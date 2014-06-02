@@ -39,12 +39,13 @@
                 </div>
                 <div class="row-fluid">
                     <!-- ko with: currentUserForSharing -->
-                    <div class="control-group" data-bind="validationElement: userEmail">
+                    <div class="control-group" data-bind="validationOptions: {insertMessages: false }, validationElement: userEmail">
                         <div class="controls">
                             <div class="input-prepend">
                                 <button class="btn btn-success" type="button" data-bind="click: $root.addSharedPerson"><i class="icon-plus icon-white"></i></button>
-                                <input id="currentUserEmail" type="text" placeholder="Enter user email:" class="input-xxlarge"  data-bind="value: userEmail" />
+                                <input id="currentUserEmail" type="text" placeholder="Enter user email:" class="input-large" data-bind="value: userEmail" />
                             </div>
+                            <span class="help-inline" data-bind="validationMessage: userEmail"></span>
                         </div>
                     </div>
                     <!-- /ko -->
