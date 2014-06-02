@@ -187,6 +187,9 @@
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupBecameARoster_event_received.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
+    <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
+    <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="QuestionnaireTests\when_moving_numeric_question_with_title_which_contains_roster_title_as_substitution_reference_from_roster_to_group.cs" />
     <Compile Include="QuestionnaireTests\when_moving_roster_nested_group_with_numeric_question_with_title_which_contains_roster_title_as_substitution_to_group.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_become_a_group_with_question_with_rostertitle_in_substitution.cs" />
