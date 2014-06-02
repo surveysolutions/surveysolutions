@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
-                    new NumericQuestion() { PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.Numeric, StataExportCaption = rosterSizeQuestionVariableName, IsInteger = true},
+                    new NumericQuestion() { PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.Numeric, StataExportCaption = rosterSizeQuestionVariableName, IsInteger = true, MaxValue = 2 },
                     new Group("Roster Group")
                     {
                         IsRoster = true,
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
             result.ShouldNotBeNull();
 
         It should_result_have_2_ids_1_and_2 = () =>
-            result.SequenceEqual(new decimal[] { 0, 1, 2 });
+            result.SequenceEqual(new decimal[] { 0, 1 }).ShouldBeTrue();
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;
