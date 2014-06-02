@@ -43,15 +43,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         
         private void HandleCreation(Guid eventSourceId, Guid responsibleId, Guid questionnaireId, long questionnaireVersion)
         {
-            var interviewBriefItem = new InterviewBrief
+            var interviewBriefItem = this.interviewBriefStorage.GetById(eventSourceId);
+
+            if (interviewBriefItem != null)
             {
-                InterviewId = eventSourceId,
-                IsDeleted = false,
-                ResponsibleId = responsibleId,
-                Status = InterviewStatus.Created,
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = questionnaireVersion
-            };
+                this.DecreaseStatisticsByStatus(this.GetStatisticItem(interviewBriefItem), interviewBriefItem.Status);
+            }
+            else
+            {
+                interviewBriefItem = new InterviewBrief
+                {
+                    InterviewId = eventSourceId,
+                    IsDeleted = false,
+                    ResponsibleId = responsibleId,
+                    Status = InterviewStatus.Created,
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireVersion = questionnaireVersion
+                };
+
+            }
 
             var statistics = this.GetStatisticItem(interviewBriefItem) ?? this.CreateNewStatisticsLine(interviewBriefItem);
 
