@@ -137,6 +137,7 @@ angular.module('designerApp')
 
             $scope.closePanel = function() {
                 $scope.activeChapter = undefined;
+                $scope.activeRoster = undefined;
             };
 
             questionnaireService.getQuestionnaireById($routeParams.questionnaireId)

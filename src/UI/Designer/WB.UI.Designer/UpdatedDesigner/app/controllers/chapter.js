@@ -21,14 +21,6 @@ angular.module('designerApp')
                 $scope.loadGroup();
             });
 
-            $scope.close = function() {
-                $scope.closePanel();
-            }
-
-            $scope.cancel = function() {
-                $scope.close();
-            }
-
             $scope.saveChapter = function() {
                 $("#edit-chapter-save-button").popover('destroy');
                 commandService.updateGroup($routeParams.questionnaireId, $scope.activeChapter).success(function(result) {
