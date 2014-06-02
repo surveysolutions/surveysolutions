@@ -65,11 +65,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return GetDataFileByLevelName(allLevels, parentLevel.LevelName);
         }
 
-        public decimal[] GetAvalibleIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string parentIdValue)
+        public decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues)
         {
-            var idIndexInParentDataFile = this.GetIdColumnIndex(parentDataFile);
+            if (parentIdValues == null || parentIdValues.Length == 0)
+                return null;
 
-            var row = parentDataFile.Content.FirstOrDefault(record => record[idIndexInParentDataFile] == parentIdValue);
+            var idIndexInParentDataFile = this.GetIdColumnIndex(parentDataFile);
+            var parentIdColumnIndexesOfParentDataFile = this.GetParentIdColumnIndexes(parentDataFile)?? new int[0];
+            var row =
+                parentDataFile.Content.FirstOrDefault(
+                    record =>
+                        record[idIndexInParentDataFile] == parentIdValues.First() &&
+                            parentIdColumnIndexesOfParentDataFile.Select(x => record[x]).SequenceEqual(parentIdValues.Skip(1)));
             if (row == null)
                 return null;
 
@@ -133,9 +140,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return dataFile.Header.ToList().FindIndex(header => header == "Id");
         }
 
-        public int GetParentIdColumnIndex(PreloadedDataByFile dataFile)
+        public int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile)
         {
-            return dataFile.Header.ToList().FindIndex(header => header == "ParentId");
+            var levelExportStructure = this.FindLevelInPreloadedData(dataFile.FileName);
+            if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
+                return null;
+
+            const string ParentId = "ParentId";
+            var columnIndexOfParentIdindexMap = new Dictionary<int,int>();
+            var listOfAvailableParentIdIndexes = levelExportStructure.LevelScopeVector.Select((l, i) => i + 1).ToArray();
+
+            for (int i = 0; i < dataFile.Header.Length; i++)
+            {
+                var columnName = dataFile.Header[i];
+                if (!columnName.StartsWith(ParentId, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
+                var parentNumberString = columnName.Substring(ParentId.Length);
+                int parentNumber;
+                if (int.TryParse(parentNumberString, out parentNumber))
+                {
+                    if (listOfAvailableParentIdIndexes.Contains(parentNumber))
+                        columnIndexOfParentIdindexMap.Add(i, parentNumber);
+                }
+            }
+            if (columnIndexOfParentIdindexMap.Values.Distinct().Count() != levelExportStructure.LevelScopeVector.Length)
+                return null;
+            return columnIndexOfParentIdindexMap.OrderBy(x => x.Value).Select(x => x.Key).ToArray();
         }
 
         public PreloadedDataDto[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels)
@@ -154,7 +185,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 var rowId = topLevelRow[idColumnIndex];
                 var answersToFeaturedQuestions = BuildAnswerForLevel(topLevelRow, topLevelData.Header, topLevelData.FileName);
 
-                var rosterAnswers = this.GetAnswers(topLevelData.FileName, rowId, new decimal[0], allLevels);
+                var rosterAnswers = this.GetAnswers(topLevelData.FileName, new[] { rowId }, new decimal[0], allLevels);
                 var levels = new List<PreloadedLevelDto>() { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions) };
                 levels.AddRange(rosterAnswers);
 
@@ -168,11 +199,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var result = new List<PreloadedDataDto>();
             foreach (var topLevelRow in sampleDataFile.Content)
             {
-                var answersToFeaturedQuestions = BuildAnswerForLevel(topLevelRow, sampleDataFile.Header, questionnaireDocument.Title);
+                var answersToFeaturedQuestions = BuildAnswerForLevel(topLevelRow, sampleDataFile.Header,
+                    GetValidFileNameForTopLevelQuestionnaire());
 
                 result.Add(new PreloadedDataDto(Guid.NewGuid().FormatGuid(), new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions) }));
             }
             return result.ToArray();
+        }
+
+        public string GetValidFileNameForTopLevelQuestionnaire()
+        {
+            return dataFileService.CreateValidFileName(questionnaireDocument.Title);
         }
 
         public Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)
@@ -202,20 +239,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return allLevels.FirstOrDefault(l => l.FileName.IndexOf(dataFileService.CreateValidFileName(name), StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
-        private PreloadedLevelDto[] GetAnswers(string levelName, string parentId, decimal[] rosterVector, PreloadedDataByFile[] rosterData)
+        private PreloadedLevelDto[] GetAnswers(string levelName, string[] parentIds, decimal[] rosterVector, PreloadedDataByFile[] rosterData)
         {
             var result = new List<PreloadedLevelDto>();
             var childFiles = GetChildDataFiles(levelName, rosterData);
 
             foreach (var preloadedDataByFile in childFiles)
             {
-                var parentIdColumnIndex = GetParentIdColumnIndex(preloadedDataByFile);
+                var parentIdColumnIndexes = GetParentIdColumnIndexes(preloadedDataByFile);
                 var idColumnIndex = GetIdColumnIndex(preloadedDataByFile);
-                var childRecrordsOfCurrentRow =
+                var childRecordsOfCurrentRow =
                     preloadedDataByFile.Content.Where(
-                        record => record[parentIdColumnIndex] == parentId).ToArray();
+                        record => parentIdColumnIndexes.Select(parentIdColumnIndex => record[parentIdColumnIndex]).SequenceEqual(parentIds))
+                        .ToArray();
 
-                foreach (var rosterRow in childRecrordsOfCurrentRow)
+                foreach (var rosterRow in childRecordsOfCurrentRow)
                 {
                     var newRosterVetor = new decimal[rosterVector.Length + 1];
                     rosterVector.CopyTo(newRosterVetor, 0);
@@ -225,7 +263,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                     result.Add(new PreloadedLevelDto(newRosterVetor, rosterAnswers));
 
-                    result.AddRange(this.GetAnswers(preloadedDataByFile.FileName, rosterRow[idColumnIndex], newRosterVetor, rosterData));
+                    var newParentIds = new string[parentIds.Length+1];
+                    newParentIds[0] = rosterRow[idColumnIndex];
+                    for (int i = 0; i < parentIds.Length; i++)
+                    {
+                        newParentIds[i + 1] = parentIds[i];
+                    }
+
+                    result.AddRange(this.GetAnswers(preloadedDataByFile.FileName, newParentIds, newRosterVetor, rosterData));
                 }
             }
 

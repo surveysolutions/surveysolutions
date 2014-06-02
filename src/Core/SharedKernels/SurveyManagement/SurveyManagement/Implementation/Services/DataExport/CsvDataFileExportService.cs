@@ -43,8 +43,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                             writer.WriteField(itemValue);
                         }
                     }
-
-                    writer.WriteField(item.ParentRecordId);
+                    foreach (var parentRecordId in item.ParentRecordIds)
+                    {
+                        writer.WriteField(parentRecordId);
+                    }
                     writer.NextRecord();
                 }
                 streamWriter.Flush();
@@ -75,7 +77,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         writer.WriteField(columnName);
                     }
                 }
-                writer.WriteField("ParentId");
+
+                for (int i = 0; i < header.LevelScopeVector.Length; i++)
+                {
+                    writer.WriteField(string.Format("ParentId{0}", i + 1));
+                }
+
                 writer.NextRecord();
                 streamWriter.Flush();
             }
