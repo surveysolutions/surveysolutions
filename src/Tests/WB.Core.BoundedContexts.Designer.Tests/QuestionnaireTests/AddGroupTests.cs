@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             // arrange
             Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaire(responsibleId : responsibleId);
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
             // act
             TestDelegate act =
@@ -45,13 +45,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         public void NewAddGroup_When_groups_title_is_not_empty_Then_raised_NewAddGroup_event_contains_the_same_group_title()
         {
+            // arrange
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+            string notEmptyNewTitle = "Some new title";
+
             using (var eventContext = new EventContext())
             {
-                // arrange
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaire(responsibleId : responsibleId);
-                string notEmptyNewTitle = "Some new title";
-
                 // act
                 questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: notEmptyNewTitle, rosterSizeQuestionId: null,
                     description: null, condition: null, parentGroupId: null, isRoster: false,

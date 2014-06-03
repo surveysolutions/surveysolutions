@@ -708,6 +708,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private readonly ILogger logger;
 
+        private static IClock Clock
+        {
+            get { return ServiceLocator.Current.GetInstance<IClock>(); }
+        }
+
         /// <remarks>
         /// All operations with expressions are time-consuming.
         /// So this processor may be used only in command handlers.
@@ -751,7 +756,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
 
-            var clock = NcqrsEnvironment.Get<IClock>();
             this.questionFactory = new QuestionFactory();
 
             this.ApplyEvent(
@@ -760,7 +764,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     IsPublic = isPublic,
                     PublicKey = publicKey,
                     Title = title,
-                    CreationDate = clock.UtcNow(),
+                    CreationDate = Clock.UtcNow(),
                     CreatedBy = createdBy
                 });
 
