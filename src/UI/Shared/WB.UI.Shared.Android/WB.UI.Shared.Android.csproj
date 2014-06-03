@@ -134,6 +134,8 @@
     <Compile Include="Controls\ScreenItems\AbstractSingleOptionQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\ScreenItems\AutoPropagateQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\IAnswerProgressIndicator.cs" />
+    <Compile Include="Controls\ScreenItems\AnswerProgressIndicator.cs" />
     <Compile Include="Controls\ScreenItems\QRBarcodeQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\DateQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\DecimalPlacesFilter.cs" />
