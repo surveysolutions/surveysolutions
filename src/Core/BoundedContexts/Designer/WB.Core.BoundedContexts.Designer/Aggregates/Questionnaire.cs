@@ -763,6 +763,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     CreationDate = clock.UtcNow(),
                     CreatedBy = createdBy
                 });
+
+            this.ApplyEvent(
+                new NewGroupAdded
+                {
+                    GroupText = "New Chapter",
+                    PublicKey = Guid.NewGuid()
+                }
+            );
         }
 
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
