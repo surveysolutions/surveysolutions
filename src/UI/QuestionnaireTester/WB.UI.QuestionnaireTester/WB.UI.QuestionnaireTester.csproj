@@ -180,6 +180,7 @@
     <AndroidResource Include="Resources\Drawable\tester_splash.png" />
     <AndroidResource Include="Resources\Drawable-xhdpi\tester_icon.png" />
     <AndroidResource Include="Resources\Values\Themes.xml" />
+    <AndroidResource Include="Resources\Drawable\answer_progress_indicator.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">

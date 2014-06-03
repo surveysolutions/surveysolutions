@@ -4,9 +4,12 @@
     android:layout_height="fill_parent">
 
   <ImageView android:id="@+id/imgAnswerProgress"
-      android:src="@drawable/capi"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:src="@drawable/answer_progress_indicator"
+      android:layout_marginLeft="10dp"
+      android:layout_width="30dp"
+      android:layout_height="fill_parent"
+      android:scaleType="centerInside"
+      android:visibility="invisible"
   />
   
   <TextView
@@ -15,7 +18,7 @@
       android:layout_height="fill_parent"
       android:textColor="@android:color/white"
       android:gravity="center_vertical|left"
-      android:layout_marginLeft="80dp"
+      android:layout_marginLeft="50dp"
         />
   <Button
         android:id="@+id/btnLogout"
