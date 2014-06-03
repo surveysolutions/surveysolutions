@@ -148,7 +148,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         public int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile)
         {
             var levelExportStructure = this.FindLevelInPreloadedData(dataFile.FileName);
-            if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
+            if (levelExportStructure == null || levelExportStructure.LevelScopeVector == null ||
+                levelExportStructure.LevelScopeVector.Length == 0)
                 return null;
 
             const string ParentId = "ParentId";

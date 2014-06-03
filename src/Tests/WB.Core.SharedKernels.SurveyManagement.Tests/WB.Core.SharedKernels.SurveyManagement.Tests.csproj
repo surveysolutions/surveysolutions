@@ -243,6 +243,7 @@
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_multyoption_question.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_numeric_question.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_textlist_question.cs" />
+    <Compile Include="PreloadedDataServiceTests\when_GetParentIdColumnIndexes_is_called_for_file_which_is_not_corresponding_to_any_roster.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetColumnIndexesGoupedByQuestionVariableName_is_called_for_top_level_file.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_first_level_of_questionnaire.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_top_level_of_questionnaire.cs" />
