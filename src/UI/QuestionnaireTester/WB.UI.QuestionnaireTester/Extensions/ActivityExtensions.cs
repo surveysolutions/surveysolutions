@@ -1,5 +1,8 @@
 using Android.App;
+using Android.Views;
 using Android.Widget;
+using Microsoft.Practices.ServiceLocation;
+using WB.UI.Shared.Android.Controls.ScreenItems;
 
 namespace WB.UI.QuestionnaireTester.Extensions
 {
@@ -24,6 +27,12 @@ namespace WB.UI.QuestionnaireTester.Extensions
 
             var tvTitlte = (TextView) actionBar.CustomView.FindViewById(Resource.Id.tvTitlte);
             tvTitlte.Text = activity.Title;
+
+            var imgProgress = (ImageView)actionBar.CustomView.FindViewById(Resource.Id.imgAnswerProgress);
+            var progressBarProvider = ServiceLocator.Current.GetInstance<IAnswerProgressIndicator>();
+            progressBarProvider.Setup(
+                show: () => activity.RunOnUiThread(() => imgProgress.Visibility = ViewStates.Visible),
+                hide: () => activity.RunOnUiThread(() => imgProgress.Visibility = ViewStates.Invisible));
         }
 
         public static void CreateSearchebleActionBar(this Activity activity)
