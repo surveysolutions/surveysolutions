@@ -8,7 +8,7 @@ namespace WB.UI.QuestionnaireTester.Extensions
 {
     public static class ActivityExtensions
     {
-        public static void CreateActionBar(this Activity activity)
+        public static void CreateActionBar(this Activity activity, IAnswerProgressIndicator answerProgressIndicator)
         {
             // Set up your ActionBar
             ActionBar actionBar = activity.ActionBar;
@@ -29,8 +29,8 @@ namespace WB.UI.QuestionnaireTester.Extensions
             tvTitlte.Text = activity.Title;
 
             var imgProgress = (ImageView)actionBar.CustomView.FindViewById(Resource.Id.imgAnswerProgress);
-            var progressBarProvider = ServiceLocator.Current.GetInstance<IAnswerProgressIndicator>();
-            progressBarProvider.Setup(
+
+            answerProgressIndicator.Setup(
                 show: () => activity.RunOnUiThread(() => imgProgress.Visibility = ViewStates.Visible),
                 hide: () => activity.RunOnUiThread(() => imgProgress.Visibility = ViewStates.Invisible));
         }
