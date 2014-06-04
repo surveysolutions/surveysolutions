@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Main.Core.Documents;
 using Main.Core.View;
 using Moq;
@@ -23,7 +24,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
             IVerificationErrorsMapper verificationErrorsMapper = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null)
         {
-            return new QuestionnaireController(
+            var questionnaireController = new QuestionnaireController(
                 chapterInfoViewFactory ?? Mock.Of<IChapterInfoViewFactory>(),
                 questionnaireInfoViewFactory ?? Mock.Of<IQuestionnaireInfoViewFactory>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
@@ -31,6 +32,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>()
                 );
+            return questionnaireController;
         }
 
         public static QuestionnaireView CreateQuestionnaireView(QuestionnaireDocument questionnaireDocument1)

@@ -14,7 +14,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
             viewState =
                 denormalizer.Create(Create.QuestionnaireClonedEvent(questionnaireId: questionnaireId,
                     questionnaireTitle: questionnaireTitle, chapter1Id: chapter1Id, chapter1Title: chapter1Title,
-                    chapter2Id: chapter2Id, chapter2Title: chapter2Title));
+                    chapter2Id: chapter2Id, chapter2Title: chapter2Title,
+                    isPublic: true));
 
         It should_questionnnaireInfoView_QuestionnaireId_be_equal_to_questionnaireId = () =>
             viewState.QuestionnaireId.ShouldEqual(questionnaireId);
@@ -48,6 +49,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
 
         It should_questionnnaireInfoView_RostersCount_be_equal_1 = () =>
             viewState.RostersCount.ShouldEqual(1);
+
+        It should_clone_is_public_flag = () => viewState.IsPublic.ShouldBeTrue();
 
         private static string questionnaireId = "33333333333333333333333333333333";
         private static string questionnaireTitle = "questionnaire title";

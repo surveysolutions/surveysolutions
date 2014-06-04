@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
         };
 
         Because of = () =>
-            viewState = denormalizer.Create(Create.NewQuestionnaireCreatedEvent(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle));
+            viewState = denormalizer.Create(Create.NewQuestionnaireCreatedEvent(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle, isPublic: true));
 
         It should_questionnnaireInfoView_QuestionnaireId_be_equal_to_questionnaireId = () =>
             viewState.QuestionnaireId.ShouldEqual(questionnaireId);
@@ -21,6 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
 
         It should_questionnnaireInfoView_Chapters_not_be_null = () =>
             viewState.Chapters.ShouldNotBeNull();
+
+        It should_fill_is_public_flag = () => viewState.IsPublic.ShouldBeTrue();
 
         private static string questionnaireId = "33333333333333333333333333333333";
         private static string questionnaireTitle = "questionnaire title";
