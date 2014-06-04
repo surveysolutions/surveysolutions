@@ -2,8 +2,8 @@
 
 angular.module('designerApp')
     .controller('MainCtrl', [
-        '$scope', '$routeParams', '$route', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'navigationService',
-        function($scope, $routeParams, $route, questionnaireService, commandService, verificationService, utilityService, navigationService) {
+        '$scope', '$routeParams', '$route', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'navigationService', '$modal', '$log',
+        function($scope, $routeParams, $route, questionnaireService, commandService, verificationService, utilityService, navigationService, $modal, $log) {
 
             $scope.verificationStatus = {
                 errorsCount: 0,
@@ -109,6 +109,19 @@ angular.module('designerApp')
                     item.items.push(emptyRoster);
                 });
             };
+
+            $scope.showShareInfo = function() {
+                $modal.open({
+                    templateUrl: 'app/views/share.html',
+                    controller: 'shareCtrl',
+                    resolve:
+                    {
+                        questionnaire: function () {
+                            return $scope.questionnaire;
+                        }
+                    }
+                });
+            }
 
             $scope.collapse = function(item) {
                 item.collapsed = true;

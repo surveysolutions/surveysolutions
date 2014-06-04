@@ -5,7 +5,10 @@ var app = angular.module('designerApp', [
         'ngResource',
         'ngSanitize',
         'ngRoute',
-        'angular-underscore'
+        'angular-underscore',
+        'ui.bootstrap',
+        'ui.bootstrap.tpls',
+        'ui.bootstrap.transition'
     ])
     .config(function($routeProvider) {
         $routeProvider

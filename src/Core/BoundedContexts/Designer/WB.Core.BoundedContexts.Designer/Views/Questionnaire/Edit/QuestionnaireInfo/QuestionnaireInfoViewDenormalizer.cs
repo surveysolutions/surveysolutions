@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -52,12 +53,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         public QuestionnaireInfoView Create(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
-            return CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Title);
+            return CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Title, evnt.Payload.IsPublic);
         }
 
         public QuestionnaireInfoView Create(IPublishedEvent<QuestionnaireCloned> evnt)
         {
-            var currentState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireDocument.Title);
+            var currentState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireDocument.Title, evnt.Payload.QuestionnaireDocument.IsPublic);
 
             AddQuestionnaireItems(currentState, evnt.Payload.QuestionnaireDocument);
 
@@ -66,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         public QuestionnaireInfoView Create(IPublishedEvent<TemplateImported> evnt)
         {
-            var currentState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Source.Title);
+            var currentState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Source.Title, evnt.Payload.Source.IsPublic);
 
             AddQuestionnaireItems(currentState, evnt.Payload.Source);
 
@@ -238,7 +239,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             return currentState;
         }
 
-        private static QuestionnaireInfoView CreateQuestionnaire(Guid questionnaireId, string questionnaireTitle)
+        private static QuestionnaireInfoView CreateQuestionnaire(Guid questionnaireId, string questionnaireTitle, bool isPublic)
         {
             var questionnaireInfo = new QuestionnaireInfoView()
             {
@@ -247,7 +248,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 Chapters = new List<ChapterInfoView>(),
                 GroupsCount = 0,
                 RostersCount = 0,
-                QuestionsCount = 0
+                QuestionsCount = 0,
+                IsPublic = isPublic
             };
             return questionnaireInfo;
         }

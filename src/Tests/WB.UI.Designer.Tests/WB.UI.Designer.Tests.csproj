@@ -144,7 +144,6 @@
     <Compile Include="QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
-    <Compile Include="QuestionnaireApiControllerTests\when_getting_questionnaire_and_questionnaire_exists.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
     <Compile Include="SynchronizationControllerTests.cs" />
     <Compile Include="VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />

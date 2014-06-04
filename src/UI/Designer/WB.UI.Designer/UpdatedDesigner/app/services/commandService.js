@@ -17,6 +17,10 @@
                 });
             }
 
+            commandService.execute = function(type, command) {
+                return commandCall(type, command);
+            }
+
             commandService.sendUpdateQuestionCommand = function(questionnaireId, question) {
                 var command = {
                     questionnaireId: questionnaireId,

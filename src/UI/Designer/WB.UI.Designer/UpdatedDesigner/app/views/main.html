@@ -8,12 +8,18 @@
             </ul>
         </div>
         <div class="header-menu">
-            This document is <span>private</span>, shared with <span>alex.smith@worldbank.org</span> and <a href="">2 other</a>
+            This document is <span>{{questionnaire.isPublic ? 'public' : 'private'}}</span><span ng-repeat="q in questionnaire.sharedPersons"><span ng-if="$first">, shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
+                </span>
+                <span ng-if="!$first && $last">
+                    and <a ng-click="showShareInfo()">{{$index}} other</a>
+                </span>
+            </span>
             <div class="buttons">
+
                 <!--<input class="wb-inline-button" type="button" value="SETTINGS">
-                <input class="wb-inline-button" type="button" value="HELP">
-                <input class="wb-inline-button" type="button" value="LOG OUT">-->
-                <button class="btn">SETTINGS</button>
+                    <input class="wb-inline-button" type="button" value="HELP">
+                    <input class="wb-inline-button" type="button" value="LOG OUT">-->
+                <button class="btn" ng-click="showShareInfo()">SHARE</button>
                 <button class="btn">HELP</button>
                 <button class="btn">LOG OUT</button>
             </div>
