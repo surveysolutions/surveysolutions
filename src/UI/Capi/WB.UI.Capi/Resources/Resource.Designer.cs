@@ -142,70 +142,73 @@ namespace WB.UI.Capi
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int bookmarkStyle = 2130837504;
+			public const int answer_progress_indicator = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public const int capi = 2130837505;
+			public const int bookmarkStyle = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int capi_icon = 2130837506;
+			public const int capi = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int capi_splash = 2130837507;
+			public const int capi_icon = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int cell_shape = 2130837508;
+			public const int capi_splash = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public const int CounterRoundShape = 2130837509;
+			public const int cell_shape = 2130837509;
 			
 			// aapt resource value: 0x7f020006
-			public const int dashboardquestionnaire = 2130837510;
+			public const int CounterRoundShape = 2130837510;
 			
 			// aapt resource value: 0x7f020007
-			public const int donecountershape = 2130837511;
+			public const int dashboardquestionnaire = 2130837511;
 			
 			// aapt resource value: 0x7f020008
-			public const int errorwarningstyle = 2130837512;
+			public const int donecountershape = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public const int grid_headerItem = 2130837513;
+			public const int errorwarningstyle = 2130837513;
 			
 			// aapt resource value: 0x7f02000a
-			public const int Icon = 2130837514;
+			public const int grid_headerItem = 2130837514;
 			
 			// aapt resource value: 0x7f02000b
-			public const int navigateLeftIcon = 2130837515;
+			public const int Icon = 2130837515;
 			
 			// aapt resource value: 0x7f02000c
-			public const int navigateRightIcon = 2130837516;
+			public const int navigateLeftIcon = 2130837516;
 			
 			// aapt resource value: 0x7f02000d
-			public const int navigation_Selector = 2130837517;
+			public const int navigateRightIcon = 2130837517;
 			
 			// aapt resource value: 0x7f02000e
-			public const int questionAnsweredShape = 2130837518;
+			public const int navigation_Selector = 2130837518;
 			
 			// aapt resource value: 0x7f02000f
-			public const int questionDisabledShape = 2130837519;
+			public const int questionAnsweredShape = 2130837519;
 			
 			// aapt resource value: 0x7f020010
-			public const int questionInvalidShape = 2130837520;
+			public const int questionDisabledShape = 2130837520;
 			
 			// aapt resource value: 0x7f020011
-			public const int questionShape = 2130837521;
+			public const int questionInvalidShape = 2130837521;
 			
 			// aapt resource value: 0x7f020012
-			public const int splash = 2130837522;
+			public const int questionShape = 2130837522;
 			
 			// aapt resource value: 0x7f020013
-			public const int statistics_row_style = 2130837523;
+			public const int splash = 2130837523;
 			
 			// aapt resource value: 0x7f020014
-			public const int SurveyShape = 2130837524;
+			public const int statistics_row_style = 2130837524;
 			
 			// aapt resource value: 0x7f020015
-			public const int SurveyTableHeader = 2130837525;
+			public const int SurveyShape = 2130837525;
+			
+			// aapt resource value: 0x7f020016
+			public const int SurveyTableHeader = 2130837526;
 			
 			static Drawable()
 			{
@@ -250,32 +253,32 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040002
 			public const int ScreenId = 2130968578;
 			
+			// aapt resource value: 0x7f04003d
+			public const int btnAnswered = 2130968637;
+			
+			// aapt resource value: 0x7f040043
+			public const int btnBackup = 2130968643;
+			
+			// aapt resource value: 0x7f040047
+			public const int btnCancel = 2130968647;
+			
+			// aapt resource value: 0x7f04003a
+			public const int btnCollect = 2130968634;
+			
 			// aapt resource value: 0x7f04003b
-			public const int btnAnswered = 2130968635;
+			public const int btnCollectMajor = 2130968635;
 			
 			// aapt resource value: 0x7f040041
-			public const int btnBackup = 2130968641;
-			
-			// aapt resource value: 0x7f040045
-			public const int btnCancel = 2130968645;
-			
-			// aapt resource value: 0x7f040038
-			public const int btnCollect = 2130968632;
-			
-			// aapt resource value: 0x7f040039
-			public const int btnCollectMajor = 2130968633;
-			
-			// aapt resource value: 0x7f04003f
-			public const int btnComplete = 2130968639;
+			public const int btnComplete = 2130968641;
 			
 			// aapt resource value: 0x7f04000a
 			public const int btnInstructions = 2130968586;
 			
-			// aapt resource value: 0x7f04003e
-			public const int btnInvalid = 2130968638;
+			// aapt resource value: 0x7f040040
+			public const int btnInvalid = 2130968640;
 			
-			// aapt resource value: 0x7f04002b
-			public const int btnLogin = 2130968619;
+			// aapt resource value: 0x7f04002d
+			public const int btnLogin = 2130968621;
 			
 			// aapt resource value: 0x7f040023
 			public const int btnNavigation = 2130968611;
@@ -286,32 +289,32 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040015
 			public const int btnNext = 2130968597;
 			
-			// aapt resource value: 0x7f040043
-			public const int btnRestore = 2130968643;
+			// aapt resource value: 0x7f040045
+			public const int btnRestore = 2130968645;
+			
+			// aapt resource value: 0x7f040044
+			public const int btnSendTabletInfo = 2130968644;
 			
 			// aapt resource value: 0x7f040042
-			public const int btnSendTabletInfo = 2130968642;
-			
-			// aapt resource value: 0x7f040040
-			public const int btnSync = 2130968640;
-			
-			// aapt resource value: 0x7f040034
-			public const int btnSyncPoint = 2130968628;
-			
-			// aapt resource value: 0x7f04003c
-			public const int btnUnanswered = 2130968636;
-			
-			// aapt resource value: 0x7f040035
-			public const int btnVersion = 2130968629;
+			public const int btnSync = 2130968642;
 			
 			// aapt resource value: 0x7f040036
-			public const int btnWhereAmI = 2130968630;
+			public const int btnSyncPoint = 2130968630;
 			
-			// aapt resource value: 0x7f040046
-			public const int contentFrame = 2130968646;
+			// aapt resource value: 0x7f04003e
+			public const int btnUnanswered = 2130968638;
 			
-			// aapt resource value: 0x7f040033
-			public const int editSettingsSyncPoint = 2130968627;
+			// aapt resource value: 0x7f040037
+			public const int btnVersion = 2130968631;
+			
+			// aapt resource value: 0x7f040038
+			public const int btnWhereAmI = 2130968632;
+			
+			// aapt resource value: 0x7f040048
+			public const int contentFrame = 2130968648;
+			
+			// aapt resource value: 0x7f040035
+			public const int editSettingsSyncPoint = 2130968629;
 			
 			// aapt resource value: 0x7f040011
 			public const int etComments = 2130968593;
@@ -319,26 +322,29 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040014
 			public const int flFragmentHolder = 2130968596;
 			
-			// aapt resource value: 0x7f040028
-			public const int footer = 2130968616;
+			// aapt resource value: 0x7f04002a
+			public const int footer = 2130968618;
 			
 			// aapt resource value: 0x7f040013
 			public const int greetingsTextView = 2130968595;
 			
-			// aapt resource value: 0x7f040027
-			public const int header = 2130968615;
+			// aapt resource value: 0x7f040029
+			public const int header = 2130968617;
+			
+			// aapt resource value: 0x7f040025
+			public const int imgAnswerProgress = 2130968613;
 			
 			// aapt resource value: 0x7f040020
 			public const int lNavigationContainer = 2130968608;
 			
-			// aapt resource value: 0x7f04002f
-			public const int llButtom = 2130968623;
+			// aapt resource value: 0x7f040031
+			public const int llButtom = 2130968625;
 			
 			// aapt resource value: 0x7f04001e
 			public const int llContainer = 2130968606;
 			
-			// aapt resource value: 0x7f04002e
-			public const int llContent = 2130968622;
+			// aapt resource value: 0x7f040030
+			public const int llContent = 2130968624;
 			
 			// aapt resource value: 0x7f040021
 			public const int llNavigationButton = 2130968609;
@@ -355,17 +361,17 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040009
 			public const int llRoot = 2130968585;
 			
-			// aapt resource value: 0x7f040031
-			public const int llScreen = 2130968625;
+			// aapt resource value: 0x7f040033
+			public const int llScreen = 2130968627;
 			
 			// aapt resource value: 0x7f040022
 			public const int llSpaceFiller = 2130968610;
 			
-			// aapt resource value: 0x7f04002c
-			public const int llSurveyHolder = 2130968620;
+			// aapt resource value: 0x7f04002e
+			public const int llSurveyHolder = 2130968622;
 			
-			// aapt resource value: 0x7f04002d
-			public const int llTop = 2130968621;
+			// aapt resource value: 0x7f04002f
+			public const int llTop = 2130968623;
 			
 			// aapt resource value: 0x7f04000b
 			public const int llWrapper = 2130968587;
@@ -373,26 +379,26 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040012
 			public const int pagesSpinner = 2130968594;
 			
-			// aapt resource value: 0x7f040030
-			public const int qGuid = 2130968624;
+			// aapt resource value: 0x7f040032
+			public const int qGuid = 2130968626;
 			
 			// aapt resource value: 0x7f04001b
 			public const int rlSurveyHeader = 2130968603;
 			
-			// aapt resource value: 0x7f040029
-			public const int teLogin = 2130968617;
+			// aapt resource value: 0x7f04002b
+			public const int teLogin = 2130968619;
 			
-			// aapt resource value: 0x7f04002a
-			public const int tePassword = 2130968618;
+			// aapt resource value: 0x7f04002c
+			public const int tePassword = 2130968620;
 			
-			// aapt resource value: 0x7f04003a
-			public const int textMem = 2130968634;
+			// aapt resource value: 0x7f04003c
+			public const int textMem = 2130968636;
 			
-			// aapt resource value: 0x7f040032
-			public const int textSyncPoint = 2130968626;
+			// aapt resource value: 0x7f040034
+			public const int textSyncPoint = 2130968628;
 			
-			// aapt resource value: 0x7f040037
-			public const int textWhereAmI = 2130968631;
+			// aapt resource value: 0x7f040039
+			public const int textWhereAmI = 2130968633;
 			
 			// aapt resource value: 0x7f04000f
 			public const int tvComments = 2130968591;
@@ -400,23 +406,23 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040010
 			public const int tvCommentsTitle = 2130968592;
 			
-			// aapt resource value: 0x7f040026
-			public const int tvCount = 2130968614;
+			// aapt resource value: 0x7f040028
+			public const int tvCount = 2130968616;
 			
 			// aapt resource value: 0x7f04000d
 			public const int tvError = 2130968589;
 			
-			// aapt resource value: 0x7f04003d
-			public const int tvErrorWarning = 2130968637;
+			// aapt resource value: 0x7f04003f
+			public const int tvErrorWarning = 2130968639;
 			
-			// aapt resource value: 0x7f040025
-			public const int tvITem = 2130968613;
+			// aapt resource value: 0x7f040027
+			public const int tvITem = 2130968615;
 			
 			// aapt resource value: 0x7f04000c
 			public const int tvMError = 2130968588;
 			
-			// aapt resource value: 0x7f040044
-			public const int tvSyncResult = 2130968644;
+			// aapt resource value: 0x7f040046
+			public const int tvSyncResult = 2130968646;
 			
 			// aapt resource value: 0x7f04000e
 			public const int tvTitle = 2130968590;
@@ -429,6 +435,9 @@ namespace WB.UI.Capi
 			
 			// aapt resource value: 0x7f040017
 			public const int txtSurveyName = 2130968599;
+			
+			// aapt resource value: 0x7f040026
+			public const int txtTitle = 2130968614;
 			
 			// aapt resource value: 0x7f04001f
 			public const int vpContent = 2130968607;
@@ -471,46 +480,49 @@ namespace WB.UI.Capi
 			public const int Details = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int list_navigation_item = 2130903048;
+			public const int InterviewActionBar = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int Login = 2130903049;
+			public const int list_navigation_item = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int Main = 2130903050;
+			public const int Login = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int RosterQuestion = 2130903051;
+			public const int Main = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int ScreenContentFragment = 2130903052;
+			public const int RosterQuestion = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int ScreenGroupView = 2130903053;
+			public const int ScreenContentFragment = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int ScreenNavigationView = 2130903054;
+			public const int ScreenGroupView = 2130903054;
 			
 			// aapt resource value: 0x7f03000f
-			public const int settings_dialog = 2130903055;
+			public const int ScreenNavigationView = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int SplashScreen = 2130903056;
+			public const int settings_dialog = 2130903056;
 			
 			// aapt resource value: 0x7f030011
-			public const int StatisticsContent = 2130903057;
+			public const int SplashScreen = 2130903057;
 			
 			// aapt resource value: 0x7f030012
-			public const int sync_dialog = 2130903058;
+			public const int StatisticsContent = 2130903058;
 			
 			// aapt resource value: 0x7f030013
-			public const int SyncLogin = 2130903059;
+			public const int sync_dialog = 2130903059;
 			
 			// aapt resource value: 0x7f030014
-			public const int zxingscanneractivitylayout = 2130903060;
+			public const int SyncLogin = 2130903060;
 			
 			// aapt resource value: 0x7f030015
-			public const int zxingscannerfragmentlayout = 2130903061;
+			public const int zxingscanneractivitylayout = 2130903061;
+			
+			// aapt resource value: 0x7f030016
+			public const int zxingscannerfragmentlayout = 2130903062;
 			
 			static Layout()
 			{
