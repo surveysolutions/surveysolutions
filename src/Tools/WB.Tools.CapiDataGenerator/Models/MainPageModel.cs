@@ -506,6 +506,14 @@ namespace CapiDataGenerator
                     catch (Exception e)
                     {
                         this.Log(e.Message);
+                        this.Log(e.StackTrace);
+
+                        if (e.InnerException != null)
+                        {
+                            this.Log("Inner Exception: " + e.InnerException.Message);
+                            this.Log(e.InnerException.StackTrace);
+                        }
+                        
                     }
                     finally
                     {
