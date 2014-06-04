@@ -412,7 +412,11 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="UpdatedDesigner\app\controllers\share.js" />
+    <Content Include="UpdatedDesigner\app\directives\directives.js" />
     <Content Include="UpdatedDesigner\app\fixtures\no-backend.js" />
+    <Content Include="UpdatedDesigner\app\services\shareService.js" />
+    <Content Include="UpdatedDesigner\app\views\share.html" />
     <Content Include="UpdatedDesigner\index.html" />
     <Content Include="UpdatedDesigner\app\app.js" />
     <Content Include="UpdatedDesigner\app\components\contextMenu.js" />
@@ -589,6 +593,10 @@
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\test.html" />
+    <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap-tpls.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap-tpls.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.js" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.min.js" />
@@ -990,6 +998,8 @@
     <Content Include="UpdatedDesigner\data\verify\no-errors.json" />
     <Content Include="UpdatedDesigner\data\verify\with-errors.json" />
     <Content Include="Views\Shared\_commonFooter.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\angular-bootstrap\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-bootstrap\bower.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -14,7 +14,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
             viewState =
                 denormalizer.Create(Create.TemplateImportedEvent(questionnaireId: questionnaireId,
                     questionnaireTitle: questionnaireTitle, chapter1Id: chapter1Id, chapter1Title: chapter1Title,
-                    chapter2Id: chapter2Id, chapter2Title: chapter2Title));
+                    chapter2Id: chapter2Id, chapter2Title: chapter2Title,
+                    isPublic: true));
 
         It should_questionnnaireInfoView_QuestionnaireId_be_equal_to_questionnaireId = () =>
             viewState.QuestionnaireId.ShouldEqual(questionnaireId);

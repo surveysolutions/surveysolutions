@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using Main.Core.View;
@@ -42,15 +43,15 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [CamelCase]
-        public QuestionnaireInfoView Get(string id)
+        public HttpResponseMessage Get(string id)
         {
             var questionnaireInfoView = questionnaireInfoViewFactory.Load(id);
             if (questionnaireInfoView == null)
             {
-                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} cannot be found", id));
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} cannot be found", id));
             }
 
-            return questionnaireInfoView;
+            return Request.CreateResponse(HttpStatusCode.OK, questionnaireInfoView);
         }
 
         [HttpGet]

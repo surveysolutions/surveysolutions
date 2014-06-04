@@ -68,7 +68,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string chapter1Id, string chapter1Title, string chapter2Id, string chapter2Title,
             string questionnaireTitle = null, string chapter1GroupId = null, string chapter1GroupTitle = null,
             string chapter2QuestionId = null, string chapter2QuestionTitle = null,
-            string chapter2QuestionVariable = null, string chapter2QuestionConditionExpression = null)
+            string chapter2QuestionVariable = null, 
+            string chapter2QuestionConditionExpression = null,
+            bool? isPublic = null)
         {
             return ToPublishedEvent(new QuestionnaireCloned()
             {
@@ -78,15 +80,23 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                         chapter2Title: chapter2Title, chapter1GroupId: chapter1GroupId,
                         chapter1GroupTitle: chapter1GroupTitle, chapter2QuestionId: chapter2QuestionId,
                         chapter2QuestionTitle: chapter2QuestionTitle, chapter2QuestionVariable: chapter2QuestionVariable,
-                        chapter2QuestionConditionExpression: chapter2QuestionConditionExpression)
+                        chapter2QuestionConditionExpression: chapter2QuestionConditionExpression,
+                        isPublic: isPublic ?? false)
             }, new Guid(questionnaireId));
         }
 
         public static IPublishedEvent<TemplateImported> TemplateImportedEvent(string questionnaireId,
-            string chapter1Id, string chapter1Title, string chapter2Id, string chapter2Title,
-            string questionnaireTitle = null, string chapter1GroupId = null, string chapter1GroupTitle = null,
-            string chapter2QuestionId = null, string chapter2QuestionTitle = null,
-            string chapter2QuestionVariable = null, string chapter2QuestionConditionExpression = null)
+            string chapter1Id, 
+            string chapter1Title, 
+            string chapter2Id, 
+            string chapter2Title,
+            string questionnaireTitle = null, 
+            string chapter1GroupId = null, string chapter1GroupTitle = null,
+            string chapter2QuestionId = null, 
+            string chapter2QuestionTitle = null,
+            string chapter2QuestionVariable = null, 
+            string chapter2QuestionConditionExpression = null,
+            bool? isPublic = null)
         {
             return ToPublishedEvent(new TemplateImported()
             {
@@ -96,7 +106,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                         chapter2Title: chapter2Title, chapter1GroupId: chapter1GroupId,
                         chapter1GroupTitle: chapter1GroupTitle, chapter2QuestionId: chapter2QuestionId,
                         chapter2QuestionTitle: chapter2QuestionTitle, chapter2QuestionVariable: chapter2QuestionVariable,
-                        chapter2QuestionConditionExpression: chapter2QuestionConditionExpression)
+                        chapter2QuestionConditionExpression: chapter2QuestionConditionExpression, 
+                        isPublic: isPublic ?? false)
             }, new Guid(questionnaireId));
         }
 
@@ -244,12 +255,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests
         }
 
         public static IPublishedEvent<NewQuestionnaireCreated> NewQuestionnaireCreatedEvent(string questionnaireId,
-            string questionnaireTitle = null)
+            string questionnaireTitle = null,
+            bool? isPublic = null)
         {
             return ToPublishedEvent(new NewQuestionnaireCreated()
             {
                 PublicKey = new Guid(questionnaireId),
-                Title = questionnaireTitle
+                Title = questionnaireTitle,
+                IsPublic = isPublic ?? false
             }, new Guid(questionnaireId));
         }
 
@@ -332,14 +345,24 @@ namespace WB.Core.BoundedContexts.Designer.Tests
         }
 
         private static QuestionnaireDocument CreateQuestionnaireDocument(string questionnaireId,
-            string questionnaireTitle, string chapter1Id, string chapter1Title, string chapter2Id, string chapter2Title,
-            string chapter1GroupId, string chapter1GroupTitle, string chapter2QuestionId, string chapter2QuestionTitle,
-            string chapter2QuestionVariable, string chapter2QuestionConditionExpression)
+            string questionnaireTitle, 
+            string chapter1Id, 
+            string chapter1Title, 
+            string chapter2Id, 
+            string chapter2Title,
+            string chapter1GroupId, 
+            string chapter1GroupTitle, 
+            string chapter2QuestionId, 
+            string chapter2QuestionTitle,
+            string chapter2QuestionVariable, 
+            string chapter2QuestionConditionExpression,
+            bool isPublic)
         {
             return new QuestionnaireDocument()
             {
                 PublicKey = Guid.Parse(questionnaireId),
                 Title = questionnaireTitle,
+                IsPublic = isPublic,
                 Children = new List<IComposite>()
                 {
                     new Group()
