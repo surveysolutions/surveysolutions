@@ -121,6 +121,8 @@
     <Compile Include="ViewModel\Dashboard\DashboardModel.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardSurveyItem.cs" />
+    <Compile Include="ViewModel\Dashboard\FeaturedCategoricalItem.cs" />
+    <Compile Include="ViewModel\Dashboard\FeaturedCategoricalOption.cs" />
     <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
     <Compile Include="ViewModel\Dashboard\QuestionnaireDTO.cs" />
     <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />

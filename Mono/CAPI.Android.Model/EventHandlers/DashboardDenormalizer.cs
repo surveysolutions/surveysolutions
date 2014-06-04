@@ -104,23 +104,31 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         private FeaturedItem CreateFeaturedItem(Guid questionId, string answerString, IQuestion featuredQuestion)
         {
-            if (questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
-            {
-                var answerValues = QuestionUtils.ExtractSelectedOptions(answerString);
-                if (answerValues != null && answerValues.Length > 0)
-                {
-                    var options =
-                       featuredQuestion.Answers.Where(o => answerValues.Contains(decimal.Parse(o.AnswerValue))).Select(o => o.AnswerText);
+            if (!questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
+                return new FeaturedItem(questionId, featuredQuestion.QuestionText, answerString);
 
-                    answerString = string.Join(",", options);   
-                }
-                else
-                {
-                    answerString = string.Empty;
-                }
+            var answerValues = QuestionUtils.ExtractSelectedOptions(answerString);
+            if (answerValues != null && answerValues.Length > 0)
+            {
+                var options =
+                    featuredQuestion.Answers.Where(o => answerValues.Contains(decimal.Parse(o.AnswerValue)))
+                        .Select(o => o.AnswerText);
+
+                answerString = string.Join(",", options);
+            }
+            else
+            {
+                answerString = string.Empty;
             }
 
-            return new FeaturedItem(questionId, featuredQuestion.QuestionText, answerString);
+            return new FeaturedCategoricalItem(questionId, featuredQuestion.QuestionText, answerString,
+                featuredQuestion.Answers.Select(
+                    answer =>
+                        new FeaturedCategoricalOption()
+                        {
+                            OptionValue = decimal.Parse(answer.AnswerValue),
+                            OptionText = answer.AnswerText
+                        }));
         }
 
         private FeaturedItem CreateFeaturedItem(AnsweredQuestionSynchronizationDto q, QuestionnaireDocumentVersioned questionnaireTemplate)
@@ -142,6 +150,42 @@ namespace CAPI.Android.Core.Model.EventHandlers
             }
 
             return new FeaturedItem(q.Id, featuredQuestion.QuestionText, answerString);
+        }
+
+        private string getAnswerForCategoricalSingleQuestion(FeaturedItem featuredQuestion, decimal answer)
+        {
+            var selectedOptionText = answer.ToString(CultureInfo.InvariantCulture);
+
+            var categoricalFeaturedQuestion = featuredQuestion as FeaturedCategoricalItem;
+            if (categoricalFeaturedQuestion != null)
+            {
+                var selectedOption = categoricalFeaturedQuestion.Options.FirstOrDefault(option => option.OptionValue == answer);
+                if (selectedOption != null)
+                {
+                    selectedOptionText = selectedOption.OptionText;
+                }
+            }
+
+            return selectedOptionText;
+        }
+
+        private string getAnswerForCategoricalMultiQuestion(FeaturedItem featuredQuestion, decimal[] answer)
+        {
+            var selectedOptionsText = string.Join(", ", answer);
+
+            var categoricalFeaturedQuestion = featuredQuestion as FeaturedCategoricalItem;
+            if (categoricalFeaturedQuestion != null)
+            {
+                var selectedOptions =
+                    categoricalFeaturedQuestion.Options.Where(option => answer.Contains(option.OptionValue))
+                        .Select(option => option.OptionText);
+                if (selectedOptions.Any())
+                {
+                    selectedOptionsText = string.Join(", ", selectedOptions);
+                }
+            }
+
+            return selectedOptionsText;
         }
 
         private IEnumerable<AnsweredQuestionSynchronizationDto> FilterNonFeaturedQuestionsByTemplate(
@@ -235,9 +279,10 @@ namespace CAPI.Android.Core.Model.EventHandlers
             //do nothing
         }
 
-        private void AnswerQuestion(Guid interviewId, Guid questionId, string newValue)
+        private void AnswerQuestion(Guid interviewId, Guid questionId, Func<FeaturedItem, string> getAnswer)
         {
             QuestionnaireDTO questionnaire = questionnaireDtOdocumentStorage.GetById(interviewId);
+
             if (questionnaire == null)
                 return;
 
@@ -246,25 +291,9 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
             if (keyIndex >= 0)
             {
-                properties[keyIndex].Value = newValue;
+                var featuredQuestion = properties[keyIndex];
 
-                questionnaire.SetProperties(properties);
-                questionnaireDtOdocumentStorage.Store(questionnaire, interviewId);
-            }
-        }
-
-        private void AnswerOptionsQuestion(Guid interviewId, Guid questionId, params decimal[] newValue)
-        {
-            QuestionnaireDTO questionnaire = questionnaireDtOdocumentStorage.GetById(interviewId);
-            if (questionnaire == null)
-                return;
-
-            var properties = questionnaire.GetProperties();
-            int keyIndex = Array.FindIndex(properties, w => w.PublicKey == questionId);
-
-            if (keyIndex >= 0)
-            {
-                properties[keyIndex].Value = newValue.ToString(); //bind options values
+                featuredQuestion.Value = getAnswer(featuredQuestion);
 
                 questionnaire.SetProperties(properties);
                 questionnaireDtOdocumentStorage.Store(questionnaire, interviewId);
@@ -273,53 +302,63 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, (featuredQuestion) => evnt.Payload.Answer);
         }
 
         
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            AnswerOptionsQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValues);
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
+                (featuredQuestion) =>
+                    getAnswerForCategoricalMultiQuestion(featuredQuestion, evnt.Payload.SelectedValues));
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            AnswerOptionsQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValue);
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
+                (featuredQuestion) =>
+                    getAnswerForCategoricalSingleQuestion(featuredQuestion, evnt.Payload.SelectedValue));
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
+                (featuredQuestion) => evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
         }
 
         public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
+                (featuredQuestion) => evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
         }
 
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
+                (featuredQuestion) => evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
         }
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString("d", CultureInfo.InvariantCulture));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
+                (featuredQuestion) => evnt.Payload.Answer.ToString("d", CultureInfo.InvariantCulture));
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Format("{0},{1}[{2}]", evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
+                (featuredQuestion) =>
+                    string.Format("{0},{1}[{2}]", evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy));
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, (featuredQuestion) => evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<AnswerRemoved> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Empty);
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, (featuredQuestion) => string.Empty);
         }
     }
 }
