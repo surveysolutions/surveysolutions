@@ -234,6 +234,9 @@
     <AndroidResource Include="Resources\Layout\CreateInterview.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\InterviewActionBar.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">
@@ -264,6 +267,7 @@
     <AndroidResource Include="Resources\Drawable\capi_splash.png" />
     <AndroidResource Include="Resources\Drawable\capi_icon.png" />
     <AndroidResource Include="Resources\Values\Themes.xml" />
+    <AndroidResource Include="Resources\Drawable\answer_progress_indicator.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
