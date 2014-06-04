@@ -41,3 +41,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]
 [assembly: InternalsVisibleTo("WB.Tools.EventsConverter")]
 [assembly: InternalsVisibleTo("WB.Tools.InterviewExtractor")]
+[assembly: InternalsVisibleTo("WB.Tools.DatabaseCleaner")]
