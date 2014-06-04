@@ -289,54 +289,49 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
             UpdateStatusMessage("Determining count of views to be deleted.");
 
-            this.ravenStore
-                .DatabaseCommands
-                .PutIndex(
-                    "AllViews",
-                    new IndexDefinition { Map = "from doc in docs let DocId = doc[\"@metadata\"][\"@id\"] select new {DocId};" },
-                    overwrite: true);
+            var initialViewCount = DocumentsInViewsDatabaseCount();
+            
+            var documentsInViewsDatabaseCount = initialViewCount;
+            
+            const int AllowedAttemptToDeleteCount = 10;
+            
+            int attemptCount = 0;
 
-            int initialViewCount;
-            using (IDocumentSession session = this.ravenStore.OpenSession())
+            while (documentsInViewsDatabaseCount > 0)
             {
-                // this will also materialize index if it is out of date or was just created
-                initialViewCount = session
-                    .Query<object>("AllViews")
-                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
-                    .Count();
+                if (AllowedAttemptToDeleteCount < attemptCount)
+                    throw new Exception(string.Format(
+                        "Failed to delete all views. Initial view count: {0}, remaining view count: {1}.",
+                        initialViewCount, documentsInViewsDatabaseCount));
+
+                ravenStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery(), false);
+
+                attemptCount++;
+
+                UpdateStatusMessage("Waiting 3 seconds while views are being deleted.");
+
+                Thread.Sleep(3000);
+
+                UpdateStatusMessage("Checking remaining views count.");
+           
+                documentsInViewsDatabaseCount = DocumentsInViewsDatabaseCount();
             }
-
-            ThrowIfShouldStopViewsRebuilding();
-
-            UpdateStatusMessage(string.Format("Deleting {0} views.", initialViewCount));
-
-            this.ravenStore
-                .DatabaseCommands
-                .DeleteByIndex("AllViews", new IndexQuery());
-
-            UpdateStatusMessage("Waiting 3 seconds while views are being deleted.");
-
-            Thread.Sleep(3000);
-
-            UpdateStatusMessage("Checking remaining views count.");
-
-            int resultViewCount;
-            using (IDocumentSession session = this.ravenStore.OpenSession())
-            {
-                resultViewCount = session
-                    .Query<object>("AllViews")
-                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
-                    .Count();
-            }
-
-            if (resultViewCount > 0)
-                throw new Exception(string.Format(
-                    "Failed to delete all views. Initial view count: {0}, remaining view count: {1}.",
-                    initialViewCount, resultViewCount));
 
             UpdateStatusMessage(string.Format("{0} views were deleted.", initialViewCount));
         }
 
+        private int DocumentsInViewsDatabaseCount()
+        {
+            int resultViewCount=0;
+            using (IDocumentSession session = this.ravenStore.OpenSession())
+            {
+                resultViewCount = session
+                    .Query<object>("Raven/DocumentsByEntityName")
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
+                    .Count();
+            }
+            return resultViewCount;
+        }
 
         private void EnableCacheInRepositoryWriters(IEnumerable<IRavenReadSideRepositoryWriter> writers)
         {
