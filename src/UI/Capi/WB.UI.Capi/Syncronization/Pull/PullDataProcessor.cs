@@ -120,6 +120,8 @@ namespace WB.UI.Capi.Syncronization.Pull
             {
                 syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
 
+                bool createdOnClient = metaInfo.CreatedOnClient.HasValue && metaInfo.CreatedOnClient.Value;
+
                 this.commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId,
                     (InterviewStatus)metaInfo.Status,
                     metaInfo.FeaturedQuestionsMeta.Select(
@@ -127,7 +129,7 @@ namespace WB.UI.Capi.Syncronization.Pull
                             new AnsweredQuestionSynchronizationDto(
                                 q.PublicKey, new decimal[0], q.Value,
                                 string.Empty))
-                        .ToArray(), string.Empty, true, metaInfo.CreatedOnClient));
+                        .ToArray(), string.Empty, true, createdOnClient));
 
             }
             catch (Exception ex)

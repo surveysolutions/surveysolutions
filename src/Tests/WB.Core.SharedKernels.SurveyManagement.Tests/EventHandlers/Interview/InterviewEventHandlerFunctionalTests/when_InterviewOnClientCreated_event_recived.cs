@@ -41,6 +41,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEv
         It should_interview_levels_count_be_equal_to_1 = () =>
             viewState.Document.Levels.Keys.Count.ShouldEqual(1);
 
+        It should_interview_has_created_onclient_true = () =>
+            viewState.Document.CreatedOnClient.ShouldEqual(true);
+
 
         private static Guid questionnaireId;
         private static long questionnaireVersion;
