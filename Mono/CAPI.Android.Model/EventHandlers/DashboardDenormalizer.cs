@@ -67,7 +67,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
             AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status,
-                evnt.Payload.FeaturedQuestionsMeta, evnt.Payload.CreatedOnClient.HasValue && evnt.Payload.CreatedOnClient.Value, false);
+                evnt.Payload.FeaturedQuestionsMeta, evnt.Payload.CreatedOnClient, false);
         }
 
 
