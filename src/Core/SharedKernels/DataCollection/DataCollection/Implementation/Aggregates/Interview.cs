@@ -639,17 +639,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             : base(id)
         {
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta));
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true));
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
         }
-
+        
         public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
             : base(id)
         {
-            this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid);
+            this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
-
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
             : base(id)
         {
@@ -1974,16 +1973,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
         {
             if (this.status == InterviewStatus.Deleted)
                 this.Restore(userId);
             else
                 this.ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
 
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId,
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, 
                 interviewStatus,
-                featuredQuestionsMeta));
+                featuredQuestionsMeta,
+                createdOnClient));
 
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
 
