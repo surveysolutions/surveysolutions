@@ -1900,8 +1900,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answersDeclaredInvalid: interviewDto.InvalidAnsweredQuestions.Select(ToIdentity).ToList(),
                 answersDeclaredValid: new List<Identity>());
 
-
-            this.ApplyEvent(new InterviewCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
+            if (interviewDto.CreatedOnClient)
+                this.ApplyEvent(new InterviewOnClientCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
+            else
+                this.ApplyEvent(new InterviewCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
+            
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: null));
 
