@@ -17,14 +17,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
     {
         HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName);
         PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels);
-        decimal GetRecordIdValueAsDecimal(string[] dataFileRecord, int idColumnIndex);
+        
         int GetIdColumnIndex(PreloadedDataByFile dataFile);
-        int GetParentIdColumnIndex(PreloadedDataByFile dataFile);
-        decimal[] GetAvalibleIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string parentIdValue);
+        int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile);
+        decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues);
+        
         Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile);
         ValueParsingResult ParseQuestion(string answer, string variableName, out KeyValuePair<Guid, object> parsedValue);
 
         PreloadedDataDto[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels);
         PreloadedDataDto[] CreatePreloadedDataDtoFromSampleData(PreloadedDataByFile sampleDataFile);
+        string GetValidFileNameForTopLevelQuestionnaire();
     }
 }

@@ -33,6 +33,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<NumericQuestionAdded>,
         IEventHandler<NumericQuestionCloned>,
         IEventHandler<NumericQuestionChanged>,
+        IEventHandler<QRBarcodeQuestionAdded>,
+        IEventHandler<QRBarcodeQuestionCloned>,
+        IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
         IEventHandler<TextListQuestionChanged>, IEventHandler
@@ -432,6 +435,65 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
             pdf.FillFrom(questionnaireDocument);
             return pdf;
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+
+                var newQuestion = new PdfQuestionView
+                {
+                    PublicId = @event.QuestionId,
+                    Title = @event.Title,
+                    QuestionType = QuestionType.QRBarcode,
+                    Answers = new List<PdfAnswerView>(),
+                    Variable = @event.VariableName,
+                    ConditionExpression = @event.EnablementCondition
+                };
+
+                questionnaire.AddQuestion(newQuestion, @event.ParentGroupId);
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionCloned> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var newQuestion = new PdfQuestionView
+                {
+                    PublicId = @event.QuestionId,
+                    Title = @event.Title,
+                    QuestionType = QuestionType.QRBarcode,
+                    Answers = new List<PdfAnswerView>(0),
+                    Variable = @event.VariableName,
+                    ConditionExpression = @event.EnablementCondition
+                };
+
+                questionnaire.AddQuestion(newQuestion, @event.ParentGroupId);
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var existingQuestion = questionnaire.GetQuestion(@event.QuestionId);
+                if (existingQuestion == null)
+                {
+                    return questionnaire;
+                }
+
+                existingQuestion.Variable = @event.VariableName;
+                existingQuestion.ConditionExpression = @event.EnablementCondition;
+                existingQuestion.Title = @event.Title;
+                existingQuestion.QuestionType = QuestionType.QRBarcode;
+                existingQuestion.Answers = new List<PdfAnswerView>(0);
+
+                return questionnaire;
+            });
         }
 
         public string Name

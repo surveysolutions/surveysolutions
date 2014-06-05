@@ -33,9 +33,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
         Because of =
             () =>
                 result =
-                    preloadedDataService.GetAvalibleIdListForParent(
+                    preloadedDataService.GetAvailableIdListForParent(
                         CreatePreloadedDataByFile(new string[] { "Id", rosterSizeQuestionVariableName }, new string[][] { new string[] { "1","3" } },
-                            questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, "1");
+                            questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, new []{"1"});
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
