@@ -74,7 +74,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 }
                 else
                     commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
-                        (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid));
+                        (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false));
 
                 File.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
             }

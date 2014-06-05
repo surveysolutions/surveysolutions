@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
-    internal class when_handling_InterviewStatusChanged_event_and_status_history_has_2_item_with_not_same_last_status :
+    internal class when_handling_InterviewStatusChanged_event_and_two_different_statuses_in_history :
         InterviewSummaryEventHandlerFunctionalTestsContext
     {
         private Establish context = () =>
