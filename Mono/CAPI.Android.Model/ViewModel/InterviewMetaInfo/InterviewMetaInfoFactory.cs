@@ -43,7 +43,7 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
                 Comments = interview.Comments,
                 Valid = interview.Valid,
                 FeaturedQuestionsMeta = featuredQuestionList,
-                CreatedOnClient = interview.CreatedOnClient,
+                CreatedOnClient = interview.JustInitilized,
                 TemplateVersion = interview.SurveyVersion
             };
         }

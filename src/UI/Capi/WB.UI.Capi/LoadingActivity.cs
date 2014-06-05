@@ -24,7 +24,11 @@ namespace WB.UI.Capi
         {
             base.OnCreate(bundle);
             this.ActionBar.SetDisplayShowHomeEnabled(false);
-            this.cancellationToken = this.WaitForLongOperation((ct) => this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
+            this.cancellationToken =
+                this.WaitForLongOperation(
+                    (ct) =>
+                        this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey")),
+                            this.Intent.GetBooleanExtra("createdOnClient", false)));
         }
 
         public override void OnBackPressed()
@@ -40,7 +44,7 @@ namespace WB.UI.Capi
                 this.cancellationToken.Cancel();
         }
 
-        protected void Restore(CancellationToken ct, Guid publicKey)
+        protected void Restore(CancellationToken ct, Guid publicKey, bool createdOnClient)
         {
             var applyingResult = this.packageApplier.CheckAndApplySyncPackage(publicKey);
 
@@ -59,9 +63,19 @@ namespace WB.UI.Capi
                 return;
             }
 
-            var intent = new Intent(this, typeof (DataCollectionDetailsActivity));
-            intent.PutExtra("publicKey", publicKey.ToString());
-            this.StartActivity(intent);
+            if (createdOnClient)
+            {
+                var intent = new Intent(this, typeof (CreateInterviewActivity));
+                intent.PutExtra("publicKey", publicKey.ToString());
+                intent.AddFlags(ActivityFlags.NoHistory);
+                this.StartActivity(intent);
+            }
+            else
+            {
+                var intent = new Intent(this, typeof (DataCollectionDetailsActivity));
+                intent.PutExtra("publicKey", publicKey.ToString());
+                this.StartActivity(intent);
+            }
         }
     }
 }

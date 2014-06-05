@@ -315,7 +315,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                 evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion,
-                evnt.EventSequence);
+                evnt.EventSequence, false);
         }
 
         public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
@@ -323,7 +323,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                 evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion,
-                evnt.EventSequence);
+                evnt.EventSequence, false);
         }
 
         public ViewWithSequence<InterviewData> Create(IPublishedEvent<InterviewOnClientCreated> evnt)
@@ -331,11 +331,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
            return this.CreateViewWithSequence(evnt.Payload.UserId, evnt.EventSourceId,
                 evnt.EventTimeStamp, evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion, 
-                evnt.EventSequence);
+                evnt.EventSequence, true);
         }
 
         private ViewWithSequence<InterviewData> CreateViewWithSequence(Guid userId, Guid eventSourceId, DateTime eventTimeStamp,
-            Guid questionnaireId, long questionnaireVersion, long eventSequence)
+            Guid questionnaireId, long questionnaireVersion, long eventSequence, bool createdOnClient)
         {
             var responsible = this.users.GetById(userId);
 
@@ -346,7 +346,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
                 ResponsibleId = userId, // Creator is responsible
-                ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined
+                ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined,
+                CreatedOnClient = createdOnClient
             };
             var emptyVector = new decimal[0];
             interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(new ValueVector<Guid>(), null, emptyVector));
