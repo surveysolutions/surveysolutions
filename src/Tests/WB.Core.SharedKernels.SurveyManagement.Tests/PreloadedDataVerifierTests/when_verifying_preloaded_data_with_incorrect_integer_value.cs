@@ -31,8 +31,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                     QuestionType = QuestionType.Numeric
                 });
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1", "ParentId" },
-                new string[][] { new string[] { "1", "text", "" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1" },
+                new string[][] { new string[] { "1", "text"} },
                 "questionnaire.csv");
 
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
