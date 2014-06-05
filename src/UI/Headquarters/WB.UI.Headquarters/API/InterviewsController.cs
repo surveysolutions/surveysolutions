@@ -25,9 +25,9 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        [Route("apis/v1/interviews")] //?{templateId}&{templateVersion}&{status}&{interviewerId}&{limit=10}&{offset=1}
+        [Route("apis/v1/interviews")] //?{templateId}&{templateVersion}&{status}&{interviewId}&{limit=10}&{offset=1}
         public InterviewApiView InterviewsFiltered(Guid? templateId = null, long? templateVersion = null,
-            InterviewStatus? status = null, Guid? interviewerId = null, int limit = 10, int offset = 1)
+            InterviewStatus? status = null, Guid? interviewId = null, int limit = 10, int offset = 1)
         {
             var input = new AllInterviewsInputModel
             {
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.API
                 QuestionnaireId = templateId,
                 QuestionnaireVersion = templateVersion,
                 Status = status,
-                InterviewId = interviewerId
+                InterviewId = interviewId
             };
 
             var interviews = this.allInterviewsViewFactory.Load(input);

@@ -78,8 +78,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 validQuestions, 
                 invalidQuestions, 
                 null, 
-                propagatedGroupInstanceCounts, 
-                interview.WasCompleted);
+                propagatedGroupInstanceCounts,
+                interview.WasCompleted, 
+                interview.CreatedOnClient);
         }
 
         private static void FillAllComments(AnsweredQuestionSynchronizationDto answeredQuestion, InterviewQuestion interviewQuestion)

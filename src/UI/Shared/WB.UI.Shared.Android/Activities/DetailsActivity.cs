@@ -94,7 +94,7 @@ namespace WB.UI.Shared.Android.Activities
                 this.screenId = this.Model.Chapters.FirstOrDefault().ScreenId;
             }
 
-
+            this.Title = this.Model.Title;
 
             if (bundle == null)
             {

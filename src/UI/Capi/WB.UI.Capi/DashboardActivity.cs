@@ -114,21 +114,15 @@ namespace WB.UI.Capi
                 return;
 
             var id = target.GetTag(Resource.Id.IsInterviewLocal);
-            bool isLocal;
+            bool createdOnClient;
+
+            bool localyCreated = (id != null && bool.TryParse(id.ToString(), out createdOnClient) && createdOnClient);
             
-            if (id != null && bool.TryParse(id.ToString(), out isLocal) && isLocal)
-            {
-                var intent = new Intent(this, typeof(CreateInterviewActivity));
-                intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
-                intent.AddFlags(ActivityFlags.NoHistory);
-                this.StartActivity(intent);
-            }
-            else
-            {
-                var intent = new Intent(this, typeof(LoadingActivity));
-                intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
-                this.StartActivity(intent);
-            }
+            var intent = new Intent(this, typeof(LoadingActivity));
+            intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
+            intent.PutExtra("createdOnClient", localyCreated);
+            this.StartActivity(intent);
+            
         }
 
         void btnNewInterview_ButtonClick(object sender, EventArgs e)
