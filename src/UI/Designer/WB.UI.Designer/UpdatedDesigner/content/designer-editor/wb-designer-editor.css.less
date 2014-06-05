@@ -321,49 +321,65 @@
     }
 
     > .question-editor {
+      position: relative;
       height: 100%;
-      padding: 36px 40px;
       background: white;
-      overflow: auto;
 
-      > .breadcrumbs {
-        .wb-breadcrumbs('gray');
-      }
+      @form-btns-hldr-height: 95px;
+      @form-holder-height: calc(~"100%" - (@form-btns-hldr-height));
 
-      > .group {
-        @bradius: 4px;
-        margin: 25px 0;
-        border-radius: @bradius;
-        background: #f1f2f3;
+      > .form-holder {
+        padding: 36px 40px;
+        height: @form-holder-height;
+        overflow: auto;
 
-        > h1 {
-          border: 2px solid #dbdfe2;
-          border-radius: @bradius;
-          margin: 0;
-          .questionnarie-question-editor-group-h1-fontstyle();
-          background: #fff;
-          padding: 12px;
+        > .breadcrumbs {
+          .wb-breadcrumbs('gray');
         }
 
-        > .form-holder {
-          padding: 15px;
-          .clearfix();
+        > .group {
+          @bradius: 4px;
+          margin: 25px 0;
+          border-radius: @bradius;
+          background: #f1f2f3;
 
-          > a {
-            .breadcrumbs-fontstyle('blue');
+          > h1 {
+            border: 2px solid #dbdfe2;
+            border-radius: @bradius;
+            margin: 0;
+            .questionnarie-question-editor-group-h1-fontstyle();
+            background: #fff;
+            padding: 12px;
+          }
 
-            &.left {
-              float: left;
-            }
-            &.right {
-              float: right;
+          > .form-holder {
+            padding: 15px;
+            .clearfix();
+
+            > a {
+              .breadcrumbs-fontstyle('blue');
+
+              &.left {
+                float: left;
+              }
+              &.right {
+                float: right;
+              }
             }
           }
         }
+
       }
 
-      .form-buttons-holder {
-        margin: 16px 0px;
+      > .form-buttons-holder {
+        padding: 25px 40px;
+        position: absolute;
+        width: 100%;
+        height: @form-btns-hldr-height;
+        bottom: 0;
+        left: 0;
+
+        //margin: 16px 0px;
         .clearfix();
 
         .pull-left, .pull-right {
@@ -371,13 +387,13 @@
         }
 
         .pull-left {
-          > * { margin-right: 12px; }
+          > * {
+            margin-right: 12px;
+          }
         }
         .pull-right {
           > * {
             margin-left: 12px;
-            vertical-align: middle;
-            padding-top: 17px;
           }
         }
 

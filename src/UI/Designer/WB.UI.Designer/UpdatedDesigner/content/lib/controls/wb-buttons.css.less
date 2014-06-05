@@ -25,18 +25,28 @@
 }
 
 .btn-lg {
-  //height: 42px;
   padding: 17px;
   border: none;
-  background-color: @inline-button-medium-bg-color;
-  &:hover { background: darken(@inline-button-medium-bg-color, 5%); }
-
-  .inline-button-fontstyle();
-  text-transform: uppercase;
-  color: @inline-button-medium-fg-color;
   border-radius: 3px;
 }
 
+.btn-primary {
+  background-color: @inline-button-medium-bg-color;
+  &:hover { background: darken(@inline-button-medium-bg-color, 5%); }
+  .inline-button-fontstyle();
+  text-transform: uppercase;
+  color: @inline-button-medium-fg-color;
+
+  &.btn-transbg {
+    padding-left: 7px;
+    padding-right: 7px;
+    background-color: transparent;
+    color: @common-blue-color;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
 
 .wb-dropdown-button() {
   vertical-align: middle;

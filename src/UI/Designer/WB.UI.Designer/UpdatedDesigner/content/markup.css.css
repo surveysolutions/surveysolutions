@@ -5873,6 +5873,9 @@ body {
 .btn-group-lg > .btn {
   padding: 17px;
   border: none;
+  border-radius: 3px;
+}
+.btn-primary {
   background-color: #2fc507;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-weight: bold;
@@ -5881,10 +5884,18 @@ body {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #ffffff;
-  border-radius: 3px;
 }
-.btn-lg:hover {
+.btn-primary:hover {
   background: #29ac06;
+}
+.btn-primary.btn-transbg {
+  padding-left: 7px;
+  padding-right: 7px;
+  background-color: transparent;
+  color: #2a81cb;
+}
+.btn-primary.btn-transbg:hover {
+  text-decoration: underline;
 }
 .dropdown.width60 {
   width: 60%;
@@ -6622,18 +6633,22 @@ body {
   vertical-align: middle;
 }
 #designer-editor.container section#main > .question-editor {
+  position: relative;
   height: 100%;
-  padding: 36px 40px;
   background: white;
+}
+#designer-editor.container section#main > .question-editor > .form-holder {
+  padding: 36px 40px;
+  height: calc(100% - 95px);
   overflow: auto;
 }
-#designer-editor.container section#main > .question-editor > .breadcrumbs > ul {
+#designer-editor.container section#main > .question-editor > .form-holder > .breadcrumbs > ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-#designer-editor.container section#main > .question-editor > .breadcrumbs > ul > li,
-#designer-editor.container section#main > .question-editor > .breadcrumbs > ul > li > a {
+#designer-editor.container section#main > .question-editor > .form-holder > .breadcrumbs > ul > li,
+#designer-editor.container section#main > .question-editor > .form-holder > .breadcrumbs > ul > li > a {
   display: inline-block;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
@@ -6641,7 +6656,7 @@ body {
   text-transform: uppercase;
   color: #4a4a4a;
 }
-#designer-editor.container section#main > .question-editor > .breadcrumbs > ul > li:after {
+#designer-editor.container section#main > .question-editor > .form-holder > .breadcrumbs > ul > li:after {
   position: relative;
   top: 3px;
   display: inline-block;
@@ -6651,12 +6666,12 @@ body {
   margin: 0 7px;
   background: url(lib/i/breadcrumb-slash.png) no-repeat;
 }
-#designer-editor.container section#main > .question-editor > .group {
+#designer-editor.container section#main > .question-editor > .form-holder > .group {
   margin: 25px 0;
   border-radius: 4px;
   background: #f1f2f3;
 }
-#designer-editor.container section#main > .question-editor > .group > h1 {
+#designer-editor.container section#main > .question-editor > .form-holder > .group > h1 {
   border: 2px solid #dbdfe2;
   border-radius: 4px;
   margin: 0;
@@ -6668,70 +6683,73 @@ body {
   background: #fff;
   padding: 12px;
 }
-#designer-editor.container section#main > .question-editor > .group > .form-holder {
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder {
   padding: 15px;
 }
-#designer-editor.container section#main > .question-editor > .group > .form-holder:before,
-#designer-editor.container section#main > .question-editor > .group > .form-holder:after {
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:before,
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .question-editor > .group > .form-holder:after {
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:after {
   clear: both;
 }
-#designer-editor.container section#main > .question-editor > .group > .form-holder:before,
-#designer-editor.container section#main > .question-editor > .group > .form-holder:after {
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:before,
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .question-editor > .group > .form-holder:after {
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:after {
   clear: both;
 }
-#designer-editor.container section#main > .question-editor > .group > .form-holder > a {
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder > a {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #2a81cb;
 }
-#designer-editor.container section#main > .question-editor > .group > .form-holder > a.left {
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder > a.left {
   float: left;
 }
-#designer-editor.container section#main > .question-editor > .group > .form-holder > a.right {
+#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder > a.right {
   float: right;
 }
-#designer-editor.container section#main > .question-editor .form-buttons-holder {
-  margin: 16px 0px;
+#designer-editor.container section#main > .question-editor > .form-buttons-holder {
+  padding: 25px 40px;
+  position: absolute;
+  width: 100%;
+  height: 95px;
+  bottom: 0;
+  left: 0;
 }
-#designer-editor.container section#main > .question-editor .form-buttons-holder:before,
-#designer-editor.container section#main > .question-editor .form-buttons-holder:after {
+#designer-editor.container section#main > .question-editor > .form-buttons-holder:before,
+#designer-editor.container section#main > .question-editor > .form-buttons-holder:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .question-editor .form-buttons-holder:after {
+#designer-editor.container section#main > .question-editor > .form-buttons-holder:after {
   clear: both;
 }
-#designer-editor.container section#main > .question-editor .form-buttons-holder:before,
-#designer-editor.container section#main > .question-editor .form-buttons-holder:after {
+#designer-editor.container section#main > .question-editor > .form-buttons-holder:before,
+#designer-editor.container section#main > .question-editor > .form-buttons-holder:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .question-editor .form-buttons-holder:after {
+#designer-editor.container section#main > .question-editor > .form-buttons-holder:after {
   clear: both;
 }
-#designer-editor.container section#main > .question-editor .form-buttons-holder .pull-left,
-#designer-editor.container section#main > .question-editor .form-buttons-holder .pull-right {
+#designer-editor.container section#main > .question-editor > .form-buttons-holder .pull-left,
+#designer-editor.container section#main > .question-editor > .form-buttons-holder .pull-right {
   height: 42px;
 }
-#designer-editor.container section#main > .question-editor .form-buttons-holder .pull-left > * {
+#designer-editor.container section#main > .question-editor > .form-buttons-holder .pull-left > * {
   margin-right: 12px;
 }
-#designer-editor.container section#main > .question-editor .form-buttons-holder .pull-right > * {
+#designer-editor.container section#main > .question-editor > .form-buttons-holder .pull-right > * {
   margin-left: 12px;
-  vertical-align: middle;
-  padding-top: 17px;
 }
-#designer-editor.container section#main > .question-editor .form-buttons-holder > div a {
+#designer-editor.container section#main > .question-editor > .form-buttons-holder > div a {
   cursor: pointer;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   text-transform: uppercase;
