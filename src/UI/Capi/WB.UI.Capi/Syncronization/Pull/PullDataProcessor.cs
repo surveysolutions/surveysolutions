@@ -127,12 +127,12 @@ namespace WB.UI.Capi.Syncronization.Pull
                             new AnsweredQuestionSynchronizationDto(
                                 q.PublicKey, new decimal[0], q.Value,
                                 string.Empty))
-                        .ToArray(), string.Empty, true));
+                        .ToArray(), string.Empty, true, metaInfo.CreatedOnClient));
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
+                this.logger.Error("Error meta applying " + metaInfo.PublicKey, ex);
                 throw;
             }
         }
