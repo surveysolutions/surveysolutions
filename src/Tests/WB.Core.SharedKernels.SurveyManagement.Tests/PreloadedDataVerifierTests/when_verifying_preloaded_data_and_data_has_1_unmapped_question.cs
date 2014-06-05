@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1", "ParentId" }, null, QuestionnaireCsvFileName);
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1" }, null, QuestionnaireCsvFileName);
 
             preloadedDataServiceMock=new Mock<IPreloadedDataService>();
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
