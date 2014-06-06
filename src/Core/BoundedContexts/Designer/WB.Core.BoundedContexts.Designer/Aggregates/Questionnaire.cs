@@ -710,7 +710,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static IClock Clock
         {
-            get { return ServiceLocator.Current.GetInstance<IClock>(); }
+            get { return NcqrsEnvironment.Get<IClock>(); /*ServiceLocator.Current.GetInstance<IClock>(); */}
         }
 
         /// <remarks>
