@@ -99,6 +99,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return File.ReadAllBytes(pathToFile);
         }
 
+        public string ReadAllText(string fileName)
+        {
+            return File.ReadAllText(fileName);
+        }
+
         public void CopyFileOrDirectory(string sourceDir, string targetDir)
         {
             FileAttributes attr = File.GetAttributes(sourceDir);
