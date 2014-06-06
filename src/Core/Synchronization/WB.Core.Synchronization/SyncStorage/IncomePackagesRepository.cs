@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Main.Core;
 using Main.Core.Documents;
@@ -10,11 +9,12 @@ using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
-using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -27,6 +27,8 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
 
         private readonly ILogger logger;
+        private readonly IJsonUtils jsonUtils;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICommandService commandService;
         private readonly SyncSettings syncSettings;
 
@@ -35,19 +37,22 @@ namespace WB.Core.Synchronization.SyncStorage
         private const string FileExtension = "sync";
 
         public IncomePackagesRepository(string folderPath, IQueryableReadSideRepositoryWriter<UserDocument> userStorage, ILogger logger,
-            SyncSettings syncSettings, ICommandService commandService)
+            SyncSettings syncSettings, ICommandService commandService, IJsonUtils jsonUtils, IFileSystemAccessor fileSystemAccessor)
         {
-            this.path = Path.Combine(folderPath, FolderName);
-            if (!Directory.Exists(this.path))
-                Directory.CreateDirectory(this.path);
-            var errorPath = Path.Combine(this.path, ErrorFolderName);
-            if (!Directory.Exists(errorPath))
-                Directory.CreateDirectory(errorPath);
+            this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
+            
+            if (!fileSystemAccessor.IsDirectoryExists(this.path))
+                fileSystemAccessor.CreateDirectory(this.path);
+            var errorPath = fileSystemAccessor.CombinePath(this.path, ErrorFolderName);
+            if (!fileSystemAccessor.IsDirectoryExists(errorPath))
+                fileSystemAccessor.CreateDirectory(errorPath);
 
             this.userStorage = userStorage;
             this.logger = logger;
             this.syncSettings = syncSettings;
             this.commandService = commandService;
+            this.jsonUtils = jsonUtils;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -57,7 +62,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             try
             {
-                var meta = this.GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
+                var meta = jsonUtils.Deserrialize<InterviewMetaInfo>(item.MetaInfo);
                 if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value)
                 {
                     AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
@@ -76,35 +81,36 @@ namespace WB.Core.Synchronization.SyncStorage
                     commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
                         (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false));
 
-                File.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
+                fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
             }
             catch (Exception ex)
             {
                 this.logger.Error("error on handling incoming package,", ex);
-
-                File.WriteAllText(this.GetItemFileNameForErrorStorage(item.Id), JsonConvert.SerializeObject(item));
+                fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.Id),jsonUtils.GetItemAsContent(item));
             }
         }
 
         private string GetItemFileName(Guid id)
         {
-            return Path.Combine(this.path, string.Format("{0}.{1}", id, FileExtension));
+            return fileSystemAccessor.CombinePath(this.path, string.Format("{0}.{1}", id, FileExtension));
         }
 
         private string GetItemFileNameForErrorStorage(Guid id)
         {
-            return Path.Combine(this.path, ErrorFolderName, string.Format("{0}.{1}", id, FileExtension));
+            return fileSystemAccessor.CombinePath(fileSystemAccessor.CombinePath(this.path, ErrorFolderName),
+                string.Format("{0}.{1}", id, FileExtension));
         }
 
         public void ProcessItem(Guid id)
         {
             var fileName = this.GetItemFileName(id);
-            if (!File.Exists(fileName))
+
+            if (!fileSystemAccessor.IsFileExists(fileName))
                 return;
 
-            var fileContent = File.ReadAllText(fileName);
-
-            var items = this.GetContentAsItem<AggregateRootEvent[]>(fileContent);
+            var fileContent = fileSystemAccessor.ReadAllText(fileName);
+            
+            var items = jsonUtils.Deserrialize<AggregateRootEvent[]>(fileContent);
             if (items.Length > 0)
             {
                 var eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
@@ -115,14 +121,10 @@ namespace WB.Core.Synchronization.SyncStorage
                 if (bus == null)
                     return;
 
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-                if (commandService == null)
-                    return;
-
                 var incomeEvents = this.BuildEventStreams(items, eventStore.GetLastEventSequence(id));
 
                 eventStore.Store(incomeEvents);
-                File.Delete(fileName);
+                fileSystemAccessor.DeleteFile(fileName);
 
                 bus.Publish(incomeEvents);
                 if (this.syncSettings.ReevaluateInterviewWhenSynchronized)
@@ -132,21 +134,24 @@ namespace WB.Core.Synchronization.SyncStorage
             }
             else
             {
-                File.Delete(fileName);
+                fileSystemAccessor.DeleteFile(fileName);
             }
         }
 
         public IEnumerable<Guid> GetListOfUnhandledPackages()
         {
-            var errorPath = Path.Combine(this.path, ErrorFolderName);
-            if (!Directory.Exists(errorPath))
+            var errorPath = fileSystemAccessor.CombinePath(this.path, ErrorFolderName);
+            if (!fileSystemAccessor.IsDirectoryExists(errorPath))
                 return Enumerable.Empty<Guid>();
-            var syncFiles = Directory.GetFiles(errorPath, string.Format("*.{0}", FileExtension));
+
+            var syncFiles = fileSystemAccessor.GetFilesInDirectory(errorPath).Where(f => f.EndsWith("." + FileExtension));
             var result = new List<Guid>();
             foreach (var syncFile in syncFiles)
             {
+                var fileName = fileSystemAccessor.GetFileName(syncFile);
+                var fileNameWithoutExtension = fileName.Substring(0, fileName.IndexOf(".") + 1);
                 Guid packageId;
-                if (Guid.TryParse(Path.GetFileNameWithoutExtension(syncFile), out packageId))
+                if (Guid.TryParse(fileNameWithoutExtension, out packageId))
                     result.Add(packageId);
             }
             return result;
@@ -155,15 +160,6 @@ namespace WB.Core.Synchronization.SyncStorage
         public string GetUnhandledPackagePath(Guid id)
         {
             return this.GetItemFileNameForErrorStorage(id);
-        }
-
-        private T GetContentAsItem<T>(string syncItemContent)
-        {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            var item = JsonConvert.DeserializeObject<T>(PackageHelper.DecompressString(syncItemContent),
-                settings);
-
-            return item;
         }
 
         protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)
