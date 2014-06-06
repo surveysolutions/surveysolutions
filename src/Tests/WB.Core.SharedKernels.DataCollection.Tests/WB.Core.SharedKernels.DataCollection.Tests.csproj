@@ -105,6 +105,7 @@
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
     <Compile Include="InterviewTests\when_answering_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_has_2_selected_options_and__new_answer_is_empty_set.cs" />
     <Compile Include="InterviewTests\when_answering_top_level_question_which_enables_nested_roster.cs" />
+    <Compile Include="InterviewTests\when_applying_synchronization_metadata_on_created_interviews.cs" />
     <Compile Include="InterviewTests\when_cancelling_interview_by_hq_synchronization.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_fixed_roster_and_roster_size_numeric_question_inside_it.cs" />
     <Compile Include="InterviewTests\when_answer_numeric_which_triggers_4_rosters_3_rosters_one_inside_other_and_1_separate_roster.cs" />
