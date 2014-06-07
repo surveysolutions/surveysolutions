@@ -52,7 +52,7 @@ function CheckPrerequisites() {
 
 
 function IsSetupSolution($Solution) {
-    return ($Solution.EndsWith('Setup.sln') -or $Solution.EndsWith('SetupHeadquarters.sln')
+    return ($Solution.EndsWith('Setup.sln') -or $Solution.EndsWith('SetupHeadquarters.sln'))
 }
 
 function ShouldSolutionBeIgnored($Solution) {
