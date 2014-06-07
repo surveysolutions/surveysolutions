@@ -14,7 +14,9 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 	$ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 	$ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
 	$ProjectSupervisor = 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj'
+	$core = 'src\core'
 
+	UpdateProjectVersion $BuildNumber $core
 	UpdateProjectVersion $BuildNumber $ProjectDesigner
 	UpdateProjectVersion $BuildNumber $ProjectHeadquarters
 	UpdateProjectVersion $BuildNumber $ProjectSupervisor
