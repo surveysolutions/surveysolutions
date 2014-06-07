@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    <UI>
+      <!--will have to move strings to localize -->
+      <Dialog Id="SiteParamsDlg"  Width="370" Height="270" Title="Headquarter website settings" NoMinimize="yes">
+        <Control Id="SiteNameLabel" Type="Text" X="45" Y="73" Width="220" Height="15" TabSkip="no" Text="New website name" />
+        <Control Id="SiteNameEdit" Type="Edit" X="45" Y="85" Width="220" Height="18" Property="SITE_NAME" Text="{80}" />
+        <Control Id="SiteHostLabel" Type="Text" X="45" Y="137" Width="220" Height="15" TabSkip="no" Text="Host name" />
+        <Control Id="SiteHostEdit" Type="Edit" X="45" Y="149" Width="220" Height="18" Property="SITE_HOST" Text="{80}" />
+        <Control Id="SitePortLabel" Type="Text" X="45" Y="201" Width="220" Height="15" TabSkip="no" Text="Port" />
+        <Control Id="SitePortEdit" Type="Edit" X="45" Y="213" Width="220" Height="18" Property="SITE_PORT" Text="{80}" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="Back"></Control>
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="Next"></Control>
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+      </Dialog>
+    </UI>
+	</Fragment>
+</Wix>
