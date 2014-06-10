@@ -1,4 +1,7 @@
 ﻿using System.Linq;
+using System.Reflection;
+using System.Web.Compilation;
+using System.Web.Hosting;
 using System.Web.Http.Filters;
 using System.Web.SessionState;
 using Elmah;
@@ -87,25 +90,26 @@ namespace WB.UI.Supervisor
             RegisterRoutes(RouteTable.Routes);
 
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(SetupViewEngine());
+            ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+
+            RegisterVirtualPathProvider();
         }
 
-        private static RazorViewEngine SetupViewEngine()
+        private static void RegisterVirtualPathProvider()
         {
-            var viewEngine = new RazorViewEngine();
+            Assembly[] assemblies = BuildManager
+                .GetReferencedAssemblies()
+                .Cast<Assembly>()
+                .Where(assembly => assembly.GetName().Name.Contains("SharedKernels") && assembly.GetName().Name.Contains("Web"))
+                .ToArray();
 
-            string[] engineViewPath =
+            HostingEnvironment.RegisterVirtualPathProvider(new EmbeddedResourceVirtualPathProvider.Vpp(assemblies)
             {
-                "~/bin/Views/{1}/{0}.cshtml",
-                "~/bin/Views/Shared/{0}.cshtml"
-            };
-
-            viewEngine.AreaMasterLocationFormats = viewEngine.AreaMasterLocationFormats.Union(engineViewPath).ToArray();
-            viewEngine.AreaViewLocationFormats = viewEngine.AreaViewLocationFormats.Union(engineViewPath).ToArray();
-            viewEngine.AreaPartialViewLocationFormats = viewEngine.AreaPartialViewLocationFormats.Union(engineViewPath).ToArray();
-
-            return viewEngine;
+                //you can do a specific assembly registration too. If you provide the assemly source path, it can read
+                //from the source file so you can change the content while the app is running without needing to rebuild
+                //{typeof(SomeAssembly.SomeClass).Assembly, @"..\SomeAssembly"} 
+            });
         }
 
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
