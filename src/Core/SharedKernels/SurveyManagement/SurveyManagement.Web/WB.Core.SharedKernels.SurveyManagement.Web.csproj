@@ -85,24 +85,16 @@
     <Compile Include="Utils\ViewHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Views\Interview\ConfirmRevalidation.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\Interview\InterviewDetails.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\Interview\Revalidate.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
+    <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
+    <EmbeddedResource Include="Views\Interview\Revalidate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
