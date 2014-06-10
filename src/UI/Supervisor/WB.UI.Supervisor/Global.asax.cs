@@ -1,4 +1,5 @@
-﻿using System.Web.Http.Filters;
+﻿using System.Linq;
+using System.Web.Http.Filters;
 using System.Web.SessionState;
 using Elmah;
 using Microsoft.Practices.ServiceLocation;
@@ -86,8 +87,25 @@ namespace WB.UI.Supervisor
             RegisterRoutes(RouteTable.Routes);
 
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new RazorViewEngine());
+            ViewEngines.Engines.Add(SetupViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+        }
+
+        private static RazorViewEngine SetupViewEngine()
+        {
+            var viewEngine = new RazorViewEngine();
+
+            string[] engineViewPath =
+            {
+                "~/bin/Views/{1}/{0}.cshtml",
+                "~/bin/Views/Shared/{0}.cshtml"
+            };
+
+            viewEngine.AreaMasterLocationFormats = viewEngine.AreaMasterLocationFormats.Union(engineViewPath).ToArray();
+            viewEngine.AreaViewLocationFormats = viewEngine.AreaViewLocationFormats.Union(engineViewPath).ToArray();
+            viewEngine.AreaPartialViewLocationFormats = viewEngine.AreaPartialViewLocationFormats.Union(engineViewPath).ToArray();
+
+            return viewEngine;
         }
 
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)

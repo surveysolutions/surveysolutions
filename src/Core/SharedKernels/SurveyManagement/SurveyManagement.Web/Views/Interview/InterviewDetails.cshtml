@@ -1,7 +1,7 @@
 ﻿@using System.Web.Optimization
 @using Questionnaire.Core.Web.Helpers
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
-@model WB.UI.Supervisor.Models.InterviewModel
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -41,7 +41,7 @@
     </script>
 
     <script type="text/html" id="SingleOptionReadOnly">
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
                 <div data-bind="foreach: options">
                     <label class="radio" data-bind='attr: { "for": optionFor }'>
@@ -53,7 +53,7 @@
         </div>
     </script>
     <script type="text/html" id="MultyOptionReadOnly">
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
                 <div data-bind="foreach: options">
                     <label class="checkbox" data-bind='attr: { "for": optionFor }'>
@@ -66,9 +66,9 @@
         </div>
     </script>
     <script type="text/html" id="NumericReadOnly">
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
-                <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
+                <input class="form-control" type="text" data-bind="value: answer" disabled="disabled" />
             </div>
         </div>
     </script>
@@ -76,7 +76,7 @@
         <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
     </script>
     <script type="text/html" id="TextListReadOnly">
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
                 <div data-bind="foreach: options">
                     <label class="checkbox">
@@ -87,19 +87,19 @@
         </div>
     </script>
     <script type="text/html" id="AutoPropagateReadOnly">
-        <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
+        <input class="form-control" type="text" data-bind="value: answer" disabled="disabled" />
     </script>
     <script type="text/html" id="TextReadOnly">
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
-                <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
+                <input class="form-control" type="text" data-bind="value: answer" disabled="disabled" />
             </div>
         </div>
     </script>
     <script type="text/html" id="QRBarcodeReadOnly">
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
-                <input class="input-block-level" type="text" data-bind="value: answer" disabled="disabled" />
+                <input class="form-control" type="text" data-bind="value: answer" disabled="disabled" />
             </div>
         </div>
     </script>
@@ -110,11 +110,8 @@
         <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
     </script>
 
-
-
-
     <script type="text/html" id="SingleOptionFull">
-        <div class="control-group" data-bind="validationElement: selectedOption">
+        <div class="form-group" data-bind="validationElement: selectedOption">
             <div class="controls">
                 <div data-bind="foreach: options">
                     <label class="radio" data-bind='attr: { "for": optionFor }'>
@@ -128,7 +125,7 @@
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly==false, enable: errors().length == 0">Save answer</button>
     </script>
     <script type="text/html" id="MultyOptionFull">
-        <div class="control-group" data-bind="validationElement: selectedOptions">
+        <div class="form-group" data-bind="validationElement: selectedOptions">
             <div class="controls">
                 <div data-bind="foreach: options">
                     <label class="checkbox" data-bind='attr: { "for": optionFor }'>
@@ -143,9 +140,9 @@
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly==false, enable: errors().length == 0">Save answer</button>
     </script>
     <script type="text/html" id="NumericFull">
-        <div class="control-group" data-bind="validationElement: answer">
+        <div class="form-group" data-bind="validationElement: answer">
             <div class="controls">
-                <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly, valueUpdate: 'afterkeydown'" />
+                <input class="form-control" type="text" data-bind="value: answer, disable: isReadonly, valueUpdate: 'afterkeydown'" />
                 <span class="help-inline" data-bind="validationMessage: answer"></span>
             </div>
         </div>
@@ -155,7 +152,7 @@
         <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
     </script>
     <script type="text/html" id="TextListFull">
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
                 <div data-bind="foreach: options">
                     <label class="checkbox">
@@ -166,22 +163,22 @@
         </div>
     </script>
     <script type="text/html" id="AutoPropagateFull">
-        <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
+        <input class="form-control" type="text" data-bind="value: answer, disable: isReadonly" />
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly==false">Save answer</button>
     </script>
     <script type="text/html" id="TextFull">
-        <div class="control-group" data-bind="validationElement: answer">
+        <div class="form-group" data-bind="validationElement: answer">
             <div class="controls">
-                <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly, valueUpdate: 'afterkeydown'" />
+                <input class="form-control" type="text" data-bind="value: answer, disable: isReadonly, valueUpdate: 'afterkeydown'" />
                 <span class="help-inline" data-bind="validationMessage: answer"></span>
             </div>
         </div>
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly==false, enable: errors().length == 0">Save answer</button>
     </script>
     <script type="text/html" id="QRBarcodeFull">
-        <div class="control-group" data-bind="validationElement: answer">
+        <div class="form-group" data-bind="validationElement: answer">
             <div class="controls">
-                <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
+                <input class="form-control" type="text" data-bind="value: answer, disable: isReadonly" />
                 <span class="help-inline" data-bind="validationMessage: answer"></span>
             </div>
         </div>
@@ -209,7 +206,7 @@
         <span data-bind=" text: answer"></span>
     </script>
     <script type="text/html" id="DateTime">
-        <span data-bind=" text: moment(answer).format('l')"></span>
+        <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
     </script>
     <script type="text/html" id="AutoPropagate">
         <span data-bind=" text: answer"></span>
@@ -229,179 +226,179 @@
 }
 
 <div data-bind="visible: IsPageLoaded">
-    <div id="menu" class="hidden-phone" data-bind="css: filter">
-        <div id="menuInner" class="slim-scroll">
-            <div class="hide-panel-block text-right innerLR">
-                &larr;&nbsp;<a class="pseudo-link" data-bind="click: ToggleFilter">Hide filter</a>
+    <div id="menu" class="col-sm-3 col-md-2 sidebar" data-bind="css: filter">
+        <div class="panel panel-default">
+            <div class="panel-heading with-btn">
+                Groups
+                <div class="btn-group btn-group-sm pull-right">
+                    <button data-bind="click: ToggleFilter" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Hide groups</button>
+                </div>
             </div>
-            <ul>
-                <li class="heading"><span>FILTER</span></li>
-            </ul>
-            <ul id="groups-menu">
+            <ul id="groups-menu" class="list-group">
                 <!-- ko foreach: groups -->
-                <li data-bind="css: css">
+                <li class="list-group-item" data-bind="css: css">
                     <a data-bind="html: title, attr: {href : href}"></a>
                 </li>
                 <!-- /ko -->
             </ul>
         </div>
+
     </div>
-    <div id="content">
+    <div id="content" class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2 main">
         <div class="row-fluid" data-bind="with: questionnaire">
-            <h3 class="span9 text-overflow-ellipsis pad-left10" data-bind="html: title"></h3>
-            <span class="span3 margin-top5 pad-right5 text-right-gray-italic">
-                <a class="btn-link" data-bind="text: status, click: $root.showStatesHistory"></a>
-                <br />
-                <span class="pad-right5" data-bind="text: responsible"></span>
-            </span>
-            <div id="statesHistoryPopover" class="popover bottom">
-                <div class="arrow"></div>
-                <h3 class="popover-title">State change history</h3>
-                <div class="popover-content">
-                    <table class="table table-bordered table-striped" data-bind="with: $root.changeStateHistory">
-                        <thead>
-                            <tr>
-                                <th style="width: 125px">State</th>
-                                <th>with comment</th>
-                                <th style="width: 90px">on</th>
-                                <th>by</th>
+            <h3 class="span10 text-overflow-ellipsis">
+                <span data-bind="html: title"></span>
+                <span class="small">Status:</span><a class="btn-link" data-bind="text: status" data-toggle="modal" data-target="#statusHistoryModal"></a>
+                <span class="small">Responsible:</span><span data-bind="text: responsible"></span>
+            </h3>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <span data-bind="visible: !IsFilterOpen()"><button data-bind="click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> Show groups</button></span>
+                @if (((Model.InterviewStatus == InterviewStatus.Completed || Model.InterviewStatus == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
+                    || (Model.InterviewStatus == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
+                {
+                <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
+                <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
+                }
+                <a href="#/all" class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'all' }">all</a>
+                <a href="#/flaged" class="btn btn-default  btn-xs" data-bind="css: { 'btn-primary': filter() == 'flaged' }">
+                    <i class="glyphicon glyphicon-flag" data-bind="    css: {'icon-white': filter() == 'flaged' }"></i> flagged (<span data-bind="    text: flagedCount"></span>)
+                </a>
+                <a href="#/commented" class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'commented' }">
+                    <i class="glyphicon glyphicon-comment" data-bind="    css: {'icon-white': filter() == 'commented' }"></i> commented (<span data-bind="    text: commentedCount"></span>)
+                </a>
+                <a href="#/answered"
+                   class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'answered' }">
+                    <i class="glyphicon glyphicon-ok"
+                       data-bind="    css: { 'icon-white': filter() == 'answered' }"></i> answered
+                    (<span data-bind="    text: answeredCount"></span>)
+                </a>
+                <a href="#/invalid" class="btn btn-default btn-xs"
+                   data-bind="css: { 'btn-primary': filter() == 'invalid' }">
+                    <i class="glyphicon glyphicon-warning-sign"
+                       data-bind="    css: { 'icon-white': filter() == 'invalid' }"></i>invalid (<span data-bind="    text: invalidCount"></span>)
+                </a>
+                <a href="#/supervisor" class="btn btn-default btn-xs"
+                   data-bind="css: { 'btn-primary': filter() == 'supervisor' }">
+                    <i class="glyphicon glyphicon-pencil"
+                       data-bind="    css: { 'icon-white': filter() == 'supervisor' }"></i>supervisor's
+                    (<span data-bind="    text: editableCount"></span>)
+                </a>
+                <a href="#/enabled" class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'enabled' }">
+                    <i class="glyphicon glyphicon-pencil" data-bind="    css: { 'icon-white': filter() == 'enabled' }"></i>enabled (<span data-bind="    text: enabledCount"></span>)
+                </a>
+            </div>
+        </div>
+        <div id="list">
+            <!-- ko foreach: groups -->
+            <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
+                <h2 data-bind="html: title" class="heading"></h2>
+                <div class="questions">
+                    <table class="table table-bordered table-hover">
+                        <tbody data-bind="foreach: questions">
+                            <tr data-bind="visible : isVisible,css: {success: isSelected, danger : isInvalid && isEnabled, mandatory : isMandatory, disabled: isEnabled == false}">
+                                <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
+                                    <div class="cell-content" data-bind="css: {featured : isFeatured}">
+                                        <span class="icon-star"></span>
+                                        <span data-bind="html: title"></span>
+                                    </div>
+                                </td>
+                                <td class="question-answer" data-bind="click: $root.showDetails">
+                                    <div class="cell-content" data-bind="visible: isEnabled || isAnswered">
+                                        <div class="question-clickable">
+                                            <span data-bind="css: markerStyle()" class="question-marker"></span>
+                                            <span data-bind="template: { name: questionType }"></span>
+                                            <small class="text-error" data-bind="html:validationExpression, visible: isInvalid"></small>
+                                            <small class="text-error" data-bind="html:validationMessage, visible: isInvalid"></small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="col-sm-3">
+                                    <div class="actions pull-right">
+                                        <div class="btn-group btn-group-xs" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
+                                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li data-bind="visible: isReadonly == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
+                                                <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
+                                                <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
+                                            </ul>
+                                        </div>
+                                        <a class="btn  btn-xs btn-success" data-bind="click: $root.showDetails, visible: comments().length > 0">
+                                            <span data-bind="text: comments().length + ' '"></span><i class="glyphicon glyphicon-comment"></i>
+                                        </a>
+                                        <a class="btn  btn-xs btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged()">
+                                            <i class="glyphicon glyphicon-flag"></i>
+                                        </a>
+                                        <a class="btn  btn-xs btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <!-- ko foreach: HistoryItems -->
-                            <tr>
-                                <td data-bind="text: State" />
-                                <td data-bind="text: Comment" />
-                                <td data-bind="text: Date" />
-                                <td data-bind="text: Responsible" />
-                            </tr>
-                            <!-- /ko -->
                         </tbody>
                     </table>
                 </div>
             </div>
+            <!-- /ko -->
         </div>
-        <div class="menubar">
-            <span data-bind="visible: !IsFilterOpen()"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
-            @if (((Model.InterviewStatus == InterviewStatus.Completed || Model.InterviewStatus == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
-                || (Model.InterviewStatus == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
-            {
-                <button class="btn btn-success" data-bind="click: showApproveModal">Approve</button>
-                <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
-            }
-            <div class="btn-group pull-right">
-                <a href="#/all" class="btn" data-bind="css: { 'btn-primary': filter() == 'all' }">all</a>
-                <a href="#/flaged" class="btn" data-bind="css: { 'btn-primary': filter() == 'flaged' }"><i class="icon-flag" data-bind="    css: {'icon-white': filter() == 'flaged' }"></i>flagged (<span data-bind="    text: flagedCount"></span>)</a>
-                <a href="#/commented" class="btn" data-bind="css: { 'btn-primary': filter() == 'commented' }"><i class="icon-comment " data-bind="    css: {'icon-white': filter() == 'commented' }"></i>commented (<span data-bind="    text: commentedCount"></span>)</a>
-                <a href="#/answered"
-                   class="btn" data-bind="css: { 'btn-primary': filter() == 'answered' }">
-                    <i class="icon-ok"
-                       data-bind="    css: { 'icon-white': filter() == 'answered' }"></i>answered
-                    (<span data-bind="    text: answeredCount"></span>)
-                </a>
-                <a href="#/invalid" class="btn "
-                   data-bind="css: { 'btn-primary': filter() == 'invalid' }">
-                    <i class="icon-warning-sign"
-                       data-bind="    css: { 'icon-white': filter() == 'invalid' }"></i>invalid (<span data-bind="    text: invalidCount"></span>)
-                </a>
-                <a href="#/supervisor" class="btn "
-                   data-bind="css: { 'btn-primary': filter() == 'supervisor' }">
-                    <i class="icon-pencil"
-                       data-bind="    css: { 'icon-white': filter() == 'supervisor' }"></i>supervisor's
-                    (<span data-bind="    text: editableCount"></span>)
-                </a>
-                <a href="#/enabled" class="btn " data-bind="css: { 'btn-primary': filter() == 'enabled' }">
-                    <i class="icon-pencil" data-bind="    css: { 'icon-white': filter() == 'enabled' }"></i>enabled (<span data-bind="    text: enabledCount"></span>)
-                </a>
+    </div>
+    <div id="details" class="col-sm-3 col-md-2">
+        <div data-bind="with: currentQuestion" class="panel panel-default">
+            <div class="panel-heading">
+                @*<button class="close" data-bind="click: $root.closeDetails">&times;</button>*@
+                <h5 class="heading" data-bind="html: title"></h5>
+            </div>
+            <div class="panel-body">
+                <!-- ko if: scope == 'Headquarter' -->
+                <div data-bind="template: { name: questionType + 'Full' }"></div>
+                <!-- /ko -->
+                <!-- ko ifnot: scope == 'Headquarter' -->
+                <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
+                <!-- /ko -->
+                <h4 class="heading">Comments</h4>
+                <dl data-bind="foreach: comments">
+                    <dt data-bind="text: userName"></dt>
+                    <dd>
+                        <span data-bind="html: text"></span>
+                        <small class="text-block comment-date " data-bind="text: moment(date).fromNow()"></small>
+                    </dd>
+                </dl>
+                <div class="form-group">
+                    <label for="commentBox">Your comment</label>
+                    <textarea id="commentBox" data-bind="value: $root.currentComment, valueUpdate: 'afterkeydown'" class="form-control"></textarea>
+                </div>
+                <button class="btn btn-default" type="button" data-bind="click: $root.addComment, disable: $root.currentComment() == ''">Add comment</button>
             </div>
         </div>
-        <div class="innerLR">@Html.Partial("_alerts")</div>
-        <div class="panel-container">
-            <div id="list">
-                <div class="innerLR ">
-                    <!-- ko foreach: groups -->
-                    <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
-                        <h2 data-bind="html: title" class="heading"></h2>
-                        <div class="questions">
-                            <table class="table table-bordered table-hover">
-                                <tbody data-bind="foreach: questions">
-                                    <tr data-bind="visible : isVisible,css: {success: isSelected, error : isInvalid && isEnabled, mandatory : isMandatory, disabled: isEnabled == false}">
-                                        <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
-                                            <div class="cell-content" data-bind="css: {featured : isFeatured}">
-                                                <span class="icon-star"></span>
-                                                <span data-bind="html: title"></span>
-                                            </div>
-                                        </td>
-                                        <td class="question-answer" data-bind="click: $root.showDetails">
-                                            <div class="cell-content" data-bind="visible: isEnabled || isAnswered">
-                                                <div class="question-clickable">
-                                                    <span data-bind="css: markerStyle()" class="question-marker"></span>
-                                                    <span data-bind="template: { name: questionType }"></span>
-                                                    <small class="text-error" data-bind="html:validationExpression, visible: isInvalid"></small>
-                                                    <small class="text-error" data-bind="html:validationMessage, visible: isInvalid"></small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div class="actions pull-right">
-                                                <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
-                                                    <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
-                                                    <ul class="dropdown-menu pull-right">
-                                                        <li data-bind="visible: isReadonly == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
-                                                        <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
-                                                        <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
-                                                    </ul>
-                                                </div>
-                                                <a class="btn btn-mini btn-success" data-bind="click: $root.showDetails, visible: comments().length > 0">
-                                                    <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
-                                                </a>
-                                                <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged()">
-                                                    <i class="icon-flag icon-white"></i>
-                                                </a>
-                                                <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- /ko -->
-                </div>
+    </div>
+</div>
+<div class="modal fade" id="statusHistoryModal" tabindex="-1" role="dialog" aria-labelledby="statusHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="statusHistoryModalLabel">Interview change status history</h4>
             </div>
-            <div id="details">
-                <div data-bind="with: currentQuestion">
-                    <button class="close" data-bind="click: $root.closeDetails">&times;</button>
-                    <h3 class="heading" data-bind="html: title"></h3>
-                    @if (GlobalInfo.IsSupervisor)
-                    {
-                        <!-- ko if: scope == 'Supervisor' -->
-                        <div data-bind="template: { name: questionType + 'Full' }"></div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped" data-bind="with: $root.changeStateHistory">
+                    <thead>
+                        <tr>
+                            <th style="width: 125px">State</th>
+                            <th>with comment</th>
+                            <th style="width: 90px">on</th>
+                            <th>by</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ko foreach: HistoryItems -->
+                        <tr>
+                            <td data-bind="text: State" />
+                            <td data-bind="text: Comment" />
+                            <td data-bind="text: Date" />
+                            <td data-bind="text: Responsible" />
+                        </tr>
                         <!-- /ko -->
-                        <!-- ko ifnot: scope == 'Supervisor' -->
-                        <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
-                        <!-- /ko -->
-                    }
-                    else
-                    {
-                        <!-- ko if: scope == 'Headquarter' -->
-                        <div data-bind="template: { name: questionType + 'Full' }"></div>
-                        <!-- /ko -->
-                        <!-- ko ifnot: scope == 'Headquarter' -->
-                        <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
-                        <!-- /ko -->
-                    }
-                    <h4 class="heading">Comments</h4>
-                    <dl data-bind="foreach: comments">
-                        <dt data-bind="text: userName"></dt>
-                        <dd>
-                            <span data-bind="html: text"></span>
-                            <span class="text-block comment-date " data-bind="text: moment(date).fromNow()"></span>
-                        </dd>
-                    </dl>
-                    <textarea data-bind="value: $root.currentComment, valueUpdate: 'afterkeydown'" class=" input-block-level"></textarea>
-                    <button class="btn" type="button" data-bind="click: $root.addComment, disable: $root.currentComment() == ''">Add comment</button>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -409,16 +406,16 @@
 @if (((Model.InterviewStatus == InterviewStatus.Completed || Model.InterviewStatus == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
                 || (Model.InterviewStatus == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
 {
-    <div id="approveModal" class="modal fade">
+    <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Approve interview</h4>
+                    <h4 class="modal-title" id="approveModalLabel">Approve interview</h4>
                 </div>
                 <div class="modal-body">
                     <label>Comment:</label>
-                    <textarea data-bind="value: changeStateComment" class="input-block-level" rows="10"></textarea>
+                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -428,16 +425,16 @@
         </div>
     </div>
 
-    <div id="rejectModal" class="modal fade">
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Reject interview</h4>
+                    <h4 class="modal-title" id="rejectModalLabel">Reject interview</h4>
                 </div>
                 <div class="modal-body">
                     <label>Comment:</label>
-                    <textarea data-bind="value: changeStateComment" class="input-block-level" rows="10"></textarea>
+                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

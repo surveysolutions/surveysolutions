@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Supervisor.Models;
 
 namespace WB.UI.Supervisor.Controllers

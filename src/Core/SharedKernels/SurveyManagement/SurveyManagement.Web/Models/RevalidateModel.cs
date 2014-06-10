@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
-namespace WB.UI.Supervisor.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class RevalidateModel
     {

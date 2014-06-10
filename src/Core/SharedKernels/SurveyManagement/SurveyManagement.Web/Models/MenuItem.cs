@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Supervisor.Models
+﻿namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     /// <summary>
     /// The menu item.

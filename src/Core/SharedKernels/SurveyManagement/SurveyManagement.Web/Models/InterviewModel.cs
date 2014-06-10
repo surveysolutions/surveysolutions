@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.UI.Supervisor.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class InterviewModel
     {
