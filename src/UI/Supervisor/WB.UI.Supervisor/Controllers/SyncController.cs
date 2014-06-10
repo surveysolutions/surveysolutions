@@ -27,27 +27,42 @@ namespace WB.UI.Supervisor.Controllers
         private readonly ILogger logger;
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
+        private readonly Func<string, string, bool> validateUserCredentials;
+        private readonly Func<string, string, bool> checkIfUserIsInRole;
+        private readonly Func<Type, int> getSupervisorRevisionNumber;
 
         private string CapiFileName = "wbcapi.apk";
 
         private string pathToSearchVersions = ("~/App_Data/Capi");
-        public SyncController(ISyncManager syncManager, ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> viewFactory)
+
+        public SyncController(ISyncManager syncManager,
+            ILogger logger,
+            IViewFactory<UserViewInputModel, UserView> viewFactory)
+            : this(syncManager, logger, viewFactory, Membership.ValidateUser, Roles.IsUserInRole, GetAssemblyRevisionNumber) { }
+
+        public SyncController(
+            ISyncManager syncManager,
+            ILogger logger,
+            IViewFactory<UserViewInputModel, UserView> viewFactory,
+            Func<string, string, bool> validateUserCredentials,
+            Func<string, string, bool> checkIfUserIsInRole,
+            Func<Type, int> getSupervisorRevisionNumber)
         {
+            this.validateUserCredentials = validateUserCredentials;
+            this.checkIfUserIsInRole = checkIfUserIsInRole;
+            this.getSupervisorRevisionNumber = getSupervisorRevisionNumber;
             this.syncManager = syncManager;
             this.logger = logger;
             this.viewFactory = viewFactory;
         }
 
-
         protected UserView GetUser(string login, string password)
         {
-            if (Membership.ValidateUser(login, password))
+            if (validateUserCredentials(login, password))
             {
-                if (Roles.IsUserInRole(login, UserRoles.Operator.ToString()))
+                if (checkIfUserIsInRole(login, UserRoles.Operator.ToString()))
                 {
-                    return
-                        this.viewFactory.Load(new UserViewInputModel(login, null));
+                    return this.viewFactory.Load(new UserViewInputModel(login, null));
                 }
             }
             return null;
@@ -56,7 +71,7 @@ namespace WB.UI.Supervisor.Controllers
         //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult Handshake(string clientId, string androidId, Guid? clientRegistrationId, int version)
+        public ActionResult Handshake(string clientId, string androidId, Guid? clientRegistrationId, int version = 0)
         {
             UserView user = this.GetUserByNameAndPassword();
             if (user == null)
@@ -65,15 +80,15 @@ namespace WB.UI.Supervisor.Controllers
             var package = new HandshakePackage();
 
             Guid key;
-            int supervisorBuildNumber = this.GetType().Assembly.GetName().Version.Build;
-            bool isDebug = System.Web.HttpContext.Current.IsDebuggingEnabled || AppSettings.IsDebugBuilded;
+            int supervisorRevisionNumber = this.getSupervisorRevisionNumber(this.GetType());
+            bool isDebug = this.ControllerContext.HttpContext.IsDebuggingEnabled;
 
-            if (!isDebug && version > supervisorBuildNumber)
+            if (!isDebug && version > supervisorRevisionNumber)
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "Your application is incometible with the Supervisor. Please, remove your copy and download the correct version";
             }
-            else if (!isDebug && version < supervisorBuildNumber)
+            else if (!isDebug && version < supervisorRevisionNumber)
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "You must update your CAPI application before synchronizing with the Supervisor";
@@ -103,6 +118,11 @@ namespace WB.UI.Supervisor.Controllers
                 }
             }
             return this.Json(package, JsonRequestBehavior.AllowGet);
+        }
+
+        private static int GetAssemblyRevisionNumber(Type typeFromAssembly)
+        {
+            return typeFromAssembly.Assembly.GetName().Version.Revision;
         }
 
 
