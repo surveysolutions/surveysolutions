@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using RestSharp;
+using System.Globalization;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.UI.Capi.Settings;
 
 namespace WB.UI.Capi.Syncronization.Handshake
 {
@@ -21,6 +22,7 @@ namespace WB.UI.Capi.Syncronization.Handshake
             var package = this.webExecutor.ExecuteRestRequest<HandshakePackage>(handshakePath,
                 login, password, null,
                 new KeyValuePair<string, string>("clientId", appID),
+                new KeyValuePair<string, string>("version", SettingsManager.AppVersionCode().ToString(CultureInfo.InvariantCulture)),
                 new KeyValuePair<string, string>("clientRegistrationId", registrationKey),
                 new KeyValuePair<string, string>("androidId", androidId));
 
