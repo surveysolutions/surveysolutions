@@ -7,9 +7,9 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
-using WB.UI.Headquarters.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class InterviewController : BaseController
@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                                    IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-                                   IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory)
+                                    IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;
@@ -46,27 +46,27 @@ namespace WB.UI.Headquarters.Controllers
                 });
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult Revalidate()
         {
             return this.View(new RevalidateModel());
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         [HttpPost]
         public ActionResult Revalidate(RevalidateModel input)
         {
             return this.RedirectToAction("ConfirmInterviewRevalidation", new {id = input.InterviewId });
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult ConfirmRevalidation(Guid id)
         {
             var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = id });
             return this.View(model);
         }
 
-        [Authorize(Roles = "Headquarter")]
+        [Authorize(Roles = "Headquarter, Supervisor")]
         [HttpPost]
         public ActionResult ConfirmInterviewRevalidation(Guid interviewId)
         {

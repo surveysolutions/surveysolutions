@@ -6,6 +6,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.DesignerPublicService;
 using WB.UI.Supervisor.Models;
