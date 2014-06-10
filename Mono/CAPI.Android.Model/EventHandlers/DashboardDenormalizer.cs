@@ -90,7 +90,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             foreach (var featuredQuestion in questionnaireTemplate.Questionnaire.Find<IQuestion>(q => q.Featured))
             {
                 var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
-                items.Add(CreateFeaturedItem(featuredQuestion.PublicKey, item != null ? item.Answer.ToString() : string.Empty, featuredQuestion));
+                items.Add(CreateFeaturedItem(featuredQuestion.PublicKey, item != null && item.Answer!=null ? item.Answer.ToString() : string.Empty, featuredQuestion));
             }
             
             questionnaireDtOdocumentStorage.Store(
