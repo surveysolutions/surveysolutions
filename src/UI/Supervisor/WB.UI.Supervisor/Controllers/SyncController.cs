@@ -18,6 +18,7 @@ using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Supervisor.Code;
 
 namespace WB.UI.Supervisor.Controllers
 {
@@ -55,7 +56,7 @@ namespace WB.UI.Supervisor.Controllers
         //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult Handshake(string clientId, string androidId, Guid? clientRegistrationId)
+        public ActionResult Handshake(string clientId, string androidId, Guid? clientRegistrationId, int version)
         {
             UserView user = this.GetUserByNameAndPassword();
             if (user == null)
@@ -64,7 +65,20 @@ namespace WB.UI.Supervisor.Controllers
             var package = new HandshakePackage();
 
             Guid key;
-            if (!Guid.TryParse(clientId, out key))
+            int supervisorBuildNumber = this.GetType().Assembly.GetName().Version.Build;
+            bool isDebug = System.Web.HttpContext.Current.IsDebuggingEnabled || AppSettings.IsDebugBuilded;
+
+            if (!isDebug && version > supervisorBuildNumber)
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Your application is incometible with the Supervisor. Please, remove your copy and download the correct version";
+            }
+            else if (!isDebug && version < supervisorBuildNumber)
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "You must update your CAPI application before synchronizing with the Supervisor";
+            }
+            else if (!Guid.TryParse(clientId, out key))
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "Client Identifier was not provided.";
@@ -91,7 +105,7 @@ namespace WB.UI.Supervisor.Controllers
             return this.Json(package, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult InitPulling(string clientRegistrationId)
@@ -328,7 +342,7 @@ namespace WB.UI.Supervisor.Controllers
                 int versionValue;
                 if (int.TryParse(versionCode, out versionValue))
                 {
-                int maxVersion = this.GetLastVersionNumber();
+                    int maxVersion = this.GetLastVersionNumber();
 
                     if (maxVersion != 0 && maxVersion > versionValue)
                     {
@@ -359,12 +373,12 @@ namespace WB.UI.Supervisor.Controllers
             try
             {
                 string authHeader = this.Request.Headers["Authorization"];
-                char[] delims = {' '};
-                string[] authHeaderTokens = authHeader.Split(new[] {' '});
+                char[] delims = { ' ' };
+                string[] authHeaderTokens = authHeader.Split(new[] { ' ' });
                 if (authHeaderTokens[0].Contains("Basic"))
                 {
                     string decodedStr = DecodeFrom64(authHeaderTokens[1]);
-                    string[] unpw = decodedStr.Split(new[] {':'});
+                    string[] unpw = decodedStr.Split(new[] { ':' });
                     username = unpw[0];
                     password = unpw[1];
                 }

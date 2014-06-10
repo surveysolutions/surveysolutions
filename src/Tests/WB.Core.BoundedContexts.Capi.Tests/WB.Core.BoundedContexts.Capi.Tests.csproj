@@ -96,6 +96,7 @@
     <Compile Include="Views\InterviewViewModelTests\when_creating_interview_with_answered_supervisor_questions_in_fixed_roster.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_creating_interview_with_one_answered_prefilled_question.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_creating_interview_with_one_unanswered_question.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_cteating_interview_with_sync_data_and_questionnaire_has_questions_that_reference_prefilled_one_in_title.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_setting_answer_to_question.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_disabling_answered_invalid_question_question_in_interview.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_setting_answer_to_question_in_interview.cs" />
