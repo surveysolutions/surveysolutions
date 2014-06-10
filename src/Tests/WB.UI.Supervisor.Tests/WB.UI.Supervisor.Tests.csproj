@@ -204,6 +204,9 @@
     <Compile Include="ReportDataApiControllerTests\when_map_report_data_is_being_queried.cs" />
     <Compile Include="ReportDataApiControllerTests\when_questionnaires_data_is_being_queried.cs" />
     <Compile Include="ReportDataApiControllerTests\when_question_info_data_is_being_queried.cs" />
+    <Compile Include="SyncControllerTests\SyncControllerTestContext.cs" />
+    <Compile Include="SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_greater.cs" />
+    <Compile Include="SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_lesser.cs" />
     <Compile Include="TabletReportControllerTests\TabletReportControllerTestContext.cs" />
     <Compile Include="TabletReportControllerTests\when_info_package_requested.cs" />
     <Compile Include="TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
