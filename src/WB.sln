@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AD7E0C01-7CD9-46FD-9DD7-3BC8A5C10ECF}"
 	ProjectSection(SolutionItems) = preProject
@@ -265,6 +265,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tools.DatabaseCleaner", "Tools\WB.Tools.DatabaseCleaner\WB.Tools.DatabaseCleaner.csproj", "{F12AF1CC-C174-4252-9B2B-8173816F156A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Capi.Synchronization.Tests", "Tests\WB.Core.BoundedContexts.Capi.Synchronization.Tests\WB.Core.BoundedContexts.Capi.Synchronization.Tests.csproj", "{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.SurveyManagement.Web", "Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj", "{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Capi.Synchronization", "Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.Capi.Synchronization\WB.Core.BoundedContexts.Capi.Synchronization.csproj", "{F907B0F2-4CFD-438C-8B53-F2D44C581F56}"
 EndProject
@@ -1711,6 +1713,21 @@ Global
 		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Release|x86.ActiveCfg = Release|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}.Release|x86.ActiveCfg = Release|Any CPU
 		{F907B0F2-4CFD-438C-8B53-F2D44C581F56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F907B0F2-4CFD-438C-8B53-F2D44C581F56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F907B0F2-4CFD-438C-8B53-F2D44C581F56}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -1871,6 +1888,7 @@ Global
 		{3017EC6D-AE4A-4C19-A653-352999592A7E} = {32F6E0FF-D109-47F8-9E9E-A4D3D69AD1B4}
 		{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD} = {DE679FBB-7B6D-4D2D-AB21-FE90B5BC1928}
 		{29A132B5-A573-40D2-9E8F-2871E95D7766} = {D2127B1E-4E7B-40D9-AED6-765E394C51B4}
+		{E96A3629-18F6-4B7C-9920-FC9A1B3892C1} = {D2127B1E-4E7B-40D9-AED6-765E394C51B4}
 		{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB} = {8F9EEF80-094E-433D-9398-19AAE71C81FF}
 	EndGlobalSection
 EndGlobal
