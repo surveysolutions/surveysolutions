@@ -401,7 +401,6 @@
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
-    <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\StatusHelper.cs" />
@@ -446,17 +445,14 @@
     <Compile Include="Models\IGridRequest.cs" />
     <Compile Include="Models\InterviewDetailsViewModel.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
-    <Compile Include="Models\InterviewModel.cs" />
     <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
     <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Models\JsonBundleCommandResponse.cs" />
     <Compile Include="Models\JsonCommandResponse.cs" />
     <Compile Include="Models\LogOnModel.cs" />
-    <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
-    <Compile Include="Models\RevalidateModel.cs" />
     <Compile Include="Models\StatusListViewModel.cs" />
     <Compile Include="Models\StatusRequestModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
@@ -523,9 +519,6 @@
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
     <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
-    <Content Include="Views\Interview\ConfirmRevalidation.cshtml" />
-    <Content Include="Views\Interview\InterviewDetails.cshtml" />
-    <Content Include="Views\Interview\Revalidate.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
@@ -649,6 +642,10 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj">
+      <Project>{e96a3629-18f6-4b7c-9920-fc9a1b3892c1}</Project>
+      <Name>WB.Core.SharedKernels.SurveyManagement.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
