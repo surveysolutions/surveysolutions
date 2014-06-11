@@ -1,7 +1,8 @@
 ﻿using System;
 using Quartz;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 
-namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Implementation
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     internal class InterviewDetailsDataLoader : IInterviewDetailsDataLoader, IJob
     {

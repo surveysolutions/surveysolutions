@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Headquarters.Synchronization
+namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers
 {
     public class SynchronizationStatus
     {

@@ -77,15 +77,6 @@
     <Compile Include="Questionnaires\Denormalizers\VersionedQustionnaireDocumentDenormalizer.cs" />
     <Compile Include="Questionnaires\Implementation\VersionedQustionnaireDocumentViewFactory.cs" />
     <Compile Include="Questionnaires\IVersionedQuestionnaireReader.cs" />
-    <Compile Include="Synchronization\IInterviewDetailsDataLoader.cs" />
-    <Compile Include="Synchronization\InterviewDetailsBackgroundSchedulerTask.cs" />
-    <Compile Include="Synchronization\InterviewDetailsDataProcessorContext.cs" />
-    <Compile Include="Synchronization\SynchorizationContext.cs" />
-    <Compile Include="Synchronization\Implementation\InterviewDetailsDataLoader.cs" />
-    <Compile Include="Synchronization\Implementation\InterviewDetailsDataProcessor.cs" />
-    <Compile Include="Synchronization\IInterviewDetailsDataProcessor.cs" />
-    <Compile Include="Synchronization\InterviewDetailsDataLoaderSettings.cs" />
-    <Compile Include="Synchronization\SynchronizationStatus.cs" />
     <Compile Include="Users\Denormalizers\RolesExtensions.cs" />
     <Compile Include="Users\Denormalizers\UsersFeedDenormalizer.cs" />
   </ItemGroup>

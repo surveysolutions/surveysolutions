@@ -1,8 +1,8 @@
 ﻿using System;
 using Quartz;
-using WB.Core.BoundedContexts.Headquarters.Synchronization.Implementation;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 
-namespace WB.Core.BoundedContexts.Headquarters.Synchronization
+namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     public class InterviewDetailsBackgroundSchedulerTask
     {
