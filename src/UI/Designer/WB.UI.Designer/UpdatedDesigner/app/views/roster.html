@@ -31,26 +31,21 @@
             <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.enablementCondition">
         </div>
 
-        <div class="comment-block" ng-show="activeRoster.rosterSizeSourceType=='numericRoster'">
-            <label for="edit-group-title" class="wb-label">Source question</label><br>
-            <select class="form-control input-lg"></select>
+        <div class="comment-block" ng-show="activeRoster.rosterSizeSourceType=='Question'">
+            <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
+            <select id="edit-roster-numeric-source" class="form-control input-lg" ng-model="activeRoster.source" ng-options="n.title for n in activeRoster.numerics"></select>
 
-            <label for="edit-group-title" class="wb-label">Titles of rows</label><br>
-            <select class="form-control input-lg"></select>
-
+            <label for="edit-roster-numeric-titles" class="wb-label">Titles for rows (optional): <span>(<a>?</a>)</span></label><br>
+            <select id="edit-roster-numeric-titles" class="form-control input-lg"></select>
         </div>
 
         <div class="comment-block" ng-show="activeRoster.rosterSizeSourceType=='listRoster'">
             <label for="edit-group-title" class="wb-label">Source question</label><br>
             <select class="form-control input-lg"></select>
-
-            <label for="edit-group-title" class="wb-label">Titles of rows</label><br>
-            <select class="form-control input-lg"></select>
         </div>
 
         <div class="comment-block" ng-show="activeRoster.rosterSizeSourceType=='FixedTitles'">
-            <h3>Manual Roster</h3>
-            <textarea rows="5" cols="100"></textarea>
+            <textarea rows="5" cols="100" ng-model="activeRoster.rosterFixedTitles"></textarea>
         </div>
     </form>
 </div>
