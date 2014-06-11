@@ -57,14 +57,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             #endregion
         }
 
-        private void FireSubstitutionEventsForPrefilledQuestions()
-        {
-            foreach (KeyValuePair<InterviewItemId, QuestionViewModel> featuredQuestion in this.FeaturedQuestions)
-            {
-                this.SubstituteDependantQuestions(featuredQuestion.Value);
-            }
-        }
-
         public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnaireRosterStructure rosterStructure)
             : this(id)
         {
@@ -97,9 +89,25 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             this.CreateInterviewTitle(questionnaire);
 
- 
+            this.UpdateHashForFeaturedQuestions();
 
             #endregion
+        }
+
+        private void UpdateHashForFeaturedQuestions()
+        {
+            foreach (KeyValuePair<InterviewItemId, QuestionViewModel> featuredQuestion in this.FeaturedQuestions)
+            {
+                this.UpdateQuestionHash(featuredQuestion.Value);
+            }
+        }
+
+        private void FireSubstitutionEventsForPrefilledQuestions()
+        {
+            foreach (KeyValuePair<InterviewItemId, QuestionViewModel> featuredQuestion in this.FeaturedQuestions)
+            {
+                this.SubstituteDependantQuestions(featuredQuestion.Value);
+            }
         }
 
         private Dictionary<Guid, IList<Guid>> questionsParticipationInSubstitutionReferences =
