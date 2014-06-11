@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Synchronization
+﻿namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     public class InterviewDetailsDataLoaderSettings
     {

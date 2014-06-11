@@ -1,6 +1,6 @@
 ﻿using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.BoundedContexts.Headquarters.Synchronization
+namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     public class InterviewDetailsDataProcessorContext : SynchorizationContext
     {

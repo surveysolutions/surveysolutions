@@ -34,6 +34,7 @@ using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.Synchronization;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Code.CommandDeserialization;
@@ -120,6 +121,11 @@ namespace WB.UI.Supervisor.App_Start
                 WebConfigurationManager.AppSettings["Headquarters.AccessToken"],
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]));
 
+            var interviewDetailsDataLoaderSettings =
+                new InterviewDetailsDataLoaderSettings(LegacyOptions.InterviewDetailsDataSchedulerEnabled,
+                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+                    LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
+
             bool useStreamingForAllEvents;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
             {
@@ -158,7 +164,8 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
                     isDebug,
-                    applicationBuildVersion),
+                    applicationBuildVersion,
+                    interviewDetailsDataLoaderSettings),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
 
@@ -177,6 +184,7 @@ namespace WB.UI.Supervisor.App_Start
                 ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
             }
 
+            ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
             
             return kernel;

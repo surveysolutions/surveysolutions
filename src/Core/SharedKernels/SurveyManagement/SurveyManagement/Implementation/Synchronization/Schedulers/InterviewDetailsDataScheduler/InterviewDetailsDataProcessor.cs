@@ -2,10 +2,11 @@ using System;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
 
-namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Implementation
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     internal class InterviewDetailsDataProcessor : IInterviewDetailsDataProcessor
     {
