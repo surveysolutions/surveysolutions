@@ -105,6 +105,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_circular_references.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_1_option.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question-inside_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_of_type_not_included_in_white_list_of_question_types.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_two_question_with_same_variable_names.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_empty_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and__.cs" />

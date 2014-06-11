@@ -27,6 +27,18 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             QuestionType.Text,
         };
 
+        private static readonly IEnumerable<QuestionType> WhiteListOfQuestionTypes = new[]
+        {
+            QuestionType.SingleOption,
+            QuestionType.MultyOption,
+            QuestionType.Numeric,
+            QuestionType.DateTime,
+            QuestionType.GpsCoordinates,
+            QuestionType.Text,
+            QuestionType.TextList,
+            QuestionType.QRBarcode
+        };
+
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeSubstitutionReferences = new[]
         {
             QuestionType.DateTime,
@@ -118,6 +130,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IQuestion>(QuestionHasValidationExpressionWithoutValidationMessage, "WB0065", VerificationMessages.WB0065_QuestionHasValidationExpressionWithoutValidationMessage),
+                     Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -126,6 +139,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByQuestionsWithDuplicateVariableName
                 };
             }
+        }
+
+        private bool QuestionTypeIsNotAllowed(IQuestion question)
+        {
+            return !WhiteListOfQuestionTypes.Contains(question.QuestionType);
         }
 
         private bool CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2(IMultyOptionsQuestion question)
