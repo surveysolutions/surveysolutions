@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog
 {
     public interface IChangeLogManipulator
     {

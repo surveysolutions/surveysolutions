@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Views.InterviewMetaInfo
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo
 {
     public class InterviewMetaInfoInputModel
     {

@@ -6,11 +6,11 @@ using Main.Core.Documents;
 using Main.Core.View;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
-using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.Cleaner;
-using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.SyncCacher;
-using WB.Core.BoundedContext.Capi.Synchronization.Views.Login;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Cleaner;
+using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.Pull
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
 {
     public class PullDataProcessor
     {
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.Pull
             var metaInfo = ExtractObject<InterviewMetaInfo>(item.MetaInfo, item.IsCompressed);
             try
             {
-                syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
+                this.syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
 
                 bool createdOnClient = metaInfo.CreatedOnClient.HasValue && metaInfo.CreatedOnClient.Value;
 

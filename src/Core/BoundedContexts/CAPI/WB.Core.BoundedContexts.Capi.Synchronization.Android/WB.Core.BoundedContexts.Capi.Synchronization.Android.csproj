@@ -9,8 +9,8 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.BoundedContext.Capi.Synchronization</RootNamespace>
-    <AssemblyName>WB.Core.BoundedContext.Capi.Synchronization</AssemblyName>
+    <RootNamespace>WB.Core.BoundedContexts.Capi.Synchronization</RootNamespace>
+    <AssemblyName>WB.Core.BoundedContexts.Capi.Synchronization</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -41,40 +41,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\CapiSynchronizationModule.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\CapiSynchronizationModule.cs">
       <Link>CapiSynchronizationModule.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Synchronization\ChangeLog\ChangeLogShortRecord.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\ChangeLog\ChangeLogShortRecord.cs">
       <Link>Synchronization\ChangeLog\ChangeLogShortRecord.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Synchronization\ChangeLog\FileChangeLogStore.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\ChangeLog\FileChangeLogStore.cs">
       <Link>Synchronization\ChangeLog\FileChangeLogStore.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Synchronization\ChangeLog\IChangeLogManipulator.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\ChangeLog\IChangeLogManipulator.cs">
       <Link>Synchronization\ChangeLog\IChangeLogManipulator.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Synchronization\ChangeLog\IChangeLogStore.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\ChangeLog\IChangeLogStore.cs">
       <Link>Synchronization\ChangeLog\IChangeLogStore.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Synchronization\Cleaner\ICleanUpExecutor.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\Cleaner\ICleanUpExecutor.cs">
       <Link>Synchronization\Cleaner\ICleanUpExecutor.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Synchronization\Pull\PullDataProcessor.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\Pull\PullDataProcessor.cs">
       <Link>Synchronization\Pull\PullDataProcessor.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Synchronization\SyncCacher\FileSyncCacher.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\SyncCacher\FileSyncCacher.cs">
       <Link>Synchronization\SyncCacher\FileSyncCacher.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Synchronization\SyncCacher\ISyncCacher.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\SyncCacher\ISyncCacher.cs">
       <Link>Synchronization\SyncCacher\ISyncCacher.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs">
       <Link>Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Views\Login\LoginView.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\Login\LoginView.cs">
       <Link>Views\Login\LoginView.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContext.Capi.Synchronization\Views\Login\LoginViewInput.cs">
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\Login\LoginViewInput.cs">
       <Link>Views\Login\LoginViewInput.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -122,7 +122,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\WB.Core.BoundedContext.Capi.Synchronization\packages.config">
+    <None Include="..\WB.Core.BoundedContexts.Capi.Synchronization\packages.config">
       <Link>packages.config</Link>
     </None>
   </ItemGroup>
