@@ -1,13 +1,12 @@
 using System;
 using Main.Core.Events;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.SharedKernel.Structures.Synchronization;
 
-namespace CAPI.Android.Core.Model
+namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog
 {
     public interface IChangeLogStore:IBackupable
     {
-        void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId/*, bool validRecord*/);
+        void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId);
         string GetChangesetContent(Guid recordId);
         void DeleteDraftChangeSet(Guid recordId);
     }

@@ -5,11 +5,10 @@ using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.Backup;
-using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ReadSideStore;
 using CAPI.Android.Core.Model.SnapshotStore;
-using CAPI.Android.Core.Model.SyncCacher;
+using CAPI.Android.Core.Model.Synchronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
@@ -20,6 +19,9 @@ using Main.Core.View;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContext.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.Backup;
@@ -45,7 +47,7 @@ namespace CAPI.Android.Core.Model
         public override void Load()
         {
             var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
-            var snapshotStore = new AndroidSnapshotStore();
+            var snapshotStore = new FileBasedSnapshotStore();
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var plainStore = new SqlitePlainStore(PlainStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);

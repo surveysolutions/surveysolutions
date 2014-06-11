@@ -45,7 +45,7 @@ namespace WB.UI.Capi.Implementations.Activities
         {
             base.Finish();
 
-            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as FileBasedSnapshotStore;
             if (snapshotStore != null)
                 snapshotStore.PersistShapshot(this.QuestionnaireId);
         }

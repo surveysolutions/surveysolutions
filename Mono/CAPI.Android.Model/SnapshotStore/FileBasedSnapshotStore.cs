@@ -8,31 +8,31 @@ using WB.Core.Infrastructure.Backup;
 
 namespace CAPI.Android.Core.Model.SnapshotStore
 {
-    public class AndroidSnapshotStore : ISnapshotStore, IBackupable
+    public class FileBasedSnapshotStore : ISnapshotStore, IBackupable
     {
-        private Dictionary<Guid, Snapshot> _snapshots = new Dictionary<Guid, Snapshot>();
+        private Dictionary<Guid, Snapshot> snapshots = new Dictionary<Guid, Snapshot>();
         private const string PersistingFolder = "SnapshotStore";
-        private readonly string _basePath;
+        private readonly string basePath;
 
-        public AndroidSnapshotStore()
+        public FileBasedSnapshotStore()
         {
-            _basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), PersistingFolder);
-            if (!Directory.Exists(_basePath))
+            this.basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), PersistingFolder);
+            if (!Directory.Exists(this.basePath))
             {
-                Directory.CreateDirectory(_basePath);
+                Directory.CreateDirectory(this.basePath);
             }
         }
 
         public void SaveShapshot(Snapshot snapshot)
         {
-            _snapshots[snapshot.EventSourceId] = snapshot;
+            this.snapshots[snapshot.EventSourceId] = snapshot;
         }
 
         public void PersistShapshot(Guid eventSourceId)
         {
-            if (!_snapshots.ContainsKey(eventSourceId))
+            if (!this.snapshots.ContainsKey(eventSourceId))
                 return;
-            var snapshot = _snapshots[eventSourceId];
+            var snapshot = this.snapshots[eventSourceId];
             try
             {
                 SaveItem(eventSourceId, JsonUtils.GetJsonData(snapshot));
@@ -40,7 +40,6 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             catch (Exception)
             {
             }
-            
         }
 
         private bool SaveItem(Guid itemId, string itemContent)
@@ -84,22 +83,22 @@ namespace CAPI.Android.Core.Model.SnapshotStore
 
         private string BuildFileName(string fileName)
         {
-            return Path.Combine(_basePath, fileName);
+            return Path.Combine(this.basePath, fileName);
         }
 
         public Snapshot TryGetSnapshot(Guid eventSourceId, long maxVersion)
         {
             Snapshot snapshot = null;
-            if (_snapshots.ContainsKey(eventSourceId))
+            if (this.snapshots.ContainsKey(eventSourceId))
             {
-                snapshot = _snapshots[eventSourceId];
+                snapshot = this.snapshots[eventSourceId];
             }
             else
             {
                 snapshot = GetSnapshotFromString(LoadItem(eventSourceId));
                 if (snapshot == null)
                     return null;
-                _snapshots[eventSourceId] = snapshot;
+                this.snapshots[eventSourceId] = snapshot;
             }
             
             return snapshot.Version > maxVersion 
@@ -114,7 +113,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
 
         public void DeleteSnapshot(Guid eventSourceId)
         {
-            _snapshots.Remove(eventSourceId);
+            this.snapshots.Remove(eventSourceId);
             this.DeleteItem(eventSourceId);
         }
 
@@ -125,9 +124,9 @@ namespace CAPI.Android.Core.Model.SnapshotStore
 
         public void RestoreFromBackupFolder(string path)
         {
-            _snapshots = new Dictionary<Guid, Snapshot>();
+            this.snapshots = new Dictionary<Guid, Snapshot>();
 
-            foreach (var file in Directory.EnumerateFiles(_basePath))
+            foreach (var file in Directory.EnumerateFiles(this.basePath))
             {
                 File.Delete(file);
             }

@@ -258,8 +258,11 @@ namespace WB.UI.Supervisor.Controllers
         {
             UserView user = this.GetUserByNameAndPassword();
             if (user == null)
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
+            {
+             //   this.logger.Fatal("Stack: " + ex.StackTrace);
 
+                return this.Json(false, JsonRequestBehavior.AllowGet);
+            }
             try
             {
                 Stream requestStream = this.Request.InputStream;

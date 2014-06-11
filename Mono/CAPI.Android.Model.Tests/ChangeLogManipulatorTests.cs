@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.ChangeLog;
+using CAPI.Android.Core.Model.Synchronization;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
 using Microsoft.Practices.ServiceLocation;
@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
 
 namespace CAPI.Androids.Core.Model.Tests
 {

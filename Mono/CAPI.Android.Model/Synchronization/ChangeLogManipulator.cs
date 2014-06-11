@@ -5,12 +5,13 @@ using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
-namespace CAPI.Android.Core.Model.ChangeLog
+namespace CAPI.Android.Core.Model.Synchronization
 {
     public class ChangeLogManipulator : IChangeLogManipulator, IBackupable
     {
@@ -28,13 +29,13 @@ namespace CAPI.Android.Core.Model.ChangeLog
             this.publicChangeLog = publicChangeLog;
             this.draftChangeLog = draftChangeLog;
             this.eventStore = eventStore;
-            fileChangeLogStore = changeLogStore;
+            this.fileChangeLogStore = changeLogStore;
         }
 
         public IList<ChangeLogShortRecord> GetClosedDraftChunksIds()
         {
             return
-                draftChangeLog.Filter(c => c.IsClosed)
+                this.draftChangeLog.Filter(c => c.IsClosed)
                               .Select(d => new ChangeLogShortRecord(Guid.Parse(d.Id), Guid.Parse(d.EventSourceId)))
                               .ToList();
 
@@ -42,12 +43,12 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public string GetDraftRecordContent(Guid recordId)
         {
-            return fileChangeLogStore.GetChangesetContent(recordId);
+            return this.fileChangeLogStore.GetChangesetContent(recordId);
         }
 
         public void CreatePublicRecord(Guid recordId)
         {
-            publicChangeLog.Store(new PublicChangeSetDTO(recordId, DateTime.Now),
+            this.publicChangeLog.Store(new PublicChangeSetDTO(recordId, DateTime.Now),
                                   recordId);
         }
 
@@ -58,20 +59,20 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public void CreateOrReopenDraftRecord(Guid eventSourceId)
         {
-            var record = GetLastDraftRecord(eventSourceId);
+            var record = this.GetLastDraftRecord(eventSourceId);
             if (record != null)
             {
                 record.IsClosed = false;
-                draftChangeLog.Store(record, Guid.Parse(record.Id));
+                this.draftChangeLog.Store(record, Guid.Parse(record.Id));
                 return;
             }
             var recordId = Guid.NewGuid();
-            draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, false), recordId);
+            this.draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, false), recordId);
         }
 
         public void CloseDraftRecord(Guid eventSourceId)
         {
-            var record = GetLastDraftRecord(eventSourceId);
+            var record = this.GetLastDraftRecord(eventSourceId);
             Guid recordId;
 
             if (record == null)
@@ -85,16 +86,16 @@ namespace CAPI.Android.Core.Model.ChangeLog
                 recordId = Guid.Parse(record.Id);
             }
             
-            var events = BuildEventStreamOfLocalChangesToSend(eventSourceId);
+            var events = this.BuildEventStreamOfLocalChangesToSend(eventSourceId);
 
-            fileChangeLogStore.SaveChangeset(events, recordId);
-            draftChangeLog.Store(record, recordId);
+            this.fileChangeLogStore.SaveChangeset(events, recordId);
+            this.draftChangeLog.Store(record, recordId);
         }
 
         
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid eventSourceId)
         {
-            var storedEvents = eventStore.ReadFrom(eventSourceId, 0, long.MaxValue).ToList();
+            var storedEvents = this.eventStore.ReadFrom(eventSourceId, 0, long.MaxValue).ToList();
 
             List<AggregateRootEvent> eventsToSend = new List<AggregateRootEvent>(); 
             
@@ -105,28 +106,13 @@ namespace CAPI.Android.Core.Model.ChangeLog
                     break;
                 }
 
-                if (EventIsActive(storedEvents[i]))
+                if (this.EventIsActive(storedEvents[i]))
                     eventsToSend.Add(new AggregateRootEvent(storedEvents[i]));
             }
 
             eventsToSend.Reverse();
             return eventsToSend.ToArray();
         }
-
-
-        /*private static int GetIndexOfLastCompleteEvent(List<CommittedEvent> storedEvents)
-        {
-            int indexOfLastCompleteEvent = storedEvents.Count - 1;
-            for (int i = storedEvents.Count - 1; i >= 0; i--)
-            {
-                if (storedEvents[i].Payload is InterviewCompleted)
-                {
-                    indexOfLastCompleteEvent = i;
-                    break;
-                }
-            }
-            return indexOfLastCompleteEvent;
-        }*/
 
         private bool EventIsActive(CommittedEvent committedEvent)
         {
@@ -173,23 +159,23 @@ namespace CAPI.Android.Core.Model.ChangeLog
         
         public void CleanUpChangeLogByRecordId(Guid recordId)
         {
-            var record = draftChangeLog.GetById(recordId);
+            var record = this.draftChangeLog.GetById(recordId);
             
             if (record == null)
                 return;
 
-            draftChangeLog.Remove(recordId);
-            fileChangeLogStore.DeleteDraftChangeSet(recordId);
+            this.draftChangeLog.Remove(recordId);
+            this.fileChangeLogStore.DeleteDraftChangeSet(recordId);
         }
 
 
         public void CleanUpChangeLogByEventSourceId(Guid eventSourceId)
         {
             string eventSource = eventSourceId.FormatGuid();
-            var record = draftChangeLog.Filter(c => c.EventSourceId == eventSource).FirstOrDefault();
+            var record = this.draftChangeLog.Filter(c => c.EventSourceId == eventSource).FirstOrDefault();
             if (record == null)
                 return;
-            CleanUpChangeLogByRecordId(Guid.Parse(record.Id));
+            this.CleanUpChangeLogByRecordId(Guid.Parse(record.Id));
         }
 
         #endregion
@@ -197,7 +183,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
         private DraftChangesetDTO GetLastDraftRecord(Guid eventSourceId)
         {
             var evtIdAsString = eventSourceId.FormatGuid();
-            var record = draftChangeLog.Filter(c => c.EventSourceId == evtIdAsString).FirstOrDefault();
+            var record = this.draftChangeLog.Filter(c => c.EventSourceId == evtIdAsString).FirstOrDefault();
             return record;
         }
 

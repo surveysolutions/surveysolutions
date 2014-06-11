@@ -13,11 +13,12 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Services;
 using WB.UI.Capi.Settings;
+using WB.UI.Capi.Syncronization;
 
 namespace WB.UI.Capi
 {

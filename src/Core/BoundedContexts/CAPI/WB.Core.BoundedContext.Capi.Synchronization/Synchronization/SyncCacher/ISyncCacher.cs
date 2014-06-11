@@ -1,6 +1,6 @@
 using System;
 
-namespace CAPI.Android.Core.Model.SyncCacher
+namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.SyncCacher
 {
     public interface ISyncCacher
     {

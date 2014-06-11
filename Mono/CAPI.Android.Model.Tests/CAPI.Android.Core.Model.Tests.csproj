@@ -82,6 +82,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\CAPI\WB.Core.BoundedContext.Capi.Synchronization.Android\WB.Core.BoundedContext.Capi.Synchronization.Android.csproj">
+      <Project>{73601a04-81a9-4bff-9a5f-591569291d8c}</Project>
+      <Name>WB.Core.BoundedContext.Capi.Synchronization.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>

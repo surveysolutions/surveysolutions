@@ -1,13 +1,13 @@
 using System;
 using System.IO;
-using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using Main.Core;
 using Main.Core.Events;
 using Main.Core.View;
+using WB.Core.BoundedContext.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
-namespace CAPI.Android.Core.Model.ChangeLog
+namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog
 {
     public class FileChangeLogStore : IChangeLogStore
     {
@@ -18,22 +18,21 @@ namespace CAPI.Android.Core.Model.ChangeLog
         public FileChangeLogStore(IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory)
         {
             this.metaInfoFactory = metaInfoFactory;
-            changelogPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), ChangelogFolder);
-            if (!Directory.Exists(changelogPath))
+            this.changelogPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), ChangelogFolder);
+            if (!Directory.Exists(this.changelogPath))
             {
-                Directory.CreateDirectory(changelogPath);
+                Directory.CreateDirectory(this.changelogPath);
             }
         }
 
-        public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId/*, bool validRecord*/)
+        public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId)
         {
             if(recordData.Length==0)
                 return;
-            var path = GetFileName(recordId);
+            var path = this.GetFileName(recordId);
             var eventSourceId = recordData[0].EventSourceId;
 
-            var metaData = metaInfoFactory.Load(new InterviewMetaInfoInputModel(eventSourceId));
-            //metaData.Valid = validRecord;
+            var metaData = this.metaInfoFactory.Load(new InterviewMetaInfoInputModel(eventSourceId));
 
             var syncItem = new SyncItem()
                 {
@@ -50,7 +49,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public string GetChangesetContent(Guid recordId)
         {
-            var path = GetFileName(recordId);
+            var path = this.GetFileName(recordId);
             if (!File.Exists(path))
                 return null;
             return File.ReadAllText(path);
@@ -58,28 +57,28 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public void DeleteDraftChangeSet(Guid recordId)
         {
-            var path = GetFileName(recordId);
+            var path = this.GetFileName(recordId);
             if (File.Exists(path))
                 File.Delete(path);
         }
 
         private string GetFileName(Guid publicKey)
         {
-            return System.IO.Path.Combine(changelogPath,
+            return System.IO.Path.Combine(this.changelogPath,
                                           publicKey.ToString());
         }
 
 
         public string GetPathToBackupFile()
         {
-            return changelogPath;
+            return this.changelogPath;
         }
 
         public void RestoreFromBackupFolder(string path)
         {
             var dirWithCahngelog = Path.Combine(path, ChangelogFolder);
             
-            foreach (var file in Directory.EnumerateFiles(changelogPath))
+            foreach (var file in Directory.EnumerateFiles(this.changelogPath))
             {
                 File.Delete(file);
             }
@@ -88,7 +87,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
                 return;
 
             foreach (var file in Directory.GetFiles(dirWithCahngelog))
-                File.Copy(file, Path.Combine(changelogPath, Path.GetFileName(file)));
+                File.Copy(file, Path.Combine(this.changelogPath, Path.GetFileName(file)));
         }
     }
 }

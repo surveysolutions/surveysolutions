@@ -9,8 +9,16 @@ using System.Linq;
 using System.Reflection;
 using CAPI.Android.Core.Model;
 using Main.Core;
+using Main.Core.View;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContext.Capi.Synchronization.Views.InterviewMetaInfo;
+using WB.Core.BoundedContext.Capi.Synchronization.Views.Login;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.UI.Capi.Syncronization;
+using WB.UI.Capi.Views.Login;
 
 namespace WB.UI.Capi.Injections
 {
@@ -27,6 +35,7 @@ namespace WB.UI.Capi.Injections
             base.Load();
             
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IViewFactory<LoginViewInput, LoginView>>().To<LoginViewFactory>();
         }
     }
 }

@@ -1,19 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.SyncCacher;
-using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core;
 using Main.Core.Commands.File;
 using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
+using Main.Core.View;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
-using Ninject;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.Cleaner;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContext.Capi.Synchronization.Views.Login;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -21,28 +19,30 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Capi.Services;
 
-namespace WB.UI.Capi.Syncronization.Pull
+namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.Pull
 {
     public class PullDataProcessor
     {
-        public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService, IReadSideRepositoryReader<LoginDTO> userStorage, IPlainQuestionnaireRepository questionnaireRepository)
+        public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService,
+            IViewFactory<LoginViewInput, LoginView> loginViewFactory, IPlainQuestionnaireRepository questionnaireRepository,
+            ICleanUpExecutor cleanUpExecutor, ILogger logger, ISyncCacher syncCacher)
         {
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.logger = logger;
+            this.syncCacher = syncCacher;
             this.changelog = changelog;
             this.commandService = commandService;
-            this.cleanUpExecutor = new CleanUpExecutor(changelog);
-            this.userStorage = userStorage;
+            this.cleanUpExecutor = cleanUpExecutor;
+            this.loginViewFactory = loginViewFactory;
             this.questionnaireRepository = questionnaireRepository;
         }
 
         private readonly ILogger logger;
-        private readonly CleanUpExecutor cleanUpExecutor;
-
+        private readonly ICleanUpExecutor cleanUpExecutor;
         private readonly IChangeLogManipulator changelog;
+        private readonly ISyncCacher syncCacher;
         private readonly ICommandService commandService;
-        private readonly IReadSideRepositoryReader<LoginDTO> userStorage;
+        private readonly IViewFactory<LoginViewInput, LoginView> loginViewFactory;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
 
 
@@ -100,7 +100,7 @@ namespace WB.UI.Capi.Syncronization.Pull
 
             ICommand userCommand = null;
 
-            if (this.userStorage.GetById(user.PublicKey) == null)
+            if (this.loginViewFactory.Load(new LoginViewInput(user.PublicKey)) == null)
                 userCommand = new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
                                                     user.Roles.ToArray(), user.IsLockedBySupervisor, user.IsLockedByHQ,  user.Supervisor);
             else
@@ -113,9 +113,6 @@ namespace WB.UI.Capi.Syncronization.Pull
         private void UpdateInterview(SyncItem item)
         {
             var metaInfo = ExtractObject<InterviewMetaInfo>(item.MetaInfo, item.IsCompressed);
-            
-            var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
-
             try
             {
                 syncCacher.SaveItem(metaInfo.PublicKey, item.Content);

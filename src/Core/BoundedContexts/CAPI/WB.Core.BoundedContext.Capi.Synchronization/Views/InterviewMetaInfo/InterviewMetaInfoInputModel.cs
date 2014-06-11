@@ -1,12 +1,12 @@
 using System;
 
-namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
+namespace WB.Core.BoundedContext.Capi.Synchronization.Views.InterviewMetaInfo
 {
     public class InterviewMetaInfoInputModel
     {
         public InterviewMetaInfoInputModel(Guid interviewid)
         {
-            InterviewId = interviewid;
+            this.InterviewId = interviewid;
         }
         public Guid InterviewId { get; private set; }
     }
