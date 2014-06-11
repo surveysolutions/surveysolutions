@@ -6,6 +6,7 @@ using Main.Core.View.User;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.UI.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 
@@ -17,16 +18,17 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
         {
             var user = new UserView();
             var userFactory = Mock.Of<IViewFactory<UserViewInputModel, UserView>>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == user);
-            controller = CreateSyncController(viewFactory: userFactory, supervisorVersion: supervisorVersion);
+            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetApplicationBuildNumber() == supervisorVersion);
+            controller = CreateSyncController(viewFactory: userFactory, versionProvider: versionProvider);
         };
 
         Because of = () =>
             result = (JsonResult)controller.Handshake("some client id", Guid.NewGuid().FormatGuid(), Guid.NewGuid(), capiVersion);
 
-        It should_return_IsErrorOccured_setted_in_true = () =>
+        It should_return_IsErrorOccured_set_in_true = () =>
             (result.Data as HandshakePackage).IsErrorOccured.ShouldBeTrue();
 
-        It should_return_error_message_that_contains_words_ = () =>
+        It should_return_error_message_that_contains_specific_words = () =>
             new[] { "must update", "before synchronizing with", "supervisor" }.ShouldEachConformTo(
                 keyword => (result.Data as HandshakePackage).ErrorMessage.ToLower().Contains(keyword));
 

@@ -14,6 +14,7 @@ using Main.Core.View.User;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 using WB.UI.Shared.Web.Exceptions;
@@ -29,7 +30,7 @@ namespace WB.UI.Supervisor.Controllers
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
         private readonly Func<string, string, bool> validateUserCredentials;
         private readonly Func<string, string, bool> checkIfUserIsInRole;
-        private readonly Func<Type, int> getSupervisorRevisionNumber;
+        private readonly ISupportedVersionProvider versionProvider;
 
         private string CapiFileName = "wbcapi.apk";
 
@@ -37,20 +38,15 @@ namespace WB.UI.Supervisor.Controllers
 
         public SyncController(ISyncManager syncManager,
             ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> viewFactory)
-            : this(syncManager, logger, viewFactory, Membership.ValidateUser, Roles.IsUserInRole, GetAssemblyRevisionNumber) { }
-
-        public SyncController(
-            ISyncManager syncManager,
-            ILogger logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory,
-            Func<string, string, bool> validateUserCredentials,
-            Func<string, string, bool> checkIfUserIsInRole,
-            Func<Type, int> getSupervisorRevisionNumber)
+            ISupportedVersionProvider versionProvider)
+            : this(syncManager, logger, viewFactory, versionProvider, Membership.ValidateUser, Roles.IsUserInRole) { }
+
+        public SyncController(ISyncManager syncManager, ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory, ISupportedVersionProvider versionProvider, Func<string, string, bool> validateUserCredentials, Func<string, string, bool> checkIfUserIsInRole)
         {
             this.validateUserCredentials = validateUserCredentials;
             this.checkIfUserIsInRole = checkIfUserIsInRole;
-            this.getSupervisorRevisionNumber = getSupervisorRevisionNumber;
+            this.versionProvider = versionProvider;
             this.syncManager = syncManager;
             this.logger = logger;
             this.viewFactory = viewFactory;
@@ -80,15 +76,14 @@ namespace WB.UI.Supervisor.Controllers
             var package = new HandshakePackage();
 
             Guid key;
-            int supervisorRevisionNumber = this.getSupervisorRevisionNumber(this.GetType());
-            bool isDebug = this.ControllerContext.HttpContext.IsDebuggingEnabled;
+            int? supervisorRevisionNumber = this.versionProvider.GetApplicationBuildNumber();
 
-            if (!isDebug && version > supervisorRevisionNumber)
+            if (supervisorRevisionNumber.HasValue && version > supervisorRevisionNumber.Value)
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "Your application is incometible with the Supervisor. Please, remove your copy and download the correct version";
             }
-            else if (!isDebug && version < supervisorRevisionNumber)
+            else if (supervisorRevisionNumber.HasValue && version < supervisorRevisionNumber.Value)
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "You must update your CAPI application before synchronizing with the Supervisor";
@@ -119,12 +114,6 @@ namespace WB.UI.Supervisor.Controllers
             }
             return this.Json(package, JsonRequestBehavior.AllowGet);
         }
-
-        private static int GetAssemblyRevisionNumber(Type typeFromAssembly)
-        {
-            return typeFromAssembly.Assembly.GetName().Version.Revision;
-        }
-
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
