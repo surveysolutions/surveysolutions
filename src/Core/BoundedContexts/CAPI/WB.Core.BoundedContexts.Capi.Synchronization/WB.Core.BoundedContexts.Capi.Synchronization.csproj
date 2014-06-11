@@ -7,8 +7,8 @@
     <ProjectGuid>{F907B0F2-4CFD-438C-8B53-F2D44C581F56}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.BoundedContext.Capi.Synchronization</RootNamespace>
-    <AssemblyName>WB.Core.BoundedContext.Capi.Synchronization</AssemblyName>
+    <RootNamespace>WB.Core.BoundedContexts.Capi.Synchronization</RootNamespace>
+    <AssemblyName>WB.Core.BoundedContexts.Capi.Synchronization</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

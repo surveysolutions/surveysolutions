@@ -6,7 +6,7 @@ using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContext.Capi.Synchronization.Views.InterviewMetaInfo;
+using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

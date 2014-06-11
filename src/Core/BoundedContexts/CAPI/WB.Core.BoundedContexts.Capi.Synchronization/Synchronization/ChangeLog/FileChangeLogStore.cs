@@ -3,11 +3,11 @@ using System.IO;
 using Main.Core;
 using Main.Core.Events;
 using Main.Core.View;
-using WB.Core.BoundedContext.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog
 {
     public class FileChangeLogStore : IChangeLogStore
     {

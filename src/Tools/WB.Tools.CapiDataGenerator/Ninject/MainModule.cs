@@ -25,7 +25,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using NinjectAdapter;
-using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.EventBus;
