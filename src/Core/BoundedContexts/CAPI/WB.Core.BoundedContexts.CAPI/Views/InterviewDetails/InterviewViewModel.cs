@@ -89,24 +89,24 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             this.CreateInterviewTitle(questionnaire);
 
-            this.UpdateHashForFeaturedQuestions();
+            this.SubscribePrefilledQuestionsOnPropertiesChanges();
 
             #endregion
         }
 
-        private void UpdateHashForFeaturedQuestions()
+        private void SubscribePrefilledQuestionsOnPropertiesChanges()
         {
-            foreach (KeyValuePair<InterviewItemId, QuestionViewModel> featuredQuestion in this.FeaturedQuestions)
+            foreach (KeyValuePair<InterviewItemId, QuestionViewModel> prefilledQuestion in this.FeaturedQuestions)
             {
-                featuredQuestion.Value.PropertyChanged += this.QuestionPropertyChanged;
+                prefilledQuestion.Value.PropertyChanged += this.QuestionPropertyChanged;
             }
         }
 
         private void FireSubstitutionEventsForPrefilledQuestions()
         {
-            foreach (KeyValuePair<InterviewItemId, QuestionViewModel> featuredQuestion in this.FeaturedQuestions)
+            foreach (KeyValuePair<InterviewItemId, QuestionViewModel> prefilledQuestion in this.FeaturedQuestions)
             {
-                this.SubstituteDependantQuestions(featuredQuestion.Value);
+                this.SubstituteDependantQuestions(prefilledQuestion.Value);
             }
         }
 
