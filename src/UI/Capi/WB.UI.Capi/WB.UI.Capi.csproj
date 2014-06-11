@@ -306,13 +306,13 @@
       <Project>{4ece2c97-13a0-46d6-95d1-7bb50a48267b}</Project>
       <Name>Mono.Android.Crasher</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContext.Capi.Synchronization.Android\WB.Core.BoundedContext.Capi.Synchronization.Android.csproj">
-      <Project>{73601a04-81a9-4bff-9a5f-591569291d8c}</Project>
-      <Name>WB.Core.BoundedContext.Capi.Synchronization.Android</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Capi\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
       <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
       <Name>WB.Core.BoundedContexts.Capi.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.Capi.Synchronization.Android\WB.Core.BoundedContexts.Capi.Synchronization.Android.csproj">
+      <Project>{73601a04-81a9-4bff-9a5f-591569291d8c}</Project>
+      <Name>WB.Core.BoundedContexts.Capi.Synchronization.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\ErrorReporting\ErrorReporting.Android\WB.Core.GenericSubdomains.ErrorReporting.Android.csproj">
       <Project>{04ff9769-ab98-416e-8aa9-89271724582e}</Project>

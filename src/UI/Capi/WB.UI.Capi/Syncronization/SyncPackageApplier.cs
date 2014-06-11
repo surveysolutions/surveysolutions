@@ -6,7 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
-using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;

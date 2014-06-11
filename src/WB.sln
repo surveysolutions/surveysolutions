@@ -264,9 +264,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Questionnaire.Core.Web.Secu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tools.DatabaseCleaner", "Tools\WB.Tools.DatabaseCleaner\WB.Tools.DatabaseCleaner.csproj", "{F12AF1CC-C174-4252-9B2B-8173816F156A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContext.Capi.Synchronization", "Core\BoundedContexts\CAPI\WB.Core.BoundedContext.Capi.Synchronization\WB.Core.BoundedContext.Capi.Synchronization.csproj", "{F907B0F2-4CFD-438C-8B53-F2D44C581F56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Capi.Synchronization.Tests", "Tests\WB.Core.BoundedContexts.Capi.Synchronization.Tests\WB.Core.BoundedContexts.Capi.Synchronization.Tests.csproj", "{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContext.Capi.Synchronization.Android", "Core\BoundedContexts\CAPI\WB.Core.BoundedContext.Capi.Synchronization.Android\WB.Core.BoundedContext.Capi.Synchronization.Android.csproj", "{73601A04-81A9-4BFF-9A5F-591569291D8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Capi.Synchronization", "Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.Capi.Synchronization\WB.Core.BoundedContexts.Capi.Synchronization.csproj", "{F907B0F2-4CFD-438C-8B53-F2D44C581F56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Capi.Synchronization.Android", "Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.Capi.Synchronization.Android\WB.Core.BoundedContexts.Capi.Synchronization.Android.csproj", "{73601A04-81A9-4BFF-9A5F-591569291D8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1694,6 +1696,21 @@ Global
 		{F12AF1CC-C174-4252-9B2B-8173816F156A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F12AF1CC-C174-4252-9B2B-8173816F156A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F12AF1CC-C174-4252-9B2B-8173816F156A}.Release|x86.ActiveCfg = Release|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204}.Release|x86.ActiveCfg = Release|Any CPU
 		{F907B0F2-4CFD-438C-8B53-F2D44C581F56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F907B0F2-4CFD-438C-8B53-F2D44C581F56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F907B0F2-4CFD-438C-8B53-F2D44C581F56}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -1777,6 +1794,7 @@ Global
 		{62D81714-5CC5-438D-A42B-0F541AC5F115} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{9B1CD3FE-144B-4E71-B392-C137E8E72839} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{931CBB23-60F8-4059-AE67-52FC9759B646} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
+		{AA97CE9A-3B87-461C-B11F-F8CC97FBA204} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{3464F3AE-094C-4DEC-8725-59506328E597} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}
 		{400CDE74-7407-4388-8D57-BF429E7C508D} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}
 		{8263CA84-BFB5-4A7B-AE31-F5FC5B05E7C1} = {805098EC-6BA3-43EB-9A2F-9640E641E2F9}

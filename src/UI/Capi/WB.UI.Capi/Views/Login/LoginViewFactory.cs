@@ -1,6 +1,6 @@
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.View;
-using WB.Core.BoundedContext.Capi.Synchronization.Views.Login;
+using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Capi.Views.Login

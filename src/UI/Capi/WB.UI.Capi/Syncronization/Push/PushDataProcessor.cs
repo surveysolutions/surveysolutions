@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model;
 using Ninject;
-using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
 
 namespace WB.UI.Capi.Syncronization.Push
 {

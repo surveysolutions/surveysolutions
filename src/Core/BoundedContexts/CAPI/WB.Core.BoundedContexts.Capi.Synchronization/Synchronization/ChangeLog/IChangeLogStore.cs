@@ -2,7 +2,7 @@ using System;
 using Main.Core.Events;
 using WB.Core.Infrastructure.Backup;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog
 {
     public interface IChangeLogStore:IBackupable
     {

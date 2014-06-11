@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using WB.Core.Infrastructure.Backup;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Synchronization.SyncCacher
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher
 {
     public class FileSyncCacher : ISyncCacher, IBackupable
     {
