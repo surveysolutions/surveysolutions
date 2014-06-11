@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             foreach (KeyValuePair<InterviewItemId, QuestionViewModel> featuredQuestion in this.FeaturedQuestions)
             {
-                this.UpdateQuestionHash(featuredQuestion.Value);
+                featuredQuestion.Value.PropertyChanged += this.QuestionPropertyChanged;
             }
         }
 
