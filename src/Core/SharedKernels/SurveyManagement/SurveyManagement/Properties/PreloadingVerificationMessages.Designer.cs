@@ -230,5 +230,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
                 return ResourceManager.GetString("PL0019_ExpectedDecimalNotParsed", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer is incorrect because is greater than max value.
+        /// </summary>
+        internal static string PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue {
+            get {
+                return ResourceManager.GetString("PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue", resourceCulture);
+            }
+        }
     }
 }

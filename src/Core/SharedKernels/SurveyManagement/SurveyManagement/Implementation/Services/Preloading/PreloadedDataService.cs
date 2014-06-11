@@ -107,20 +107,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
 
             var answerObject = answerOnRosterSizeQuestion.Value.Value;
+
             if (rosterScopeDescription.ScopeType == RosterScopeType.Numeric)
             {
-                var triggerQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(g => g.PublicKey == levelScopeVector.Last());
-                if (triggerQuestion == null)
-                    return null;
-
-                var intValueOfNumericQuestion = (int) answerObject;
-                var numericQuestion = triggerQuestion as INumericQuestion;
-                if (numericQuestion == null)
-                    return null;
-                if (numericQuestion.MaxValue.HasValue && intValueOfNumericQuestion > numericQuestion.MaxValue)
-                    intValueOfNumericQuestion = numericQuestion.MaxValue.Value;
-
-                return Enumerable.Range(0, intValueOfNumericQuestion).Select(i => (decimal) i).ToArray();
+                return Enumerable.Range(0, (int)answerObject).Select(i => (decimal)i).ToArray();
             }
 
             if (rosterScopeDescription.ScopeType == RosterScopeType.MultyOption)

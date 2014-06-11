@@ -51,14 +51,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     var numericQuestion = question as INumericQuestion;
                     if (numericQuestion == null)
                         return ValueParsingResult.QuestionTypeIsIncorrect;
+                    
                     // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
                     if (numericQuestion.IsInteger)
                     {
                         int intNumericValue;
                         if (!int.TryParse(answer, out intNumericValue))
                             return ValueParsingResult.AnswerAsIntWasNotParsed;
-                        
+
                         parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, intNumericValue);
+
+                        if (numericQuestion.MaxValue.HasValue && intNumericValue > numericQuestion.MaxValue.Value)
+                            return ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue;
+
                         return ValueParsingResult.OK;
                     }
                     else
@@ -68,6 +73,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                             return ValueParsingResult.AnswerAsDecimalWasNotParsed;
                         {
                             parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, decimalNumericValue);
+                         
+                            if (numericQuestion.MaxValue.HasValue && decimalNumericValue > numericQuestion.MaxValue.Value)
+                                return ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue;
+
                             return ValueParsingResult.OK;
                         }
                     }
