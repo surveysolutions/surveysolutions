@@ -129,6 +129,13 @@ namespace WB.UI.Supervisor.App_Start
             bool isDebug = AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof (SyncController).Assembly.GetName().Version;
 
+            var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
+                appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
+                incomingCapiPackagesWithErrorsDirectoryName:
+                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
+                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
+
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -143,7 +150,7 @@ namespace WB.UI.Supervisor.App_Start
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
-                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), new SyncSettings(reevaluateInterviewWhenSynchronized:true)),
+                new SynchronizationModule(synchronizationSettings),
                 new SupervisorCommandDeserializationModule(),
                 new SurveyManagementSharedKernelModule(
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
