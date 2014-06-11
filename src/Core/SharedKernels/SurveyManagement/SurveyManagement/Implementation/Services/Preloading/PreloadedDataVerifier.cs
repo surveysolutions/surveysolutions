@@ -350,6 +350,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                                                 string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
                                                 levelData.FileName));
                                     break;
+                                case ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue:
+                                    yield return
+                                        new PreloadedDataVerificationError("PL0020",
+                                            PreloadingVerificationMessages.PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
+                                    break;
                                 case ValueParsingResult.AnswerAsIntWasNotParsed:
                                     yield return
                                         new PreloadedDataVerificationError("PL0018",

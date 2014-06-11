@@ -37,11 +37,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                         CreatePreloadedDataByFile(new string[] { "Id", rosterSizeQuestionVariableName }, new string[][] { new string[] { "1","3" } },
                             questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, new []{"1"});
 
-        It should_return_not_null_result = () =>
-            result.ShouldNotBeNull();
-
-        It should_result_have_2_ids_1_and_2 = () =>
-            result.SequenceEqual(new decimal[] { 0, 1 }).ShouldBeTrue();
+        It should_return_null_result = () =>
+            result.ShouldBeNull();
 
         private static PreloadedDataService preloadedDataService;
         private static QuestionnaireDocument questionnaireDocument;
