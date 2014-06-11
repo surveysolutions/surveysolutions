@@ -165,5 +165,10 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         #endregion
+
+        public ActionResult InterviewDetails()
+        {
+            return this.View();
+        }
     }
 }

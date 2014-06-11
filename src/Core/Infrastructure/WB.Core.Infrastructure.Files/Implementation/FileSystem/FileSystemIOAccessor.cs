@@ -23,6 +23,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return ZlpPathHelper.GetFileNameFromFilePath(filePath);
         }
 
+        public string GetFileNameWithoutExtension(string filePath)
+        {
+            return ZlpPathHelper.GetFileNameWithoutExtension(filePath);
+        }
+
         public long GetFileSize(string filePath)
         {
             if (!this.IsFileExists(filePath))
@@ -121,6 +126,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return ZlpIOHelper.GetFiles(pathToDirectory).Select(fileInfo => fileInfo.FullName).ToArray();
         }
 
+        public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
+        {
+            return ZlpIOHelper.GetFiles(pathToDirectory, pattern).Select(fileInfo => fileInfo.FullName).ToArray();
+        }
+
         public void WriteAllText(string pathToFile, string content)
         {
             ZlpIOHelper.WriteAllText(pathToFile, content);
@@ -134,6 +144,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         public byte[] ReadAllBytes(string pathToFile)
         {
             return ZlpIOHelper.ReadAllBytes(pathToFile);
+        }
+
+        public string ReadAllText(string pathToFile)
+        {
+            return ZlpIOHelper.ReadAllText(pathToFile);
         }
 
         public string ReadAllText(string fileName)

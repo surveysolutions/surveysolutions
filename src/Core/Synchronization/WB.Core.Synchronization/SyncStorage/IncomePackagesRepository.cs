@@ -23,34 +23,40 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal class IncomePackagesRepository : IIncomePackagesRepository
     {
-        private readonly string path;
+        private string incomingCapiPackagesDirectory;
+        private string incomingCapiPackagesWithErrorsDirectory;
+        private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
 
         private readonly ILogger logger;
-        private readonly IJsonUtils jsonUtils;
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICommandService commandService;
         private readonly SyncSettings syncSettings;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
-        private const string FolderName = "IncomingData";
-        private const string ErrorFolderName = "IncomingDataWithErrors";
-        private const string FileExtension = "sync";
-
-        public IncomePackagesRepository(string folderPath, ILogger logger,
-            SyncSettings syncSettings, ICommandService commandService, IJsonUtils jsonUtils, IFileSystemAccessor fileSystemAccessor)
+        public IncomePackagesRepository(IQueryableReadSideRepositoryWriter<UserDocument> userStorage, ILogger logger,
+            SyncSettings syncSettings, ICommandService commandService, IFileSystemAccessor fileSystemAccessor)
         {
-            this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.path))
-                fileSystemAccessor.CreateDirectory(this.path);
-            var errorPath = fileSystemAccessor.CombinePath(this.path, ErrorFolderName);
-            if (!fileSystemAccessor.IsDirectoryExists(errorPath))
-                fileSystemAccessor.CreateDirectory(errorPath);
-
+            this.userStorage = userStorage;
             this.logger = logger;
             this.syncSettings = syncSettings;
             this.commandService = commandService;
-            this.jsonUtils = jsonUtils;
             this.fileSystemAccessor = fileSystemAccessor;
+
+            InitializeDirectoriesForCapiIncomePackages();
+        }
+
+        private void InitializeDirectoriesForCapiIncomePackages()
+        {
+            this.incomingCapiPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
+                syncSettings.IncomingCapiPackagesDirectoryName);
+
+            this.incomingCapiPackagesWithErrorsDirectory = fileSystemAccessor.CombinePath(this.incomingCapiPackagesDirectory,
+                this.syncSettings.IncomingCapiPackagesWithErrorsDirectoryName);
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.incomingCapiPackagesDirectory))
+                this.fileSystemAccessor.CreateDirectory(this.incomingCapiPackagesDirectory);
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(incomingCapiPackagesWithErrorsDirectory))
+                this.fileSystemAccessor.CreateDirectory(incomingCapiPackagesWithErrorsDirectory);
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -79,7 +85,7 @@ namespace WB.Core.Synchronization.SyncStorage
                     commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
                         (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false));
 
-                fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
             }
             catch (Exception ex)
             {
@@ -90,25 +96,25 @@ namespace WB.Core.Synchronization.SyncStorage
 
         private string GetItemFileName(Guid id)
         {
-            return fileSystemAccessor.CombinePath(this.path, string.Format("{0}.{1}", id, FileExtension));
+            return this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesDirectory,
+                string.Format("{0}.{1}", id, this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
         private string GetItemFileNameForErrorStorage(Guid id)
         {
-            return fileSystemAccessor.CombinePath(fileSystemAccessor.CombinePath(this.path, ErrorFolderName),
-                string.Format("{0}.{1}", id, FileExtension));
+            return this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesWithErrorsDirectory,
+                string.Format("{0}.{1}", id, this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
         public void ProcessItem(Guid id)
         {
             var fileName = this.GetItemFileName(id);
-
-            if (!fileSystemAccessor.IsFileExists(fileName))
+            if (!this.fileSystemAccessor.IsFileExists(fileName))
                 return;
 
-            var fileContent = fileSystemAccessor.ReadAllText(fileName);
-            
-            var items = jsonUtils.Deserrialize<AggregateRootEvent[]>(PackageHelper.DecompressString(fileContent));
+            var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
+
+            var items = this.GetContentAsItem<AggregateRootEvent[]>(fileContent);
             if (items.Length > 0)
             {
                 var eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
@@ -122,7 +128,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 var incomeEvents = this.BuildEventStreams(items, eventStore.GetLastEventSequence(id));
 
                 eventStore.Store(incomeEvents);
-                fileSystemAccessor.DeleteFile(fileName);
+                this.fileSystemAccessor.DeleteFile(fileName);
 
                 bus.Publish(incomeEvents);
                 if (this.syncSettings.ReevaluateInterviewWhenSynchronized)
@@ -132,24 +138,23 @@ namespace WB.Core.Synchronization.SyncStorage
             }
             else
             {
-                fileSystemAccessor.DeleteFile(fileName);
+                this.fileSystemAccessor.DeleteFile(fileName);
             }
         }
 
         public IEnumerable<Guid> GetListOfUnhandledPackages()
         {
-            var errorPath = fileSystemAccessor.CombinePath(this.path, ErrorFolderName);
-            if (!fileSystemAccessor.IsDirectoryExists(errorPath))
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.incomingCapiPackagesWithErrorsDirectory))
                 return Enumerable.Empty<Guid>();
 
-            var syncFiles = fileSystemAccessor.GetFilesInDirectory(errorPath).Where(f => f.EndsWith("." + FileExtension));
+            var syncFiles = this.fileSystemAccessor.GetFilesInDirectory(this.incomingCapiPackagesWithErrorsDirectory,
+                string.Format("*.{0}", this.syncSettings.IncomingCapiPackageFileNameExtension));
+
             var result = new List<Guid>();
             foreach (var syncFile in syncFiles)
             {
-                var fileName = fileSystemAccessor.GetFileName(syncFile);
-                var fileNameWithoutExtension = fileName.Substring(0, fileName.IndexOf(".") + 1);
                 Guid packageId;
-                if (Guid.TryParse(fileNameWithoutExtension, out packageId))
+                if (Guid.TryParse(this.fileSystemAccessor.GetFileNameWithoutExtension(syncFile), out packageId))
                     result.Add(packageId);
             }
             return result;
