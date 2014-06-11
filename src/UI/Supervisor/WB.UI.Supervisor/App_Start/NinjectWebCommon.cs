@@ -37,6 +37,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Code.CommandDeserialization;
+using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
 using WB.UI.Supervisor.App_Start;
 using WebActivatorEx;
@@ -125,6 +126,9 @@ namespace WB.UI.Supervisor.App_Start
                 useStreamingForAllEvents = true;
             }
 
+            bool isDebug = AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
+            Version applicationBuildVersion = typeof (SyncController).Assembly.GetName().Version;
+
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -145,7 +149,9 @@ namespace WB.UI.Supervisor.App_Start
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])),
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
+                    isDebug,
+                    applicationBuildVersion),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
 

@@ -11,6 +11,7 @@ using Main.Core.View;
 using Main.Core.View.User;
 using Moq;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
 using WB.UI.Supervisor.Controllers;
 
@@ -21,14 +22,12 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
         protected static SyncController CreateSyncController(ISyncManager syncManager = null,
             ILogger logger = null,
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            int supervisorVersion = 5)
+            ISupportedVersionProvider versionProvider = null)
         {
             var controller = new SyncController(syncManager ?? Mock.Of<ISyncManager>(),
                 logger ?? Mock.Of<ILogger>(),
                 viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
-                (login, password) => true,
-                (login, role) => true,
-                (type) => supervisorVersion);
+                versionProvider ?? Mock.Of<ISupportedVersionProvider>(), (login, password) => true, (login, role) => true);
 
             SetControllerContextWithStream(controller, stream: null);
             
