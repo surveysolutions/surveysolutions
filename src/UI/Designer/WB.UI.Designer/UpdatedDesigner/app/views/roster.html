@@ -1,37 +1,66 @@
-﻿<div class="breadcrumbs">
-    <ul>
-        <li ng-repeat="breadcrumb in activeChapter.breadcrumbs"><a ng-href="breadcrumb.id">{{breadcrumb.title}}</a></li>
-    </ul>
+﻿<div class="form-holder">
+    <div class="breadcrumbs">
+        <ul>
+            <li ng-repeat="breadcrumb in activeRoster.breadcrumbs"><a ng-href="breadcrumb.id">{{breadcrumb.title}}</a></li>
+        </ul>
+    </div>
+
+    <form role="form">
+        <h3>Roster</h3>
+
+        <div class="comment-block">
+            <select class="form-control input-lg" ng-model="activeRoster.rosterSizeSourceType">
+                <option value="Question">Answer to numeric question</option>
+                <option value="Question">Answer to list question</option>
+                <option value="FixedTitles">Manual list</option>
+            </select>
+        </div>
+
+        <div class="comment-block">
+            <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
+            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" style="font-weight: bold;" ng-model="activeRoster.title">
+        </div>
+
+        <div class="comment-block">
+            <label for="edit-group-description" class="wb-label">Description <span>(<a>?</a>)</span></label><br>
+            <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.description">
+        </div>
+
+        <div class="comment-block">
+            <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
+            <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.enablementCondition">
+        </div>
+
+        <div class="comment-block" ng-show="activeRoster.rosterSizeSourceType=='numericRoster'">
+            <label for="edit-group-title" class="wb-label">Source question</label><br>
+            <select class="form-control input-lg"></select>
+
+            <label for="edit-group-title" class="wb-label">Titles of rows</label><br>
+            <select class="form-control input-lg"></select>
+
+        </div>
+
+        <div class="comment-block" ng-show="activeRoster.rosterSizeSourceType=='listRoster'">
+            <label for="edit-group-title" class="wb-label">Source question</label><br>
+            <select class="form-control input-lg"></select>
+
+            <label for="edit-group-title" class="wb-label">Titles of rows</label><br>
+            <select class="form-control input-lg"></select>
+        </div>
+
+        <div class="comment-block" ng-show="activeRoster.rosterSizeSourceType=='FixedTitles'">
+            <h3>Manual Roster</h3>
+            <textarea rows="5" cols="100"></textarea>
+        </div>
+    </form>
 </div>
-
-<form role="form">
-    <h3>Roster</h3>
-
-    <div class="comment-block">
-        <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
-        <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" style="font-weight: bold;" ng-model="activeRoster.title">
+<div class="form-buttons-holder">
+    <div class="pull-left">
+        <button id="edit-roster-save-button" class="btn-lg btn-primary" ng-click="saveChapter()">Save</button>
+        <button id="edit-chapter-cancel-button" class="btn-lg btn-primary btn-transbg" ng-click="closePanel()">Cancel</button>
     </div>
-
-    <div class="comment-block">
-        <label for="edit-group-description" class="wb-label">Description <span>(<a>?</a>)</span></label><br>
-        <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.description">
+    <div class="pull-right">
+        <button id="edit-chapter-delete-button" class="btn-lg btn-primary btn-transbg" ng-click="deleteChapter()">Delete</button>
+        <button id="edit-chapter-clone-button" class="btn-lg btn-primary btn-transbg" ng-click="cloneChapter()">Clone</button>
     </div>
-
-    <div class="comment-block">
-        <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
-        <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.enablementCondition">
-    </div>
-
-    <div class="form-buttons-holder">
-        <div class="pull-left">
-            <!--<input id="edit-chapter-save-button" class="wb-inline-button-medium" type="submit" value="Save" ng-click="saveChapter()">-->
-            <button id="edit-chapter-save-button" class="btn-lg" ng-click="saveChapter()">Save</button>
-            <a ng-click="closePanel()">Cancel</a>
-        </div>
-        <div class="pull-right">
-            <a ng-click="deleteChapter()">Delete</a>
-            <a ng-click="cloneChapter()">Clone</a>
-        </div>
-    </div>
-
-</form>
+</div>

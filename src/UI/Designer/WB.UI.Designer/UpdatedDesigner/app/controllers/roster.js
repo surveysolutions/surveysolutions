@@ -2,14 +2,17 @@
 
 angular.module('designerApp')
     .controller('RosterCtrl', [
-        '$scope', '$routeParams', 'questionnaireService', 'commandService', 'utilityService', 'navigationService',
-        function($scope, $routeParams, questionnaireService, commandService, math, navigationService) {
+        '$scope', '$routeParams', 'questionnaireService',
+        function($scope, $routeParams, questionnaireService) {
+
             $scope.loadRoster = function() {
-                questionnaireService.getGroupDetailsById($routeParams.questionnaireId, $scope.activeRoster.itemId).success(function(result) {
-                        var roster = result.group;
+                questionnaireService.getRosterDetailsById($routeParams.questionnaireId, $scope.activeRoster.itemId).success(function(result) {
+                        $scope.activeRoster.breadcrumbs = result.breadcrumbs;
+
+                        var roster = result.roster;
                         $scope.activeRoster.description = roster.description;
                         $scope.activeRoster.enablementCondition = roster.enablementCondition;
-                        $scope.activeRoster.breadcrumbs = result.breadcrumbs;
+                        $scope.activeRoster.rosterSizeSourceType = roster.rosterSizeSourceType;
                     }
                 );
             }
