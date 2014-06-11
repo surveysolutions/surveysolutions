@@ -24,7 +24,6 @@ namespace WB.Core.Synchronization.SyncStorage
     internal class IncomePackagesRepository : IIncomePackagesRepository
     {
         private readonly string path;
-        private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
 
         private readonly ILogger logger;
         private readonly IJsonUtils jsonUtils;
@@ -36,18 +35,17 @@ namespace WB.Core.Synchronization.SyncStorage
         private const string ErrorFolderName = "IncomingDataWithErrors";
         private const string FileExtension = "sync";
 
-        public IncomePackagesRepository(string folderPath, IQueryableReadSideRepositoryWriter<UserDocument> userStorage, ILogger logger,
+        public IncomePackagesRepository(string folderPath, ILogger logger,
             SyncSettings syncSettings, ICommandService commandService, IJsonUtils jsonUtils, IFileSystemAccessor fileSystemAccessor)
         {
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
-            
+
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
             var errorPath = fileSystemAccessor.CombinePath(this.path, ErrorFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(errorPath))
                 fileSystemAccessor.CreateDirectory(errorPath);
 
-            this.userStorage = userStorage;
             this.logger = logger;
             this.syncSettings = syncSettings;
             this.commandService = commandService;
@@ -61,8 +59,8 @@ namespace WB.Core.Synchronization.SyncStorage
                 throw new ArgumentException("Sync Item is not set.");
 
             try
-            {
-                var meta = jsonUtils.Deserrialize<InterviewMetaInfo>(item.MetaInfo);
+            { 
+                var meta = jsonUtils.Deserrialize<InterviewMetaInfo>(PackageHelper.DecompressString(item.MetaInfo));
                 if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value)
                 {
                     AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
@@ -110,7 +108,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             var fileContent = fileSystemAccessor.ReadAllText(fileName);
             
-            var items = jsonUtils.Deserrialize<AggregateRootEvent[]>(fileContent);
+            var items = jsonUtils.Deserrialize<AggregateRootEvent[]>(PackageHelper.DecompressString(fileContent));
             if (items.Length > 0)
             {
                 var eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Infrastructure.FileSystem;
@@ -21,6 +22,13 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
     {
         Establish context = () =>
         {
+            syncItem = new SyncItem()
+            {
+                Content = "some content",
+                Id = Guid.NewGuid(),
+                MetaInfo = PackageHelper.CompressString("some string")
+            };
+
             jsonMock = new Mock<IJsonUtils>();
             jsonMock.Setup(x => x.Deserrialize<InterviewMetaInfo>(Moq.It.IsAny<string>()))
                 .Returns(interviewMetaInfo);
@@ -56,7 +64,7 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
         private static IncomePackagesRepository incomePackagesRepository;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Mock<ICommandService> commandServiceMock;
-        private static SyncItem syncItem = new SyncItem() { Content = "some content", Id = Guid.NewGuid() };
+        private static SyncItem syncItem;
 
         private static InterviewMetaInfo interviewMetaInfo = new InterviewMetaInfo()
         {
