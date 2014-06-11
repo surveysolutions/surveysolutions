@@ -7,9 +7,9 @@ using Main.Core.Entities.SubEntities.Question;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
-    internal class QuestionDetailsFactory : IQuestionDetailsFactory
+    internal class QuestionDetailsViewMapper : IQuestionDetailsViewMapper
     {
-        public QuestionDetailsView CreateQuestion(IQuestion question, Guid parentGroupId)
+        public QuestionDetailsView Map(IQuestion question, Guid parentGroupId)
         {
             var questionView = CreateQuestionByType(question.QuestionType);
             if (questionView == null)
