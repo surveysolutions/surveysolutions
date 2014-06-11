@@ -68,17 +68,6 @@ namespace WB.UI.Headquarters
                     ));
 
             bundles.Add(
-                new ScriptBundle("~/js/interview-details").Include(
-                    "~/Scripts/moment.js",
-                    "~/Scripts/viewmodels/pages/interview/details/config.js",
-                    "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
-                    "~/Scripts/viewmodels/pages/interview/details/mapper.js",
-                    "~/Scripts/viewmodels/pages/interview/details/model.js",
-                    "~/Scripts/viewmodels/pages/interview/details/interviewdetailssettings.js",
-                    "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js"
-                    ));
-
-            bundles.Add(
                 new ScriptBundle("~/js/interview-new").Include(
                     "~/Scripts/viewmodels/pages/interview/new/datacontext.js",
                     "~/Scripts/viewmodels/pages/interview/new/mapper.js",

@@ -26,7 +26,6 @@ Supervisor.VM.InterviewDetails = function (settings) {
         }
         self.currentQuestion(question);
         self.currentQuestion().isSelected(true);
-
         $('body').addClass('details-visible');
     };
 

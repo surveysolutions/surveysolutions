@@ -260,7 +260,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\details.js" />
-    <Content Include="Scripts\director.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
     <Content Include="Views\ControlPanel\InterviewDetails.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
@@ -289,7 +288,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
-    <Content Include="Scripts\director.min.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery.pnotify.js" />
@@ -324,12 +322,6 @@
     <Content Include="Scripts\viewmodels\pages\designerquestionnaires.js" />
     <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
     <Content Include="Scripts\viewmodels\pages\interview\custom.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\config.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\datacontext.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\interviewdetails.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\interviewdetailssettings.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\mapper.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\model.js" />
     <Content Include="Scripts\viewmodels\pages\interview\hq.interviews.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\datacontext.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\mapper.js" />
