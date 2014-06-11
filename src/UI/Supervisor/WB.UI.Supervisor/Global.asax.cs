@@ -5,6 +5,7 @@ using System.Web.Hosting;
 using System.Web.Http.Filters;
 using System.Web.SessionState;
 using Elmah;
+using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
@@ -80,6 +81,7 @@ namespace WB.UI.Supervisor
             GlobalConfiguration.Configure(WebApiConfig.Register);
             //WebApiConfig.Register(GlobalConfiguration.Configuration);
 
+            RegisterVirtualPathProvider();
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
@@ -92,8 +94,6 @@ namespace WB.UI.Supervisor
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
-
-            RegisterVirtualPathProvider();
         }
 
         private static void RegisterVirtualPathProvider()
@@ -110,6 +110,8 @@ namespace WB.UI.Supervisor
                 //from the source file so you can change the content while the app is running without needing to rebuild
                 //{typeof(SomeAssembly.SomeClass).Assembly, @"..\SomeAssembly"} 
             });
+
+            BundleTable.VirtualPathProvider = HostingEnvironment.VirtualPathProvider;
         }
 
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
