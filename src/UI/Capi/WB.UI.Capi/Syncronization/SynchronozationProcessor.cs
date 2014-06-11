@@ -9,9 +9,14 @@ using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Settings;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.Pull;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContext.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -62,8 +67,8 @@ namespace WB.UI.Capi.Syncronization
         }
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog,
-            IReadSideRepositoryReader<LoginDTO> userStorage, IRestServiceWrapperFactory restServiceWrapperFactory, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IViewFactory<LoginViewInput, LoginView> loginViewFactory, IRestServiceWrapperFactory restServiceWrapperFactory, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, ISyncCacher syncCacher)
         {
             this.context = context;
             
@@ -76,7 +81,8 @@ namespace WB.UI.Capi.Syncronization
             this.handshake = new RestHandshake(executor);
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            this.pullDataProcessor = new PullDataProcessor(changelog, commandService, userStorage, plainQuestionnaireRepository);
+            this.pullDataProcessor = new PullDataProcessor(changelog, commandService, loginViewFactory, plainQuestionnaireRepository,
+                new CleanUpExecutor(changelog), ServiceLocator.Current.GetInstance<ILogger>(), syncCacher);
             this.pushDataProcessor = new PushDataProcessor(changelog);
 
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();

@@ -11,8 +11,12 @@ using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Utility;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContext.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
@@ -238,8 +242,8 @@ namespace WB.UI.Capi
             try
             {
                 this.synchronizer = new SynchronozationProcessor(this, this.CreateAuthenticator(),
-                    CapiApplication.Kernel.Get<IChangeLogManipulator>(), CapiApplication.Kernel.Get<IReadSideRepositoryReader<LoginDTO>>(),
-                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>());
+                    CapiApplication.Kernel.Get<IChangeLogManipulator>(), CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
+                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), CapiApplication.Kernel.Get<ISyncCacher>());
             }
             catch (Exception ex)
             {

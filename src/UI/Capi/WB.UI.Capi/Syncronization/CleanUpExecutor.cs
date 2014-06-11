@@ -1,19 +1,20 @@
 ﻿using System;
 using AndroidNcqrs.Eventing.Storage.SQLite;
-using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContext.Capi.Synchronization.Synchronization.Cleaner;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.UI.Capi.Services
+namespace WB.UI.Capi.Syncronization
 {
 
     //has to be reviewed after interview separation from template
-    public class CleanUpExecutor
+    public class CleanUpExecutor : ICleanUpExecutor
     {
         private readonly IChangeLogManipulator changelog;
 
@@ -34,7 +35,7 @@ namespace WB.UI.Capi.Services
             if (eventStore != null)
                 eventStore.CleanStream(id);
 
-            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as FileBasedSnapshotStore;
             if (snapshotStore != null)
                 snapshotStore.DeleteSnapshot(id);
             
@@ -43,7 +44,6 @@ namespace WB.UI.Capi.Services
             //think about more elegant solution
             CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>().Remove(id);
             CapiApplication.Kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>().Remove(id);
-
         }
     }
 }
