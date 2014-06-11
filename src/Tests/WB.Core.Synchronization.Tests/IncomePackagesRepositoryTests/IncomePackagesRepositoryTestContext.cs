@@ -21,7 +21,7 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
     {
         protected static IncomePackagesRepository CreateIncomePackagesRepository(IJsonUtils jsonUtils = null, IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService=null)
         {
-            return new IncomePackagesRepository("", Mock.Of<IQueryableReadSideRepositoryWriter<UserDocument>>(), Mock.Of<ILogger>(),
+            return new IncomePackagesRepository("", Mock.Of<ILogger>(),
                 new SyncSettings(true), commandService ?? Mock.Of<ICommandService>(), jsonUtils ?? Mock.Of<IJsonUtils>(), fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object);
         }
 
