@@ -3,8 +3,8 @@ using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
-    internal interface IQuestionDetailsFactory
+    internal interface IQuestionDetailsViewMapper
     {
-        QuestionDetailsView CreateQuestion(IQuestion question, Guid parentGroupId);
+        QuestionDetailsView Map(IQuestion question, Guid parentGroupId);
     }
 }

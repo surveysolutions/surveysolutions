@@ -226,12 +226,12 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\EventConverter.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GeoLocationDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GroupAndRosterDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\IQuestionDetailsFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\IQuestionDetailsViewMapper.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultiOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\NumericDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QrBarcodeDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsViewMapper.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\SingleOptionDetailsView.cs" />

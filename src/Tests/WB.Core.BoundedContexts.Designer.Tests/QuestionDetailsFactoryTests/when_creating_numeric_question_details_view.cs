@@ -29,11 +29,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
                 CountOfDecimalPlaces = countOfDecimalPlaces
             };
 
-            factory = CreateQuestionDetailsFactory();
+            viewMapper = CreateQuestionDetailsFactory();
         };
 
         Because of = () =>
-            questionView = (NumericDetailsView)factory.CreateQuestion(question, parentGroupId);
+            questionView = (NumericDetailsView)viewMapper.Map(question, parentGroupId);
 
         It should_set_CountOfDecimalPlaces_in_countOfDecimalPlaces = () =>
             questionView.CountOfDecimalPlaces.ShouldEqual(countOfDecimalPlaces);
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string variableName = "variable";
 
-        private static QuestionDetailsFactory factory;
+        private static QuestionDetailsViewMapper viewMapper;
         private static NumericDetailsView questionView;
         private static bool  isInteger = true;
         private static int maxValue = 18;
