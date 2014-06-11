@@ -26,11 +26,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
                 MaxAnswerCount = maxAnswerCount
             };
 
-            factory = CreateQuestionDetailsFactory();
+            viewMapper = CreateQuestionDetailsFactory();
         };
 
         Because of = () =>
-            questionView = (TextListDetailsView)factory.CreateQuestion(question, parentGroupId);
+            questionView = (TextListDetailsView)viewMapper.Map(question, parentGroupId);
 
         It should_set_Type_in_DateTime = () =>
             questionView.Type.ShouldEqual(questionType);
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
         private static QuestionScope scope = QuestionScope.Supervisor;
         private static string variableName = "variable";
 
-        private static QuestionDetailsFactory factory;
+        private static QuestionDetailsViewMapper viewMapper;
         private static TextListDetailsView questionView;
         private static readonly int maxAnswerCount = 14;
     }
