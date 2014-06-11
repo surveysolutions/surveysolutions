@@ -11,7 +11,6 @@ using It = Machine.Specifications.It;
 namespace WB.Core.BoundedContexts.Designer.Tests.CreateQuestionnaireCommandTests
 {
     [Subject(typeof (Questionnaire))]
-    [Ignore("This test should be fixed in KP-3602")]
     public class when_creating_new_questionnaire
     {
         Establish context = () =>
@@ -23,12 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CreateQuestionnaireCommandTests
             isPublic = true;
             currentDate = new DateTime(2010, 2, 3);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IClock>())
-                .Returns(Mock.Of<IClock>(c =>
-
-                    c.UtcNow() == currentDate
-                    ));
+            NcqrsEnvironment.SetDefault(Mock.Of<IClock>(x => x.UtcNow() == currentDate));
         };
 
         Because of = () => questionnaire = new Questionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic);
