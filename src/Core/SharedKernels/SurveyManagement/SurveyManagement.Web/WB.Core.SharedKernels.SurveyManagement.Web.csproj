@@ -100,14 +100,68 @@
   <ItemGroup>
     <EmbeddedResource Include="Views\web.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Shared\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
     <EmbeddedResource Include="Views\Interview\Revalidate.cshtml" />
+    <Content Include="Scripts\supervisor.framework.js" />
+    <Content Include="Scripts\viewmodels\listview.js" />
+    <Content Include="Scripts\viewmodels\pagebase.js" />
+    <Content Include="Scripts\viewmodels\pages\designerquestionnaires.js" />
+    <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\custom.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\hq.interviews.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\new\datacontext.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\new\mapper.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\new\model.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\new\newinterview.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
+    <Content Include="Scripts\viewmodels\pages\mapreport.js" />
+    <Content Include="Scripts\viewmodels\pages\surveysandstatuses.js" />
+    <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
+    <Content Include="Scripts\viewmodels\pages\users.js" />
+    <Content Include="Scripts\viewmodels\viewmodelbase.js" />
+    <Content Include="Views\Backup\Index.cshtml" />
+    <Content Include="Views\ControlPanel\Designer.cshtml" />
+    <Content Include="Views\ControlPanel\IncomingDataWithErrors.cshtml" />
+    <Content Include="Views\ControlPanel\NConfig.cshtml" />
+    <Content Include="Views\ControlPanel\RevalidateInterviews.cshtml" />
+    <Content Include="Views\Device\Index.cshtml" />
+    <Content Include="Views\HQ\Assign.cshtml" />
+    <Content Include="Views\HQ\BatchUpload.cshtml" />
+    <Content Include="Views\HQ\ImportResult.cshtml" />
+    <Content Include="Views\HQ\ImportSample.cshtml" />
+    <Content Include="Views\HQ\Index.cshtml" />
+    <Content Include="Views\HQ\Interviews.cshtml" />
+    <Content Include="Views\HQ\MapReport.cshtml" />
+    <Content Include="Views\HQ\SampleCreationResult.cshtml" />
+    <Content Include="Views\HQ\Status.cshtml" />
+    <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
+    <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
+    <Content Include="Views\HQ\TakeNew.cshtml" />
+    <Content Include="Views\HQ\VerifySample.cshtml" />
+    <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
+    <Content Include="Views\Survey\Index.cshtml" />
+    <Content Include="Views\Survey\Interviews.cshtml" />
+    <Content Include="Views\Survey\Status.cshtml" />
+    <Content Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
+    <Content Include="Views\TabletReport\Packages.cshtml" />
+    <Content Include="Views\Team\AddInterviewer.cshtml" />
+    <Content Include="Views\Team\AddSupervisor.cshtml" />
+    <Content Include="Views\Team\Details.cshtml" />
+    <Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\Team\Interviewers.cshtml" />
+    <Content Include="Views\Template\Import.cshtml" />
+    <Content Include="Views\Template\LoginToDesigner.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\AccessDenied.cshtml" />
+    <Content Include="Views\Shared\EditForm.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
+    <Content Include="Views\Shared\_alerts.cshtml" />
+    <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
+    <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
