@@ -9,13 +9,10 @@ namespace WB.Core.Synchronization
 {
     public class SynchronizationModule : NinjectModule
     {
-        private readonly string currentFolderPath;
         private readonly SyncSettings syncSettings;
 
-        public SynchronizationModule(string currentFolderPath,
-            SyncSettings syncSettings)
+        public SynchronizationModule(SyncSettings syncSettings)
         {
-            this.currentFolderPath = currentFolderPath;
             this.syncSettings = syncSettings;
         }
 
@@ -29,7 +26,7 @@ namespace WB.Core.Synchronization
             this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
             this.Bind<IChunkWriter>().To<ReadSideChunkWriter>().InSingletonScope();
             this.Bind<IChunkReader>().To<ReadSideChunkReader>();
-            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope().WithConstructorArgument("folderPath", currentFolderPath);
+            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope();
             this.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
         }
     }

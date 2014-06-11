@@ -24,6 +24,10 @@ namespace WB.UI.Headquarters
                 "~/Content/bootstrap-mvc-validation.css",
                 "~/Content/main-not-logged.css"));
 
+            bundles.Add(new StyleBundle("~/css/admin").Include(
+                "~/Content/bootstrap.css",
+                "~/Content/admin.css"));
+
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/modernizr-{version}.js",

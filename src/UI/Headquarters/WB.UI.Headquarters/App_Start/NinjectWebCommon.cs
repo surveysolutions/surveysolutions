@@ -15,8 +15,10 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
+using Quartz;
 using Questionnaire.Core.Web.Binding;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Synchronization;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.EventBus;
@@ -106,11 +108,23 @@ namespace WB.UI.Headquarters
                 WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
 
+            var interviewDetailsDataLoaderSettings =
+                new InterviewDetailsDataLoaderSettings(LegacyOptions.InterviewDetailsDataSchedulerEnabled,
+                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+                    LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
+
             bool useStreamingForAllEvents;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
             {
                 useStreamingForAllEvents = true;
             }
+
+            var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: false,
+                appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
+                incomingCapiPackagesWithErrorsDirectoryName:
+                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
+                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -126,9 +140,9 @@ namespace WB.UI.Headquarters
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
-                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), new SyncSettings(reevaluateInterviewWhenSynchronized:false)),
+                new SynchronizationModule(synchronizationSettings),
                 new SupervisorCommandDeserializationModule(),
-                new HeadquartersBoundedContextModule(),
+                new HeadquartersBoundedContextModule(interviewDetailsDataLoaderSettings),
                 new SurveyManagementSharedKernelModule(
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
@@ -153,6 +167,13 @@ namespace WB.UI.Headquarters
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .WhenControllerHas<TokenValidationAuthorizationAttribute>();
+
+            if (LegacyOptions.SupervisorFunctionsEnabled)
+            {
+                ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
+            }
+
+            ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
 #warning dirty index registrations
             // SuccessMarker.Start(kernel);
