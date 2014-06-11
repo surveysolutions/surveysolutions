@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
