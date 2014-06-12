@@ -32,6 +32,7 @@ using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Web;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.API;
