@@ -2,26 +2,31 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using Main.Core;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Ninject;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.SyncPackageApplier;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
-namespace WB.UI.Capi.Syncronization
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.SyncPackageApplier
 {
     public class SyncPackageApplier : ISyncPackageApplier
     {
         private static ConcurrentDictionary<Guid, bool> itemsInProcess = new ConcurrentDictionary<Guid, bool>();
         private const int CountOfAttempt = 200;
 
-        private ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-        private ISyncCacher syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
+        private readonly ILogger logger;
+        private readonly ISyncCacher syncCacher;
 
+
+        public SyncPackageApplier(ILogger logger, ISyncCacher syncCacher)
+        {
+            this.logger = logger;
+            this.syncCacher = syncCacher;
+        }
 
         private bool WaitUntilItemCanBeProcessed(Guid id)
         {

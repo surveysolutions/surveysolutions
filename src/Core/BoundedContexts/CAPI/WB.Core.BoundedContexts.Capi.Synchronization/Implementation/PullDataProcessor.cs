@@ -1,18 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Main.Core;
 using Main.Core.Commands.File;
 using Main.Core.Documents;
 using Main.Core.View;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.BoundedContexts.Capi.ModelUtils;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Cleaner;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Cleaner;
+using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -20,16 +21,18 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation
 {
-    public class PullDataProcessor
+    public class DataProcessor : IDataProcessor
     {
-        public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService,
+        public DataProcessor(IChangeLogManipulator changelog, ICommandService commandService,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory, IPlainQuestionnaireRepository questionnaireRepository,
-            ICleanUpExecutor cleanUpExecutor, ILogger logger, ISyncCacher syncCacher)
+            ICleanUpExecutor cleanUpExecutor, ILogger logger, ISyncCacher syncCacher, IStringCompressor stringCompressor, IJsonUtils jsonUtils)
         {
             this.logger = logger;
             this.syncCacher = syncCacher;
+            this.stringCompressor = stringCompressor;
+            this.jsonUtils = jsonUtils;
             this.changelog = changelog;
             this.commandService = commandService;
             this.cleanUpExecutor = cleanUpExecutor;
@@ -44,9 +47,10 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
         private readonly ICommandService commandService;
         private readonly IViewFactory<LoginViewInput, LoginView> loginViewFactory;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IStringCompressor stringCompressor;
+        private readonly IJsonUtils jsonUtils;
 
-
-        public void Proccess(SyncItem item)
+        public void ProcessPulledItem(SyncItem item)
         {
             switch (item.ItemType)
             {
@@ -71,16 +75,22 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
             this.changelog.CreatePublicRecord(item.Id);
         }
 
+        public IList<ChangeLogRecordWithContent> GetItemsForPush()
+        {
+            var records = this.changelog.GetClosedDraftChunksIds();
+            return records.Select(chunk => new ChangeLogRecordWithContent(chunk.RecordId, chunk.EventSourceId, this.changelog.GetDraftRecordContent(chunk.RecordId))).ToList();
+        }
+
         private void UploadFile(SyncItem item)
         {
-            var file = ExtractObject<FileSyncDescription>(item.Content, item.IsCompressed);
+            var file = this.ExtractObject<FileSyncDescription>(item.Content, item.IsCompressed);
 
             this.commandService.Execute(new UploadFileCommand(file.PublicKey, file.Title, file.Description, file.OriginalFile));
         }
 
         private void DeleteInterview(SyncItem item)
         {
-            var questionnarieId = ExtractGuid(item.Content, item.IsCompressed);
+            var questionnarieId = this.ExtractGuid(item.Content, item.IsCompressed);
 
             try
             {
@@ -96,7 +106,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
 
         private void ChangeOrCreateUser(SyncItem item)
         {
-            var user = ExtractObject<UserDocument>(item.Content, item.IsCompressed);
+            var user = this.ExtractObject<UserDocument>(item.Content, item.IsCompressed);
 
             ICommand userCommand = null;
 
@@ -112,7 +122,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
 
         private void UpdateInterview(SyncItem item)
         {
-            var metaInfo = ExtractObject<InterviewMetaInfo>(item.MetaInfo, item.IsCompressed);
+            var metaInfo = this.ExtractObject<InterviewMetaInfo>(item.MetaInfo, item.IsCompressed);
             try
             {
                 this.syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
@@ -138,12 +148,12 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
 
         private void UpdateQuestionnaire(SyncItem item)
         {
-            var template = ExtractObject<QuestionnaireDocument>(item.Content, item.IsCompressed);
+            var template = this.ExtractObject<QuestionnaireDocument>(item.Content, item.IsCompressed);
 
             QuestionnaireMetadata metadata;
             try
             {
-                metadata = ExtractObject<QuestionnaireMetadata>(item.MetaInfo, item.IsCompressed);
+                metadata = this.ExtractObject<QuestionnaireMetadata>(item.MetaInfo, item.IsCompressed);
             }
             catch (Exception exception)
             {
@@ -154,23 +164,23 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
             this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version));
         }
 
-        private static TResult ExtractObject<TResult>(string initialString, bool isCompressed)
+        private TResult ExtractObject<TResult>(string initialString, bool isCompressed)
         {
-            string stringData = ExtractStringData(initialString, isCompressed);
+            string stringData = this.ExtractStringData(initialString, isCompressed);
 
-            return JsonUtils.GetObject<TResult>(stringData);
+            return this.jsonUtils.Deserrialize<TResult>(stringData);
         }
 
-        private static Guid ExtractGuid(string initialString, bool isCompressed)
+        private Guid ExtractGuid(string initialString, bool isCompressed)
         {
-            string stringData = ExtractStringData(initialString, isCompressed);
+            string stringData = this.ExtractStringData(initialString, isCompressed);
 
             return Guid.Parse(stringData);
         }
 
-        private static string ExtractStringData(string initialString, bool isCompressed)
+        private string ExtractStringData(string initialString, bool isCompressed)
         {
-            return isCompressed ? PackageHelper.DecompressString(initialString) : initialString;
+            return isCompressed ? this.stringCompressor.DecompressString(initialString) : initialString;
         }
     }
 }

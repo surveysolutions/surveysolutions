@@ -44,29 +44,41 @@
     <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\CapiSynchronizationModule.cs">
       <Link>CapiSynchronizationModule.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\ChangeLog\ChangeLogShortRecord.cs">
-      <Link>Synchronization\ChangeLog\ChangeLogShortRecord.cs</Link>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\ChangeLogRecordWithContent.cs">
+      <Link>ChangeLog\ChangeLogRecordWithContent.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\ChangeLog\FileChangeLogStore.cs">
-      <Link>Synchronization\ChangeLog\FileChangeLogStore.cs</Link>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\ChangeLogShortRecord.cs">
+      <Link>ChangeLog\ChangeLogShortRecord.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\ChangeLog\IChangeLogManipulator.cs">
-      <Link>Synchronization\ChangeLog\IChangeLogManipulator.cs</Link>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\IChangeLogManipulator.cs">
+      <Link>ChangeLog\IChangeLogManipulator.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\ChangeLog\IChangeLogStore.cs">
-      <Link>Synchronization\ChangeLog\IChangeLogStore.cs</Link>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\IChangeLogStore.cs">
+      <Link>ChangeLog\IChangeLogStore.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\Cleaner\ICleanUpExecutor.cs">
-      <Link>Synchronization\Cleaner\ICleanUpExecutor.cs</Link>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Cleaner\ICleanUpExecutor.cs">
+      <Link>Cleaner\ICleanUpExecutor.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\Pull\PullDataProcessor.cs">
-      <Link>Synchronization\Pull\PullDataProcessor.cs</Link>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\IDataProcessor.cs">
+      <Link>IDataProcessor.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\SyncCacher\FileSyncCacher.cs">
-      <Link>Synchronization\SyncCacher\FileSyncCacher.cs</Link>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\ChangeLog\FileChangeLogStore.cs">
+      <Link>Implementation\ChangeLog\FileChangeLogStore.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Synchronization\SyncCacher\ISyncCacher.cs">
-      <Link>Synchronization\SyncCacher\ISyncCacher.cs</Link>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\PullDataProcessor.cs">
+      <Link>Implementation\PullDataProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\SyncCacher\FileSyncCacher.cs">
+      <Link>Implementation\SyncCacher\FileSyncCacher.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\SyncPackageApplier\SyncPackageApplier.cs">
+      <Link>Implementation\SyncPackageApplier\SyncPackageApplier.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\SyncCacher\ISyncCacher.cs">
+      <Link>SyncCacher\ISyncCacher.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\SyncPackageApplier\ISyncPackageApplier.cs">
+      <Link>SyncPackageApplier\ISyncPackageApplier.cs</Link>
     </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs">
       <Link>Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs</Link>
@@ -116,6 +128,10 @@
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
       <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
       <Name>WB.Core.BoundedContexts.Capi.Android</Name>
@@ -126,6 +142,7 @@
       <Link>packages.config</Link>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

@@ -13,7 +13,7 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
