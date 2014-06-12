@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -28,9 +27,9 @@ namespace WB.UI.Designer.Api
 
         public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, 
-            IQuestionnaireVerifier questionnaireVerifier, 
-            IVerificationErrorsMapper verificationErrorsMapper, 
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
+            IQuestionnaireVerifier questionnaireVerifier,
+            IVerificationErrorsMapper verificationErrorsMapper,
             IQuestionnaireInfoFactory questionnaireInfoFactory)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
@@ -46,6 +45,7 @@ namespace WB.UI.Designer.Api
         public HttpResponseMessage Get(string id)
         {
             var questionnaireInfoView = questionnaireInfoViewFactory.Load(id);
+
             if (questionnaireInfoView == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} cannot be found", id));
@@ -59,9 +59,10 @@ namespace WB.UI.Designer.Api
         public IQuestionnaireItem Chapter(string id, string chapterId)
         {
             var chapterInfoView = chapterInfoViewFactory.Load(questionnaireId: id, groupId: chapterId);
+
             if (chapterInfoView == null)
             {
-                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Chapter with id={0} cannot be found", chapterId));
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
             return chapterInfoView;
@@ -72,10 +73,12 @@ namespace WB.UI.Designer.Api
         public NewEditQuestionView EditQuestion(string id, Guid questionId)
         {
             var editQuestionView = questionnaireInfoFactory.GetQuestionEditView(id, questionId);
+
             if (editQuestionView == null)
             {
-                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} or question with id={1} cannot be found", id, questionId));
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
+
             return editQuestionView;
         }
 
@@ -84,10 +87,12 @@ namespace WB.UI.Designer.Api
         public NewEditGroupView EditGroup(string id, Guid groupId)
         {
             var editGroupView = questionnaireInfoFactory.GetGroupEditView(id, groupId);
+
             if (editGroupView == null)
             {
-                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} or group with id={1} cannot be found", id, groupId));
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
+
             return editGroupView;
         }
 
@@ -96,10 +101,12 @@ namespace WB.UI.Designer.Api
         public NewEditRosterView EditRoster(string id, Guid rosterId)
         {
             var editRosterView = questionnaireInfoFactory.GetRosterEditView(id, rosterId);
+
             if (editRosterView == null)
             {
-                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} or roster with id={1} cannot be found", id, rosterId));
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
+
             return editRosterView;
         }
 
@@ -120,15 +127,14 @@ namespace WB.UI.Designer.Api
 
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
-            QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
             if (questionnaire == null)
             {
-                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} cannot be found", id));
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
             return questionnaire;
         }
-
     }
 }
