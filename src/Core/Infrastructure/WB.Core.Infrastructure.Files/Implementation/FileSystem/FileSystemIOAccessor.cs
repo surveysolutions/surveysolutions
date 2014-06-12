@@ -151,11 +151,6 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return ZlpIOHelper.ReadAllText(pathToFile);
         }
 
-        public string ReadAllText(string fileName)
-        {
-            return ZlpIOHelper.ReadAllText(fileName);
-        }
-
         public void CopyFileOrDirectory(string sourceDir, string targetDir)
         {
             FileAttributes attr = File.GetAttributes(sourceDir);
