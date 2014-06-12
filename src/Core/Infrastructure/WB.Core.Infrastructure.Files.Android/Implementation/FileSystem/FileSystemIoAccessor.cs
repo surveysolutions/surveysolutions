@@ -18,6 +18,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return Path.GetFileName(filePath);
         }
 
+        public string GetFileNameWithoutExtension(string filePath)
+        {
+            return Path.GetFileNameWithoutExtension(filePath);
+        }
+
         public long GetFileSize(string filePath)
         {
             if (!this.IsFileExists(filePath))
@@ -82,6 +87,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         public string[] GetFilesInDirectory(string pathToDirectory)
         {
             return Directory.GetFiles(pathToDirectory).ToArray();
+        }
+
+        public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
+        {
+            return Directory.GetFiles(pathToDirectory, pattern).ToArray();
         }
 
         public void WriteAllText(string pathToFile, string content)
