@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Moq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters.Controllers;
 
