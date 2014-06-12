@@ -385,14 +385,6 @@
     <Compile Include="Models\API\UserApiDetails.cs" />
     <Compile Include="Models\API\UserApiItem.cs" />
     <Compile Include="Models\API\UserApiView.cs" />
-    <Compile Include="Models\BatchUploadModel.cs" />
-    <Compile Include="Models\InterviewDetailsViewModel.cs" />
-    <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
-    <Compile Include="Models\HistoryItemView.cs" />
-    <Compile Include="Models\InverviewChangeStateHistoryView.cs" />
-    <Compile Include="Models\JsonBundleCommandResponse.cs" />
-    <Compile Include="Models\JsonCommandResponse.cs" />
-    <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\StatusHelper.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
@@ -408,10 +400,6 @@
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
-    <Compile Include="Models\DesignerQuestionnairesRequestModel.cs" />
-    <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
-    <Compile Include="Models\LogOnModel.cs" />
-    <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
@@ -419,31 +407,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Injections\SupervisorCoreRegistry.cs" />
-    <Compile Include="Models\AssigmentModel.cs" />
-    <Compile Include="Models\AssignSuveyData.cs" />
-    <Compile Include="Models\ChartDataModel.cs" />
-    <Compile Include="Models\CompleteQuestionSettings.cs" />
-    <Compile Include="Models\DeleteInterviewsModel.cs" />
-    <Compile Include="Models\StatusListViewModel.cs" />
-    <Compile Include="Models\StatusRequestModel.cs" />
-    <Compile Include="Models\DocumentFilter.cs" />
-    <Compile Include="Models\DocumentRequestModel.cs" />
-    <Compile Include="Models\DocumentListViewModel.cs" />
-    <Compile Include="Models\UsersListViewModel.cs" />
-    <Compile Include="Models\SurveyRequestModel.cs" />
-    <Compile Include="Models\SurveyListViewModel.cs" />
-    <Compile Include="Models\GlobalHelper.cs" />
-    <Compile Include="Models\HQDashboardModel.cs" />
-    <Compile Include="Models\IGridRequest.cs" />
-    <Compile Include="Models\InterviewerListViewModel.cs" />
-    <Compile Include="Models\StringExtension.cs" />
-    <Compile Include="Models\GridDataRequestModel.cs" />
-    <Compile Include="Models\PagingExtensions.cs" />
-    <Compile Include="Models\PagingHelper.cs" />
-    <Compile Include="Models\SummaryListViewModel.cs" />
-    <Compile Include="Models\SummaryRequestModel.cs" />
     <Compile Include="Models\SupervisorModel.cs" />
-    <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Models\SupervisorUserViewModel.cs" />
     <Compile Include="Models\UserViewModelForSupervisor.cs" />
