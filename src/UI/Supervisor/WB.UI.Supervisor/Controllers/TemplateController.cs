@@ -8,10 +8,10 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Supervisor.Code;
-using WB.UI.Supervisor.DesignerPublicService;
 using WB.UI.Supervisor.Models;
+using WB.UI.Supervisor.PublicService;
 
-namespace WB.UI.Supervisor.Controllers
+namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Headquarter")]
     [Obsolete("Remove when HQ application will be separate")]

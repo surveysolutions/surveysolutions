@@ -102,6 +102,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 "Interview",
                 "Interview/{action}/{id}",
                 new { controller = "Interview", id = UrlParameter.Optional });
+
+            context.MapRoute(
+                "Backup",
+                "Backup/{action}/{id}",
+                new { controller = "Backup", action = "Index", id = UrlParameter.Optional });
+
+            context.MapRoute(
+                "HQ",
+                "HQ/{action}/{id}",
+                new { controller = "HQ", action = "Index", id = UrlParameter.Optional });
+
+            context.MapRoute(
+                "ImportExport",
+                "ImportExport/{action}/{id}",
+                new { controller = "ImportExport", action = "Index", id = UrlParameter.Optional });
+
+            context.MapRoute(
+                "Survey",
+                "Survey/{action}/{id}",
+                new { controller = "Survey", action = "Index", id = UrlParameter.Optional });
+
+            context.MapRoute(
+                "TabletReport",
+                "TabletReport/{action}/{id}",
+                new { controller = "TabletReport", action = "Index", id = UrlParameter.Optional });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
@@ -13,8 +14,8 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
+using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Models;
-using System.Linq;
 
 namespace WB.UI.Supervisor.Controllers
 {
@@ -100,12 +101,12 @@ namespace WB.UI.Supervisor.Controllers
             return new InverviewChangeStateHistoryView()
             {
                 HistoryItems = interviewSummary.StatusHistory.Select(x => new HistoryItemView()
-                        {
-                            Comment = x.Comment,
-                            Date = x.Date.ToShortDateString(),
-                            State = x.Status.ToLocalizeString(),
-                            Responsible = x.Responsible
-                        })
+                {
+                    Comment = x.Comment,
+                    Date = x.Date.ToShortDateString(),
+                    State = x.Status.ToLocalizeString(),
+                    Responsible = x.Responsible
+                })
             };
         }
 
@@ -138,7 +139,7 @@ namespace WB.UI.Supervisor.Controllers
                     depth = group.Depth,
                     title = group.Title,
                     rosterVector = group.RosterVector,
-                    questions = new List<QuestionModel>(group.Questions.Select(q => SelectModelByQuestion(group, q)))
+                    questions = new List<QuestionModel>(group.Questions.Select(q => this.SelectModelByQuestion(group, q)))
                 })
             };
 
@@ -168,7 +169,7 @@ namespace WB.UI.Supervisor.Controllers
             switch (dto.QuestionType)
             {
                 case QuestionType.DateTime:
-                    model = new DateQuestionModel() {answer = answerAsString};
+                    model = new DateQuestionModel() { answer = answerAsString };
                     break;
                 case QuestionType.GpsCoordinates:
                     string accuracy = string.Empty,
@@ -202,10 +203,10 @@ namespace WB.UI.Supervisor.Controllers
                     };
                     break;
                 case QuestionType.QRBarcode:
-                    model = new QRBarcodeQuestionModel() {answer = answerAsString};
+                    model = new QRBarcodeQuestionModel() { answer = answerAsString };
                     break;
                 case QuestionType.Text:
-                    model = new TextQuestionModel() {answer = answerAsString};
+                    model = new TextQuestionModel() { answer = answerAsString };
                     break;
                 case QuestionType.MultyOption:
                     var answersAsDecimalArray = hasAnswer && !isLinked
@@ -295,7 +296,7 @@ namespace WB.UI.Supervisor.Controllers
                     {
                         options =
                             dto.Options.Select(
-                                option => new OptionModel(uid) {value = option.Value.ToString(), label = option.Label})
+                                option => new OptionModel(uid) { value = option.Value.ToString(), label = option.Label })
                     };
                     break;
             }
@@ -315,12 +316,12 @@ namespace WB.UI.Supervisor.Controllers
                                 userName = comment.CommenterName,
                                 date = comment.Date
                             });
-            model.scope = Enum.GetName(typeof (QuestionScope), dto.Scope);
+            model.scope = Enum.GetName(typeof(QuestionScope), dto.Scope);
             model.isAnswered = dto.IsAnswered;
             model.id = dto.Id;
             model.title = HttpUtility.UrlDecode(dto.Title);
             model.isFlagged = dto.IsFlagged;
-            model.questionType = Enum.GetName(typeof (QuestionType), dto.QuestionType);
+            model.questionType = Enum.GetName(typeof(QuestionType), dto.QuestionType);
             model.isEnabled = dto.IsEnabled;
             model.isFeatured = dto.IsFeatured;
             model.isMandatory = dto.IsMandatory;
@@ -338,7 +339,7 @@ namespace WB.UI.Supervisor.Controllers
         private readonly Guid? parentIdPrivate;
         public GroupModel(Guid? parentId)
         {
-            parentIdPrivate = parentId;
+            this.parentIdPrivate = parentId;
         }
 
         public IEnumerable<QuestionModel> questions { get; set; }
@@ -356,7 +357,7 @@ namespace WB.UI.Supervisor.Controllers
         {
             get
             {
-                return parentIdPrivate.HasValue
+                return this.parentIdPrivate.HasValue
                     ? string.Concat(this.parentIdPrivate, "_", string.Join("_", this.rosterVector.Take(this.rosterVector.Length - 1)))
                     : string.Empty;
             }
@@ -418,7 +419,7 @@ namespace WB.UI.Supervisor.Controllers
         public bool isInteger = true;
         public int? countOfDecimalPlaces { set; get; }
     }
-    public class DateQuestionModel : TextQuestionModel{}
+    public class DateQuestionModel : TextQuestionModel { }
     public class QRBarcodeQuestionModel : TextQuestionModel { }
     public class CategoricalQuestionModel : TextQuestionModel
     {

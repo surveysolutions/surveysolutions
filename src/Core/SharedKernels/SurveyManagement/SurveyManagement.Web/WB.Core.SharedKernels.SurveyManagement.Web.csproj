@@ -85,8 +85,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\StatusHelper.cs" />
+    <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\HQController.cs" />
+    <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Models\AssigmentModel.cs" />
     <Compile Include="Models\AssignSuveyData.cs" />
     <Compile Include="Models\BatchUploadModel.cs" />
