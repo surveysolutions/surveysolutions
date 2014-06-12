@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher
+namespace WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher
 {
     public interface ISyncCacher
     {

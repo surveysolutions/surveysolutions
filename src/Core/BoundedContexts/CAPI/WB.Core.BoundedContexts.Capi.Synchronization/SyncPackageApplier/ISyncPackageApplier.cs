@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.UI.Capi.Syncronization
+namespace WB.Core.BoundedContexts.Capi.Synchronization.SyncPackageApplier
 {
     public interface ISyncPackageApplier
     {

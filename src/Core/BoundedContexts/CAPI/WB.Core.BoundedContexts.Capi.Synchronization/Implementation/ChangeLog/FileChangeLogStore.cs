@@ -4,10 +4,11 @@ using Main.Core;
 using Main.Core.Events;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
-namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog
 {
     public class FileChangeLogStore : IChangeLogStore
     {
