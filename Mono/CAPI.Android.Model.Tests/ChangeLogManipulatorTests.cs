@@ -9,7 +9,7 @@ using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 
 namespace CAPI.Androids.Core.Model.Tests
 {

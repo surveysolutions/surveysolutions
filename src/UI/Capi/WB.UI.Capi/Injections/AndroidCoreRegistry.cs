@@ -10,8 +10,6 @@ using System.Reflection;
 using CAPI.Android.Core.Model;
 using Main.Core;
 using Main.Core.View;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.SharedKernel.Structures.Synchronization;

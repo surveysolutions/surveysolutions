@@ -28,6 +28,8 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.SyncPackageApplier;
+using WB.Core.BoundedContexts.Capi.Synchronization.SyncPackageApplier;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Rest.Android;

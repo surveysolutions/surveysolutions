@@ -19,7 +19,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
