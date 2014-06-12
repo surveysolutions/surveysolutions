@@ -18,7 +18,8 @@ using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
-using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
@@ -247,12 +248,12 @@ namespace WB.UI.Capi
             try
             {
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
-                var cleaner = new CleanUpExecutor(changeLogManipulator);
+                var cleaner = new CapiCleanUpService(changeLogManipulator);
                 this.synchronizer = new SynchronozationProcessor(this, this.CreateAuthenticator(),
-                    new DataProcessor(changeLogManipulator, NcqrsEnvironment.Get<ICommandService>(),
+                    new CapiDataSynchronizationService(changeLogManipulator, NcqrsEnvironment.Get<ICommandService>(),
                         CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
                         CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), cleaner, ServiceLocator.Current.GetInstance<ILogger>(),
-                        CapiApplication.Kernel.Get<ISyncCacher>(), CapiApplication.Kernel.Get<IStringCompressor>(),
+                        CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(), CapiApplication.Kernel.Get<IStringCompressor>(),
                         CapiApplication.Kernel.Get<IJsonUtils>()),
                     cleaner, CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
             }

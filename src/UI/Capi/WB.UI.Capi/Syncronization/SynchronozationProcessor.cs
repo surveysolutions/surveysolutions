@@ -15,8 +15,7 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.Synchronization;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Cleaner;
-using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
@@ -49,8 +48,8 @@ namespace WB.UI.Capi.Syncronization
 
         #endregion
 
-        private readonly IDataProcessor dataProcessor;
-        private readonly ICleanUpExecutor cleanUpExecutor;
+        private readonly ICapiDataSynchronizationService dataProcessor;
+        private readonly ICapiCleanUpService cleanUpExecutor;
 
         private IDictionary<SynchronizationChunkMeta, bool> remoteChuncksForDownload;
 
@@ -69,8 +68,8 @@ namespace WB.UI.Capi.Syncronization
             get { return SettingsManager.GetSetting(SettingsNames.LastHandledSequence); }
         }
 
-        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IDataProcessor dataProcessor,
-            ICleanUpExecutor cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory)
+        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, ICapiDataSynchronizationService dataProcessor,
+            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory)
         {
             this.context = context;
 
@@ -109,7 +108,7 @@ namespace WB.UI.Capi.Syncronization
                         {
                             var data = this.pull.RequestChunck(this.credentials.Login, this.credentials.Password, chunckId.Id, chunckId.Sequence, this.clientRegistrationId, this.ct);
 
-                            this.dataProcessor.ProcessPulledItem(data);
+                            this.dataProcessor.SavePulledItem(data);
                             this.remoteChuncksForDownload[chunckId] = true;
                             
                             //save last handled item

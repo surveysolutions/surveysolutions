@@ -5,7 +5,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Capi.Synchronization.SyncPackageApplier;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Syncronization;
@@ -19,7 +19,7 @@ namespace WB.UI.Capi
     {
         private CancellationTokenSource cancellationToken;
         //protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-        private ISyncPackageApplier packageApplier = ServiceLocator.Current.GetInstance<ISyncPackageApplier>();
+        private ISyncPackageRestoreService packageRestoreService = ServiceLocator.Current.GetInstance<ISyncPackageRestoreService>();
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -47,7 +47,7 @@ namespace WB.UI.Capi
 
         protected void Restore(CancellationToken ct, Guid publicKey, bool createdOnClient)
         {
-            var applyingResult = this.packageApplier.CheckAndApplySyncPackage(publicKey);
+            var applyingResult = this.packageRestoreService.CheckAndApplySyncPackage(publicKey);
 
             if (!applyingResult || ct.IsCancellationRequested)
             {

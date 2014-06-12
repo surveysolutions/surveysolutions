@@ -3,8 +3,8 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
-using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -12,9 +12,9 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizationServiceTests
 {
-    internal class when_sync_package_contains_information_about_new_interview : DataProcessorTestContext
+    internal class when_sync_package_contains_information_about_new_broken_interview : CapiDataSynchronizationServiceTestContext
     {
         Establish context = () =>
         {
@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
                 CreatedOnClient = false,
                 PublicKey = Guid.NewGuid(),
                 ResponsibleId = Guid.NewGuid(),
-                Status = (int) InterviewStatus.InterviewerAssigned,
+                Status = (int)InterviewStatus.InterviewerAssigned,
                 TemplateId = Guid.NewGuid(),
                 TemplateVersion = 1,
                 Title = "my title",
@@ -38,16 +38,17 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
             jsonUtilsMock.Setup(x => x.Deserrialize<InterviewMetaInfo>(syncItem.MetaInfo)).Returns(questionnaireMetadata);
 
             commandService = new Mock<ICommandService>();
+            commandService.Setup(x => x.Execute(Moq.It.IsAny<ApplySynchronizationMetadata>(), null)).Throws<NullReferenceException>();
 
             plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
-            syncCacher = new Mock<ISyncCacher>();
-            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null,
+            syncCacher = new Mock<ICapiSynchronizationCacheService>();
+            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null,
                 plainQuestionnaireRepositoryMock.Object, syncCacher.Object);
         };
 
-        Because of = () => dataProcessor.ProcessPulledItem(syncItem);
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.SavePulledItem(syncItem));
 
         It should_call_ApplySynchronizationMetadata_once =
             () =>
@@ -58,28 +59,32 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
                                 param =>
                                     param.QuestionnaireId == questionnaireMetadata.TemplateId && param.Id == questionnaireMetadata.PublicKey &&
                                     param.UserId == questionnaireMetadata.ResponsibleId && (int)param.InterviewStatus == questionnaireMetadata.Status &&
-                                    param.Comments=="" && param.Valid==true && param.CreatedOnClient==false && param.FeaturedQuestionsMeta.Length==2), null),
+                                    param.Comments == "" && param.Valid == true && param.CreatedOnClient == false && param.FeaturedQuestionsMeta.Length == 2), null),
                     Times.Once);
 
-        It should_store_interview_content_in_sync_cacher_once =
+        It should_not_store_questionnaire_in_pline_storage =
             () =>
                 syncCacher.Verify(
-                    x => x.SaveItem(questionnaireMetadata.PublicKey,syncItem.Content),
-                    Times.Once);
+                    x => x.SaveItem(questionnaireMetadata.PublicKey, syncItem.Content),
+                    Times.Never);
 
-        It should_create_public_record_in_change_log_for_sync_item_once =
+        It should_not_create_public_record_in_change_log_for_sync_item =
         () =>
             changeLogManipulator.Verify(
                 x =>
                     x.CreatePublicRecord(syncItem.Id),
-                Times.Once);
+                Times.Never);
 
-        private static DataProcessor dataProcessor;
+        It should_throw_NullReferenceException = () =>
+            exception.ShouldBeOfType<NullReferenceException>();
+
+        private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static SyncItem syncItem;
         private static Mock<ICommandService> commandService;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
         private static Mock<IChangeLogManipulator> changeLogManipulator;
-        private static Mock<ISyncCacher> syncCacher;
+        private static Mock<ICapiSynchronizationCacheService> syncCacher;
         private static InterviewMetaInfo questionnaireMetadata;
+        private static Exception exception;
     }
 }

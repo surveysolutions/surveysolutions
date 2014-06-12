@@ -8,16 +8,16 @@ using Main.Core.View;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizationServiceTests
 {
-    internal class when_sync_package_contains_information_about_existing_user : DataProcessorTestContext
+    internal class when_sync_package_contains_information_about_existing_user : CapiDataSynchronizationServiceTestContext
     {
         Establish context = () =>
         {
@@ -43,10 +43,10 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
             loginViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<LoginViewInput>())).Returns(new LoginView(Guid.NewGuid(), "test"));
 
             changeLogManipulator=new Mock<IChangeLogManipulator>();
-            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, loginViewFactoryMock.Object);
+            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, loginViewFactoryMock.Object);
         };
 
-        Because of = () => dataProcessor.ProcessPulledItem(syncItem);
+        Because of = () => capiDataSynchronizationService.SavePulledItem(syncItem);
 
         It should_call_ChangeUserCommand_once =
             () =>
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
                         x.CreatePublicRecord(syncItem.Id),
                     Times.Once);
 
-        private static DataProcessor dataProcessor;
+        private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static SyncItem syncItem;
         private static UserDocument userDocument;
         private static Mock<ICommandService> commandService;

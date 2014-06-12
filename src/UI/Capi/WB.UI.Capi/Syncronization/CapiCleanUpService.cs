@@ -6,7 +6,7 @@ using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Cleaner;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -14,11 +14,11 @@ namespace WB.UI.Capi.Syncronization
 {
 
     //has to be reviewed after interview separation from template
-    public class CleanUpExecutor : ICleanUpExecutor
+    public class CapiCleanUpService : ICapiCleanUpService
     {
         private readonly IChangeLogManipulator changelog;
 
-        public CleanUpExecutor(IChangeLogManipulator changelog)
+        public CapiCleanUpService(IChangeLogManipulator changelog)
         {
             this.changelog = changelog;
         }

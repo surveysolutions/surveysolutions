@@ -4,15 +4,15 @@ using Moq;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Cleaner;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizationServiceTests
 {
-    internal class when_sync_package_contains_information_about_delete_interview : DataProcessorTestContext
+    internal class when_sync_package_contains_information_about_delete_interview_and_delete_throw_exception : CapiDataSynchronizationServiceTestContext
     {
         Establish context = () =>
         {
@@ -26,13 +26,14 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
 
-            cleanUpExecutorMock=new Mock<ICleanUpExecutor>();
+            cleanUpExecutorMock = new Mock<ICapiCleanUpService>();
+            cleanUpExecutorMock.Setup(x => x.DeleteInterveiw(interviewId)).Throws<NullReferenceException>();
 
-            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, null, null,
+            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, null, null,
                 plainQuestionnaireRepositoryMock.Object, null, cleanUpExecutorMock.Object);
         };
 
-        Because of = () => dataProcessor.ProcessPulledItem(syncItem);
+        Because of = () => exception = Catch.Exception(() =>capiDataSynchronizationService.SavePulledItem(syncItem));
 
         It should_never_call_any_command =
             () =>
@@ -48,19 +49,23 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
                     x => x.DeleteInterveiw(interviewId),
                     Times.Once);
 
-        It should_create_public_record_in_change_log_for_sync_item_once =
+        It should_not_create_public_record_in_change_log_for_sync_item =
         () =>
             changeLogManipulator.Verify(
                 x =>
                     x.CreatePublicRecord(syncItem.Id),
-                Times.Once);
+                Times.Never);
 
-        private static DataProcessor dataProcessor;
+        It should_throw_NullReferenceException = () =>
+            exception.ShouldBeOfType<NullReferenceException>();
+
+        private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static SyncItem syncItem;
         private static Mock<ICommandService> commandService;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
         private static Mock<IChangeLogManipulator> changeLogManipulator;
-        private static Mock<ICleanUpExecutor> cleanUpExecutorMock;
+        private static Mock<ICapiCleanUpService> cleanUpExecutorMock;
         private static Guid interviewId;
+        private static Exception exception;
     }
 }

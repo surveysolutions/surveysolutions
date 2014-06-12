@@ -21,8 +21,8 @@ using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.SyncCacher;
-using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
@@ -61,7 +61,7 @@ namespace CAPI.Android.Core.Model
             var fileSystem = new FileStorageService();
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
             var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
-            var syncCacher = new FileSyncCacher();
+            var syncCacher = new FileCapiSynchronizationCacheService();
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
             var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
             var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>();
@@ -88,7 +88,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();
             this.Bind<IDataCollectionAuthentication, IAuthentication>().To<AndroidAuthentication>().InSingletonScope();
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
-            this.Bind<ISyncCacher>().ToConstant(syncCacher);
+            this.Bind<ICapiSynchronizationCacheService>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
 
