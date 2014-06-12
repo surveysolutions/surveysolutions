@@ -417,6 +417,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     question.PublicKey.InterviewItemPropagationVector.Take(q.PublicKey.InterviewItemPropagationVector.Length)
                         .SequenceEqual(q.PublicKey.InterviewItemPropagationVector));
 
+                if (questionSourceOfSubstitution == null)
+                {
+                    questionSourceOfSubstitution =
+                        this.FeaturedQuestions.Values.FirstOrDefault(q => q.PublicKey.Id == questionsUsedAsSubstitutionReference);
+                }
+
                 if (questionSourceOfSubstitution != null)
                     question.SubstituteQuestionText(questionSourceOfSubstitution);
             }
