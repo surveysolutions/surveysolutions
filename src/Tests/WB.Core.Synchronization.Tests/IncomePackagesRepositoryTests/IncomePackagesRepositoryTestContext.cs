@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Documents;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.Synchronization.SyncStorage;
@@ -19,20 +13,33 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
 {
     internal class IncomePackagesRepositoryTestContext
     {
-        protected static IncomePackagesRepository CreateIncomePackagesRepository(IJsonUtils jsonUtils = null, IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService=null)
+        const string appDataDirectory = "App_Data";
+        const string incomingCapiPackagesDirectoryName = "IncomingData";
+        const string incomingCapiPackagesWithErrorsDirectoryName = "IncomingDataWithErrors";
+        const string incomingCapiPackageFileNameExtension = "sync";
+
+        protected static IncomePackagesRepository CreateIncomePackagesRepository(IJsonUtils jsonUtils = null,
+            IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService = null)
         {
-            return new IncomePackagesRepository("", Mock.Of<ILogger>(),
-                new SyncSettings(true), commandService ?? Mock.Of<ICommandService>(), jsonUtils ?? Mock.Of<IJsonUtils>(), fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object);
+            return new IncomePackagesRepository(logger: Mock.Of<ILogger>(),
+                syncSettings:
+                    new SyncSettings(true, appDataDirectory, incomingCapiPackagesDirectoryName,
+                        incomingCapiPackagesWithErrorsDirectoryName, incomingCapiPackageFileNameExtension),
+                commandService: commandService ?? Mock.Of<ICommandService>(),
+                fileSystemAccessor: fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object,
+                jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>());
         }
 
         protected static string GetPathToSynchItemInErrorFolder(Guid syncItemId)
         {
-            return string.Format(@"IncomingData\IncomingDataWithErrors\{0}.sync", syncItemId);
+            return string.Format(@"{0}\{1}\{2}\{3}.{4}",appDataDirectory, incomingCapiPackagesDirectoryName,
+                incomingCapiPackagesWithErrorsDirectoryName, syncItemId, incomingCapiPackageFileNameExtension);
         }
 
         protected static string GetPathToSynchItemInSyncPackageFolder(Guid syncItemId)
         {
-            return string.Format(@"IncomingData\{0}.sync", syncItemId);
+            return string.Format(@"{0}\{1}\{2}.{3}", appDataDirectory, incomingCapiPackagesDirectoryName, syncItemId,
+                incomingCapiPackageFileNameExtension);
         }
 
         protected static string GetSyncItemAsString(SyncItem item)
