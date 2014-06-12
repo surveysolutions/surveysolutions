@@ -138,10 +138,19 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
     <EmbeddedResource Include="Views\Interview\Revalidate.cshtml" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Scripts\supervisor.framework.js" />
     <Content Include="Scripts\viewmodels\listview.js" />
     <Content Include="Scripts\viewmodels\pagebase.js" />
