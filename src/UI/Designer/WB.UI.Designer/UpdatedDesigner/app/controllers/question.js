@@ -15,14 +15,9 @@
 
                 questionnaireService.getQuestionDetailsById(questionnaireId, questionId)
                     .success(function(result) {
-                        if (result === 'null') {
-                            alert('Questionnaire not found');
-                        } else {
-                            console.log(result);
-                            $scope.activeQuestion = result;
-                            $scope.activeQuestion.optionValue = "";
-                            $scope.activeQuestion.optionTitle = "";
-                        }
+                        $scope.activeQuestion = result;
+                        $scope.activeQuestion.optionValue = "";
+                        $scope.activeQuestion.optionTitle = "";
                     });
 
                 $scope.addOption = function() {
