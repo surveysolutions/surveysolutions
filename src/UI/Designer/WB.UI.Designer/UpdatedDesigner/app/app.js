@@ -1,6 +1,7 @@
-'use strict';
+(function() {
+    'use strict';
 
-var app = angular.module('designerApp', [
+    angular.module('designerApp', [
         'ngCookies',
         'ngResource',
         'ngSanitize',
@@ -10,29 +11,33 @@ var app = angular.module('designerApp', [
         'ui.bootstrap.tpls',
         'ui.bootstrap.transition',
         'ui.tree'
-    ])
-    .config(function($routeProvider) {
-        $routeProvider
-            .when('/:questionnaireId', {
-                templateUrl: 'app/views/main.html',
-                controller: 'MainCtrl'
-            })
-            .when('/:questionnaireId/chapter/:chapterId', {
-                templateUrl: 'app/views/main.html',
-                controller: 'MainCtrl',
-                reloadOnSearch: false
-            })
-            .when('/:questionnaireId/chapter/:chapterId/item/:itemId', {
-                templateUrl: 'app/views/main.html',
-                controller: 'MainCtrl',
-                reloadOnSearch: false
-            })
-            .when('/:questionnaireId/editchapter/:chapterId', {
-                templateUrl: 'app/views/main.html',
-                controller: 'MainCtrl',
-                reloadOnSearch: false
-            })
-            .otherwise({
-                redirectTo: '/'
-            });
-    });
+    ]);
+
+    angular.module('designerApp').config([
+        '$routeProvider', function($routeProvider) {
+            $routeProvider
+                .when('/:questionnaireId', {
+                    templateUrl: 'app/views/main.html',
+                    controller: 'MainCtrl'
+                })
+                .when('/:questionnaireId/chapter/:chapterId', {
+                    templateUrl: 'app/views/main.html',
+                    controller: 'MainCtrl',
+                    reloadOnSearch: false
+                })
+                .when('/:questionnaireId/chapter/:chapterId/item/:itemId', {
+                    templateUrl: 'app/views/main.html',
+                    controller: 'MainCtrl',
+                    reloadOnSearch: false
+                })
+                .when('/:questionnaireId/editchapter/:chapterId', {
+                    templateUrl: 'app/views/main.html',
+                    controller: 'MainCtrl',
+                    reloadOnSearch: false
+                })
+                .otherwise({
+                    redirectTo: '/'
+                });
+        }
+    ]);
+}());

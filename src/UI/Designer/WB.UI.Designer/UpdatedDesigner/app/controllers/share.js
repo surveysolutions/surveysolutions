@@ -1,29 +1,29 @@
-﻿(function(app) {
+﻿(function() {
     'use strict';
-    app.controller('shareCtrl',
+    angular.module('designerApp').controller('shareCtrl',
     [
         '$scope', '$log', '$modalInstance', 'questionnaire', 'shareService',
-        function ($scope, $log, $modalInstance, questionnaire, shareService) {
+        function($scope, $log, $modalInstance, questionnaire, shareService) {
             $scope.questionnaire = questionnaire;
-            
+
             $scope.viewModel = {
                 shareWith: '',
                 shareForm: {}
             };
 
-            $scope.cancel = function () {
+            $scope.cancel = function() {
                 $modalInstance.dismiss();
             };
 
             $scope.invite = function() {
                 var request = shareService.findUserByEmail($scope.viewModel.shareWith);
-                request.success(function (data) {
+                request.success(function(data) {
                     $scope.viewModel.shareForm.shareWithInput.$setValidity('', data.isUserExist);
 
                     if (data.isUserExist) {
                         var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId);
-                        shareRequest.success(function () {
-                            if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length == 0) {
+                        shareRequest.success(function() {
+                            if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length === 0) {
                                 $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith });
                             }
 
@@ -50,4 +50,4 @@
             };
         }
     ]);
-})(app);
+})();

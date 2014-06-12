@@ -1,9 +1,9 @@
-﻿(function(appToBeMocked) {
+﻿(function() {
     if (!(document.URL.indexOf('nobackend') > 0)) {
         return;
     }
 
-    appToBeMocked
+    angular.module('designerApp')
         .config(function($provide) {
             $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
         })
@@ -53,4 +53,4 @@
             $httpBackend.whenPOST('../account/findbyemail', {email: 'test@test.com'})
                 .respond({"isUserExist": false});
         });
-}(app));
+}());

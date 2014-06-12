@@ -1,72 +1,74 @@
-﻿'use strict';
+﻿(function() {
+    'use strict';
 
-angular.module('designerApp')
-    .controller('ChaptersCtrl', [
-        '$scope', '$routeParams', '$location', '$route', 'commandService', 'utilityService', 'navigationService',
-        function($scope, $routeParams, $location, $route, commandService, math, navigationService) {
+    angular.module('designerApp')
+        .controller('ChaptersCtrl', [
+            '$scope', '$routeParams', '$location', '$route', 'commandService', 'utilityService', 'navigationService',
+            function($scope, $routeParams, $location, $route, commandService, math, navigationService) {
 
-            $scope.chapters = [];
+                $scope.chapters = [];
 
-            $scope.isFolded = false;
-
-            $scope.unfold = function() {
-                $scope.isFolded = true;
-            };
-
-            $scope.foldback = function() {
                 $scope.isFolded = false;
-            };
 
-            $scope.openMenu = function(chapter) {
-                chapter.isMenuOpen = true;
-            };
-
-            $scope.editChapter = function(chapter) {
-                console.log(chapter);
-                chapter.isMenuOpen = false;
-                chapter.itemId = chapter.itemId;
-                $scope.setItem(chapter);
-                //navigationService.editChapter($routeParams.questionnaireId, chapter.itemId);
-            };
-
-            $scope.addNewChapter = function() {
-                var newId = math.guid();
-
-                var newChapter = {
-                    title: 'New Chapter',
-                    itemId: newId
+                $scope.unfold = function() {
+                    $scope.isFolded = true;
                 };
 
-                commandService.addChapter($routeParams.questionnaireId, newChapter).success(function() {
-                    $scope.questionnaire.chapters.push(newChapter);
-                });
-            };
+                $scope.foldback = function() {
+                    $scope.isFolded = false;
+                };
 
-            $scope.cloneChapter = function(chapter) {
-                chapter.isMenuOpen = false;
-                var newId = math.guid();
-                var chapterDescription = "";
+                $scope.openMenu = function(chapter) {
+                    chapter.isMenuOpen = true;
+                };
 
-                commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, chapter, chapterDescription).success(function() {
+                $scope.editChapter = function(chapter) {
+                    console.log(chapter);
+                    chapter.isMenuOpen = false;
+                    chapter.itemId = chapter.itemId;
+                    $scope.setItem(chapter);
+                    //navigationService.editChapter($routeParams.questionnaireId, chapter.itemId);
+                };
+
+                $scope.addNewChapter = function() {
+                    var newId = math.guid();
+
                     var newChapter = {
-                        title: chapter.title,
+                        title: 'New Chapter',
                         itemId: newId
                     };
-                    $scope.questionnaire.chapters.push(newChapter);
-                    navigationService.openChapter($routeParams.questionnaireId, newId);
-                });
-            };
 
-            $scope.deleteChapter = function(chapter) {
-                chapter.isMenuOpen = false;
-                if (confirm("Are you sure want to delete?")) {
-                    commandService.deleteGroup($routeParams.questionnaireId, chapter.itemId).success(function() {
-                        var index = $scope.questionnaire.chapters.indexOf(chapter);
-                        if (index > -1) {
-                            $scope.questionnaire.chapters.splice(index, 1);
-                        }
+                    commandService.addChapter($routeParams.questionnaireId, newChapter).success(function() {
+                        $scope.questionnaire.chapters.push(newChapter);
                     });
-                }
-            };
-        }
-    ]);
+                };
+
+                $scope.cloneChapter = function(chapter) {
+                    chapter.isMenuOpen = false;
+                    var newId = math.guid();
+                    var chapterDescription = "";
+
+                    commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, chapter, chapterDescription).success(function() {
+                        var newChapter = {
+                            title: chapter.title,
+                            itemId: newId
+                        };
+                        $scope.questionnaire.chapters.push(newChapter);
+                        navigationService.openChapter($routeParams.questionnaireId, newId);
+                    });
+                };
+
+                $scope.deleteChapter = function(chapter) {
+                    chapter.isMenuOpen = false;
+                    if (confirm("Are you sure want to delete?")) {
+                        commandService.deleteGroup($routeParams.questionnaireId, chapter.itemId).success(function() {
+                            var index = $scope.questionnaire.chapters.indexOf(chapter);
+                            if (index > -1) {
+                                $scope.questionnaire.chapters.splice(index, 1);
+                            }
+                        });
+                    }
+                };
+            }
+        ]);
+}());
