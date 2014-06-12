@@ -105,6 +105,7 @@
                 <span ng-click="collapse(item)" ng-show="!item.collapsed" class="btn-collapse"></span>
                 <span ng-click="expand(item)" ng-show="item.collapsed" class="btn-expand"></span>
                 {{item.title}}
+                <i class="glyphicon glyphicon-random" ui-tree-handle></i>
             </div>
 
             <div ng-show="!item.collapsed" ui-tree-nodes="item.items" ng-model="item.items">
