@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.View;
+﻿using Main.Core.View;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Cleaner;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Cleaner;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
+using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
 {
-    internal class PullDataProcessorTestContext
+    internal class DataProcessorTestContext
     {
-        protected static PullDataProcessor CreatePullDataProcessor(IChangeLogManipulator changeLogManipulator,
+        protected static DataProcessor CreateDataProcessor(IChangeLogManipulator changeLogManipulator,
             ICommandService commandService = null, IJsonUtils jsonUtils = null,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null, ISyncCacher syncCacher = null,
@@ -29,7 +24,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
             var mockOfCompressor = new Mock<IStringCompressor>();
             mockOfCompressor.Setup(x => x.DecompressString(Moq.It.IsAny<string>())).Returns<string>(s => s);
 
-            return new PullDataProcessor(changeLogManipulator, commandService ?? Mock.Of<ICommandService>(),
+            return new DataProcessor(changeLogManipulator, commandService ?? Mock.Of<ICommandService>(),
                 loginViewFactory ?? Mock.Of<IViewFactory<LoginViewInput, LoginView>>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 cleanUpExecutor ?? Mock.Of<ICleanUpExecutor>(),
