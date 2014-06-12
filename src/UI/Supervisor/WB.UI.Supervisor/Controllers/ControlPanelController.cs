@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using Raven.Client.Linq.Indexing;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.DesignerPublicService;
