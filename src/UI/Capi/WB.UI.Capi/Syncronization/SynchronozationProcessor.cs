@@ -21,6 +21,8 @@ using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Handshake;
@@ -67,8 +69,8 @@ namespace WB.UI.Capi.Syncronization
         }
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog,
-            IViewFactory<LoginViewInput, LoginView> loginViewFactory, IRestServiceWrapperFactory restServiceWrapperFactory, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, ISyncCacher syncCacher)
+            IViewFactory<LoginViewInput, LoginView> loginViewFactory, IRestServiceWrapperFactory restServiceWrapperFactory,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, ISyncCacher syncCacher, IStringCompressor stringCompressor, IJsonUtils jsonUtils)
         {
             this.context = context;
             
@@ -82,7 +84,7 @@ namespace WB.UI.Capi.Syncronization
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             this.pullDataProcessor = new PullDataProcessor(changelog, commandService, loginViewFactory, plainQuestionnaireRepository,
-                new CleanUpExecutor(changelog), ServiceLocator.Current.GetInstance<ILogger>(), syncCacher);
+                new CleanUpExecutor(changelog), ServiceLocator.Current.GetInstance<ILogger>(), syncCacher, stringCompressor, jsonUtils);
             this.pushDataProcessor = new PushDataProcessor(changelog);
 
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();

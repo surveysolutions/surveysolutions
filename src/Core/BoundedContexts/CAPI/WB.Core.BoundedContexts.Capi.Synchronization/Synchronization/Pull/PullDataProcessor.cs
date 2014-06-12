@@ -1,18 +1,18 @@
 using System;
 using System.Linq;
-using Main.Core;
 using Main.Core.Commands.File;
 using Main.Core.Documents;
 using Main.Core.View;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Cleaner;
 using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -26,10 +26,12 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
     {
         public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory, IPlainQuestionnaireRepository questionnaireRepository,
-            ICleanUpExecutor cleanUpExecutor, ILogger logger, ISyncCacher syncCacher)
+            ICleanUpExecutor cleanUpExecutor, ILogger logger, ISyncCacher syncCacher, IStringCompressor stringCompressor, IJsonUtils jsonUtils)
         {
             this.logger = logger;
             this.syncCacher = syncCacher;
+            this.stringCompressor = stringCompressor;
+            this.jsonUtils = jsonUtils;
             this.changelog = changelog;
             this.commandService = commandService;
             this.cleanUpExecutor = cleanUpExecutor;
@@ -44,9 +46,10 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
         private readonly ICommandService commandService;
         private readonly IViewFactory<LoginViewInput, LoginView> loginViewFactory;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IStringCompressor stringCompressor;
+        private readonly IJsonUtils jsonUtils;
 
-
-        public void Proccess(SyncItem item)
+        public void Process(SyncItem item)
         {
             switch (item.ItemType)
             {
@@ -154,23 +157,23 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull
             this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version));
         }
 
-        private static TResult ExtractObject<TResult>(string initialString, bool isCompressed)
+        private TResult ExtractObject<TResult>(string initialString, bool isCompressed)
         {
             string stringData = ExtractStringData(initialString, isCompressed);
 
-            return JsonUtils.GetObject<TResult>(stringData);
+            return jsonUtils.Deserrialize<TResult>(stringData);
         }
 
-        private static Guid ExtractGuid(string initialString, bool isCompressed)
+        private Guid ExtractGuid(string initialString, bool isCompressed)
         {
             string stringData = ExtractStringData(initialString, isCompressed);
 
             return Guid.Parse(stringData);
         }
 
-        private static string ExtractStringData(string initialString, bool isCompressed)
+        private string ExtractStringData(string initialString, bool isCompressed)
         {
-            return isCompressed ? PackageHelper.DecompressString(initialString) : initialString;
+            return isCompressed ? stringCompressor.DecompressString(initialString) : initialString;
         }
     }
 }
