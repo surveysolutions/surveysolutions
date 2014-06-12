@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 foreach (var rosterInstance in rosterGroupInstance.Value)
                 {
-                    this.AddPropagateScreen(rosterGroupInstance.Key.Id,
+                    this.AddRosterScreen(rosterGroupInstance.Key.Id,
                         rosterGroupInstance.Key.InterviewItemPropagationVector, rosterInstance.RosterInstanceId, rosterInstance.SortIndex);
 
                     if (!string.IsNullOrEmpty(rosterInstance.RosterTitle))
@@ -351,7 +351,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 if (propagatedGroupsCount < count)
                 {
                     var rosterInstanceId = propagatedGroupsCount + i;
-                    this.AddPropagateScreen(publicKey, outerScopePropagationVector, rosterInstanceId, rosterInstanceId);
+                    this.AddRosterScreen(publicKey, outerScopePropagationVector, rosterInstanceId, rosterInstanceId);
                 }
                 else
                 {
@@ -368,7 +368,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return newGroupVector;
         }
 
-        public void AddPropagateScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal rosterInstanceId, int? sortIndex)
+        public void AddRosterScreen(Guid screenId, decimal[] outerScopePropagationVector, decimal rosterInstanceId, int? sortIndex)
         {
             var propagationVector = BuildPropagationVectorForGroup(outerScopePropagationVector,
                 rosterInstanceId);
@@ -404,7 +404,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                         this.Screens.Add(newGridScreen.ScreenId, newGridScreen);
                         continue;
                     }
-                    AddPropagateScreen(group.PublicKey.Id, outerScopePropagationVector, rosterInstanceId, sortIndex);
+                    this.AddRosterScreen(group.PublicKey.Id, outerScopePropagationVector, rosterInstanceId, sortIndex);
                 }
             }
 
@@ -426,6 +426,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 var questionSourceOfSubstitution = this.Questions.Values.FirstOrDefault(q => q.PublicKey.Id == questionsUsedAsSubstitutionReference &&
                     question.PublicKey.InterviewItemPropagationVector.Take(q.PublicKey.InterviewItemPropagationVector.Length)
                         .SequenceEqual(q.PublicKey.InterviewItemPropagationVector));
+
+                if (questionSourceOfSubstitution == null)
+                {
+                    questionSourceOfSubstitution =
+                        this.FeaturedQuestions.Values.FirstOrDefault(q => q.PublicKey.Id == questionsUsedAsSubstitutionReference);
+                }
 
                 if (questionSourceOfSubstitution != null)
                     question.SubstituteQuestionText(questionSourceOfSubstitution);
