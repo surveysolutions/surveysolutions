@@ -126,7 +126,7 @@ namespace WB.UI.Supervisor.App_Start
                 useStreamingForAllEvents = true;
             }
 
-            bool isDebug = AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
+            Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof (SyncController).Assembly.GetName().Version;
 
             var kernel = new StandardKernel(
