@@ -30,13 +30,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly int supportedQuestionnaireVersionMajor;
         private readonly int supportedQuestionnaireVersionMinor;
         private readonly int supportedQuestionnaireVersionPatch;
-        private readonly bool isDebug;
+        private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
-            bool isDebug, Version applicationBuildVersion,
+            Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings)
         {
             this.currentFolderPath = currentFolderPath;
