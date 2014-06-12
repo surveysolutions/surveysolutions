@@ -15,6 +15,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.Synchronization;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Models;
@@ -46,13 +48,15 @@ namespace WB.UI.Supervisor.Tests.HQControllerTests
                 Mock.Of<IGlobalInfoProvider>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>>(),
-                questionnaireItemFactoryMock ??
-                    Mock.Of<IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>>(),
                 Mock.Of<IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView>>(),
                 Mock.Of<IViewFactory<UserListViewInputModel, UserListView>>(),
                 sampleImportServiceMock ?? Mock.Of<ISampleImportService>(),
                 Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(),
-                Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(), Mock.Of<IPreloadedDataVerifier>(), Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>());
+                questionnaireItemFactoryMock ?? Mock.Of<IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>>(),
+                Mock.Of<IPreloadingTemplateService>(),
+                Mock.Of<IPreloadedDataRepository>(),
+                Mock.Of<IPreloadedDataVerifier>(),
+                Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>());
         }
     }
 }
