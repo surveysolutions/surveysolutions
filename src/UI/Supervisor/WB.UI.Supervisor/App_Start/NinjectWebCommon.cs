@@ -35,9 +35,9 @@ using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
+using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.Synchronization;
 using WB.UI.Supervisor.Code;
-using WB.UI.Supervisor.Code.CommandDeserialization;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
 using WB.UI.Supervisor.App_Start;
@@ -157,7 +157,7 @@ namespace WB.UI.Supervisor.App_Start
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
-                new SupervisorCommandDeserializationModule(),
+                new SurveyManagementWebModule(),
                 new SurveyManagementSharedKernelModule(
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),

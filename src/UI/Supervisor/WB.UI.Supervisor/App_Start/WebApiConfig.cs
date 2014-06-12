@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
-using WB.UI.Supervisor.Code.MessageHandler;
 
 
 namespace WB.UI.Supervisor.App_Start

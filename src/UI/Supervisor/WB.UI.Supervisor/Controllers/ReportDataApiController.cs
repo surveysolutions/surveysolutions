@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Supervisor.Models;
 
 namespace WB.UI.Supervisor.Controllers
