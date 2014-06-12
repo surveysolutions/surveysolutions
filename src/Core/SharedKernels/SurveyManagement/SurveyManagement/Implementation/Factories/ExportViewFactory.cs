@@ -148,7 +148,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             IEnumerable<IMultyOptionsQuestion> rosterSizeMultyOptionQuestions =
                 rosterGroups.Select(@group => document.Find<IMultyOptionsQuestion>(@group.RosterSizeQuestionId.Value))
-                    .Where(question => question != null);
+                    .Where(question => question != null).Distinct();
 
             IEnumerable<ITextListQuestion> rosterSizeTextListQuestions =
                 rosterGroups.Select(@group => document.Find<ITextListQuestion>(@group.RosterSizeQuestionId.Value))
