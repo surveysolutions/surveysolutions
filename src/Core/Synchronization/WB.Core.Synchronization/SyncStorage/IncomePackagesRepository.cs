@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core;
-using Main.Core.Documents;
 using Main.Core.Events;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -12,7 +11,6 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -25,21 +23,21 @@ namespace WB.Core.Synchronization.SyncStorage
     {
         private string incomingCapiPackagesDirectory;
         private string incomingCapiPackagesWithErrorsDirectory;
-        private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
 
         private readonly ILogger logger;
         private readonly ICommandService commandService;
         private readonly SyncSettings syncSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IJsonUtils jsonUtils;
 
-        public IncomePackagesRepository(IQueryableReadSideRepositoryWriter<UserDocument> userStorage, ILogger logger,
-            SyncSettings syncSettings, ICommandService commandService, IFileSystemAccessor fileSystemAccessor)
+        public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
+            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils)
         {
-            this.userStorage = userStorage;
             this.logger = logger;
             this.syncSettings = syncSettings;
             this.commandService = commandService;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.jsonUtils = jsonUtils;
 
             InitializeDirectoriesForCapiIncomePackages();
         }
@@ -114,7 +112,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
 
-            var items = this.GetContentAsItem<AggregateRootEvent[]>(fileContent);
+            var items = jsonUtils.Deserrialize<AggregateRootEvent[]>(PackageHelper.DecompressString(fileContent));
             if (items.Length > 0)
             {
                 var eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
