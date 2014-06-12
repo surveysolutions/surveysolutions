@@ -20,18 +20,20 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
 {
     internal class PullDataProcessorTestContext
     {
-        protected static PullDataProcessor CreatePullDataProcessor(ICommandService commandService = null, IJsonUtils jsonUtils = null,
+        protected static PullDataProcessor CreatePullDataProcessor(IChangeLogManipulator changeLogManipulator,
+            ICommandService commandService = null, IJsonUtils jsonUtils = null,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory = null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null, ISyncCacher syncCacher = null,
+            ICleanUpExecutor cleanUpExecutor = null)
         {
             var mockOfCompressor = new Mock<IStringCompressor>();
             mockOfCompressor.Setup(x => x.DecompressString(Moq.It.IsAny<string>())).Returns<string>(s => s);
 
-            return new PullDataProcessor(Mock.Of<IChangeLogManipulator>(), commandService ?? Mock.Of<ICommandService>(),
+            return new PullDataProcessor(changeLogManipulator, commandService ?? Mock.Of<ICommandService>(),
                 loginViewFactory ?? Mock.Of<IViewFactory<LoginViewInput, LoginView>>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<ICleanUpExecutor>(),
-                Mock.Of<ILogger>(), Mock.Of<ISyncCacher>(), mockOfCompressor.Object, jsonUtils ?? Mock.Of<IJsonUtils>());
+                cleanUpExecutor ?? Mock.Of<ICleanUpExecutor>(),
+                Mock.Of<ILogger>(), syncCacher ?? Mock.Of<ISyncCacher>(), mockOfCompressor.Object, jsonUtils ?? Mock.Of<IJsonUtils>());
         }
     }
 }
