@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.WebPages;
-using Main.Core;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Supervisor.Controllers
+namespace WB.UI.Headquarters.Controllers
 {
     public class TabletReportController : Controller
     {
@@ -45,14 +36,14 @@ namespace WB.UI.Supervisor.Controllers
                         });
                 }
 
-                tabletInformationService.SaveTabletInformation(tabletInformationPackage.Content,
+                this.tabletInformationService.SaveTabletInformation(tabletInformationPackage.Content,
                     tabletInformationPackage.AndroidId, tabletInformationPackage.RegistrationId);
 
                 return this.Json(true, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
-                logger.Error(e.Message, e);
+                this.logger.Error(e.Message, e);
                 return this.Json(false, JsonRequestBehavior.AllowGet);
             }
         }
@@ -60,13 +51,13 @@ namespace WB.UI.Supervisor.Controllers
         [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult Packages()
         {
-            return this.View(tabletInformationService.GetAllTabletInformationPackages());
+            return this.View(this.tabletInformationService.GetAllTabletInformationPackages());
         }
 
         [Authorize(Roles = "Headquarter, Supervisor")]
         public ActionResult DownloadPackages(string fileName)
         {
-            return this.File(tabletInformationService.GetFullPathToContentFile(fileName), "application/zip", fileName);
+            return this.File(this.tabletInformationService.GetFullPathToContentFile(fileName), "application/zip", fileName);
         }
     }
 }
