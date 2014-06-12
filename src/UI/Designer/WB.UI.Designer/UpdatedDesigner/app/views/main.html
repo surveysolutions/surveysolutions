@@ -120,7 +120,7 @@
             </div>
         </script>
 
-        <div class="question-list" ui-tree="groupsTree">
+        <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
             <div ui-tree-nodes ng-model="items">
                 <div ng-repeat="item in items" ui-tree-node ng-include="'tree_item_renderer.html'">
                 </div>
