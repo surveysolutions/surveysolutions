@@ -8,7 +8,8 @@ var app = angular.module('designerApp', [
         'angular-underscore',
         'ui.bootstrap',
         'ui.bootstrap.tpls',
-        'ui.bootstrap.transition'
+        'ui.bootstrap.transition',
+        'ui.tree'
     ])
     .config(function($routeProvider) {
         $routeProvider

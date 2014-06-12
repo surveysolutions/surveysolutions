@@ -32,6 +32,30 @@ angular.module('designerApp')
 
             $scope.questionnaire = null;
 
+            $scope.groupsTree = {
+                dropped: function(event) {
+                    var movedItem = event.source.nodeScope.item;
+
+                    if ($scope.isQuestion(movedItem)) {
+                        commandService.execute('MoveQuestion', {
+                                targetGroupId: event.dest.nodesScope.item.itemId,
+                                targetIndex: event.dest.index,
+                                questionId: movedItem.itemId,
+                                questionnaireId: $routeParams.questionnaireId
+                            }
+                        );
+                    } else {
+                        commandService.execute('MoveGroup', {
+                                targetGroupId: event.dest.nodesScope.item.itemId,
+                                targetIndex: event.dest.index,
+                                groupId: event.source.nodeScope.item.itemId,
+                                questionnaireId: $routeParams.questionnaireId
+                            }
+                        );
+                    }
+                }
+            };
+
             $scope.currentChapter = null;
 
             $scope.currentChapterId = null;

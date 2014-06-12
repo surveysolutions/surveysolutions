@@ -80,6 +80,7 @@
                  ng-hide="item.isDeleted"
                  class="question item"
                  ng-class="{'selected' : item.itemId == currentItemId, 'cat-singleanswer': item.type == 'YesNo', 'cat-singleanswer': item.type == 'DropDownList', 'cat-multianswer' : item.type == 'MultyOption', 'cat-intedit' : item.type == 'Numeric', 'cat-datetime' : item.type == 'DateTime', 'cat-geoloc' : item.type == 'GpsCoordinates', 'cat-textedit' : item.type == 'AutoPropagate', 'cat-textarea' : item.type == 'TextList',  'cat-multimedia' : item.type == 'QRBarcode', 'cat-textedit' : item.type == 'Text', 'cat-singleanswer' : item.type == 'SingleOption' }">
+                
                 <div class="icon"></div>
                 {{ item.title }}
                 <div class="qname-block">
@@ -101,13 +102,15 @@
                  ng-click="setItem(item)"
                  ng-class="{'selected' : item.itemId == currentItemId}"
                  ng-if="!isQuestion(item) && !item.isDeleted">
+
+                
                 <span ng-click="collapse(item)" ng-show="!item.collapsed" class="btn-collapse"></span>
                 <span ng-click="expand(item)" ng-show="item.collapsed" class="btn-expand"></span>
                 {{item.title}}
             </div>
 
-            <div ng-show="!item.collapsed">
-                <div ng-repeat="item in item.items" ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
+            <div ng-show="!item.collapsed" ui-tree-nodes="item.items" ng-model="item.items">
+                <div ng-repeat="item in item.items" ui-tree-node ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
                 </div>
             </div>
 
@@ -118,18 +121,24 @@
             </div>
         </script>
 
-        <div class="question-list">
-            <div ng-repeat="item in items" ng-include="'tree_item_renderer.html'">
+        <div class="question-list" ui-tree="groupsTree">
+            <div ui-tree-nodes ng-model="items">
+                <div ng-repeat="item in items" ui-tree-node ng-include="'tree_item_renderer.html'">
+                </div>
             </div>
 
             <div class="start-box" ng-show="currentChapter==undefined">
                 <p>This questionnaire is empty.</p>
 
-                <p>You can start by using <button class="btn" disabled>ADD QUESTION</button> and <button class="btn" disabled>ADD GROUP</button> buttons<br/>
-                    on top of this section or manage chapters with <span class="left-panel-glyph"></span> left panel</p>
+                <p>
+                    You can start by using <button class="btn" disabled>ADD QUESTION</button> and <button class="btn" disabled>ADD GROUP</button> buttons<br />
+                    on top of this section or manage chapters with <span class="left-panel-glyph"></span> left panel
+                </p>
 
-                <p>Language of survey, device types, collaboration and other options<br/>
-                    can be found at <button class="btn" disabled>SETTINGS</button> panel (top right corner)</p>
+                <p>
+                    Language of survey, device types, collaboration and other options<br />
+                    can be found at <button class="btn" disabled>SETTINGS</button> panel (top right corner)
+                </p>
             </div>
         </div>
     </div>
