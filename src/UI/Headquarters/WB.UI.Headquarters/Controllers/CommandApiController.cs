@@ -6,7 +6,8 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.UI.Headquarters.Code.CommandTransformation;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
 using WB.UI.Shared.Web.CommandDeserialization;
 
