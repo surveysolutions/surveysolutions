@@ -88,6 +88,7 @@
     <Compile Include="InterviewViewModelDenormalizerTests\when_handle_QRBarcodeQuestionAnswered_event.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\InterviewViewModelTests\InterviewViewModelTestContext.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_adding_new_roster_screen_with_question_that_reference_prefilled_one_in_title.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_adding_roster_row_and_row_contains_question_with_substitution_on_upper_level_of_interview.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_nested_roster_row_method_called_and_1_row_in_roster_already_present_and_other_row_present_in_other_parent_roster_row.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_2_rows_in_roster_already_present.cs" />
