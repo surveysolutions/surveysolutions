@@ -80,7 +80,7 @@
                  ng-hide="item.isDeleted"
                  class="question item"
                  ng-class="{'selected' : item.itemId == currentItemId, 'cat-singleanswer': item.type == 'YesNo', 'cat-singleanswer': item.type == 'DropDownList', 'cat-multianswer' : item.type == 'MultyOption', 'cat-intedit' : item.type == 'Numeric', 'cat-datetime' : item.type == 'DateTime', 'cat-geoloc' : item.type == 'GpsCoordinates', 'cat-textedit' : item.type == 'AutoPropagate', 'cat-textarea' : item.type == 'TextList',  'cat-multimedia' : item.type == 'QRBarcode', 'cat-textedit' : item.type == 'Text', 'cat-singleanswer' : item.type == 'SingleOption' }">
-                <i clss="glyphicon glyphicon-random" ui-tree-handle></i>
+                
                 <div class="icon"></div>
                 {{ item.title }}
                 <div class="qname-block">
@@ -103,7 +103,7 @@
                  ng-class="{'selected' : item.itemId == currentItemId}"
                  ng-if="!isQuestion(item) && !item.isDeleted">
 
-                <i clss="glyphicon glyphicon-random" ui-tree-handle></i>
+                
                 <span ng-click="collapse(item)" ng-show="!item.collapsed" class="btn-collapse"></span>
                 <span ng-click="expand(item)" ng-show="item.collapsed" class="btn-expand"></span>
                 {{item.title}}
@@ -121,7 +121,7 @@
             </div>
         </script>
 
-        <div class="question-list" ui-tree="items">
+        <div class="question-list" ui-tree="groupsTree">
             <div ui-tree-nodes ng-model="items">
                 <div ng-repeat="item in items" ui-tree-node ng-include="'tree_item_renderer.html'">
                 </div>
