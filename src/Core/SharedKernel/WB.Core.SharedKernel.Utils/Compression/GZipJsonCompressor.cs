@@ -9,10 +9,6 @@ namespace WB.Core.SharedKernel.Utils.Compression
     using System.Text;
 
     using Newtonsoft.Json;
-
-    /// <summary>
-    /// Compress/Decompress json objects with GZip archiever.
-    /// </summary>
     public class GZipJsonCompressor : IStringCompressor
     {
         private readonly IJsonUtils jsonSerrializer;
@@ -22,17 +18,6 @@ namespace WB.Core.SharedKernel.Utils.Compression
             this.jsonSerrializer = jsonSerrializer;
         }
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// Compress data.
-        /// </summary>
-        /// <param name="data">
-        /// Deserializable json object as string.
-        /// </param>
-        /// <returns>
-        /// Zip archieve as stream <see cref="Stream"/>.
-        /// </returns>
         public Stream Compress(string data)
         {
             var output = new MemoryStream();
@@ -50,17 +35,6 @@ namespace WB.Core.SharedKernel.Utils.Compression
             return output;
         }
 
-        /// <summary>
-        /// Decompress data.
-        /// </summary>
-        /// <param name="stream">
-        /// Zip stream.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// <see cref="T"/>.
-        /// </returns>
         public T Decompress<T>(Stream stream) where T : class
         {
             using (var zip = new GZipStream(stream, CompressionMode.Decompress))
@@ -101,6 +75,32 @@ namespace WB.Core.SharedKernel.Utils.Compression
             }
         }
 
-        #endregion
+        public string CompressString(string s)
+        {
+            var bytes = Encoding.Unicode.GetBytes(s);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(mso, CompressionMode.Compress))
+                {
+                    msi.CopyTo(gs);
+                }
+                return Convert.ToBase64String(mso.ToArray());
+            }
+        }
+
+        public string DecompressString(string s)
+        {
+            var bytes = Convert.FromBase64String(s);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
+                {
+                    gs.CopyTo(mso);
+                }
+                return Encoding.Unicode.GetString(mso.ToArray());
+            }
+        }
     }
 }
