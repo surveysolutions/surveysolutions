@@ -1,8 +1,14 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = "Index";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/validate")
 }
 
 <div class="row-fluid">
@@ -46,7 +52,7 @@
             <br />
             <div class="control-group">
                 <div class="controls">
-                    <input type="file" name="file" accept=".csv" />
+                    @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".csv" })
                     @Html.ValidationMessageFor(x => x.File)
                 </div>
             </div>
@@ -70,7 +76,7 @@
             <br />
             <div class="control-group">
                 <div class="controls">
-                    <input type="file" name="file" accept=".zip" />
+                    @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".zip" })
                     @Html.ValidationMessageFor(x => x.File)
                 </div>
             </div>
