@@ -4,16 +4,16 @@ using Main.Core.Documents;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizationServiceTests
 {
-    internal class when_sync_package_contains_information_about_questionnaire : DataProcessorTestContext
+    internal class when_sync_package_contains_information_about_questionnaire_with_broken_metadata : CapiDataSynchronizationServiceTestContext
     {
         Establish context = () =>
         {
@@ -22,53 +22,54 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
                 PublicKey = Guid.NewGuid()
             };
 
-            var questionnaireMetadata = new QuestionnaireMetadata(1);
-
-            syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", Id = Guid.NewGuid() };
+            syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", Id = Guid.NewGuid()};
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserrialize<QuestionnaireDocument>(syncItem.Content)).Returns(questionnaireDocument);
-            jsonUtilsMock.Setup(x => x.Deserrialize<QuestionnaireMetadata>(syncItem.MetaInfo)).Returns(questionnaireMetadata);
+            jsonUtilsMock.Setup(x => x.Deserrialize<QuestionnaireMetadata>(syncItem.MetaInfo)).Throws<NullReferenceException>();
 
             commandService = new Mock<ICommandService>();
 
-            plainQuestionnaireRepositoryMock=new Mock<IPlainQuestionnaireRepository>();
-
+            plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
             changeLogManipulator = new Mock<IChangeLogManipulator>();
-            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null,
+            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null,
                 plainQuestionnaireRepositoryMock.Object);
         };
 
-        Because of = () => dataProcessor.ProcessPulledItem(syncItem);
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.SavePulledItem(syncItem));
 
-        It should_call_RegisterPlainQuestionnaire_once =
+        It should_not_call_RegisterPlainQuestionnaire =
             () =>
                 commandService.Verify(
                     x =>
                         x.Execute(
                             Moq.It.Is<RegisterPlainQuestionnaire>(
                                 param =>
-                                    param.QuestionnaireId==questionnaireDocument.PublicKey && param.Version==1), null),
-                    Times.Once);
+                                    param.QuestionnaireId == questionnaireDocument.PublicKey && param.Version == Moq.It.IsAny<long>()), null),
+                    Times.Never);
 
-        It should_store_questionnaire_in_plaine_storage_once =
+        It should_not_store_questionnaire_in_pline_storage =
             () =>
                 plainQuestionnaireRepositoryMock.Verify(
-                    x => x.StoreQuestionnaire(questionnaireDocument.PublicKey, 1, questionnaireDocument),
-                    Times.Once);
+                    x => x.StoreQuestionnaire(questionnaireDocument.PublicKey, Moq.It.IsAny<long>(), questionnaireDocument),
+                    Times.Never);
 
-        It should_create_public_record_in_change_log_for_sync_item_once =
+        It should_throw_ArgumentException = () =>
+            exception.ShouldBeOfType<ArgumentException>();
+
+        It should_not_create_public_record_in_change_log_for_sync_item =
         () =>
             changeLogManipulator.Verify(
                 x =>
                     x.CreatePublicRecord(syncItem.Id),
-                Times.Once);
+                Times.Never);
 
-        private static DataProcessor dataProcessor;
+        private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static SyncItem syncItem;
         private static QuestionnaireDocument questionnaireDocument;
         private static Mock<ICommandService> commandService;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
+        private static Exception exception;
         private static Mock<IChangeLogManipulator> changeLogManipulator;
     }
 }

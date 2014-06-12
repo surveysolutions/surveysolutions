@@ -4,14 +4,14 @@ using Main.Core.Commands.File;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizationServiceTests
 {
-    internal class when_sync_package_contains_information_about_file : DataProcessorTestContext
+    internal class when_sync_package_contains_information_about_file : CapiDataSynchronizationServiceTestContext
     {
         Establish context = () =>
         {
@@ -31,10 +31,10 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
             commandService = new Mock<ICommandService>();
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
-            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object);
+            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object);
         };
 
-        Because of = () => dataProcessor.ProcessPulledItem(syncItem);
+        Because of = () => capiDataSynchronizationService.SavePulledItem(syncItem);
 
         It should_call_UploadFileCommand_once =
             () =>
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
                     x.CreatePublicRecord(syncItem.Id),
                 Times.Once);
 
-        private static DataProcessor dataProcessor;
+        private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static SyncItem syncItem;
         private static FileSyncDescription fileSyncDescription;
         private static Mock<ICommandService> commandService;

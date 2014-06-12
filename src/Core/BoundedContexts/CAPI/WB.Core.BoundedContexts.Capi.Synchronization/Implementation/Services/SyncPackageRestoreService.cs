@@ -5,27 +5,26 @@ using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
-using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
-using WB.Core.BoundedContexts.Capi.Synchronization.SyncPackageApplier;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
-namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.SyncPackageApplier
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 {
-    public class SyncPackageApplier : ISyncPackageApplier
+    public class SyncPackageRestoreService : ISyncPackageRestoreService
     {
         private static ConcurrentDictionary<Guid, bool> itemsInProcess = new ConcurrentDictionary<Guid, bool>();
         private const int CountOfAttempt = 200;
 
         private readonly ILogger logger;
-        private readonly ISyncCacher syncCacher;
+        private readonly ICapiSynchronizationCacheService capiSynchronizationCacheService;
 
 
-        public SyncPackageApplier(ILogger logger, ISyncCacher syncCacher)
+        public SyncPackageRestoreService(ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService)
         {
             this.logger = logger;
-            this.syncCacher = syncCacher;
+            this.capiSynchronizationCacheService = capiSynchronizationCacheService;
         }
 
         private bool WaitUntilItemCanBeProcessed(Guid id)
@@ -57,11 +56,11 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.SyncPackag
             bool isAppliedSuccesfully = false;
             try
             {
-                if (!this.syncCacher.DoesCachedItemExist(itemKey))
+                if (!this.capiSynchronizationCacheService.DoesCachedItemExist(itemKey))
                     isAppliedSuccesfully = true;
                 else
                 {
-                    var item = this.syncCacher.LoadItem(itemKey);
+                    var item = this.capiSynchronizationCacheService.LoadItem(itemKey);
 
                     if (!string.IsNullOrWhiteSpace(item))
                     {
@@ -71,7 +70,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.SyncPackag
                         NcqrsEnvironment.Get<ICommandService>()
                             .Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
 
-                        this.syncCacher.DeleteItem(itemKey);
+                        this.capiSynchronizationCacheService.DeleteItem(itemKey);
 
                         isAppliedSuccesfully = true;
                     }

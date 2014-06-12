@@ -7,15 +7,15 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizationServiceTests
 {
-    internal class when_sync_package_contains_information_about_new_user : DataProcessorTestContext
+    internal class when_sync_package_contains_information_about_new_user : CapiDataSynchronizationServiceTestContext
     {
         Establish context = () =>
         {
@@ -38,10 +38,10 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
             commandService=new Mock<ICommandService>();
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
-            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object);
+            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object);
         };
 
-        Because of = () => dataProcessor.ProcessPulledItem(syncItem);
+        Because of = () => capiDataSynchronizationService.SavePulledItem(syncItem);
 
         private It should_call_CreateUserCommand_once =
             () =>
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
                     x.CreatePublicRecord(syncItem.Id),
                 Times.Once);
 
-        private static DataProcessor dataProcessor;
+        private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static SyncItem syncItem;
         private static UserDocument userDocument;
         private static Mock<ICommandService> commandService;
