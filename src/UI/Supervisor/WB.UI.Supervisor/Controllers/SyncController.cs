@@ -14,10 +14,12 @@ using Main.Core.View.User;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Supervisor.Code;
 
 namespace WB.UI.Supervisor.Controllers
 {
@@ -26,27 +28,37 @@ namespace WB.UI.Supervisor.Controllers
         private readonly ILogger logger;
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
+        private readonly Func<string, string, bool> validateUserCredentials;
+        private readonly Func<string, string, bool> checkIfUserIsInRole;
+        private readonly ISupportedVersionProvider versionProvider;
 
         private string CapiFileName = "wbcapi.apk";
 
         private string pathToSearchVersions = ("~/App_Data/Capi");
-        public SyncController(ISyncManager syncManager, ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> viewFactory)
+
+        public SyncController(ISyncManager syncManager,
+            ILogger logger,
+            IViewFactory<UserViewInputModel, UserView> viewFactory,
+            ISupportedVersionProvider versionProvider)
+            : this(syncManager, logger, viewFactory, versionProvider, Membership.ValidateUser, Roles.IsUserInRole) { }
+
+        public SyncController(ISyncManager syncManager, ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory, ISupportedVersionProvider versionProvider, Func<string, string, bool> validateUserCredentials, Func<string, string, bool> checkIfUserIsInRole)
         {
+            this.validateUserCredentials = validateUserCredentials;
+            this.checkIfUserIsInRole = checkIfUserIsInRole;
+            this.versionProvider = versionProvider;
             this.syncManager = syncManager;
             this.logger = logger;
             this.viewFactory = viewFactory;
         }
 
-
         protected UserView GetUser(string login, string password)
         {
-            if (Membership.ValidateUser(login, password))
+            if (validateUserCredentials(login, password))
             {
-                if (Roles.IsUserInRole(login, UserRoles.Operator.ToString()))
+                if (checkIfUserIsInRole(login, UserRoles.Operator.ToString()))
                 {
-                    return
-                        this.viewFactory.Load(new UserViewInputModel(login, null));
+                    return this.viewFactory.Load(new UserViewInputModel(login, null));
                 }
             }
             return null;
@@ -55,7 +67,7 @@ namespace WB.UI.Supervisor.Controllers
         //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult Handshake(string clientId, string androidId, Guid? clientRegistrationId)
+        public ActionResult Handshake(string clientId, string androidId, Guid? clientRegistrationId, int version = 0)
         {
             UserView user = this.GetUserByNameAndPassword();
             if (user == null)
@@ -64,7 +76,19 @@ namespace WB.UI.Supervisor.Controllers
             var package = new HandshakePackage();
 
             Guid key;
-            if (!Guid.TryParse(clientId, out key))
+            int? supervisorRevisionNumber = this.versionProvider.GetApplicationBuildNumber();
+
+            if (supervisorRevisionNumber.HasValue && version > supervisorRevisionNumber.Value)
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Your application is incometible with the Supervisor. Please, remove your copy and download the correct version";
+            }
+            else if (supervisorRevisionNumber.HasValue && version < supervisorRevisionNumber.Value)
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "You must update your CAPI application before synchronizing with the Supervisor";
+            }
+            else if (!Guid.TryParse(clientId, out key))
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "Client Identifier was not provided.";
@@ -91,7 +115,6 @@ namespace WB.UI.Supervisor.Controllers
             return this.Json(package, JsonRequestBehavior.AllowGet);
         }
 
-        
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult InitPulling(string clientRegistrationId)
@@ -328,7 +351,7 @@ namespace WB.UI.Supervisor.Controllers
                 int versionValue;
                 if (int.TryParse(versionCode, out versionValue))
                 {
-                int maxVersion = this.GetLastVersionNumber();
+                    int maxVersion = this.GetLastVersionNumber();
 
                     if (maxVersion != 0 && maxVersion > versionValue)
                     {
@@ -359,12 +382,12 @@ namespace WB.UI.Supervisor.Controllers
             try
             {
                 string authHeader = this.Request.Headers["Authorization"];
-                char[] delims = {' '};
-                string[] authHeaderTokens = authHeader.Split(new[] {' '});
+                char[] delims = { ' ' };
+                string[] authHeaderTokens = authHeader.Split(new[] { ' ' });
                 if (authHeaderTokens[0].Contains("Basic"))
                 {
                     string decodedStr = DecodeFrom64(authHeaderTokens[1]);
-                    string[] unpw = decodedStr.Split(new[] {':'});
+                    string[] unpw = decodedStr.Split(new[] { ':' });
                     username = unpw[0];
                     password = unpw[1];
                 }
