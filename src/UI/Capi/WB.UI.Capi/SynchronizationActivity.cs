@@ -23,6 +23,8 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
@@ -242,8 +244,10 @@ namespace WB.UI.Capi
             try
             {
                 this.synchronizer = new SynchronozationProcessor(this, this.CreateAuthenticator(),
-                    CapiApplication.Kernel.Get<IChangeLogManipulator>(), CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
-                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), CapiApplication.Kernel.Get<ISyncCacher>());
+                    CapiApplication.Kernel.Get<IChangeLogManipulator>(),
+                    CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
+                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(),
+                    CapiApplication.Kernel.Get<ISyncCacher>(), CapiApplication.Kernel.Get<IStringCompressor>(), CapiApplication.Kernel.Get<IJsonUtils>());
             }
             catch (Exception ex)
             {
