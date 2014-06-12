@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
 {
-    internal class when_sync_package_contains_information_about_questionnaire : PullDataProcessorTestContext
+    internal class when_sync_package_contains_information_about_questionnaire : DataProcessorTestContext
     {
         Establish context = () =>
         {
@@ -41,11 +35,11 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
             plainQuestionnaireRepositoryMock=new Mock<IPlainQuestionnaireRepository>();
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
-            pullDataProcessor = CreatePullDataProcessor(changeLogManipulator.Object,commandService.Object, jsonUtilsMock.Object, null,
+            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null,
                 plainQuestionnaireRepositoryMock.Object);
         };
 
-        Because of = () => pullDataProcessor.Process(syncItem);
+        Because of = () => dataProcessor.ProcessPulledItem(syncItem);
 
         It should_call_RegisterPlainQuestionnaire_once =
             () =>
@@ -70,7 +64,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
                     x.CreatePublicRecord(syncItem.Id),
                 Times.Once);
 
-        private static PullDataProcessor pullDataProcessor;
+        private static DataProcessor dataProcessor;
         private static SyncItem syncItem;
         private static QuestionnaireDocument questionnaireDocument;
         private static Mock<ICommandService> commandService;

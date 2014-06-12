@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Sync;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
 {
-    internal class when_sync_package_contains_information_about_new_user : PullDataProcessorTestContext
+    internal class when_sync_package_contains_information_about_new_user : DataProcessorTestContext
     {
         Establish context = () =>
         {
@@ -41,10 +38,10 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
             commandService=new Mock<ICommandService>();
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
-            pullDataProcessor = CreatePullDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object);
+            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object);
         };
 
-        Because of = () => pullDataProcessor.Process(syncItem);
+        Because of = () => dataProcessor.ProcessPulledItem(syncItem);
 
         private It should_call_CreateUserCommand_once =
             () =>
@@ -65,8 +62,8 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
                 x =>
                     x.CreatePublicRecord(syncItem.Id),
                 Times.Once);
-        
-        private static PullDataProcessor pullDataProcessor;
+
+        private static DataProcessor dataProcessor;
         private static SyncItem syncItem;
         private static UserDocument userDocument;
         private static Mock<ICommandService> commandService;

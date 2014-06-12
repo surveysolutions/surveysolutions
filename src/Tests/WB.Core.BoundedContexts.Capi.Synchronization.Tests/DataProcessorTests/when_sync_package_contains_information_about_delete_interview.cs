@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Moq;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Cleaner;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Cleaner;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
 {
-    internal class when_sync_package_contains_information_about_delete_interview : PullDataProcessorTestContext
+    internal class when_sync_package_contains_information_about_delete_interview : DataProcessorTestContext
     {
         Establish context = () =>
         {
@@ -35,11 +28,11 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
 
             cleanUpExecutorMock=new Mock<ICleanUpExecutor>();
 
-            pullDataProcessor = CreatePullDataProcessor(changeLogManipulator.Object, commandService.Object, null, null,
+            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, null, null,
                 plainQuestionnaireRepositoryMock.Object, null, cleanUpExecutorMock.Object);
         };
 
-        Because of = () => pullDataProcessor.Process(syncItem);
+        Because of = () => dataProcessor.ProcessPulledItem(syncItem);
 
         It should_never_call_any_command =
             () =>
@@ -62,7 +55,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
                     x.CreatePublicRecord(syncItem.Id),
                 Times.Once);
 
-        private static PullDataProcessor pullDataProcessor;
+        private static DataProcessor dataProcessor;
         private static SyncItem syncItem;
         private static Mock<ICommandService> commandService;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;

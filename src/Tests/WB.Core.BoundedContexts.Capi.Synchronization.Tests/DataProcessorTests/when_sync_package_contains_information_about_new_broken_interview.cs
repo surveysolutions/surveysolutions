@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
+using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -16,9 +12,9 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTests
+namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.DataProcessorTests
 {
-    internal class when_sync_package_contains_information_about_new_broken_interview : PullDataProcessorTestContext
+    internal class when_sync_package_contains_information_about_new_broken_interview : DataProcessorTestContext
     {
         Establish context = () =>
         {
@@ -48,11 +44,11 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
             syncCacher = new Mock<ISyncCacher>();
-            pullDataProcessor = CreatePullDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null,
+            dataProcessor = CreateDataProcessor(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null,
                 plainQuestionnaireRepositoryMock.Object, syncCacher.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() =>pullDataProcessor.Process(syncItem));
+        Because of = () => exception = Catch.Exception(() => dataProcessor.ProcessPulledItem(syncItem));
 
         It should_call_ApplySynchronizationMetadata_once =
             () =>
@@ -82,7 +78,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
         It should_throw_NullReferenceException = () =>
             exception.ShouldBeOfType<NullReferenceException>();
 
-        private static PullDataProcessor pullDataProcessor;
+        private static DataProcessor dataProcessor;
         private static SyncItem syncItem;
         private static Mock<ICommandService> commandService;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;

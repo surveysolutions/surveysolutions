@@ -13,6 +13,7 @@ using Main.Core.View;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Capi.Syncronization;
@@ -33,6 +34,7 @@ namespace WB.UI.Capi.Injections
             base.Load();
             
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
             this.Bind<IViewFactory<LoginViewInput, LoginView>>().To<LoginViewFactory>();
         }
     }
