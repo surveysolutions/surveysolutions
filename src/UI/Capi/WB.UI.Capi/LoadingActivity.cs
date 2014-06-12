@@ -5,6 +5,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Capi.Synchronization.SyncPackageApplier;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Syncronization;

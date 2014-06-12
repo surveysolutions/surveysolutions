@@ -13,9 +13,12 @@ using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Utility;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ninject;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
+using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
@@ -23,6 +26,8 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
@@ -241,9 +246,15 @@ namespace WB.UI.Capi
             this.PreperaUI();
             try
             {
+                var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
+                var cleaner = new CleanUpExecutor(changeLogManipulator);
                 this.synchronizer = new SynchronozationProcessor(this, this.CreateAuthenticator(),
-                    CapiApplication.Kernel.Get<IChangeLogManipulator>(), CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
-                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), CapiApplication.Kernel.Get<ISyncCacher>());
+                    new DataProcessor(changeLogManipulator, NcqrsEnvironment.Get<ICommandService>(),
+                        CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
+                        CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), cleaner, ServiceLocator.Current.GetInstance<ILogger>(),
+                        CapiApplication.Kernel.Get<ISyncCacher>(), CapiApplication.Kernel.Get<IStringCompressor>(),
+                        CapiApplication.Kernel.Get<IJsonUtils>()),
+                    cleaner, CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
             }
             catch (Exception ex)
             {

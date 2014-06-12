@@ -1,8 +1,9 @@
 using System;
 using System.IO;
+using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
 using WB.Core.Infrastructure.Backup;
 
-namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.SyncCacher
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.SyncCacher
 {
     public class FileSyncCacher : ISyncCacher, IBackupable
     {
