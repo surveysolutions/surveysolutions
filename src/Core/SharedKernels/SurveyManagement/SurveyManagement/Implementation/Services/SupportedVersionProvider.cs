@@ -7,10 +7,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
         private static QuestionnaireVersion supportedQuestionnaireVersion;
-        private static bool isDebugMode;
+        private static Func<bool> isDebugMode;
         private static Version buildVersion;
 
-        public SupportedVersionProvider(ApplicationVersionSettings settings, bool isDebug, Version applicationBuildVersion)
+        public SupportedVersionProvider(ApplicationVersionSettings settings, Func<bool> isDebug, Version applicationBuildVersion)
         {
             supportedQuestionnaireVersion = new QuestionnaireVersion(
                 settings.SupportedQuestionnaireVersionMajor,
@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
         public int? GetApplicationBuildNumber()
         {
-            if (isDebugMode)
+            if (isDebugMode())
                 return null;
             return buildVersion.Revision;
         }
