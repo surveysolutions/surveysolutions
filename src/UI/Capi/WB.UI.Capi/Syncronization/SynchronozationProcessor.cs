@@ -71,6 +71,7 @@ namespace WB.UI.Capi.Syncronization
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IDataProcessor dataProcessor,
             ICleanUpExecutor cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, ISyncCacher syncCacher, IStringCompressor stringCompressor, IJsonUtils jsonUtils)
         {
             this.context = context;
 
