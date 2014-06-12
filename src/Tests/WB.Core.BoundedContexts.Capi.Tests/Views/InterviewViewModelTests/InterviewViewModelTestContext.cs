@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         protected static void PropagateScreen(InterviewViewModel interviewViewModel, Guid screenId, decimal rosterInstanceId, decimal[] outerScopePropagationVector=null)
         {
             var outerVector = outerScopePropagationVector ?? new decimal[0];
-            interviewViewModel.AddPropagateScreen(screenId, outerVector, rosterInstanceId, null);
+            interviewViewModel.AddRosterScreen(screenId, outerVector, rosterInstanceId, null);
 
             var extendedVector = outerVector.ToList();
             extendedVector.Add(rosterInstanceId);
