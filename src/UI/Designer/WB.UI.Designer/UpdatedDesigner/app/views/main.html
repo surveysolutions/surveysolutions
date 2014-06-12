@@ -16,12 +16,9 @@
             </span>
             <div class="buttons">
 
-                <!--<input class="wb-inline-button" type="button" value="SETTINGS">
-                    <input class="wb-inline-button" type="button" value="HELP">
-                    <input class="wb-inline-button" type="button" value="LOG OUT">-->
                 <button class="btn" ng-click="showShareInfo()">SHARE</button>
                 <button class="btn">HELP</button>
-                <button class="btn">LOG OUT</button>
+                <a class="btn" href="../account/logoff">LOG OUT</a>
             </div>
         </div>
     </div>
@@ -83,6 +80,7 @@
                 
                 <div class="icon"></div>
                 {{ item.title }}
+                <i class="glyphicon glyphicon-random" ui-tree-handle></i>
                 <div class="qname-block">
                     <a href class="linked"></a>{{item.variable}}
                     <div class="btn-group">
