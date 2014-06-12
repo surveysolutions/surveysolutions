@@ -101,6 +101,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation
             catch (Exception ex)
             {
                 this.logger.Error("Error on item deletion " + questionnarieId, ex);
+                throw;
             }
         }
 
@@ -125,8 +126,6 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation
             var metaInfo = this.ExtractObject<InterviewMetaInfo>(item.MetaInfo, item.IsCompressed);
             try
             {
-                this.syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
-
                 bool createdOnClient = metaInfo.CreatedOnClient.HasValue && metaInfo.CreatedOnClient.Value;
 
                 this.commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId,
@@ -137,7 +136,8 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation
                                 q.PublicKey, new decimal[0], q.Value,
                                 string.Empty))
                         .ToArray(), string.Empty, true, createdOnClient));
-
+             
+                this.syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
             }
             catch (Exception ex)
             {
