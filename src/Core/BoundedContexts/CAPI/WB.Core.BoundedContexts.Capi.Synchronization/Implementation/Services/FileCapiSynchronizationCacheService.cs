@@ -1,17 +1,17 @@
 using System;
 using System.IO;
-using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.Infrastructure.Backup;
 
-namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.SyncCacher
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 {
-    public class FileSyncCacher : ISyncCacher, IBackupable
+    public class FileCapiSynchronizationCacheService : ICapiSynchronizationCacheService, IBackupable
     {
         private const string CacheFolder = "SyncCache";
 
         private readonly string _basePath;
 
-        public FileSyncCacher()
+        public FileCapiSynchronizationCacheService()
         {
             this._basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), CacheFolder);
             if (!Directory.Exists(this._basePath))

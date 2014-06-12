@@ -166,7 +166,7 @@
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
     <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
-    <Compile Include="Syncronization\CleanUpExecutor.cs" />
+    <Compile Include="Syncronization\CapiCleanUpService.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
     <Compile Include="NinjectServiceLocator.cs" />

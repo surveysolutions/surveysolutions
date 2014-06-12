@@ -99,7 +99,7 @@ namespace WB.UI.Capi
 
             alert.SetPositiveButton("OK", (e, s) =>
             {
-                new CleanUpExecutor(logManipulator).DeleteInterveiw(itemId);
+                new CapiCleanUpService(logManipulator).DeleteInterveiw(itemId);
                 ((LinearLayout)view.Parent).RemoveView(view);
             });
 

@@ -7,8 +7,7 @@ using Main.Core.View;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Cleaner;
-using WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -21,36 +20,36 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 {
-    public class DataProcessor : IDataProcessor
+    public class CapiDataSynchronizationService : ICapiDataSynchronizationService
     {
-        public DataProcessor(IChangeLogManipulator changelog, ICommandService commandService,
+        public CapiDataSynchronizationService(IChangeLogManipulator changelog, ICommandService commandService,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory, IPlainQuestionnaireRepository questionnaireRepository,
-            ICleanUpExecutor cleanUpExecutor, ILogger logger, ISyncCacher syncCacher, IStringCompressor stringCompressor, IJsonUtils jsonUtils)
+            ICapiCleanUpService capiCleanUpService, ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService, IStringCompressor stringCompressor, IJsonUtils jsonUtils)
         {
             this.logger = logger;
-            this.syncCacher = syncCacher;
+            this.capiSynchronizationCacheService = capiSynchronizationCacheService;
             this.stringCompressor = stringCompressor;
             this.jsonUtils = jsonUtils;
             this.changelog = changelog;
             this.commandService = commandService;
-            this.cleanUpExecutor = cleanUpExecutor;
+            this.capiCleanUpService = capiCleanUpService;
             this.loginViewFactory = loginViewFactory;
             this.questionnaireRepository = questionnaireRepository;
         }
 
         private readonly ILogger logger;
-        private readonly ICleanUpExecutor cleanUpExecutor;
+        private readonly ICapiCleanUpService capiCleanUpService;
         private readonly IChangeLogManipulator changelog;
-        private readonly ISyncCacher syncCacher;
+        private readonly ICapiSynchronizationCacheService capiSynchronizationCacheService;
         private readonly ICommandService commandService;
         private readonly IViewFactory<LoginViewInput, LoginView> loginViewFactory;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStringCompressor stringCompressor;
         private readonly IJsonUtils jsonUtils;
 
-        public void ProcessPulledItem(SyncItem item)
+        public void SavePulledItem(SyncItem item)
         {
             switch (item.ItemType)
             {
@@ -94,7 +93,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation
 
             try
             {
-                this.cleanUpExecutor.DeleteInterveiw(questionnarieId);
+                this.capiCleanUpService.DeleteInterveiw(questionnarieId);
             }
 
             #warning replace catch with propper handler of absent questionnaries
@@ -137,7 +136,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation
                                 string.Empty))
                         .ToArray(), string.Empty, true, createdOnClient));
              
-                this.syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
+                this.capiSynchronizationCacheService.SaveItem(metaInfo.PublicKey, item.Content);
             }
             catch (Exception ex)
             {

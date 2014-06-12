@@ -1,8 +1,8 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Capi.Synchronization.SyncCacher
+namespace WB.Core.BoundedContexts.Capi.Synchronization.Services
 {
-    public interface ISyncCacher
+    public interface ICapiSynchronizationCacheService
     {
         bool SaveItem(Guid itemId, string itemContent);
 
