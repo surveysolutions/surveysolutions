@@ -31,8 +31,10 @@ using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandDeserialization;
 using WB.UI.Headquarters.Injections;
 using WebActivatorEx;
@@ -96,6 +98,9 @@ namespace WB.UI.Headquarters
 
             int? pageSize = GetEventStorePageSize();
 
+            Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
+            Version applicationBuildVersion = typeof (SyncController).Assembly.GetName().Version;
+
             var ravenSettings = new RavenConnectionSettings(storePath, isEmbeded, WebConfigurationManager.AppSettings["Raven.Username"],
                 WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 WebConfigurationManager.AppSettings["Raven.Databases.Views"],
@@ -128,7 +133,9 @@ namespace WB.UI.Headquarters
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])));
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
+                    isDebug,
+                    applicationBuildVersion));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);

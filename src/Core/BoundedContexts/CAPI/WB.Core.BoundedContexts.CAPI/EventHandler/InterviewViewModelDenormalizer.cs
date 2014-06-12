@@ -351,7 +351,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<RosterRowAdded> evnt)
         {
             var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.AddPropagateScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex);
+            doc.AddRosterScreen(evnt.Payload.GroupId, evnt.Payload.OuterRosterVector, evnt.Payload.RosterInstanceId, evnt.Payload.SortIndex);
         }
 
         public void Handle(IPublishedEvent<RosterRowRemoved> evnt)
@@ -382,7 +382,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
 
             foreach (var instance in evnt.Payload.Instances)
             {
-                doc.AddPropagateScreen(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
+                doc.AddRosterScreen(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
             }
         }
 
