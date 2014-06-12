@@ -29,14 +29,19 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly int supportedQuestionnaireVersionMajor;
         private readonly int supportedQuestionnaireVersionMinor;
         private readonly int supportedQuestionnaireVersionPatch;
+        private readonly Func<bool> isDebug;
+        private readonly Version applicationBuildVersion;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
-            int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch)
+            int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
+            Func<bool> isDebug, Version applicationBuildVersion)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
             this.supportedQuestionnaireVersionMinor = supportedQuestionnaireVersionMinor;
             this.supportedQuestionnaireVersionPatch = supportedQuestionnaireVersionPatch;
+            this.isDebug = isDebug;
+            this.applicationBuildVersion = applicationBuildVersion;
         }
 
         public override void Load()
@@ -52,15 +57,16 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
             this.Bind<IDataFileService>().To<DataFileService>();
-            this.Bind<ApplicationVersionSettings>().ToMethod(context => new ApplicationVersionSettings
+            
+            var applicationVersionSettings = new ApplicationVersionSettings
             {
                 SupportedQuestionnaireVersionMajor = this.supportedQuestionnaireVersionMajor,
                 SupportedQuestionnaireVersionMinor = this.supportedQuestionnaireVersionMinor,
                 SupportedQuestionnaireVersionPatch = this.supportedQuestionnaireVersionPatch
-            });
-
+            };
             this.Unbind<ISupportedVersionProvider>();
-            this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>().InSingletonScope();
+            this.Bind<ISupportedVersionProvider>()
+                .ToConstant(new SupportedVersionProvider(applicationVersionSettings, this.isDebug, this.applicationBuildVersion));
 
             this.Bind(typeof (ITemporaryDataStorage<>)).To(typeof (FileTemporaryDataStorage<>));
 

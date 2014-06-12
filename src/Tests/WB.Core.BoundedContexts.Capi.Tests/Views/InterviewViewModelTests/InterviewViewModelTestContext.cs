@@ -31,10 +31,26 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             return result;
         }
 
+        protected static InterviewViewModel CreateInterviewViewModel(QuestionnaireDocument template, QuestionnaireRosterStructure rosterStructure)
+        {
+            var result = new InterviewViewModel(Guid.NewGuid(), template, rosterStructure);
+
+            foreach (var screen in result.Chapters)
+            {
+                SubscribeScreen(result, screen);
+            }
+
+            foreach (var featuredQuestion in result.FeaturedQuestions)
+            {
+                SubscribeObject(featuredQuestion.Value);
+            }
+            return result;
+        }
+
         protected static void PropagateScreen(InterviewViewModel interviewViewModel, Guid screenId, decimal rosterInstanceId, decimal[] outerScopePropagationVector=null)
         {
             var outerVector = outerScopePropagationVector ?? new decimal[0];
-            interviewViewModel.AddPropagateScreen(screenId, outerVector, rosterInstanceId, null);
+            interviewViewModel.AddRosterScreen(screenId, outerVector, rosterInstanceId, null);
 
             var extendedVector = outerVector.ToList();
             extendedVector.Add(rosterInstanceId);
