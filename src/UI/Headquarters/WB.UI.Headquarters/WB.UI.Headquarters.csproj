@@ -235,8 +235,6 @@
     <Content Include="Content\listview.css" />
     <Content Include="Content\admin.css" />
     <Content Include="Content\main-not-logged.css" />
-    <Content Include="fonts\fontawesome-webfont.svg" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -431,13 +429,6 @@
     </Content>
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="fonts\fontawesome-webfont.eot" />
-    <Content Include="fonts\fontawesome-webfont.ttf" />
-    <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Scripts\jquery-2.1.0.min.map" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
