@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="DataProcessorTests\when_GetItemsForPush_called.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataProcessorTests\DataProcessorTestContext.cs" />
     <Compile Include="DataProcessorTests\when_sync_package_contains_information_about_delete_interview.cs" />
