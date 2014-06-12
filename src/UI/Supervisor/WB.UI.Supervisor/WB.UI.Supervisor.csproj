@@ -403,19 +403,17 @@
     <Compile Include="Utils\ViewHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap\bootstrap-mvc-validation.css" />
-    <Content Include="Content\bootstrap-responsive.css" />
-    <Content Include="Content\bootstrap-responsive.min.css" />
+    <Content Include="Content\app.css" />
+    <Content Include="Content\bootstrap-mvc-validation.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\bootstrap\bootstrap.css" />
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\details.css" />
     <Content Include="Content\favicon.png" />
     <Content Include="Content\font-awesome.css" />
-    <Content Include="Content\bootstrap\font-awesome.min.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\glyphicons.png" />
     <Content Include="Content\jquery.dataTables.css" />
     <Content Include="Content\jquery.pnotify.default.css" />
@@ -436,7 +434,6 @@
     </Content>
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <None Include="parameters.xml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -455,17 +452,10 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\jquery-1.9.1.js" />
-    <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery.pnotify.js" />
     <Content Include="Scripts\Math.uuid.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
-    <Content Include="Scripts\bootstrap-editable-inline.js" />
-    <Content Include="Scripts\bootstrap-editable-inline.min.js" />
-    <Content Include="Scripts\bootstrap-editable.js" />
-    <Content Include="Scripts\bootstrap-editable.min.js" />
-    <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="Scripts\jquery-2.1.0.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
