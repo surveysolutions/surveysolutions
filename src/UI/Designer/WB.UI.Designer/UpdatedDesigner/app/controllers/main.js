@@ -35,10 +35,12 @@ angular.module('designerApp')
             $scope.groupsTree = {
                 dropped: function(event) {
                     var movedItem = event.source.nodeScope.item;
+                    var destItem = event.dest.nodesScope.item;
+                    var destGroupId = destItem ? destItem.itemId : $scope.questionnaire.chapters[0].itemId;
 
                     if ($scope.isQuestion(movedItem)) {
                         commandService.execute('MoveQuestion', {
-                                targetGroupId: event.dest.nodesScope.item.itemId,
+                                targetGroupId: destGroupId,
                                 targetIndex: event.dest.index,
                                 questionId: movedItem.itemId,
                                 questionnaireId: $routeParams.questionnaireId
@@ -46,7 +48,7 @@ angular.module('designerApp')
                         );
                     } else {
                         commandService.execute('MoveGroup', {
-                                targetGroupId: event.dest.nodesScope.item.itemId,
+                                targetGroupId: destGroupId,
                                 targetIndex: event.dest.index,
                                 groupId: event.source.nodeScope.item.itemId,
                                 questionnaireId: $routeParams.questionnaireId
