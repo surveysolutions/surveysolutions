@@ -31,13 +31,13 @@ using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
+using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Code.CommandDeserialization;
 using WB.UI.Headquarters.Injections;
 using WebActivatorEx;
 
@@ -141,7 +141,7 @@ namespace WB.UI.Headquarters
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
-                new SupervisorCommandDeserializationModule(),
+                new SurveyManagementWebModule(),
                 new HeadquartersBoundedContextModule(),
                 new SurveyManagementSharedKernelModule(
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),

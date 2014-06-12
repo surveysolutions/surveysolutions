@@ -111,7 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\AppSettings.cs" />
-    <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializationModule.cs" />
     <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializer.cs" />
     <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
     <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
@@ -179,6 +178,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="SurveyManagementAreaRegistration.cs" />
+    <Compile Include="SurveyManagementWebModule.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />

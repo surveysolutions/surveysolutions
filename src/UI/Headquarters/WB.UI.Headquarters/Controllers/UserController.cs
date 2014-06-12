@@ -9,6 +9,7 @@ using Questionnaire.Core.Web.Security;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
