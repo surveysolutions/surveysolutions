@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.Pull;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -18,7 +19,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTests
 {
-    internal class when_sync_pachage_contains_information_about_questionnaire : PullDataProcessorTestContext
+    internal class when_sync_package_contains_information_about_questionnaire : PullDataProcessorTestContext
     {
         Establish context = () =>
         {
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
 
             var questionnaireMetadata = new QuestionnaireMetadata(1);
 
-            syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata" };
+            syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", Id = Guid.NewGuid() };
 
             var jsonUtilsMock = new Mock<IJsonUtils>();
             jsonUtilsMock.Setup(x => x.Deserrialize<QuestionnaireDocument>(syncItem.Content)).Returns(questionnaireDocument);
@@ -38,8 +39,9 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
             commandService = new Mock<ICommandService>();
 
             plainQuestionnaireRepositoryMock=new Mock<IPlainQuestionnaireRepository>();
-            
-            pullDataProcessor = CreatePullDataProcessor(commandService.Object, jsonUtilsMock.Object, null,
+
+            changeLogManipulator = new Mock<IChangeLogManipulator>();
+            pullDataProcessor = CreatePullDataProcessor(changeLogManipulator.Object,commandService.Object, jsonUtilsMock.Object, null,
                 plainQuestionnaireRepositoryMock.Object);
         };
 
@@ -61,10 +63,18 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.PullDataProcessorTes
                     x => x.StoreQuestionnaire(questionnaireDocument.PublicKey, 1, questionnaireDocument),
                     Times.Once);
 
+        It should_create_public_record_in_change_log_for_sync_item_once =
+        () =>
+            changeLogManipulator.Verify(
+                x =>
+                    x.CreatePublicRecord(syncItem.Id),
+                Times.Once);
+
         private static PullDataProcessor pullDataProcessor;
         private static SyncItem syncItem;
         private static QuestionnaireDocument questionnaireDocument;
         private static Mock<ICommandService> commandService;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
+        private static Mock<IChangeLogManipulator> changeLogManipulator;
     }
 }
