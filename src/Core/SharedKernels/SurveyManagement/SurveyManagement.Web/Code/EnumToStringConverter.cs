@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
     public class EnumToStringConverter : Newtonsoft.Json.Converters.StringEnumConverter
     {

@@ -6,7 +6,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public class TabletReportController : Controller
     {

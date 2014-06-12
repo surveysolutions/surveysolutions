@@ -10,7 +10,7 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
-namespace WB.UI.Headquarters.Code.CommandTransformation
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
 {
     public class CommandTransformator
     {

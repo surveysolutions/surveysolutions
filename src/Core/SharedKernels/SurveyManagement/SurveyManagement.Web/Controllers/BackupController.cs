@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Models;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public class BackupController : AsyncController
     {

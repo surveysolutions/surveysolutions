@@ -5,7 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
-namespace WB.UI.Headquarters.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class QuestionnaireVerificationResponse
     {

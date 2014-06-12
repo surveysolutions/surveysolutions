@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 
-namespace WB.UI.Headquarters.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     /// <summary>
     ///     The interviewer list view model.

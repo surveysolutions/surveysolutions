@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace WB.UI.Headquarters.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     /// <summary>
     /// String extensions

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Security;
 
-namespace WB.UI.Headquarters.Code.MessageHandler
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.MessageHandler
 {
     public class BasicAuthMessageHandler : DelegatingHandler
     {

@@ -397,11 +397,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
-    <Compile Include="Properties\Strings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
     <Compile Include="Utils\Attributes\CompressContentAttribute .cs" />
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />
@@ -678,13 +673,6 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\User\CreateSupervisor.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

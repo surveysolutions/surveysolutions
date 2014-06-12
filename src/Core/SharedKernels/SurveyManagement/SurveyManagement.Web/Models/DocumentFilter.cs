@@ -2,7 +2,7 @@
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 
-namespace WB.UI.Headquarters.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class DocumentFilter
     {
