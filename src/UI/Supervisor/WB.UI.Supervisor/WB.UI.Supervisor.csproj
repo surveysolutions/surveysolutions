@@ -348,30 +348,16 @@
     <Compile Include="API\UsersController.cs" />
     <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Code\AppSettings.cs" />
     <Compile Include="Code\Bundling\PathExtension.cs" />
     <Compile Include="Code\Bundling\StyleImagePathBundle.cs" />
     <Compile Include="Code\Bundling\StyleRelativePathTransform.cs" />
-    <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
-    <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializer.cs" />
-    <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
-    <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
-    <Compile Include="Code\CommandTransformation\IntreviewCommand.cs" />
-    <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
-    <Compile Include="Code\EnumToStringConverter.cs" />
-    <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
-    <Compile Include="Code\HttpForbiddenResult.cs" />
-    <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
-    <Compile Include="Code\LocalizationExtensions.cs" />
-    <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HQSyncController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
-    <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Filters\LongWebsiteDirectoryPathFilter.cs" />
     <Compile Include="Models\API\BaseApiView.cs" />
     <Compile Include="Models\API\InterviewApiDetails.cs" />
@@ -405,7 +391,6 @@
     <Compile Include="Models\SupervisorUserViewModel.cs" />
     <Compile Include="Models\UserViewModelForSupervisor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

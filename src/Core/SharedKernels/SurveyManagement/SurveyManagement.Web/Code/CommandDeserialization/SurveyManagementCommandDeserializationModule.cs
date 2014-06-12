@@ -3,11 +3,11 @@ using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Headquarters.Code.CommandDeserialization
 {
-    public class SupervisorCommandDeserializationModule : NinjectModule
+    public class SurveyManagementCommandDeserializationModule : NinjectModule
     {
         public override void Load()
         {
-            this.Bind<ICommandDeserializer>().To<HeadquartersCommandDeserializer>();
+            this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
         }
     }
 }

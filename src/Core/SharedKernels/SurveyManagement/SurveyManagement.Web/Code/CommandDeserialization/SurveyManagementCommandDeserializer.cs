@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Shared.Web.CommandDeserialization;
-using WB.UI.Supervisor.Code.CommandTransformation;
 
-namespace WB.UI.Supervisor.Code.CommandDeserialization
+namespace WB.UI.Headquarters.Code.CommandDeserialization
 {
-    internal class SupervisorCommandDeserializer : CommandDeserializer
+    internal class SurveyManagementCommandDeserializer : CommandDeserializer
     {
         protected override Dictionary<string, Type> KnownCommandTypes
         {

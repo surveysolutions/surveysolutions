@@ -85,7 +85,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\AppSettings.cs" />
+    <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializationModule.cs" />
+    <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializer.cs" />
+    <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
+    <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
+    <Compile Include="Code\CommandTransformation\IntreviewCommand.cs" />
+    <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
+    <Compile Include="Code\EnumToStringConverter.cs" />
+    <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
+    <Compile Include="Code\HttpForbiddenResult.cs" />
+    <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
+    <Compile Include="Code\LocalizationExtensions.cs" />
+    <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
+    <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\StatusHelper.cs" />
+    <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HQController.cs" />
