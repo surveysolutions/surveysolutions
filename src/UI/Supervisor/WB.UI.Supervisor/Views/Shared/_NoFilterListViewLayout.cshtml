@@ -16,12 +16,12 @@
 {
     @RenderSection("output", false)
 }
-<div class="innerLR">
-    @RenderSection("header", false)
-</div>
+@RenderSection("header", false)
 
-@RenderSection("gridnavigation", false)
-<div id="list" class="innerLR">
+<div class="well well-sm">
+    @RenderSection("gridnavigation", false)
+</div>
+<div id="list">
     <!-- ko if:IsPageLoaded()  -->
     <!-- ko ifnot:Pager().TotalItemCount() > 0  -->
     <p class="text-center">
@@ -39,3 +39,5 @@
 @this.RenderBody()
 
 @Html.Partial("_ListViewPagingScript")
+
+

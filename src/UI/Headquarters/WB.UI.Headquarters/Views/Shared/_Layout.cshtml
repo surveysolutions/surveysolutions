@@ -1,7 +1,7 @@
 ﻿@using System.Diagnostics
 @using System.Web.Optimization
-@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Code
 @using WB.UI.Headquarters.Models
 <!DOCTYPE html>
@@ -33,6 +33,7 @@
                 </a>
             </div>
             <div class="collapse navbar-collapse">
+
                 <ul class="nav navbar-nav" role="menu">
                     <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
@@ -60,6 +61,7 @@
                         <a href="@Url.Action("Index", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Questionnaries</a>
                     </li>
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right" role="menu">
                     <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
@@ -77,6 +79,7 @@
                     </li>
                 </ul>
             </div>
+
         </div>
     </div>
 
@@ -130,6 +133,7 @@
                 {
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
+                | <a href="@Url.Action("GetLatestVersion", "Sync")">Get CAPI</a>
             </div>
         </footer>
     </div>

@@ -14,18 +14,19 @@ namespace WB.UI.Supervisor.App_Start
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new StyleImagePathBundle("~/Content/bootstrap-bundle")
-                .Include("~/Content/bootstrap/bootstrap.css")
-                .Include("~/Content/bootstrap/bootstrap-mvc-validation.css"));
-
-            bundles.Add(new StyleBundle("~/Content/main")
-                .Include("~/Content/jquery.pnotify.default.css")
-                .Include("~/Content/supervisor.css")
-                .Include("~/Content/main.css"))
-               ;
+            bundles.Add(new StyleBundle("~/Content/main").Include(
+                "~/Content/bootstrap.css",
+                "~/Content/font-awesome.min.css",
+                "~/Content/bootstrap-mvc-validation.css",
+                "~/Content/jquery.pnotify.default.css",
+                "~/Content/app.css"
+                /*"~/Content/supervisor.css",
+                "~/Content/main.css"*/));
 
             bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
-                 "~/Content/main-not-logged.css"));
+                "~/Content/bootstrap.css",
+                "~/Content/bootstrap-mvc-validation.css",
+                "~/Content/main-not-logged.css"));
 
             bundles.Add(new StyleBundle("~/css/list").Include("~/Content/listview.css"));
 
@@ -35,8 +36,8 @@ namespace WB.UI.Supervisor.App_Start
 
             bundles.Add(new StyleBundle("~/css/interview").Include(
                 "~/Content/bootstrap-editable.css",
-                "~/Content/datepicker.css",
-                "~/Content/details.css"));
+                "~/Content/datepicker.css"
+                /*"~/Content/details.css"*/));
         }
     }
 }
