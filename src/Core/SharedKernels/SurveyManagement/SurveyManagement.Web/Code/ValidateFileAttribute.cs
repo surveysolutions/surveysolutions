@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Web;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
     public class ValidateFileAttribute : RequiredAttribute
     {

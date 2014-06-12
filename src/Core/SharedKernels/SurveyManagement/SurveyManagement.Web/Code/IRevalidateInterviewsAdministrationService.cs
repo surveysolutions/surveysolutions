@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Headquarters.Code
+﻿namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
     public interface IRevalidateInterviewsAdministrationService
     {

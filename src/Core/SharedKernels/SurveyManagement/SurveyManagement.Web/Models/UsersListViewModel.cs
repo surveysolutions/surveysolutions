@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using Main.Core.Entities;
 
-namespace WB.UI.Headquarters.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class UsersListViewModel : IGridRequest<UsersRequestModel>
     {

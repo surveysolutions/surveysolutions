@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.UI.Headquarters.Models
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class InterviewDetailsViewModel
     {

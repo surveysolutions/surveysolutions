@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.UI.Headquarters.Code.CommandTransformation;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.UI.Shared.Web.CommandDeserialization;
 
-namespace WB.UI.Headquarters.Code.CommandDeserialization
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization
 {
     internal class SurveyManagementCommandDeserializer : CommandDeserializer
     {

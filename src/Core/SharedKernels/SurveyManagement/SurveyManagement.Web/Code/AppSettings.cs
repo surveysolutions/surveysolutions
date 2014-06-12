@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using WB.UI.Shared.Web.Extensions;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
     public sealed class AppSettings
     {

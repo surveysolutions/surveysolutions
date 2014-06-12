@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
     internal class RevalidateInterviewsAdministrationService : IRevalidateInterviewsAdministrationService
     {

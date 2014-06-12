@@ -1,7 +1,7 @@
 ﻿using Ninject.Modules;
 using WB.UI.Shared.Web.CommandDeserialization;
 
-namespace WB.UI.Headquarters.Code.CommandDeserialization
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization
 {
     public class SurveyManagementCommandDeserializationModule : NinjectModule
     {

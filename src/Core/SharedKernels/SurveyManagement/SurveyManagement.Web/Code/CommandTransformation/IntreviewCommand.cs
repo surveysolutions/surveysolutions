@@ -1,7 +1,7 @@
 ﻿using System;
 using Ncqrs.Commanding;
 
-namespace WB.UI.Headquarters.Code.CommandTransformation
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
 {
     internal class IntreviewCommand : ICommand
     {
