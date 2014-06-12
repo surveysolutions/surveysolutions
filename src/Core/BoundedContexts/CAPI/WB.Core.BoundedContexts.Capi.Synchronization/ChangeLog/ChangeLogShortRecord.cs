@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Capi.Synchronization.Synchronization.ChangeLog
+namespace WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog
 {
     public class ChangeLogShortRecord
     {

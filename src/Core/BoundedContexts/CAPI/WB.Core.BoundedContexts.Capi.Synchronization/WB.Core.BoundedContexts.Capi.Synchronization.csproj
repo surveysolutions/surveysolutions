@@ -44,15 +44,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CapiSynchronizationModule.cs" />
+    <Compile Include="ChangeLog\ChangeLogRecordWithContent.cs" />
+    <Compile Include="ChangeLog\ChangeLogShortRecord.cs" />
+    <Compile Include="ChangeLog\IChangeLogManipulator.cs" />
+    <Compile Include="ChangeLog\IChangeLogStore.cs" />
+    <Compile Include="Cleaner\ICleanUpExecutor.cs" />
+    <Compile Include="IDataProcessor.cs" />
+    <Compile Include="Implementation\ChangeLog\FileChangeLogStore.cs" />
+    <Compile Include="Implementation\PullDataProcessor.cs" />
+    <Compile Include="Implementation\SyncCacher\FileSyncCacher.cs" />
+    <Compile Include="Implementation\SyncPackageApplier\SyncPackageApplier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Synchronization\ChangeLog\ChangeLogShortRecord.cs" />
-    <Compile Include="Synchronization\ChangeLog\FileChangeLogStore.cs" />
-    <Compile Include="Synchronization\ChangeLog\IChangeLogManipulator.cs" />
-    <Compile Include="Synchronization\ChangeLog\IChangeLogStore.cs" />
-    <Compile Include="Synchronization\Cleaner\ICleanUpExecutor.cs" />
-    <Compile Include="Synchronization\Pull\PullDataProcessor.cs" />
-    <Compile Include="Synchronization\SyncCacher\FileSyncCacher.cs" />
-    <Compile Include="Synchronization\SyncCacher\ISyncCacher.cs" />
+    <Compile Include="SyncCacher\ISyncCacher.cs" />
+    <Compile Include="SyncPackageApplier\ISyncPackageApplier.cs" />
     <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="Views\Login\LoginView.cs" />
     <Compile Include="Views\Login\LoginViewInput.cs" />
@@ -93,11 +97,16 @@
       <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
       <Project>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
