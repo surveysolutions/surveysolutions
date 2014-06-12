@@ -94,11 +94,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
         private static void RegisterRoutes(AreaRegistrationContext context)
         {
             context.MapRoute(
-                "SurveyManagement_default",
-                "SurveyManagement/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional });
-
-            context.MapRoute(
                 "Interview",
                 "Interview/{action}/{id}",
                 new { controller = "Interview", id = UrlParameter.Optional });
