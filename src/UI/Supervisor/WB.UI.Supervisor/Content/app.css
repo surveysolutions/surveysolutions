@@ -1,0 +1,268 @@
+﻿body {
+  padding-top: 50px;
+}
+
+#umbrella {
+    position: fixed;
+    top: 40px;
+    width: 100%;
+    z-index: 10;
+    text-align: center;
+
+}
+#umbrella-message {
+    display: inline-block;
+    background: #F9EDBE;
+    padding: 5px 15px;
+    border: 1px solid #F0C36D;
+    -webkit-border-radius: 0 0 6px 6px;
+     -moz-border-radius: 0 0 6px 6px;
+          border-radius: 0 0 6px 6px;
+    -webkit-box-shadow: 0px 0px 5px rgba(50, 50, 50, 0.2);
+    -moz-box-shadow:    0px 0px 5px rgba(50, 50, 50, 0.2);
+    box-shadow:         0px 0px 5px rgba(50, 50, 50, 0.2);
+    margin-top: -1px;
+}
+.has-error .help-inline {
+    color: #a94442;
+    font-size: 85%;
+    line-height: 1.2;
+}
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+
+  .sidebar.pull-right {
+      right: 0;
+      left: auto;
+  }
+}
+
+.sidebar .panel-heading.with-btn {
+    overflow: hidden;
+    padding-top: 20px;
+}
+.sidebar .panel-heading.with-btn .btn-group {
+    position: relative;
+    top: -5px;
+}
+
+#menu #groups-menu li.level0 a{
+    font-weight: bold;
+}
+#menu #groups-menu li.level1 a{
+    padding-left: 10px;
+    font-weight: bold;
+}
+#menu #groups-menu li.level2 a{
+    padding-left: 22px;
+}
+#menu #groups-menu li.level3 a{
+    padding-left: 30px;
+}
+#menu #groups-menu li.level4  a{
+    padding-left: 38px;
+}
+#menu #groups-menu li.level5 a,
+#menu #groups-menu li.level6 a,
+#menu #groups-menu li.level7 a,
+#menu #groups-menu li.level8 a,
+#menu #groups-menu li.level9 a,
+#menu #groups-menu li.level10 a
+ {
+    padding-left: 42px;
+}
+#menu {
+    display: block;
+}
+
+.menu-hidden #menu {
+    display: none;
+}
+/*
+ * Main content
+ */
+.main {
+  padding: 10px;
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+.table > thead > tr > th.sorting {
+    padding-right: 20px;
+    vertical-align: top;
+}
+
+/*
+    Details 
+ */
+#details {
+    display: none;
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    right: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-left: 1px solid #eee;
+}
+ #details{
+    display: block;
+}
+
+/*
+ *  Errors output
+ */
+#output {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    z-index: 1002;
+    display: none;
+   
+}
+.output-visible #output {
+    display: block;
+}
+#output .panel {
+    margin: 0 20px;
+    border-radius: 4px 4px 0 0;
+
+}
+
+#output .panel .panel-body {
+    padding: 5px 15px;
+    max-height: 350px;
+    overflow-y:auto; 
+}
+
+#output .panel .list-group {
+    margin-bottom: 0;
+}
+
+/*
+    Map Report 
+ */
+
+.map-report .innerLR {
+    padding: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.map-report #footer-block {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: inline-block;
+    text-align: right;
+}
+.map-report #footer-block * {
+    display: inline-block;
+}
+
+.map-report #footer-block hr {
+    display: none;
+}
+
+.map-report #footer-block footer div:last-child {
+    display: none;
+}
+
+.map-report #footer-block footer div:first-child {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 15px;
+}
+
+#map-canvas {
+     position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#report-builder {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 226px;
+    background: white;
+    z-index: 30;
+    -webkit-box-shadow: 5px 0px 25px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    5px 0px 25px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         5px 0px 25px 0px rgba(50, 50, 50, 0.75);
+}
+
+#report-builder .central-pane {
+     position: absolute;
+    top: 0;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+     padding: 10px;
+    padding-bottom: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+#report-builder .central-pane  .currently-on-map {
+    margin-top: 15px;
+}
+
+#report-builder .central-pane  .currently-on-map h4{
+    margin: 0;
+}
+
+#report-builder .central-pane .currently-on-map li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+#report-builder .central-pane .currently-on-map li:last-child {
+    border-bottom: none;
+}
+
+#report-builder .bottom-pane{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+     padding: 10px;
+    -moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
+-webkit-box-shadow: 0px -5px 25px 0px rgba(255, 255, 255, 0.75);
+-moz-box-shadow:    0px -5px 25px 0px rgba(255, 255, 255, 0.75);
+box-shadow:         0px -5px 25px 0px rgba(255, 255, 255, 0.75);
+}

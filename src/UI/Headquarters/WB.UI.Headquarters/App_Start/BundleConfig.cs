@@ -31,9 +31,11 @@ namespace WB.UI.Headquarters
             bundles.Add(new StyleBundle("~/css/list").Include("~/Content/listview.css"));
 
             bundles.Add(new StyleBundle("~/css/interview-new").Include(
+                "~/Content/bootstrap-editable.css",
                 "~/Content/datepicker.css"));
 
             bundles.Add(new StyleBundle("~/css/interview").Include(
+                "~/Content/bootstrap-editable.css",
                 "~/Content/datepicker.css"));
         }
     }

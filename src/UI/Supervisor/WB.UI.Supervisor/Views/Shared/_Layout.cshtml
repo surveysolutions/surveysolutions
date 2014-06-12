@@ -15,101 +15,158 @@
     @{
         var page = ViewBag.ActivePage ?? MenuItem.Logon;
     }
-    @Styles.Render("~/Content/bootstrap-bundle")
     @Styles.Render("~/Content/main")
     @RenderSection("styles", false)
 </head>
 <body>
-    <div id="splash-screen">
-        @RenderSection("splash_screen", false)
-    </div>
-    <div class="container-fluid">
-        <div class="navbar navbar-fixed-top hidden-print">
-            <div class="navbar-inner">
-                @if (User.IsInRole("Headquarter"))
-                {
-                    <a class="brand" href="@Url.Action("Index", "HQ")"><span>Dashboard<span>headquarters</span></span></a>
-                    <ul class="nav" role="menu">
-                        <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th"></i>Reports <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li class="@(page == MenuItem.Surveys ? "active" : "")"><a href="@Url.Action("SurveysAndStatuses", "HQ")">Surveys and Statuses</a></li>
-                                <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("SupervisorsAndStatuses", "HQ")">Teams and Statuses</a></li>
-                                <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("MapReport", "HQ")">Map Report</a></li>
-                            </ul>
-                        <li class="@(page == MenuItem.Docs ? "active" : "")">
-                            <a href="@Url.Action("Interviews", "HQ")"><i class="icon-list-alt"></i>Interviews</a>
-                        </li>
-                        <li class="@(page == MenuItem.Teams ? "active" : "")">
-                            <a href="@Url.Action("Index", "Team")"><i class="icon-user"></i>Supervisors</a>
-                        </li>
-                        <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
-                            <a href="@Url.Action("Index", "HQ")"><i class="icon-list"></i>Questionnaries</a>
-                        </li>
-                    </ul>
-                    <ul class="nav pull-right" role="menu">
-                        <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Import template", "Import", "Template")</li>
-                                <li>@Html.ActionLink("Backup", "Index", "Backup")</li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+                    @if (User.IsInRole("Headquarter"))
+                    {
 
-                                <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
-                            </ul>
-                        </li>
-                    </ul>
-                }
-                else
-                {
-                    <a class="brand" href="@Url.Action("Index", "Survey")"><span>Dashboard<span>supervisor</span></span></a>
-                    <ul class="nav" role="menu">
-                        <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th"></i>Reports <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li class="@(page == MenuItem.Surveys ? "active" : "")"><a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a></li>
-                                <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("TeamMembersAndStatuses", "Survey")">Team members and Statuses</a></li>
-                            </ul>
-                        <li class="@(page == MenuItem.Docs ? "active" : "")">
-                            <a href="@Url.Action("Interviews", "Survey")"><i class="icon-list-alt"></i>Interviews</a>
-                        </li>
-                        <li class="@(page == MenuItem.Teams ? "active" : "")">
-                            <a href="@Url.Action("Interviewers", "Team")"><i class="icon-user"></i>Interviewers</a>
-                        </li>
-                        @if (!LegacyOptions.HqFunctionsEnabled)
-                        {
-                            <li>
-                                <a href="@Url.Action("Synchronization", "HQSync")" target="_blank">
-                                    <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    Synchronization
-                                </a>
+
+            <div class="navbar-header hidden-print">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index", "HQ")">
+                    Headquarters
+                </a>
+            </div>
+            <div class="collapse navbar-collapse">
+
+                <ul class="nav navbar-nav" role="menu">
+                    <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="@(page == MenuItem.Surveys ? "active" : "")">
+                                <a href="@Url.Action("SurveysAndStatuses", "HQ")">Surveys and Statuses</a>
                             </li>
-                        }
-                    </ul>
-                    <ul class="nav pull-right" role="menu">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
-                            </ul>
-                        </li>
-                    </ul>
-                }
+                            <li class="@(page == MenuItem.Summary ? "active" : "")">
+                                <a href="@Url.Action("SupervisorsAndStatuses", "HQ")">Teams and Statuses</a>
+                            </li>
+                            <li class="@(page == MenuItem.MapReport ? "active" : "")">
+                                <a href="@Url.Action("MapReport", "HQ")">Map Report</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="@(page == MenuItem.Docs ? "active" : "")">
+                        <a href="@Url.Action("Interviews", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
+                    </li>
+                    <li class="@(page == MenuItem.Teams ? "active" : "")">
+                        <a href="@Url.Action("Index", "Team")"><i class="glyphicon glyphicon-user"></i> Supervisors</a>
+                    </li>
+                    <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
+                        <a href="@Url.Action("Index", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Questionnaries</a>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right" role="menu">
+                    <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                            Administration <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Backup", "Index", "Backup")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
 
-        </div>
-        <div class="ui-pnotify" data-bind="visible: IsNotifyVisible()" style="display: none">
-            <div class="alert ui-pnotify-container ui-pnotify-shadow">
-                <div class="ui-pnotify-icon"><span class="icon-exclamation-sign"></span></div>
-                <h4 class="ui-pnotify-title" data-bind="text: NotifyTitle()"></h4>
-                <div class="ui-pnotify-text" data-bind="html: NotifyText()"></div>
+
+
+                    }
+                    else
+                    {
+                        
+                        
+            <div class="navbar-header hidden-print">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index", "Survey")">
+                    Supervisor
+                </a>
             </div>
+                        
+                        
+                        
+                        
+            <div class="collapse navbar-collapse">
+
+                <ul class="nav navbar-nav" role="menu">
+                    
+                    <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="@(page == MenuItem.Surveys ? "active" : "")">
+                                <a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a>
+                            </li>
+                            <li class="@(page == MenuItem.Summary ? "active" : "")">
+                                <a href="@Url.Action("TeamMembersAndStatuses", "Survey")">Team members and Statuses</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="@(page == MenuItem.Docs ? "active" : "")">
+                        <a href="@Url.Action("Interviews", "Survey")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
+                    </li>
+
+                    <li class="@(page == MenuItem.Teams ? "active" : "")">
+                        <a href="@Url.Action("Interviewers", "Team")"><i class="glyphicon glyphicon-user"></i> Interviewers</a>
+                    </li>
+
+                    @if (!LegacyOptions.HqFunctionsEnabled)
+                    {
+                        <li>
+                            <a href="@Url.Action("Synchronization", "HQSync")" target="_blank">
+                                <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                Synchronization
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right" role="menu">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+                        
+
+                    }
         </div>
-        <div id="wrapper">
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="ui-pnotify" data-bind="visible: IsNotifyVisible()" style="display: none">
+                <div class="alert ui-pnotify-container ui-pnotify-shadow">
+                    <div class="ui-pnotify-icon"><span class="icon-exclamation-sign"></span></div>
+                    <h4 class="ui-pnotify-title" data-bind="text: NotifyTitle()"></h4>
+                    <div class="ui-pnotify-text" data-bind="html: NotifyText()"></div>
+                </div>
+            </div>
             <div id="umbrella">
                 <div id="umbrella-message">
                     Loading, please wait
@@ -117,23 +174,18 @@
             </div>
             @RenderBody()
             <div id="output">
-                <div class="inner">
-                    <div class="title">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
                         <button type="button" class="close" data-bind="click: HideOutput">&times;</button>
                         <span>Errors log</span>
                     </div>
-                    <div class="body">
-                        <div class="container-fluid">
-                            <div class="form-horizontal">
-                                <ul data-bind="foreach: Errors" class="error-list">
-                                    <li class="error">
-                                        <pre data-bind="html: error"></pre>
-                                    </li>
-                                </ul>
-                                @RenderSection("output", false)
-
-                            </div>
-                        </div>
+                    <div class="panel-body">
+                        <ul data-bind="foreach: Errors" class="list-group">
+                            <li class="list-group-item">
+                                <pre data-bind="html: error"></pre>
+                            </li>
+                        </ul>
+                        @RenderSection("output", false)
                     </div>
                 </div>
             </div>
@@ -147,7 +199,7 @@
             </div>
             <div class="text-center">
                 @FileVersionInfo.GetVersionInfo(ViewContext.Controller.GetType().Assembly.Location).ProductVersion
-                @*@ViewContext.Controller.GetType().Assembly.GetName().Version *@                
+                @*@ViewContext.Controller.GetType().Assembly.GetName().Version*@ 
                 @if (AppSettings.IsDebugBuilded)
                 {
                     <span id="build-config">[.NET Debug]</span>
@@ -170,7 +222,7 @@
                         unhandledExceptionMessage: 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.AdminEmail">@AppSettings.Instance.AdminEmail</a>',
                         notifyDialogTitle: 'Please wait',
                         notifyDialogText: '"Your previous request is not complete. Please wait for it to be finished and repeat your operation."',
-                        notifyNoMarkersTitle:'No markers were added',
+                        notifyNoMarkersTitle: 'No markers were added',
                         notifyNoMarkersText: 'There is no any information about geolocation points'
                     }
                 }
@@ -193,9 +245,6 @@
             $(window).resize(function () {
                 setMinHeight();
             });
-
-            
-          
         });
     </script>
     @if (!LegacyOptions.HqFunctionsEnabled) { 

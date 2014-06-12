@@ -25,22 +25,24 @@
 
 @section filters
 {
-    <ul>
-        <li class="heading"><span>FILTER</span></li>
-        <li>
-            <label>Team members</label>
-            <select data-bind="value: SelectedUser" class="input-block-level">
-                @if (Model.Count() > 1)
-                {
-                    <option>Any</option>
-                }
-                @foreach (var item in Model)
-                {
-                    <option value="@item.UserId">@item.UserName</option>
-                }
-            </select>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Team members</h4>
+            <p class="list-group-item-text">
+                <select data-bind="value: SelectedUser" class="form-control">
+                    @if (Model.Count() > 1)
+                    {
+                        <option>Any</option>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <option value="@item.UserId">@item.UserName</option>
+                    }
+                </select>
+            </p>
         </li>
     </ul>
+
 }
 
 @section grid

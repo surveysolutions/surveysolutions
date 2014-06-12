@@ -18,11 +18,7 @@
 {
     @RenderSection("output", false)
 }
-<div id="content" class="no-menu">
-    <div class="innerLR">
-        @Html.Partial("_alerts")
-    </div>
-    <div class="innerLR">
-        @RenderBody()
-    </div>
+<div class="col-sm-12 col-md-12 main" id="content">
+    @Html.Partial("_alerts")
+    @RenderBody()
 </div>

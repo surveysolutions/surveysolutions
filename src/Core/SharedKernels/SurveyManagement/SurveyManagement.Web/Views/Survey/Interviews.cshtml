@@ -30,7 +30,7 @@
 
 @section  actionbar{
     <div class="btn-group">
-        <button class="btn dropdown-toggle" data-toggle="dropdown" data-bind="disable: IsNothingSelected">Assign interviewer <span class="caret"></span></button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-bind="disable: IsNothingSelected">Assign interviewer <span class="caret"></span></button>
         <ul class="dropdown-menu" data-bind="foreach: Users">
             <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
         </ul>
@@ -89,7 +89,8 @@
                 </td>
                 <td>
                     <a class="btn btn-success" data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
-                        <i class="icon icon-align-justify icon-white"></i></a>
+                        <i class="glyphicon glyphicon-align-justify"></i>
+                    </a>
                 </td>
             </tr>
             <!-- /ko -->
@@ -99,43 +100,49 @@
 
 @section filters
 {
-    <ul>
-        <li class="heading"><span>FILTER</span></li>
-        <li>
-            <label>Template</label>
-            <select data-bind="value: SelectedTemplate" class="input-block-level">
-                @if (Model.Templates.Count() > 1)
-                {
-                    <option value="">Any</option>
-                }
-                @foreach (var item in Model.Templates)
-                {
-                    <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
-                }
-            </select>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Template</h4>
+            <p class="list-group-item-text">
+                <select data-bind="value: SelectedTemplate" class="form-control">
+                    @if (Model.Templates.Count() > 1)
+                    {
+                        <option value="">Any</option>
+                    }
+                    @foreach (var item in Model.Templates)
+                    {
+                        <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
+                    }
+                </select>
+            </p>
         </li>
-        <li>
-            <label>Responsible</label>
-            <select data-bind="value: SelectedResponsible" class="input-block-level">
-                @if (Model.Responsibles.Count() > 1)
-                {
-                    <option value="">Any</option>
-                }
-                @foreach (var item in Model.Responsibles)
-                {
-                    <option value="@item.UserId">@item.UserName</option>
-                }
-            </select>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Responsible</h4>
+            <p class="list-group-item-text">
+                <select data-bind="value: SelectedResponsible" class="form-control">
+                    @if (Model.Responsibles.Count() > 1)
+                    {
+                        <option value="">Any</option>
+                    }
+                    @foreach (var item in Model.Responsibles)
+                    {
+                        <option value="@item.UserId">@item.UserName</option>
+                    }
+                </select>
+            </p>
         </li>
-        <li>
-            <label>Status</label>
-            <select data-bind="value: SelectedStatus" class="input-block-level">
-                <option value="">Any</option>
-                @foreach (var item in Model.Statuses)
-                {
-                    <option value="@item.Status">@item.StatusName</option>
-                }
-            </select>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Status</h4>
+            <p class="list-group-item-text">
+                <select data-bind="value: SelectedStatus" class="form-control">
+                    <option value="">Any</option>
+                    @foreach (var item in Model.Statuses)
+                    {
+                        <option value="@item.Status">@item.StatusName</option>
+                    }
+                </select>
+            </p>
         </li>
     </ul>
+
 }
