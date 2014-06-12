@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters
 
             int? pageSize = GetEventStorePageSize();
 
-            bool isDebug = AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
+            Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof (SyncController).Assembly.GetName().Version;
 
             var ravenSettings = new RavenConnectionSettings(storePath, isEmbeded, WebConfigurationManager.AppSettings["Raven.Username"],
