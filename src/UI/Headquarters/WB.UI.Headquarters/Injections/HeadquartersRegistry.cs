@@ -11,7 +11,6 @@ using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.UI.Headquarters.Code;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Injections
@@ -55,7 +54,6 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
-            this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
         }
     }
 }

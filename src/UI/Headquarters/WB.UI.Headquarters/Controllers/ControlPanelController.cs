@@ -3,8 +3,8 @@ using System.ServiceModel;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.PublicService;
 
 namespace WB.UI.Headquarters.Controllers
