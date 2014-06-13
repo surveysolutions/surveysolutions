@@ -208,6 +208,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap.css" />
     <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\admin.css" />
     <Content Include="Global.asax" />
@@ -227,6 +229,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="parameters.xml" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
     <Content Include="Views\ControlPanel\InterviewDetails.cshtml" />
