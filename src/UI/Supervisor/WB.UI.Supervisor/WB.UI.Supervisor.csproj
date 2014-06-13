@@ -342,8 +342,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\InterviewsController.cs" />
-    <Compile Include="API\QuestionnairesController.cs" />
     <Compile Include="App_Start\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\Bundling\PathExtension.cs" />
