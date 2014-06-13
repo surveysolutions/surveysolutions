@@ -635,12 +635,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
-            InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments)
+            InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid)
             : base(id)
         {
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true));
-            this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
+            this.ApplyValidationEvent(isValid);
         }
         
         public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus,
@@ -1990,7 +1990,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
 
-            if (valid)
+            ApplyValidationEvent(valid);
+        }
+
+        private void ApplyValidationEvent(bool isValid)
+        {
+            if (isValid)
                 this.ApplyEvent(new InterviewDeclaredValid());
             else
                 this.ApplyEvent(new InterviewDeclaredInvalid());
