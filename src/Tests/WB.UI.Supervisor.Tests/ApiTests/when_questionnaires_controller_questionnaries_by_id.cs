@@ -4,7 +4,7 @@ using Main.Core.View;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
-using WB.UI.Supervisor.API;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using It = Machine.Specifications.It;
 
