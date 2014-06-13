@@ -192,8 +192,42 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\web.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\bootstrap-datepicker.js" />
+    <EmbeddedResource Include="Scripts\bootstrap.file-input.js" />
+    <EmbeddedResource Include="Scripts\bootstrap.js" />
+    <EmbeddedResource Include="Scripts\bootstrap.min.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.0.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.0.min.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.0.intellisense.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\jquery.pnotify.js" />
+    <EmbeddedResource Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <EmbeddedResource Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <EmbeddedResource Include="Scripts\jquery.validate.js" />
+    <EmbeddedResource Include="Scripts\jquery.validate.min.js" />
+    <EmbeddedResource Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
+    <EmbeddedResource Include="Scripts\jquery.validate.unobtrusive.js" />
+    <EmbeddedResource Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <EmbeddedResource Include="Scripts\knockout-3.1.0.debug.js" />
+    <EmbeddedResource Include="Scripts\knockout-3.1.0.js" />
+    <EmbeddedResource Include="Scripts\knockout.mapping-latest.debug.js" />
+    <EmbeddedResource Include="Scripts\knockout.mapping-latest.js" />
+    <EmbeddedResource Include="Scripts\knockout.validation.debug.js" />
+    <EmbeddedResource Include="Scripts\knockout.validation.js" />
+    <EmbeddedResource Include="Scripts\ko.pager.js" />
+    <EmbeddedResource Include="Scripts\lodash.underscore.js" />
+    <EmbeddedResource Include="Scripts\lodash.underscore.min.js" />
+    <EmbeddedResource Include="Scripts\markerclusterer_compiled.js" />
+    <EmbeddedResource Include="Scripts\Math.uuid.js" />
+    <EmbeddedResource Include="Scripts\modernizr-2.7.2.js" />
+    <EmbeddedResource Include="Scripts\moment-with-langs.js" />
+    <EmbeddedResource Include="Scripts\moment-with-langs.min.js" />
+    <EmbeddedResource Include="Scripts\moment.js" />
+    <EmbeddedResource Include="Scripts\moment.min.js" />
+    <EmbeddedResource Include="Scripts\query-string.js" />
+    <EmbeddedResource Include="Scripts\jquery.validate-vsdoc.js" />
     <EmbeddedResource Include="Content\img\clear.png" />
     <EmbeddedResource Include="Content\img\details_bg.jpg" />
     <EmbeddedResource Include="Content\img\divider.png" />
@@ -282,6 +316,7 @@
     <EmbeddedResource Include="Views\Shared\_LayoutWithSidebar.cshtml" />
     <EmbeddedResource Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <EmbeddedResource Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.0.min.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
