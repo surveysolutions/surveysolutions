@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    internal class when_deleting_question_and_question_is_referenced_as_roster_title_question : QuestionnaireTestsContext
+    internal class when_deleting_question_and_question_is_referenced_as_roster_title_question_in_roster_triggered_by_multy_option_question : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -24,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new NewQuestionAdded
             {
                 PublicKey = rosterSizeQuestionId,
-                QuestionType = QuestionType.Numeric,
+                QuestionType = QuestionType.MultyOption,
                 GroupPublicKey = chapterId
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
@@ -37,32 +42,30 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 QuestionType = QuestionType.Text,
                 GroupPublicKey = rosterId
             });
+            eventContext = new EventContext();
+        };
+
+        Cleanup stuff = () =>
+        {
+            eventContext.Dispose();
+            eventContext = null;
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                questionnaire.NewDeleteQuestion(rosterTitleQuestionId, responsibleId));
+                questionnaire.NewDeleteQuestion(rosterTitleQuestionId, responsibleId);
 
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
+        It should_raise_QuestionDeleted_event = () =>
+          eventContext.ShouldContainEvent<QuestionDeleted>();
 
-        It should_throw_exception_with_message_containting__roster__ = () =>
-            exception.Message.ToLower().ShouldContain("roster");
+        It should_raise_QuestionDeleted_event_with_QuestionId_specified = () =>
+            eventContext.GetSingleEvent<QuestionDeleted>()
+                .QuestionId.ShouldEqual(rosterTitleQuestionId);
 
-        It should_throw_exception_with_message_containting__using__ = () =>
-            exception.Message.ToLower().ShouldContain("title");
-
-        It should_throw_exception_with_message_containting__referenced__ = () =>
-            exception.Message.ToLower().ShouldContain("referenced");
-
-        It should_throw_exception_with_message_containting_group_title = () =>
-            exception.Message.ShouldContain(rosterTitle);
-
-        private static Exception exception;
         private static string rosterTitle;
         private static Questionnaire questionnaire;
         private static Guid rosterSizeQuestionId;
         private static Guid rosterTitleQuestionId;
         private static Guid responsibleId;
+        private static EventContext eventContext;
     }
 }

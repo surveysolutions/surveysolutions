@@ -1125,7 +1125,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(group);
             }
 
-
             this.ApplyEvent(new GroupUpdated
             {
                 GroupPublicKey = groupId,
@@ -3190,7 +3189,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowIfQuestionIsUsedAsRosterTitle(Guid questionId)
         {
             var referencingRosterTitle =
-                this.innerDocument.Find<IGroup>(group => @group.RosterTitleQuestionId == questionId).FirstOrDefault();
+                this.innerDocument.Find<IGroup>(
+                    group =>
+                        @group.RosterTitleQuestionId == questionId && group.RosterSizeQuestionId.HasValue &&
+                            this.innerDocument.FirstOrDefault<IQuestion>(
+                                question =>
+                                    question.PublicKey == @group.RosterSizeQuestionId.Value && question.QuestionType == QuestionType.Numeric) != null)
+                    .FirstOrDefault();
 
             if (referencingRosterTitle != null)
                 throw new QuestionnaireException(
