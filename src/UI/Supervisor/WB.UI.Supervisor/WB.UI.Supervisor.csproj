@@ -481,7 +481,6 @@
     <Content Include="Content\main.css" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -492,12 +491,7 @@
     <Content Include="Configuration\Stacy.Supervisor.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\_LayoutWithSidebar.cshtml" />
-    <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
-    <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
-    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <None Include="Service References\DesignerPublicService\PublicService.wsdl" />
     <None Include="Service References\DesignerPublicService\PublicService.xsd">
       <SubType>Designer</SubType>
@@ -633,9 +627,6 @@
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Account\LogOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NLog.config">
