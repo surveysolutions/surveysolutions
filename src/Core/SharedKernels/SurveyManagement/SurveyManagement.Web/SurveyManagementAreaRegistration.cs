@@ -11,12 +11,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
             {
                 "~/js/main", new[]
                 {
-                    "~/Scripts/jquery-{version}.js",
+                    "~/Scripts/jquery-2.1.0.js",
                     "~/Scripts/moment.js",
-                    "~/Scripts/modernizr-{version}.js",
+                    "~/Scripts/modernizr-2.7.2.js",
                     "~/Scripts/bootstrap.js",
                     "~/Scripts/director.js",
-                    "~/Scripts/knockout-{version}.js",
+                    "~/Scripts/knockout-3.1.0.js",
                     "~/Scripts/knockout.mapping-latest.js",
                     "~/Scripts/query-string.js",
                     "~/Scripts/supervisor.framework.js",
