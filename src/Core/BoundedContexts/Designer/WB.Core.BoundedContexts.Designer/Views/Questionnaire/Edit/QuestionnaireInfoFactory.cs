@@ -147,8 +147,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var question = questionnaire.Questions.FirstOrDefault(x => x.Id == questionId);
             if (question == null)
                 return null;
-            //var result = new NewEditQuestionView();
-
             
             NewEditQuestionView result = MapQuestionFields(question);
             result.Options = result.Options ?? new CategoricalOption[0];

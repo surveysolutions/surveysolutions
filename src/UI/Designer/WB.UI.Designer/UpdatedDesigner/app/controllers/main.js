@@ -100,35 +100,44 @@
                     return item.hasOwnProperty('type');
                 };
 
-                $scope.addQuestion = function(item) {
+                $scope.addQuestion = function(parent) {
                     var newId = utilityService.guid();
                     var emptyQuestion = {
                         "itemId": newId,
                         "title": "New Question",
                         "variable": "",
-                        "type": 7,
+                        "type": 7, // todo: explain parameter
                         "linkedVariables": [],
                         "brokenLinkedVariables": null
                     };
-                    commandService.addQuestion($routeParams.questionnaireId, item, newId).success(function() {
-                            item.items.push(emptyQuestion);
+
+                    commandService.addQuestion($routeParams.questionnaireId, parent.itemId, newId).success(function(result) {
+                            if (result.IsSuccess) {
+                                parent.items.push(emptyQuestion);
+                            } else {
+                                $log.error(result.Error);
+                            }
                         }
                     );
                 };
 
-                $scope.addGroup = function(item) {
+                $scope.addGroup = function(parent) {
                     var newId = utilityService.guid();
                     var emptyGroup = {
                         "itemId": newId,
                         "title": "New group",
                         "items": []
                     };
-                    commandService.addGroup($routeParams.questionnaireId, emptyGroup, item.itemId).success(function() {
-                        item.items.push(emptyGroup);
+                    commandService.addGroup($routeParams.questionnaireId, emptyGroup, parent.itemId).success(function (result) {
+                        if (result.IsSuccess) {
+                            parent.items.push(emptyGroup);
+                        } else {
+                            $log.error(result.Error);
+                        }
                     });
                 };
 
-                $scope.addRoster = function(item) {
+                $scope.addRoster = function(parent) {
                     var newId = utilityService.guid();
                     var emptyRoster = {
                         "itemId": newId,
@@ -136,8 +145,12 @@
                         "items": []
                     };
 
-                    commandService.addRoster($routeParams.questionnaireId, emptyRoster, item.itemId).success(function() {
-                        item.items.push(emptyRoster);
+                    commandService.addRoster($routeParams.questionnaireId, emptyRoster, parent.itemId).success(function (result) {
+                        if (result.IsSuccess) {
+                            parent.items.push(emptyRoster);
+                        } else {
+                            $log.error(result.Error);
+                        }
                     });
                 };
 

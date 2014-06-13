@@ -8,7 +8,10 @@
             </ul>
         </div>
         <div class="header-menu">
-            This document is <span>{{questionnaire.isPublic ? 'public' : 'private'}}</span><span ng-repeat="q in questionnaire.sharedPersons"><span ng-if="$first">, shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
+            This document is <span>{{questionnaire.isPublic ? 'public' : 'private'}}</span>
+            <span ng-repeat="q in questionnaire.sharedPersons">
+                <span ng-if="$first">
+                    , shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
                 </span>
                 <span ng-if="!$first && $last">
                     and <a ng-click="showShareInfo()">{{$index}} other</a>
@@ -24,7 +27,6 @@
     </div>
     <div class="questionnarie-title">
         <div class="title">
-            <!--ng-controller="VerificationCtrl"-->
             {{questionnaire.title}} <span>({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
             <input type="button" class="wb-inline-button error" value="VERIFY" ng-click="verify()" />
             <span id="verify-btn" data-toggle="modal" data-target="#verification-modal" ng-hide="verificationStatus.errorsCount == 0" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>
@@ -77,7 +79,7 @@
                  ng-hide="item.isDeleted"
                  class="question item"
                  ng-class="{'selected' : item.itemId == currentItemId, 'cat-singleanswer': item.type == 'YesNo', 'cat-singleanswer': item.type == 'DropDownList', 'cat-multianswer' : item.type == 'MultyOption', 'cat-intedit' : item.type == 'Numeric', 'cat-datetime' : item.type == 'DateTime', 'cat-geoloc' : item.type == 'GpsCoordinates', 'cat-textedit' : item.type == 'AutoPropagate', 'cat-textarea' : item.type == 'TextList',  'cat-multimedia' : item.type == 'QRBarcode', 'cat-textedit' : item.type == 'Text', 'cat-singleanswer' : item.type == 'SingleOption' }">
-                
+
                 <div class="icon"></div>
                 {{ item.title }}
                 <i class="glyphicon glyphicon-random" ui-tree-handle></i>
@@ -101,7 +103,6 @@
                  ng-class="{'selected' : item.itemId == currentItemId}"
                  ng-if="!isQuestion(item) && !item.isDeleted">
 
-                
                 <span ng-click="collapse(item)" ng-show="!item.collapsed" class="btn-collapse"></span>
                 <span ng-click="expand(item)" ng-show="item.collapsed" class="btn-expand"></span>
                 {{item.title}}
@@ -126,7 +127,13 @@
                 </div>
             </div>
 
-            <div class="start-box" ng-show="currentChapter==undefined">
+            <div class="start-box" ng-show="currentChapter==undefined || currentChapter.items.length == 0">
+                <div class="buttons-item">
+                    <input type="button" class="wb-inline-button lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
+                    <input type="button" class="wb-inline-button lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
+                    <input type="button" class="wb-inline-button lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
+                </div>
+
                 <p>This questionnaire is empty.</p>
 
                 <p>

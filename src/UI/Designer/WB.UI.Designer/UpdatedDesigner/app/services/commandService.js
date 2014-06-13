@@ -120,7 +120,7 @@
                         "isRoster": true,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "FixedTitles",
-                        "rosterFixedTitles": "",
+                        "rosterFixedTitles": ["111"], // todo: temp solution
                         "rosterTitleQuestionId": null,
                         "parentGroupId": parentGroupId
                     };
@@ -145,13 +145,13 @@
                     return commandCall("UpdateGroup", command);
                 };
 
-                commandService.addQuestion = function(questionnaireId, group, newId) {
+                commandService.addQuestion = function(questionnaireId, parentGroupId, newId) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "questionId": newId,
                         "title": "New Question",
                         "type": "Text",
-                        "variableName": "",
+                        "variableName": "q",
                         "isPreFilled": false,
                         "isMandatory": false,
                         "scope": "Interviewer",
@@ -159,7 +159,7 @@
                         "validationExpression": "",
                         "validationMessage": "",
                         "instructions": "",
-                        "parentGroupId": group.itemId
+                        "parentGroupId": parentGroupId
                     };
 
                     return commandCall("AddQuestion", command);
