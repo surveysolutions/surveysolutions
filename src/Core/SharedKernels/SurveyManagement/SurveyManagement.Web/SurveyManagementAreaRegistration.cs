@@ -4,8 +4,50 @@ using System.Web.Optimization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web
 {
-    public class SurveyManagementAreaRegistration : AreaRegistration 
+    public class SurveyManagementAreaRegistration : AreaRegistration
     {
+        private static readonly Dictionary<string, string[]> StyleBundles = new Dictionary<string, string[]>
+        {
+            {
+                "~/Content/main", new[]
+                {
+                    "~/Content/bootstrap.css",
+                    "~/Content/font-awesome.min.css",
+                    "~/Content/bootstrap-mvc-validation.css",
+                    "~/Content/jquery.pnotify.default.css",
+                    "~/Content/app.css",
+                }
+            },
+            {
+                "~/css/main-not-loggedin", new[]
+                {
+                    "~/Content/bootstrap.css",
+                    "~/Content/bootstrap-mvc-validation.css",
+                    "~/Content/main-not-logged.css",
+                }
+            },
+            {
+                "~/css/list", new[]
+                {
+                    "~/Content/listview.css",
+                }
+            },
+            {
+                "~/css/interview-new", new[]
+                {
+                    "~/Content/bootstrap-editable.css",
+                    "~/Content/datepicker.css",
+                }
+            },
+            {
+                "~/css/interview", new[]
+                {
+                    "~/Content/bootstrap-editable.css",
+                    "~/Content/datepicker.css",
+                }
+            },
+        };
+
         private static readonly Dictionary<string, string[]> ScriptBundles = new Dictionary<string, string[]>
         {
             {
@@ -88,6 +130,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
             foreach (KeyValuePair<string, string[]> scriptBundle in ScriptBundles)
             {
                 bundles.Add(new ScriptBundle(scriptBundle.Key).Include(scriptBundle.Value));
+            }
+
+            foreach (KeyValuePair<string, string[]> styleBundle in StyleBundles)
+            {
+                bundles.Add(new StyleBundle(styleBundle.Key).Include(styleBundle.Value));
             }
         }
 

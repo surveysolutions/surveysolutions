@@ -1,6 +1,4 @@
-﻿using WB.UI.Supervisor.Code.Bundling;
-
-namespace WB.UI.Supervisor.App_Start
+﻿namespace WB.UI.Supervisor.App_Start
 {
     using System.Web.Optimization;
 
