@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 {
                     "~/Content/bootstrap-editable.css",
                     "~/Content/datepicker.css",
+                    "~/Content/interview-details.css",
                 }
             },
         };
