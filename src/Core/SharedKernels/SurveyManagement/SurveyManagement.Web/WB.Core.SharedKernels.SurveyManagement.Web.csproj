@@ -73,11 +73,19 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -111,6 +119,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\BaseApiServiceController.cs" />
+    <Compile Include="Api\UsersController.cs" />
     <Compile Include="Code\AppSettings.cs" />
     <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializer.cs" />
     <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
@@ -266,6 +276,7 @@
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.eot" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.ttf" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.woff" />
+    <None Include="app.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
