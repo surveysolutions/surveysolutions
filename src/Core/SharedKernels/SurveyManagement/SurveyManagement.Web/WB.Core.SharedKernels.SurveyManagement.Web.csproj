@@ -295,9 +295,6 @@
     <EmbeddedResource Include="Views\Survey\Status.cshtml" />
     <EmbeddedResource Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
     <EmbeddedResource Include="Views\TabletReport\Packages.cshtml" />
-    <EmbeddedResource Include="Views\Team\AddInterviewer.cshtml" />
-    <EmbeddedResource Include="Views\Team\AddSupervisor.cshtml" />
-    <EmbeddedResource Include="Views\Team\Details.cshtml" />
     <EmbeddedResource Include="Views\Team\Index.cshtml" />
     <EmbeddedResource Include="Views\Team\Interviewers.cshtml" />
     <EmbeddedResource Include="Views\Template\Import.cshtml" />
