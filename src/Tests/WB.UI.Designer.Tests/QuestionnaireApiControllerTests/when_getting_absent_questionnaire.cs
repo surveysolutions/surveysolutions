@@ -1,12 +1,12 @@
 using System;
 using System.Net;
 using System.Web;
+using System.Web.Http;
 using Machine.Specifications;
 using WB.UI.Designer.Api;
 
 namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
 {
-    [Ignore("Should be fixed in KP-3405")]
     internal class when_getting_edit_question_info_and_question_is_absent : QuestionnaireApiControllerTestContext
     {
         Establish context = () =>
@@ -20,11 +20,8 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
         It should_throw_exception = () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_HttpException_exception = () =>
-            exception.ShouldBeOfExactType(typeof(HttpException));
-
-        It should_throw_HttpException_exception1 = () =>
-            (exception as HttpException).GetHttpCode().ShouldEqual((int)HttpStatusCode.NotFound);
+        It should_throw_HttpResponseException_exception = () =>
+            exception.ShouldBeOfExactType(typeof(HttpResponseException));
 
         private static QuestionnaireController controller;
         private static Exception exception;
