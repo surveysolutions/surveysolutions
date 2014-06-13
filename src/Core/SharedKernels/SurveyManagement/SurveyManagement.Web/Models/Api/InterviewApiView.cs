@@ -2,7 +2,7 @@
 using System.Linq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.UI.Supervisor.Models.API
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {
     public class InterviewApiView : BaseApiView
     {

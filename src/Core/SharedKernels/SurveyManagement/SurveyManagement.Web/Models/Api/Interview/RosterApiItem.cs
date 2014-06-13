@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace WB.UI.Supervisor.Models.API.Interview
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api.Interview
 {
     
     public class RosterApiItem

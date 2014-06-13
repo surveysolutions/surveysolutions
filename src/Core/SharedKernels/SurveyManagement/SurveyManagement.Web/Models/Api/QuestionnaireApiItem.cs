@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace WB.UI.Headquarters.Models.API
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {
     public class QuestionnaireApiItem
     {

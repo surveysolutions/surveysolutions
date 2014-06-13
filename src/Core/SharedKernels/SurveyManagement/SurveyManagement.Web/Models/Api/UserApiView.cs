@@ -4,7 +4,7 @@ using System.Linq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
-namespace WB.UI.Supervisor.Models.API
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {
     public class UserApiView : BaseApiView
     {
