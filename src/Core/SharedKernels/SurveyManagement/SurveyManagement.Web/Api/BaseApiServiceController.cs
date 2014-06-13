@@ -2,7 +2,7 @@
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Logging;
 
-namespace WB.UI.Headquarters.API
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     public abstract class BaseApiServiceController : ApiController
     {
