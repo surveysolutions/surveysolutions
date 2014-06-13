@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Error(
                         string.Format(
                             "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
-                            GlobalHelper.GenerateUrl("Import", "Template", null)));
+                            GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
                     this.Logger.Error("Could not connect to designer.", ex);
                 }
             }
