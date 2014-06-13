@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace WB.UI.Supervisor.Models.API
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {
     public abstract class BaseApiView
     {

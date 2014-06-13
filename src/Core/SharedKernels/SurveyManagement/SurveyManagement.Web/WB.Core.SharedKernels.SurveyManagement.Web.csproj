@@ -73,6 +73,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -132,6 +133,17 @@
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
+    <Compile Include="Models\Api\BaseApiView.cs" />
+    <Compile Include="Models\Api\InterviewApiDetails.cs" />
+    <Compile Include="Models\Api\InterviewApiItem.cs" />
+    <Compile Include="Models\Api\InterviewApiView.cs" />
+    <Compile Include="Models\Api\Interview\QuestionApiItem.cs" />
+    <Compile Include="Models\Api\Interview\RosterApiItem.cs" />
+    <Compile Include="Models\Api\QuestionnaireApiItem.cs" />
+    <Compile Include="Models\Api\QuestionnaireApiView.cs" />
+    <Compile Include="Models\Api\UserApiDetails.cs" />
+    <Compile Include="Models\Api\UserApiItem.cs" />
+    <Compile Include="Models\Api\UserApiView.cs" />
     <Compile Include="Models\AssigmentModel.cs" />
     <Compile Include="Models\AssignSuveyData.cs" />
     <Compile Include="Models\BatchUploadModel.cs" />

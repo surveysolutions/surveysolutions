@@ -4,7 +4,7 @@ using Main.Core.View;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.UI.Headquarters.API;
-using WB.UI.Headquarters.Models.API;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using It = Machine.Specifications.It;
 
 namespace WB.UI.Headquarters.Tests.ApiTests

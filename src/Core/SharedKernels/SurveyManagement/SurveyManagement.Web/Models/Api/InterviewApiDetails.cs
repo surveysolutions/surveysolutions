@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.UI.Supervisor.Models.API.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api.Interview;
 
-namespace WB.UI.Supervisor.Models.API
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {
     public class InterviewApiDetails
     {
@@ -15,7 +15,7 @@ namespace WB.UI.Supervisor.Models.API
             this.Questions = new List<QuestionApiItem>();
             this.Rosters = new List<RosterApiItem>();
 
-            var rosters = new Dictionary<string, RosterApiItem>(); 
+            var rosters = new Dictionary<string, RosterApiItem>();
 
             if (interview != null)
             {
@@ -28,15 +28,17 @@ namespace WB.UI.Supervisor.Models.API
                         var key = CreateLeveKeyFromPropagationVector(interviewGroupView.RosterVector);
                         RosterApiItem item;
 
-                        if(rosters.ContainsKey(key))
+                        if (rosters.ContainsKey(key))
                             item = rosters[key];
                         else
                         {
-                            item = new RosterApiItem() { Id = interviewGroupView.Id, 
-                                RosterVector = interviewGroupView.RosterVector, 
+                            item = new RosterApiItem()
+                            {
+                                Id = interviewGroupView.Id,
+                                RosterVector = interviewGroupView.RosterVector,
                                 Item = interviewGroupView.RosterVector.Last()
                             };
-                            
+
                             rosters.Add(key, item);
                         }
 
@@ -50,7 +52,7 @@ namespace WB.UI.Supervisor.Models.API
                     {
                         var key = CreateLeveKeyFromPropagationVector(rosterApiItem.RosterVector.Take(rosterApiItem.RosterVector.Length - 1).ToArray());
 
-                        if(!rosters.ContainsKey(key))
+                        if (!rosters.ContainsKey(key))
                             throw new Exception("Error in structure");
 
                         rosters[key].Rosters.Add(rosterApiItem);
@@ -65,7 +67,7 @@ namespace WB.UI.Supervisor.Models.API
         {
             return string.Join(",", vector.Select(v => v.ToString("0.############################", CultureInfo.InvariantCulture)));
         }
-        
+
         private static void AddQuestionsToRoster(List<QuestionApiItem> questions, IEnumerable<InterviewQuestionView> questionsToAdd)
         {
             questions.AddRange(questionsToAdd.Select(question => new QuestionApiItem(question.Variable, question.Answer ?? string.Empty)));

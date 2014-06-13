@@ -316,17 +316,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Injections\HeadquartersRegistry.cs" />
-    <Compile Include="Models\API\BaseApiView.cs" />
-    <Compile Include="Models\API\InterviewApiDetails.cs" />
-    <Compile Include="Models\API\InterviewApiItem.cs" />
-    <Compile Include="Models\API\InterviewApiView.cs" />
-    <Compile Include="Models\API\Interview\QuestionApiItem.cs" />
-    <Compile Include="Models\API\Interview\RosterApiItem.cs" />
-    <Compile Include="Models\API\QuestionnaireApiItem.cs" />
-    <Compile Include="Models\API\QuestionnaireApiView.cs" />
-    <Compile Include="Models\API\UserApiDetails.cs" />
-    <Compile Include="Models\API\UserApiItem.cs" />
-    <Compile Include="Models\API\UserApiView.cs" />
     <Compile Include="Models\HeadquartersModel.cs" />
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />

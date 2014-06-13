@@ -359,17 +359,6 @@
     <Compile Include="Controllers\HQSyncController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Filters\LongWebsiteDirectoryPathFilter.cs" />
-    <Compile Include="Models\API\BaseApiView.cs" />
-    <Compile Include="Models\API\InterviewApiDetails.cs" />
-    <Compile Include="Models\API\InterviewApiItem.cs" />
-    <Compile Include="Models\API\Interview\QuestionApiItem.cs" />
-    <Compile Include="Models\API\Interview\RosterApiItem.cs" />
-    <Compile Include="Models\API\QuestionnaireApiItem.cs" />
-    <Compile Include="Models\API\InterviewApiView.cs" />
-    <Compile Include="Models\API\QuestionnaireApiView.cs" />
-    <Compile Include="Models\API\UserApiDetails.cs" />
-    <Compile Include="Models\API\UserApiItem.cs" />
-    <Compile Include="Models\API\UserApiView.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
