@@ -7,6 +7,8 @@ using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
@@ -19,12 +21,17 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 
         private readonly ILogger logger;
         private readonly ICapiSynchronizationCacheService capiSynchronizationCacheService;
+        private readonly IStringCompressor stringCompressor;
+        private readonly IJsonUtils jsonUtils;
+        private readonly ICommandService commandService;
 
-
-        public SyncPackageRestoreService(ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService)
+        public SyncPackageRestoreService(ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService, IStringCompressor stringCompressor, IJsonUtils jsonUtils, ICommandService commandService)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
+            this.stringCompressor = stringCompressor;
+            this.jsonUtils = jsonUtils;
+            this.commandService = commandService;
         }
 
         private bool WaitUntilItemCanBeProcessed(Guid id)
@@ -64,11 +71,10 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 
                     if (!string.IsNullOrWhiteSpace(item))
                     {
-                        string content = PackageHelper.DecompressString(item);
-                        var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
+                        string content = stringCompressor.DecompressString(item);
+                        var interview = jsonUtils.Deserrialize<InterviewSynchronizationDto>(content);
 
-                        NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
+                        commandService.Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
 
                         this.capiSynchronizationCacheService.DeleteItem(itemKey);
 

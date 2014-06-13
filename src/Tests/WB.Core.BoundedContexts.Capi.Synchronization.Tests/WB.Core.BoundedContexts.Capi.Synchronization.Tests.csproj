@@ -73,6 +73,12 @@
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_user.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire.cs" />
     <Compile Include="CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire_with_broken_metadata.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\SyncPackageRestoreServiceTestContext.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_doesnt_exist.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_exists.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_exists_and_restore_it_called_from_2_separate_thereads.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_exists_but_empty_string.cs" />
+    <Compile Include="SyncPackageRestoreServiceTests\when_synchronization_item_exists_but_invalid.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
