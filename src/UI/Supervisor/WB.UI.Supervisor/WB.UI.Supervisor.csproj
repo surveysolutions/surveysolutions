@@ -399,6 +399,8 @@
     <Compile Include="ServiceLocationModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap.css" />
     <Content Include="Content\favicon.png" />
     <Content Include="Content\images\glyphicons.png" />
     <Content Include="favicon.ico" />
@@ -413,6 +415,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="parameters.xml" />
     <None Include="Service References\DesignerPublicService\PublicService.disco" />
     <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
