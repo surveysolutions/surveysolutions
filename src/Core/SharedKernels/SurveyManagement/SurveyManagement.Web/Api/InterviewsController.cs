@@ -5,12 +5,11 @@ using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
-namespace WB.UI.Supervisor.API
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
-    [Authorize (Roles = "Headquarter, Supervisor")]
+    [Authorize(Roles = "Headquarter, Supervisor")]
     public class InterviewsController : BaseApiServiceController
     {
         private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
@@ -24,10 +23,10 @@ namespace WB.UI.Supervisor.API
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
         }
- 
+
         [HttpGet]
         [Route("apis/v1/interviews")] //?{templateId}&{templateVersion}&{status}&{interviewId}&{limit=10}&{offset=1}
-        public InterviewApiView InterviewsFiltered(Guid? templateId = null, long? templateVersion = null, 
+        public InterviewApiView InterviewsFiltered(Guid? templateId = null, long? templateVersion = null,
             InterviewStatus? status = null, Guid? interviewId = null, int limit = 10, int offset = 1)
         {
             var input = new AllInterviewsInputModel
@@ -44,7 +43,7 @@ namespace WB.UI.Supervisor.API
 
             return new InterviewApiView(interviews);
         }
-        
+
         [HttpGet]
         [Route("apis/v1/questionnaires/{id:guid}/{version:long}/interviews")]
         public InterviewApiView Interviews(Guid id, long version, int limit = 10, int offset = 1)
@@ -61,7 +60,7 @@ namespace WB.UI.Supervisor.API
 
             return new InterviewApiView(interviews);
         }
-        
+
         [HttpGet]
         [Route("apis/v1/interviews/{id:guid}/details")]
         public InterviewApiDetails InterviewDetails(Guid id)
@@ -71,7 +70,7 @@ namespace WB.UI.Supervisor.API
                 CompleteQuestionnaireId = id
             };
 
-            var interview = interviewDetailsViewFactory.Load(inputModel);
+            var interview = this.interviewDetailsViewFactory.Load(inputModel);
 
             if (interview == null)
             {
