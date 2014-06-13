@@ -244,6 +244,9 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
     <Content Include="Views\ControlPanel\InterviewDetails.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\Team\AddInterviewer.cshtml" />
+    <Content Include="Views\Team\AddSupervisor.cshtml" />
+    <Content Include="Views\Team\Details.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
