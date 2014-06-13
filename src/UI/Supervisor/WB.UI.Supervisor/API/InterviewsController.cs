@@ -5,7 +5,7 @@ using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.UI.Supervisor.Models.API;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
 namespace WB.UI.Supervisor.API
 {
