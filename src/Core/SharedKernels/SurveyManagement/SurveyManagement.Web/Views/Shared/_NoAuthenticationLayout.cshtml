@@ -16,7 +16,7 @@
     <div class="row-fluid" id="footer-block">
             <hr>
             <footer class="text-center">
-                <a href="@Url.Action("GetLatestVersion", "Sync")" class="btn ">Get CAPI</a>
+                <a href="@Url.Action("GetLatestVersion", "Sync", new { area = string.Empty })" class="btn ">Get CAPI</a>
             </footer>
     </div>
     @Scripts.Render("~/js/main")

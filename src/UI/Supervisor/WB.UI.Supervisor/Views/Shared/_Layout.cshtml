@@ -59,7 +59,7 @@
                         <a href="@Url.Action("Interviews", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
                     </li>
                     <li class="@(page == MenuItem.Teams ? "active" : "")">
-                        <a href="@Url.Action("Index", "Team")"><i class="glyphicon glyphicon-user"></i> Supervisors</a>
+                        <a href="@Url.Action("Index", "Team", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Supervisors</a>
                     </li>
                     <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
                         <a href="@Url.Action("Index", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Questionnaries</a>
@@ -78,7 +78,7 @@
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
+                            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
                         </ul>
                     </li>
                 </ul>
@@ -129,13 +129,13 @@
                     </li>
 
                     <li class="@(page == MenuItem.Teams ? "active" : "")">
-                        <a href="@Url.Action("Interviewers", "Team")"><i class="glyphicon glyphicon-user"></i> Interviewers</a>
+                        <a href="@Url.Action("Interviewers", "Team", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Interviewers</a>
                     </li>
 
                     @if (!LegacyOptions.HqFunctionsEnabled)
                     {
                         <li>
-                            <a href="@Url.Action("Synchronization", "HQSync")" target="_blank">
+                            <a href="@Url.Action("Synchronization", "HQSync", new { area = string.Empty })" target="_blank">
                                 <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 Synchronization
                             </a>
@@ -147,7 +147,7 @@
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
+                            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
                         </ul>
                     </li>
                 </ul>
@@ -208,7 +208,7 @@
                 {
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
-                | <a href="@Url.Action("GetLatestVersion", "Sync")">Get CAPI</a>
+                | <a href="@Url.Action("GetLatestVersion", "Sync", new { area = string.Empty })">Get CAPI</a>
             </div>
         </footer>
     </div>
@@ -254,7 +254,7 @@
                     $.ajax({
                         method: 'GET',
                         cache: false,
-                        url: '@Url.Action("GetSyncStatus", "HQSync")',
+                        url: '@Url.Action("GetSyncStatus", "HQSync", new { area = string.Empty })',
                         success: function (dataString) {
                             var data = JSON.parse(dataString);
                             if (!data.StartedAt) {

@@ -141,32 +141,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
         private static void RegisterRoutes(AreaRegistrationContext context)
         {
             context.MapRoute(
-                "Interview",
+                "InterviewRoute",
                 "Interview/{action}/{id}",
                 new { controller = "Interview", id = UrlParameter.Optional });
 
             context.MapRoute(
-                "Backup",
+                "BackupRoute",
                 "Backup/{action}/{id}",
                 new { controller = "Backup", action = "Index", id = UrlParameter.Optional });
 
             context.MapRoute(
-                "HQ",
+                "HQRoute",
                 "HQ/{action}/{id}",
                 new { controller = "HQ", action = "Index", id = UrlParameter.Optional });
 
             context.MapRoute(
-                "ImportExport",
+                "ImportExportRoute",
                 "ImportExport/{action}/{id}",
                 new { controller = "ImportExport", action = "Index", id = UrlParameter.Optional });
 
             context.MapRoute(
-                "Survey",
+                "SurveyRoute",
                 "Survey/{action}/{id}",
                 new { controller = "Survey", action = "Index", id = UrlParameter.Optional });
 
             context.MapRoute(
-                "TabletReport",
+                "TabletReportRoute",
                 "TabletReport/{action}/{id}",
                 new { controller = "TabletReport", action = "Index", id = UrlParameter.Optional });
         }
