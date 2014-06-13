@@ -53,7 +53,7 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
                     x.Execute(
                         Moq.It.Is<CreateInterviewCreatedOnClientCommand>(passedCommand => passedCommand.Id == interviewMetaInfo.PublicKey && passedCommand.UserId == interviewMetaInfo.ResponsibleId &&
                 passedCommand.QuestionnaireId == interviewMetaInfo.TemplateId
-                && passedCommand.InterviewStatus == InterviewStatus.Completed && passedCommand.Comments == interviewMetaInfo.Comments
+                && passedCommand.InterviewStatus == InterviewStatus.Completed && passedCommand.IsValid == interviewMetaInfo.Valid
                 && passedCommand.FeaturedQuestionsMeta.Length == 2
                                    /* && passedCommand.Valid == true*/),
                         null), Times.Once);

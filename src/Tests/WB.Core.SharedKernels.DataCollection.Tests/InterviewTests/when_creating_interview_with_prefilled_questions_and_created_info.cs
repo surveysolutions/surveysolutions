@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments);
+            new Interview(interviewId, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid);
 
         It should_event_context_contains_3_events = () =>
             eventContext.Events.Count().ShouldEqual(3);
@@ -56,9 +56,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext.GetEvent<SynchronizationMetadataApplied>()
                 .Status.ShouldEqual(interviewStatus);
 
-        It should_provide_comments_in_InterviewStatusChanged_event = () =>
-            eventContext.GetEvents<InterviewStatusChanged>().Last()
-                .Comment.ShouldEqual(comments);
+        It should_provide_userId_in_SynchronizationMetadataApplied_event = () =>
+            eventContext.GetEvent<SynchronizationMetadataApplied>()
+                .UserId.ShouldEqual(userId);
+
+        It should_provide_InterviewDeclaredValid_event = () =>
+            eventContext.ShouldContainEvent<InterviewDeclaredValid>();
         
         Cleanup stuff = () =>
         {
@@ -71,7 +74,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static long questionnaireVersion = 18;
         private static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid interviewId = Guid.Parse("11000000000000000000000000000000");
-        private static string comments = "status chance comment";
+        private static bool isValid = true;
         private static AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta = null;
         private static InterviewStatus interviewStatus = InterviewStatus.Completed;
     }
