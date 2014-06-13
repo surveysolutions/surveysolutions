@@ -7,9 +7,8 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Models;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class ReportDataApiController : BaseApiController

@@ -3,7 +3,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public abstract class BaseApiController : ApiController
     {
