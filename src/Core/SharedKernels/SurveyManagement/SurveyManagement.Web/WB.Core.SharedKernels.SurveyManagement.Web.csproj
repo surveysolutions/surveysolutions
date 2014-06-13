@@ -202,6 +202,16 @@
     <EmbeddedResource Include="Scripts\jquery-2.1.0.intellisense.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Content\bootstrap-theme.min.css" />
+    <EmbeddedResource Include="Content\bootstrap.css" />
+    <EmbeddedResource Include="Content\bootstrap.min.css" />
+    <EmbeddedResource Include="Content\datepicker.css" />
+    <EmbeddedResource Include="Content\font-awesome.css" />
+    <EmbeddedResource Include="Content\font-awesome.min.css" />
+    <EmbeddedResource Include="Content\jquery.dataTables.css" />
+    <EmbeddedResource Include="Content\jquery.pnotify.default.css" />
+    <EmbeddedResource Include="Content\listview.css" />
+    <EmbeddedResource Include="Content\main-not-logged.css" />
     <EmbeddedResource Include="Scripts\jquery.pnotify.js" />
     <EmbeddedResource Include="Scripts\jquery.unobtrusive-ajax.js" />
     <EmbeddedResource Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -247,6 +257,8 @@
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.eot" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.ttf" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.woff" />
+    <EmbeddedResource Include="Content\bootstrap-theme.css.map" />
+    <EmbeddedResource Include="Content\bootstrap.css.map" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
@@ -375,6 +387,11 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\datacontext.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\interviewdetails.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interview\details\interviewdetailssettings.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Content\app.css" />
+    <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
+    <EmbeddedResource Include="Content\bootstrap-theme.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

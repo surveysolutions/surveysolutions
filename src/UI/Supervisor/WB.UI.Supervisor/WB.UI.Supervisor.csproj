@@ -399,21 +399,8 @@
     <Compile Include="ServiceLocationModule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\app.css" />
-    <Content Include="Content\bootstrap-mvc-validation.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\datepicker.css" />
     <Content Include="Content\favicon.png" />
-    <Content Include="Content\font-awesome.css" />
-    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\glyphicons.png" />
-    <Content Include="Content\jquery.dataTables.css" />
-    <Content Include="Content\jquery.pnotify.default.css" />
-    <Content Include="Content\listview.css" />
-    <Content Include="Content\main-not-logged.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\Ira.Supervisor.Web.config">
@@ -426,8 +413,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
     <None Include="parameters.xml" />
     <None Include="Service References\DesignerPublicService\PublicService.disco" />
     <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
