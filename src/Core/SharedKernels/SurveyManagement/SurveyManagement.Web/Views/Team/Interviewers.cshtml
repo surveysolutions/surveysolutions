@@ -7,7 +7,7 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
-        var $detailsUrl = '@Url.Action("Details", "Team")';
+        var $detailsUrl = '@Url.Action("Details", "Team", new { area = string.Empty })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})');
             model.GetFilterMethod = function () {
@@ -31,7 +31,7 @@
     @if (User.IsInRole("Headquarter"))
     {
         <div class="menubar">
-            <a class="btn btn-default" href="@Url.Action("AddInterviewer", "Team", new {id = Model})">
+            <a class="btn btn-default" href="@Url.Action("AddInterviewer", "Team", new { id = Model, area = string.Empty })">
                 <i class="glyphicon glyphicon-user"></i> Add interviewer
             </a>
         </div>
