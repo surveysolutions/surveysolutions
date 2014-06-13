@@ -5,6 +5,7 @@ using WB.UI.Designer.Api;
 
 namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
 {
+    [Ignore("Should be fixed in KP-3405")]
     internal class when_verifying_absent_questionnaire : QuestionnaireApiControllerTestContext
     {
         Establish context = () =>
