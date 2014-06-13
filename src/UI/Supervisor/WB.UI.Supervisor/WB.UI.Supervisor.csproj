@@ -348,14 +348,10 @@
     <Compile Include="Code\Bundling\StyleImagePathBundle.cs" />
     <Compile Include="Code\Bundling\StyleRelativePathTransform.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
-    <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\CommandApiController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HQSyncController.cs" />
-    <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Filters\LongWebsiteDirectoryPathFilter.cs" />
-    <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
@@ -366,7 +362,6 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
-    <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
