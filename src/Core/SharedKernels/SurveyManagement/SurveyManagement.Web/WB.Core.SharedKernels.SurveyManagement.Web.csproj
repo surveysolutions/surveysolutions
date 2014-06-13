@@ -276,7 +276,6 @@
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.eot" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.ttf" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.woff" />
-    <None Include="app.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
