@@ -391,13 +391,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Scripts\jquery-2.1.0.min.map" />
-    <Content Include="Views\Account\LogOn.cshtml" />
-    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
-    <Content Include="Views\Shared\_LayoutWithSidebar.cshtml" />
-    <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
-    <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <Content Include="Views\User\CreateHeadquarters.cshtml" />
     <None Include="Service References\PublicService\PublicService.wsdl" />
     <None Include="Service References\PublicService\PublicService.xsd">
@@ -424,7 +418,6 @@
     <Content Include="Service References\PublicService\WB.UI.Headquarters.PublicService.RemoteFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
