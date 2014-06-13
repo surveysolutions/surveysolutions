@@ -142,7 +142,8 @@
                     var emptyRoster = {
                         "itemId": newId,
                         "title": "New roster",
-                        "items": []
+                        "items": [],
+                        isRoster : true
                     };
 
                     commandService.addRoster($routeParams.questionnaireId, emptyRoster, parent.itemId).success(function (result) {
