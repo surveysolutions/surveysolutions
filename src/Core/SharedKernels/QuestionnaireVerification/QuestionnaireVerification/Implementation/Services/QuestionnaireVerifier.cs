@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             QuestionType.Text,
         };
 
-        private static readonly IEnumerable<QuestionType> WhiteListOfQuestionTypes = new[]
+        private static readonly HashSet<QuestionType> WhiteListOfQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.SingleOption,
             QuestionType.MultyOption,
