@@ -406,7 +406,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
-    <Content Include="Content\details.css" />
     <Content Include="Content\favicon.png" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -415,7 +414,6 @@
     <Content Include="Content\jquery.pnotify.default.css" />
     <Content Include="Content\listview.css" />
     <Content Include="Content\main-not-logged.css" />
-    <Content Include="Content\supervisor.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\Ira.Supervisor.Web.config">
@@ -442,7 +440,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Content\main.css" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
