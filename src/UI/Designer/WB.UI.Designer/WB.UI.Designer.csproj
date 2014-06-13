@@ -417,6 +417,7 @@
     <Content Include="UpdatedDesigner\app\fixtures\no-backend.js" />
     <Content Include="UpdatedDesigner\app\services\shareService.js" />
     <Content Include="UpdatedDesigner\app\views\share.html" />
+    <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\index.html" />
     <Content Include="UpdatedDesigner\app\app.js" />
     <Content Include="UpdatedDesigner\app\components\contextMenu.js" />
@@ -1047,6 +1048,9 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\README.md" />
+    <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
