@@ -202,9 +202,6 @@
     <EmbeddedResource Include="Scripts\jquery-2.1.0.intellisense.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Content\bootstrap-theme.min.css" />
-    <EmbeddedResource Include="Content\bootstrap.css" />
-    <EmbeddedResource Include="Content\bootstrap.min.css" />
     <EmbeddedResource Include="Content\datepicker.css" />
     <EmbeddedResource Include="Content\font-awesome.css" />
     <EmbeddedResource Include="Content\font-awesome.min.css" />
@@ -257,8 +254,6 @@
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.eot" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.ttf" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.woff" />
-    <EmbeddedResource Include="Content\bootstrap-theme.css.map" />
-    <EmbeddedResource Include="Content\bootstrap.css.map" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
@@ -391,7 +386,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Content\app.css" />
     <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
-    <EmbeddedResource Include="Content\bootstrap-theme.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
