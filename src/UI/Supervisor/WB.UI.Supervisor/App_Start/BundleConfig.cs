@@ -19,9 +19,7 @@ namespace WB.UI.Supervisor.App_Start
                 "~/Content/font-awesome.min.css",
                 "~/Content/bootstrap-mvc-validation.css",
                 "~/Content/jquery.pnotify.default.css",
-                "~/Content/app.css"
-                /*"~/Content/supervisor.css",
-                "~/Content/main.css"*/));
+                "~/Content/app.css"));
 
             bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
                 "~/Content/bootstrap.css",
@@ -36,8 +34,7 @@ namespace WB.UI.Supervisor.App_Start
 
             bundles.Add(new StyleBundle("~/css/interview").Include(
                 "~/Content/bootstrap-editable.css",
-                "~/Content/datepicker.css"
-                /*"~/Content/details.css"*/));
+                "~/Content/datepicker.css"));
         }
     }
 }
