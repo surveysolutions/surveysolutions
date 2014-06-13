@@ -8,10 +8,9 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Models;
 using WB.UI.Shared.Web.CommandDeserialization;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class CommandApiController : BaseApiController
