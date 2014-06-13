@@ -76,7 +76,7 @@ namespace WB.Core.Synchronization.SyncStorage
                     commandService.Execute(new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
                         userId: meta.ResponsibleId, questionnaireId: meta.TemplateId,
                         questionnaireVersion: meta.TemplateVersion.Value, status: (InterviewStatus) meta.Status,
-                        featuredQuestionsMeta: prefilledQuestions, comments: meta.Comments));
+                        featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid));
 
                 }
                 else

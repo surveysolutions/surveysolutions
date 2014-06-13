@@ -15,10 +15,10 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public InterviewStatus InterviewStatus { get; set; }
         public AnsweredQuestionSynchronizationDto[] FeaturedQuestionsMeta { get; set; }
-        public string Comments { get; set; }
+        public bool IsValid { get; set; }
 
         public CreateInterviewCreatedOnClientCommand(Guid interviewId, Guid userId, Guid questionnaireId,
-            long questionnaireVersion, InterviewStatus status, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments)
+            long questionnaireVersion, InterviewStatus status, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.QuestionnaireVersion = questionnaireVersion;
             this.FeaturedQuestionsMeta = featuredQuestionsMeta;
             this.InterviewStatus = status;
-            this.Comments = comments;
+            this.IsValid = isValid;
         }
     }
 }

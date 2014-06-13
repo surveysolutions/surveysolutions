@@ -153,6 +153,7 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApprovedByHQ_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApprovedByHQ_event.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SynchronizationMetadataApplied_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApproved_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApproved_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewCompleted_event_and_responsible_user_not_found.cs" />
