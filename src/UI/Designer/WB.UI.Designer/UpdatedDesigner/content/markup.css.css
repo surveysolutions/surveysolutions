@@ -5959,6 +5959,12 @@ body {
   font-weight: normal;
   font-size: 12px;
 }
+.popover {
+  max-width: inherit;
+}
+.modal {
+  overflow-y: inherit;
+}
 /*
   string @color: 'blue' or 'gray'
 */
@@ -6762,12 +6768,6 @@ body {
 #chapter-panel-context-menu {
   .wb-context-menu();
 } */
-.popover {
-  max-width: inherit;
-}
-.modal {
-  overflow-y: inherit;
-}
 #verify-popover {
   display: none;
 }
