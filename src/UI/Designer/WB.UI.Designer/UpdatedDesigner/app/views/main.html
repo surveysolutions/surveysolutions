@@ -28,7 +28,7 @@
     <div class="questionnarie-title">
         <div class="title">
             {{questionnaire.title}} <span>({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
-            <input type="button" class="wb-inline-button error" value="VERIFY" ng-click="verify()" />
+            <input type="button" class="btn error" value="VERIFY" ng-click="verify()" />
             <span id="verify-btn" data-toggle="modal" data-target="#verification-modal" ng-hide="verificationStatus.errorsCount == 0" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>
             <span ng-show="verificationStatus.errorsCount == 0">OK</span>
         </div>
@@ -69,7 +69,7 @@
                 </li>
             </ul>
             <div class="button-holder">
-                <input type="button" class="wb-inline-button lighter-hover" value="ADD NEW CHAPTER" ng-click="addNewChapter()">
+                <input type="button" class="btn lighter-hover" value="ADD NEW CHAPTER" ng-click="addNewChapter()">
             </div>
         </div>
 
@@ -115,9 +115,9 @@
             </div>
 
             <div class="buttons-item" ng-if="!isQuestion(item)" ng-show="!item.collapsed">
-                <input type="button" class="wb-inline-button lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
-                <input type="button" class="wb-inline-button lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
-                <input type="button" class="wb-inline-button lighter-hover" value="ADD ROSTER" ng-click="addRoster(item)" />
+                <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
+                <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
+                <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(item)" />
             </div>
         </script>
 
@@ -129,9 +129,9 @@
 
             <div class="start-box" ng-show="currentChapter==undefined || currentChapter.items.length == 0">
                 <div class="buttons-item">
-                    <input type="button" class="wb-inline-button lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
-                    <input type="button" class="wb-inline-button lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
-                    <input type="button" class="wb-inline-button lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
+                    <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
+                    <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
+                    <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
                 </div>
 
                 <p>This questionnaire is empty.</p>

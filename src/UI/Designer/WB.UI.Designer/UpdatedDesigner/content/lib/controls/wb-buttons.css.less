@@ -1,12 +1,11 @@
-.btn, .wb-inline-button {
+.btn {
   padding: 5px 6px;
-  height: 22px;
   border: none;
-  background: @inline-button-bg-color;
+  background-color: @inline-button-bg-color;
   font-style: normal;
-  &:hover { background: darken(@inline-button-bg-color, 5%); }
+  &:hover { background-color: darken(@inline-button-bg-color, 5%); }
   &.lighter-hover {
-    &:hover { background: lighten(@inline-button-bg-color, 5%); }
+    &:hover { background-color: lighten(@inline-button-bg-color, 5%); }
   }
   border-radius: 3px;
   //vertical-align: text-bottom;
@@ -25,26 +24,26 @@
 }
 
 .btn-lg {
-  padding: 17px;
-  border: none;
-  border-radius: 3px;
+  &, &:hover, &:focus, &:active, &.active {
+    padding: 17px;
+    border: none;
+    border-radius: 3px;
+  }
 }
 
 .btn-primary {
   background-color: @inline-button-medium-bg-color;
-  &:hover { background: darken(@inline-button-medium-bg-color, 5%); }
+  &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
   .inline-button-fontstyle();
   text-transform: uppercase;
   color: @inline-button-medium-fg-color;
+}
 
-  &.btn-transbg {
-    padding-left: 7px;
-    padding-right: 7px;
+.btn-link {
+  &, &:active, &:hover {
     background-color: transparent;
-    color: @common-blue-color;
-    &:hover {
-      text-decoration: underline;
-    }
+    -webkit-box-shadow: none;
+    box-shadow: none;
   }
 }
 

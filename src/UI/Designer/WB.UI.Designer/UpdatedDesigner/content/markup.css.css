@@ -5836,12 +5836,10 @@ body {
   color: #ff4200;
   font-size: 12px;
 }
-.btn,
-.wb-inline-button {
+.btn {
   padding: 5px 6px;
-  height: 22px;
   border: none;
-  background: #edeff0;
+  background-color: #edeff0;
   font-style: normal;
   border-radius: 3px;
   color: #2a81cb;
@@ -5852,24 +5850,24 @@ body {
   line-height: 12px;
   letter-spacing: 1px;
 }
-.btn:hover,
-.wb-inline-button:hover {
-  background: #dfe3e4;
+.btn:hover {
+  background-color: #dfe3e4;
 }
-.btn.lighter-hover:hover,
-.wb-inline-button.lighter-hover:hover {
-  background: #fbfbfc;
+.btn.lighter-hover:hover {
+  background-color: #fbfbfc;
 }
-.btn.error,
-.wb-inline-button.error {
+.btn.error {
   color: #d20426;
 }
-.btn[disabled],
-.wb-inline-button[disabled] {
+.btn[disabled] {
   opacity: 1;
   color: #7a7a7a;
 }
 .btn-lg,
+.btn-lg:hover,
+.btn-lg:focus,
+.btn-lg:active,
+.btn-lg.active,
 .btn-group-lg > .btn {
   padding: 17px;
   border: none;
@@ -5886,16 +5884,14 @@ body {
   color: #ffffff;
 }
 .btn-primary:hover {
-  background: #29ac06;
+  background-color: #29ac06;
 }
-.btn-primary.btn-transbg {
-  padding-left: 7px;
-  padding-right: 7px;
+.btn-link,
+.btn-link:active,
+.btn-link:hover {
   background-color: transparent;
-  color: #2a81cb;
-}
-.btn-primary.btn-transbg:hover {
-  text-decoration: underline;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 .dropdown.width60 {
   width: 60%;
