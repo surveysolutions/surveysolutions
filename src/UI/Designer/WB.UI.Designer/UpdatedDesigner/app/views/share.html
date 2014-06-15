@@ -10,8 +10,8 @@
 <div class="modal-body">
     <div class="container">
         <div class="row">
-            <h3>Who has acccess:</h3>
-            <ul>
+            <h3>Who has access:</h3>
+            <ul class="accounts">
                 <li ng-repeat="s in questionnaire.sharedPersons">
                     <a href="mailto:{{s.email}}">{{s.email}}</a> - <div class="btn-group">
                         <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
@@ -27,7 +27,7 @@
             <button class="btn btn-link" ng-click="togglePublicity()">MAKE THIS QUESTIONNAIRE {{questionnaire.isPublic ? 'PRIVATE' : 'PUBLIC'}}</button>
             <span>({{questionnaire.isPublic ? 'visible to you only' : 'visible to everyone'}})</span>
         </div>
-        <form role="form" class="form-horizontal" name="viewModel.shareForm" novalidate>
+        <form role="form" class="form-horizontal row" name="viewModel.shareForm" novalidate>
             <h3>Invite collaborators by e-mail:</h3>
             <div class="form-group" bs-has-error>
                 <div class="col-md-4">
