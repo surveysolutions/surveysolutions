@@ -1,9 +1,5 @@
-.wb-question-list(@purpose) {
-  position: relative;
+.wb-question-item(@purpose) {
   @line-height: 35px;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
 
   .item, .buttons-item {
     position: relative;
@@ -276,33 +272,8 @@
       }
     }
   }
+}
 
-  > .start-box {
-    .questionnarie-startbox-fontstyle();
-    text-align: center;
-    position: absolute;
-    width: 100%;
-    top: 30%;
-
-    button {
-      margin-left: 5px; margin-right: 5px;
-      background-color: #edeff1;
-    }
-
-    p {
-      line-height: 175%;
-      margin: 1.5em 0;
-    }
-
-    span.left-panel-glyph {
-      display: inline-block;
-      @s: 26px;
-      background: #cbd1d5 url(../i/chapter-panel-btn-small.png) no-repeat center;
-      border-radius: 3px;
-      width: @s;
-      height: @s;
-      vertical-align: middle;
-    }
-  }
+.wb-question-list(@purpose) {
 }
 
