@@ -6765,11 +6765,15 @@ body {
 .popover {
   max-width: inherit;
 }
+.modal {
+  overflow-y: inherit;
+}
 #verify-popover {
   display: none;
 }
 #verify-popover-content {
-  width: 900px;
+  max-height: 600px;
+  overflow: auto;
 }
 #verify-popover-content .question-list .item,
 #verify-popover-content .question-list .buttons-item {
@@ -6946,16 +6950,16 @@ body {
   color: #fff;
   background-color: #2a81cb;
 }
-#verify-popover-content .question-list > .breadcrumbs {
+#verify-popover-content .question-list .breadcrumbs {
   margin: 10px 0;
 }
-#verify-popover-content .question-list > .breadcrumbs > ul {
+#verify-popover-content .question-list .breadcrumbs > ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-#verify-popover-content .question-list > .breadcrumbs > ul > li,
-#verify-popover-content .question-list > .breadcrumbs > ul > li > a {
+#verify-popover-content .question-list .breadcrumbs > ul > li,
+#verify-popover-content .question-list .breadcrumbs > ul > li > a {
   display: inline-block;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
@@ -6963,7 +6967,7 @@ body {
   text-transform: uppercase;
   color: #4a4a4a;
 }
-#verify-popover-content .question-list > .breadcrumbs > ul > li:after {
+#verify-popover-content .question-list .breadcrumbs > ul > li:after {
   position: relative;
   top: 3px;
   display: inline-block;
@@ -6973,7 +6977,7 @@ body {
   margin: 0 7px;
   background: url(lib/i/breadcrumb-slash.png) no-repeat;
 }
-#verify-popover-content .question-list > ul.error-list {
+#verify-popover-content .question-list ul.error-list {
   margin-top: 5px;
   list-style: none;
   font-family: Georgia, serif;
@@ -6982,7 +6986,7 @@ body {
   color: #c80000;
   line-height: 22px;
 }
-#verify-popover-content .question-list > ul.error-list > li:before {
+#verify-popover-content .question-list ul.error-list > li:before {
   position: relative;
   top: -0.3em;
   width: 1.2em;
@@ -6992,7 +6996,7 @@ body {
   margin-right: 1em;
   border-bottom: 1px #c80000 solid;
 }
-#verify-popover-content .question-list > ul.error-list > li > span.var {
+#verify-popover-content .question-list ul.error-list > li > span.var {
   font-family: "Lucida Console", Monaco, monospace;
   font-style: normal;
   color: #ff4200;

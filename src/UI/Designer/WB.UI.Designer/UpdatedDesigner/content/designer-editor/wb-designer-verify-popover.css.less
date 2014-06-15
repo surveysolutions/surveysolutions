@@ -4,23 +4,29 @@
   max-width: inherit;
 }
 
+.modal {
+  overflow-y: inherit;
+}
+
 #verify-popover {
   display: none;
 }
 
 #verify-popover-content {
-  width: 900px;
+  max-height: 600px;
+  overflow: auto;
+  //width: 900px;
 
   .question-list {
     .wb-question-item('verify');
     //.wb-question-list('verify');
 
-    > .breadcrumbs {
+    .breadcrumbs {
       .wb-breadcrumbs('gray');
       margin: 10px 0;
     }
 
-    > ul.error-list {
+    ul.error-list {
       margin-top: 5px;
       list-style: none;
       .wb-question-verify-error-li-fontstyle();
