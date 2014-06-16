@@ -6643,8 +6643,8 @@ body {
   color: #9ca4aa;
   font-weight: normal;
 }
-.item > span.btn-collapse,
-.item > span.btn-expand {
+.item span.btn-collapse,
+.item span.btn-expand {
   display: inline-block;
   position: relative;
   top: 2px;
@@ -6653,10 +6653,10 @@ body {
   height: 16px;
   background: url(i/section-collapse-glyph.png) no-repeat;
 }
-.item > span.btn-collapse {
+.item span.btn-collapse {
   background-position: center -8px;
 }
-.item > span.btn-expand {
+.item span.btn-expand {
   background-position: center -40px;
 }
 .item .icon {
@@ -6865,8 +6865,8 @@ body {
 #verify-popover-content .question-list .item > span.parenthesis {
   font-weight: normal;
 }
-#verify-popover-content .question-list .item > span.btn-collapse,
-#verify-popover-content .question-list .item > span.btn-expand {
+#verify-popover-content .question-list .item span.btn-collapse,
+#verify-popover-content .question-list .item span.btn-expand {
   display: inline-block;
   position: relative;
   top: 2px;
@@ -6875,10 +6875,10 @@ body {
   height: 16px;
   background: url(i/section-collapse-glyph.png) no-repeat;
 }
-#verify-popover-content .question-list .item > span.btn-collapse {
+#verify-popover-content .question-list .item span.btn-collapse {
   background-position: center -8px;
 }
-#verify-popover-content .question-list .item > span.btn-expand {
+#verify-popover-content .question-list .item span.btn-expand {
   background-position: center -40px;
 }
 #verify-popover-content .question-list .item .icon {

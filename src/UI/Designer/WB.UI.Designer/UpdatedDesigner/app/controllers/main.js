@@ -171,13 +171,9 @@
                         }
                     });
                 };
-
-                $scope.collapse = function(item) {
-                    item.collapsed = true;
-                };
-
-                $scope.expand = function(item) {
-                    item.collapsed = false;
+                
+                $scope.toggle = function (scope) {
+                    scope.toggle();
                 };
 
                 $scope.closePanel = function() {
