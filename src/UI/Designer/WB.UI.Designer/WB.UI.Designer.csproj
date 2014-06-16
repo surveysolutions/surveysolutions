@@ -1059,6 +1059,9 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\.travis.yml" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\CHANGELOG.md" />
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css.map">
+      <DependentUpon>wb-question-list.css.css</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
