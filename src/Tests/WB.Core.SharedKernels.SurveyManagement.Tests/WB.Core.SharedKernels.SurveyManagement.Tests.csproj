@@ -184,6 +184,7 @@
     <Compile Include="InterviewSynchronizationDtoFactoryTests\when_build_from_interview_created_onclient.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_question_which_uses_roster_title_in_substitution_and_placed_in_nested_group.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_integer_value_greater_then_allowed_max_value.cs" />
+    <Compile Include="QuestionDataParserTests\when_parsing_answer_on_numeric_int_roster_size_question_and_answer_is_negative.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_int_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
