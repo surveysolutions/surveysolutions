@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -338,15 +339,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                             if (string.IsNullOrEmpty(answer))
                                 continue;
 
-                            KeyValuePair<Guid, object> value;
-                            var parsedResult = preloadedDataService.ParseQuestion(answer, question, out value);
+                            KeyValuePair<Guid, object> parsedValue;
+                            var parsedResult = preloadedDataService.ParseQuestion(answer, question, out parsedValue);
 
                             switch (parsedResult)
                             {
                                 case ValueParsingResult.OK:
                                 {
-                                    if(question is MultyOptionsQuestion)
-                                        values.Add((decimal)value.Value);
+                                    if(question.QuestionType == QuestionType.MultyOption)
+                                        values.Add((decimal)parsedValue.Value);
                                     continue;
                                 }
                                     
@@ -363,6 +364,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                                     yield return
                                         new PreloadedDataVerificationError("PL0020",
                                             PreloadingVerificationMessages.PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
+                                    break;
+                                case ValueParsingResult.AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsNegative:
+                                    yield return
+                                        new PreloadedDataVerificationError("PL0022",
+                                            PreloadingVerificationMessages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative,
                                             new PreloadedDataVerificationReference(answerIndex, y,
                                                 PreloadedDataVerificationReferenceType.Cell,
                                                 string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),

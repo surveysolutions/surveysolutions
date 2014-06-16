@@ -248,5 +248,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
                 return ResourceManager.GetString("PL0021_MultyOptionQuestionHasDuplicateAnswers", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has negative value and is used as roster size question.
+        /// </summary>
+        internal static string PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative {
+            get {
+                return ResourceManager.GetString("PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative", resourceCulture);
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             this.dataFileService = dataFileService;
             this.dataParser = dataParser;
         }
-
+        
         public HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName)
         {
             return
@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public ValueParsingResult ParseQuestion(string answer, IQuestion question, out KeyValuePair<Guid, object> parsedValue)
         {
-            return dataParser.TryParse(answer, question, out parsedValue);
+            return dataParser.TryParse(answer, question, questionnaireDocument, out parsedValue);
         }
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
@@ -318,7 +318,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             var question = this.GetQuestionByVariableName(exportedHeaderItem.VariableName);
 
-            return dataParser.BuildAnswerFromStringArray(row.Where((v, i) => headerIndexes.Contains(i)).ToArray(), question);
+            return dataParser.BuildAnswerFromStringArray(row.Where((v, i) => headerIndexes.Contains(i)).ToArray(), question, questionnaireDocument);
         }
 
         private PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedDataByFile[] allLevels)
