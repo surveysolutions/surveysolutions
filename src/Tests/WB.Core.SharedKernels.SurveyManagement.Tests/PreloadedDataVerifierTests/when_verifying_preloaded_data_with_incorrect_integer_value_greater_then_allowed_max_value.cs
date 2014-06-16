@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             KeyValuePair<Guid, object> outValue;
 
             preloadedDataServiceMock.Setup(
-                x => x.ParseQuestion(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), out outValue)).Returns(ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue);
+                x => x.ParseQuestion(Moq.It.IsAny<string>(), Moq.It.IsAny<IQuestion>(), out outValue)).Returns(ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
