@@ -46,6 +46,8 @@
 
                 $scope.moveToChapter = function (chapterId) {
                     questionnaireService.moveQuestion(questionId, 0, chapterId, questionnaireId);
+                    $scope.resetSelection();
+                    questionnaireService.removeItem($scope.items, questionId);
                 };
             }
         ]);

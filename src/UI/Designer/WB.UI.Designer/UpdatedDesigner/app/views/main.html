@@ -198,7 +198,7 @@
 
         <ul role="menu" class="dropdown-menu dropdown-menu-right">
             <li ng-repeat="chapter in questionnaire.chapters">
-                <a ng-click="moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId">
+                <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId">
                     {{chapter.title}}
                     <small>({{chapter.questionsCount}} questions, {{chapter.groupsCount}} groups, {{chapter.rostersCount}} rosters)</small>
                 </a>

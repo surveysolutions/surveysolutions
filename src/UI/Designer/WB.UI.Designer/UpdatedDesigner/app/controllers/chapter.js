@@ -89,7 +89,7 @@
                 $scope.moveToChapter = function (chapterId) {
                     questionnaireService.moveGroup($scope.activeChapter.itemId, 0, chapterId, $routeParams.questionnaireId);
                     $scope.resetSelection();
-                    $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+                    questionnaireService.removeItem($scope.items, $scope.activeChapter.itemId);
                 };
             }
         ]);
