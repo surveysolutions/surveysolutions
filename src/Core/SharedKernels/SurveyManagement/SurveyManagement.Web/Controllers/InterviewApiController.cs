@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var isLinked = dto is InterviewLinkedQuestionView;
             var hasAnswer = dto.Answer != null;
             string answerAsString = !hasAnswer ? string.Empty : dto.Answer.ToString();
-            var options =
+            var avalibleOptions =
                 dto.Options.Select(
                     option =>
                         new
@@ -230,38 +230,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         (option) => hasAnswer && (isLinked
                             ? answersAsDecimalArrayOnLinkedQuestion.Any(x=>x.SequenceEqual((decimal[]) option))
                             : answersAsDecimalArray.Contains((decimal) option));
+
+                    Func<object, int?> getOrderNo = (optionValue) =>dto.Scope == QuestionScope.Supervisor
+                                                ? null
+                                                : (!areAnswersOrdered
+                                                    ? (int?) null
+                                                    : (!isSelected(optionValue))
+                                                        ? (int?) null
+                                                        : isLinked
+                                                            ? Array.FindIndex(answersAsDecimalArrayOnLinkedQuestion,
+                                                                o => o.SequenceEqual((decimal[]) optionValue)) + 1
+                                                            : answersAsDecimalArray.ToList().IndexOf((decimal) optionValue) + 1);
+
                     model = new MultiQuestionModel()
                     {
                         options =
-                            options.Select(
+                            avalibleOptions.Select(
                                 (option, index) =>
                                     new OptionModel(uid)
                                     {
                                         isSelected = isSelected(option.Value),
                                         label = option.Label,
-                                        value = isLinked ? string.Join(", ", (decimal[])option.Value) : option.Value.ToString(),
-                                        orderNo =
-                                            dto.Scope == QuestionScope.Supervisor
-                                                ? null
-                                                : (!areAnswersOrdered
-                                                    ? (int?) null
-                                                    : (!isSelected(option.Value))
-                                                        ? (int?) null
-                                                        : isLinked
-                                                            ? Array.FindIndex(answersAsDecimalArrayOnLinkedQuestion,
-                                                                o => o.SequenceEqual((decimal[]) option.Value)) + 1
-                                                            : answersAsDecimalArray.ToList().IndexOf((decimal) option.Value) + 1)
+                                        value = isLinked ? string.Join(", ", (decimal[]) option.Value) : option.Value.ToString(),
+                                        orderNo = getOrderNo(option.Value)
                                     }),
                         selectedOptions =
                             isLinked
-                                ? answersAsDecimalArrayOnLinkedQuestion.Select(answer => string.Join(", ", answer)) : answersAsDecimalArray.Select(answer => answer.ToString()),
+                                ? answersAsDecimalArrayOnLinkedQuestion.Select(answer => string.Join(", ", answer))
+                                : answersAsDecimalArray.Select(answer => answer.ToString()),
                         areAnswersOrdered = areAnswersOrdered,
                         maxAllowedAnswers = maxAllowedAnswers,
                         answer =
                             string.Join(", ",
-                                options.Where(option => isSelected(option.Value))
+                                avalibleOptions.Where(option => isSelected(option.Value)).OrderBy(option => getOrderNo(option.Value))
                                     .Select(option => option.Label))
                     };
+
                     break;
                 case QuestionType.SingleOption:
                     string answerLabel = string.Empty;
@@ -273,12 +277,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         (option) => hasAnswer && (isLinked
                             ? ((decimal[]) option).SequenceEqual(answersAsDecimalOnLinkedQuestion)
                             : (answerAsDecimal.HasValue && (decimal) option == answerAsDecimal));
-                    var selectedAnswer = options.FirstOrDefault(option => isSelectedOption(option.Value));
+                    var selectedAnswer = avalibleOptions.FirstOrDefault(option => isSelectedOption(option.Value));
                         answerLabel = selectedAnswer == null ? string.Empty : selectedAnswer.Label;
                     model = new SingleQuestionModel()
                     {
                         options =
-                            options.Select(
+                            avalibleOptions.Select(
                                 (option) =>
                                     new OptionModel(uid)
                                     {

@@ -54,8 +54,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             {
                 var selectedAnswers =
                     this.AnswerOptions.Where(a => this.SelectedAnswers.Any(selected => IsVectorsEqual(selected, a.PropagationVector)))
+                        .OrderBy(x => Array.FindIndex(SelectedAnswers, a => IsVectorsEqual(a, x.PropagationVector)))
                         .Select(answer => answer.Title)
                         .ToList();
+
                 return string.Join(", ", selectedAnswers);
             }
         }
