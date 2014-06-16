@@ -668,6 +668,10 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\directives\uiTreeNodes.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\main.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\services\helper.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils-ieshiv.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils-ieshiv.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-underscore\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-underscore\angular-underscore.js" />
     <Content Include="UpdatedDesigner\vendor\angular-underscore\angular-underscore.min.js" />
@@ -1051,6 +1055,10 @@
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\.travis.yml" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\CHANGELOG.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
