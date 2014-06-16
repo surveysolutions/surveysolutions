@@ -38,11 +38,9 @@
     }
 
     & when (@purpose='questionnarie') {
-
-      > .handler {
-        background-image: url(../i/question-item-dots.png);
-        background-position: 5px center;
-        background-repeat: no-repeat;
+      
+       > .handler {
+       
         position: absolute;
         top: 0;
         left: 0;
@@ -51,6 +49,9 @@
       }
 
       &:hover {
+        background-image: url(../i/question-item-dots.png);
+        background-position: 5px center;
+        background-repeat: no-repeat;
         background-color: @questionnarie-question-list-item-hover-color;
         &:after {
           background: none;
@@ -68,8 +69,10 @@
           background: none;
         }
         &:hover {
-          cursor: default;
-          background: @questionnarie-question-list-item-selected-color;
+            background-image: url(../i/question-item-dots.png);
+            background-position: 5px center;
+            background-repeat: no-repeat;
+            background-color: @questionnarie-question-list-item-selected-color;
         }
       }
     }

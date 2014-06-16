@@ -6599,9 +6599,6 @@ body {
   margin-top: 5px;
 }
 .item > .handler {
-  background-image: url(i/question-item-dots.png);
-  background-position: 5px center;
-  background-repeat: no-repeat;
   position: absolute;
   top: 0;
   left: 0;
@@ -6609,6 +6606,9 @@ body {
   height: 100%;
 }
 .item:hover {
+  background-image: url(i/question-item-dots.png);
+  background-position: 5px center;
+  background-repeat: no-repeat;
   background-color: #edeff1;
 }
 .item:hover:after {
@@ -6624,8 +6624,10 @@ body {
   background: none;
 }
 .item.selected:hover {
-  cursor: default;
-  background: #ffffff;
+  background-image: url(i/question-item-dots.png);
+  background-position: 5px center;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
 }
 .item.section {
   font-weight: bold;
