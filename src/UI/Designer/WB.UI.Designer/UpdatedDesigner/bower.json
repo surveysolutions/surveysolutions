@@ -25,6 +25,7 @@
     "json3": "~3.2.6",
     "malihu-custom-scrollbar-plugin": "~2.8.5",
     "prettycheckable": "~2.1.2",
-    "angular-ui-tree": "~2.1.4"
+    "angular-ui-tree": "~2.1.4",
+    "angular-ui-utils": "~0.1.1"
   }
 }

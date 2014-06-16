@@ -10,7 +10,8 @@
         'ui.bootstrap',
         'ui.bootstrap.tpls',
         'ui.bootstrap.transition',
-        'ui.tree'
+        'ui.tree',
+        'ui.utils'
     ]);
 
     angular.module('designerApp').config([

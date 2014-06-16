@@ -1,4 +1,4 @@
-@import "../vendor/bootstrap-select/bootstrap-select.min.css";
+﻿@import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/prettycheckable/dist/prettyCheckable.css";
 /**
@@ -5861,9 +5861,6 @@ body {
 }
 .btn[disabled] {
   opacity: 1;
-  color: #7a7a7a;
-}
-.btn[disabled] {
   color: #fff;
   background-color: transparent;
   background: url(i/btn-disabled.png);
@@ -6058,6 +6055,11 @@ body {
 .mCS-wb-dark-thick > .mCSB_scrollTools .mCSB_buttonRight {
   background-position: -100px -56px;
 }
+.ui-match {
+  background-color: #FFCC00;
+  border-top: solid 1px #FAD540;
+  border-bottom: solid 1px #FAD540;
+}
 #designer-editor.container {
   width: 100%;
   height: 100%;
@@ -6217,7 +6219,7 @@ body {
   color: #9ca4aa;
   font-weight: normal;
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right {
   display: block;
   position: absolute;
   top: 7px;
@@ -6226,40 +6228,40 @@ body {
   padding: 0;
   list-style: none;
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right:before,
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right:after {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right:before,
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right:after {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right:after {
   clear: both;
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right:before,
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right:after {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right:before,
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right:after {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right:after {
   clear: both;
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right li {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right li {
   float: left;
   width: 40px;
   height: 40px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right li a {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right li a {
   display: block;
   width: 100%;
   height: 100%;
   background: no-repeat center 0;
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right li a:hover {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right li a:hover {
   background-position: center -40px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right li a.filter {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right li a.filter {
   background-image: url(i/filter-glyph.png);
 }
-#designer-editor.container section#main > .questionnaire-tree > .chapter-title > ul.controls-right li a.search {
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right li a.search {
   background-image: url(i/search-glyph.png);
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel {
@@ -7048,3 +7050,4 @@ body {
   color: #ff4200;
   font-size: 12px;
 }
+/*# sourceMappingURL=markup.css.css.map */

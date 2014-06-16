@@ -42,12 +42,26 @@
 
 <section id="main" class="row">
     <div class="questionnaire-tree col-xs-6">
-        <div class="chapter-title">
-            {{currentChapter.title }}
-            <ul class="controls-right">
-                <li><a class="filter" title="Toggle Filter"></a></li>
-                <li><a class="search" title="Toggle Search"></a></li>
-            </ul>
+        <div class="chapter-title" ng-switch on="filtersBoxMode" ng-animate="'animate'">
+            <div ng-switch-when="search">
+                <div class="input-group">
+                    <input type="text" ng-model="search.searchText" focus-on="focusSearch" />
+                    <span class="input-group-addon glyphicon glyphicon-search"></span>
+                </div>
+                <button ng-click="hideSearch()">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+            </div>
+
+            <div ng-switch-when="default">
+                {{currentChapter.title }}
+                <ul class="controls-right">
+                    <li><a class="filter" title="Toggle Filter"></a></li>
+                    <li>
+                        <a href="javascript:void(0);" ng-click="showSearch()" class="search" title="Toggle Search"></a>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}" ng-controller="ChaptersCtrl">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
@@ -82,12 +96,14 @@
 
                 <div class="handler" ui-tree-handle></div>
                 <div class="icon"></div>
-                {{ item.title }}
+                <span ng-bind-html="item.title | highlight:search.searchText"></span>
+
                 <!--<i class="glyphicon glyphicon-random"></i>-->
                 <div class="qname-block">
-                    <a href class="linked"></a>{{item.variable}}
+                    <a href class="linked"></a>
+                    <span ng-bind-html="item.variable | highlight:search.searchText"></span>
                     <div class="btn-group">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"></a>
+                        <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"></a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a>Delete</a>
@@ -107,12 +123,12 @@
                 <div class="handler" ui-tree-handle></div>
                 <span ng-click="collapse(item)" ng-show="!item.collapsed" class="btn-collapse"></span>
                 <span ng-click="expand(item)" ng-show="item.collapsed" class="btn-expand"></span>
-                {{item.title}}
-                <!--<i class="glyphicon glyphicon-random" ui-tree-handle></i>-->
+                <span ng-bind-html="item.title | highlight:search.searchText"></span>
+
             </div>
 
             <div ng-show="!item.collapsed" ui-tree-nodes="item.items" ng-model="item.items">
-                <div ng-repeat="item in item.items" ui-tree-node ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
+                <div ng-repeat="item in item.items | filter:search.searchText" ui-tree-node ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
                 </div>
             </div>
 
@@ -125,7 +141,7 @@
 
         <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
             <div ui-tree-nodes ng-model="items">
-                <div ng-repeat="item in items" ui-tree-node ng-include="'tree_item_renderer.html'">
+                <div ng-repeat="item in items | filter:search.searchText" ui-tree-node ng-include="'tree_item_renderer.html'">
                 </div>
             </div>
 

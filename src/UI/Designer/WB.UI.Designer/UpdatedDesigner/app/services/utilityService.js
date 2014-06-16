@@ -1,7 +1,8 @@
 ﻿(function() {
     angular.module('designerApp')
         .factory('utilityService', [
-            function() {
+            '$rootScope', '$timeout',
+            function ($rootScope, $timeout) {
                 var utilityService = {};
 
                 utilityService.guid = function() {
@@ -21,6 +22,12 @@
                         return typeof args[number] != 'undefined'
                             ? args[number]
                             : match;
+                    });
+                };
+
+                utilityService.focus = function(name) {
+                    $timeout(function() {
+                        $rootScope.$broadcast('focusOn', name);
                     });
                 };
 

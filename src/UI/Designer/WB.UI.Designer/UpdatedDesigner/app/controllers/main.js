@@ -11,6 +11,11 @@
                     errors: []
                 };
 
+                var filtersBlockModes = {
+                    default: 'default',
+                    search: 'search'
+                };
+
                 $scope.verify = function() {
                     verificationService.verify($routeParams.questionnaireId).success(function(result) {
                         $scope.verificationStatus.errors = result.errors;
@@ -31,7 +36,11 @@
 
                 $scope.item = null;
 
+                $scope.search = { searchText: '' };
+
                 $scope.questionnaire = null;
+
+                $scope.filtersBoxMode = filtersBlockModes.default;
 
                 $scope.groupsTree = {
                     dropped: function(event) {
@@ -198,6 +207,16 @@
                             }
                         }
                     });
+
+                $scope.showSearch = function() {
+                    $scope.filtersBoxMode = filtersBlockModes.search;
+                    utilityService.focus('focusSearch');
+                };
+
+                $scope.hideSearch = function() {
+                    $scope.filtersBoxMode = filtersBlockModes.default;
+                    $scope.search.searchText = '';
+                };
 
                 //do not reload views, change url only
                 var lastRoute = $route.current;
