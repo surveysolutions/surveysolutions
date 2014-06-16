@@ -64,6 +64,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         if (numericQuestion.MaxValue.HasValue && intNumericValue > numericQuestion.MaxValue.Value)
                             return ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue;
 
+                        if (intNumericValue < 0 &&
+                            questionnaire.FirstOrDefault<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey) != null)
+                            return ValueParsingResult.AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsNegative;
+
                         return ValueParsingResult.OK;
                     }
                     else
