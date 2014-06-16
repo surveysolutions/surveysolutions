@@ -43,6 +43,10 @@
                         }
                     });
                 };
+
+                $scope.moveToChapter = function (chapterId) {
+                    questionnaireService.moveQuestion(questionId, 0, chapterId, questionnaireId);
+                };
             }
         ]);
 }());

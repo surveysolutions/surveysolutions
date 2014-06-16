@@ -2,8 +2,8 @@
     'use strict';
     angular.module('designerApp')
         .factory('questionnaireService', [
-            '$http', 'utilityService',
-            function($http, string) {
+            '$http', 'commandService', 'utilityService',
+            function($http, commandService, string) {
 
                 var urlBase = '../api/questionnaire';
                 var questionnaireService = {};
@@ -31,6 +31,26 @@
                 questionnaireService.getQuestionDetailsById = function(questionnaireId, questionId) {
                     var url = string.format('{0}/editQuestion/{1}?questionId={2}', urlBase, questionnaireId, questionId);
                     return $http.get(url);
+                };
+
+                questionnaireService.moveGroup = function(groupId, index, destGroupId, questionnaireId) {
+                    commandService.execute('MoveGroup', {
+                            targetGroupId: destGroupId,
+                            targetIndex: index,
+                            groupId: groupId,
+                            questionnaireId: questionnaireId
+                        }
+                    );
+                };
+
+                questionnaireService.moveQuestion = function(questionId, index, destGroupId, questionnaireId) {
+                    commandService.execute('MoveQuestion', {
+                            targetGroupId: destGroupId,
+                            targetIndex: index,
+                            questionId: questionId,
+                            questionnaireId: questionnaireId
+                        }
+                    );
                 };
 
                 return questionnaireService;

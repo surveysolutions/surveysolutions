@@ -40,21 +40,9 @@
                         var destGroupId = destItem ? destItem.itemId : $scope.questionnaire.chapters[0].itemId;
 
                         if ($scope.isQuestion(movedItem)) {
-                            commandService.execute('MoveQuestion', {
-                                    targetGroupId: destGroupId,
-                                    targetIndex: event.dest.index,
-                                    questionId: movedItem.itemId,
-                                    questionnaireId: $routeParams.questionnaireId
-                                }
-                            );
+                            questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId);
                         } else {
-                            commandService.execute('MoveGroup', {
-                                    targetGroupId: destGroupId,
-                                    targetIndex: event.dest.index,
-                                    groupId: event.source.nodeScope.item.itemId,
-                                    questionnaireId: $routeParams.questionnaireId
-                                }
-                            );
+                            questionnaireService.moveGroup(event.source.nodeScope.item.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId);
                         }
                     }
                 };
@@ -62,6 +50,13 @@
                 $scope.currentChapter = null;
 
                 $scope.currentChapterId = null;
+
+                $scope.resetSelection = function () {
+                    navigationService.openChapter($routeParams.questionnaireId, $scope.currentChapterId);
+                    $scope.currentItemId = null;
+                    $scope.activeRoster = null;
+                    $scope.activeQuestion = null;
+                };
 
                 $scope.setItem = function(item) {
                     navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
