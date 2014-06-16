@@ -53,6 +53,34 @@
                     );
                 };
 
+                
+
+                questionnaireService.removeItem = function (items, itemId) {
+                    var removeFunc = function(item, itemToRemoveId) {
+                        var itemToRemove = _.findWhere(items, { itemId: itemId });
+                        if (itemToRemove) {
+                            var indexOf = _.indexOf(items, itemToRemove);
+                            items.splice(indexOf, 1);
+                            return true;
+                        }
+
+                        var childItems = item.items;
+                        for (var i = 0; i < childItems.length; i++) {
+                            removeFunc(childItems[i], itemToRemoveId);
+                        }
+
+                        return false;
+                    };
+
+                    for (var j = 0; j < items.length; j++) {
+
+                        if (removeFunc(items[j], itemId)) {
+                            return;
+                        };
+                    }
+                   
+                }
+
                 return questionnaireService;
             }
         ]);
