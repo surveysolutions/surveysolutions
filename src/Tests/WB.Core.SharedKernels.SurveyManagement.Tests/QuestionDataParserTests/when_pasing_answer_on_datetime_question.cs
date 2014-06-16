@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
@@ -19,13 +17,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName,
-                        CreateQuestionnaireDocumentWithOneChapter(new DateTimeQuestion()
-                        {
-                            PublicKey = questionId,
-                            QuestionType = QuestionType.DateTime,
-                            StataExportCaption = questionVarName
-                        }), out parcedValue);
+                    questionDataParser.TryParse(answer, new DateTimeQuestion()
+                    {
+                        PublicKey = questionId,
+                        QuestionType = QuestionType.DateTime,
+                        StataExportCaption = questionVarName
+                    }, out parcedValue);
 
         private It should_result_be_equal_to_4_28_2014 = () =>
             parcedValue.Value.ShouldEqual(DateTime.Parse("4/28/2014", CultureInfo.InvariantCulture.DateTimeFormat));

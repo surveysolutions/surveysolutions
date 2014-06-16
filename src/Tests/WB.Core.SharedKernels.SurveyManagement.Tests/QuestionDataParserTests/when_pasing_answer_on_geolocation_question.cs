@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
@@ -18,19 +15,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName,
-                        CreateQuestionnaireDocumentWithOneChapter(new GpsCoordinateQuestion()
-                        {
-                            PublicKey = questionId,
-                            QuestionType = QuestionType.GpsCoordinates,
-                            StataExportCaption = questionVarName
-                        }), out parcedValue);
+                    questionDataParser.TryParse(answer, new GpsCoordinateQuestion()
+                    {
+                        PublicKey = questionId,
+                        QuestionType = QuestionType.GpsCoordinates,
+                        StataExportCaption = questionVarName
+                    }, out parcedValue);
 
         private It should_result_be_type_of_GeoPosition = () =>
             parcedValue.Value.ShouldBeOfExactType<GeoPosition>();
 
         private It should_result_key_be_equal_to_questionId = () =>
             parcedValue.Key.ShouldEqual(questionId);
-
     }
 }

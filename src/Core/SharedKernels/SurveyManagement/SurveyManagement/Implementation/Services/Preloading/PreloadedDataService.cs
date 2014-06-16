@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -125,9 +121,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return null;
         }
 
-        public ValueParsingResult ParseQuestion(string answer, string variableName, out KeyValuePair<Guid, object> parsedValue)
+        public ValueParsingResult ParseQuestion(string answer, IQuestion question, out KeyValuePair<Guid, object> parsedValue)
         {
-            return dataParser.TryParse(answer, variableName, questionnaireDocument, out parsedValue);
+            return dataParser.TryParse(answer, question, out parsedValue);
         }
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
@@ -320,8 +316,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (!headerIndexes.Any())
                 return null;
 
-            return dataParser.BuildAnswerFromStringArray(row.Where((v, i) => headerIndexes.Contains(i)).ToArray(),
-                exportedHeaderItem.VariableName, questionnaireDocument);
+            var question = this.GetQuestionByVariableName(exportedHeaderItem.VariableName);
+
+            return dataParser.BuildAnswerFromStringArray(row.Where((v, i) => headerIndexes.Contains(i)).ToArray(), question);
         }
 
         private PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedDataByFile[] allLevels)
@@ -350,6 +347,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     .Select(scope => exportStructure.HeaderToLevelMap[scope.ScopeVector]).Select(
                         child =>
                             GetDataFileByLevelName(allLevels, child.LevelName)).Where(file => file != null).ToArray();
+        }
+
+        public IQuestion GetQuestionByVariableName(string variableName)
+        {
+            return questionnaireDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption.Equals(variableName, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

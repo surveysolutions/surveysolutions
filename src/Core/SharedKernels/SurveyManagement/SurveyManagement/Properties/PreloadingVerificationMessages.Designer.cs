@@ -239,5 +239,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
                 return ResourceManager.GetString("PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categorical multiple answers question has duplicate answer options .
+        /// </summary>
+        internal static string PL0021_MultyOptionQuestionHasDuplicateAnswers {
+            get {
+                return ResourceManager.GetString("PL0021_MultyOptionQuestionHasDuplicateAnswers", resourceCulture);
+            }
+        }
     }
 }
