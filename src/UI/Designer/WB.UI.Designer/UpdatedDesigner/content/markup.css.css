@@ -5863,6 +5863,11 @@ body {
   opacity: 1;
   color: #7a7a7a;
 }
+.btn[disabled] {
+  color: #fff;
+  background-color: transparent;
+  background: url(i/btn-disabled.png);
+}
 .btn-lg,
 .btn-lg:hover,
 .btn-lg:focus,
@@ -5907,7 +5912,7 @@ body {
   top: 0;
   height: 100%;
   width: 40px;
-  background: url(lib/i/dropdown-arrow.png) no-repeat center center;
+  background: url(i/dropdown-arrow.png) no-repeat center center;
 }
 .dropdown > .wb-dropdown-button {
   background-color: #fff;
@@ -6354,7 +6359,7 @@ body {
   vertical-align: middle;
   width: 37px;
   height: 30px;
-  background: url(lib/i/btn-dropdown-blue.png) center -5px no-repeat;
+  background: url(i/btn-dropdown-blue.png) center -5px no-repeat;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .btn-group > .dropdown-toggle:hover {
   background-position: center -42px;
@@ -6731,7 +6736,7 @@ body {
   vertical-align: middle;
   width: 37px;
   height: 30px;
-  background: url(lib/i/btn-dropdown-blue.png) center -5px no-repeat;
+  background: url(i/btn-dropdown-blue.png) center -5px no-repeat;
 }
 .item > .qname-block > .btn-group > .dropdown-toggle:hover {
   background-position: center -42px;
@@ -6948,7 +6953,7 @@ body {
   vertical-align: middle;
   width: 37px;
   height: 30px;
-  background: url(lib/i/btn-dropdown-blue.png) center -5px no-repeat;
+  background: url(i/btn-dropdown-blue.png) center -5px no-repeat;
 }
 #verify-popover-content .question-list .item > .qname-block > .btn-group > .dropdown-toggle:hover {
   background-position: center -42px;
