@@ -196,6 +196,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 if (this.isDisposed)
                     return;
 
+                this.tvError.Text = Model.ValidationMessage;
                 this.FireAnswerSavedEvent();
             });
         }
