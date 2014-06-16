@@ -11,17 +11,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "unparsed";
             questionDataParser = CreateQuestionDataParser();
+            question = new DateTimeQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.DateTime,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, new DateTimeQuestion()
-                    {
-                        PublicKey = questionId,
-                        QuestionType = QuestionType.DateTime,
-                        StataExportCaption = questionVarName
-                    }, out parcedValue);
+                    questionDataParser.TryParse(answer, question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
 
         private It should_result_be_AnswerAsDateTimeWasNotParsed = () =>
             parsingResult.ShouldEqual(ValueParsingResult.AnswerAsDateTimeWasNotParsed);

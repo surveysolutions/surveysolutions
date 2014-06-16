@@ -11,17 +11,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "1";
             questionDataParser = CreateQuestionDataParser();
+            question = new MultyOptionsQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.MultyOption,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, new MultyOptionsQuestion()
-                    {
-                        PublicKey = questionId,
-                        QuestionType = QuestionType.MultyOption,
-                        StataExportCaption = questionVarName
-                    }, out parcedValue);
+                    questionDataParser.TryParse(answer, question,CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
 
         private It should_result_be_ParsedValueIsNotAllowed = () =>
             parsingResult.ShouldEqual(ValueParsingResult.ParsedValueIsNotAllowed);

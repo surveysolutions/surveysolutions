@@ -11,19 +11,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "unparsed";
             questionDataParser = CreateQuestionDataParser();
+            question = new NumericQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.Numeric,
+                IsInteger = false,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, new NumericQuestion()
-                    {
-                        PublicKey = questionId,
-                        QuestionType = QuestionType.Numeric,
-                        IsInteger = false,
-                        StataExportCaption = questionVarName
-                    },
-                        out parcedValue);
+                    questionDataParser.TryParse(answer, question,
+                        CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
 
         private It should_result_be_AnswerAsDecimalWasNotParsed = () =>
             parsingResult.ShouldEqual(ValueParsingResult.AnswerAsDecimalWasNotParsed);

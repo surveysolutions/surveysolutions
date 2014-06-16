@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -16,20 +12,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "-5";
             questionDataParser = CreateQuestionDataParser();
+            question = new NumericQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.Numeric,
+                IsInteger = true,
+                MaxValue = 3,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName,
-                        CreateQuestionnaireDocumentWithOneChapter(new NumericQuestion()
-                        {
-                            PublicKey = questionId,
-                            QuestionType = QuestionType.Numeric,
-                            IsInteger = true,
-                            MaxValue = 3,
-                            StataExportCaption = questionVarName
-                        },
+                    questionDataParser.TryParse(answer, question,
+                        CreateQuestionnaireDocumentWithOneChapter(question,
                             new Group("roster group")
                             {
                                 PublicKey = Guid.NewGuid(),

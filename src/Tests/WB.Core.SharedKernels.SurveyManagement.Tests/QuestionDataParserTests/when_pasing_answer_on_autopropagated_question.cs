@@ -10,17 +10,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "1";
             questionDataParser = CreateQuestionDataParser();
+            question = new AutoPropagateQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.AutoPropagate,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, new AutoPropagateQuestion()
-                    {
-                        PublicKey = questionId,
-                        QuestionType = QuestionType.AutoPropagate,
-                        StataExportCaption = questionVarName
-                    }, out parcedValue);
+                    questionDataParser.TryParse(answer, question,CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
 
         private It should_result_be_equal_to_1 = () =>
             parcedValue.Value.ShouldEqual(1);

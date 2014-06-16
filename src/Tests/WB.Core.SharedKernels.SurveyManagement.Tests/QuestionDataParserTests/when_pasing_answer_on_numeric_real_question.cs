@@ -10,18 +10,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "1.22";
             questionDataParser = CreateQuestionDataParser();
+            question = new NumericQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.Numeric,
+                IsInteger = false,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, new NumericQuestion()
-                    {
-                        PublicKey = questionId,
-                        QuestionType = QuestionType.Numeric,
-                        IsInteger = false,
-                        StataExportCaption = questionVarName
-                    },
+                    questionDataParser.TryParse(answer, question,CreateQuestionnaireDocumentWithOneChapter(question),
                         out parcedValue);
 
         private It should_result_be_equal_to_1_22 = () =>

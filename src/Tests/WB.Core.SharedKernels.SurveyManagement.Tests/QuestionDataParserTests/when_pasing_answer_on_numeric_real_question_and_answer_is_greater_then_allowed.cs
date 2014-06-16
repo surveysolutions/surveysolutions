@@ -11,19 +11,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "5.6";
             questionDataParser = CreateQuestionDataParser();
+            question = new NumericQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.Numeric,
+                IsInteger = false,
+                MaxValue = 3,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, new NumericQuestion()
-                    {
-                        PublicKey = questionId,
-                        QuestionType = QuestionType.Numeric,
-                        IsInteger = false,
-                        MaxValue = 3,
-                        StataExportCaption = questionVarName
-                    }, out parcedValue);
+                    questionDataParser.TryParse(answer, question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
 
         private It should_result_be_equal_to_5_6 = () =>
             parcedValue.Value.ShouldEqual((decimal) 5.6);

@@ -10,18 +10,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "some answer";
             questionDataParser = CreateQuestionDataParser();
+            question = new TextQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.Text,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
                     questionDataParser.TryParse(answer, 
-                        new TextQuestion()
-                        {
-                            PublicKey = questionId,
-                            QuestionType = QuestionType.Text,
-                            StataExportCaption = questionVarName
-                        },
+                        question,
+                        CreateQuestionnaireDocumentWithOneChapter(question),
                         out parcedValue);
 
         private It should_result_value_be_equal_to_answer = () =>
@@ -29,5 +31,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 
         private It should_result_key_be_equal_to_questionId = () =>
             parcedValue.Key.ShouldEqual(questionId);
+    
+    
     }
+
 }

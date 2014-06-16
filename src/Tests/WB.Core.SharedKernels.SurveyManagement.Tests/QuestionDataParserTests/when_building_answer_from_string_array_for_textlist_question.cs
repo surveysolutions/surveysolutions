@@ -7,19 +7,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
     internal class when_building_answer_from_string_array_for_textlist_question : QuestionDataParserTestContext
     {
-        private Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
+        private Establish context = () =>
+        {
+            questionDataParser = CreateQuestionDataParser();
+            question = new TextListQuestion()
+            {
+                MaxAnswerCount = 5,
+                PublicKey = questionId,
+                QuestionType = QuestionType.TextList,
+                StataExportCaption = questionVarName
+            };
+        };
 
         private Because of =
             () =>
                 result =
                     questionDataParser.BuildAnswerFromStringArray(new string[] { "a", "b", "c" },
-                        new TextListQuestion()
-                        {
-                            MaxAnswerCount = 5,
-                            PublicKey = questionId,
-                            QuestionType = QuestionType.TextList,
-                            StataExportCaption = questionVarName
-                        });
+                        question, CreateQuestionnaireDocumentWithOneChapter(question));
 
         private It should_result_be_type_of_array_of_Tuple_decimal_string = () =>
             result.Value.Value.ShouldBeOfExactType<Tuple<decimal, string>[]>();
