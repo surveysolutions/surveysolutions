@@ -11,17 +11,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "unparsed";
             questionDataParser = CreateQuestionDataParser();
+            question = new GpsCoordinateQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.GpsCoordinates,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, new GpsCoordinateQuestion()
-                    {
-                        PublicKey = questionId,
-                        QuestionType = QuestionType.GpsCoordinates,
-                        StataExportCaption = questionVarName
-                    }, out parcedValue);
+                    questionDataParser.TryParse(answer, question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
 
         private It should_result_be_null = () =>
             parsingResult.ShouldEqual(ValueParsingResult.AnswerAsGpsWasNotParsed);

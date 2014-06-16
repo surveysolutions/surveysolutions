@@ -73,10 +73,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         private It should_result_has_1_error = () =>
             result.Count().ShouldEqual(1);
 
-        private It should_return_single_PL0011_error = () =>
+        private It should_return_single_PL0021_error = () =>
             result.First().Code.ShouldEqual("PL0021");
 
-        private It should_return_reference_with_Cell_type = () =>
+        private It should_return_reference_with_Column_type = () =>
             result.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         private static PreloadedDataVerifier preloadedDataVerifier;

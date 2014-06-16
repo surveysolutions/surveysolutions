@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -11,7 +12,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 {
     internal class QuestionDataParser : IQuestionDataParser
     {
-        public ValueParsingResult TryParse(string answer, IQuestion question, out KeyValuePair<Guid, object> parsedValue)
+        public ValueParsingResult TryParse(string answer, IQuestion question, QuestionnaireDocument questionnaire, out KeyValuePair<Guid, object> parsedValue)
         {
             parsedValue = new KeyValuePair<Guid, object>();
 
@@ -124,7 +125,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         }
 
-        public KeyValuePair<Guid, object>? BuildAnswerFromStringArray(string[] answers, IQuestion question)
+        public KeyValuePair<Guid, object>? BuildAnswerFromStringArray(string[] answers, IQuestion question, QuestionnaireDocument questionnaire)
         {
             if (question == null)
                 return null;
@@ -134,7 +135,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             foreach (var answer in answers)
             {
                 KeyValuePair<Guid, object> parsedAnswer;
-                if(this.TryParse(answer, question, out parsedAnswer) != ValueParsingResult.OK)
+                if(this.TryParse(answer, question, questionnaire, out parsedAnswer) != ValueParsingResult.OK)
                     continue;
                 
                 typedAnswers.Add(parsedAnswer.Value);

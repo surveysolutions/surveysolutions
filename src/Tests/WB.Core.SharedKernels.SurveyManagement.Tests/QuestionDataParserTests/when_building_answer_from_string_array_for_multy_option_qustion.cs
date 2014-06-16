@@ -7,25 +7,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
 {
     internal class when_building_answer_from_string_array_for_multy_option_qustion : QuestionDataParserTestContext
     {
-        private Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
+        private Establish context = () =>
+        {
+            questionDataParser = CreateQuestionDataParser();
+            question = new MultyOptionsQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.MultyOption,
+                Answers =
+                    new List<Answer>()
+                    {
+                        new Answer() { AnswerValue = "1", AnswerText = "a" },
+                        new Answer() { AnswerValue = "2", AnswerText = "b" },
+                        new Answer() { AnswerValue = "3", AnswerText = "c" }
+                    },
+                StataExportCaption = questionVarName
+            };
+        };
 
         private Because of =
             () =>
                 result =
                     questionDataParser.BuildAnswerFromStringArray(new string[] { "1", "2" },
-                        new MultyOptionsQuestion()
-                        {
-                            PublicKey = questionId,
-                            QuestionType = QuestionType.MultyOption,
-                            Answers =
-                                new List<Answer>()
-                                {
-                                    new Answer() { AnswerValue = "1", AnswerText = "a" },
-                                    new Answer() { AnswerValue = "2", AnswerText = "b" },
-                                    new Answer() { AnswerValue = "3", AnswerText = "c" }
-                                },
-                            StataExportCaption = questionVarName
-                        });
+                        question, CreateQuestionnaireDocumentWithOneChapter(question));
 
         private It should_result_be_type_of_array_of_decimal = () =>
             result.Value.Value.ShouldBeOfExactType<decimal[]>();
