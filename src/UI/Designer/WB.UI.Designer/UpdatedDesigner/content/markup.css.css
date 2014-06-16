@@ -6004,6 +6004,9 @@ body {
 /*
   string @color: 'blue' or 'gray'
 */
+.angular-ui-tree-placeholder {
+  outline: 2px dashed #BCC3C8;
+}
 .mCSB_container {
   margin-right: 0;
 }
@@ -6592,10 +6595,17 @@ body {
 .item:first-child {
   margin-top: 5px;
 }
-.item:hover {
+.item > .handler {
   background-image: url(i/question-item-dots.png);
   background-position: 5px center;
   background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 100%;
+}
+.item:hover {
   background-color: #edeff1;
 }
 .item:hover:after {

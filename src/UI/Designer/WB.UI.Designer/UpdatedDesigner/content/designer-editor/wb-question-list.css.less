@@ -38,10 +38,19 @@
     }
 
     & when (@purpose='questionnarie') {
-      &:hover {
+
+      > .handler {
         background-image: url(../i/question-item-dots.png);
         background-position: 5px center;
         background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 18px;
+        height: 100%;
+      }
+
+      &:hover {
         background-color: @questionnarie-question-list-item-hover-color;
         &:after {
           background: none;
@@ -274,6 +283,6 @@
   }
 }
 
-.wb-question-list(@purpose) {
+.angular-ui-tree-placeholder {
+  outline: 2px dashed #BCC3C8;
 }
-
