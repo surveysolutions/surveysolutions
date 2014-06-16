@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
@@ -18,13 +16,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName,
-                        CreateQuestionnaireDocumentWithOneChapter(new DateTimeQuestion()
-                        {
-                            PublicKey = questionId,
-                            QuestionType = QuestionType.DateTime,
-                            StataExportCaption = questionVarName
-                        }),out parcedValue);
+                    questionDataParser.TryParse(answer, new DateTimeQuestion()
+                    {
+                        PublicKey = questionId,
+                        QuestionType = QuestionType.DateTime,
+                        StataExportCaption = questionVarName
+                    }, out parcedValue);
 
         private It should_result_be_AnswerAsDateTimeWasNotParsed = () =>
             parsingResult.ShouldEqual(ValueParsingResult.AnswerAsDateTimeWasNotParsed);

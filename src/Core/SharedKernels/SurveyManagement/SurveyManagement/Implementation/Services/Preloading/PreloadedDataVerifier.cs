@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -328,6 +329,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     var row = levelData.Content[y];
                     foreach (var presentQuestion in presentQuestions)
                     {
+                        var question = preloadedDataService.GetQuestionByVariableName(presentQuestion.Key);
+                        var values = new List<decimal>(); 
+
                         foreach (var answerIndex in presentQuestion.Value)
                         {
                             var answer = row[answerIndex];
@@ -335,12 +339,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                                 continue;
 
                             KeyValuePair<Guid, object> value;
-                            var parsedResult = preloadedDataService.ParseQuestion(answer, presentQuestion.Key, out value);
+                            var parsedResult = preloadedDataService.ParseQuestion(answer, question, out value);
 
                             switch (parsedResult)
                             {
                                 case ValueParsingResult.OK:
+                                {
+                                    if(question is MultyOptionsQuestion)
+                                        values.Add((decimal)value.Value);
                                     continue;
+                                }
+                                    
                                 case ValueParsingResult.AnswerAsDecimalWasNotParsed:
                                     yield return
                                         new PreloadedDataVerificationError("PL0019",
@@ -442,6 +451,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                                     break;
                             }
                         }
+
+                        if(values.Count > 0 && values.GroupBy(n => n).Any(c => c.Count() > 1))
+                            yield return
+                                new PreloadedDataVerificationError("PL0021", 
+                                    PreloadingVerificationMessages.PL0021_MultyOptionQuestionHasDuplicateAnswers,
+                                    new PreloadedDataVerificationReference(PreloadedDataVerificationReferenceType.Column, presentQuestion.Key, levelData.FileName));
+
                     }
                 }
             }
