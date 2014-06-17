@@ -121,16 +121,17 @@
 
                 $scope.addQuestion = function(parent) {
                     var newId = utilityService.guid();
+                    var variable = "q" + newId.substring(0, 5);
                     var emptyQuestion = {
                         "itemId": newId,
                         "title": "New Question",
-                        "variable": "",
+                        "variable": variable,
                         "type": 7, // todo: explain parameter
                         "linkedVariables": [],
                         "brokenLinkedVariables": null
                     };
 
-                    commandService.addQuestion($routeParams.questionnaireId, parent.itemId, newId).success(function(result) {
+                    commandService.addQuestion($routeParams.questionnaireId, parent.itemId, newId, variable).success(function(result) {
                             if (result.IsSuccess) {
                                 parent.items.push(emptyQuestion);
                             } else {

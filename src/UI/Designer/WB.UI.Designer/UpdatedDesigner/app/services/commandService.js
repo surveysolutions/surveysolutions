@@ -145,13 +145,13 @@
                     return commandCall("UpdateGroup", command);
                 };
 
-                commandService.addQuestion = function(questionnaireId, parentGroupId, newId) {
+                commandService.addQuestion = function(questionnaireId, parentGroupId, newId, varName) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "questionId": newId,
                         "title": "New Question",
                         "type": "Text",
-                        "variableName": "q",
+                        "variableName":varName,
                         "isPreFilled": false,
                         "isMandatory": false,
                         "scope": "Interviewer",
