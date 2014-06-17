@@ -1,4 +1,4 @@
-﻿@import "../vendor/bootstrap-select/bootstrap-select.min.css";
+@import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/prettycheckable/dist/prettyCheckable.css";
 /**
@@ -6602,8 +6602,9 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 18px;
+  width: 25px;
   height: 100%;
+  z-index: 100;
 }
 .item:hover {
   background-image: url(i/question-item-dots.png);
@@ -6632,7 +6633,7 @@ body {
 .item.section {
   font-weight: bold;
   text-transform: uppercase;
-  padding-left: 14px;
+  padding-left: 25px;
 }
 .item.question {
   margin-left: 20px;
@@ -6859,7 +6860,7 @@ body {
 #verify-popover-content .question-list .item.section {
   font-weight: bold;
   text-transform: uppercase;
-  padding-left: 14px;
+  padding-left: 25px;
 }
 #verify-popover-content .question-list .item > span.var {
   font-style: italic;
@@ -7053,4 +7054,3 @@ body {
   color: #ff4200;
   font-size: 12px;
 }
-/*# sourceMappingURL=markup.css.css.map */
