@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -16,12 +15,10 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
-using WB.UI.Supervisor.Code;
 
-namespace WB.UI.Supervisor.Controllers
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public class SyncController : AsyncController
     {
@@ -54,9 +51,9 @@ namespace WB.UI.Supervisor.Controllers
 
         protected UserView GetUser(string login, string password)
         {
-            if (validateUserCredentials(login, password))
+            if (this.validateUserCredentials(login, password))
             {
-                if (checkIfUserIsInRole(login, UserRoles.Operator.ToString()))
+                if (this.checkIfUserIsInRole(login, UserRoles.Operator.ToString()))
                 {
                     return this.viewFactory.Load(new UserViewInputModel(login, null));
                 }
@@ -310,12 +307,12 @@ namespace WB.UI.Supervisor.Controllers
 
             if (maxVersion > 0)
             {
-                var targetToSearchVersions = Server.MapPath(pathToSearchVersions);
+                var targetToSearchVersions = this.Server.MapPath(this.pathToSearchVersions);
                 string path = Path.Combine(targetToSearchVersions, maxVersion.ToString(CultureInfo.InvariantCulture));
 
                 string pathToFile = Path.Combine(path, this.CapiFileName);
                 if (System.IO.File.Exists(pathToFile))
-                    return File(pathToFile, "application/vnd.android.package-archive", this.CapiFileName);
+                    return this.File(pathToFile, "application/vnd.android.package-archive", this.CapiFileName);
             }
 
             return null;
@@ -325,7 +322,7 @@ namespace WB.UI.Supervisor.Controllers
         {
             int maxVersion = 0;
 
-            var targetToSearchVersions = Server.MapPath(pathToSearchVersions);
+            var targetToSearchVersions = this.Server.MapPath(this.pathToSearchVersions);
             if (Directory.Exists(targetToSearchVersions))
             {
                 var dirInfo = new DirectoryInfo(targetToSearchVersions);
@@ -364,10 +361,10 @@ namespace WB.UI.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                logger.Error("Error on version check.", e);
+                this.logger.Error("Error on version check.", e);
             }
 
-            return Json(isNewVersionExsist, JsonRequestBehavior.AllowGet);
+            return this.Json(isNewVersionExsist, JsonRequestBehavior.AllowGet);
         }
 
 

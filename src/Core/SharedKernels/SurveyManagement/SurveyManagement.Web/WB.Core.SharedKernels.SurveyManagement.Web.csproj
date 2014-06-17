@@ -148,6 +148,7 @@
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />

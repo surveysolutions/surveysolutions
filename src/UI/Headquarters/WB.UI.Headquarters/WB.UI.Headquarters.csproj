@@ -298,6 +298,7 @@
     <Compile Include="Controllers\ControlPanelApiController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
+    <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="API\SyncController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
@@ -360,7 +361,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
