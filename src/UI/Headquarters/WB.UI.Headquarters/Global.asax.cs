@@ -16,6 +16,7 @@ using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Elmah;
 
 namespace WB.UI.Headquarters
@@ -35,6 +36,7 @@ namespace WB.UI.Headquarters
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new SupervisorFunctionsEnabledAttribute());
         }
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)
