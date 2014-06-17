@@ -1,27 +1,11 @@
 @import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/prettycheckable/dist/prettyCheckable.css";
-@import url(http://fonts.googleapis.com/css?family=Roboto:300);
 /**
  * WorldBank Designer
  * file: markup.css.less
  * description: LESS main import script
  */
-/*
-*= depend_on lib/wb-common.css.less
-*= depend_on lib/wb-vars.css.less
-*= depend_on lib/wb-mixins.css.less
-*= depend_on lib/wb-fontstyles.css.less
-*= depend_on lib/controls/wb-buttons.css.less
-*= depend_on lib/controls/wb-labels.css.less
-*= depend_on lib/controls/wb-inputs.css.less
-*= depend_on lib/controls/wb-breadcrumbs.css.less
-*= depend_on designer-editor/wb-question-list.css.less
-*= depend_on designer-editor/wb-custom-scrollbar.css.less
-*= depend_on designer-editor/wb-designer-editor.css.less
-*= depend_on designer-editor/wb-designer-verify-popover.css.less
-*= depend_on designer-editor/wb-context-menu.css.less
-*/
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -5818,6 +5802,12 @@ body {
  * file: wb-mixins.css.less
  * description: common mixins definition
  */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'), url(../fonts/Roboto300.woff) format('woff');
+}
 /**
  * WorldBank Designer
  * file: wb-fontstyles.css.less
