@@ -6269,6 +6269,59 @@ body {
 #designer-editor.container section#main > .questionnaire-tree > .chapter-title ul.controls-right li a.search {
   background-image: url(i/search-glyph.png);
 }
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box:before,
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box:after {
+  content: " ";
+  display: table;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box:after {
+  clear: both;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box:before,
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box:after {
+  content: " ";
+  display: table;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box:after {
+  clear: both;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box > .input-group {
+  margin-top: 7px;
+  line-height: 40px;
+  width: calc(100% - 50px);
+  float: left;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box > .input-group > input {
+  height: 40px;
+  border: none;
+  border-radius: 3px 0 0 3px;
+  padding: 0 14px;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #000;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box > .input-group > span {
+  height: 40px;
+  border: none;
+  border-radius: 0 3px 3px 0;
+  background-color: #fff;
+  cursor: pointer;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box > button {
+  margin: 7px 0 0 3px;
+  line-height: 40px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  padding: 0;
+  display: block;
+  float: left;
+  background: transparent url(i/cross.png) 0 0;
+}
+#designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box > button:hover {
+  background-position: 0 -40px;
+}
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel {
   position: absolute;
   left: 0;

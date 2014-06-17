@@ -154,6 +154,49 @@
             }
           }
         }
+
+        > .search-box {
+          @h: 40px;
+          .clearfix();
+          > .input-group {
+            margin-top: 7px;
+            line-height: @h;
+            width: ~"calc(100% - 50px)";
+            float: left;
+            > input {
+              height: @h;
+              border: none;
+              border-radius: 3px 0 0 3px;
+              padding: 0 14px;
+              width: 100%;
+              .arial-font();
+              font-size: 16px;
+              color: #000;
+            }
+            > span {
+              height: @h;
+              border: none;
+              border-radius: 0 3px 3px 0;
+              background-color: #fff;
+              cursor: pointer;
+            }
+          }
+          > button {
+            @btn-size: 40px;
+            margin: 7px 0 0 3px;
+            line-height: @h;
+            width: @btn-size;
+            height: @btn-size;
+            border: none;
+            padding: 0;
+            display: block;
+            float: left;
+            background: transparent url(../i/cross.png) 0 0;
+            &:hover {
+              background-position: 0 -40px;
+            }
+          }
+        }
       }
 
       > .chapter-panel {
