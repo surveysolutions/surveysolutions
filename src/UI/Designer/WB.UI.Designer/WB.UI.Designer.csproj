@@ -1062,6 +1062,7 @@
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css.map">
       <DependentUpon>wb-question-list.css.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\fonts\Roboto300.woff" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
