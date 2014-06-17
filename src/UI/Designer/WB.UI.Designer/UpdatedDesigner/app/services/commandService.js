@@ -145,13 +145,30 @@
                     return commandCall("UpdateGroup", command);
                 };
 
+                commandService.updateRoster = function(questionnaireId, roster) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "groupId": roster.itemId,
+                        "title": roster.title,
+                        "description": roster.description,
+                        "condition": roster.enablementCondition,
+                        "isRoster": true,
+                        "rosterSizeQuestionId": null,
+                        "rosterSizeSource": roster.rosterSizeSourceType,
+                        "rosterFixedTitles": roster.rosterFixedTitles,
+                        "rosterTitleQuestionId": null
+                    };
+
+                    return commandCall("UpdateGroup", command);
+                };
+
                 commandService.addQuestion = function(questionnaireId, parentGroupId, newId, varName) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "questionId": newId,
                         "title": "New Question",
                         "type": "Text",
-                        "variableName":varName,
+                        "variableName": varName,
                         "isPreFilled": false,
                         "isMandatory": false,
                         "scope": "Interviewer",

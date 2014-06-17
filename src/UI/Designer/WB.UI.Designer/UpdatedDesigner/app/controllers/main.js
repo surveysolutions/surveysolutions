@@ -44,7 +44,6 @@
                     SingleOption: 'cat-singleanswer'
                 };
 
-
                 $scope.chapters = [];
 
                 $scope.items = [];
@@ -190,11 +189,6 @@
                 
                 $scope.toggle = function (scope) {
                     scope.toggle();
-                };
-
-                $scope.closePanel = function() {
-                    $scope.activeChapter = undefined;
-                    $scope.activeRoster = undefined;
                 };
 
                 questionnaireService.getQuestionnaireById($routeParams.questionnaireId)
