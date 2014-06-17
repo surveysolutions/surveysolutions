@@ -30,6 +30,21 @@
                     });
                 };
 
+                $scope.answerTypeClass = {
+                    YesNo: 'cat-singleanswer',
+                    DropDownList: 'cat-singleanswer',
+                    MultyOption: 'cat-multianswer',
+                    Numeric: 'cat-intedit',
+                    DateTime: 'cat-datetime',
+                    GpsCoordinates: 'cat-geoloc',
+                    AutoPropagate: 'cat-textedit',
+                    TextList: 'cat-textarea',
+                    QRBarcode: 'cat-multimedia',
+                    Text: 'cat-textedit',
+                    SingleOption: 'cat-singleanswer'
+                };
+
+
                 $scope.chapters = [];
 
                 $scope.items = [];
