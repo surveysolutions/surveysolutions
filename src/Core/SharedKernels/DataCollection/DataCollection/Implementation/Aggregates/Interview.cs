@@ -1340,7 +1340,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime,
                 selectedPropagationVectors));
 
-            if (questionnaire.IsQuestionMandatory(questionId) && !answeredLinkedQuestions.Any())
+            bool questionIsMandatoryAndLinkedAndNotAnswered = questionnaire.IsQuestionMandatory(questionId) && !answeredLinkedQuestions.Any();
+            if (questionIsMandatoryAndLinkedAndNotAnswered)
             {
                 this.ApplySingleAnswerDeclaredInvalidEvent(questionId, rosterVector);
             }
