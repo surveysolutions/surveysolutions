@@ -18,7 +18,7 @@
 
         <div class="comment-block">
             <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" style="font-weight: bold;" ng-model="activeRoster.title">
+            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.title">
         </div>
 
         <div class="comment-block">
@@ -33,7 +33,7 @@
 
         <div class="comment-block" ng-show="activeRoster.rosterSizeSourceType=='Question'">
             <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
-            <select id="edit-roster-numeric-source" class="form-control input-lg" ng-model="activeRoster.source" ng-options="n.title for n in activeRoster.numerics"></select>
+            <select id="edit-roster-numeric-sourcsplitArraye" class="form-control input-lg" ng-model="activeRoster.source" ng-options="n.title for n in activeRoster.numerics"></select>
 
             <label for="edit-roster-numeric-titles" class="wb-label">Titles for rows (optional): <span>(<a>?</a>)</span></label><br>
             <select id="edit-roster-numeric-titles" class="form-control input-lg"></select>
@@ -45,7 +45,8 @@
         </div>
 
         <div class="comment-block" ng-show="activeRoster.rosterSizeSourceType=='FixedTitles'">
-            <textarea rows="5" cols="100" ng-model="activeRoster.rosterFixedTitles"></textarea>
+            <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <span>(<a>?</a>)</span></label>
+            <textarea rows="5" cols="100" split-array ng-model="activeRoster.rosterFixedTitles"></textarea>
         </div>
     </form>
 </div>
