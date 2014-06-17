@@ -1,6 +1,7 @@
 @import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/prettycheckable/dist/prettyCheckable.css";
+@import url(http://fonts.googleapis.com/css?family=Roboto:300);
 /**
  * WorldBank Designer
  * file: markup.css.less
