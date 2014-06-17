@@ -352,7 +352,6 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HQSyncController.cs" />
     <Compile Include="Filters\LongWebsiteDirectoryPathFilter.cs" />
-    <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
