@@ -134,7 +134,7 @@ namespace WB.UI.Supervisor.App_Start
             }
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
-            Version applicationBuildVersion = typeof (SyncController).Assembly.GetName().Version;
+            Version applicationBuildVersion = typeof (AccountController).Assembly.GetName().Version;
 
             var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
                 appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
