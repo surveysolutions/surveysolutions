@@ -98,9 +98,10 @@
                 <div class="icon"></div>
                 <span ng-bind-html="item.title | highlight:search.searchText"></span>
 
-                <!--<i class="glyphicon glyphicon-random"></i>-->
                 <div class="qname-block">
-                    <a href class="linked"></a>
+
+                    <a ng-if="item.linkedToQuestionId" href="javascript:void(0);" class="linked"></a>
+
                     <span ng-bind-html="item.variable | highlight:search.searchText"></span>
                     <div class="btn-group">
                         <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"></a>
