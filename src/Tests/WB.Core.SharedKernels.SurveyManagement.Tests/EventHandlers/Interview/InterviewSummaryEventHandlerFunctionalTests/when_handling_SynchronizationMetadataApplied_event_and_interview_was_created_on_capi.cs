@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Moq;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -16,11 +21,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             viewModel = new InterviewSummary()
             {
                 WasCreatedOnClient = true,
-                ResponsibleId = responsibleId,
-                ResponsibleName = responsibleName
+                ResponsibleId = responsibleId
             };
 
-            denormalizer = CreateDenormalizer();
+            var usersMock = new Mock<IReadSideRepositoryWriter<UserDocument>>();
+
+            usersMock.Setup(_ => _.GetById(responsibleId.FormatGuid()))
+                .Returns(new UserDocument() {Supervisor = new UserLight() {Id = supervisorId, Name = supervisorName}});
+
+            denormalizer = CreateDenormalizer(users: usersMock.Object);
         };
 
         Because of = () =>
@@ -28,11 +37,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                 denormalizer.Update(viewModel,
                     Create.SynchronizationMetadataAppliedEvent(status: interviewStatus));
 
-        It should_teamLeadId_be_equal_to_specified_responsibleId = () =>
-            viewModel.TeamLeadId.ShouldEqual(responsibleId);
+        It should_teamLeadId_be_equal_to_specified_supervisorId = () =>
+            viewModel.TeamLeadId.ShouldEqual(supervisorId);
 
-        It should_teamLeadName_be_equal_to_specified_responsibleName = () =>
-            viewModel.TeamLeadName.ShouldEqual(responsibleName);
+        It should_teamLeadName_be_equal_to_specified_supervisorName = () =>
+            viewModel.TeamLeadName.ShouldEqual(supervisorName);
 
         It should_status_be_equal_specified_interviewStatus = () =>
             viewModel.Status.ShouldEqual(interviewStatus);
@@ -40,7 +49,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static InterviewSummaryEventHandlerFunctional denormalizer;
         private static InterviewSummary viewModel;
         private static Guid responsibleId = Guid.Parse("11111111111111111111111111111111");
-        private static string responsibleName = "responsible";
+        private static Guid supervisorId = Guid.Parse("22222222222222222222222222222222");
+        private static string supervisorName = "supervisor";
         private static InterviewStatus interviewStatus = InterviewStatus.ApprovedByHeadquarters;
     }
 }
