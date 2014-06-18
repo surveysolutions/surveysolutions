@@ -8,17 +8,13 @@
             </ul>
         </div>
         <div class="header-menu">
-            This document is <span>{{questionnaire.isPublic ? 'public' : 'private'}}</span>
-            <span ng-repeat="q in questionnaire.sharedPersons">
-                <span ng-if="$first">
-                    , shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
+            This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong><span ng-repeat="q in questionnaire.sharedPersons"><span ng-if="$first">, shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
                 </span>
                 <span ng-if="!$first && $last">
-                    and <a ng-click="showShareInfo()">{{$index}} other</a>
+                    and <a href="javascript:void(0);" ng-click="showShareInfo()">{{$index}} other</a>
                 </span>
             </span>
             <div class="buttons">
-
                 <button class="btn" ng-click="showShareInfo()">SHARE</button>
                 <button class="btn">HELP</button>
                 <a class="btn" href="../account/logoff">LOG OUT</a>
@@ -27,10 +23,10 @@
     </div>
     <div class="questionnarie-title">
         <div class="title">
-            {{questionnaire.title}} <span>({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
+            {{questionnaire.title}} <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
             <input type="button" class="btn error" value="VERIFY" ng-click="verify()" />
             <span id="verify-btn" data-toggle="modal" data-target="#verification-modal" ng-hide="verificationStatus.errorsCount == 0" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>
-            <span ng-show="verificationStatus.errorsCount == 0">OK</span>
+            <span class="text-success" ng-show="verificationStatus.errorsCount == 0">OK</span>
         </div>
     </div>
 </section>

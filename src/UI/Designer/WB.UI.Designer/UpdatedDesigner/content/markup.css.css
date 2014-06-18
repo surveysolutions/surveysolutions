@@ -6145,12 +6145,14 @@ body {
   font-style: italic;
   color: #c1c7cb;
 }
-#designer-editor.container section#header > .header-line > .header-menu span {
-  color: #5d6468;
-}
 #designer-editor.container section#header > .header-line > .header-menu > a {
   text-decoration: underline;
   color: #2a81cb;
+  cursor: pointer;
+}
+#designer-editor.container section#header > .header-line > .header-menu strong {
+  color: #5D6468;
+  font-weight: normal;
 }
 #designer-editor.container section#header > .header-line > .header-menu .buttons {
   display: inline-block;
