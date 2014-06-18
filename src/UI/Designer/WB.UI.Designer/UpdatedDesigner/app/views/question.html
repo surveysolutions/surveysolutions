@@ -36,19 +36,6 @@
             <button class="btn btn-lg btn-link">Add Instruction</button>
         </div>
 
-            <!--<div class="checkbox">
-            <label>
-                <input type="checkbox" ng-model="activeQuestion.isPreFilled">
-                pre-filled question
-            </label>
-        </div>
-
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" ng-model="activeQuestion.isMandatory">
-                mandatory question
-            </label>
-        </div>      -->
         <div ng-include="activeQuestion.type + '-template.html'">
         </div>
 
