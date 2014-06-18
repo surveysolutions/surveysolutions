@@ -9,9 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.DesignerPublicService;
-using WB.UI.Supervisor.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {

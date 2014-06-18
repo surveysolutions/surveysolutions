@@ -8,6 +8,7 @@ using Questionnaire.Core.Web.Security;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
@@ -47,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
                     bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
-                    if (isSupervisor || isHeadquarter)
+                    if (isHeadquarter || (isSupervisor && LegacyOptions.SupervisorFunctionsEnabled))
                     {
                         this.authentication.SignIn(model.UserName, false);
                         if (isSupervisor)
