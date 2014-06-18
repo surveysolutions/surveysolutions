@@ -367,6 +367,7 @@
     <EmbeddedResource Include="Views\Interviewer\Create.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserEditForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserCreateForm.cshtml" />
+    <EmbeddedResource Include="Views\Shared\SupervisorMainMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

@@ -10,9 +10,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="@Url.Content("~/Content/img/favicon.ico")" />
-    @{
-        var page = ViewBag.ActivePage ?? MenuItem.Logon;
-    }
     @Styles.Render("~/Content/main")
     @RenderSection("styles", false)
 </head>
@@ -33,42 +30,17 @@
             <div class="collapse navbar-collapse">
 
                 <ul class="nav navbar-nav" role="menu">
-                    <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="@(page == MenuItem.Surveys ? "active" : "")">
-                                <a href="@Url.Action("SurveysAndStatuses", "HQ")">Surveys and Statuses</a>
-                            </li>
-                            <li class="@(page == MenuItem.Summary ? "active" : "")">
-                                <a href="@Url.Action("SupervisorsAndStatuses", "HQ")">Teams and Statuses</a>
-                            </li>
-                            <li class="@(page == MenuItem.MapReport ? "active" : "")">
-                                <a href="@Url.Action("MapReport", "HQ")">Map Report</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="@(page == MenuItem.Docs ? "active" : "")">
-                        <a href="@Url.Action("Interviews", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
-                    </li>
-                    <li class="@(page == MenuItem.Teams ? "active" : "")">
-                        <a href="@Url.Action("Index", "Supervisor", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Supervisors</a>
-                    </li>
-                    <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
-                        <a href="@Url.Action("Index", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Questionnaries</a>
-                    </li>
+                    @if (User.IsInRole("Headquarter"))
+                    {
+                        @Html.Partial("HeadquartersMainMenu")
+                    }
+                    else
+                    {
+                        @Html.Partial("SupervisorMainMenu")
+                    }
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right" role="menu">
-                    <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-                            Administration <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Backup", "Index", "Backup")</li>
-                        </ul>
-                    </li>
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
