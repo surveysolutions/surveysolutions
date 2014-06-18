@@ -366,9 +366,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                             }
                         }
                     }
-                    currentState.TeamLeadId = currentState.ResponsibleId;
-                    currentState.TeamLeadName = currentState.ResponsibleName;
-                    currentState.Status = evnt.Payload.Status;
+                    var responsible = this.users.GetById(currentState.ResponsibleId);
+                    if (responsible != null && responsible.Supervisor != null)
+                    {
+                        currentState.TeamLeadId = responsible.Supervisor.Id;
+                        currentState.TeamLeadName = responsible.Supervisor.Name;
+                    }
+                    currentState.Status = evnt.Payload.Status;    
                 }
             });
         }
