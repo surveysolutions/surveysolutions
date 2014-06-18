@@ -230,7 +230,6 @@
     </Content>
     <Content Include="Content\bootstrap.css.map" />
     <None Include="parameters.xml" />
-    <Content Include="Views\ControlPanel\InterviewDetails.cshtml" />
     <Content Include="Views\Shared\HeadquartersMainMenu.cshtml" />
     <Content Include="Views\Supervisor\Create.cshtml" />
     <Content Include="Views\Supervisor\Edit.cshtml" />
