@@ -443,8 +443,6 @@
     <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <Content Include="Views\ControlPanel\Headquarters.cshtml" />
     <Content Include="Views\ControlPanel\Settings.cshtml" />
-    <Content Include="Views\ControlPanel\InterviewDetails.cshtml" />
-    <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <None Include="WB.UI.Supervisor.wpp.targets" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

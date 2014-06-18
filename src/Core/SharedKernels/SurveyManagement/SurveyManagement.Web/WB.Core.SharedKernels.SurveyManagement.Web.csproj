@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\BaseApiServiceController.cs" />
+    <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Models\HistoryItemView.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\IGridRequest.cs" />
+    <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="Models\InterviewDetailsViewModel.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
     <Compile Include="Models\InterviewModel.cs" />
@@ -367,7 +369,10 @@
     <EmbeddedResource Include="Views\Interviewer\Create.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserEditForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserCreateForm.cshtml" />
+    <EmbeddedResource Include="Content\admin.css" />
     <EmbeddedResource Include="Views\Shared\SupervisorMainMenu.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_AdminLayout.cshtml" />
+    <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
