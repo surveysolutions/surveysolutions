@@ -8,9 +8,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Supervisor.Models;
 
 namespace WB.UI.Supervisor.Controllers
 {
@@ -55,18 +53,10 @@ namespace WB.UI.Supervisor.Controllers
                 if (await this.LoginIncludingHeadquartersData(model.UserName, model.Password))
                 {
                     bool isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
-                    bool isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
-                    if (isSupervisor || isHeadquarter)
+                    if (isSupervisor)
                     {
                         this.authentication.SignIn(model.UserName, false);
-                        if (isSupervisor)
-                        {
-                            return this.RedirectToAction("Index", "Survey");
-                        }
-                        else
-                        {
-                            return this.RedirectToAction("Index", "HQ");
-                        }
+                        return this.RedirectToAction("Index", "Survey");
                     }
 
                     this.ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");

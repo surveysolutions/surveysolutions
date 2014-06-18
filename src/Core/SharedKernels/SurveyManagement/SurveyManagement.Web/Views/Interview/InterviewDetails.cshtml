@@ -34,7 +34,7 @@
         settings.Urls.ChangeStateHistory = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "ChangeStateHistory"})';
 
         $(function () {
-            var model = new Supervisor.VM.InterviewDetails(settings);
+            window.model = new Supervisor.VM.InterviewDetails(settings);
             ko.applyBindings(model);
             model.load();
         });
@@ -348,12 +348,24 @@
                 <h5 class="heading" data-bind="html: title"></h5>
             </div>
             <div class="panel-body">
-                <!-- ko if: scope == 'Headquarter' -->
-                <div data-bind="template: { name: questionType + 'Full' }"></div>
-                <!-- /ko -->
-                <!-- ko ifnot: scope == 'Headquarter' -->
-                <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
-                <!-- /ko -->
+                @if (GlobalInfo.IsHeadquarter)
+                {
+                    <!-- ko if: scope == 'Headquarter' -->
+                    <div data-bind="template: { name: questionType + 'Full' }"></div>
+                    <!-- /ko -->
+                    <!-- ko ifnot: scope == 'Headquarter' -->
+                    <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
+                    <!-- /ko -->
+                }
+                else
+                {
+                     <!-- ko if: scope == 'Supervisor' -->
+                    <div data-bind="template: { name: questionType + 'Full' }"></div>
+                    <!-- /ko -->
+                    <!-- ko ifnot: scope == 'Supervisor' -->
+                    <div data-bind="template: { name: questionType + 'ReadOnly' }"></div>
+                    <!-- /ko -->
+                }
                 <h4 class="heading">Comments</h4>
                 <dl data-bind="foreach: comments">
                     <dt data-bind="text: userName"></dt>

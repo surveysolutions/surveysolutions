@@ -146,10 +146,12 @@
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
+    <Compile Include="Controllers\InterviewerController.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
+    <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
     <Compile Include="Models\Api\InterviewApiDetails.cs" />
@@ -199,9 +201,17 @@
     <Compile Include="Models\SummaryRequestModel.cs" />
     <Compile Include="Models\SurveyListViewModel.cs" />
     <Compile Include="Models\SurveyRequestModel.cs" />
+    <Compile Include="Models\InterviewerModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\FieldsAndValidations.Designer.cs">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Properties\Strings.Designer.cs">
       <DependentUpon>Strings.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -209,12 +219,16 @@
     </Compile>
     <Compile Include="SurveyManagementAreaRegistration.cs" />
     <Compile Include="SurveyManagementWebModule.cs" />
+    <Compile Include="Utils\Alerts.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
-    <Compile Include="Utils\ControlGroupExtensions.cs" />
-    <Compile Include="Utils\ViewHelperExtensions.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\FieldsAndValidations.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
@@ -332,13 +346,10 @@
     <EmbeddedResource Include="Views\Survey\Status.cshtml" />
     <EmbeddedResource Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
     <EmbeddedResource Include="Views\TabletReport\Packages.cshtml" />
-    <EmbeddedResource Include="Views\Team\Index.cshtml" />
-    <EmbeddedResource Include="Views\Team\Interviewers.cshtml" />
     <EmbeddedResource Include="Views\Template\Import.cshtml" />
     <EmbeddedResource Include="Views\Template\LoginToDesigner.cshtml" />
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
     <EmbeddedResource Include="Views\Shared\AccessDenied.cshtml" />
-    <EmbeddedResource Include="Views\Shared\EditForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <EmbeddedResource Include="Views\Shared\_alerts.cshtml" />
     <EmbeddedResource Include="Views\Shared\_ListViewPagingScript.cshtml" />
@@ -351,6 +362,11 @@
     <EmbeddedResource Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <EmbeddedResource Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <EmbeddedResource Include="Scripts\jquery-2.1.0.min.map" />
+    <EmbeddedResource Include="Views\Interviewer\Edit.cshtml" />
+    <EmbeddedResource Include="Views\Interviewer\Index.cshtml" />
+    <EmbeddedResource Include="Views\Interviewer\Create.cshtml" />
+    <EmbeddedResource Include="Views\Shared\UserEditForm.cshtml" />
+    <EmbeddedResource Include="Views\Shared\UserCreateForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
@@ -420,6 +436,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Content\app.css" />
     <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Team\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
