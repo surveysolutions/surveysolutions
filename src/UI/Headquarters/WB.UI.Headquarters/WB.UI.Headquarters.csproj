@@ -235,7 +235,6 @@
     <Content Include="Views\Supervisor\Edit.cshtml" />
     <Content Include="Views\Supervisor\Index.cshtml" />
     <Content Include="Views\Supervisor\Interviewers.cshtml" />
-    <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
