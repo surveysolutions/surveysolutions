@@ -7,6 +7,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Designer.Api;
@@ -78,7 +79,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
                         new VerificationReference
                         {
                             Type = QuestionnaireVerificationReferenceType.Question,
-                            Id = Guid.NewGuid(),
+                            ItemId = Guid.NewGuid().FormatGuid(),
                             Title = "aaaaaaaaaaaaaaaaaaaaaa"
                         }
                     }
@@ -93,7 +94,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
                         new VerificationReference
                         {
                             Type = QuestionnaireVerificationReferenceType.Question,
-                            Id = Guid.NewGuid(),
+                            ItemId = Guid.NewGuid().FormatGuid(),
                             Title = "aaaaaaaaaaaaaaaaaaaaaa"
                         }
                     }

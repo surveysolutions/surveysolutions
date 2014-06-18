@@ -17,7 +17,7 @@
                 };
 
                 $scope.verify = function() {
-                    verificationService.verify($routeParams.questionnaireId).success(function(result) {
+                    verificationService.verify($routeParams.questionnaireId).success(function (result) {
                         $scope.verificationStatus.errors = result.errors;
                         $scope.verificationStatus.errorsCount = result.errors.length;
 
@@ -28,6 +28,10 @@
                             });
                         }
                     });
+                };
+
+                $scope.navigateTo = function (itemId, chapterId) {
+                    navigationService.openItem($routeParams.questionnaireId, chapterId, itemId);
                 };
 
                 $scope.answerTypeClass = {
