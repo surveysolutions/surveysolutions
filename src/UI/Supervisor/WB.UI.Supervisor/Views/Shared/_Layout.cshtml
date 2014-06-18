@@ -20,76 +20,7 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
-                    @if (User.IsInRole("Headquarter"))
-                    {
 
-
-            <div class="navbar-header hidden-print">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="@Url.Action("Index", "HQ")">
-                    Headquarters
-                </a>
-            </div>
-            <div class="collapse navbar-collapse">
-
-                <ul class="nav navbar-nav" role="menu">
-                    <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="@(page == MenuItem.Surveys ? "active" : "")">
-                                <a href="@Url.Action("SurveysAndStatuses", "HQ")">Surveys and Statuses</a>
-                            </li>
-                            <li class="@(page == MenuItem.Summary ? "active" : "")">
-                                <a href="@Url.Action("SupervisorsAndStatuses", "HQ")">Teams and Statuses</a>
-                            </li>
-                            <li class="@(page == MenuItem.MapReport ? "active" : "")">
-                                <a href="@Url.Action("MapReport", "HQ")">Map Report</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="@(page == MenuItem.Docs ? "active" : "")">
-                        <a href="@Url.Action("Interviews", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
-                    </li>
-                    @*<li class="@(page == MenuItem.Teams ? "active" : "")">
-                        <a href="@Url.Action("Index", "Team", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Supervisors</a>
-                    </li>*@
-                    <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
-                        <a href="@Url.Action("Index", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Questionnaries</a>
-                    </li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right" role="menu">
-                    <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-                            Administration <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Backup", "Index", "Backup")</li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
-
-
-                    }
-                    else
-                    {
-                        
-                        
             <div class="navbar-header hidden-print">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -101,14 +32,10 @@
                     Supervisor
                 </a>
             </div>
-                        
-                        
-                        
-                        
             <div class="collapse navbar-collapse">
 
                 <ul class="nav navbar-nav" role="menu">
-                    
+
                     <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
@@ -130,16 +57,12 @@
                     <li class="@(page == MenuItem.Teams ? "active" : "")">
                         <a href="@Url.Action("Index", "Interviewer", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Interviewers</a>
                     </li>
-
-                    @if (!LegacyOptions.HqFunctionsEnabled)
-                    {
-                        <li>
-                            <a href="@Url.Action("Synchronization", "HQSync", new { area = string.Empty })" target="_blank">
-                                <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                Synchronization
-                            </a>
-                        </li>
-                    }
+                    <li>
+                        <a href="@Url.Action("Synchronization", "HQSync", new { area = string.Empty })" target="_blank">
+                            <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            Synchronization
+                        </a>
+                    </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right" role="menu">
@@ -151,9 +74,6 @@
                     </li>
                 </ul>
             </div>
-                        
-
-                    }
         </div>
     </div>
 
@@ -246,52 +166,51 @@
             });
         });
     </script>
-    @if (!LegacyOptions.HqFunctionsEnabled) { 
-        <script>
-            $(function() {
-                var refreshSyncStatus = function () {
-                    $.ajax({
-                        method: 'GET',
-                        cache: false,
-                        url: '@Url.Action("GetSyncStatus", "HQSync", new { area = string.Empty })',
-                        success: function (dataString) {
-                            var data = JSON.parse(dataString);
-                            if (!data.StartedAt) {
-                                return;
-                            }
-                            var title = 'Last synchronization: <br /> started {0}'.f(moment(data.StartedAtUtc).fromNow());
-                            if (data.FinishedAt) {
-                                title += '<br /> last successful sync {0} <br/> applied changes with {1} errors'.f(moment(data.FinisedAtUtc).fromNow(), data.ErrorsCount);
-                            }
-                            if (!data.IsHqReachable) {
-                                title += '<br /> During last sync HQ was unreachable';
-                            }
+    <script>
+        $(function () {
+            var refreshSyncStatus = function () {
+                $.ajax({
+                    method: 'GET',
+                    cache: false,
+                    url: '@Url.Action("GetSyncStatus", "HQSync", new { area = string.Empty })',
+                    success: function (dataString) {
+                        var data = JSON.parse(dataString);
+                        if (!data.StartedAt) {
+                            return;
+                        }
+                        var title = 'Last synchronization: <br /> started {0}'.f(moment(data.StartedAtUtc).fromNow());
+                        if (data.FinishedAt) {
+                            title += '<br /> last successful sync {0} <br/> applied changes with {1} errors'.f(moment(data.FinisedAtUtc).fromNow(), data.ErrorsCount);
+                        }
+                        if (!data.IsHqReachable) {
+                            title += '<br /> During last sync HQ was unreachable';
+                        }
 
-                            $('#synchronizationStatus').tooltip({
-                                title: title,
-                                placement: 'bottom',
-                                html: true
-                            }).attr('data-original-title', title)
-                                .tooltip('fixTitle');
+                        $('#synchronizationStatus').tooltip({
+                            title: title,
+                            placement: 'bottom',
+                            html: true
+                        }).attr('data-original-title', title)
+                            .tooltip('fixTitle');
 
-                            if (data.IsRunning) {
-                                $('#synchronizationStatus').attr('class', '').addClass('label label-warning');
+                        if (data.IsRunning) {
+                            $('#synchronizationStatus').attr('class', '').addClass('label label-warning');
+                        } else {
+                            if (data.IsHqReachable) {
+                                $('#synchronizationStatus').attr('class', '').addClass('label label-success');
                             } else {
-                                if (data.IsHqReachable) {
-                                    $('#synchronizationStatus').attr('class', '').addClass('label label-success');
-                                } else {
-                                    $('#synchronizationStatus').attr('class', '').addClass('label badge-important');
-                                }
+                                $('#synchronizationStatus').attr('class', '').addClass('label badge-important');
                             }
                         }
-                    });
+                    }
+                });
 
-                }
+            }
 
-                setInterval(refreshSyncStatus, 3000);
-            });
-        </script>
-    }
+            setInterval(refreshSyncStatus, 3000);
+        });
+    </script>
+
 
     @RenderSection("scripts", false)
 </body>
