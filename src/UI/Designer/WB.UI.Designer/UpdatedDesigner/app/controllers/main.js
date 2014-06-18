@@ -7,7 +7,7 @@
             function($scope, $routeParams, $route, questionnaireService, commandService, verificationService, utilityService, navigationService, $modal, $log) {
 
                 $scope.verificationStatus = {
-                    errorsCount: 0,
+                    errorsCount: null,
                     errors: []
                 };
 
