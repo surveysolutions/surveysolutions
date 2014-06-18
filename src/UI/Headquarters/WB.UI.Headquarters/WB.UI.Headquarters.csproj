@@ -231,7 +231,6 @@
     </Content>
     <Content Include="Content\bootstrap.css.map" />
     <None Include="parameters.xml" />
-    <Content Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
     <Content Include="Views\ControlPanel\InterviewDetails.cshtml" />
     <Content Include="Views\Shared\HeadquartersMainMenu.cshtml" />
     <Content Include="Views\Supervisor\Create.cshtml" />

@@ -192,5 +192,10 @@ namespace WB.UI.Supervisor.Controllers
             bool areHeadquartersFunctionsEnabled = bool.Parse(WebConfigurationManager.AppSettings["HeadquartersFunctionsEnabled"]);
             return this.View(areHeadquartersFunctionsEnabled);
         }
+
+        public ActionResult InterviewDetails()
+        {
+            return this.View();
+        }
     }
 }
