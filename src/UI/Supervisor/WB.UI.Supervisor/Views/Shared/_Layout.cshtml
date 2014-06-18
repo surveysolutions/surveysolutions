@@ -11,9 +11,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")" />
-    @{
-        var page = ViewBag.ActivePage ?? MenuItem.Logon;
-    }
     @Styles.Render("~/Content/main")
     @RenderSection("styles", false)
 </head>
@@ -35,28 +32,7 @@
             <div class="collapse navbar-collapse">
 
                 <ul class="nav navbar-nav" role="menu">
-
-                    <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="@(page == MenuItem.Surveys ? "active" : "")">
-                                <a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a>
-                            </li>
-                            <li class="@(page == MenuItem.Summary ? "active" : "")">
-                                <a href="@Url.Action("TeamMembersAndStatuses", "Survey")">Team members and Statuses</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="@(page == MenuItem.Docs ? "active" : "")">
-                        <a href="@Url.Action("Interviews", "Survey")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
-                    </li>
-
-                    <li class="@(page == MenuItem.Teams ? "active" : "")">
-                        <a href="@Url.Action("Index", "Interviewer", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Interviewers</a>
-                    </li>
+                    @Html.Partial("SupervisorMainMenu")
                     <li>
                         <a href="@Url.Action("Synchronization", "HQSync", new { area = string.Empty })" target="_blank">
                             <span id="synchronizationStatus" class="label">&nbsp;&nbsp;&nbsp;&nbsp;</span>

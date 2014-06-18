@@ -233,11 +233,12 @@
     <None Include="parameters.xml" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
     <Content Include="Views\ControlPanel\InterviewDetails.cshtml" />
-    <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\Shared\HeadquartersMainMenu.cshtml" />
     <Content Include="Views\Supervisor\Create.cshtml" />
     <Content Include="Views\Supervisor\Edit.cshtml" />
     <Content Include="Views\Supervisor\Index.cshtml" />
     <Content Include="Views\Supervisor\Interviewers.cshtml" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
