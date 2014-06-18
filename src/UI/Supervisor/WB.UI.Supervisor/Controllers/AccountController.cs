@@ -8,9 +8,7 @@ using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Supervisor.Models;
 
 namespace WB.UI.Supervisor.Controllers
 {

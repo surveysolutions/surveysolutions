@@ -356,19 +356,11 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
-    <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Models\UserCreateModel.cs" />
-    <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Injections\SupervisorCoreRegistry.cs" />
-    <Compile Include="Models\SupervisorModel.cs" />
-    <Compile Include="Models\UserViewModel.cs" />
-    <Compile Include="Models\SupervisorUserViewModel.cs" />
-    <Compile Include="Models\UserViewModelForSupervisor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -451,9 +443,6 @@
     <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <Content Include="Views\ControlPanel\Headquarters.cshtml" />
     <Content Include="Views\ControlPanel\Settings.cshtml" />
-    <Content Include="Views\Team\AddInterviewer.cshtml" />
-    <Content Include="Views\Team\AddSupervisor.cshtml" />
-    <Content Include="Views\Team\Details.cshtml" />
     <None Include="WB.UI.Supervisor.wpp.targets" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -464,6 +453,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
@@ -582,7 +572,6 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\User\CreateSupervisor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
