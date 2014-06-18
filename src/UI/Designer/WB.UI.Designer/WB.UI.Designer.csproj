@@ -604,6 +604,13 @@
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\build\loading-bar.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\build\loading-bar.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\build\loading-bar.min.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\build\loading-bar.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\Gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\src\loading-bar.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\src\loading-bar.js" />
     <Content Include="UpdatedDesigner\vendor\angular-mocks\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-mocks\angular-mocks.js" />
     <Content Include="UpdatedDesigner\vendor\angular-mocks\bower.json" />
@@ -1063,6 +1070,15 @@
       <DependentUpon>wb-question-list.css.css</DependentUpon>
     </Content>
     <Content Include="UpdatedDesigner\fonts\Roboto300.woff" />
+    <Content Include="UpdatedDesigner\content\lib\controls\wb-modal.css.less" />
+    <Content Include="UpdatedDesigner\content\lib\wb-customfonts.css.less" />
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-share.css.less" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\CHANGELOG.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\package.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-loading-bar\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

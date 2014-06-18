@@ -25,23 +25,22 @@
             </ul>
 
             <button class="btn btn-link" ng-click="togglePublicity()">MAKE THIS QUESTIONNAIRE {{questionnaire.isPublic ? 'PRIVATE' : 'PUBLIC'}}</button>
-            <span>({{questionnaire.isPublic ? 'visible to you only' : 'visible to everyone'}})</span>
+            <i class="text-muted">({{questionnaire.isPublic ? 'visible to you only' : 'visible to everyone'}})</i>
         </div>
-        <form role="form" class="form-horizontal row" name="viewModel.shareForm" novalidate>
+        <form role="form" class="form-inline row" name="viewModel.shareForm" novalidate>
             <h3>Invite collaborators by e-mail:</h3>
             <div class="form-group" bs-has-error>
-                <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Email to share with" name="shareWithInput" ng-model="viewModel.shareWith" />
-                    <a href="javascript:void(0);">Can edit and share</a>
-                    <p class="help-block" ng-hide="viewModel.shareForm.shareWithInput.$valid">
-                        Provide email of existing user
-                    </p>
-                </div>
+                <input type="text" class="form-control share-with-email" placeholder="Email to share with" name="shareWithInput" ng-model="viewModel.shareWith" />
+               
+                <p class="help-block" ng-hide="viewModel.shareForm.shareWithInput.$valid">
+                    Provide email of existing user
+                </p>
             </div>
             <div class="form-group">
-                <div class="col-md-6">
-                    <button class="btn btn-primary btn-lg" ng-click="invite()">Invite</button>
-                </div>
+                <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith">Invite</button>
+            </div>
+            <div class="form-group share-form-btn-label">
+                <span class="text-muted">&mdash;</span> <a href="javascript:void(0);"><i> can edit and share</i></a>
             </div>
         </form>
     </div>

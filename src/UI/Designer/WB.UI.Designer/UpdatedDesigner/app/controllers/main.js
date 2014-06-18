@@ -65,7 +65,7 @@
                         if ($scope.isQuestion(movedItem)) {
                             questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId);
                         } else {
-                            questionnaireService.moveGroup(event.source.nodeScope.item.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId);
+                            questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId);
                         }
                     }
                 };
@@ -178,6 +178,7 @@
                     $modal.open({
                         templateUrl: 'app/views/share.html',
                         controller: 'shareCtrl',
+                        windowClass: 'share-window',
                         resolve:
                         {
                             questionnaire: function() {
