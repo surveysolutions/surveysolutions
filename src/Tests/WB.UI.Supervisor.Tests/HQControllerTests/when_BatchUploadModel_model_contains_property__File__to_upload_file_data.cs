@@ -4,7 +4,6 @@ using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Supervisor.Controllers;
-using WB.UI.Supervisor.Models;
 
 namespace WB.UI.Supervisor.Tests.HQControllerTests
 {

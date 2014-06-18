@@ -1,21 +1,17 @@
 ﻿@using System.Web.Optimization
-@model WB.UI.Supervisor.Models.UserViewModel
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
 
 @{
-    ViewBag.Title = string.Format("Edit user: {0}", Model.UserName);
+    ViewBag.Title = "Create";
 }
 
 @section scripts
 {
     @Scripts.Render("~/validate")
 }
+
 <div class="page-header">
-    <h2>
-        Edit user
-        <small>
-            @Model.UserName
-        </small>
-    </h2>
+    <h2>Create supervisor</h2>
 </div>
 
 
@@ -23,12 +19,12 @@
 {
     <fieldset class="form-horizontal">
         @{
-            this.Html.RenderPartial("EditForm");
+            this.Html.RenderPartial("UserCreateForm");
         }
         <div class="form-group">
             <div class="col-sm-offset-2">
                 <button type="submit" class="btn btn-primary">Save changes</button>
-                @Html.ActionLink("Cancel", "DetailsBack", new { id = Model.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
             </div>
         </div>
     </fieldset>

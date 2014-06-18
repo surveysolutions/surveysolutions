@@ -1,17 +1,12 @@
 ﻿using System;
 using System.ServiceModel;
-using System.ServiceModel.Security;
-using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
-using Raven.Client.Linq.Indexing;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
-using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.DesignerPublicService;
-using WB.UI.Supervisor.Models;
 
 namespace WB.UI.Supervisor.Controllers
 {

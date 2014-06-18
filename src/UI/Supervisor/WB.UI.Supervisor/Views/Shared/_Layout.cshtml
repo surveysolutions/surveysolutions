@@ -3,7 +3,6 @@
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Supervisor.Code
-@using WB.UI.Supervisor.Models
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,9 +57,9 @@
                     <li class="@(page == MenuItem.Docs ? "active" : "")">
                         <a href="@Url.Action("Interviews", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
                     </li>
-                    <li class="@(page == MenuItem.Teams ? "active" : "")">
+                    @*<li class="@(page == MenuItem.Teams ? "active" : "")">
                         <a href="@Url.Action("Index", "Team", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Supervisors</a>
-                    </li>
+                    </li>*@
                     <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
                         <a href="@Url.Action("Index", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Questionnaries</a>
                     </li>
@@ -129,7 +128,7 @@
                     </li>
 
                     <li class="@(page == MenuItem.Teams ? "active" : "")">
-                        <a href="@Url.Action("Interviewers", "Team", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Interviewers</a>
+                        <a href="@Url.Action("Index", "Interviewer", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> Interviewers</a>
                     </li>
 
                     @if (!LegacyOptions.HqFunctionsEnabled)
