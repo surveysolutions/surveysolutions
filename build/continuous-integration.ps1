@@ -50,13 +50,14 @@ try {
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
+	CopyCapi -Project $ProjectHeadquarters -PathToFinalCapi $PackageName -BuildNumber $BuildNumber
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectSupervisor $BuildConfiguration
 	CopyCapi -Project $ProjectSupervisor -PathToFinalCapi $PackageName -BuildNumber $BuildNumber
 	BuildWebPackage $ProjectSupervisor $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-	$artifactsFolder = (Get-Location).Path +  "\Artifacts"
+	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
 	}
