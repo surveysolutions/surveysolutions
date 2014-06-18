@@ -25,6 +25,7 @@
         this.root = $('#designer-editor.container');
         this.init_chapter_panel();
         console.log('test');
+        this.init_checkboxes();
         return this.init_scrollbars();
       };
 
@@ -67,6 +68,12 @@
           scrollInertia: 0,
           mouseWheelPixels: 30
         });
+      };
+
+      PrivateClass.prototype.init_checkboxes = function() {
+          return $.each($('input.wb-checkbox'), function(i, el) {
+              return $(el).prettyCheckable();
+          });
       };
 
       return PrivateClass;

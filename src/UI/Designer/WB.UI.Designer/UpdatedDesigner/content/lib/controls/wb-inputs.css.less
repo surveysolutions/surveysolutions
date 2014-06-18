@@ -14,7 +14,7 @@
 }
 
 .prettycheckbox > a, .prettyradio > a {
-  background: url(../i/pretty-checkable-sprites.png)
+  background: url(../../i/pretty-checkable-sprites.png)
 }
 
 .prettycheckbox {
@@ -24,8 +24,15 @@
   }
 }
 
-input[type="text"] {
-  &::-moz-placeholder           { font-style: italic; }  // Firefox
-  &:-ms-input-placeholder       { font-style: italic; } // Internet Explorer 10+
-  &::-webkit-input-placeholder  { font-style: italic; } // Safari and Chrome
+.form-control {
+  border-width: 2px;
+  .placeholder-style() {
+    .lucida-console-font();
+    font-size: 16px;
+    color: #c1c7cb;
+  }
+
+  &::-moz-placeholder { .placeholder-style(); }
+  &:-ms-input-placeholder { .placeholder-style(); }
+  &::-webkit-input-placeholder { .placeholder-style(); }
 }

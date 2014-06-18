@@ -5940,7 +5940,7 @@ body {
 }
 .prettycheckbox > a,
 .prettyradio > a {
-  background: url(lib/i/pretty-checkable-sprites.png);
+  background: url(i/pretty-checkable-sprites.png);
 }
 .prettycheckbox label {
   margin: 7px 6px 4px 0;
@@ -5948,14 +5948,23 @@ body {
   font-weight: normal;
   font-size: 12px;
 }
-input[type="text"]::-moz-placeholder {
-  font-style: italic;
+.form-control {
+  border-width: 2px;
 }
-input[type="text"]:-ms-input-placeholder {
-  font-style: italic;
+.form-control::-moz-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 16px;
+  color: #c1c7cb;
 }
-input[type="text"]::-webkit-input-placeholder {
-  font-style: italic;
+.form-control:-ms-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 16px;
+  color: #c1c7cb;
+}
+.form-control::-webkit-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 16px;
+  color: #c1c7cb;
 }
 .popover {
   max-width: inherit;
@@ -6508,6 +6517,9 @@ input[type="text"]::-webkit-input-placeholder {
   height: calc(100% - 95px);
   overflow: auto;
 }
+#designer-editor.container section#main > .question-editor > .form-holder > .breadcrumbs {
+  margin-bottom: 10px;
+}
 #designer-editor.container section#main > .question-editor > .form-holder > .breadcrumbs > ul {
   list-style: none;
   margin: 0;
@@ -6532,53 +6544,42 @@ input[type="text"]::-webkit-input-placeholder {
   margin: 0 7px;
   background: url(lib/i/breadcrumb-slash.png) no-repeat;
 }
+#designer-editor.container section#main > .question-editor > .form-holder .gray {
+  background-color: #F1F2F3;
+}
 #designer-editor.container section#main > .question-editor > .form-holder > .group {
   margin: 25px 0;
   border-radius: 4px;
   background: #f1f2f3;
-}
-#designer-editor.container section#main > .question-editor > .form-holder > .group > h1 {
-  border: 2px solid #dbdfe2;
-  border-radius: 4px;
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  font-weight: bold;
-  color: #000;
-  text-transform: uppercase;
-  background: #fff;
-  padding: 12px;
-}
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder {
   padding: 15px;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:before,
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:after {
+#designer-editor.container section#main > .question-editor > .form-holder > .group:before,
+#designer-editor.container section#main > .question-editor > .form-holder > .group:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:after {
+#designer-editor.container section#main > .question-editor > .form-holder > .group:after {
   clear: both;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:before,
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:after {
+#designer-editor.container section#main > .question-editor > .form-holder > .group:before,
+#designer-editor.container section#main > .question-editor > .form-holder > .group:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder:after {
+#designer-editor.container section#main > .question-editor > .form-holder > .group:after {
   clear: both;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder > a {
+#designer-editor.container section#main > .question-editor > .form-holder > .group a {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #2a81cb;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder > a.left {
+#designer-editor.container section#main > .question-editor > .form-holder > .group a.left {
   float: left;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group > .form-holder > a.right {
+#designer-editor.container section#main > .question-editor > .form-holder > .group a.right {
   float: right;
 }
 #designer-editor.container section#main > .question-editor > .form-buttons-holder {
@@ -7109,15 +7110,24 @@ input[type="text"]::-webkit-input-placeholder {
   color: #ff4200;
   font-size: 12px;
 }
-ul.accounts {
+.share-question-dialog ul.accounts {
   list-style: none;
   padding-left: 0;
 }
-ul.accounts > li {
+.share-question-dialog ul.accounts > li {
   font-family: Georgia, serif;
   font-style: italic;
   font-size: 14px;
 }
-ul.accounts > li > a {
+.share-question-dialog ul.accounts > li > a {
   color: #5d6468;
+}
+.share-question-dialog input[type="text"]::-moz-placeholder {
+  font-style: italic;
+}
+.share-question-dialog input[type="text"]:-ms-input-placeholder {
+  font-style: italic;
+}
+.share-question-dialog input[type="text"]::-webkit-input-placeholder {
+  font-style: italic;
 }

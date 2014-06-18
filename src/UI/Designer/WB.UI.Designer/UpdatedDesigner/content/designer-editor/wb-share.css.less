@@ -1,12 +1,24 @@
-ul.accounts {
-  list-style: none;
-  padding-left: 0;
+.share-question-dialog {
+  ul.accounts {
+    list-style: none;
+    padding-left: 0;
 
-  > li {
-    .georgia-font();
-    font-style: italic;
-    font-size: 14px;
+    > li {
+      .georgia-font();
+      font-style: italic;
+      font-size: 14px;
 
-    > a { color: #5d6468; }
+      > a {
+        color: #5d6468;
+      }
+    }
+  }
+
+  input[type="text"] {
+    .placeholder-style() { font-style: italic; }
+
+    &::-moz-placeholder { .placeholder-style(); }
+    &:-ms-input-placeholder { .placeholder-style(); }
+    &::-webkit-input-placeholder { .placeholder-style(); }
   }
 }

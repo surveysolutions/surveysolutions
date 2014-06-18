@@ -7,30 +7,41 @@
     </div>
 
     <form role="form">
-        <h3>Question</h3>
+        <!--<h3>Question</h3>-->
 
-        <div class="form-group">
-            <label for="edit-question-title">Question Title</label>
-            <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control">
+        <div class="row">
+            <div class="form-group col-xs-8">
+                <!--<label for="edit-question-type">Type</label>-->
+                <select id="edit-question-type" class="form-control" ng-model="activeQuestion.type"
+                        ng-options="scope.value as scope.text for scope in activeQuestion.questionTypeOptions"></select>
+            </div>
+
+            <div class="form-group col-xs-3 pull-right">
+                <!--<label for="edit-question-variable-name">Variable name</label>-->
+                <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variableName"
+                       class="form-control" placeholder="Set variable">
+            </div>
         </div>
 
-
         <div class="form-group">
-            <label for="edit-question-variable-name">Variable name</label>
-            <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variableName"
-                   class="form-control">
+            <!--<label for="edit-question-title">Question Title</label>-->
+            <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text">
+
+            <div class="has-pretty-child gray">
+                <div class="clearfix prettycheckbox labelright blue"><input type="checkbox" data-label="Mandatory question" name="mandatory-question" value="yes" class="wb-checkbox" style="display: none;"><a class="" href="#"></a>
+                    <label for="undefined">Mandatory question</label></div>
+                <div class="clearfix prettycheckbox labelright blue"><input type="checkbox" data-label="Filled by supervisor " name="filled-by-supervisor" value="yes" class="wb-checkbox" style="display: none;"><a class=" " href="#"></a>
+                    <label for="undefined">Filled by supervisor </label></div><br>
+
+                <a class="right" href="#">More Options</a>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="edit-question-type">Type</label>
-            <select id="edit-question-type" class="form-control" ng-model="activeQuestion.type"
-                    ng-options="scope.value as scope.text for scope in activeQuestion.questionTypeOptions"></select>
-        </div>
 
         <div class="checkbox">
             <label>
                 <input type="checkbox" ng-model="activeQuestion.isPreFilled">
-                fre-filled question
+                pre-filled question
             </label>
         </div>
 
@@ -139,6 +150,6 @@
     <div class="pull-left">
         <button cid="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveChapter()">Save</button>
         <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()">Cancel</button>
-        <ng-include src="'moveToChapterSnippet'" />
+        <ng-include src="'moveToChapterSnippet'"/>
     </div>
 </div>

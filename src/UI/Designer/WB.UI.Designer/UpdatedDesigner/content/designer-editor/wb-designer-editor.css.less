@@ -415,7 +415,12 @@
         overflow: auto;
 
         > .breadcrumbs {
+          margin-bottom: 10px;
           .wb-breadcrumbs('gray');
+        }
+
+        .gray {
+          background-color:	#F1F2F3;
         }
 
         > .group {
@@ -424,28 +429,17 @@
           border-radius: @bradius;
           background: #f1f2f3;
 
-          > h1 {
-            border: 2px solid #dbdfe2;
-            border-radius: @bradius;
-            margin: 0;
-            .questionnarie-question-editor-group-h1-fontstyle();
-            background: #fff;
-            padding: 12px;
-          }
+          padding: 15px;
+          .clearfix();
 
-          > .form-holder {
-            padding: 15px;
-            .clearfix();
+          a {
+            .breadcrumbs-fontstyle('blue');
 
-            > a {
-              .breadcrumbs-fontstyle('blue');
-
-              &.left {
-                float: left;
-              }
-              &.right {
-                float: right;
-              }
+            &.left {
+              float: left;
+            }
+            &.right {
+              float: right;
             }
           }
         }
