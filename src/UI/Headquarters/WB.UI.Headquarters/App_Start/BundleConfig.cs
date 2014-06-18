@@ -11,10 +11,6 @@ namespace WB.UI.Headquarters
             bundles.IgnoreList.Clear();
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
-
-            bundles.Add(new StyleBundle("~/css/admin").Include(
-                "~/Content/bootstrap.css",
-                "~/Content/admin.css"));
         }
     }
 }
