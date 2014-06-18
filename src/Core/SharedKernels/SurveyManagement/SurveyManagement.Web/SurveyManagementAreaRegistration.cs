@@ -46,6 +46,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Content/datepicker.css"
                 }
             },
+
+            {
+                "~/css/admin", new[]
+                {
+                    "~/Content/bootstrap.css",
+                    "~/Content/admin.css"
+                }
+            }
         };
 
         private static readonly Dictionary<string, string[]> ScriptBundles = new Dictionary<string, string[]>
@@ -111,9 +119,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
             },
         };
 
-        public override string AreaName 
+        public override string AreaName
         {
-            get 
+            get
             {
                 return "SurveyManagement";
             }

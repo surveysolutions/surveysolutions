@@ -3,7 +3,7 @@ using System.Web.Http;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.UI.Headquarters.Models;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     public class ControlPanelApiController : ApiController
     {

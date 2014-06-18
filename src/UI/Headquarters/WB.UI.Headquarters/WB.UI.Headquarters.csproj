@@ -211,7 +211,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\img\favicon.ico" />
-    <Content Include="Content\admin.css" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -296,11 +295,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\ControlPanelApiController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />
-    <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="API\SyncController.cs" />
     <Compile Include="Controllers\SupervisorController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
