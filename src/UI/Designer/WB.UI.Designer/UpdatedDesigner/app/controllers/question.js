@@ -3,52 +3,57 @@
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$scope', '$routeParams', 'questionnaireService', 'commandService',
-            function($scope, $routeParams, questionnaireService, commandService) {
+            '$scope', '$routeParams', 'questionnaireService', 'commandService', '$log',
+            function($scope, $routeParams, questionnaireService, commandService, $log) {
 
-                var questionnaireId = $routeParams.questionnaireId;
-                var questionId;
-                var questionBrief;
+                var dataBind = function(result) {
+                    $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
 
-                questionId = $scope.activeQuestion.itemId;
-                questionBrief = $scope.activeQuestion;
+                    //console.log(JSON.stringify(result));
 
-                questionnaireService.getQuestionDetailsById(questionnaireId, questionId)
-                    .success(function(result) {
-                        $scope.activeQuestion = result;
-                        $scope.activeQuestion.optionValue = "";
-                        $scope.activeQuestion.optionTitle = "";
-                    });
+                    $scope.activeQuestion.type = result.type;
+                    $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
+                    $scope.activeQuestion.variableName = result.variableName;
+                    $scope.activeQuestion.title = result.title;
+                    $scope.activeQuestion.isPreFilled = result.isPreFilled;
+                    $scope.activeQuestion.isMandatory = result.isMandatory;
+                    $scope.activeQuestion.enablementCondition = result.enablementCondition;
+                    $scope.activeQuestion.validationExpression = result.validationExpression;
+                    $scope.activeQuestion.validationMessage = result.validationMessage;
+                    $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
+                }
 
-                $scope.addOption = function() {
-                    $scope.activeQuestion.options.push({
-                        value: $scope.activeQuestion.optionValue,
-                        title: $scope.activeQuestion.optionTitle
-                    });
+                $scope.loadQuestion = function () {
+                    questionnaireService.getQuestionDetailsById($routeParams.questionnaireId, $scope.activeQuestion.itemId)
+                        .success(function (result) {
+                            $scope.initialQuestion = angular.copy(result);
+                            dataBind(result);
+                        });
                 };
 
                 $scope.saveQuestion = function() {
-                    $('#edit-question-save-button').popover('destroy');
-                    commandService.sendUpdateQuestionCommand(questionnaireId, $scope.activeQuestion).success(function(result) {
-                        if (result.IsSuccess) {
-                            questionBrief.title = $scope.activeQuestion.title;
-                            questionBrief.type = $scope.activeQuestion.type;
-                            questionBrief.variable = $scope.activeQuestion.variableName;
-                        } else {
-                            $('#edit-question-save-button').popover({
-                                content: result.Error,
-                                placement: top,
-                                animation: true
-                            }).popover('show');
+                    commandService.sendUpdateQuestionCommand($routeParams.questionnaireId, $scope.activeQuestion).success(function (result) {
+                        if (!result.IsSuccess) {
+                            $log.error(result.Error);
                         }
                     });
                 };
 
-                $scope.moveToChapter = function (chapterId) {
+                $scope.moveToChapter = function(chapterId) {
                     questionnaireService.moveQuestion(questionId, 0, chapterId, questionnaireId);
                     $scope.resetSelection();
                     questionnaireService.removeItem($scope.items, questionId);
                 };
+
+                $scope.resetQuestion = function () {
+                    dataBind($scope.initialQuestion);
+                };
+
+                $scope.loadQuestion();
+
+                $scope.$watch('activeQuestion', function() {
+                    $scope.loadQuestion();
+                });
             }
         ]);
 }());

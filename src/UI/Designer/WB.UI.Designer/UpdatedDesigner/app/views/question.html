@@ -7,8 +7,6 @@
     </div>
 
     <form role="form">
-        <!--<h3>Question</h3>-->
-
         <div class="row">
             <div class="form-group col-xs-8">
                 <!--<label for="edit-question-type">Type</label>-->
@@ -89,16 +87,6 @@
             <input id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions"
                    class="form-control">
         </div>
-        <!--<div class="form-buttons-holder">
-            <div class="pull-left">
-                <input id="edit-question-save-button" class="btn-lg btn-primary" type="submit" value="Save"
-                       ng-click="saveQuestion()">
-                <input id="edit-question-cancel-button" class="btn-lg btn-primary btn-transbg" type="submit"
-                       value="Cancel" ng-click="cancel()">
-            </div>
-            <div class="pull-right">
-            </div>
-        </div>-->
     </form>
 
     <script type="text/ng-template" id="SingleOption-template.html">
@@ -156,9 +144,12 @@
 
 <div class="form-buttons-holder">
     <div class="pull-left">
-        <button cid="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveChapter()">Save</button>
-        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()">Cancel</button>
-        <ng-include src="'moveToChapterSnippet'"/>
+        <button cid="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveQuestion()">Save</button>
+        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="resetQuestion()">Cancel</button>
+        
+    </div>
+    <div class="pull-right">
+        <ng-include src="'moveToChapterSnippet'" />
     </div>
 </div>
 

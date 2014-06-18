@@ -35,7 +35,6 @@
                                 placement: top,
                                 animation: true
                             }).popover('show');
-                        } else {
                             $log.error(result);
                         }
                     });

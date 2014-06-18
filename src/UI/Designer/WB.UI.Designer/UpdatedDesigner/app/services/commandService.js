@@ -14,7 +14,7 @@
                             "type": type,
                             "command": JSON.stringify(command)
                         },
-                        headers: { 'Content-Type': 'application/json; ' }
+                        headers: {'Content-Type': 'application/json;'}
                     });
                 }
 
@@ -25,7 +25,7 @@
                 commandService.sendUpdateQuestionCommand = function(questionnaireId, question) {
                     var command = {
                         questionnaireId: questionnaireId,
-                        questionId: question.id,
+                        questionId: question.itemId,
                         title: question.title,
                         type: question.type,
                         variableName: question.variableName,

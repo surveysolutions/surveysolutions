@@ -88,6 +88,8 @@
                         $scope.activeRoster = undefined;
                         $scope.activeChapter = undefined;
                         $scope.activeQuestion = item;
+                        console.log(JSON.stringify($scope.activeQuestion));
+                        console.log(item);
                     } else if (item.isRoster) {
                         $scope.activeRoster = item;
                         $scope.activeQuestion = undefined;
