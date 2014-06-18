@@ -11,7 +11,8 @@
         'ui.bootstrap.tpls',
         'ui.bootstrap.transition',
         'ui.tree',
-        'ui.utils'
+        'ui.utils',
+        'angular-loading-bar'
     ]);
 
     angular.module('designerApp').config([
