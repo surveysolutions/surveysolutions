@@ -5963,47 +5963,28 @@ input[type="text"]::-webkit-input-placeholder {
 .modal {
   overflow-y: inherit;
 }
-.modal-dialog {
-  /*.col-md-4 {
-    input {
-      font-style: italic;
-    }
-  }*/
-}
-.modal-dialog .modal-header {
+.modal .modal-dialog .modal-header {
   border-bottom: none;
   border-top: 8px solid #d7e4ee;
   border-radius: 5px 5px 0 0;
 }
-.modal-dialog .modal-header h1 {
+.modal .modal-dialog .modal-header h1 {
   font-family: 'Roboto', sans-serif;
 }
-.modal-dialog h2 {
+.modal .modal-dialog h2 {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #3f3f3f;
 }
-.modal-dialog h2 small {
+.modal .modal-dialog h2 small {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   color: #b9c3ca;
 }
-.modal-dialog h3 {
+.modal .modal-dialog h3 {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   font-weight: bold;
-}
-.modal-dialog ul.accounts {
-  padding-left: 0;
-}
-.modal-dialog ul.accounts li {
-  list-style: none;
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 14px;
-}
-.modal-dialog ul.accounts li a {
-  color: #5d6468;
 }
 /*
   string @color: 'blue' or 'gray'
@@ -7113,4 +7094,16 @@ input[type="text"]::-webkit-input-placeholder {
   font-style: normal;
   color: #ff4200;
   font-size: 12px;
+}
+ul.accounts {
+  list-style: none;
+  padding-left: 0;
+}
+ul.accounts > li {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+}
+ul.accounts > li > a {
+  color: #5d6468;
 }
