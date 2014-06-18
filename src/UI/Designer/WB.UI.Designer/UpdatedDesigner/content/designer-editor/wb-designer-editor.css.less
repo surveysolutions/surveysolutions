@@ -420,30 +420,20 @@
         }
 
         .gray {
-          background-color:	#F1F2F3;
+          padding: 8px;
+          background: #f1f2f3;
+          border-radius: 4px;
+          .clearfix();
         }
 
-        > .group {
-          @bradius: 4px;
-          margin: 25px 0;
-          border-radius: @bradius;
-          background: #f1f2f3;
-
-          padding: 15px;
-          .clearfix();
-
-          a {
-            .breadcrumbs-fontstyle('blue');
-
-            &.left {
-              float: left;
-            }
-            &.right {
-              float: right;
-            }
+        .form-group {
+          > label {
+            .lucida-console-font();
+            font-size: 14px;
+            color: #5d5d5d;
+            font-weight: normal;
           }
         }
-
       }
 
       > .form-buttons-holder {

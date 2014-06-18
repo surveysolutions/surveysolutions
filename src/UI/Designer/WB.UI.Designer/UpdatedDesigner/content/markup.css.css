@@ -5943,7 +5943,8 @@ body {
   background: url(i/pretty-checkable-sprites.png);
 }
 .prettycheckbox label {
-  margin: 7px 6px 4px 0;
+  font-size: 14px !important;
+  margin: 4px 6px 4px 0;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: normal;
   font-size: 12px;
@@ -6545,42 +6546,31 @@ body {
   background: url(lib/i/breadcrumb-slash.png) no-repeat;
 }
 #designer-editor.container section#main > .question-editor > .form-holder .gray {
-  background-color: #F1F2F3;
-}
-#designer-editor.container section#main > .question-editor > .form-holder > .group {
-  margin: 25px 0;
-  border-radius: 4px;
+  padding: 8px;
   background: #f1f2f3;
-  padding: 15px;
+  border-radius: 4px;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group:before,
-#designer-editor.container section#main > .question-editor > .form-holder > .group:after {
+#designer-editor.container section#main > .question-editor > .form-holder .gray:before,
+#designer-editor.container section#main > .question-editor > .form-holder .gray:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group:after {
+#designer-editor.container section#main > .question-editor > .form-holder .gray:after {
   clear: both;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group:before,
-#designer-editor.container section#main > .question-editor > .form-holder > .group:after {
+#designer-editor.container section#main > .question-editor > .form-holder .gray:before,
+#designer-editor.container section#main > .question-editor > .form-holder .gray:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group:after {
+#designer-editor.container section#main > .question-editor > .form-holder .gray:after {
   clear: both;
 }
-#designer-editor.container section#main > .question-editor > .form-holder > .group a {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 12px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #2a81cb;
-}
-#designer-editor.container section#main > .question-editor > .form-holder > .group a.left {
-  float: left;
-}
-#designer-editor.container section#main > .question-editor > .form-holder > .group a.right {
-  float: right;
+#designer-editor.container section#main > .question-editor > .form-holder .form-group > label {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  color: #5d5d5d;
+  font-weight: normal;
 }
 #designer-editor.container section#main > .question-editor > .form-buttons-holder {
   padding: 25px 40px;

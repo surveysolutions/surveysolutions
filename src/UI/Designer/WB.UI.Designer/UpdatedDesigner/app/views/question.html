@@ -28,17 +28,17 @@
             <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text">
 
             <div class="has-pretty-child gray">
-                <div class="clearfix prettycheckbox labelright blue"><input type="checkbox" data-label="Mandatory question" name="mandatory-question" value="yes" class="wb-checkbox" style="display: none;"><a class="" href="#"></a>
-                    <label for="undefined">Mandatory question</label></div>
-                <div class="clearfix prettycheckbox labelright blue"><input type="checkbox" data-label="Filled by supervisor " name="filled-by-supervisor" value="yes" class="wb-checkbox" style="display: none;"><a class=" " href="#"></a>
-                    <label for="undefined">Filled by supervisor </label></div><br>
+                <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" data-label="Mandatory question"/>
+                <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isPreFilled" data-label="Filled by supervisor"/>
 
-                <a class="right" href="#">More Options</a>
             </div>
         </div>
 
+        <div class="form-group">
+            <button class="btn btn-lg btn-link">Add Instruction</button>
+        </div>
 
-        <div class="checkbox">
+            <!--<div class="checkbox">
             <label>
                 <input type="checkbox" ng-model="activeQuestion.isPreFilled">
                 pre-filled question
@@ -50,26 +50,34 @@
                 <input type="checkbox" ng-model="activeQuestion.isMandatory">
                 mandatory question
             </label>
-        </div>
+        </div>      -->
         <div ng-include="activeQuestion.type + '-template.html'">
         </div>
 
         <div class="form-group">
-            <label for="edit-question-validation-expression">Validation expression</label>
-            <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression"
-                   class="form-control">
-        </div>
-
-        <div class="form-group">
-            <label for="edit-question-validation-message">Validation expression</label>
-            <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage"
-                   class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="edit-question-enablement-condition">Enablement cndition</label>
+            <label for="edit-question-enablement-condition">Condition expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
             <input id="edit-question-enablement-condition" type="text" ng-model="activeQuestion.enablementCondition"
                    class="form-control">
         </div>
+
+        <div class="row">
+            <div class="form-group col-xs-8">
+                <div class="form-group">
+                    <label for="edit-question-validation-expression">Validation expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
+                    <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression"
+                           class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group col-xs-4 pull-right">
+                <div class="form-group">
+                    <label for="edit-question-validation-message">Validation message (<a href="#">?</a>)</label>
+                    <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage"
+                           class="form-control">
+                </div>
+            </div>
+        </div>
+
         <div class="form-group">
             <label for="edit-question-scope">Question scope</label>
             <select for="edit-question-scope" ng-model="activeQuestion.questionScope"
@@ -153,3 +161,12 @@
         <ng-include src="'moveToChapterSnippet'"/>
     </div>
 </div>
+
+<script lang="text/javascript">
+    /* this block is needed for prettyCheckable initialization, should be called after DOM update */
+    $(function (){
+        $.each($('input.wb-checkbox'), function(i, el) {
+            $(el).prettyCheckable();
+        });
+    });
+</script>
