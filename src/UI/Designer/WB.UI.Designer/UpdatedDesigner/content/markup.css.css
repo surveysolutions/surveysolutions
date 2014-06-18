@@ -1,4 +1,4 @@
-@import "../vendor/bootstrap-select/bootstrap-select.min.css";
+﻿@import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/prettycheckable/dist/prettyCheckable.css";
 /**
@@ -7110,6 +7110,9 @@ body {
   color: #ff4200;
   font-size: 12px;
 }
+.share-window .modal-content {
+  width: 800px;
+}
 .share-question-dialog ul.accounts {
   list-style: none;
   padding-left: 0;
@@ -7131,3 +7134,16 @@ body {
 .share-question-dialog input[type="text"]::-webkit-input-placeholder {
   font-style: italic;
 }
+.share-question-dialog .form-group {
+  vertical-align: top;
+}
+.share-question-dialog .form-group .share-with-email {
+  width: 400px;
+}
+.share-question-dialog .form-group.share-form-btn-label {
+  padding-top: 6px;
+}
+.share-question-dialog .form-group .invite-button {
+  line-height: 0px;
+}
+/*# sourceMappingURL=markup.css.css.map */

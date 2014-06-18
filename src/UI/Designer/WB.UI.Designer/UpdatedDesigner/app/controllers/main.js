@@ -178,6 +178,7 @@
                     $modal.open({
                         templateUrl: 'app/views/share.html',
                         controller: 'shareCtrl',
+                        windowClass: 'share-window',
                         resolve:
                         {
                             questionnaire: function() {
