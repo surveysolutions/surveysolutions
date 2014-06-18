@@ -1,0 +1,64 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")">
+    @Styles.Render("~/css/admin")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">@Membership.ApplicationName</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-2 sidebar">
+                    <ul class="nav nav-sidebar">
+                        <li><a href="readside">Read side</a></li>
+                        <li><a href="nconfig">NConfig</a></li>
+                        <li><a href="designer">Designer</a></li>
+                        <li><a href="revalidateinterviews">Revalidate Interviews</a></li>
+                        <li><a href="interviewdetails">Interview details</a></li>
+                        <li><a href="incomingdatawitherrors">Interviews with errors</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        @Scripts.Render("~/js/main")
+        <script type="text/javascript">
+            var input = window.input || (function () {
+                'use strict';
+                return {
+                    settings: {
+                        messages: {
+                            unhandledExceptionMessage: 'An unexpected error occurred. We are sorry for inconvenience.',
+                            notifyDialogTitle: 'Please wait',
+                            notifyDialogText: '"Your previous request is not complete. Please wait for it to be finished and repeat your operation."',
+                            notifyNoMarkersTitle: 'No markers were added',
+                            notifyNoMarkersText: 'There is no any information about geolocation points'
+                        }
+                    }
+                };
+            }(document));
+            window.input = input;
+        </script>
+        @RenderSection("scripts", false)
+    </body>
+</html>
