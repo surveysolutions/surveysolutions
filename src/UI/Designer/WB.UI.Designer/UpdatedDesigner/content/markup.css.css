@@ -5965,23 +5965,37 @@ input[type="text"]::-webkit-input-placeholder {
 }
 .modal .modal-dialog .modal-header {
   border-bottom: none;
-  border-top: 8px solid #d7e4ee;
   border-radius: 5px 5px 0 0;
+}
+.modal .modal-dialog .modal-header.blue-strip {
+  border-top: 8px solid #d7e4ee;
 }
 .modal .modal-dialog .modal-header h1 {
   font-family: 'Roboto', sans-serif;
 }
-.modal .modal-dialog h2 {
+.modal .modal-dialog .modal-header button.close {
+  position: absolute;
+  z-index: 100;
+  top: 12px;
+  right: 4px;
+  width: 40px;
+  height: 40px;
+  background: url(i/cross.png) 0 0 no-repeat;
+}
+.modal .modal-dialog .modal-header button.close:hover {
+  background-position: 0 -40px;
+}
+.modal .modal-dialog .modal-header h2 {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #3f3f3f;
 }
-.modal .modal-dialog h2 small {
+.modal .modal-dialog .modal-header h2 small {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   color: #b9c3ca;
 }
-.modal .modal-dialog h3 {
+.modal .modal-dialog .modal-body h3 {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   font-weight: bold;
