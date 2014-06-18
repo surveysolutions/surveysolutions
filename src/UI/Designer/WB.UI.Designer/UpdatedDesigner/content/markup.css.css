@@ -5948,11 +5948,27 @@ body {
   font-weight: normal;
   font-size: 12px;
 }
+input[type="text"]::-moz-placeholder {
+  font-style: italic;
+}
+input[type="text"]:-ms-input-placeholder {
+  font-style: italic;
+}
+input[type="text"]::-webkit-input-placeholder {
+  font-style: italic;
+}
 .popover {
   max-width: inherit;
 }
 .modal {
   overflow-y: inherit;
+}
+.modal-dialog {
+  /*.col-md-4 {
+    input {
+      font-style: italic;
+    }
+  }*/
 }
 .modal-dialog .modal-header {
   border-bottom: none;
@@ -5988,9 +6004,6 @@ body {
 }
 .modal-dialog ul.accounts li a {
   color: #5d6468;
-}
-.modal-dialog .col-md-4 input {
-  font-style: italic;
 }
 /*
   string @color: 'blue' or 'gray'

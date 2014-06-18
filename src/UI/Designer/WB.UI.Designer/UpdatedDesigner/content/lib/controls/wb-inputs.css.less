@@ -23,3 +23,9 @@
     .wb-checkbox-fontstyle();
   }
 }
+
+input[type="text"] {
+  &::-moz-placeholder           { font-style: italic; }  // Firefox
+  &:-ms-input-placeholder       { font-style: italic; } // Internet Explorer 10+
+  &::-webkit-input-placeholder  { font-style: italic; } // Safari and Chrome
+}
