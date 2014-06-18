@@ -2,6 +2,7 @@
 @using System.Web.Optimization
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@using WB.UI.Headquarters.Code
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,11 +100,17 @@
                 {
                     <span id="build-config">[.NET Debug]</span>
                 }
+                
                 @if (HttpContext.Current.IsDebuggingEnabled)
                 {
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
-                | <a href="@Url.Action("GetLatestVersion", "Sync", new { area = string.Empty })">Get CAPI</a>
+                
+                @if (LegacyOptions.SupervisorFunctionsEnabled)
+                {
+                    <text>|</text> <a href="@Url.Action("GetLatestVersion", "Sync", new { area = string.Empty })">Get CAPI</a>
+                }
+
             </div>
         </footer>
     </div>
