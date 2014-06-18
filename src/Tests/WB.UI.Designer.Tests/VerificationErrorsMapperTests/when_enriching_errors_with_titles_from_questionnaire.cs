@@ -13,8 +13,8 @@ namespace WB.UI.Designer.Tests.VerificationErrorsMapperTests
         Establish context = () =>
         {
             mapper = CreateVerificationErrorsMapper();
-            verificationErrors = CreateQuestionnaireVerificationErrors(questionId, groupId);
-            document = CreateQuestionnaireDocument(questionId, groupId, groupTitle, questionTitle);
+            verificationErrors = CreateQuestionnaireVerificationErrors(Guid.Parse(questionId), Guid.Parse(groupId));
+            document = CreateQuestionnaireDocument(Guid.Parse(questionId), Guid.Parse(groupId), groupTitle, questionTitle);
         };
 
         Because of = () =>
@@ -42,10 +42,10 @@ namespace WB.UI.Designer.Tests.VerificationErrorsMapperTests
             result.Last().References.Count.ShouldEqual(verificationErrors.Last().References.Count());
 
         It should_return_first_error_that_references_question_with_questionId = () =>
-            result.First().References.First().Id.ShouldEqual(questionId);
+            result.First().References.First().ItemId.ShouldEqual(questionId);
 
         It should_return_last_error_that_references_question_with_questionId = () =>
-            result.Last().References.First().Id.ShouldEqual(groupId);
+            result.Last().References.First().ItemId.ShouldEqual(groupId);
 
         It should_return_first_error_that_references_question_with_questionTitle = () =>
             result.First().References.First().Title.ShouldEqual(questionTitle);
@@ -58,8 +58,8 @@ namespace WB.UI.Designer.Tests.VerificationErrorsMapperTests
         private static QuestionnaireVerificationError[] verificationErrors;
         private static QuestionnaireDocument document;
         private static VerificationError[] result;
-        private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
-        private static Guid groupId = Guid.Parse("22222222222222222222222222222222");
+        private static string questionId = "11111111111111111111111111111111";
+        private static string groupId = "22222222222222222222222222222222";
         private static string groupTitle = "Group Title";
         private static string questionTitle = "Question Title";
     }
