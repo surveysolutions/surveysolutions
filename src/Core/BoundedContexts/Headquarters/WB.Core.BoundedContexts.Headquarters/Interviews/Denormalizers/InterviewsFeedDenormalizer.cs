@@ -74,7 +74,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 Timestamp = evnt.EventTimeStamp,
                 EntryId = evnt.EventIdentifier.FormatGuid(),
                 UserId = evnt.Payload.UserId.FormatGuid(),
-                Comment = evnt.Payload.Comment,
                 InterviewerId =  supervisorId != responsibleId ? responsibleId : null
             }, evnt.EventIdentifier.FormatGuid());
         }
