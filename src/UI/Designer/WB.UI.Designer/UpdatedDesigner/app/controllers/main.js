@@ -151,7 +151,7 @@
 
                 var upDownMove = function(updownStepValue) {
                     if ($scope.items && $scope.currentItem) {
-                        var parent = $scope.currentItem.parent;
+                        var parent = $scope.currentItem.getParentItem();
 
                         if (_.isNull(parent)) {
                             var siblingIndex = _.indexOf($scope.items, $scope.currentItem) + updownStepValue;
@@ -164,7 +164,7 @@
                         var nextItemIndex = _.indexOf(parent.items, $scope.currentItem) + updownStepValue;
 
                         if (nextItemIndex < $scope.items.length && nextItemIndex >= 0) {
-                            $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, parent.items[nextItemIndex].item);
+                            $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, parent.items[nextItemIndex]);
                         }
                     }
                 }
@@ -179,8 +179,9 @@
 
                 $scope.goToParent = function() {
                     if ($scope.items && $scope.currentItem) {
-                        if ($scope.currentItem.parent != null) {
-                            $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.parent);
+                        var parent = $scope.currentItem.getParentItem();
+                        if (parent != null) {
+                            $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, parent);
                         }
                     }
                 }
