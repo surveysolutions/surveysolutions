@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     public class ApplySynchronizationMetadata : InterviewCommand
     {
         public ApplySynchronizationMetadata(Guid interviewId, Guid userId, Guid questionnaireId, InterviewStatus status,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid)
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient = false)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.FeaturedQuestionsMeta = featuredQuestionsMeta;
             this.Comments = comments;
             this.Valid = valid;
+            this.CreatedOnClient = createdOnClient;
         }
 
         public Guid Id { get; set; }
@@ -32,5 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public string Comments { get; set; }
 
         public bool Valid { get; set; }
+
+        public bool CreatedOnClient { get; set; }
     }
 }

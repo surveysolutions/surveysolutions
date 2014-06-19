@@ -7,9 +7,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
     public class AccountViewFactory : IViewFactory<AccountViewInputModel, AccountView>
     {
-        private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;
+        private readonly IQueryableReadSideRepositoryWriter<AccountDocument> accounts;
 
-        public AccountViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
+        public AccountViewFactory(IQueryableReadSideRepositoryWriter<AccountDocument> accounts)
         {
             this.accounts = accounts;
         }

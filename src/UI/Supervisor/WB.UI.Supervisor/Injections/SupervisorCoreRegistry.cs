@@ -55,7 +55,6 @@ namespace WB.UI.Supervisor.Injections
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
-            this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
         }
     }
 }

@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{73601A04-81A9-4BFF-9A5F-591569291D8C}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.Core.BoundedContexts.Capi.Synchronization</RootNamespace>
+    <AssemblyName>WB.Core.BoundedContexts.Capi.Synchronization</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\CapiSynchronizationModule.cs">
+      <Link>CapiSynchronizationModule.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\ChangeLogRecordWithContent.cs">
+      <Link>ChangeLog\ChangeLogRecordWithContent.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\ChangeLogShortRecord.cs">
+      <Link>ChangeLog\ChangeLogShortRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\IChangeLogManipulator.cs">
+      <Link>ChangeLog\IChangeLogManipulator.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\ChangeLog\IChangeLogStore.cs">
+      <Link>ChangeLog\IChangeLogStore.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\ChangeLog\FileChangeLogStore.cs">
+      <Link>Implementation\ChangeLog\FileChangeLogStore.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\Services\CapiDataSynchronizationService.cs">
+      <Link>Implementation\Services\CapiDataSynchronizationService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\Services\FileCapiSynchronizationCacheService.cs">
+      <Link>Implementation\Services\FileCapiSynchronizationCacheService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Implementation\Services\SyncPackageRestoreService.cs">
+      <Link>Implementation\Services\SyncPackageRestoreService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Services\ICapiCleanUpService.cs">
+      <Link>Services\ICapiCleanUpService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Services\ICapiDataSynchronizationService.cs">
+      <Link>Services\ICapiDataSynchronizationService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Services\ICapiSynchronizationCacheService.cs">
+      <Link>Services\ICapiSynchronizationCacheService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Services\ISyncPackageRestoreService.cs">
+      <Link>Services\ISyncPackageRestoreService.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs">
+      <Link>Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\Login\LoginView.cs">
+      <Link>Views\Login\LoginView.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.Capi.Synchronization\Views\Login\LoginViewInput.cs">
+      <Link>Views\Login\LoginViewInput.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
+      <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
+      <Name>AndroidMain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNCQRS\AndroidNCQRS.csproj">
+      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
+      <Name>AndroidNCQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
+      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
+      <Name>AndroidNinject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
+      <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.Core.BoundedContexts.Capi.Android\WB.Core.BoundedContexts.Capi.Android.csproj">
+      <Project>{c62669d1-2b5f-4976-a33d-a66b674d0149}</Project>
+      <Name>WB.Core.BoundedContexts.Capi.Android</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\WB.Core.BoundedContexts.Capi.Synchronization\packages.config">
+      <Link>packages.config</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkReference="f907b0f2-4cfd-438c-8b53-f2d44c581f56" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

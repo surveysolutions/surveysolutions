@@ -33,4 +33,11 @@
       scope="\\web.config$" 
       match="//system.serviceModel/client/endpoint/@address" />
   </parameter>
+   <parameter name="Allow supervisor access"
+      description="Hybrid mode with embedded supervison functionality"
+      defaultValue="true">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='SupervisorFunctionsEnabled']/@value" />
+   </parameter>
 </parameters>

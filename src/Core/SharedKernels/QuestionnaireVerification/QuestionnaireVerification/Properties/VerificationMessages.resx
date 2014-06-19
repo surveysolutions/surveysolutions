@@ -288,4 +288,7 @@
   <data name="WB0065_QuestionHasValidationExpressionWithoutValidationMessage" xml:space="preserve">
     <value>Validation message is required if question has validation expression</value>
   </data>
+  <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+    <value>Question of this type is not supported</value>
+  </data>
 </root>

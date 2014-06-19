@@ -5,6 +5,8 @@ using Main.Core.View;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models;
 using It = Machine.Specifications.It;

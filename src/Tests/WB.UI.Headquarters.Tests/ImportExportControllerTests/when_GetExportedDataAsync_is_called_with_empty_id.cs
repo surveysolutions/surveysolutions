@@ -7,6 +7,7 @@ using System.Web;
 using Machine.Specifications;
 using Main.Core.View;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.UI.Headquarters.Tests.ImportExportControllerTests

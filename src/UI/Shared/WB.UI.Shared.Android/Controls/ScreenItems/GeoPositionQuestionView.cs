@@ -36,28 +36,13 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             base.Initialize();
 
-            var geoWrapper = new RelativeLayout(this.Context);
-            geoWrapper.LayoutParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.FillParent);
 
-            //geoWrapper.Orientation = Orientation.Horizontal;
-            
             this.locationText = new TextView(this.Context);
-            
             this.locationText.SetTypeface(null, TypefaceStyle.Bold);
+
+            this.InitializeTextAndButtonView(this.locationText, "Get Location", this.GetLocation);
+
             this.PutAnswerStoredInModelToUI();
-
-            var updateLocationButton = new Button(this.Context) {Text = "Get Location"};
-            var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, 
-                                                               ViewGroup.LayoutParams.WrapContent);
-            layoutParams.AddRule(LayoutRules.AlignParentRight);
-            updateLocationButton.LayoutParameters = layoutParams;
-            updateLocationButton.Click += this.GetLocation;
-
-            geoWrapper.AddView(updateLocationButton);
-            geoWrapper.AddView(this.locationText);
-
-            this.llWrapper.AddView(geoWrapper);
         }
 
         protected override string GetAnswerStoredInModelAsString()

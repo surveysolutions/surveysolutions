@@ -1,5 +1,5 @@
 using System;
-using System.Web;
+using System.Web.Http;
 using Machine.Specifications;
 using WB.UI.Designer.Api;
 
@@ -18,8 +18,8 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
         It should_throw_exception = () =>
             exception.ShouldNotBeNull();
 
-        It should_throw_HttpException_exception = () =>
-            exception.ShouldBeOfExactType(typeof(HttpException));
+        It should_throw_HttpResponseException_exception = () =>
+            exception.ShouldBeOfExactType(typeof(HttpResponseException));
 
         private static QuestionnaireController controller;
         private static Exception exception;

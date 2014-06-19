@@ -19,7 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             HashSet<InterviewItemId> invalidAnsweredQuestions,
             Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
-            bool wasCompleted)
+            bool wasCompleted,
+            bool createdOnClient = false)
         {
             Id = id;
             Status = status;
@@ -34,9 +35,12 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
             RosterGroupInstances = rosterGroupInstances;
             this.WasCompleted = wasCompleted;
+            this.CreatedOnClient = createdOnClient;
+
         }
 
         public Guid Id { get;  set; }
+        public bool CreatedOnClient { get; set; }
         public InterviewStatus Status { get;  set; }
         public Guid UserId { get;  set; }
         public Guid QuestionnaireId { get; set; }

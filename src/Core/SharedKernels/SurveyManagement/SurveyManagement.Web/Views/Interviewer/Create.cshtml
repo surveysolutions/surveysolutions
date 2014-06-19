@@ -1,0 +1,28 @@
+﻿@using System.Web.Optimization
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewerModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/validate")
+}
+
+<div class="page-header">
+    <h2>Create interviewer</h2>
+</div>
+
+
+<form class="form-horizontal" method="POST">
+    @{
+        this.Html.RenderPartial("UserCreateForm");
+    }
+    <div class="form-group">
+        <div class="col-sm-offset-2">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            @Html.ActionLink("Cancel", "Back", new { id = Model.SupervisorId }, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</form>

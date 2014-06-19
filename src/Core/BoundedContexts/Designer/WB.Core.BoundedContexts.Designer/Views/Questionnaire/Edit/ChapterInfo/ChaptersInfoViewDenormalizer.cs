@@ -34,8 +34,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionAdded>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionUpdated>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionCloned>,
-        IUpdateHandler<GroupInfoView, QuestionnaireItemMoved>
-
+        IUpdateHandler<GroupInfoView, QuestionnaireItemMoved>,
+        IUpdateHandler<GroupInfoView, GroupBecameARoster>,
+        IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
     {
         private readonly IExpressionProcessor expressionProcessor;
 
@@ -120,31 +121,43 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return currentState;
         }
 
-        public GroupInfoView Update(GroupInfoView currentState,IPublishedEvent<NewQuestionAdded> evnt)
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<NewQuestionAdded> evnt)
         {
-            this.AddQuestion(questionnaire: currentState, groupId: evnt.Payload.GroupPublicKey.Value.FormatGuid(),
-                questionId: evnt.Payload.PublicKey.FormatGuid(), questionTitle: evnt.Payload.QuestionText,
-                questionType: evnt.Payload.QuestionType, questionVariable: evnt.Payload.StataExportCaption,
-                questionConditionExpression: evnt.Payload.ConditionExpression);
+            this.AddQuestion(questionnaire: currentState, 
+                groupId: evnt.Payload.GroupPublicKey.Value.FormatGuid(),
+                questionId: evnt.Payload.PublicKey.FormatGuid(), 
+                questionTitle: evnt.Payload.QuestionText,
+                questionType: evnt.Payload.QuestionType, 
+                questionVariable: evnt.Payload.StataExportCaption,
+                questionConditionExpression: evnt.Payload.ConditionExpression,
+                linkedToQuestionId: Monads.Maybe(() => evnt.Payload.LinkedToQuestionId.FormatGuid()));
 
             return currentState;
         }
 
         public GroupInfoView Update(GroupInfoView currentState,IPublishedEvent<QuestionCloned> evnt)
         {
-            this.AddQuestion(questionnaire: currentState, groupId: evnt.Payload.GroupPublicKey.Value.FormatGuid(),
-                questionId: evnt.Payload.PublicKey.FormatGuid(), questionTitle: evnt.Payload.QuestionText,
-                questionType: evnt.Payload.QuestionType, questionVariable: evnt.Payload.StataExportCaption,
-                questionConditionExpression: evnt.Payload.ConditionExpression, orderIndex: evnt.Payload.TargetIndex);
+            this.AddQuestion(questionnaire: currentState,
+                groupId: evnt.Payload.GroupPublicKey.Value.FormatGuid(),
+                questionId: evnt.Payload.PublicKey.FormatGuid(), 
+                questionTitle: evnt.Payload.QuestionText,
+                questionType: evnt.Payload.QuestionType, 
+                questionVariable: evnt.Payload.StataExportCaption,
+                questionConditionExpression: evnt.Payload.ConditionExpression, 
+                linkedToQuestionId: Monads.Maybe(() => evnt.Payload.LinkedToQuestionId.FormatGuid()),
+                orderIndex: evnt.Payload.TargetIndex);
 
             return currentState;
         }
 
         public GroupInfoView Update(GroupInfoView currentState,IPublishedEvent<NumericQuestionAdded> evnt)
         {
-            this.AddQuestion(questionnaire: currentState, groupId: evnt.Payload.GroupPublicKey.FormatGuid(),
-                questionId: evnt.Payload.PublicKey.FormatGuid(), questionTitle: evnt.Payload.QuestionText,
-                questionType: QuestionType.Numeric, questionVariable: evnt.Payload.StataExportCaption,
+            this.AddQuestion(questionnaire: currentState, 
+                groupId: evnt.Payload.GroupPublicKey.FormatGuid(),
+                questionId: evnt.Payload.PublicKey.FormatGuid(),
+                questionTitle: evnt.Payload.QuestionText,
+                questionType: QuestionType.Numeric,
+                questionVariable: evnt.Payload.StataExportCaption,
                 questionConditionExpression: evnt.Payload.ConditionExpression);
 
             return currentState;
@@ -152,19 +165,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView currentState,IPublishedEvent<NumericQuestionCloned> evnt)
         {
-            this.AddQuestion(questionnaire: currentState, groupId: evnt.Payload.GroupPublicKey.FormatGuid(),
-                questionId: evnt.Payload.PublicKey.FormatGuid(), questionTitle: evnt.Payload.QuestionText,
-                questionType: QuestionType.Numeric, questionVariable: evnt.Payload.StataExportCaption,
-                questionConditionExpression: evnt.Payload.ConditionExpression, orderIndex: evnt.Payload.TargetIndex);
+            this.AddQuestion(questionnaire: currentState, 
+                groupId: evnt.Payload.GroupPublicKey.FormatGuid(),
+                questionId: evnt.Payload.PublicKey.FormatGuid(), 
+                questionTitle: evnt.Payload.QuestionText,
+                questionType: QuestionType.Numeric, 
+                questionVariable: evnt.Payload.StataExportCaption,
+                questionConditionExpression: evnt.Payload.ConditionExpression,
+                orderIndex: evnt.Payload.TargetIndex);
 
             return currentState;
         }
 
         public GroupInfoView Update(GroupInfoView currentState,IPublishedEvent<TextListQuestionAdded> evnt)
         {
-            this.AddQuestion(questionnaire: currentState, groupId: evnt.Payload.GroupId.FormatGuid(),
-                 questionId: evnt.Payload.PublicKey.FormatGuid(), questionTitle: evnt.Payload.QuestionText,
-                 questionType: QuestionType.TextList, questionVariable: evnt.Payload.StataExportCaption,
+            this.AddQuestion(questionnaire: currentState, 
+                groupId: evnt.Payload.GroupId.FormatGuid(),
+                 questionId: evnt.Payload.PublicKey.FormatGuid(),
+                 questionTitle: evnt.Payload.QuestionText,
+                 questionType: QuestionType.TextList, 
+                 questionVariable: evnt.Payload.StataExportCaption,
                  questionConditionExpression: evnt.Payload.ConditionExpression);
 
             return currentState;
@@ -213,40 +233,52 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<QuestionChanged> evnt)
         {
-            this.UpdateQuestion(questionnaire: currentState, questionId: evnt.Payload.PublicKey.FormatGuid(),
-                questionTitle: evnt.Payload.QuestionText, questionType: evnt.Payload.QuestionType,
+            this.UpdateQuestion(questionnaire: currentState, 
+                questionId: evnt.Payload.PublicKey.FormatGuid(),
+                questionTitle: evnt.Payload.QuestionText,
+                questionType: evnt.Payload.QuestionType,
                 questionVariable: evnt.Payload.StataExportCaption,
-                questionConditionExpression: evnt.Payload.ConditionExpression);
+                questionConditionExpression: evnt.Payload.ConditionExpression,
+                linkedToQuestionId: Monads.Maybe(() => evnt.Payload.LinkedToQuestionId.FormatGuid()));
 
             return currentState;
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<NumericQuestionChanged> evnt)
         {
-            this.UpdateQuestion(questionnaire: currentState, questionId: evnt.Payload.PublicKey.FormatGuid(),
-                questionTitle: evnt.Payload.QuestionText, questionType: QuestionType.Numeric,
+            this.UpdateQuestion(questionnaire: currentState, 
+                questionId: evnt.Payload.PublicKey.FormatGuid(),
+                questionTitle: evnt.Payload.QuestionText, 
+                questionType: QuestionType.Numeric,
                 questionVariable: evnt.Payload.StataExportCaption,
-                questionConditionExpression: evnt.Payload.ConditionExpression);
+                questionConditionExpression: evnt.Payload.ConditionExpression, 
+                linkedToQuestionId: null);
 
             return currentState;
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<TextListQuestionChanged> evnt)
         {
-            this.UpdateQuestion(questionnaire: currentState, questionId: evnt.Payload.PublicKey.FormatGuid(),
-                questionTitle: evnt.Payload.QuestionText, questionType: QuestionType.TextList,
+            this.UpdateQuestion(questionnaire: currentState, 
+                questionId: evnt.Payload.PublicKey.FormatGuid(),
+                questionTitle: evnt.Payload.QuestionText,
+                questionType: QuestionType.TextList,
                 questionVariable: evnt.Payload.StataExportCaption,
-                questionConditionExpression: evnt.Payload.ConditionExpression);
+                questionConditionExpression: evnt.Payload.ConditionExpression, 
+                linkedToQuestionId: null);
 
             return currentState;
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
-            this.UpdateQuestion(questionnaire: currentState, questionId: evnt.Payload.QuestionId.FormatGuid(),
-                questionTitle: evnt.Payload.Title, questionType: QuestionType.QRBarcode,
+            this.UpdateQuestion(questionnaire: currentState,
+                questionId: evnt.Payload.QuestionId.FormatGuid(),
+                questionTitle: evnt.Payload.Title, 
+                questionType: QuestionType.QRBarcode,
                 questionVariable: evnt.Payload.VariableName,
-                questionConditionExpression: evnt.Payload.EnablementCondition);
+                questionConditionExpression: evnt.Payload.EnablementCondition, 
+                linkedToQuestionId: null);
 
             return currentState;
         }
@@ -270,6 +302,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 parentOfGroup.Items.Remove(groupOrQuestionView);
                 targetGroup.Items.Insert(Math.Min(evnt.Payload.TargetIndex, targetGroup.Items.Count), groupOrQuestionView);
             }
+
+            return currentState;
+        }
+
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<GroupBecameARoster> evnt)
+        {
+            var groupView = this.FindGroup(questionnaireOrGroup: currentState,
+               groupId: evnt.Payload.GroupId.FormatGuid());
+
+            groupView.IsRoster = true;
+
+            return currentState;
+        }
+
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<GroupStoppedBeingARoster> evnt)
+        {
+            var groupView = this.FindGroup(questionnaireOrGroup: currentState,
+                groupId: evnt.Payload.GroupId.FormatGuid());
+
+            groupView.IsRoster = false;
 
             return currentState;
         }
@@ -325,8 +377,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return findedGroup;
         }
         
-        private void AddQuestion(GroupInfoView questionnaire, string groupId, string questionId, string questionTitle,
-            QuestionType questionType, string questionVariable, string questionConditionExpression, int? orderIndex = null)
+        private void AddQuestion(GroupInfoView questionnaire, 
+            string groupId, 
+            string questionId, 
+            string questionTitle,
+            QuestionType questionType, 
+            string questionVariable, 
+            string questionConditionExpression, 
+            string linkedToQuestionId = null,
+            int? orderIndex = null)
         {
             var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: groupId);
 
@@ -345,7 +404,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Title = questionTitle,
                 Type = questionType,
                 Variable = questionVariable,
-                LinkedVariables = questionsUsedInConditionExpression
+                LinkedVariables = questionsUsedInConditionExpression,
+                LinkedToQuestionId = linkedToQuestionId
             };
 
             if (orderIndex.HasValue)
@@ -359,8 +419,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             
         }
 
-        private void UpdateQuestion(GroupInfoView questionnaire, string questionId, string questionTitle,
-            QuestionType questionType, string questionVariable, string questionConditionExpression)
+        private void UpdateQuestion(GroupInfoView questionnaire, 
+            string questionId, 
+            string questionTitle,
+            QuestionType questionType, 
+            string questionVariable, 
+            string questionConditionExpression, 
+            string linkedToQuestionId)
         {
             var questionView = this.FindQuestion(questionnaireOrGroup: questionnaire, questionId: questionId);
 
@@ -375,9 +440,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             questionView.Type = questionType;
             questionView.Variable = questionVariable;
             questionView.LinkedVariables = questionsUsedInConditionExpression;
+            questionView.LinkedToQuestionId = linkedToQuestionId;
         }
 
-        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, int orderIndex = -1)
+        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, int? orderIndex = null)
         {
             var parentGroup = string.IsNullOrEmpty(parentGroupId)
                 ? questionnaire
@@ -396,9 +462,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 QuestionsCount = 0
             };
 
-            if (orderIndex > -1)
+            if (orderIndex.HasValue)
             {
-                parentGroup.Items.Insert(orderIndex, groupInfoView);
+                parentGroup.Items.Insert(orderIndex.Value, groupInfoView);
             }
             else
             {
@@ -417,10 +483,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             foreach (var question in sourceQuestionnaireOrGroup.Children.OfType<IQuestion>())
             {
-                this.AddQuestion(questionnaire: currentState, groupId: question.GetParent().PublicKey.FormatGuid(),
-                    questionId: question.PublicKey.FormatGuid(), questionTitle: question.QuestionText,
-                    questionType: question.QuestionType, questionVariable: question.StataExportCaption,
-                    questionConditionExpression: question.ConditionExpression);
+                this.AddQuestion(questionnaire: currentState,
+                    groupId: question.GetParent().PublicKey.FormatGuid(),
+                    questionId: question.PublicKey.FormatGuid(), 
+                    questionTitle: question.QuestionText,
+                    questionType: question.QuestionType,
+                    questionVariable: question.StataExportCaption,
+                    questionConditionExpression: question.ConditionExpression,
+                    linkedToQuestionId: Monads.Maybe(() => question.LinkedToQuestionId.FormatGuid()));
             }
         }
 

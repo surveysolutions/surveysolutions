@@ -5,9 +5,10 @@ using Main.Core.View;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.UI.Headquarters.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
-using WB.UI.Headquarters.Models;
 using It = Machine.Specifications.It;
 
 namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests

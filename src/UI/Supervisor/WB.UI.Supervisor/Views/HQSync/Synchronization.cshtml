@@ -76,17 +76,17 @@
 
             self.StartPull = function() {
                 self.pullRunning(true);
-                $.post('@Url.Action("Synchronize", "HQSync")');
+                $.post('@Url.Action("Synchronize", "HQSync", new { area = string.Empty })');
             }
 
             self.StartPush = function() {
                 self.pushRunning(true);
-                $.post('@Url.Action("Push", "HQSync")');
+                $.post('@Url.Action("Push", "HQSync", new { area = string.Empty })');
             }
 
             self.RefreshStatus = function() {
                 $.ajax({
-                    url: '@Url.Action("PullStatus", "HQSync")',
+                    url: '@Url.Action("PullStatus", "HQSync", new { area = string.Empty })',
                     cache: false,
                     success: function(status) {
                         self.pullRunning(status.IsRunning);
@@ -95,7 +95,7 @@
                     }
                 });
                 $.ajax({
-                    url: '@Url.Action("PushStatus", "HQSync")',
+                    url: '@Url.Action("PushStatus", "HQSync", new { area = string.Empty })',
                     cache: false,
                     success: function (status) {
                         self.pushRunning(status.IsRunning);

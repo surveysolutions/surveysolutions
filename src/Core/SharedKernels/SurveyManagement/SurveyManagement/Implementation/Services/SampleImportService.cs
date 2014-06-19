@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Spec;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
-using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -24,7 +14,6 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
@@ -99,7 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             result.SetStatusMessage("Data parsing");
             this.tempSampleCreationStorage.Store(result, id);
 
-            var interviewForCreate =preloadedDataDtoCreator(preloadedDataService);
+            var interviewForCreate = preloadedDataDtoCreator(preloadedDataService);
 
             if (interviewForCreate == null)
             {
@@ -107,6 +96,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 this.tempSampleCreationStorage.Store(result, id);
                 return;
             }
+
+            int errorCountOccuredOnInterviewsCreaition = 0;
 
             var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
             for (int i = 0; i < interviewForCreate.Length; i++)
@@ -117,16 +108,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         bigTemplate.PublicKey, version, interviewForCreate[i],
                         DateTime.UtcNow, responsibleSupervisorId));
 
-                    result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, interviewForCreate.Length));
+                    result.SetStatusMessage(string.Format("Processed {0} interview(s) from {1}", i, interviewForCreate.Length));
                     this.tempSampleCreationStorage.Store(result, id);
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e.Message, e);
+
+                    errorCountOccuredOnInterviewsCreaition ++;
                 }
             }
 
-            result.CompleteProcess();
+            if (errorCountOccuredOnInterviewsCreaition > 0)
+            {
+                result.SetErrorMessage(string.Format("Error{0} occured during interview creation", errorCountOccuredOnInterviewsCreaition == 1 ? "" : "s"));
+            }
+            else
+                result.CompleteProcess();
+
             this.tempSampleCreationStorage.Store(result, id);
         }
     }

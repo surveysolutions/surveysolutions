@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             get
             {
-                var selectedAnswers = this.Answers.Where(a => a.Selected).Select(answer => answer.Title).ToList();
+                var selectedAnswers = this.Answers.Where(a => a.Selected).OrderBy(x=>x.AnswerOrder).Select(answer => answer.Title).ToList();
                 return string.Join(", ", selectedAnswers);
             }
         }

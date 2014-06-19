@@ -204,6 +204,9 @@
     <Compile Include="ReportDataApiControllerTests\when_map_report_data_is_being_queried.cs" />
     <Compile Include="ReportDataApiControllerTests\when_questionnaires_data_is_being_queried.cs" />
     <Compile Include="ReportDataApiControllerTests\when_question_info_data_is_being_queried.cs" />
+    <Compile Include="SyncControllerTests\SyncControllerTestContext.cs" />
+    <Compile Include="SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_greater.cs" />
+    <Compile Include="SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_lesser.cs" />
     <Compile Include="TabletReportControllerTests\TabletReportControllerTestContext.cs" />
     <Compile Include="TabletReportControllerTests\when_info_package_requested.cs" />
     <Compile Include="TabletReportControllerTests\when_list_of_info_packages_is_requested.cs" />
@@ -235,6 +238,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj">
+      <Project>{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}</Project>
+      <Name>WB.Core.SharedKernels.SurveyManagement.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>

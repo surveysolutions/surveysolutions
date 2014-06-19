@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 
@@ -11,10 +9,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         private Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
 
         private Because of =
-            () => parsingResult = questionDataParser.TryParse("some answer", "var", new QuestionnaireDocument(), out parcedValue);
+            () => parsingResult = questionDataParser.TryParse("some answer", null, new QuestionnaireDocument(), out parcedValue);
 
         private It should_result_be_QuestionWasNotFound = () =>
             parsingResult.ShouldEqual(ValueParsingResult.QuestionWasNotFound);
-
     }
 }

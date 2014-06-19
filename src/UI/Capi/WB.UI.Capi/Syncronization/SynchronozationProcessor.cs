@@ -9,13 +9,20 @@ using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Settings;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.BoundedContexts.Capi.Synchronization;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
+using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization.Handshake;
@@ -41,8 +48,8 @@ namespace WB.UI.Capi.Syncronization
 
         #endregion
 
-        private readonly PullDataProcessor pullDataProcessor;
-        private readonly PushDataProcessor pushDataProcessor;
+        private readonly ICapiDataSynchronizationService dataProcessor;
+        private readonly ICapiCleanUpService cleanUpExecutor;
 
         private IDictionary<SynchronizationChunkMeta, bool> remoteChuncksForDownload;
 
@@ -61,23 +68,21 @@ namespace WB.UI.Capi.Syncronization
             get { return SettingsManager.GetSetting(SettingsNames.LastHandledSequence); }
         }
 
-        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog,
-            IReadSideRepositoryReader<LoginDTO> userStorage, IRestServiceWrapperFactory restServiceWrapperFactory, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, ICapiDataSynchronizationService dataProcessor,
+            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory)
         {
             this.context = context;
-            
+
             this.Preparation();
             this.authentificator = authentificator;
+            this.cleanUpExecutor = cleanUpExecutor;
 
             var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
             this.pull = new RestPull(executor);
             this.push = new RestPush(executor);
             this.handshake = new RestHandshake(executor);
 
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            this.pullDataProcessor = new PullDataProcessor(changelog, commandService, userStorage, plainQuestionnaireRepository);
-            this.pushDataProcessor = new PushDataProcessor(changelog);
+            this.dataProcessor = dataProcessor;
 
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
@@ -102,8 +107,8 @@ namespace WB.UI.Capi.Syncronization
                         try
                         {
                             var data = this.pull.RequestChunck(this.credentials.Login, this.credentials.Password, chunckId.Id, chunckId.Sequence, this.clientRegistrationId, this.ct);
-                            
-                            this.pullDataProcessor.Proccess(data);
+
+                            this.dataProcessor.SavePulledItem(data);
                             this.remoteChuncksForDownload[chunckId] = true;
                             
                             //save last handled item
@@ -130,7 +135,7 @@ namespace WB.UI.Capi.Syncronization
 
             this.CancelIfException(() =>
                 {
-                    var dataByChuncks = this.pushDataProcessor.GetChuncks();
+                    var dataByChuncks = this.dataProcessor.GetItemsForPush();
                     int i = 1;
                     foreach (var chunckDescription in dataByChuncks)
                     {
@@ -138,7 +143,7 @@ namespace WB.UI.Capi.Syncronization
 
                         this.push.PushChunck(this.credentials.Login, this.credentials.Password, chunckDescription.Content, this.ct);
                         //fix method
-                        this.pushDataProcessor.DeleteInterview(chunckDescription.EventSourceId);
+                        cleanUpExecutor.DeleteInterveiw(chunckDescription.EventSourceId);
 
                         this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (i * 100) / dataByChuncks.Count));
                         i++;

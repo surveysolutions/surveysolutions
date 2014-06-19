@@ -22,17 +22,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             questionId = Guid.Parse("21111111111111111111111111111111");
-            questionnaire =
-                CreateQuestionnaireDocumentWithOneChapter(new NumericQuestion()
-                {
-                    StataExportCaption = "q1",
-                    PublicKey = questionId,
-                    IsInteger = true,
-                    QuestionType = QuestionType.Numeric
-                });
+            var question = new NumericQuestion()
+            {
+                StataExportCaption = "q1",
+                PublicKey = questionId,
+                IsInteger = true,
+                QuestionType = QuestionType.Numeric
+            };
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(question);
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1", "ParentId" },
-                new string[][] { new string[] { "1", "text", "" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1"},
+                new string[][] { new string[] { "1", "text"} },
                 "questionnaire.csv");
 
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             KeyValuePair<Guid, object> outValue;
 
             preloadedDataServiceMock.Setup(
-                x => x.ParseQuestion(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), out outValue)).Returns(ValueParsingResult.ParsedValueIsNotAllowed);
+                x => x.ParseQuestion(Moq.It.IsAny<string>(), Moq.It.IsAny<IQuestion>(), out outValue)).Returns(ValueParsingResult.ParsedValueIsNotAllowed);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };

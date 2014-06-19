@@ -33,6 +33,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             QuestionnaireRosterStructure questionnaireRosters,
             UserDocument user)
         {
+            questionnaire.Questionnaire.ConnectChildrenWithParent();
+
             Dictionary<Guid, string> idToVariableMap = questionnaire.Questionnaire.GetAllQuestions().ToDictionary(
                 x => x.PublicKey,
                 x => x.StataExportCaption);
@@ -141,7 +143,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             IEnumerable<InterviewLevel> upperInterviewLevels,
             Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap,
             Func<Guid, decimal[], Dictionary<decimal[], string>> getAvailableOptions,
-            IQuestionnaireDocument questionnaire, InterviewData interview,
+            QuestionnaireDocument questionnaire, InterviewData interview,
             QuestionnaireRosterStructure questionnaireRosters)
         {
             var result = new List<InterviewGroupView>();
@@ -188,10 +190,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels,
             Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, decimal[], Dictionary<decimal[], string>> getAvailableOptions,
-            IQuestionnaireDocument questionnaire)
+            QuestionnaireDocument questionnaire)
         {
-            var rosterTitleFromLevel = interviewLevel.RosterRowTitles.ContainsKey(currentGroup.PublicKey)
-                ? interviewLevel.RosterRowTitles[currentGroup.PublicKey]
+            Guid nearestParentRosterId = GetNearestParentRosterId(questionnaire, currentGroup.PublicKey);
+            var rosterTitleFromLevel = interviewLevel.RosterRowTitles.ContainsKey(nearestParentRosterId)
+                ? interviewLevel.RosterRowTitles[nearestParentRosterId]
                 : null;
 
             var rosterTitle = !string.IsNullOrEmpty(rosterTitleFromLevel)
@@ -224,6 +227,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
             return completedGroup;
         }
+
+        private Guid GetNearestParentRosterId(QuestionnaireDocument questionnaire, Guid groupId)
+        {
+            var currentGroup = questionnaire.Find<IGroup>(groupId);
+            while (currentGroup != null)
+            {
+                if (currentGroup.IsRoster)
+                    break;
+                currentGroup = (IGroup) currentGroup.GetParent();
+            }
+            return currentGroup == null ? Guid.Empty : currentGroup.PublicKey;
+        }
+
 
         private static bool IsQuestionParentGroupDisabled(IEnumerable<Guid> disabledGroups, IGroup group)
         {

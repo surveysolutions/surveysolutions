@@ -6,7 +6,9 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
-using WB.UI.Headquarters.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.PublicService;
 
@@ -79,7 +81,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.Error(
                         string.Format(
                             "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
-                            GlobalHelper.GenerateUrl("Import", "Template", null)));
+                            GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
                     this.Logger.Error("Could not connect to designer.", ex);
                 }
             }

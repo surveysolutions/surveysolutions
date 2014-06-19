@@ -7,6 +7,7 @@ namespace WB.Core.Infrastructure.FileSystem
     {
         string CombinePath(string path1, string path2);
         string GetFileName(string filePath);
+        string GetFileNameWithoutExtension(string filePath);
         long GetFileSize(string filePath);
         DateTime GetCreationTime(string filePath);
         bool IsDirectoryExists(string pathToDirectory);
@@ -22,10 +23,13 @@ namespace WB.Core.Infrastructure.FileSystem
 
         string[] GetDirectoriesInDirectory(string pathToDirectory);
         string[] GetFilesInDirectory(string pathToDirectory);
+        string[] GetFilesInDirectory(string pathToDirectory, string pattern);
 
         void WriteAllText(string pathToFile, string content);
         void WriteAllBytes(string pathToFile, byte[] content);
         byte[] ReadAllBytes(string pathToFile);
+        string ReadAllText(string pathToFile);
+
         void CopyFileOrDirectory(string sourceDir, string targetDir);
     }
 }

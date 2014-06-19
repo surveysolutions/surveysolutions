@@ -14,13 +14,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         Establish context = () =>
         {
             InitializePreviousState();
-            questionDetailsFactoryMock = new Mock<IQuestionDetailsFactory>();
+            questionDetailsFactoryMock = new Mock<IQuestionDetailsViewMapper>();
             questionFactoryMock = new Mock<IQuestionFactory>();
 
             evnt = CreateQuestionDeletedEvent(q3Id);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
-                questionDetailsFactory: questionDetailsFactoryMock.Object,
+                questionDetailsViewMapper: questionDetailsFactoryMock.Object,
                 questionFactory: questionFactoryMock.Object);
         };
 
@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         private static QuestionsAndGroupsCollectionDenormalizer denormalizer;
         private static IPublishedEvent<QuestionDeleted> evnt;
         private static QuestionsAndGroupsCollectionView newState = null;
-        private static Mock<IQuestionDetailsFactory> questionDetailsFactoryMock = null;
+        private static Mock<IQuestionDetailsViewMapper> questionDetailsFactoryMock = null;
         private static Mock<IQuestionFactory> questionFactoryMock;
     }
 }
