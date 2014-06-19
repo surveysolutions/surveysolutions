@@ -12,6 +12,7 @@
         'ui.bootstrap.transition',
         'ui.tree',
         'ui.utils',
+        'ui.notify',
         'angular-loading-bar',
         'cfp.hotkeys'
     ]);

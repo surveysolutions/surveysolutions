@@ -1,0 +1,30 @@
+{
+    "name": "pnotify",
+    "version": "2.0.1",
+    "description": "JavaScript notification plugin.",
+    "main": [
+        "pnotify.core.js",
+        "pnotify.buttons.js",
+        "pnotify.callbacks.js",
+        "pnotify.confirm.js",
+        "pnotify.desktop.js",
+        "pnotify.history.js",
+        "pnotify.nonblock.js",
+        "pnotify.core.css",
+        "pnotify.buttons.css",
+        "pnotify.history.css"
+    ],
+    "ignore": [
+        "build-cache/",
+        "build-tools/",
+        "includes/",
+        "oxygen/",
+        "devnote*.*",
+        "index.html",
+        "README.md",
+        "testing.html",
+        "buildcustom.php",
+        "pnotify.tooltip.js",
+        "pnotify.mobile.js"
+    ]
+}
