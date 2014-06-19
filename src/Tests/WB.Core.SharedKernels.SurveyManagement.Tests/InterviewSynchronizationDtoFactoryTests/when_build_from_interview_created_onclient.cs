@@ -30,10 +30,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.InterviewSynchronizationD
         };
 
         Because of = () =>
-            result = interviewSynchronizationDtoFactory.BuildFrom(interviewData);
+            result = interviewSynchronizationDtoFactory.BuildFrom(interviewData, "comment");
 
         It should_result_has_created_onclient_state = () =>
             result.CreatedOnClient.ShouldEqual(createdOnClientFlag);
+
+        It should_result_has_comment = () =>
+         result.Comments.ShouldEqual("comment");
 
         private static InterviewSynchronizationDtoFactory interviewSynchronizationDtoFactory;
         private static InterviewData interviewData;

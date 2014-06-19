@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
             return
                 ToPublishedEvent(new SynchronizationMetadataApplied(userId: GetGuidIdByStringId(userId), status: status,
                     questionnaireId: GetGuidIdByStringId(questionnaireId), featuredQuestionsMeta: featuredQuestionsMeta,
-                    createdOnClient: createdOnClient));
+                    createdOnClient: createdOnClient, comments:null));
         }
 
         private static Guid GetGuidIdByStringId(string stringId)

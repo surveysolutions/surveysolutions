@@ -191,8 +191,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 supervisorIdGuid, 
                 feedEntry.InterviewId != null ? (Guid?)Guid.Parse(feedEntry.InterviewerId) : null,
                 interviewDetails, 
-                DateTime.Now, 
-                feedEntry.Comment));
+                DateTime.Now));
         }
 
         public void Push(Guid userId)
