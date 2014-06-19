@@ -12,7 +12,8 @@
         'ui.bootstrap.transition',
         'ui.tree',
         'ui.utils',
-        'angular-loading-bar'
+        'angular-loading-bar',
+        'cfp.hotkeys'
     ]);
 
     angular.module('designerApp').config([

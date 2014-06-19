@@ -3,8 +3,17 @@
 
     angular.module('designerApp')
         .controller('MainCtrl', [
-            '$scope', '$routeParams', '$route', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'navigationService', '$modal', '$log',
-            function($scope, $routeParams, $route, questionnaireService, commandService, verificationService, utilityService, navigationService, $modal, $log) {
+            '$scope', '$routeParams', '$route', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', 'navigationService', '$modal', '$log',
+            function($scope, $routeParams, $route, questionnaireService, commandService, verificationService, utilityService, hotkeys, navigationService, $modal, $log) {
+
+                hotkeys.add({
+                    combo: 'ctrl+f',
+                    description: 'Search for groups and questions in chapter',
+                    callback: function(event) {
+                        $scope.showSearch();
+                        event.preventDefault();
+                    }
+                });
 
                 $scope.verificationStatus = {
                     errorsCount: null,

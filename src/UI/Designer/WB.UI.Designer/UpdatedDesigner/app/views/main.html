@@ -41,11 +41,10 @@
         <div class="chapter-title" ng-switch on="filtersBoxMode" ng-animate="'animate'">
             <div class="search-box" ng-switch-when="search">
                 <div class="input-group">
-                    <input type="text" ng-model="search.searchText" focus-on="focusSearch" />
+                    <input type="text" ng-model="search.searchText" focus-on="focusSearch" hotkey="{'esc': hideSearch}" />
                     <span class="input-group-addon glyphicon glyphicon-search" title="Search"></span>
                 </div>
                 <button ng-click="hideSearch()" title="Cancel search">
-                    <!--<i class="glyphicon glyphicon-remove"></i>-->
                 </button>
             </div>
 
