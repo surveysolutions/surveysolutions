@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.InterviewViewModelDenormalizerTests
 
             var questionnaireDocument = CreateQuestionnaireDocument(questionnaireId);
 
-            var evnt = new SynchronizationMetadataApplied(userId, questionnaireId, InterviewStatus.RejectedBySupervisor, null);
+            var evnt = new SynchronizationMetadataApplied(userId, questionnaireId, InterviewStatus.RejectedBySupervisor, null, false);
             
             var interviewViewModelStub = new Mock<IReadSideRepositoryWriter<InterviewViewModel>>();
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Fragment>
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="EventsDatabase" Guid="">
+        <util:XmlFile Id="ModifyServiceLocation"
+                 Action="setValue"
+                 ElementPath="//configuration/appSettings/add[\[]@key='Raven.Databases.Events'[\]]/@value"
+                 Value="[DATABASE_EVENTS]"
+                 File="[INSTALLFOLDER]web.config"
+                 SelectionLanguage="XPath" />
+        <CreateFolder />
+      </Component>
+    </DirectoryRef>
+    <ComponentGroup Id="Web.configModification">
+      <ComponentRef Id="EventsDatabase" />
+    </ComponentGroup>
+	</Fragment>
+</Wix>

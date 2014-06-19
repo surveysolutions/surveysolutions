@@ -5,6 +5,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.UI.Capi.Implementations.Activities;
 using WB.UI.Capi.Syncronization;
@@ -18,13 +19,17 @@ namespace WB.UI.Capi
     {
         private CancellationTokenSource cancellationToken;
         //protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-        private ISyncPackageApplier packageApplier = ServiceLocator.Current.GetInstance<ISyncPackageApplier>();
+        private ISyncPackageRestoreService packageRestoreService = ServiceLocator.Current.GetInstance<ISyncPackageRestoreService>();
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             this.ActionBar.SetDisplayShowHomeEnabled(false);
-            this.cancellationToken = this.WaitForLongOperation((ct) => this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey"))));
+            this.cancellationToken =
+                this.WaitForLongOperation(
+                    (ct) =>
+                        this.Restore(ct, Guid.Parse(this.Intent.GetStringExtra("publicKey")),
+                            this.Intent.GetBooleanExtra("createdOnClient", false)));
         }
 
         public override void OnBackPressed()
@@ -40,9 +45,9 @@ namespace WB.UI.Capi
                 this.cancellationToken.Cancel();
         }
 
-        protected void Restore(CancellationToken ct, Guid publicKey)
+        protected void Restore(CancellationToken ct, Guid publicKey, bool createdOnClient)
         {
-            var applyingResult = this.packageApplier.CheckAndApplySyncPackage(publicKey);
+            var applyingResult = this.packageRestoreService.CheckAndApplySyncPackage(publicKey);
 
             if (!applyingResult || ct.IsCancellationRequested)
             {
@@ -59,9 +64,19 @@ namespace WB.UI.Capi
                 return;
             }
 
-            var intent = new Intent(this, typeof (DataCollectionDetailsActivity));
-            intent.PutExtra("publicKey", publicKey.ToString());
-            this.StartActivity(intent);
+            if (createdOnClient)
+            {
+                var intent = new Intent(this, typeof (CreateInterviewActivity));
+                intent.PutExtra("publicKey", publicKey.ToString());
+                intent.AddFlags(ActivityFlags.NoHistory);
+                this.StartActivity(intent);
+            }
+            else
+            {
+                var intent = new Intent(this, typeof (DataCollectionDetailsActivity));
+                intent.PutExtra("publicKey", publicKey.ToString());
+                this.StartActivity(intent);
+            }
         }
     }
 }

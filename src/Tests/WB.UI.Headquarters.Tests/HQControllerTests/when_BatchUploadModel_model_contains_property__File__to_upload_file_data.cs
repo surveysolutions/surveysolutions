@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using System.Reflection;
 using Machine.Specifications;
-using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Controllers;
-using WB.UI.Headquarters.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 
 namespace WB.UI.Headquarters.Tests.HQControllerTests
 {

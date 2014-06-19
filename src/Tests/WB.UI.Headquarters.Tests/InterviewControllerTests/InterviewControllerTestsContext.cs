@@ -6,7 +6,7 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
-using WB.UI.Headquarters.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 
 namespace WB.UI.Headquarters.Tests.InterviewControllerTests
 {

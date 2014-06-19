@@ -35,7 +35,7 @@ namespace WB.UI.Capi.Controls
             view.SetTag(Resource.Id.QuestionnaireId, dataItem.PublicKey.ToString());
             llQuestionnairie.Focusable = false;
 
-            if (dataItem.CreatedOnClient.HasValue && dataItem.CreatedOnClient.Value)
+            if (dataItem.CanBeDeleted)
             {
                 Button delButton = new Button(activity);
 
@@ -57,9 +57,9 @@ namespace WB.UI.Capi.Controls
 
                     this.deleteHandler.Invoke(dataItem.PublicKey, target.Parent as View);
                 };
-
-                view.SetTag(Resource.Id.IsInterviewLocal, true);
             }
+
+            view.SetTag(Resource.Id.IsInterviewLocal, dataItem.CreatedOnClient);
 
             AddPropertyToContainer(llQuestionnairie, GetStatusText(dataItem.Status));
           

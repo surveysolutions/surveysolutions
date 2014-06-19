@@ -174,4 +174,13 @@
   <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
     <value>Expected Decimal value was not recognized</value>
   </data>
+  <data name="PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue" xml:space="preserve">
+    <value>Answer is incorrect because is greater than max value</value>
+  </data>
+  <data name="PL0021_MultyOptionQuestionHasDuplicateAnswers" xml:space="preserve">
+    <value>Categorical multiple answers question has duplicate answer options </value>
+  </data>
+  <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+    <value>Question has negative value and is used as roster size question</value>
+  </data>
 </root>

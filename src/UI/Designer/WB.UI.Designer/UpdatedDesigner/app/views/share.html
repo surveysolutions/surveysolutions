@@ -1,0 +1,47 @@
+﻿<div class="modal-header blue-strip">
+    <button type="button" class="close" aria-hidden="true" ng-click="cancel()"><!--&times;--></button>
+    <h1>Share this questionnaire</h1>
+    <h2>
+        {{questionnaire.title}}
+        <small>({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</small>
+    </h2>
+</div>
+
+<div class="modal-body">
+    <div class="container share-question-dialog">
+        <div class="row">
+            <h3>Who has access:</h3>
+            <ul class="accounts">
+                <li ng-repeat="s in questionnaire.sharedPersons">
+                    <a href="mailto:{{s.email}}">{{s.email}}</a> - <div class="btn-group">
+                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                            Can edit <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a ng-click="revokeAccess(s)">Revoke access</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+
+            <button class="btn btn-link" ng-click="togglePublicity()">MAKE THIS QUESTIONNAIRE {{questionnaire.isPublic ? 'PRIVATE' : 'PUBLIC'}}</button>
+            <i class="text-muted">({{questionnaire.isPublic ? 'visible to you only' : 'visible to everyone'}})</i>
+        </div>
+        <form role="form" class="form-inline row" name="viewModel.shareForm" novalidate>
+            <h3>Invite collaborators by e-mail:</h3>
+            <div class="form-group" bs-has-error>
+                <input type="text" class="form-control share-with-email" placeholder="Email to share with" name="shareWithInput" ng-model="viewModel.shareWith" />
+               
+                <p class="help-block" ng-hide="viewModel.shareForm.shareWithInput.$valid">
+                    Provide email of existing user
+                </p>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith">Invite</button>
+            </div>
+            <div class="form-group share-form-btn-label">
+                <span class="text-muted">&mdash;</span> <a href="javascript:void(0);"><i> can edit and share</i></a>
+            </div>
+        </form>
+    </div>
+</div>

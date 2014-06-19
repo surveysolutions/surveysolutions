@@ -11,24 +11,19 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     public class QuestionnaireDTO : DenormalizerRow
     {
         public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IList<FeaturedItem> properties,
-            long surveyVersion, bool? createdOnClient = false)
+            long surveyVersion, bool? createdOnClient = false, bool justInitilized = false)
         {
-            Id = id.FormatGuid();
-            Status = (int)status;
-            
-            Responsible = responsible.FormatGuid();
-            Survey = survey.FormatGuid();
-
+            this.Id = id.FormatGuid();
+            this.Status = (int) status;
+            this.Responsible = responsible.FormatGuid();
+            this.Survey = survey.FormatGuid();
             this.SetProperties(properties);
-
-            CreatedOnClient = createdOnClient;
-            SurveyVersion = surveyVersion;
-            
+            this.CreatedOnClient = createdOnClient;
+            this.JustInitilized = justInitilized;
+            this.SurveyVersion = surveyVersion;
         }
 
-        public QuestionnaireDTO()
-        {
-        }
+        public QuestionnaireDTO() {}
 
         public int Status { get; set; }
         public string Responsible { get; set; }
@@ -39,32 +34,34 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         public string Comments { get; set; }
         public bool Valid { get; set; }
 
+        public bool? JustInitilized { get; set; }
         public bool? CreatedOnClient { get; set; }
         public long SurveyVersion { get; set; }
 
         public DashboardQuestionnaireItem GetDashboardItem(string surveyKey, string title)
         {
             return new DashboardQuestionnaireItem(
-                Guid.Parse(Id),Guid.Parse(surveyKey), GetTypedStatus(),
-                GetProperties(), title, CreatedOnClient);
+                Guid.Parse(this.Id), Guid.Parse(surveyKey), this.GetTypedStatus(),
+                this.GetProperties(), title, this.CreatedOnClient,
+                this.JustInitilized.HasValue && this.JustInitilized.Value);
         }
 
         private InterviewStatus GetTypedStatus()
         {
-                return (InterviewStatus)Status;
+            return (InterviewStatus) this.Status;
         }
 
 
         public FeaturedItem[] GetProperties()
         {
-            if (string.IsNullOrEmpty(Properties))
+            if (string.IsNullOrEmpty(this.Properties))
                 return new FeaturedItem[0];
-            return JsonUtils.GetObject<FeaturedItem[]>(Properties);
+            return JsonUtils.GetObject<FeaturedItem[]>(this.Properties);
         }
 
         public void SetProperties(IEnumerable<FeaturedItem> properties)
         {
-            Properties = JsonUtils.GetJsonData(properties.ToArray());
+            this.Properties = JsonUtils.GetJsonData(properties.ToArray());
         }
     }
 }

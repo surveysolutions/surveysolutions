@@ -230,5 +230,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
                 return ResourceManager.GetString("PL0019_ExpectedDecimalNotParsed", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer is incorrect because is greater than max value.
+        /// </summary>
+        internal static string PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue {
+            get {
+                return ResourceManager.GetString("PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categorical multiple answers question has duplicate answer options .
+        /// </summary>
+        internal static string PL0021_MultyOptionQuestionHasDuplicateAnswers {
+            get {
+                return ResourceManager.GetString("PL0021_MultyOptionQuestionHasDuplicateAnswers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has negative value and is used as roster size question.
+        /// </summary>
+        internal static string PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative {
+            get {
+                return ResourceManager.GetString("PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative", resourceCulture);
+            }
+        }
     }
 }

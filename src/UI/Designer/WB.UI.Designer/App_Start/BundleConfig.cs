@@ -1,17 +1,9 @@
-﻿namespace WB.UI.Designer.App_Start
-{
-    using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
+namespace WB.UI.Designer.App_Start
+{
     public class BundleConfig
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The register bundles.
-        /// </summary>
-        /// <param name="bundles">
-        /// The bundles.
-        /// </param>
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.UseCdn = false;
@@ -31,8 +23,6 @@
                     "~/Content/body.css", 
                     "~/Content/bootstrap-responsive.css", 
                     "~/Content/bootstrap-mvc-validation.css"));
-
-            #region [Scripts]
 
             bundles.Add(new ScriptBundle("~/simplepage").Include("~/Scripts/jquery-{version}.js",
                                                                  "~/Scripts/bootstrap.js"));
@@ -118,9 +108,6 @@
                     //"~/Scripts/lib/ace/theme-designer.js",
                    ));
 
-            #endregion
         }
-
-        #endregion
     }
 }

@@ -1,0 +1,56 @@
+.popover {
+  max-width: inherit;
+}
+
+.modal {
+  overflow-y: inherit;
+
+  .modal-dialog {
+    .modal-header {
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
+
+      &.blue-strip {
+        border-top: 8px solid #d7e4ee;
+      }
+
+      h1 {
+        .roboto-font();
+      }
+
+      button.close {
+        @s: 40px;
+        position: absolute;
+        z-index: 100;
+        top: 12px;
+        right: 4px;
+        width: @s;
+        height: @s;
+        background: url(../../i/cross.png) 0 0 no-repeat;
+        &:hover {
+          background-position: 0 -40px;
+        }
+      }
+
+      h2 {
+        .arial-font();
+        font-size: 18px;
+        color: #3f3f3f;
+
+        small {
+          .lucida-console-font();
+          font-size: 14px;
+          color: #b9c3ca;
+        }
+      }
+    }
+
+    .modal-body {
+      h3 {
+        .arial-font();
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+  }
+}

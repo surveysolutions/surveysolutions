@@ -1,0 +1,36 @@
+﻿<div class="form-holder">
+    <div class="breadcrumbs">
+        <ul>
+            <li ng-repeat="breadcrumb in activeChapter.breadcrumbs"><a ng-href="breadcrumb.id">{{breadcrumb.title}}</a></li>
+        </ul>
+    </div>
+
+    <form role="form">
+        <div class="form-group">
+            <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
+            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" style="font-weight: bold;" ng-model="activeChapter.title">
+        </div>
+
+        <div class="form-group">
+            <label for="edit-group-description" class="wb-label">Description <span>(<a>?</a>)</span></label><br>
+            <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeChapter.description">
+        </div>
+
+        <div class="form-group">
+            <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
+            <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeChapter.enablementCondition">
+        </div>
+    </form>
+</div>
+
+<div class="form-buttons-holder">
+    <div class="pull-left">
+        <button id="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveChapter()">Save</button>
+        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()">Cancel</button>
+    </div>
+    <div class="pull-right">
+        <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteChapter()">Delete</button>
+        <button id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneChapter()">Clone</button>
+        <ng-include src="'moveToChapterSnippet'" />
+    </div>
+</div>

@@ -82,6 +82,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.Capi.Synchronization\WB.Core.BoundedContexts.Capi.Synchronization.csproj">
+      <Project>{f907b0f2-4cfd-438c-8b53-f2d44c581f56}</Project>
+      <Name>WB.Core.BoundedContexts.Capi.Synchronization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>

@@ -15,6 +15,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
+using Quartz;
 using Questionnaire.Core.Web.Binding;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Logging;
@@ -29,11 +30,15 @@ using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
+using WB.Core.SharedKernels.SurveyManagement.Web;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
-using WB.UI.Headquarters.Code.CommandDeserialization;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
 using WebActivatorEx;
 
@@ -96,16 +101,31 @@ namespace WB.UI.Headquarters
 
             int? pageSize = GetEventStorePageSize();
 
+            Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
+            Version applicationBuildVersion = typeof (SyncController).Assembly.GetName().Version;
+
             var ravenSettings = new RavenConnectionSettings(storePath, isEmbeded, WebConfigurationManager.AppSettings["Raven.Username"],
                 WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
+
+            var interviewDetailsDataLoaderSettings =
+                new InterviewDetailsDataLoaderSettings(LegacyOptions.InterviewDetailsDataSchedulerEnabled,
+                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+                    LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
 
             bool useStreamingForAllEvents;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
             {
                 useStreamingForAllEvents = true;
             }
+
+            var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: false,
+                appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
+                incomingCapiPackagesWithErrorsDirectoryName:
+                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
+                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -121,14 +141,17 @@ namespace WB.UI.Headquarters
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
-                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), new SyncSettings(reevaluateInterviewWhenSynchronized:false)),
-                new SupervisorCommandDeserializationModule(),
+                new SynchronizationModule(synchronizationSettings),
+                new SurveyManagementWebModule(),
                 new HeadquartersBoundedContextModule(),
                 new SurveyManagementSharedKernelModule(
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"])));
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
+                    isDebug,
+                    applicationBuildVersion,
+                    interviewDetailsDataLoaderSettings));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
@@ -146,6 +169,13 @@ namespace WB.UI.Headquarters
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .WhenControllerHas<TokenValidationAuthorizationAttribute>();
+
+            if (LegacyOptions.SupervisorFunctionsEnabled)
+            {
+                ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
+            }
+
+            ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
 #warning dirty index registrations
             // SuccessMarker.Start(kernel);

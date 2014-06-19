@@ -1,0 +1,67 @@
+{
+    "id": "20ec8915-7c0e-41e4-9d77-db46e929db5d",
+    "parentGroupsIds": ["ddfaab0f-3739-4a67-9f08-8add19325cfe", "6e240642-274c-4bde-a937-baa78cd4ad6f"],
+    "rosterScopeIds": [],
+    "parentGroupId": "ddfaab0f-3739-4a67-9f08-8add19325cfe",
+    "enablementCondition": "[q2]>0",
+    "isPreFilled": false,
+    "instructions": null,
+    "isMandatory": false,
+    "questionScope": "Interviewer",
+    "variableName": "q1",
+    "title": "Q111",
+    "validationExpression": "",
+    "validationMessage": "",
+    "type": "Text",
+    "linkedToQuestionId": null,
+    "options": [],
+    "areAnswersOrdered": false,
+    "maxAllowedAnswers": null,
+    "isInteger": false,
+    "maxValue": null,
+    "countOfDecimalPlaces": null,
+    "maxAnswerCount": null,
+    "sourceOfLinkedQuestions": {},
+    "questionTypeOptions": [{
+        "value": "SingleOption",
+        "text": "Categorical: one answer"
+    }, {
+        "value": "MultyOption",
+        "text": "Categorical: multiple answers"
+    }, {
+        "value": "Numeric",
+        "text": "Numeric"
+    }, {
+        "value": "DateTime",
+        "text": "Date"
+    }, {
+        "value": "Text",
+        "text": "Text"
+    }, {
+        "value": "GpsCoordinates",
+        "text": "Geo Location"
+    }, {
+        "value": "TextList",
+        "text": "List"
+    }, {
+        "value": "QRBarcode",
+        "text": "QR Barcode"
+    }],
+    "questionScopeOptions": [{
+        "value": "Interviewer",
+        "text": "Interviewer"
+    }, {
+        "value": "Supervisor",
+        "text": "Supervisor"
+    }, {
+        "value": "Headquarter",
+        "text": "Headquarters"
+    }],
+    "breadcrumbs": [{
+        "id": "6e240642-274c-4bde-a937-baa78cd4ad6f",
+        "title": "Chapter"
+    }, {
+        "id": "ddfaab0f-3739-4a67-9f08-8add19325cfe",
+        "title": "Group 1"
+    }]
+}

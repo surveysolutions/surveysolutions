@@ -1,0 +1,171 @@
+/**
+ * WorldBank Designer
+ * file: wb-fontstyles.css.less
+ * description: font style definition
+ */
+
+.arial-font() { font-family: Arial, Helvetica, sans-serif; }
+.trebuchet-font() { font-family: "Trebuchet MS", Helvetica, sans-serif; }
+.lucida-console-font() { font-family: "Lucida Console", Monaco, monospace; }
+.georgia-font() { font-family: Georgia, serif; }
+.roboto-font() { font-family: 'Roboto', sans-serif; }
+
+.breadcrumbs-fontstyle(@color) {
+  .trebuchet-font();
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.breadcrumbs-fontstyle(@color) when(@color='blue') {
+  color: @designer-editor-breadcrumbs-color-blue;
+}
+
+.breadcrumbs-fontstyle(@color) when(@color='gray') {
+  color: @designer-editor-breadcrumbs-color-gray;
+}
+
+.questionnarie-title-fontstyle() {
+  .arial-font();
+  font-size: 18px;
+  color: @designer-editor-title-color;
+}
+
+.questionnarie-title-span-gray-fontstyle() {
+  .lucida-console-font();
+  font-size: 14px;
+  color: @designer-editor-title-span-color;
+}
+
+.questionnarie-title-span-error-fontstyle() {
+  .georgia-font();
+  font-size: 14px;
+  font-style: italic;
+  color: @error-message-color;
+
+  > a {
+    text-decoration: underline;
+    color: @error-message-link-color;
+  }
+}
+
+.questionnarie-chapter-title-fontstyle() {
+  .arial-font();
+  font-size: 16px;
+  font-weight: bold;
+  color: @designer-editor-title-color;
+}
+
+.questionnarie-chapter-title-span-fontstyle() {
+  .trebuchet-font();
+  font-size: 16px;
+  color: @designer-editor-title-span-dark-color;
+  font-weight: normal;
+}
+
+.questionnarie-chapter-list-fontstyle() {
+  .arial-font();
+  font-size: 16px;
+  color: @designer-editor-chapter-list-color;
+}
+
+.questionnarie-chapter-list-span-fontstyle() {
+  .trebuchet-font();
+  font-size: 12px;
+  color: @designer-editor-chapter-list-span-color;
+}
+
+.questionnarie-question-list-item-fontstyle() {
+  .arial-font();
+  font-size: 16px;
+  color: @questionnarie-question-list-item-color;
+}
+
+.questionnarie-question-list-item-qname-fontstyle() {
+  .lucida-console-font();
+  font-size: 12px;
+  color: #ff4200;
+}
+
+.questionnarie-question-editor-group-h1-fontstyle() {
+  .arial-font();
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.questionnarie-startbox-fontstyle() {
+  .arial-font();
+  font-size: 18px;
+  color: @questionnarie-startbox-fg-color;
+}
+
+.wb-label-fontstyle() {
+  .lucida-console-font();
+  font-size: 14px;
+  font-weight: normal;
+  color: #5d5d5d;
+}
+
+.wb-input-text-fontstyle() {
+  .lucida-console-font();
+  font-size: 14px;
+  font-weight: normal;
+  color: #c1c7cb;
+}
+
+/** Controls font-styles */
+
+.inline-button-fontstyle() {
+  .trebuchet-font();
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 1px;
+}
+
+.wb-checkbox-fontstyle() {
+  .arial-font();
+  font-weight: normal;
+  font-size: 12px;
+}
+
+.wb-question-verify-error-li-fontstyle {
+  .georgia-font();
+  font-size: 14px;
+  font-style: italic;
+  color: @verify-popup-color;
+  line-height: 22px;
+}
+
+.wb-question-verify-error-li-var-fontstyle {
+  .lucida-console-font();
+  font-style: normal;
+  color: @verify-popup-var-color;
+  font-size: 12px;
+}
+
+.context-menu-fontstyle() {
+  .trebuchet-font();
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 30px;
+  color: @common-blue-color;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.header-menu-fontstyle() {
+  .georgia-font();
+  font-size: 14px;
+  font-style: italic;
+  color: #c1c7cb;
+
+    > a {
+    text-decoration: underline;
+    color: #2a81cb;
+    cursor: pointer;
+  }
+}

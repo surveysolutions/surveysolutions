@@ -16,11 +16,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
     {
         protected static QuestionsAndGroupsCollectionDenormalizer CreateQuestionnaireInfoDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter = null,
-            IQuestionDetailsFactory questionDetailsFactory = null, 
+            IQuestionDetailsViewMapper questionDetailsViewMapper = null, 
             IQuestionFactory questionFactory = null)
         {
             return new QuestionsAndGroupsCollectionDenormalizer(readsideRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView>>(),
-                questionDetailsFactory ?? Mock.Of<IQuestionDetailsFactory>(),
+                questionDetailsViewMapper ?? Mock.Of<IQuestionDetailsViewMapper>(),
                 questionFactory ?? Mock.Of<IQuestionFactory>());
         }
 

@@ -19,6 +19,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -506,6 +507,14 @@ namespace CapiDataGenerator
                     catch (Exception e)
                     {
                         this.Log(e.Message);
+                        this.Log(e.StackTrace);
+
+                        if (e.InnerException != null)
+                        {
+                            this.Log("Inner Exception: " + e.InnerException.Message);
+                            this.Log(e.InnerException.StackTrace);
+                        }
+                        
                     }
                     finally
                     {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -19,7 +21,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
 
-        private readonly string[] serviceColumns = { "Id", "ParentId" };
+        private class ServiceColumns
+        {
+            public const string Id = "Id";
+            public const string ParentId = "ParentId";
+        }
+
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
 
         public PreloadedDataVerifier(
@@ -39,10 +46,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var preloadedDataService = CreatePreloadedDataService(questionnaireId, version);
             if (preloadedDataService == null)
             {
-                return new []{new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire)};
+                return new[] { new PreloadedDataVerificationError("PL0001", PreloadingVerificationMessages.PL0001_NoQuestionnaire) };
             }
             var result = new List<PreloadedDataVerificationError>();
-            var datas = new [] { data };
+
+            var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
+
             result.AddRange(
                 this.Verifier(this.CoulmnWasntMappedOnQuestionInTemplate, "PL0003",
                     PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
@@ -78,13 +87,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var questionnaire = this.questionnaireDocumentVersionedStorage.GetById(questionnaireId, version);
             var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetById(questionnaireId, version);
             var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(questionnaireId, version);
-            if (questionnaire == null || questionnaireExportStructure == null || questionnaireRosterStructure == null)
+
+            if (questionnaireExportStructure == null || questionnaireRosterStructure == null || questionnaire == null)
             {
                 return null;
             }
 
-            questionnaire.Questionnaire.ConnectChildrenWithParent();
 
+            questionnaire.Questionnaire.ConnectChildrenWithParent();
             return this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
                 questionnaireRosterStructure, questionnaire.Questionnaire);
         }
@@ -103,7 +113,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         PreloadedDataVerificationReferenceType.Column),
                     this.Verifier(this.IdDuplication, "PL0006", PreloadingVerificationMessages.PL0006_IdDublication),
                     this.Verifier(this.OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord),
-                    this.Verifier(this.RosterIdIsInconsistantWithRosterSizeQuestion, "PL0009",
+                    this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009",
                         PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
                     this.ErrorsByQuestionsWasntParsed
                 };
@@ -116,10 +126,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
             if (levelExportStructure == null)
                 yield break;
+            var referenceNames = levelExportStructure.ReferencedNames ?? new string[0];
+            var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure).ToArray();
             foreach (var columnName in levelData.Header)
             {
-                if (this.serviceColumns.Contains(columnName))
+                if (string.Equals(columnName, ServiceColumns.Id, StringComparison.InvariantCultureIgnoreCase))
                     continue;
+
+                if (listOfParentIdColumns.Contains(columnName))
+                    continue;
+
+                if (referenceNames.Contains(columnName))
+                    continue;
+                
                 if (!levelExportStructure.HeaderItems.Values.Any(headerItem => headerItem.ColumnNames.Contains(columnName)))
                     yield return columnName;
             }
@@ -136,11 +155,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private IEnumerable<string> ServiceColumnsAreAbsent(PreloadedDataByFile levelData, IPreloadedDataService preloadedDataService)
         {
-            foreach (var serviceColumn in this.serviceColumns)
+            var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
+            if (levelExportStructure == null)
+                yield break;
+
+            if (levelData.Header.Count(h => string.Equals(h, ServiceColumns.Id, StringComparison.InvariantCultureIgnoreCase)) != 1)
+                yield return ServiceColumns.Id;
+
+            var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure);
+            foreach (var parentIdColumn in listOfParentIdColumns)
             {
-                if (!levelData.Header.Contains(serviceColumn))
+                if (levelData.Header.Count(h => string.Equals(h, parentIdColumn, StringComparison.InvariantCultureIgnoreCase)) != 1)
+                    yield return parentIdColumn;
+            }
+        }
+
+        private IEnumerable<string> GetListOfParentIdColumns(PreloadedDataByFile levelData, HeaderStructureForLevel levelExportStructure)
+        {
+            if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
+                yield break;
+
+            var columnsStartWithParentId =
+                levelData.Header.Where(h => h.StartsWith(ServiceColumns.ParentId, StringComparison.InvariantCultureIgnoreCase)).ToList();
+
+            var listOfAvailableParentIdIndexes = levelExportStructure.LevelScopeVector.Select((l, i) => i + 1).ToArray();
+
+            foreach (var columnStartWithParentId in columnsStartWithParentId)
+            {
+                var parentNumberString = columnStartWithParentId.Substring(ServiceColumns.ParentId.Length);
+                int parentNumber;
+                if (int.TryParse(parentNumberString, out parentNumber))
                 {
-                    yield return serviceColumn;
+                    if (listOfAvailableParentIdIndexes.Contains(parentNumber))
+                        yield return columnStartWithParentId;
                 }
             }
         }
@@ -153,21 +200,43 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (parentDataFile == null)
                 yield break;
 
-            var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(levelData);
-            var idCoulmnIndexInParentFile = preloadedDataService.GetIdColumnIndex(parentDataFile);
-            var parentIds = parentDataFile.Content.Select(row => row[idCoulmnIndexInParentFile]).ToList();
+            var parentIdColumnIndexes = preloadedDataService.GetParentIdColumnIndexes(levelData);
+            var parentIdColumnIndexesForParentDataFile = preloadedDataService.GetParentIdColumnIndexes(parentDataFile);
+            var idColumnIndexInParentFile = preloadedDataService.GetIdColumnIndex(parentDataFile);
 
+            if (idColumnIndexInParentFile < 0 || parentIdColumnIndexes == null || parentIdColumnIndexes.Length==0 ||
+                parentIdColumnIndexesForParentDataFile == null)
+                yield break;
+
+            var parentIds =
+                parentDataFile.Content.Select(
+                    row =>
+                        JoinRowIdWithParentIdsInParentIdsVector(row[idColumnIndexInParentFile],
+                            CreateParentIdsVector(row, parentIdColumnIndexesForParentDataFile))).ToList();
+            
             for (int y = 0; y < levelData.Content.Length; y++)
             {
-                var parentIdValue = levelData.Content[y][parentIdColumnIndex];
-                if (!parentIds.Contains(parentIdValue))
+
+                var parentIdValues = CreateParentIdsVector(levelData.Content[y], parentIdColumnIndexes);
+                if (!parentIds.Any(p => p.SequenceEqual(parentIdValues)))
                     yield return
-                        new PreloadedDataVerificationReference(parentIdColumnIndex, y, PreloadedDataVerificationReferenceType.Cell,
-                            parentIdValue, levelData.FileName);
+                        new PreloadedDataVerificationReference(parentIdColumnIndexes.First(), y, PreloadedDataVerificationReferenceType.Cell,
+                            string.Join(",", parentIdValues), levelData.FileName);
             }
         }
 
-        private IEnumerable<PreloadedDataVerificationReference> RosterIdIsInconsistantWithRosterSizeQuestion(PreloadedDataByFile levelData,
+        private string[] JoinRowIdWithParentIdsInParentIdsVector(string id, string[] parentIds)
+        {
+            var result = new string[parentIds.Count() + 1];
+            result[0] = id;
+            for (int i = 1; i < result.Length; i++)
+            {
+                result[i] = parentIds[i - 1];
+            }
+            return result;
+        }
+
+        private IEnumerable<PreloadedDataVerificationReference> RosterIdIsInconsistencyWithRosterSizeQuestion(PreloadedDataByFile levelData,
             PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
         {
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
@@ -180,12 +249,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 yield break;
 
             var idCoulmnIndexFile = preloadedDataService.GetIdColumnIndex(levelData);
-            var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(levelData);
+            var parentIdColumnIndexes = preloadedDataService.GetParentIdColumnIndexes(levelData);
+
+            if (idCoulmnIndexFile < 0 || parentIdColumnIndexes == null)
+                yield break;
+
             for (int y = 0; y < levelData.Content.Length; y++)
             {
-                var parentIdValue = levelData.Content[y][parentIdColumnIndex];
                 var idValue = levelData.Content[y][idCoulmnIndexFile];
-                decimal[] ids = preloadedDataService.GetAvalibleIdListForParent(parentDataFile, levelExportStructure.LevelScopeVector, parentIdValue);
+                
+                decimal[] ids = preloadedDataService.GetAvailableIdListForParent(parentDataFile, levelExportStructure.LevelScopeVector,
+                    CreateParentIdsVector(levelData.Content[y], parentIdColumnIndexes));
 
                 if (ids == null)
                     continue;
@@ -202,13 +276,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
+        private string[] CreateParentIdsVector(string[] content, int[] parentIdColumnIndexes)
+        {
+            return parentIdColumnIndexes.Select(parentIdColumnIndex => content[parentIdColumnIndex]).ToArray();
+        }
+
         private IEnumerable<PreloadedDataVerificationReference> IdDuplication(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,
             IPreloadedDataService preloadedDataService)
         {
             var idColumnIndex = preloadedDataService.GetIdColumnIndex(levelData);
-            var parentIdColumnIndex = preloadedDataService.GetParentIdColumnIndex(levelData);
+            var parentIdColumnIndexes = preloadedDataService.GetParentIdColumnIndexes(levelData);
 
-            if (idColumnIndex < 0 || parentIdColumnIndex < 0)
+            if (idColumnIndex < 0 || parentIdColumnIndexes == null)
                 yield break;
 
             var idAndParentContainer = new HashSet<KeyValuePair<string, string>>();
@@ -222,7 +301,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                             levelData.FileName);
                     continue;
                 }
-                var parentIdValue = levelData.Content[y][parentIdColumnIndex];
+                var parentIdValue = string.Join(",", parentIdColumnIndexes.Select(parentidIndex => levelData.Content[y][parentidIndex]));
                 var idAndParentPair = new KeyValuePair<string, string>(idValue, parentIdValue);
                 if (idAndParentContainer.Contains(idAndParentPair))
                 {
@@ -251,23 +330,49 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     var row = levelData.Content[y];
                     foreach (var presentQuestion in presentQuestions)
                     {
+                        var question = preloadedDataService.GetQuestionByVariableName(presentQuestion.Key);
+                        var values = new List<decimal>(); 
+
                         foreach (var answerIndex in presentQuestion.Value)
                         {
                             var answer = row[answerIndex];
                             if (string.IsNullOrEmpty(answer))
                                 continue;
 
-                            KeyValuePair<Guid, object> value;
-                            var parsedResult = preloadedDataService.ParseQuestion(answer, presentQuestion.Key, out value);
+                            KeyValuePair<Guid, object> parsedValue;
+                            var parsedResult = preloadedDataService.ParseQuestion(answer, question, out parsedValue);
 
                             switch (parsedResult)
                             {
                                 case ValueParsingResult.OK:
+                                {
+                                    if(question.QuestionType == QuestionType.MultyOption)
+                                        values.Add((decimal)parsedValue.Value);
                                     continue;
+                                }
+                                    
                                 case ValueParsingResult.AnswerAsDecimalWasNotParsed:
                                     yield return
                                         new PreloadedDataVerificationError("PL0019",
                                             PreloadingVerificationMessages.PL0019_ExpectedDecimalNotParsed,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
+                                    break;
+                                case ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue:
+                                    yield return
+                                        new PreloadedDataVerificationError("PL0020",
+                                            PreloadingVerificationMessages.PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
+                                    break;
+                                case ValueParsingResult.AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsNegative:
+                                    yield return
+                                        new PreloadedDataVerificationError("PL0022",
+                                            PreloadingVerificationMessages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative,
                                             new PreloadedDataVerificationReference(answerIndex, y,
                                                 PreloadedDataVerificationReferenceType.Cell,
                                                 string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
@@ -356,6 +461,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                                     break;
                             }
                         }
+
+                        if(values.Count > 0 && values.GroupBy(n => n).Any(c => c.Count() > 1))
+                            yield return
+                                new PreloadedDataVerificationError("PL0021", 
+                                    PreloadingVerificationMessages.PL0021_MultyOptionQuestionHasDuplicateAnswers,
+                                    new PreloadedDataVerificationReference(PreloadedDataVerificationReferenceType.Column, presentQuestion.Key, levelData.FileName));
+
                     }
                 }
             }

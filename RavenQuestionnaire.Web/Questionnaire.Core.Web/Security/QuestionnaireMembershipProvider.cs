@@ -1,4 +1,5 @@
-﻿using Main.Core.View;
+﻿using System.Collections.Specialized;
+using Main.Core.View;
 using Main.Core.View.User;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
@@ -13,8 +14,6 @@ namespace Questionnaire.Core.Web.Security
     {
         private static readonly string PERSON_TO_REQUEST = "FEF8050CBFAC46edBDF6B73C5C14DF0B.";
 
-        private string applicationName = "Questionnaire";
-
         private IViewFactory<UserViewInputModel, UserView> ViewFactory
         {
             get { return ServiceLocator.Current.GetInstance<IViewFactory<UserViewInputModel, UserView>>(); }
@@ -22,15 +21,8 @@ namespace Questionnaire.Core.Web.Security
 
         public override string ApplicationName
         {
-            get
-            {
-                return this.applicationName;
-            }
-
-            set
-            {
-                this.applicationName = value;
-            }
+            get { return this._ApplicationName; }
+            set { this._ApplicationName = value; }
         }
 
         public ICommandService CommandInvoker
@@ -42,7 +34,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return true;
+                return _EnablePasswordReset;
             }
         }
 
@@ -50,7 +42,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return false;
+                return _EnablePasswordRetrieval;
             }
         }
 
@@ -58,7 +50,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return 5;
+                return _MaxInvalidPasswordAttempts;
             }
         }
 
@@ -66,7 +58,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return 1;
+                return _MinRequiredNonalphanumericCharacters;
             }
         }
 
@@ -74,7 +66,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return 6;
+                return _MinRequiredPasswordLength;
             }
         }
 
@@ -82,7 +74,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return 10;
+                return _PasswordAttemptWindow;
             }
         }
 
@@ -90,7 +82,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return MembershipPasswordFormat.Hashed;
+                return _PasswordFormat;
             }
         }
 
@@ -98,7 +90,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return @"(?=^.{8,40}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+}{&quot;&quot;:;'?/>.<,]).*$";
+                return _PasswordStrengthRegularExpression;
             }
         }
 
@@ -106,7 +98,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return false;
+                return _RequiresQuestionAndAnswer;
             }
         }
 
@@ -114,7 +106,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return true;
+                return _RequiresUniqueEmail;
             }
         }
 
@@ -277,6 +269,70 @@ namespace Questionnaire.Core.Web.Security
                 new DateTime(0x6da, 1, 1));
 
             return mu;
+        }
+
+        //
+        // Properties from web.config, default all to False
+        //
+        private string _ApplicationName;
+        private bool _EnablePasswordReset;
+        private bool _EnablePasswordRetrieval;
+        private bool _RequiresQuestionAndAnswer;
+        private bool _RequiresUniqueEmail;
+        private int _MaxInvalidPasswordAttempts;
+        private int _PasswordAttemptWindow;
+        private int _MinRequiredPasswordLength;
+        private int _MinRequiredNonalphanumericCharacters;
+        private string _PasswordStrengthRegularExpression = @"(?=^.{8,40}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+}{&quot;&quot;:;'?/>.<,]).*$";
+        private MembershipPasswordFormat _PasswordFormat = MembershipPasswordFormat.Hashed;
+
+        public override void Initialize(string name, NameValueCollection config)
+        {
+            if (config == null)
+                throw new ArgumentNullException("config");
+
+            if (name == null || name.Length == 0)
+                name = "CustomMembershipProvider";
+
+            if (String.IsNullOrEmpty(config["description"]))
+            {
+                config.Remove("description");
+                config.Add("description", "Custom Membership Provider");
+            }
+
+            base.Initialize(name, config);
+
+            _ApplicationName = GetConfigValue(config["applicationName"],
+                          System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
+            _MaxInvalidPasswordAttempts = Convert.ToInt32(
+                          GetConfigValue(config["maxInvalidPasswordAttempts"], "5"));
+            _PasswordAttemptWindow = Convert.ToInt32(
+                          GetConfigValue(config["passwordAttemptWindow"], "10"));
+            _MinRequiredNonalphanumericCharacters = Convert.ToInt32(
+                          GetConfigValue(config["minRequiredNonalphanumericCharacters"], "1"));
+            _MinRequiredPasswordLength = Convert.ToInt32(
+                          GetConfigValue(config["minRequiredPasswordLength"], "6"));
+            _EnablePasswordReset = Convert.ToBoolean(
+                          GetConfigValue(config["enablePasswordReset"], "true"));
+            _RequiresUniqueEmail = Convert.ToBoolean(
+                          GetConfigValue(config["requiresUniqueEmail"], "false"));
+            _RequiresQuestionAndAnswer = Convert.ToBoolean(
+                          GetConfigValue(config["requiresQuestionAndAnswer"], "false"));
+            _EnablePasswordRetrieval = Convert.ToBoolean(
+                          GetConfigValue(config["enablePasswordRetrieval"], "false"));
+
+        }
+
+        //
+        // A helper function to retrieve config values from the configuration file.
+        //  
+
+        private string GetConfigValue(string configValue, string defaultValue)
+        {
+            if (string.IsNullOrEmpty(configValue))
+                return defaultValue;
+
+            return configValue;
         }
     }
 }

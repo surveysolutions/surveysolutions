@@ -575,5 +575,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0065_QuestionHasValidationExpressionWithoutValidationMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question of this type is not supported.
+        /// </summary>
+        internal static string WB0066_QuestionTypeIsNotAllowed {
+            get {
+                return ResourceManager.GetString("WB0066_QuestionTypeIsNotAllowed", resourceCulture);
+            }
+        }
     }
 }

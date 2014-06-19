@@ -232,6 +232,7 @@ namespace WB.UI.QuestionnaireTester
 
             this.kernel.Unbind<IAnswerOnQuestionCommandService>();
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
+            this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
 
             #region register handlers

@@ -33,6 +33,7 @@ namespace WB.Core.Synchronization.MetaInfo
             metaInfo.PublicKey = doc.Id;
             metaInfo.TemplateId = doc.QuestionnaireId;
             metaInfo.Status = (int) doc.Status;
+            metaInfo.CreatedOnClient = doc.CreatedOnClient;
 
             var featuredQuestionList = new List<FeaturedQuestionMeta>();
 

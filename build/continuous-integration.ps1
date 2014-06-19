@@ -14,7 +14,9 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 	$ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 	$ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
 	$ProjectSupervisor = 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj'
+	$core = 'src\core'
 
+	UpdateProjectVersion $BuildNumber $core
 	UpdateProjectVersion $BuildNumber $ProjectDesigner
 	UpdateProjectVersion $BuildNumber $ProjectHeadquarters
 	UpdateProjectVersion $BuildNumber $ProjectSupervisor
@@ -48,13 +50,14 @@ try {
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
+	CopyCapi -Project $ProjectHeadquarters -PathToFinalCapi $PackageName -BuildNumber $BuildNumber
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectSupervisor $BuildConfiguration
 	CopyCapi -Project $ProjectSupervisor -PathToFinalCapi $PackageName -BuildNumber $BuildNumber
 	BuildWebPackage $ProjectSupervisor $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-	$artifactsFolder = (Get-Location).Path +  "\Artifacts"
+	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
 	}
