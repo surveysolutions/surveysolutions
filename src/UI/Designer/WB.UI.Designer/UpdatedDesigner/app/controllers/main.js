@@ -46,7 +46,7 @@
                 };
 
                 $scope.verify = function() {
-                    verificationService.verify($routeParams.questionnaireId).success(function (result) {
+                    verificationService.verify($routeParams.questionnaireId).success(function(result) {
                         $scope.verificationStatus.errors = result.errors;
                         $scope.verificationStatus.errorsCount = result.errors.length;
 
@@ -59,7 +59,7 @@
                     });
                 };
 
-                $scope.navigateTo = function (itemId, chapterId) {
+                $scope.navigateTo = function(itemId, chapterId) {
                     navigationService.openItem($routeParams.questionnaireId, chapterId, itemId);
                 };
 
@@ -107,7 +107,7 @@
 
                 $scope.currentChapterId = null;
 
-                $scope.resetSelection = function () {
+                $scope.resetSelection = function() {
                     navigationService.openChapter($routeParams.questionnaireId, $scope.currentChapterId);
                     $scope.currentItemId = null;
                     $scope.activeRoster = null;
@@ -160,21 +160,23 @@
                 }
 
                 $scope.setItem = function(item) {
-                    navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
                     $scope.currentItemId = item.itemId;
                     $scope.currentItem = item;
                     if ($scope.isQuestion(item)) {
                         $scope.activeRoster = undefined;
                         $scope.activeChapter = undefined;
                         $scope.activeQuestion = item;
+                        navigationService.openQuestion($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
                     } else if (item.isRoster) {
                         $scope.activeRoster = item;
                         $scope.activeQuestion = undefined;
                         $scope.activeChapter = undefined;
+                        navigationService.openRoster($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
                     } else {
                         $scope.activeRoster = undefined;
                         $scope.activeQuestion = undefined;
                         $scope.activeChapter = item;
+                        navigationService.openGroup($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
                     }
                 };
 
@@ -201,6 +203,7 @@
 
                             $scope.items = result.items;
                             $scope.currentChapter = result;
+
                             window.ContextMenuController.get().init();
                         });
                 };
@@ -238,7 +241,7 @@
                         "title": "New group",
                         "items": []
                     };
-                    commandService.addGroup($routeParams.questionnaireId, emptyGroup, parent.itemId).success(function (result) {
+                    commandService.addGroup($routeParams.questionnaireId, emptyGroup, parent.itemId).success(function(result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyGroup);
                         } else {
@@ -253,10 +256,10 @@
                         "itemId": newId,
                         "title": "New roster",
                         "items": [],
-                        isRoster : true
+                        isRoster: true
                     };
 
-                    commandService.addRoster($routeParams.questionnaireId, emptyRoster, parent.itemId).success(function (result) {
+                    commandService.addRoster($routeParams.questionnaireId, emptyRoster, parent.itemId).success(function(result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyRoster);
                         } else {
@@ -278,30 +281,44 @@
                         }
                     });
                 };
-                
-                $scope.toggle = function (scope) {
+
+                $scope.toggle = function(scope) {
                     scope.toggle();
                 };
 
                 questionnaireService.getQuestionnaireById($routeParams.questionnaireId)
                     .success(function(result) {
-                        if (result === 'null') {
-                            alert('Questionnaire not found');
-                        } else {
-                            $scope.questionnaire = result;
+                        $scope.questionnaire = result;
 
-                            if ($routeParams.chapterId) {
-                                $scope.currentChapterId = $routeParams.chapterId;
+                        if ($routeParams.chapterId) {
+                            $scope.currentChapterId = $routeParams.chapterId;
+                            $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+                        } else {
+                            if (result.chapters.length > 0) {
+                                $scope.currentChapter = result.chapters[0];
+                                $scope.currentChapterId = $scope.currentChapter.itemId;
                                 $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
-                            } else {
-                                if (result.chapters.length > 0) {
-                                    $scope.currentChapter = result.chapters[0];
-                                    $scope.currentChapterId = $scope.currentChapter.itemId;
-                                    $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
-                                }
                             }
-                            if ($routeParams.itemId) {
-                                $scope.currentItemId = $routeParams.itemId;
+                        }
+                        if ($routeParams.itemId) {
+                            $scope.currentItemId = $routeParams.itemId;
+
+                            if (document.URL.indexOf('question') > 0) {
+                                $scope.activeRoster = undefined;
+                                $scope.activeChapter = undefined;
+                                $scope.activeQuestion = { itemId: $routeParams.itemId };
+                            }
+
+                            if (document.URL.indexOf('group') > 0) {
+                                $scope.activeRoster = undefined;
+                                $scope.activeChapter = { itemId: $routeParams.itemId };
+                                $scope.activeQuestion = undefined;
+                            }
+
+                            if (document.URL.indexOf('roster') > 0) {
+                                $scope.activeRoster = { itemId: $routeParams.itemId };
+                                $scope.activeChapter = undefined;
+                                $scope.activeQuestion = undefined;
                             }
                         }
                     });

@@ -33,7 +33,22 @@
                     controller: 'MainCtrl',
                     reloadOnSearch: false
                 })
-                .when('/:questionnaireId/editchapter/:chapterId', {
+                .when('/:questionnaireId/chapter/:chapterId/question/:itemId', {
+                    templateUrl: 'app/views/main.html',
+                    controller: 'MainCtrl',
+                    reloadOnSearch: false
+                })
+                .when('/:questionnaireId/chapter/:chapterId/chapter/:itemId', {
+                    templateUrl: 'app/views/main.html',
+                    controller: 'MainCtrl',
+                    reloadOnSearch: false
+                })
+                .when('/:questionnaireId/chapter/:chapterId/roster/:itemId', {
+                    templateUrl: 'app/views/main.html',
+                    controller: 'MainCtrl',
+                    reloadOnSearch: false
+                })
+                .when('/:questionnaireId/chapter/:chapterId/group/:itemId', {
                     templateUrl: 'app/views/main.html',
                     controller: 'MainCtrl',
                     reloadOnSearch: false

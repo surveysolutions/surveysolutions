@@ -9,18 +9,13 @@
                 $scope.loadGroup = function() {
                     questionnaireService.getGroupDetailsById($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function(result) {
                             var group = result.group;
+                            $scope.activeChapter.title = group.title;
                             $scope.activeChapter.description = group.description;
                             $scope.activeChapter.enablementCondition = group.enablementCondition;
                             $scope.activeChapter.breadcrumbs = result.breadcrumbs;
                         }
                     );
                 };
-
-                $scope.loadGroup();
-
-                $scope.$watch('activeChapter', function() {
-                    $scope.loadGroup();
-                });
 
                 $scope.saveChapter = function() {
                     $("#edit-chapter-save-button").popover('destroy');
@@ -86,11 +81,17 @@
                     });
                 };
 
-                $scope.moveToChapter = function (chapterId) {
+                $scope.moveToChapter = function(chapterId) {
                     questionnaireService.moveGroup($scope.activeChapter.itemId, 0, chapterId, $routeParams.questionnaireId);
                     $scope.resetSelection();
                     questionnaireService.removeItem($scope.items, $scope.activeChapter.itemId);
                 };
+
+                $scope.loadGroup();
+
+                $scope.$watch('activeChapter', function() {
+                    $scope.loadGroup();
+                });
             }
         ]);
 }());

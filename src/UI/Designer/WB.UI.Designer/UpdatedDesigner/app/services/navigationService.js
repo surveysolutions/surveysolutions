@@ -2,11 +2,27 @@
     'use strict';
     angular.module('designerApp')
         .factory('navigationService', [
-            '$location', 'utilityService', function($location, string) {
+            '$location', 'utilityService',
+            function($location, string) {
                 var navigationService = {};
 
                 navigationService.openItem = function(questionnaireId, currentChapterId, itemId) {
                     var url = string.format('/{0}/chapter/{1}/item/{2}', questionnaireId, currentChapterId, itemId);
+                    $location.path(url);
+                };
+
+                navigationService.openQuestion = function(questionnaireId, currentChapterId, itemId) {
+                    var url = string.format('/{0}/chapter/{1}/question/{2}', questionnaireId, currentChapterId, itemId);
+                    $location.path(url);
+                };
+
+                navigationService.openRoster = function(questionnaireId, currentChapterId, itemId) {
+                    var url = string.format('/{0}/chapter/{1}/roster/{2}', questionnaireId, currentChapterId, itemId);
+                    $location.path(url);
+                };
+
+                navigationService.openGroup = function(questionnaireId, currentChapterId, itemId) {
+                    var url = string.format('/{0}/chapter/{1}/group/{2}', questionnaireId, currentChapterId, itemId);
                     $location.path(url);
                 };
 
