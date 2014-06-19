@@ -96,7 +96,7 @@
                         return message;
                     },
                     beforeDrop: function(event) {
-                        me.draggedFrom = event.source.nodeScope.item.parent;
+                        me.draggedFrom = event.source.nodeScope.item.getParentItem();
                     },
                     dropped: function (event) {
                         
@@ -227,7 +227,9 @@
 
                 var connectTree = function() {
                     var setParent = function (item, parent) {
-                        item.parent = parent;
+                        item.getParentItem = function() {
+                            return parent;
+                        };
                         _.each(item.items, function (child) {
                             setParent(child, item);
                         });
