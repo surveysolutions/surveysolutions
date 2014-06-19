@@ -121,7 +121,7 @@
                         if (_.isNull(parent)) {
                             var siblingIndex = _.indexOf($scope.items, $scope.currentItem) + updownStepValue;
                             if (siblingIndex < $scope.items.length && siblingIndex >= 0) {
-                                navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, $scope.items[siblingIndex].itemId);
+                                $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, $scope.items[siblingIndex]);
                             }
                             return;
                         }
@@ -129,7 +129,7 @@
                         var nextItemIndex = _.indexOf(parent.items, $scope.currentItem) + updownStepValue;
 
                         if (nextItemIndex < $scope.items.length && nextItemIndex >= 0) {
-                            navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, parent.items[nextItemIndex].itemId);
+                            $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, parent.items[nextItemIndex].item);
                         }
                     }
                 }
@@ -138,7 +138,6 @@
                     upDownMove(1);
                 };
 
-
                 $scope.goToPrevItem = function () {
                     upDownMove(-1);
                 };
@@ -146,7 +145,7 @@
                 $scope.goToParent = function() {
                     if ($scope.items && $scope.currentItem) {
                         if ($scope.currentItem.parent != null) {
-                            navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.parent.itemId);
+                            $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.parent);
                         }
                     }
                 }
@@ -154,31 +153,45 @@
                 $scope.goToChild = function () {
                     if ($scope.items && $scope.currentItem) {
                         if (!_.isEmpty($scope.currentItem.items)) {
-                            navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.items[0].itemId);
+                            $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.items[0]);
                         }
                     }
                 }
 
-                $scope.setItem = function(item) {
+                $scope.nav = function (questionnaireId, currentChapterId, item) {
                     $scope.currentItemId = item.itemId;
                     $scope.currentItem = item;
                     if ($scope.isQuestion(item)) {
                         $scope.activeRoster = undefined;
                         $scope.activeChapter = undefined;
                         $scope.activeQuestion = item;
-                        navigationService.openQuestion($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
+                        navigationService.openQuestion(questionnaireId, currentChapterId, item.itemId);
                     } else if (item.isRoster) {
                         $scope.activeRoster = item;
                         $scope.activeQuestion = undefined;
                         $scope.activeChapter = undefined;
-                        navigationService.openRoster($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
+                        navigationService.openRoster(questionnaireId, currentChapterId, item.itemId);
                     } else {
                         $scope.activeRoster = undefined;
                         $scope.activeQuestion = undefined;
                         $scope.activeChapter = item;
-                        navigationService.openGroup($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
+                        navigationService.openGroup(questionnaireId, currentChapterId, item.itemId);
                     }
                 };
+
+                $scope.setItem = function(item) {
+                    $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, item);
+                };
+
+                var getType = function(item) {
+                    if ($scope.isQuestion(item)) {
+                        return 'question';
+                    } else if (item.isRoster) {
+                        return 'roster';
+                    } else {
+                        return 'group';
+                    }
+                }
 
                 $scope.changeChapter = function(chapter) {
                     navigationService.openChapter($routeParams.questionnaireId, chapter.itemId);
@@ -286,6 +299,18 @@
                     scope.toggle();
                 };
 
+                $scope.showSearch = function () {
+                    $scope.filtersBoxMode = filtersBlockModes.search;
+                    utilityService.focus('focusSearch');
+                };
+
+                $scope.hideSearch = function () {
+                    $scope.filtersBoxMode = filtersBlockModes.default;
+                    $scope.search.searchText = '';
+                };
+
+                
+
                 questionnaireService.getQuestionnaireById($routeParams.questionnaireId)
                     .success(function(result) {
                         $scope.questionnaire = result;
@@ -322,16 +347,6 @@
                             }
                         }
                     });
-
-                $scope.showSearch = function() {
-                    $scope.filtersBoxMode = filtersBlockModes.search;
-                    utilityService.focus('focusSearch');
-                };
-
-                $scope.hideSearch = function() {
-                    $scope.filtersBoxMode = filtersBlockModes.default;
-                    $scope.search.searchText = '';
-                };
 
                 //do not reload views, change url only
                 var lastRoute = $route.current;
