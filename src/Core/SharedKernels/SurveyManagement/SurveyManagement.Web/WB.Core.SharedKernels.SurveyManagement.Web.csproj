@@ -361,7 +361,6 @@
     <EmbeddedResource Include="Views\ControlPanel\ReadSide.cshtml" />
     <EmbeddedResource Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
     <EmbeddedResource Include="Views\Shared\_LayoutWithSidebar.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <EmbeddedResource Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <EmbeddedResource Include="Scripts\jquery-2.1.0.min.map" />
     <EmbeddedResource Include="Views\Interviewer\Edit.cshtml" />
