@@ -6,11 +6,12 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
-using WB.UI.Supervisor.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Supervisor.DesignerPublicService;
-using WB.UI.Supervisor.Models;
 
-namespace WB.UI.Supervisor.Controllers
+namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Headquarter")]
     [Obsolete("Remove when HQ application will be separate")]
@@ -79,7 +80,7 @@ namespace WB.UI.Supervisor.Controllers
                     this.Error(
                         string.Format(
                             "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
-                            GlobalHelper.GenerateUrl("Import", "Template", null)));
+                            GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
                     this.Logger.Error("Could not connect to designer.", ex);
                 }
             }

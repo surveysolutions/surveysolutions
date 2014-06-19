@@ -34,8 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
                 result =
                     preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { CreatePreloadedDataByFile(new string[0], null, QuestionnaireCsvFileName) });
 
-        It should_result_has_2_error = () =>
-           result.Count().ShouldEqual(2);
+        It should_result_has_1_error = () =>
+           result.Count().ShouldEqual(1);
 
         It should_return_first_PL0007_error = () =>
             result.First().Code.ShouldEqual("PL0007");
@@ -51,9 +51,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
 
         It should_firt_error_has_content_with_id = () =>
             result.First().References.First().Content.ShouldEqual("Id");
-
-        It should_second_error_has_content_with_id = () =>
-            result.Last().References.First().Content.ShouldEqual("ParentId");
 
         private static PreloadedDataVerifier preloadedDataVerifier;
         private static IEnumerable<PreloadedDataVerificationError> result;

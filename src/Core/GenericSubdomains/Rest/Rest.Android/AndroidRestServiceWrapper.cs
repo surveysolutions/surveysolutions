@@ -43,7 +43,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
                 
                 this.logger.Error("Sync error. Response status:" + response.StatusCode, exception);
 
-                throw exception;
+                throw exception; 
             }
         }
 

@@ -34,6 +34,10 @@
     <WarningsNotAsErrors>612,618,1030,649</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="Machine.Specifications">
       <HintPath>..\..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.dll</HintPath>
     </Reference>
@@ -65,6 +69,10 @@
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz, Version=2.2.3.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Quartz.2.2.3\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -145,6 +153,7 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApprovedByHQ_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApprovedByHQ_event.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SynchronizationMetadataApplied_event_and_interview_was_created_on_capi.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApproved_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApproved_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewCompleted_event_and_responsible_user_not_found.cs" />
@@ -168,10 +177,28 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewDeleted_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewStatusChanged_event_and_no_status_history.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewStatusChanged_event_and_status_history_has_1_item.cs" />
-    <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewStatusChanged_event_and_status_history_has_2_item_with_not_same_last_status.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewStatusChanged_event_and_two_different_statuses_in_history.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewCreated_event.cs" />
+    <Compile Include="InterviewSynchronizationDtoFactoryTests\when_build_from_interview_created_onclient.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_question_which_uses_roster_title_in_substitution_and_placed_in_nested_group.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_duplicate_values.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_integer_value_greater_then_allowed_max_value.cs" />
+    <Compile Include="QuestionDataParserTests\when_parsing_answer_on_numeric_int_roster_size_question_and_answer_is_negative.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_int_question_and_answer_is_greater_then_allowed.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_is_greater_then_allowed.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_broken_capi_package.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_capi_package_and_throws_unhandled_exception.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_1_capi_package.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_and_capi_package_has_bad_file_name.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_and_no_new_capi_packages.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataSchedulerTests\InterviewDetailsDataSchedulerTestsContext.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataSchedulerTests\when_loading_interview_details_from_capi_package.cs" />
+    <Compile Include="TestInMemoryWriter.cs" />
+    <Compile Include="EventHandlers\Interview\StatisticsDenormalizerTests\when_duplicate_creation_event_exists_in_event_stream.cs" />
     <Compile Include="EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\QuestionnaireQuestionsInfoDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
@@ -234,14 +261,18 @@
     <Compile Include="PreloadedDataServiceTests\PreloadedDataServiceTestContext.cs" />
     <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_is_called.cs" />
     <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_is_called_for_2_data_files.cs" />
+    <Compile Include="PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_is_called_for_3_data_files.cs" />
     <Compile Include="PreloadedDataServiceTests\when_FindLevelInPreloadedData_is_called_with_lower_case_file_name.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_fixed_roster.cs" />
+    <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_nested_fixed_roster.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_multyoption_question.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_numeric_question.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_textlist_question.cs" />
+    <Compile Include="PreloadedDataServiceTests\when_GetParentIdColumnIndexes_is_called_for_file_which_is_not_corresponding_to_any_roster.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetColumnIndexesGoupedByQuestionVariableName_is_called_for_top_level_file.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_first_level_of_questionnaire.cs" />
     <Compile Include="PreloadedDataServiceTests\when_GetParentDataFile_is_called_for_top_level_of_questionnaire.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_valid_data_by_nested_roster.cs" />
     <Compile Include="PreloadedDataVerifierTests\PreloadedDataVerifierTestContext.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_file.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_1_unmapped_question.cs" />
@@ -376,6 +407,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

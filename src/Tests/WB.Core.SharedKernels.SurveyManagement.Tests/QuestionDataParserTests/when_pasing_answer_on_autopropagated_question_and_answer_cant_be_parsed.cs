@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
@@ -13,21 +11,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         {
             answer = "unparsed";
             questionDataParser = CreateQuestionDataParser();
+            question = new AutoPropagateQuestion()
+            {
+                PublicKey = questionId,
+                QuestionType = QuestionType.AutoPropagate,
+                StataExportCaption = questionVarName
+            };
         };
 
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName,
-                        CreateQuestionnaireDocumentWithOneChapter(new AutoPropagateQuestion()
-                        {
-                            PublicKey = questionId,
-                            QuestionType = QuestionType.AutoPropagate,
-                            StataExportCaption = questionVarName
-                        }), out parcedValue);
+                    questionDataParser.TryParse(answer, question,CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
 
         private It should_result_be_AnswerAsIntWasNotParsed = () =>
             parsingResult.ShouldEqual(ValueParsingResult.AnswerAsIntWasNotParsed);
-
     }
 }

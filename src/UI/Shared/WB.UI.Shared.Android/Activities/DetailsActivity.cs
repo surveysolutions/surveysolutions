@@ -1,14 +1,17 @@
 using System;
 using System.Linq;
+using Android.App;
 using Android.OS;
 using Android.Support.V4.View;
 using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Droid.Fragging;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Controls;
+using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Events;
 using WB.UI.Shared.Android.Frames;
 
@@ -92,7 +95,6 @@ namespace WB.UI.Shared.Android.Activities
             }
 
             this.Title = this.Model.Title;
-            this.ActionBar.SetDisplayShowHomeEnabled(false);
 
             if (bundle == null)
             {

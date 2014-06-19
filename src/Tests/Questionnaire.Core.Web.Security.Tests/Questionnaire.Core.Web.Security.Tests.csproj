@@ -76,6 +76,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionaireRoleProviderTests\QuestionnaireRoleProviderTestsContext.cs" />
     <Compile Include="QuestionaireRoleProviderTests\when_check_that_user_is_in_role_and_http_context_exist_and_user_does_not_exist_in_cache.cs" />
+    <Compile Include="QuestionnaireMembershipProviderTests\QuestionnaireMembershipProviderTestsContext.cs" />
+    <Compile Include="QuestionnaireMembershipProviderTests\when_initialize_and_all_provider_params_specified.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">

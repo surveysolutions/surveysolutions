@@ -1,6 +1,8 @@
 ﻿using System;
+using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -106,6 +108,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
         public static IPublishedEvent<InterviewApprovedByHQ> InterviewApprovedByHQEvent(string userId = null, string comment = null)
         {
             return ToPublishedEvent(new InterviewApprovedByHQ(userId: GetGuidIdByStringId(userId), comment: comment));
+        }
+
+        public static IPublishedEvent<SynchronizationMetadataApplied> SynchronizationMetadataAppliedEvent(string userId = null,
+            InterviewStatus status = InterviewStatus.Created, string questionnaireId = null,
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta = null, bool createdOnClient = false)
+        {
+            return
+                ToPublishedEvent(new SynchronizationMetadataApplied(userId: GetGuidIdByStringId(userId), status: status,
+                    questionnaireId: GetGuidIdByStringId(questionnaireId), featuredQuestionsMeta: featuredQuestionsMeta,
+                    createdOnClient: createdOnClient));
         }
 
         private static Guid GetGuidIdByStringId(string stringId)

@@ -60,7 +60,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
 
             if (this.Model.AnswerObject != null && answer.Equals(this.Model.AnswerObject))
             {
-                base.FireAnswerSavedEvent();
+                if (this.etComments.Visibility!=ViewStates.Visible)
+                {
+                    base.FireAnswerSavedEvent();
+                }
                 return;
             }
 

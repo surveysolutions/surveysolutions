@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.View;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Controllers;
 using It = Machine.Specifications.It;
 

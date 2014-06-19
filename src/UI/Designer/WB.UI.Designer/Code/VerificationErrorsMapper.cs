@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Code
@@ -32,13 +35,28 @@ namespace WB.UI.Designer.Code
         {
             foreach (var reference in references)
             {
+                var item = questionnaireDocument.Find<IComposite>(reference.Id);
+                var parent = item;
+                while (parent != null)
+                {
+                    IComposite grandParent = parent.GetParent();
+                    if (grandParent == null || grandParent.GetParent() == null)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        parent = grandParent;
+                    }
+                }
+
                 if (reference.Type == QuestionnaireVerificationReferenceType.Group)
                 {
                     var group = questionnaireDocument.Find<IGroup>(reference.Id);
 
                     yield return new VerificationReference
                     {
-                        Id = reference.Id,
+                        ItemId = reference.Id.FormatGuid(),
                         Type = reference.Type,
                         Title = group.Title
                     };
@@ -46,11 +64,13 @@ namespace WB.UI.Designer.Code
                 else
                 {
                     var question = questionnaireDocument.Find<IQuestion>(reference.Id);
+
                     yield return new VerificationReference
                     {
-                        Id = reference.Id,
+                        ItemId = reference.Id.FormatGuid(),
                         Type = reference.Type,
-                        Title = question.QuestionText
+                        Title = question.QuestionText,
+                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
                     };
                 }
             }

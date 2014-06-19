@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
+using System.Web.Compilation;
+using System.Web.Hosting;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -13,6 +16,7 @@ using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Elmah;
 
 namespace WB.UI.Headquarters
@@ -32,6 +36,7 @@ namespace WB.UI.Headquarters
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new SupervisorFunctionsEnabledAttribute());
         }
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)
@@ -70,6 +75,7 @@ namespace WB.UI.Headquarters
             GlobalConfiguration.Configure(WebApiConfig.Register);
             //WebApiConfig.Register(GlobalConfiguration.Configuration);
 
+            RegisterVirtualPathProvider();
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
@@ -82,6 +88,24 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+        }
+
+        private static void RegisterVirtualPathProvider()
+        {
+            Assembly[] assemblies = BuildManager
+                .GetReferencedAssemblies()
+                .Cast<Assembly>()
+                .Where(assembly => assembly.GetName().Name.Contains("SharedKernels") && assembly.GetName().Name.Contains("Web"))
+                .ToArray();
+
+            HostingEnvironment.RegisterVirtualPathProvider(new EmbeddedResourceVirtualPathProvider.Vpp(assemblies)
+            {
+                //you can do a specific assembly registration too. If you provide the assemly source path, it can read
+                //from the source file so you can change the content while the app is running without needing to rebuild
+                //{typeof(SomeAssembly.SomeClass).Assembly, @"..\SomeAssembly"} 
+            });
+
+            BundleTable.VirtualPathProvider = HostingEnvironment.VirtualPathProvider;
         }
 
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)

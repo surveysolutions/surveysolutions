@@ -5,9 +5,9 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.DesignerPublicService;
-using WB.UI.Supervisor.Models;
 using It = Machine.Specifications.It;
 using QuestionnaireVersion = WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.QuestionnaireVersion;
 

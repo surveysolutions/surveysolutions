@@ -68,6 +68,8 @@
   <ItemGroup>
     <Compile Include="Create.cs" />
     <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_interview_rejected.cs" />
+    <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_supervisor_assigned_on_interview_on_capi_client.cs" />
+    <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_supervisor_assigned_on_interview_on_hq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
