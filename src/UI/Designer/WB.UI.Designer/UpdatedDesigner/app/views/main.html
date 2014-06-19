@@ -41,7 +41,7 @@
         <div class="chapter-title" ng-switch on="filtersBoxMode" ng-animate="'animate'">
             <div class="search-box" ng-switch-when="search">
                 <div class="input-group">
-                    <input type="text" ng-model="search.searchText" focus-on="focusSearch" hotkey="{'esc': hideSearch}" />
+                    <input type="text" ng-model="search.searchText" focus-on="focusSearch" />
                     <span class="input-group-addon glyphicon glyphicon-search" title="Search"></span>
                 </div>
                 <button ng-click="hideSearch()" title="Cancel search">
@@ -99,17 +99,17 @@
 
                     <span ng-bind-html="item.variable | highlight:search.searchText"></span>
                     <!--<div class="btn-group dropdown">
-                        <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"></a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a>Delete</a>
-                            </li>
-                            <li>
-                                <a>Clone</a>
-                            </li>
-                        </ul>-->
-                    </div>
+            <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a>Delete</a>
+                </li>
+                <li>
+                    <a>Clone</a>
+                </li>
+            </ul>-->
                 </div>
+            </div>
             </div>
             <div class="section item"
                  ng-class="{'selected' : item.itemId == currentItemId}"

@@ -15,6 +15,11 @@
                     }
                 });
 
+                hotkeys.add('down', 'Navigate to next sibling', function(event) {
+                    event.preventDefault();
+                    $scope.goToNextItem();
+                });
+
                 $scope.verificationStatus = {
                     errorsCount: null,
                     errors: []
@@ -94,9 +99,28 @@
                     $scope.activeQuestion = null;
                 };
 
+                $scope.goToNextItem = function() {
+                    var parent = $scope.currentItem.parent;
+                    
+                    if (_.isNull(parent)) {
+                        var siblingIndex = _.indexOf($scope.items, $scope.currentItem) + 1;
+                        if (siblingIndex < $scope.items.length && siblingIndex > 0) {
+                            navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, $scope.items[siblingIndex].itemId);
+                        }
+                        return;
+                    }
+
+                    var nextItemIndex = _.indexOf(parent.items, $scope.currentItem) + 1;
+
+                    if (nextItemIndex < $scope.items.length && nextItemIndex > 0) {
+                        navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, parent.items[nextItemIndex].itemId);
+                    }
+                };
+
                 $scope.setItem = function(item) {
                     navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
                     $scope.currentItemId = item.itemId;
+                    $scope.currentItem = item;
                     if ($scope.isQuestion(item)) {
                         $scope.activeRoster = undefined;
                         $scope.activeChapter = undefined;
@@ -121,6 +145,18 @@
                 $scope.loadChapterDetails = function(questionnaireId, chapterId) {
                     questionnaireService.getChapterById(questionnaireId, chapterId)
                         .success(function(result) {
+
+                            var setParent = function(item, parent) {
+                                item.parent = parent;
+                                _.each(item.items, function(child) {
+                                    setParent(child, item);
+                                });
+                            }
+
+                            _.each(result.items, function(item) {
+                                setParent(item, null);
+                            });
+
                             $scope.items = result.items;
                             $scope.currentChapter = result;
                             window.ContextMenuController.get().init();
