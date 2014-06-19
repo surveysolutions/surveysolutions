@@ -689,6 +689,7 @@ namespace CapiDataGenerator
                         sycnhronizedInterview: new InterviewSynchronizationDto(
                             id: interviewData.Key,
                             status: InterviewStatus.InterviewerAssigned,
+                            comments:null, 
                             userId: interviewData.Value,
                             questionnaireId: template.PublicKey,
                             questionnaireVersion: 1,

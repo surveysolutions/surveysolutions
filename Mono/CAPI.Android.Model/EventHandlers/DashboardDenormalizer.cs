@@ -66,20 +66,20 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status,
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status, evnt.Payload.Comments,
                 evnt.Payload.FeaturedQuestionsMeta, evnt.Payload.CreatedOnClient, false);
         }
 
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, InterviewStatus.InterviewerAssigned, 
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, InterviewStatus.InterviewerAssigned, null,
                 new AnsweredQuestionSynchronizationDto[0], true, true);
         }
 
 
         private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, Guid interviewId, Guid responsibleId,
-                                                     InterviewStatus status, IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions, 
+                                                     InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions, 
                                                      bool createdOnClient, bool canBeDeleted)
         {
             var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId);
@@ -95,7 +95,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             
             questionnaireDtOdocumentStorage.Store(
                 new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                                     items, questionnaireTemplate.Version, createdOnClient, canBeDeleted), interviewId);
+                                     items, questionnaireTemplate.Version, comments, createdOnClient, canBeDeleted), interviewId);
         }
 
         private FeaturedItem CreateFeaturedItem(Guid questionId, string answerString, IQuestion featuredQuestion)
@@ -197,7 +197,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
             AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId,
-                                            evnt.Payload.InterviewData.Status, evnt.Payload.InterviewData.Answers, 
+                                            evnt.Payload.InterviewData.Status,evnt.Payload.InterviewData.Comments, evnt.Payload.InterviewData.Answers, 
                                             evnt.Payload.InterviewData.CreatedOnClient, false);
         }
 

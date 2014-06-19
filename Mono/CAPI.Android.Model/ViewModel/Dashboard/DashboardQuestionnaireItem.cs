@@ -6,23 +6,18 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class DashboardQuestionnaireItem
     {
-        #region Constructors and Destructors
-
         public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, InterviewStatus status, IList<FeaturedItem> properties,
-            string title, bool? createdOnClient = false, bool canBeDeleted = false)
+            string title, string comments, bool? createdOnClient = false, bool canBeDeleted = false)
         {
             this.PublicKey = publicKey;
             this.status = status;
             this.Properties = properties;
             this.SurveyKey = surveyKey;
             this.Title = title;
+            this.Comments = comments;
             this.CreatedOnClient = createdOnClient;
             this.CanBeDeleted = canBeDeleted;
         }
-
-        #endregion
-
-        #region Public Properties
 
         public IList<FeaturedItem> Properties { get; private set; }
 
@@ -42,6 +37,6 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             get { return this.status; }
         }
 
-        #endregion
+        public string Comments { get; private set; }
     }
 }

@@ -639,7 +639,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             : base(id)
         {
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true));
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true, null));
             this.ApplyValidationEvent(isValid);
         }
         
@@ -863,8 +863,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid supervisorId,
             Guid? interviewerId,
             InterviewSynchronizationDto interviewDto,
-            DateTime synchronizationTime,
-            string comment)
+            DateTime synchronizationTime)
         {
           
             var commentedAnswers = (
@@ -884,8 +883,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewRestored(userId));
             }
 
-            this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: comment));
+            this.ApplyEvent(new InterviewRejectedByHQ(userId, interviewDto.Comments));
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments));
 
             if (interviewerId.HasValue)
             {
@@ -1907,7 +1906,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
             
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments));
 
             this.ApplyRostersEvents(rosters.ToArray());
             foreach (var answerDto in interviewDto.Answers.Where(x => x.Answer != null))
@@ -1987,7 +1986,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, 
                 interviewStatus,
                 featuredQuestionsMeta,
-                createdOnClient));
+                createdOnClient, comments));
 
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
 

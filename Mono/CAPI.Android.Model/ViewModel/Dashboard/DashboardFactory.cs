@@ -36,7 +36,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
                 {
                     result.Surveys.Add(new DashboardSurveyItem(Guid.Parse(surveyDto.Id), surveyDto.TemplateMaxVersion, surveyDto.SurveyTitle,
                         questionnairies.Where(q => q.Survey == surveyDto.Id)
-                            .Select(q => q.GetDashboardItem(q.Survey, surveyDto.SurveyTitle))));
+                            .Select(q => q.GetDashboardItem(q.Survey, surveyDto.SurveyTitle, q.Comments))));
                 }
             }
             return result;

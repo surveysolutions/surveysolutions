@@ -61,6 +61,7 @@ namespace WB.UI.Capi.Controls
 
             view.SetTag(Resource.Id.IsInterviewLocal, dataItem.CreatedOnClient);
 
+
             AddPropertyToContainer(llQuestionnairie, GetStatusText(dataItem.Status));
           
             foreach (var featuredItem in dataItem.Properties)
@@ -72,6 +73,13 @@ namespace WB.UI.Capi.Controls
             var img = activity.Resources.GetDrawable(global::Android.Resource.Drawable.IcMediaPlay);
             tvArrow.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
             llQuestionnairie.AddView(tvArrow, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WrapContent, 1));
+
+            var tvComment = view.FindViewById<TextView>(Resource.Id.tvComment);
+
+            if (string.IsNullOrEmpty(dataItem.Comments))
+                tvComment.Visibility = ViewStates.Gone;
+            else
+                tvComment.Text = dataItem.Comments;
             return view;
         }
         

@@ -370,7 +370,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             if (this.IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
             {
-                this.ResendInterviewInNewStatus(currentState.Document, newStatus);
+                this.ResendInterviewInNewStatus(currentState.Document, newStatus, evnt.Payload.Comment);
             }
             else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
             {
@@ -390,16 +390,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
         }
 
-        public void ResendInterviewInNewStatus(InterviewData interview, InterviewStatus newStatus)
+        public void ResendInterviewInNewStatus(InterviewData interview, InterviewStatus newStatus, string comments)
         {
-            var interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, newStatus);
+            var interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, newStatus, comments);
 
             this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
         }
 
         public void ResendInterviewForPerson(InterviewData interview, Guid responsibleId)
         {
-            InterviewSynchronizationDto interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, responsibleId, InterviewStatus.InterviewerAssigned);
+            InterviewSynchronizationDto interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, responsibleId, InterviewStatus.InterviewerAssigned, null);
             this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
         }
 
@@ -807,10 +807,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedToUser(InterviewData interview, Guid userId,
-            InterviewStatus status)
+            InterviewStatus status, string comments)
         {
             var factory = new InterviewSynchronizationDtoFactory(this.questionnriePropagationStructures);
-            return factory.BuildFrom(interview, userId, status);
+            return factory.BuildFrom(interview, userId, status, comments);
         }
     }
 }

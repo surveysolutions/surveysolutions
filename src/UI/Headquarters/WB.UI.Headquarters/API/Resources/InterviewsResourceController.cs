@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Newtonsoft.Json;
@@ -17,27 +18,36 @@ namespace WB.UI.Headquarters.API.Resources
     public class InterviewsResourceController : ApiController
     {
         private readonly IReadSideRepositoryReader<ViewWithSequence<InterviewData>> interviewDataReader;
+        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IInterviewSynchronizationDtoFactory factory;
 
         public InterviewsResourceController(IReadSideRepositoryReader<ViewWithSequence<InterviewData>> interviewDataReader,
-            IInterviewSynchronizationDtoFactory factory)
+            IInterviewSynchronizationDtoFactory factory, IReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
             this.interviewDataReader = interviewDataReader;
             this.factory = factory;
+            this.interviewSummaryReader = interviewSummaryReader;
         }
 
         [Route("{id}", Name = "api.interviewDetails")]
         public HttpResponseMessage Get(string id)
         {
             var interviewData = this.interviewDataReader.GetById(id);
-
+            var interviewSummary = this.interviewSummaryReader.GetById(id);
             if (interviewData == null)
             {
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format("Interview with id {0} was not found", id));
             }
 
+            string comments = null;
+            if (interviewSummary != null && interviewSummary.CommentedStatusesHistory != null &&
+                interviewSummary.CommentedStatusesHistory.Any())
+            {
+                comments = interviewSummary.CommentedStatusesHistory.Last().Comment;
+            }
+
             InterviewData document = interviewData.Document;
-            InterviewSynchronizationDto interviewSynchronizationDto = this.factory.BuildFrom(document);
+            InterviewSynchronizationDto interviewSynchronizationDto = this.factory.BuildFrom(document, comments);
 
             var result = this.Request.CreateResponse(HttpStatusCode.OK, interviewSynchronizationDto,
                 new JsonNetFormatter(new JsonSerializerSettings
