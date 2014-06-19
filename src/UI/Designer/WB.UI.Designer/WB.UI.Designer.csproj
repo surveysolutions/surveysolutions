@@ -415,6 +415,7 @@
     <Content Include="UpdatedDesigner\app\controllers\share.js" />
     <Content Include="UpdatedDesigner\app\directives\directives.js" />
     <Content Include="UpdatedDesigner\app\fixtures\no-backend.js" />
+    <Content Include="UpdatedDesigner\app\services\errorReportingService.js" />
     <Content Include="UpdatedDesigner\app\services\shareService.js" />
     <Content Include="UpdatedDesigner\app\views\share.html" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />

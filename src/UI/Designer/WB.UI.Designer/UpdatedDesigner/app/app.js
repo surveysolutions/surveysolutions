@@ -58,4 +58,8 @@
                 });
         }
     ]);
+    angular.module('designerApp').config(['$httpProvider', function($httpProvider) {
+        $httpProvider.interceptors.push('errorReportingInterceptor');
+    }]);
+
 }());
