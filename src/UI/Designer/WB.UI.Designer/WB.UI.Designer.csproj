@@ -604,6 +604,13 @@
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.min.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\Gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\src\hotkeys.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\src\hotkeys.js" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\build\loading-bar.css" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\build\loading-bar.js" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\build\loading-bar.min.css" />
@@ -1079,6 +1086,11 @@
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\package.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
