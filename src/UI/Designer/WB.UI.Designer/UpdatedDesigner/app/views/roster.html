@@ -29,7 +29,7 @@
             <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.enablementCondition">
         </div>
         
-        <div ng-include="activeRoster.rosterSizeSourceType + '-template.html'">
+        <div ng-include="activeRoster.rosterSizeSourceType + '-template.html'" ng-if="activeRoster.rosterSizeSourceType != undefined">
         </div>
 
     </form>

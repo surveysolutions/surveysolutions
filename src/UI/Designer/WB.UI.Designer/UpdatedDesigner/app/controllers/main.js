@@ -20,12 +20,12 @@
                     $scope.goToNextItem();
                 });
 
-                hotkeys.add('up', 'Navigate to previous sibling', function (event) {
+                hotkeys.add('up', 'Navigate to previous sibling', function(event) {
                     event.preventDefault();
                     $scope.goToPrevItem();
                 });
 
-                hotkeys.add('left', 'Navigate to parent', function (event) {
+                hotkeys.add('left', 'Navigate to parent', function(event) {
                     event.preventDefault();
                     $scope.goToParent();
                 });
@@ -134,11 +134,11 @@
                     }
                 }
 
-                $scope.goToNextItem = function () {
+                $scope.goToNextItem = function() {
                     upDownMove(1);
                 };
 
-                $scope.goToPrevItem = function () {
+                $scope.goToPrevItem = function() {
                     upDownMove(-1);
                 };
 
@@ -150,7 +150,7 @@
                     }
                 }
 
-                $scope.goToChild = function () {
+                $scope.goToChild = function() {
                     if ($scope.items && $scope.currentItem) {
                         if (!_.isEmpty($scope.currentItem.items)) {
                             $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.items[0]);
@@ -158,7 +158,7 @@
                     }
                 }
 
-                $scope.nav = function (questionnaireId, currentChapterId, item) {
+                $scope.nav = function(questionnaireId, currentChapterId, item) {
                     $scope.currentItemId = item.itemId;
                     $scope.currentItem = item;
                     if ($scope.isQuestion(item)) {
@@ -182,16 +182,6 @@
                 $scope.setItem = function(item) {
                     $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, item);
                 };
-
-                var getType = function(item) {
-                    if ($scope.isQuestion(item)) {
-                        return 'question';
-                    } else if (item.isRoster) {
-                        return 'roster';
-                    } else {
-                        return 'group';
-                    }
-                }
 
                 $scope.changeChapter = function(chapter) {
                     navigationService.openChapter($routeParams.questionnaireId, chapter.itemId);
@@ -299,17 +289,16 @@
                     scope.toggle();
                 };
 
-                $scope.showSearch = function () {
+                $scope.showSearch = function() {
                     $scope.filtersBoxMode = filtersBlockModes.search;
                     utilityService.focus('focusSearch');
                 };
 
-                $scope.hideSearch = function () {
+                $scope.hideSearch = function() {
                     $scope.filtersBoxMode = filtersBlockModes.default;
                     $scope.search.searchText = '';
                 };
 
-                
 
                 questionnaireService.getQuestionnaireById($routeParams.questionnaireId)
                     .success(function(result) {

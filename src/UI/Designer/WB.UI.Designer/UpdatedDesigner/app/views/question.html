@@ -36,7 +36,7 @@
             <button class="btn btn-lg btn-link">Add Instruction</button>
         </div>
 
-        <div ng-include="activeQuestion.type + '-template.html'">
+        <div ng-include="activeQuestion.type + '-template.html'" ng-if="activeQuestion.type != undefined">
         </div>
 
         <div class="form-group">
