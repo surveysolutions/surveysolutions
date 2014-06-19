@@ -5,7 +5,7 @@
         .controller('MainCtrl', [
             '$scope', '$routeParams', '$route', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', 'navigationService', '$modal', '$log',
             function($scope, $routeParams, $route, questionnaireService, commandService, verificationService, utilityService, hotkeys, navigationService, $modal, $log) {
-
+                var me = this;
                 hotkeys.add({
                     combo: 'ctrl+f',
                     description: 'Search for groups and questions in chapter',
@@ -89,16 +89,51 @@
 
                 $scope.filtersBoxMode = filtersBlockModes.default;
 
+
                 $scope.groupsTree = {
-                    dropped: function(event) {
+                    accept: function (sourceNodeScope, destNodesScope) {
+                        var message = _.isNull(destNodesScope.item) || $scope.isGroup(destNodesScope.item);
+                        return message;
+                    },
+                    beforeDrop: function(event) {
+                        me.draggedFrom = event.source.nodeScope.item.parent;
+                    },
+                    dropped: function (event) {
+                        
                         var movedItem = event.source.nodeScope.item;
                         var destItem = event.dest.nodesScope.item;
                         var destGroupId = destItem ? destItem.itemId : $scope.questionnaire.chapters[0].itemId;
+                        var putItem = function(item, parent, index) {
+                            questionnaireService.removeItem($scope.items, item.itemId);
+                            var itemsToAddTo = _.isNull(parent) ? $scope.items : parent.items;
+                            itemsToAddTo.splice(index, 0, item);
+                           
+                            connectTree();
+                        };
 
-                        if ($scope.isQuestion(movedItem)) {
-                            questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId);
-                        } else {
-                            questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId);
+                        if (event.dest.destNode != event.source.sourceNode || event.dest.index != event.source.index) {
+                            if ($scope.isQuestion(movedItem)) {
+                                questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId)
+                                    .success(function(data) {
+                                        if (!data.IsSuccess) {
+                                            putItem(movedItem, me.draggedFrom, event.source.index);
+                                        }
+                                    })
+                                    .error(function() {
+                                        putItem(movedItem, me.draggedFrom, event.source.index);
+                                    });
+                            } else {
+                                questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId)
+                                    .success(function(data) {
+                                        if (!data.IsSuccess) {
+                                            putItem(movedItem, me.draggedFrom, event.source.index);
+
+                                        }
+                                    })
+                                    .error(function() {
+                                        putItem(movedItem, me.draggedFrom, event.source.index);
+                                    });
+                            }
                         }
                     }
                 };
@@ -189,23 +224,26 @@
                     $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
                 };
 
+
+                var connectTree = function() {
+                    var setParent = function (item, parent) {
+                        item.parent = parent;
+                        _.each(item.items, function (child) {
+                            setParent(child, item);
+                        });
+                    }
+
+                    _.each($scope.items, function (item) {
+                        setParent(item, null);
+                    });
+                }
+
                 $scope.loadChapterDetails = function(questionnaireId, chapterId) {
                     questionnaireService.getChapterById(questionnaireId, chapterId)
                         .success(function(result) {
-
-                            var setParent = function(item, parent) {
-                                item.parent = parent;
-                                _.each(item.items, function(child) {
-                                    setParent(child, item);
-                                });
-                            }
-
-                            _.each(result.items, function(item) {
-                                setParent(item, null);
-                            });
-
                             $scope.items = result.items;
                             $scope.currentChapter = result;
+                            connectTree();
 
                             window.ContextMenuController.get().init();
                         });
@@ -213,6 +251,10 @@
 
                 $scope.isQuestion = function(item) {
                     return item.hasOwnProperty('type');
+                };
+
+                $scope.isGroup = function(item) {
+                    return !item.hasOwnProperty('type');
                 };
 
                 $scope.addQuestion = function(parent) {

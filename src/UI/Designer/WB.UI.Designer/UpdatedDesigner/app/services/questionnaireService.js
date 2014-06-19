@@ -34,7 +34,7 @@
                 };
 
                 questionnaireService.moveGroup = function(groupId, index, destGroupId, questionnaireId) {
-                    commandService.execute('MoveGroup', {
+                    return commandService.execute('MoveGroup', {
                             targetGroupId: destGroupId,
                             targetIndex: index,
                             groupId: groupId,
@@ -44,7 +44,7 @@
                 };
 
                 questionnaireService.moveQuestion = function(questionId, index, destGroupId, questionnaireId) {
-                    commandService.execute('MoveQuestion', {
+                    return commandService.execute('MoveQuestion', {
                             targetGroupId: destGroupId,
                             targetIndex: index,
                             questionId: questionId,
