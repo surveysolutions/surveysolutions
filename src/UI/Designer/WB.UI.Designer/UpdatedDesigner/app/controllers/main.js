@@ -20,6 +20,21 @@
                     $scope.goToNextItem();
                 });
 
+                hotkeys.add('up', 'Navigate to previous sibling', function (event) {
+                    event.preventDefault();
+                    $scope.goToPrevItem();
+                });
+
+                hotkeys.add('left', 'Navigate to parent', function (event) {
+                    event.preventDefault();
+                    $scope.goToParent();
+                });
+
+                hotkeys.add('right', 'Navigate to child', function(event) {
+                    event.preventDefault();
+                    $scope.goToChild();
+                });
+
                 $scope.verificationStatus = {
                     errorsCount: null,
                     errors: []
@@ -99,23 +114,50 @@
                     $scope.activeQuestion = null;
                 };
 
-                $scope.goToNextItem = function() {
-                    var parent = $scope.currentItem.parent;
-                    
-                    if (_.isNull(parent)) {
-                        var siblingIndex = _.indexOf($scope.items, $scope.currentItem) + 1;
-                        if (siblingIndex < $scope.items.length && siblingIndex > 0) {
-                            navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, $scope.items[siblingIndex].itemId);
+                var upDownMove = function(updownStepValue) {
+                    if ($scope.items && $scope.currentItem) {
+                        var parent = $scope.currentItem.parent;
+
+                        if (_.isNull(parent)) {
+                            var siblingIndex = _.indexOf($scope.items, $scope.currentItem) + updownStepValue;
+                            if (siblingIndex < $scope.items.length && siblingIndex >= 0) {
+                                navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, $scope.items[siblingIndex].itemId);
+                            }
+                            return;
                         }
-                        return;
-                    }
 
-                    var nextItemIndex = _.indexOf(parent.items, $scope.currentItem) + 1;
+                        var nextItemIndex = _.indexOf(parent.items, $scope.currentItem) + updownStepValue;
 
-                    if (nextItemIndex < $scope.items.length && nextItemIndex > 0) {
-                        navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, parent.items[nextItemIndex].itemId);
+                        if (nextItemIndex < $scope.items.length && nextItemIndex >= 0) {
+                            navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, parent.items[nextItemIndex].itemId);
+                        }
                     }
+                }
+
+                $scope.goToNextItem = function () {
+                    upDownMove(1);
                 };
+
+
+                $scope.goToPrevItem = function () {
+                    upDownMove(-1);
+                };
+
+                $scope.goToParent = function() {
+                    if ($scope.items && $scope.currentItem) {
+                        if ($scope.currentItem.parent != null) {
+                            navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.parent.itemId);
+                        }
+                    }
+                }
+
+                $scope.goToChild = function () {
+                    if ($scope.items && $scope.currentItem) {
+                        if (!_.isEmpty($scope.currentItem.items)) {
+                            navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.items[0].itemId);
+                        }
+                    }
+                }
 
                 $scope.setItem = function(item) {
                     navigationService.openItem($routeParams.questionnaireId, $scope.currentChapterId, item.itemId);
