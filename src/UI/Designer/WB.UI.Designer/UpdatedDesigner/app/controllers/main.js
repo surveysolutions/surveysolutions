@@ -104,17 +104,22 @@
                 $scope.filtersBoxMode = filtersBlockModes.default;
 
                 $scope.chaptersTree = {
-                    dropped: function(event) {
+                    dropped: function (event) {
+                        var rollback = function(item, targetIndex) {
+                            $scope.questionnaire.chapters.splice(_.indexOf($scope.chapters, item), 1);
+                            $scope.questionnaire.chapters.splice(targetIndex, 0, item);
+                        };
+
                         if (event.dest.index !== event.source.index) {
-                            var groupId = event.source.nodeScope.chapter.itemId;
-                            questionnaireService.moveGroup(groupId, event.dest.index, null, $routeParams.questionnaireId)
+                            var group = event.source.nodeScope.chapter;
+                            questionnaireService.moveGroup(group.itemId, event.dest.index, null, $routeParams.questionnaireId)
                                 .success(function(data) {
                                     if (!data.IsSuccess) {
-                                        $log.warn('rollback');
+                                        rollback(group, event.source.index);
                                     }
                                 })
                                 .error(function() {
-                                    $log.warn('rollback');
+                                    rollback(group, event.source.index);
                                 });
                         }
                     }
@@ -197,7 +202,7 @@
                             $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, parent.items[nextItemIndex]);
                         }
                     }
-                }
+                };
 
                 $scope.goToNextItem = function() {
                     upDownMove(1);
@@ -214,7 +219,7 @@
                             $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, parent);
                         }
                     }
-                }
+                };
 
                 $scope.goToChild = function() {
                     if ($scope.items && $scope.currentItem) {
@@ -222,7 +227,7 @@
                             $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.items[0]);
                         }
                     }
-                }
+                };
 
                 $scope.nav = function(questionnaireId, currentChapterId, item) {
                     $scope.currentItemId = item.itemId;
@@ -255,7 +260,6 @@
                     $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
                 };
 
-
                 var connectTree = function() {
                     var setParent = function(item, parent) {
                         item.getParentItem = function() {
@@ -264,12 +268,12 @@
                         _.each(item.items, function(child) {
                             setParent(child, item);
                         });
-                    }
+                    };
 
                     _.each($scope.items, function(item) {
                         setParent(item, null);
                     });
-                }
+                };
 
                 $scope.loadChapterDetails = function(questionnaireId, chapterId) {
                     questionnaireService.getChapterById(questionnaireId, chapterId)
