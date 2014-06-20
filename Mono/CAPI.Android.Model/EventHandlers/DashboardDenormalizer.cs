@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -90,7 +91,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             foreach (var featuredQuestion in questionnaireTemplate.Questionnaire.Find<IQuestion>(q => q.Featured))
             {
                 var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
-                items.Add(CreateFeaturedItem(featuredQuestion.PublicKey, item != null && item.Answer!=null ? item.Answer.ToString() : string.Empty, featuredQuestion));
+                items.Add(CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
             }
             
             questionnaireDtOdocumentStorage.Store(
@@ -98,10 +99,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                      items, questionnaireTemplate.Version, comments, createdOnClient, canBeDeleted), interviewId);
         }
 
-        private FeaturedItem CreateFeaturedItem(Guid questionId, string answerString, IQuestion featuredQuestion)
+        private FeaturedItem CreateFeaturedItem(IQuestion featuredQuestion, object answer)
         {
+            var answerString = this.getFormattedAnswer(featuredQuestion.QuestionType, answer);
             if (!questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
-                return new FeaturedItem(questionId, featuredQuestion.QuestionText, answerString);
+                return new FeaturedItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText, answerString);
 
             var answerValues = QuestionUtils.ExtractSelectedOptions(answerString);
             if (answerValues != null && answerValues.Length > 0)
@@ -117,14 +119,35 @@ namespace CAPI.Android.Core.Model.EventHandlers
                 answerString = string.Empty;
             }
 
-            return new FeaturedCategoricalItem(questionId, featuredQuestion.QuestionText, answerString,
+            return new FeaturedCategoricalItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText, answerString,
                 featuredQuestion.Answers.Select(
-                    answer =>
+                    aswr =>
                         new FeaturedCategoricalOption()
                         {
-                            OptionValue = decimal.Parse(answer.AnswerValue),
-                            OptionText = answer.AnswerText
+                            OptionValue = decimal.Parse(aswr.AnswerValue),
+                            OptionText = aswr.AnswerText
                         }));
+        }
+
+        private string getFormattedAnswer(QuestionType questionType, object answer)
+        {
+            if (answer == null)
+                return string.Empty;
+
+            var answerAsString = string.Empty;
+            switch (questionType)
+            {
+                case QuestionType.DateTime:
+                    if (answer is DateTime)
+                    {
+                        answerAsString = ((DateTime)answer).ToString("d", CultureInfo.InvariantCulture);   
+                    }
+                    break;
+                default:
+                    answerAsString = answer.ToString();
+                    break;
+            }
+            return answerAsString;
         }
 
         private FeaturedItem CreateFeaturedItem(AnsweredQuestionSynchronizationDto q, QuestionnaireDocumentVersioned questionnaireTemplate)
@@ -338,7 +361,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                (featuredQuestion) => evnt.Payload.Answer.ToString("d", CultureInfo.InvariantCulture));
+                (featuredQuestion) => getFormattedAnswer(QuestionType.DateTime, evnt.Payload.Answer));
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
