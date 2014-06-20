@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_answering_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_has_2_selected_options_and__new_answer_is_empty_set : InterviewTestsContext
+    internal class when_revalidating_interview_with_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_answer_is_empty_set : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                         && _.GetQuestionType(linkedToQuestionId) == QuestionType.Text
                         && _.GetRostersFromTopToSpecifiedQuestion(linkedToQuestionId) == new[] { linkedToRosterId }
                         && _.IsQuestionMandatory(questionId) == true
+                        && _.GetAllMandatoryQuestions() == new[] { questionId }
                         && _.HasQuestion(questionId) == true
                         && _.GetQuestionType(questionId) == QuestionType.MultyOption
                         && _.GetQuestionReferencedByLinkedQuestion(questionId) == linkedToQuestionId
@@ -64,12 +65,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview.Apply(new RosterRowAdded(rosterAId, emptyRosterVector, rosterInstanceId, sortIndex: null));
             interview.Apply(new RosterRowAdded(rosterBId, emptyRosterVector, rosterInstanceId, sortIndex: null));
             interview.Apply(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, DateTime.Now, new[] { linkedOption3Vector, linkedOption2Vector }));
-           
+            interview.Apply(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, DateTime.Now, new decimal[][] { }));
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId, rosterVector, DateTime.Now, new decimal[][] { });
+            interview.ReevaluateSynchronizedInterview();
 
         Cleanup stuff = () =>
         {
@@ -77,11 +78,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = null;
         };
 
-        It should_raise_MultipleOptionsLinkedQuestionAnswered_event = () =>
-            eventContext.ShouldContainEvent<MultipleOptionsLinkedQuestionAnswered>();
-
-        It should_raise_1_AnswersDeclaredInvalid_event = () =>
+        It should_raise_1_AnswersDeclaredInvalid_events = () =>
             eventContext.ShouldContainEvents<AnswersDeclaredInvalid>(count: 1);
+
+        It should_raise_1_RosterRowsTitleChanged_events1 = () =>
+         eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(@event
+                => @event.Questions.Any(question => question.Id == questionId));
 
         private static EventContext eventContext;
         private static Interview interview;
