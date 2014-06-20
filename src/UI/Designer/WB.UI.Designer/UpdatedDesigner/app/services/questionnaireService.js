@@ -53,6 +53,33 @@
                     );
                 };
 
+                questionnaireService.findItem = function(items, itemId) {
+                    var findFunc = function(item, itemToRemoveId) {
+                        var itemToFind = _.findWhere(item.items, { itemId: itemId });
+                        if (itemToFind) {
+                            return itemToFind;
+                        }
+
+                        var childItems = item.items || [];
+                        for (var i = 0; i < childItems.length; i++) {
+                            var resultLocal = findFunc(childItems[i], itemToRemoveId);
+                            if (resultLocal)
+                                return resultLocal;
+                        }
+
+                        return null;
+                    };
+
+                    for (var j = 0; j < items.length; j++) {
+                        var resultItem = findFunc(items[j], itemId)
+                        if (resultItem) {
+                            return resultItem;
+                        };
+                    }
+
+                    return null;
+                };
+
                 return questionnaireService;
             }
         ]);

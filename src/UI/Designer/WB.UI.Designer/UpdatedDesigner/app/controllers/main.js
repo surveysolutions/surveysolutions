@@ -57,9 +57,9 @@
                             });
                             // --- dialog and arrow positioning
                             $('#verification-modal .modal-dialog').stop().css({
-                               position: 'absolute',
-                               top: $('#verification-btn').offset().top + 15,
-                               left: 50
+                                position: 'absolute',
+                                top: $('#verification-btn').offset().top + 15,
+                                left: 50
                             });
                             $('#verification-modal .modal-dialog .arrow').css({
                                 left: $('#verification-btn').offset().left - 45
@@ -70,7 +70,11 @@
                 };
 
                 $scope.navigateTo = function(itemId, chapterId) {
-                    navigationService.openItem($routeParams.questionnaireId, chapterId, itemId);
+                    questionnaireService.getChapterById($routeParams.questionnaireId, chapterId)
+                        .success(function(result) {
+                            var itemToFind = questionnaireService.findItem(result.items, itemId);
+                            $scope.nav($routeParams.questionnaireId, chapterId, itemToFind);
+                        });
                 };
 
                 $scope.answerTypeClass = {
@@ -101,15 +105,15 @@
 
 
                 $scope.groupsTree = {
-                    accept: function (sourceNodeScope, destNodesScope) {
+                    accept: function(sourceNodeScope, destNodesScope) {
                         var message = _.isNull(destNodesScope.item) || $scope.isGroup(destNodesScope.item);
                         return message;
                     },
                     beforeDrop: function(event) {
                         me.draggedFrom = event.source.nodeScope.item.getParentItem();
                     },
-                    dropped: function (event) {
-                        
+                    dropped: function(event) {
+
                         var movedItem = event.source.nodeScope.item;
                         var destItem = event.dest.nodesScope.item;
                         var destGroupId = destItem ? destItem.itemId : $scope.questionnaire.chapters[0].itemId;
@@ -117,7 +121,7 @@
                             questionnaireService.removeItem($scope.items, item.itemId);
                             var itemsToAddTo = _.isNull(parent) ? $scope.items : parent.items;
                             itemsToAddTo.splice(index, 0, item);
-                           
+
                             connectTree();
                         };
 
@@ -237,16 +241,16 @@
 
 
                 var connectTree = function() {
-                    var setParent = function (item, parent) {
+                    var setParent = function(item, parent) {
                         item.getParentItem = function() {
                             return parent;
                         };
-                        _.each(item.items, function (child) {
+                        _.each(item.items, function(child) {
                             setParent(child, item);
                         });
                     }
 
-                    _.each($scope.items, function (item) {
+                    _.each($scope.items, function(item) {
                         setParent(item, null);
                     });
                 }
@@ -353,7 +357,6 @@
                     $scope.filtersBoxMode = filtersBlockModes.default;
                     $scope.search.searchText = '';
                 };
-
 
                 questionnaireService.getQuestionnaireById($routeParams.questionnaireId)
                     .success(function(result) {
