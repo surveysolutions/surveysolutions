@@ -1,4 +1,4 @@
-﻿@import "../vendor/bootstrap-select/bootstrap-select.min.css";
+@import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/prettycheckable/dist/prettyCheckable.css";
 /**
@@ -6310,6 +6310,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #000;
+  outline: none;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box > .input-group > span {
   height: 40px;
@@ -6317,6 +6318,7 @@ body {
   border-radius: 0 3px 3px 0;
   background-color: #fff;
   cursor: pointer;
+  top: 0;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box > button {
   margin: 7px 0 0 3px;
@@ -7145,4 +7147,3 @@ body {
 .share-question-dialog .form-group .invite-button {
   line-height: 0px;
 }
-/*# sourceMappingURL=markup.css.css.map */
