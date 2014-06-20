@@ -113,14 +113,15 @@ namespace WB.UI.Headquarters
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.InterviewDetailsDataSchedulerEnabled,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
                     LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
-
+            
             bool useStreamingForAllEvents;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
             {
                 useStreamingForAllEvents = true;
             }
 
-            var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: false,
+            bool reevaluateInterviewWhenSynchronized = LegacyOptions.SupervisorFunctionsEnabled;
+            var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: reevaluateInterviewWhenSynchronized,
                 appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                 incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
                 incomingCapiPackagesWithErrorsDirectoryName:
