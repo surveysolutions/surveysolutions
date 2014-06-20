@@ -223,9 +223,9 @@
       <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
       <Name>WB.Core.GenericSubdomains.Rest</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
-      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
-      <Name>WB.Core.SharedKernel.Utils</Name>
+    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils.Android\WB.Core.SharedKernel.Utils.Android.csproj">
+      <Project>{5f8613d4-a556-4826-8d69-9918808b113e}</Project>
+      <Name>WB.Core.SharedKernel.Utils.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Android\WB.UI.Shared.Android.csproj">
       <Project>{596bdadc-eff5-474d-b028-2f5c60b59050}</Project>
