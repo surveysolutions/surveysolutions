@@ -293,7 +293,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             var targetGroup = this.FindGroup(currentState, targetGroupKey);
 
-
             var groupOrQuestionView = this.FindGroupOrQuestion<IQuestionnaireItem>(currentState, groupOrQuestionKey);
             if (groupOrQuestionView != null)
             {

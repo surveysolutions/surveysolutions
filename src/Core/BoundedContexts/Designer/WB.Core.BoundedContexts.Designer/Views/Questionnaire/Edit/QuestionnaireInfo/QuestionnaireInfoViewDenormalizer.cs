@@ -223,8 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             var existsChapter = currentState.Chapters.Find(chapter => chapter.ItemId == groupOrQuestionKey);
 
-            if (existsChapter != null && evnt.Payload.GroupKey.HasValue &&
-                evnt.Payload.GroupKey.Value.FormatGuid() != currentState.QuestionnaireId)
+            if (existsChapter != null)
             {
                 currentState.Chapters.Remove(existsChapter);
             }
