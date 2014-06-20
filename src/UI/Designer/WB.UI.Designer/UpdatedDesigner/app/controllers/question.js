@@ -8,12 +8,10 @@
 
                 var dataBind = function(result) {
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
-
-                    //console.log(JSON.stringify(result));
-
+                    
                     $scope.activeQuestion.type = result.type;
+                    $scope.activeQuestion.variable = result.variableName; 
                     $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
-                    $scope.activeQuestion.variableName = result.variableName;
                     $scope.activeQuestion.title = result.title;
                     $scope.activeQuestion.isPreFilled = result.isPreFilled;
                     $scope.activeQuestion.isMandatory = result.isMandatory;
