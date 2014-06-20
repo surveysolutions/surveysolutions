@@ -5973,6 +5973,15 @@ body {
 .modal {
   overflow-y: inherit;
 }
+.modal .modal-dialog > .arrow {
+  position: absolute;
+  top: -20px;
+  left: 100px;
+  width: 42px;
+  height: 21px;
+  background: url(i/popover-arrow.png) center no-repeat;
+  z-index: 100;
+}
 .modal .modal-dialog .modal-header {
   border-bottom: none;
   border-radius: 5px 5px 0 0;

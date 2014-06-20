@@ -55,6 +55,16 @@
                                 backdrop: false,
                                 show: true
                             });
+                            // --- dialog and arrow positioning
+                            $('#verification-modal .modal-dialog').stop().css({
+                               position: 'absolute',
+                               top: $('#verification-btn').offset().top + 15,
+                               left: 50
+                            });
+                            $('#verification-modal .modal-dialog .arrow').css({
+                                left: $('#verification-btn').offset().left - 45
+                            });
+                            // ---
                         }
                     });
                 };

@@ -24,7 +24,7 @@
     <div class="questionnarie-title">
         <div class="title">
             {{questionnaire.title}} <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
-            <input type="button" class="btn error" value="VERIFY" ng-click="verify()" />
+            <input id="verification-btn" type="button" class="btn error" value="VERIFY" ng-click="verify()" />
             <span id="verify-btn" data-toggle="modal" data-target="#verification-modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>
             <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK</span>
         </div>
@@ -176,6 +176,7 @@
 
 <div id="verification-modal" class="modal fade">
     <div class="modal-dialog modal-lg">
+        <div class="arrow"></div>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><!--&times;--></button>
