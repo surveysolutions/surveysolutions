@@ -102,7 +102,7 @@
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.Core.BoundedContexts.CAPI\WB.Core.BoundedContexts.Capi.csproj">
-      <Project>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</Project>
+      <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
       <Name>WB.Core.BoundedContexts.Capi</Name>
     </ProjectReference>
   </ItemGroup>
