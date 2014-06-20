@@ -83,8 +83,9 @@
 
                 $scope.moveToChapter = function(chapterId) {
                     questionnaireService.moveGroup($scope.activeChapter.itemId, 0, chapterId, $routeParams.questionnaireId);
+                    var removeFrom = $scope.activeChapter.getParentItem() || $scope;
+                    removeFrom.items.splice(_.indexOf(removeFrom.items, $scope.activeChapter), 1);
                     $scope.resetSelection();
-                    questionnaireService.removeItem($scope.items, $scope.activeChapter.itemId);
                 };
 
                 $scope.loadGroup();

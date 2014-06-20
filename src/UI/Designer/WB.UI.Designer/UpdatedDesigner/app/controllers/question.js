@@ -40,9 +40,11 @@
                 };
 
                 $scope.moveToChapter = function(chapterId) {
-                    questionnaireService.moveQuestion(questionId, 0, chapterId, questionnaireId);
+                    questionnaireService.moveQuestion($scope.activeQuestion.itemId, 0, chapterId, $routeParams.questionnaireId);
+                    
+                    var removeFrom = $scope.activeQuestion.getParentItem() || $scope;
+                    removeFrom.items.splice(_.indexOf(removeFrom.items, $scope.activeQuestion), 1);
                     $scope.resetSelection();
-                    questionnaireService.removeItem($scope.items, questionId);
                 };
 
                 $scope.resetQuestion = function () {
