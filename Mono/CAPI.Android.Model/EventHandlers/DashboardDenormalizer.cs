@@ -1,23 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
@@ -101,120 +99,24 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         private FeaturedItem CreateFeaturedItem(IQuestion featuredQuestion, object answer)
         {
-            var answerString = this.getFormattedAnswer(featuredQuestion.QuestionType, answer);
-            if (!questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
-                return new FeaturedItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText, answerString);
-
-            var answerValues = QuestionUtils.ExtractSelectedOptions(answerString);
-            if (answerValues != null && answerValues.Length > 0)
-            {
-                var options =
-                    featuredQuestion.Answers.Where(o => answerValues.Contains(decimal.Parse(o.AnswerValue)))
-                        .Select(o => o.AnswerText);
-
-                answerString = string.Join(",", options);
-            }
-            else
-            {
-                answerString = string.Empty;
-            }
-
-            return new FeaturedCategoricalItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText, answerString,
-                featuredQuestion.Answers.Select(
-                    aswr =>
-                        new FeaturedCategoricalOption()
-                        {
-                            OptionValue = decimal.Parse(aswr.AnswerValue),
-                            OptionText = aswr.AnswerText
-                        }));
-        }
-
-        private string getFormattedAnswer(QuestionType questionType, object answer)
-        {
-            if (answer == null)
-                return string.Empty;
-
-            var answerAsString = string.Empty;
-            switch (questionType)
-            {
-                case QuestionType.DateTime:
-                    if (answer is DateTime)
-                    {
-                        answerAsString = ((DateTime)answer).ToString("d", CultureInfo.InvariantCulture);   
-                    }
-                    break;
-                default:
-                    answerAsString = answer.ToString();
-                    break;
-            }
-            return answerAsString;
-        }
-
-        private FeaturedItem CreateFeaturedItem(AnsweredQuestionSynchronizationDto q, QuestionnaireDocumentVersioned questionnaireTemplate)
-        {
-            var featuredQuestion = questionnaireTemplate.Questionnaire.Find<IQuestion>(q.Id);
-            if (featuredQuestion == null)
-                return null;
-            
-            var answerString = q.Answer.ToString();
-
             if (questionTypesWithOptions.Contains(featuredQuestion.QuestionType))
             {
-                var answerValues = QuestionUtils.ExtractSelectedOptions(answerString);
+                var featuredCategoricalOptions = featuredQuestion.Answers.Select(
+                    option =>
+                        new FeaturedCategoricalOption()
+                        {
+                            OptionValue = decimal.Parse(option.AnswerValue),
+                            OptionText = option.AnswerText
+                        });
 
-                var options =
-                    featuredQuestion.Answers.Where(o => answerValues.Contains(decimal.Parse(o.AnswerValue))).Select(o => o.AnswerText);
-                
-                answerString = string.Join(",", options);
+                return new FeaturedCategoricalItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
+                    AnswerUtils.AnswerToString(answer,
+                        (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalOptions, optionValue)),
+                    featuredCategoricalOptions);
             }
 
-            return new FeaturedItem(q.Id, featuredQuestion.QuestionText, answerString);
-        }
-
-        private string getAnswerForCategoricalSingleQuestion(FeaturedItem featuredQuestion, decimal answer)
-        {
-            var selectedOptionText = answer.ToString(CultureInfo.InvariantCulture);
-
-            var categoricalFeaturedQuestion = featuredQuestion as FeaturedCategoricalItem;
-            if (categoricalFeaturedQuestion != null)
-            {
-                var selectedOption = categoricalFeaturedQuestion.Options.FirstOrDefault(option => option.OptionValue == answer);
-                if (selectedOption != null)
-                {
-                    selectedOptionText = selectedOption.OptionText;
-                }
-            }
-
-            return selectedOptionText;
-        }
-
-        private string getAnswerForCategoricalMultiQuestion(FeaturedItem featuredQuestion, decimal[] answer)
-        {
-            var selectedOptionsText = string.Join(", ", answer);
-
-            var categoricalFeaturedQuestion = featuredQuestion as FeaturedCategoricalItem;
-            if (categoricalFeaturedQuestion != null)
-            {
-                var selectedOptions =
-                    categoricalFeaturedQuestion.Options.Where(option => answer.Contains(option.OptionValue))
-                        .Select(option => option.OptionText);
-                if (selectedOptions.Any())
-                {
-                    selectedOptionsText = string.Join(", ", selectedOptions);
-                }
-            }
-
-            return selectedOptionsText;
-        }
-
-        private IEnumerable<AnsweredQuestionSynchronizationDto> FilterNonFeaturedQuestionsByTemplate(
-            QuestionnaireDocument template, IEnumerable<AnsweredQuestionSynchronizationDto> allQuestions)
-        {
-            return allQuestions.Where(
-                q =>
-                template.FirstOrDefault<IQuestion>(
-                    questionFromTemplate => questionFromTemplate.PublicKey == q.Id && questionFromTemplate.Featured) !=
-                null);
+            return new FeaturedItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
+                AnswerUtils.AnswerToString(answer));
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
@@ -299,7 +201,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             //do nothing
         }
 
-        private void AnswerQuestion(Guid interviewId, Guid questionId, Func<FeaturedItem, string> getAnswer)
+        private void AnswerQuestion(Guid interviewId, Guid questionId, object answer)
         {
             QuestionnaireDTO questionnaire = questionnaireDtOdocumentStorage.GetById(interviewId);
 
@@ -313,72 +215,83 @@ namespace CAPI.Android.Core.Model.EventHandlers
             {
                 var featuredQuestion = properties[keyIndex];
 
-                featuredQuestion.Value = getAnswer(featuredQuestion);
+                featuredQuestion.Value = getAnswer(featuredQuestion, answer);
 
                 questionnaire.SetProperties(properties);
                 questionnaireDtOdocumentStorage.Store(questionnaire, interviewId);
             }
         }
 
+        private string getAnswer(FeaturedItem featuredQuestion, object answer)
+        {
+            var featuredCategoricalQuestion = featuredQuestion as FeaturedCategoricalItem;
+            if (featuredCategoricalQuestion != null)
+                return AnswerUtils.AnswerToString(answer,
+                    (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalQuestion.Options, optionValue));
+
+            return AnswerUtils.AnswerToString(answer);
+        }
+
+        private static string getCategoricalAnswerOptionText(
+            IEnumerable<FeaturedCategoricalOption> featuredCategoricalOptions, decimal optionValue)
+        {
+            var featuredCategoricalOption =
+                featuredCategoricalOptions.FirstOrDefault(option => option.OptionValue == optionValue);
+
+            return featuredCategoricalOption != null ? featuredCategoricalOption.OptionText : string.Empty;
+        }
+
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, (featuredQuestion) => evnt.Payload.Answer);
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
 
         
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                (featuredQuestion) =>
-                    getAnswerForCategoricalMultiQuestion(featuredQuestion, evnt.Payload.SelectedValues));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValues);
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                (featuredQuestion) =>
-                    getAnswerForCategoricalSingleQuestion(featuredQuestion, evnt.Payload.SelectedValue));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValue);
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                (featuredQuestion) => evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                (featuredQuestion) => evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                (featuredQuestion) => evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                (featuredQuestion) => getFormattedAnswer(QuestionType.DateTime, evnt.Payload.Answer));
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                (featuredQuestion) =>
-                    string.Format("{0},{1}[{2}]", evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy));
+                new GeoPosition(latitude: evnt.Payload.Latitude, longitude: evnt.Payload.Longitude,
+                    accuracy: evnt.Payload.Accuracy, timestamp: evnt.Payload.Timestamp));
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, (featuredQuestion) => evnt.Payload.Answer);
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<AnswerRemoved> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, (featuredQuestion) => string.Empty);
+            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Empty);
         }
     }
 }
