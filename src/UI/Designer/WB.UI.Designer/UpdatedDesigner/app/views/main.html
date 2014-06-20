@@ -58,12 +58,13 @@
                 </ul>
             </div>
         </div>
-        <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}" ng-controller="ChaptersCtrl">
+        <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
-            <ul class="chapters">
-                <li ng-repeat="chapter in questionnaire.chapters" ng-class="{current: currentChapterId == chapter.itemId}" ng-click="changeChapter(chapter);">
+            <ul class="chapters" ui-tree-nodes ng-model="questionnaire.chapters">
+                <li ng-repeat="chapter in questionnaire.chapters" ui-tree-node ng-class="{current: currentChapterId == chapter.itemId}" ng-click="changeChapter(chapter);">
                     <div class="holder">
                         <div class="inner">
+                            <a class="handler" ui-tree-handle style="display: block">+</a>
                             <h1>{{chapter.title}}</h1>
                             <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
                                 <a class="dropdown-toggle" data-toggle="dropdown"></a>

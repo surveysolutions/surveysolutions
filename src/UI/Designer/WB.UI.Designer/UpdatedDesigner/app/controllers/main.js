@@ -103,6 +103,22 @@
 
                 $scope.filtersBoxMode = filtersBlockModes.default;
 
+                $scope.chaptersTree = {
+                    dropped: function(event) {
+                        if (event.dest.index !== event.source.index) {
+                            var groupId = event.source.nodeScope.chapter.itemId;
+                            questionnaireService.moveGroup(groupId, event.dest.index, null, $routeParams.questionnaireId)
+                                .success(function(data) {
+                                    if (!data.IsSuccess) {
+                                        $log.warn('rollback');
+                                    }
+                                })
+                                .error(function() {
+                                    $log.warn('rollback');
+                                });
+                        }
+                    }
+                };
 
                 $scope.groupsTree = {
                     accept: function(sourceNodeScope, destNodesScope) {
@@ -125,7 +141,7 @@
                             connectTree();
                         };
 
-                        if (event.dest.destNode != event.source.sourceNode || event.dest.index != event.source.index) {
+                        if (event.dest.destNode !== event.source.sourceNode || event.dest.index !== event.source.index) {
                             if ($scope.isQuestion(movedItem)) {
                                 questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId)
                                     .success(function(data) {
