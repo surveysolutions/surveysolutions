@@ -5,15 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{77572D67-D00D-4E26-B2E2-6B7FAEA92416}</ProjectGuid>
+    <ProjectGuid>{5F8613D4-A556-4826-8D69-9918808B113E}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.GenericSubdomains.Rest.Android</RootNamespace>
-    <AssemblyName>WB.Core.GenericSubdomains.Rest.Android</AssemblyName>
+    <RootNamespace>WB.Core.SharedKernel.Utils.Android</RootNamespace>
+    <AssemblyName>WB.Core.SharedKernel.Utils.Android</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,8 +24,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,59 +32,49 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\portable-net40+sl5+wp80+win8+monotouch+monoandroid\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
-    <Reference Include="RestSharp.MonoDroid, Version=104.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AndroidNetworkService.cs" />
-    <Compile Include="AndroidRestServiceWrapper.cs" />
-    <Compile Include="AndroidRestServiceWrapperFactory.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Compression\GZipJsonCompressor.cs">
+      <Link>Compression\GZipJsonCompressor.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Compression\IStringCompressor.cs">
+      <Link>Compression\IStringCompressor.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\FileSizeUtils.cs">
+      <Link>FileSizeUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Serialization\IJsonUtils.cs">
+      <Link>Serialization\IJsonUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\WB.Core.SharedKernel.Utils\Serialization\NewtonJsonUtils.cs">
+      <Link>Serialization\NewtonJsonUtils.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RestAndroidModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\AboutResources.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Values\Strings.xml" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
-      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
-      <Name>AndroidNinject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils.Android\WB.Core.SharedKernel.Utils.Android.csproj">
-      <Project>{5f8613d4-a556-4826-8d69-9918808b113e}</Project>
-      <Name>WB.Core.SharedKernel.Utils.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
-      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rest\WB.Core.GenericSubdomains.Rest.csproj">
-      <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
-      <Name>WB.Core.GenericSubdomains.Rest</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="39aebc09-5a81-47c8-b68d-4984199ae1fe" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
