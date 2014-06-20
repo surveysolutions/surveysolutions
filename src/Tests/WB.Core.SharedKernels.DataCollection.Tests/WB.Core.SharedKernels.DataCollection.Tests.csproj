@@ -206,6 +206,7 @@
     <Compile Include="InterviewTests\when_reevaluating_interview_with_mandatory_question_inside_recently_enabled_group.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_custom_enablement_condition.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression.cs" />
+    <Compile Include="InterviewTests\when_revalidating_interview_with_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_answer_is_empty_set.cs" />
     <Compile Include="InterviewTests\when_roster_row_with_nested_roster_is_removed.cs" />
     <Compile Include="InterviewTests\when_reevaluating_interview_with_recently_enabled_mandatory_question.cs" />
     <Compile Include="InterviewTests\when_roster_size_question_of_neted_roster_increase_row_count_but_row_is_disabled.cs" />
