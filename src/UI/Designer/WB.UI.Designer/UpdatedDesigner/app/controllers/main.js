@@ -138,15 +138,17 @@
                         var movedItem = event.source.nodeScope.item;
                         var destItem = event.dest.nodesScope.item;
                         var destGroupId = destItem ? destItem.itemId : $scope.questionnaire.chapters[0].itemId;
-                        var putItem = function(item, parent, index) {
-                            questionnaireService.removeItem($scope.items, item.itemId);
+                        var putItem = function (item, parent, index) {
+                            var dropFrom = item.parent || $scope;
+
+                            dropFrom.items.splice(_.indexOf(dropFrom.items, item), 1);
                             var itemsToAddTo = _.isNull(parent) ? $scope.items : parent.items;
                             itemsToAddTo.splice(index, 0, item);
 
                             connectTree();
                         };
 
-                        if (event.dest.destNode !== event.source.sourceNode || event.dest.index !== event.source.index) {
+                        if (event.dest.destNode !== event.source.nodeScope || event.dest.index !== event.source.index) {
                             if ($scope.isQuestion(movedItem)) {
                                 questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId)
                                     .success(function(data) {
