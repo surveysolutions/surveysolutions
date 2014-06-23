@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IJsonUtils jsonUtils;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
-        private readonly HttpMessageHandler httpMessageHandler;
+        private readonly Func<HttpMessageHandler> httpMessageHandler;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
             IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
-            HttpMessageHandler httpMessageHandler)
+            Func<HttpMessageHandler> httpMessageHandler)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -351,7 +351,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void SendInterviewData(Guid interviewId, string interviewData)
         {
-            using (var client = new HttpClient(this.httpMessageHandler).AppendAuthToken(this.settings))
+            using (var client = new HttpClient(this.httpMessageHandler()).AppendAuthToken(this.settings))
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, this.settings.InterviewsPushUrl) {
                     Content = new StringContent(interviewData)

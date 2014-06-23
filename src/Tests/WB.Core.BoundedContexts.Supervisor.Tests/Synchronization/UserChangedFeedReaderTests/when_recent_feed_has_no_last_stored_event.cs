@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFe
       ""EntryId"": ""preLastArchiveEntry""
       }");
 
-            feedReader = Create.UserChangedFeedReader(messageHandler: handler.Object,
+            feedReader = Create.UserChangedFeedReader(messageHandler: () => handler.Object,
                 settings: settings);
         };
 
