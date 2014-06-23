@@ -62,7 +62,7 @@
         <tbody data-bind="foreach: ListView.Items">
             <tr>
                 <td>
-                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + User.Id() }, text: User.Name"></a>
+                    <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + User.Id() }, text: User.Name"></a>
                 </td>
                 <!-- ko foreach:CountersByTemplate -->
                 <td data-bind="text: Count"></td>
