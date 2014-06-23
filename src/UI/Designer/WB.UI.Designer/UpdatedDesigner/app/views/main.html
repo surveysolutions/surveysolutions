@@ -124,7 +124,7 @@
 
             </div>
 
-            <div ng-class="{hidden: collapsed}" ui-tree-nodes="item.items" ng-model="item.items">
+            <div ng-hide="collapsed" class="slide" ui-tree-nodes="item.items" ng-model="item.items">
                 <div ng-repeat="item in item.items | filter:search.searchText" ui-tree-node ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
                 </div>
             </div>
