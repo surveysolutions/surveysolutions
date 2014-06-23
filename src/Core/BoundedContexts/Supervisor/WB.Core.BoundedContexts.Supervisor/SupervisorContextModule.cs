@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using Ninject.Activation;
 using Ninject.Modules;
 using Quartz;
@@ -50,7 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor
 
             this.Bind<IEventHandler>().To<ReadyToSendToHeadquartersInterviewDenormalizer>().InSingletonScope();
 
-            this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
+            this.Bind<Func<HttpMessageHandler>>().ToMethod(x=> () => new HttpClientHandler());
         }
     }
 }

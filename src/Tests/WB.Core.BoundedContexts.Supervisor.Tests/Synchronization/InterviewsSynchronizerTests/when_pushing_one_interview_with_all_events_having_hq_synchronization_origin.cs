@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryWriter: readyToSendInterviewsRepositoryWriter,
-                httpMessageHandler: httpMessageHandlerMock.Object,
+                httpMessageHandler: () => httpMessageHandlerMock.Object,
                 eventStore: eventStore,
                 logger: loggerMock.Object,
                 commandService: commandServiceMock.Object);
