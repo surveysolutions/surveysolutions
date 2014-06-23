@@ -15,6 +15,7 @@ namespace WB.UI.Headquarters.API.Resources
 {
     [TokenValidationAuthorization]
     [RoutePrefix("api/resources/interviews/v1")]
+    [HeadquarterFeatureOnly]
     public class InterviewsResourceController : ApiController
     {
         private readonly IReadSideRepositoryReader<ViewWithSequence<InterviewData>> interviewDataReader;

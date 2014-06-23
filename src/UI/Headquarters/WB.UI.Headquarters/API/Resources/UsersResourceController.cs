@@ -14,6 +14,7 @@ namespace WB.UI.Headquarters.API.Resources
 {
     [TokenValidationAuthorizationAttribute]
     [RoutePrefix("api/resources/users/v1")]
+    [HeadquarterFeatureOnly]
     public class UsersResourceController : ApiController
     {
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
