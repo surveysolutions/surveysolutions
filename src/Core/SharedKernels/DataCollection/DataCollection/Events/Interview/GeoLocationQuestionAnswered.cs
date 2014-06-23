@@ -10,14 +10,17 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public double Longitude { get; private set; }
         public double Accuracy { get; private set; }
 
+        public double Altitude { get; private set; }
+
         public GeoLocationQuestionAnswered(Guid userId, Guid questionId, decimal[] propagationVector, DateTime answerTime,
-            double latitude, double longitude, double accuracy, DateTimeOffset timestamp) 
+            double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp) 
             : base(userId, questionId, propagationVector, answerTime)
         {
             this.Latitude = latitude;
             this.Longitude = longitude;
             this.Accuracy = accuracy;
             this.Timestamp = timestamp;
+            this.Altitude = altitude;
         }
     }
 }

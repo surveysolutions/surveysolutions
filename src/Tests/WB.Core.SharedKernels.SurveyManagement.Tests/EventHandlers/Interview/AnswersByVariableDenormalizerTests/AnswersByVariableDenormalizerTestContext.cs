@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.AnswersByVa
 
         protected static IPublishedEvent<GeoLocationQuestionAnswered> CreateGeoLocationQuestionAnsweredEvent(Guid interviewId, Guid? userId = null, Guid? questionId = null,
             decimal[] propagationVector = null, DateTime? answerTime = null, double? latitude = null, double? longitude = null,
-            double? accuracy = null, DateTimeOffset? timestamp = null)
+            double? accuracy = null, double? altitude = null, DateTimeOffset? timestamp = null)
         {
             return ToPublishedEvent(new GeoLocationQuestionAnswered(
                 userId ?? Guid.NewGuid(),
@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.AnswersByVa
                 latitude ?? 0,
                 longitude ?? 0,
                 accuracy ?? 0,
+                altitude ?? 0,
                 timestamp ?? new DateTimeOffset(DateTime.Now)
                 ), 1, interviewId);
         }
