@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -14,16 +15,8 @@ using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 
 namespace WB.Tools.ConsoleTranslator
 {
-    class Program
+    internal class Program
     {
-        struct Entry
-        {
-            public string Variable { get; set; }
-            public string Code { get; set; }
-            public string InitialLanguage { get; set; }
-            public string TargetLanguage { get; set; }
-        }
-
         private static readonly Dictionary<string, Tuple<string, Action<string[]>>> Actions = new Dictionary<string, Tuple<string, Action<string[]>>>
         {
             {
@@ -36,6 +29,11 @@ namespace WB.Tools.ConsoleTranslator
                     "questionnaire.json translation-template.csv",
                     args => GetCsvTemplate(args[1], args[2]))
             },
+            {
+                "translate", Tuple.Create<string, Action<string[]>>(
+                    "intial-questionnaire.json translation.csv target-questionnaire.json",
+                    args => Translate(args[1], args[2], args[3]))
+            },
         };
 
         static void Main(string[] args)
@@ -43,11 +41,12 @@ namespace WB.Tools.ConsoleTranslator
             Bootstrap();
 
             string inputQuestionnairePath = @"C:\Users\Anatoliy\Desktop\PERCEPTIONS OF INEQUALITY AND ASPIRED ECONOMIC MOBILITY IN NEPAL (SECOND VERSION).tmpl";
-            string outputCsvPath = @"C:\Users\Anatoliy\Desktop\PERCEPTIONS OF INEQUALITY.csv";
+            string csvPath = @"C:\Users\Anatoliy\Desktop\PERCEPTIONS OF INEQUALITY.csv";
+            string targetQuestionnairePath = @"C:\Users\Anatoliy\Desktop\Translated PERCEPTIONS OF INEQUALITY AND ASPIRED ECONOMIC MOBILITY IN NEPAL (SECOND VERSION).tmpl";
 
             if (args.Length == 0)
             {
-                args = new [] { "get-template", inputQuestionnairePath, outputCsvPath };
+                args = new [] { "translate", inputQuestionnairePath, csvPath, targetQuestionnairePath };
             }
 
             try
@@ -77,11 +76,22 @@ namespace WB.Tools.ConsoleTranslator
 
         private static void GetCsvTemplate(string inputQuestionnairePath, string outputCsvPath)
         {
-            QuestionnaireDocument questionnaire = LoadQuestionnaire(inputQuestionnairePath);
+            QuestionnaireDocument questionnaire = LoadQuestionnaireFromJsonFile(inputQuestionnairePath);
 
-            var entries = ExtractEntriesFromQuestionaire(questionnaire).ToList();
+            List<Entry> entries = ExtractEntriesFromQuestionaire(questionnaire).ToList();
 
             WriteEntriesToCsv(entries, outputCsvPath);
+        }
+
+        private static void Translate(string inputQuestionnairePath, string translationCsvPath, string targetQuestionairePath)
+        {
+            QuestionnaireDocument questionnaire = LoadQuestionnaireFromJsonFile(inputQuestionnairePath);
+
+            List<Entry> entries = ExtractEntriesFromCsvFile(translationCsvPath).ToList();
+
+            TranslateQuestionnaire(questionnaire, entries);
+
+            WriteQuestionnaireToJsonFile(questionnaire, targetQuestionairePath);
         }
 
         private static void Bootstrap()
@@ -116,32 +126,84 @@ namespace WB.Tools.ConsoleTranslator
             }
         }
 
+        private static void TranslateQuestionnaire(QuestionnaireDocument questionnaire, List<Entry> entries)
+        {
+            int translatedQuestions = 0;
+            int skippedQuestions = 0;
+            int translatedOptions = 0;
+            int skippedOptions = 0;
+
+            foreach (var question in questionnaire.GetAllQuestions<IQuestion>())
+            {
+                Entry questionEntry = entries.GetQuestionEntry(question.StataExportCaption);
+
+                if (questionEntry.HasTranslation())
+                {
+                    question.QuestionText = questionEntry.TargetLanguage;
+                    translatedQuestions++;
+                }
+                else
+                {
+                    skippedQuestions++;
+                }
+
+                foreach (var answerOption in question.Answers)
+                {
+                    Entry answerOptionEntry = entries.GetAnswerOptionEntry(question.StataExportCaption, answerOption.AnswerValue);
+
+                    if (answerOptionEntry.HasTranslation())
+                    {
+                        answerOption.AnswerText = answerOptionEntry.TargetLanguage;
+                        translatedOptions++;
+                    }
+                    else
+                    {
+                        skippedOptions++;
+                    }
+                }
+            }
+
+            Console.WriteLine("Questions translated: {0}", translatedQuestions);
+            Console.WriteLine("Questions skipped: {0}", skippedQuestions);
+            Console.WriteLine("Options translated: {0}", translatedOptions);
+            Console.WriteLine("Options skipped: {0}", skippedOptions);
+        }
+
         private static void WriteEntriesToCsv(List<Entry> entries, string path)
         {
             var fileSystemAccessor = new FileSystemIOAccessor();
 
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(path, true))
             using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-            using (var writer = new CsvWriter(streamWriter))
+            using (var csvWriter = new CsvWriter(streamWriter))
             {
-                writer.WriteRecord<Entry>(new Entry
-                {
-                    Variable = "variable",
-                    Code = "code",
-                    InitialLanguage = "initial_language",
-                    TargetLanguage = "target_language",
-                });
+                csvWriter.WriteHeader<Entry>();
 
                 foreach (var entry in entries)
                 {
-                    writer.WriteRecord<Entry>(entry);
+                    csvWriter.WriteRecord<Entry>(entry);
                 }
 
                 streamWriter.Flush();
             }
         }
 
-        private static QuestionnaireDocument LoadQuestionnaire(string path)
+        private static IEnumerable<Entry> ExtractEntriesFromCsvFile(string path)
+        {
+            var fileSystemAccessor = new FileSystemIOAccessor();
+
+            using (var fileStream = fileSystemAccessor.ReadFile(path))
+            using (var streamReader = new StreamReader(fileStream))
+            using (var csvReader = new CsvReader(streamReader))
+            {
+                while (csvReader.Read())
+                {
+                    yield return csvReader.GetRecord<Entry>();
+                }
+            }
+        }
+
+        private static QuestionnaireDocument LoadQuestionnaireFromJsonFile(string path)
         {
             string fileContent = File.OpenText(path).ReadToEnd();
 
@@ -151,6 +213,19 @@ namespace WB.Tools.ConsoleTranslator
             questionaire.PublicKey = Guid.NewGuid();
 
             return questionaire;
+        }
+
+        private static void WriteQuestionnaireToJsonFile(QuestionnaireDocument questionnaire, string path)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+                Formatting = Formatting.Indented,
+            };
+
+            string fileContent = JsonConvert.SerializeObject(questionnaire, settings);
+
+            File.WriteAllText(path, fileContent, Encoding.UTF8);
         }
     }
 }
