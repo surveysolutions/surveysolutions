@@ -281,7 +281,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
                 new GeoPosition(latitude: evnt.Payload.Latitude, longitude: evnt.Payload.Longitude,
-                    accuracy: evnt.Payload.Accuracy, timestamp: evnt.Payload.Timestamp));
+                    accuracy: evnt.Payload.Accuracy, altitude:evnt.Payload.Altitude, 
+                    timestamp: evnt.Payload.Timestamp));
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)

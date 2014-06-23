@@ -1496,15 +1496,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
-        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, DateTimeOffset timestamp)
+        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, 
+            double accuracy, double altitude, DateTimeOffset timestamp)
         {
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
             InterviewChanges interviewChanges = CalculateInterviewChangesOnAnswerGeoLocationQuestion(this.interviewState, userId, questionId,
-                rosterVector, answerTime, latitude, longitude, accuracy, timestamp,
-                answeredQuestion, questionnaire);
+                rosterVector, answerTime, latitude, longitude, accuracy, altitude, timestamp, answeredQuestion, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1558,7 +1558,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerGeoLocationQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, DateTimeOffset timestamp, Identity answeredQuestion,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp, Identity answeredQuestion,
             IQuestionnaire questionnaire)
         {
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
@@ -1566,7 +1566,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answerChanges = new List<AnswerChange>()
             {
-                new AnswerChange( AnswerChangeType.GeoLocation, userId, questionId, rosterVector, answerTime, new GeoLocationPoint(latitude, longitude, accuracy, timestamp))
+                new AnswerChange( AnswerChangeType.GeoLocation, userId, questionId, rosterVector, answerTime, new GeoLocationPoint(latitude, longitude, accuracy, altitude, timestamp))
             };
 
             string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
@@ -1952,7 +1952,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.GpsCoordinates:
                         var geoPosition = (GeoPosition)answer;
                         this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, rosterVector, synchronizationTime,
-                            geoPosition.Latitude, geoPosition.Longitude, geoPosition.Accuracy, geoPosition.Timestamp));
+                            geoPosition.Latitude, geoPosition.Longitude, geoPosition.Accuracy, geoPosition.Altitude,
+                            geoPosition.Timestamp));
                         break;
 
                     case QuestionType.QRBarcode:
@@ -2283,7 +2284,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case AnswerChangeType.GeoLocation:
                         var geoPosition = (GeoLocationPoint)change.Answer;
                         this.ApplyEvent(new GeoLocationQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, geoPosition.Latitude, geoPosition.Longitude,
-                            geoPosition.Accuracy, geoPosition.Timestamp));
+                            geoPosition.Accuracy, geoPosition.Altitude, geoPosition.Timestamp));
                         break;
 
                     default:
@@ -2768,7 +2769,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         interviewChanges =
                             this.CalculateInterviewChangesOnAnswerGeoLocationQuestion(changeStructures.State, userId, questionId,
                                 currentQuestionRosterVector, answersTime, geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy,
-                                geoAnswer.Timestamp, answeredQuestion, questionnaire);
+                                geoAnswer.Altitude, geoAnswer.Timestamp, answeredQuestion, questionnaire);
                         break;
                     case QuestionType.TextList:
                         interviewChanges =
