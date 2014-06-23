@@ -144,7 +144,7 @@ namespace WB.UI.Headquarters
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new HeadquartersBoundedContextModule(),
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled),
                 new SurveyManagementSharedKernelModule(
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
@@ -170,6 +170,9 @@ namespace WB.UI.Headquarters
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .WhenControllerHas<TokenValidationAuthorizationAttribute>();
+
+            kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(System.Web.Http.Filters.FilterScope.Controller)
+               .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
 
             if (LegacyOptions.SupervisorFunctionsEnabled)
             {

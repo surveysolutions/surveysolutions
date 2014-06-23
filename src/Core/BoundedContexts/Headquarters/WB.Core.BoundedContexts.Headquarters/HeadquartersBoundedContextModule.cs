@@ -8,10 +8,20 @@ namespace WB.Core.BoundedContexts.Headquarters
 {
     public class HeadquartersBoundedContextModule : NinjectModule
     {
+        private readonly bool supervisorFunctionsEnabled;
+
+        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled)
+        {
+            this.supervisorFunctionsEnabled = supervisorFunctionsEnabled;
+        }
+
         public override void Load()
         {
-            this.Bind<IVersionedQuestionnaireReader>().To<VersionedQustionnaireDocumentViewFactory>();
-            this.Kernel.RegisterDenormalizer<InterviewsFeedDenormalizer>();
+            if (!supervisorFunctionsEnabled)
+            {
+                this.Bind<IVersionedQuestionnaireReader>().To<VersionedQustionnaireDocumentViewFactory>();
+                this.Kernel.RegisterDenormalizer<InterviewsFeedDenormalizer>();
+            }
         }
     }
 }
