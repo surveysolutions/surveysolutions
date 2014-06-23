@@ -186,7 +186,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.SelectedValues;
-            this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            if (@event.SelectedValues.Length != 0)
+            {
+                this.interviewState.AnsweredQuestions.Add(questionKey);
+            }
+            else
+            {
+                this.interviewState.AnsweredQuestions.Remove(questionKey);
+            }
         }
 
         internal void Apply(GeoLocationQuestionAnswered @event)
