@@ -2,11 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Newtonsoft.Json.Linq;
-using Raven.Client.Linq.Indexing;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation;
 
@@ -19,7 +15,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IAtomFeedReader atomReader;
 
         public UserChangedFeedReader(HeadquartersSettings headquartersSettings, 
-            HttpMessageHandler messageHandler,
+            Func<HttpMessageHandler> messageHandler,
             HeadquartersPullContext headquartersPullContext)
         {
             if (headquartersSettings == null) throw new ArgumentNullException("headquartersSettings");

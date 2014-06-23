@@ -12,11 +12,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
 {
     internal class AtomFeedReader : IAtomFeedReader
     {
-        private readonly HttpMessageHandler messageHandler;
+        private readonly Func<HttpMessageHandler> messageHandler;
         private readonly HeadquartersSettings headquartersSettings;
         private const string AtomXmlNamespace = "http://www.w3.org/2005/Atom";
 
-        public AtomFeedReader(HttpMessageHandler messageHandler, HeadquartersSettings settings)
+        public AtomFeedReader(Func<HttpMessageHandler> messageHandler, HeadquartersSettings settings)
         {
             if (messageHandler == null) throw new ArgumentNullException("messageHandler");
             this.messageHandler = messageHandler;
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
 
         public async Task<IEnumerable<AtomFeedEntry<T>>> ReadAfterAsync<T>(Uri feedUri, string lastReceivedEntryId)
         {
-            using (var client = new HttpClient(this.messageHandler))
+            using (var client = new HttpClient(this.messageHandler()))
             {
                 client.AppendAuthToken(this.headquartersSettings);
 
