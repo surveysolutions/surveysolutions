@@ -273,6 +273,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
+    <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
     <Compile Include="Code\Security\ITokenVerifier.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
