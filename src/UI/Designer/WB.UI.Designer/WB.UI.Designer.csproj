@@ -689,12 +689,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils-ieshiv.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.min.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-underscore\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-underscore\angular-underscore.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-underscore\angular-underscore.min.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-underscore\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-underscore\package.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-underscore\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular\angular-csp.css" />
     <Content Include="UpdatedDesigner\vendor\angular\angular.js" />
@@ -928,6 +922,13 @@
     <Content Include="UpdatedDesigner\vendor\json3\lib\json3.min.js" />
     <Content Include="UpdatedDesigner\vendor\json3\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\json3\README.md" />
+    <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.compat.js" />
+    <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.compat.min.js" />
+    <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.js" />
+    <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.min.js" />
+    <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.js" />
+    <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.min.js" />
+    <Content Include="UpdatedDesigner\vendor\lodash\LICENSE.txt" />
     <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.concat.min.js" />
     <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.css" />
@@ -993,15 +994,6 @@
     <Content Include="UpdatedDesigner\vendor\prettycheckable\img\sprites\L-radio-checked-disabled.png" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\package.json" />
     <Content Include="UpdatedDesigner\vendor\prettycheckable\README.md" />
-    <Content Include="UpdatedDesigner\vendor\underscore\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\underscore\.editorconfig" />
-    <Content Include="UpdatedDesigner\vendor\underscore\.gitignore" />
-    <Content Include="UpdatedDesigner\vendor\underscore\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\underscore\component.json" />
-    <Content Include="UpdatedDesigner\vendor\underscore\LICENSE" />
-    <Content Include="UpdatedDesigner\vendor\underscore\package.json" />
-    <Content Include="UpdatedDesigner\vendor\underscore\README.md" />
-    <Content Include="UpdatedDesigner\vendor\underscore\underscore.js" />
     <Content Include="Views\Questionnaire\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1146,6 +1138,8 @@
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\README.md" />
     <Content Include="UpdatedDesigner\vendor\pines-notify\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\pines-notify\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\lodash\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\lodash\bower.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
