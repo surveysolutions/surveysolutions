@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.UserChangedFe
       ""EntryId"": ""preLastEntry""
       }");
 
-            feedReader = Create.UserChangedFeedReader(messageHandler: handler.Object);
+            feedReader = Create.UserChangedFeedReader(messageHandler: () => handler.Object);
         };
 
         private Because of = () => feedEntries = feedReader.ReadAfterAsync(lastStoredEntry).Result;
