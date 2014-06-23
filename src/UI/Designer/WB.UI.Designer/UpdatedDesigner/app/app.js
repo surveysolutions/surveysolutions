@@ -6,7 +6,6 @@
         'ngResource',
         'ngSanitize',
         'ngRoute',
-        'angular-underscore',
         'ui.bootstrap',
         'ui.bootstrap.tpls',
         'ui.bootstrap.transition',
