@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 interviewSummaryRepositoryWriter: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,
                 jsonUtils: jsonUtils,
-                httpMessageHandler: httpMessageHandler);
+                httpMessageHandler: () => httpMessageHandler);
         };
 
         Because of = () =>
