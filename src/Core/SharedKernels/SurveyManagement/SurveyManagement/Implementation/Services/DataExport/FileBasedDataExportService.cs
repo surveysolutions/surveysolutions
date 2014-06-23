@@ -110,6 +110,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel, interviewExportedDataFileName,
                     this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, contentOfAdditionalFileName));
             }
+
+            this.dataFileExportService.CreateHeaderForActionFile(this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
         }
 
         public void AddExportedDataByInterview(InterviewDataExportView interviewDataExportView)
@@ -128,6 +130,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
                 this.dataFileExportService.AddRecord(interviewDataExportLevelView, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName)));
             }
+        }
+
+        public void AddInterviewAction(InterviewActionExportView interviewActionExportView)
+        {
+            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(interviewActionExportView.TemplateId, interviewActionExportView.TemplateVersion);
+
+            this.ThrowArgumentExceptionIfDataFolderMissing(interviewActionExportView.TemplateId, interviewActionExportView.TemplateVersion, dataFolderForTemplatePath);
+
+            this.dataFileExportService.AddActionRecord(interviewActionExportView, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
         }
 
         private void ThrowArgumentExceptionIfDataFolderMissing(Guid questionnaireId, long version, string dataDirectoryPath)

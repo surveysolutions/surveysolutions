@@ -1835,7 +1835,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored, comment: null));
         }
 
-        public void Complete(Guid userId, string comment)
+        public void Complete(Guid userId, string comment, DateTime completeTime)
         {
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
@@ -1843,7 +1843,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             /*IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);*/
             bool isInterviewInvalid = this.HasInvalidAnswers() /*|| this.HasNotAnsweredMandatoryQuestions(questionnaire)*/;
 
-            this.ApplyEvent(new InterviewCompleted(userId));
+            this.ApplyEvent(new InterviewCompleted(userId, completeTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
             this.ApplyEvent(isInterviewInvalid
@@ -1851,11 +1851,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : new InterviewDeclaredValid() as object);
         }
 
-        public void Restart(Guid userId, string comment)
+        public void Restart(Guid userId, string comment, DateTime restartTime)
         {
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
 
-            this.ApplyEvent(new InterviewRestarted(userId));
+            this.ApplyEvent(new InterviewRestarted(userId, restartTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment));
         }
 

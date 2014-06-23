@@ -25,14 +25,14 @@ namespace WB.UI.Capi.Implementations.Fragments
             if (this.Model.Status == InterviewStatus.Completed)
             {
                 CapiApplication.CommandService.Execute(
-                    new RestartInterviewCommand(this.Model.PublicKey, CapiApplication.Membership.CurrentUser.Id, this.etComments.Text));
+                    new RestartInterviewCommand(this.Model.PublicKey, CapiApplication.Membership.CurrentUser.Id, this.etComments.Text, DateTime.UtcNow));
 
                 logManipulator.CreateOrReopenDraftRecord(this.Model.PublicKey);
             }
             else
             {
                 CapiApplication.CommandService.Execute(
-                    new CompleteInterviewCommand(this.Model.PublicKey, CapiApplication.Membership.CurrentUser.Id, this.etComments.Text));
+                    new CompleteInterviewCommand(this.Model.PublicKey, CapiApplication.Membership.CurrentUser.Id, this.etComments.Text, DateTime.UtcNow));
 
                 logManipulator.CloseDraftRecord(this.Model.PublicKey);
             }

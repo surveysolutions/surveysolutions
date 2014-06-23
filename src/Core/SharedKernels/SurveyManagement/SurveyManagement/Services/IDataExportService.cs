@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
     {
         string GetFilePathToExportedCompressedData(Guid questionnaireId, long version);
         void AddExportedDataByInterview(InterviewDataExportView interviewDataExportView);
+        void AddInterviewAction(InterviewActionExportView interviewActionExportView);
         void CreateExportedDataStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure);
     }
 }
