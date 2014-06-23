@@ -546,7 +546,7 @@ namespace CapiDataGenerator
             {
                 var interview = interviews.ElementAt(z);
 
-                commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value, "auto complete comment"));
+                commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value, "auto complete comment", DateTime.Now));
 
                 if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor ||
                     AppSettings.Instance.CurrentMode == GenerationMode.DataSplitOnCapiCreatedAndSupervisor)

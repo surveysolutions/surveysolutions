@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             interview.AssignInterviewer(supervisorId, userId);
-            interview.Complete(userId, string.Empty);
+            interview.Complete(userId, string.Empty, DateTime.Now);
             interview.Approve(userId, string.Empty);
 
             eventContext = new EventContext();
