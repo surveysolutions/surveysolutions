@@ -24,9 +24,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="@Url.Action("Index", "HQ")">
-                    Headquarters
-                </a>
+                @if (User.IsInRole("Headquarter"))
+                {
+                    <a class="navbar-brand" href="@Url.Action("Index", "HQ")">Headquarters</a>
+                }
+                else
+                {
+                    <a class="navbar-brand" href="@Url.Action("Index", "Survey")">Supervisor</a>
+                }
             </div>
             <div class="collapse navbar-collapse">
 
