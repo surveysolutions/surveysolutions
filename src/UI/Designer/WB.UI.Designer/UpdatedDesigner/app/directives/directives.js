@@ -33,7 +33,7 @@
                 }
 
                 function toUser(array) {
-                    if (angular.isUndefined(array))
+                    if (!_.isArray(array))
                         return null;
                     return array.join("\n");
                 }

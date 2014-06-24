@@ -153,10 +153,10 @@
                         "description": roster.description,
                         "condition": roster.enablementCondition,
                         "isRoster": true,
-                        "rosterSizeQuestionId": null,
+                        "rosterSizeQuestionId": roster.rosterSizeQuestionId,
                         "rosterSizeSource": roster.rosterSizeSourceType,
                         "rosterFixedTitles": roster.rosterFixedTitles,
-                        "rosterTitleQuestionId": null
+                        "rosterTitleQuestionId": roster.rosterTitleQuestionId
                     };
 
                     return commandCall("UpdateGroup", command);

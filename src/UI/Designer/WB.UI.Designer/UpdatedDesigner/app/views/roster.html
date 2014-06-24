@@ -7,16 +7,19 @@
 
     <form role="form" name="editRosterForm">
         <div class="form-group">
-            <select class="form-control input-lg" ng-model="activeRoster.rosterSizeSourceType">
-                <option value="Question">Answer to numeric question</option>
-                <option value="Question">Answer to list question</option>
-                <option value="FixedTitles">Manual list</option>
+            <select class="form-control input-lg" ng-model="activeRoster.rosterTemplate" ng-change="updateRosterType()">
+                <option value="Numeric-template.html">Answer to numeric question</option>
+                <option value="List-template.html">Answer to list question</option>
+                <option value="FixedTitles-template.html">Manual list</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
             <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.title">
+        </div>
+        
+        <div ng-include="activeRoster.rosterTemplate" ng-if="activeRoster.rosterSizeSourceType != undefined">
         </div>
 
         <div class="form-group">
@@ -29,11 +32,9 @@
             <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.enablementCondition">
         </div>
         
-        <div ng-include="activeRoster.rosterSizeSourceType + '-template.html'" ng-if="activeRoster.rosterSizeSourceType != undefined">
-        </div>
-
     </form>
 </div>
+
 <div class="form-buttons-holder">
     <div class="pull-left">
         <button id="edit-roster-save-button" class="btn btn-lg btn-primary" ng-click="saveRoster()">Save</button>
@@ -45,10 +46,17 @@
     </div>
 </div>
 
-<script type="text/ng-template" id="Question-template.html">
+<script type="text/ng-template" id="List-template.html">
     <div class="form-group">
         <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
-        <select id="edit-roster-numeric-source" class="form-control input-lg" ng-model="activeRoster.source" ng-options="n.title for n in activeRoster.numerics"></select>
+        <select id="edit-roster-numeric-source" class="form-control input-lg" ng-model="activeRoster.rosterSizeQuestionId" ng-options="item.id as item.title for item in activeRoster.lists"></select>
+    </div>
+</script>
+
+<script type="text/ng-template" id="Numeric-template.html">
+    <div class="form-group">
+        <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
+        <select id="edit-roster-numeric-source" class="form-control input-lg" ng-model="activeRoster.source" ng-options="numeric.id as numeric.title for numeric in activeRoster.numerics"></select>
 
         <label for="edit-roster-numeric-titles" class="wb-label">Titles for rows (optional): <span>(<a>?</a>)</span></label><br>
         <select id="edit-roster-numeric-titles" class="form-control input-lg"></select>
