@@ -64,7 +64,7 @@
                 <li ng-repeat="chapter in questionnaire.chapters" ui-tree-node ng-class="{current: currentChapterId == chapter.itemId}" ng-click="changeChapter(chapter);">
                     <div class="holder">
                         <div class="inner">
-                            <a class="handler" ui-tree-handle style="display: block">+</a>
+                            <a class="handler" ui-tree-handle style="display: none">+</a>
                             <h1>{{chapter.title}}</h1>
                             <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
                                 <a class="dropdown-toggle" data-toggle="dropdown"></a>
