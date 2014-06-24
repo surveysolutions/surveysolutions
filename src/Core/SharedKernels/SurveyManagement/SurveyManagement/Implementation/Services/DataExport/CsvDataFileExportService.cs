@@ -68,6 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     writer.WriteField(interviewActionExportView.InterviewId);
                     writer.WriteField(interviewActionExportView.Action);
                     writer.WriteField(interviewActionExportView.Originator);
+                    writer.WriteField(interviewActionExportView.Role);
                     writer.WriteField(interviewActionExportView.Timestamp.ToString("d", CultureInfo.InvariantCulture));
                     writer.WriteField(interviewActionExportView.Timestamp.ToString("T", CultureInfo.InvariantCulture));
 
@@ -123,6 +124,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 writer.WriteField("Id");
                 writer.WriteField("Action");
                 writer.WriteField("Originator");
+                writer.WriteField("Role");
                 writer.WriteField("Date");
                 writer.WriteField("Time");
 

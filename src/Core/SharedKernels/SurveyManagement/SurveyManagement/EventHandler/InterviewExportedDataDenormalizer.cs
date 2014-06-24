@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         IEventHandler
     {
+        private const string UnknownUserRole = "<UNKNOWN ROLE>";
         private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -94,10 +95,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (interviewActionLog == null)
                 return;
 
-            var userName = this.GetUserName(evnt.Payload.UserId);
+            UserDocument responsible = this.users.GetById(evnt.Payload.UserId);
+            var userName = this.GetUserName(responsible);
 
             interviewActionLog.Actions.Add(CreateInterviewActionExportView(evnt.EventSourceId, InterviewExportedAction.ApproveByHeadquarter,
-                userName, evnt.EventTimeStamp));
+                userName, this.GetUserRole(responsible), evnt.EventTimeStamp));
 
             this.dataExportService.AddInterviewActions(interview.Document.QuestionnaireId,
                 interview.Document.QuestionnaireVersion, interviewActionLog.Actions);
@@ -211,9 +213,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector));
         }
 
-        private string GetUserName(Guid userId)
+        private string GetUserName(UserDocument responsible)
         {
-            UserDocument responsible = this.users.GetById(userId);
             var userName = responsible != null ? responsible.UserName : "<UNKNOWN USER>";
             return userName;
         }
@@ -224,9 +225,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (interviewActionLog == null)
                 return;
 
-            var userName = this.GetUserName(userId);
+            UserDocument responsible = this.users.GetById(userId);
+            var userName = this.GetUserName(responsible);
 
-            interviewActionLog.Actions.Add(CreateInterviewActionExportView(interviewId, action, userName, timeStamp));
+            interviewActionLog.Actions.Add(CreateInterviewActionExportView(interviewId, action, userName, this.GetUserRole(responsible), timeStamp));
             interviewActionLogs.Store(interviewActionLog, interviewId);
         }
 
@@ -244,25 +246,44 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
 
             interviewActionLog.Actions.Add(CreateInterviewActionExportView(interviewId, InterviewExportedAction.FirstAnswerSet,
-                responsible.UserName, answerTime));
+                responsible.UserName, this.GetUserRole(responsible), answerTime));
 
             interviewActionLogs.Store(interviewActionLog, interviewId);
         }
 
-        private InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action, string userName,
+        private string GetUserRole(UserDocument user)
+        {
+            if (!user.Roles.Any())
+                return UnknownUserRole;
+            var firstRole = user.Roles.First();
+            switch (firstRole)
+            {
+                    case UserRoles.Operator:
+                    return "Interviewer";
+                    case UserRoles.Supervisor:
+                    return "Supervisor";
+                    case UserRoles.Headquarter:
+                    return "Headquarter";
+            }
+            return UnknownUserRole;
+        }
+
+        private InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action, string userName, string userRole,
             DateTime timestamp)
         {
-            return new InterviewActionExportView(interviewId.FormatGuid(), action, userName, timestamp);
+            return new InterviewActionExportView(interviewId.FormatGuid(), action, userName, timestamp, userRole);
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            var userName = this.GetUserName(evnt.Payload.UserId);
+            UserDocument responsible = this.users.GetById(evnt.Payload.UserId);
+            var userName = this.GetUserName(responsible);
             interviewActionLogs.Store(
                 new InterviewActionLog(evnt.EventSourceId,
                     new List<InterviewActionExportView>()
                     {
-                        CreateInterviewActionExportView(evnt.EventSourceId,InterviewExportedAction.SupervisorAssigned,userName,evnt.EventTimeStamp)
+                        CreateInterviewActionExportView(evnt.EventSourceId, InterviewExportedAction.SupervisorAssigned, userName,
+                            this.GetUserRole(responsible), evnt.EventTimeStamp)
                     }), evnt.EventSourceId);
         }
 

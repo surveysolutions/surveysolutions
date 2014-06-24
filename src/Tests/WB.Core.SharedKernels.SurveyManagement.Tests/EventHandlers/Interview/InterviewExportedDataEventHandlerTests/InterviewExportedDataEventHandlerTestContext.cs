@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -77,6 +78,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                 interviewDataStorageMock.Object,
                 questionnaireExportStructureMock.Object, dataExportService ?? Mock.Of<IDataExportService>(), userDocumentWriter.Object,
                 interviewActionLogWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewActionLog>>());
+        }
+
+        protected static InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action,string userName="test", string role="headquarter")
+        {
+            return new InterviewActionExportView(interviewId.FormatGuid(), action, userName, DateTime.Now, role);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(Dictionary<string,Guid> variableNameAndQuestionId)
