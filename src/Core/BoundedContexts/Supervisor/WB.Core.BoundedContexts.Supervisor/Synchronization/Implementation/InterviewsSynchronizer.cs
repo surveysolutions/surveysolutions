@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.executeCommand(new RejectInterviewFromHeadquartersCommand(interviewDetails.Id, 
                 userIdGuid, 
                 supervisorIdGuid, 
-                feedEntry.InterviewId != null ? (Guid?)Guid.Parse(feedEntry.InterviewerId) : null,
+                feedEntry.InterviewerId != null ? (Guid?)Guid.Parse(feedEntry.InterviewerId) : null,
                 interviewDetails, 
                 DateTime.Now, 
                 feedEntry.Comment));
