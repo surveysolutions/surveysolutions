@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.Synchronization.MetaInfo
@@ -44,7 +45,7 @@ namespace WB.Core.Synchronization.MetaInfo
                 if (answerOnFeaturedQuestion != null && answerOnFeaturedQuestion.Answer != null)
                 {
                     featuredQuestionList.Add(new FeaturedQuestionMeta(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
-                        answerOnFeaturedQuestion.Answer.ToString()));
+                        AnswerUtils.AnswerToString(answerOnFeaturedQuestion.Answer)));
                 }
             }
 
