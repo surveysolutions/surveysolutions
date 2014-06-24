@@ -6,13 +6,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -21,7 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
     [Subject(typeof(InterviewExportedDataDenormalizer))]
     internal class InterviewExportedDataEventHandlerTestContext
@@ -30,11 +29,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
             Func<QuestionnaireDocument> templateCreationAction,
-            Func<InterviewData> dataCreationAction = null, Action<InterviewDataExportView> returnStoredView = null)
+            Func<InterviewData> dataCreationAction = null, Action<InterviewDataExportView> returnStoredView = null,
+            UserDocument userDocument = null, IReadSideRepositoryWriter<InterviewActionLog> interviewActionLogWriter = null)
+        {
+            var dataExportService = new Mock<IDataExportService>();
+
+            if (returnStoredView != null)
+                dataExportService.Setup(x => x.AddExportedDataByInterview(Moq.It.IsAny<InterviewDataExportView>()))
+                    .Callback(returnStoredView);
+            return CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(templateCreationAction, dataCreationAction,
+                dataExportService.Object, userDocument, interviewActionLogWriter);
+        }
+
+        protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
+          Func<QuestionnaireDocument> templateCreationAction,
+          Func<InterviewData> dataCreationAction = null, IDataExportService dataExportService = null,
+          UserDocument userDocument = null, IReadSideRepositoryWriter<InterviewActionLog> interviewActionLogWriter = null)
         {
             var interviewDataStorageMock = new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
             var questionnaire = templateCreationAction();
-
 
             interviewDataStorageMock.Setup(
                 x => x.GetById(Moq.It.IsAny<string>()))
@@ -47,21 +60,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
                         return new ViewWithSequence<InterviewData>(interview, 1);
                     });
 
-
             var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
-            var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(), new QuestionnaireRosterStructureFactory());
+            var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
+                new QuestionnaireRosterStructureFactory());
             questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
                 .Returns(exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1));
 
-            var dataExportService = new Mock<IDataExportService>();
 
-            if (returnStoredView != null)
-                dataExportService.Setup(x => x.AddExportedDataByInterview(Moq.It.IsAny<InterviewDataExportView>()))
-                    .Callback<InterviewDataExportView>(returnStoredView);
+            var userDocumentWriter = new Mock<IReadSideRepositoryWriter<UserDocument>>();
+            if (userDocument != null)
+            {
+                userDocumentWriter.Setup(x => x.GetById(Moq.It.IsAny<string>())).Returns(userDocument);
+            }
 
             return new InterviewExportedDataDenormalizer(
                 interviewDataStorageMock.Object,
-                questionnaireExportStructureMock.Object, dataExportService.Object, Mock.Of<IReadSideRepositoryWriter<UserDocument>>(), Mock.Of<IReadSideRepositoryWriter<InterviewActionLog>>());
+                questionnaireExportStructureMock.Object, dataExportService ?? Mock.Of<IDataExportService>(), userDocumentWriter.Object,
+                interviewActionLogWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewActionLog>>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(Dictionary<string,Guid> variableNameAndQuestionId)
@@ -110,13 +125,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
             return interviewData;
         }
 
-        protected static IPublishedEvent<InterviewApprovedByHQ> CreatePublishableEvent()
+        protected static IPublishedEvent<InterviewApprovedByHQ> CreateInterviewApprovedByHQPublishableEvent(Guid? interviewId=null)
         {
-            var publishableEventMock = new Mock<IPublishedEvent<InterviewApprovedByHQ>>();
-            publishableEventMock.Setup(x => x.Payload).Returns(new InterviewApprovedByHQ(Guid.NewGuid(),""));
-            return publishableEventMock.Object;
+             var eventSourceId = interviewId ?? Guid.NewGuid();
+            return CreatePublishableEvent(() => new InterviewApprovedByHQ(eventSourceId, ""), eventSourceId);
         }
 
+        protected static IPublishedEvent<T> CreatePublishableEvent<T>(Func<T> eventCreator, Guid? eventSourceId = null)
+        {
+            var publishableEventMock = new Mock<IPublishedEvent<T>>();
+
+            publishableEventMock.Setup(x => x.Payload).Returns(eventCreator());
+            publishableEventMock.Setup(x => x.EventSourceId).Returns(eventSourceId ?? Guid.NewGuid());
+            
+            return publishableEventMock.Object;
+        }
 
         protected static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)
         {

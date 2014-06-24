@@ -1,6 +1,5 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Moq;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -11,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEventHandlerFunctionalTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewEventHandlerFunctionalTests
 {
     internal class when_interview_is_assigned_to_interviewer_in_RejectedByHQ_status : InterviewEventHandlerFunctionalTestContext
     {

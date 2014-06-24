@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -13,7 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.AnswersByVariableDenormalizerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.AnswersByVariableDenormalizerTests
 {
     internal class AnswersByVariableDenormalizerTestContext
     {
