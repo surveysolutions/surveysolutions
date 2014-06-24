@@ -1,7 +1,7 @@
-﻿namespace WB.UI.Designer.Utils
-{
-    using System;
+﻿using System;
 
+namespace WB.Core.BoundedContexts.Designer.Services
+{
     public interface IExpressionReplacer 
     {
         /// <summary>

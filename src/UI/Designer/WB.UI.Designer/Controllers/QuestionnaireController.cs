@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
@@ -158,7 +159,7 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Edit(Guid id)
         {
-            var questionnaire = this.editQuestionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            EditQuestionnaireView questionnaire = this.editQuestionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
             if(questionnaire == null)
                 throw new HttpException(404, string.Empty);
