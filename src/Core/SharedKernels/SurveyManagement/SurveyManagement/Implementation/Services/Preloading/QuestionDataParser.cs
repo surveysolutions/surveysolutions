@@ -12,15 +12,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 {
     internal class QuestionDataParser : IQuestionDataParser
     {
-        public ValueParsingResult TryParse(string answer, string variableName, QuestionnaireDocument questionnaire, out KeyValuePair<Guid, object> parsedValue)
+        public ValueParsingResult TryParse(string answer, IQuestion question, QuestionnaireDocument questionnaire, out KeyValuePair<Guid, object> parsedValue)
         {
             parsedValue = new KeyValuePair<Guid, object>();
 
             if (string.IsNullOrEmpty(answer))
                 return ValueParsingResult.ValueIsNullOrEmpty;
-            var question = GetQuestionByVariableName(questionnaire, variableName);
+
             if (question == null)
                 return ValueParsingResult.QuestionWasNotFound;
+
             if (question.LinkedToQuestionId.HasValue)
                 return ValueParsingResult.UnsupportedLinkedQuestion;
 
@@ -51,14 +52,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     var numericQuestion = question as INumericQuestion;
                     if (numericQuestion == null)
                         return ValueParsingResult.QuestionTypeIsIncorrect;
+                    
                     // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
                     if (numericQuestion.IsInteger)
                     {
                         int intNumericValue;
                         if (!int.TryParse(answer, out intNumericValue))
                             return ValueParsingResult.AnswerAsIntWasNotParsed;
-                        
+
                         parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, intNumericValue);
+
+                        if (numericQuestion.MaxValue.HasValue && intNumericValue > numericQuestion.MaxValue.Value)
+                            return ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue;
+
+                        if (intNumericValue < 0 &&
+                            questionnaire.FirstOrDefault<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey) != null)
+                            return ValueParsingResult.AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsNegative;
+
                         return ValueParsingResult.OK;
                     }
                     else
@@ -68,6 +78,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                             return ValueParsingResult.AnswerAsDecimalWasNotParsed;
                         {
                             parsedValue = new KeyValuePair<Guid, object>(question.PublicKey, decimalNumericValue);
+                         
+                            if (numericQuestion.MaxValue.HasValue && decimalNumericValue > numericQuestion.MaxValue.Value)
+                                return ValueParsingResult.AnswerIsIncorrectBecauseIsGreaterThanMaxValue;
+
                             return ValueParsingResult.OK;
                         }
                     }
@@ -111,14 +125,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         }
 
-        public KeyValuePair<Guid, object>? BuildAnswerFromStringArray(string[] answers, string variableName, QuestionnaireDocument questionnaire)
+        public KeyValuePair<Guid, object>? BuildAnswerFromStringArray(string[] answers, IQuestion question, QuestionnaireDocument questionnaire)
         {
+            if (question == null)
+                return null;
+
             var typedAnswers = new List<object>();
 
             foreach (var answer in answers)
             {
                 KeyValuePair<Guid, object> parsedAnswer;
-                if(this.TryParse(answer, variableName, questionnaire, out parsedAnswer) != ValueParsingResult.OK)
+                if(this.TryParse(answer, question, questionnaire, out parsedAnswer) != ValueParsingResult.OK)
                     continue;
                 
                 typedAnswers.Add(parsedAnswer.Value);
@@ -126,11 +143,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             if (typedAnswers.Count == 0)
                 return null;
-
-            var question = GetQuestionByVariableName(questionnaire, variableName);
-            if (question == null)
-                return null;
-
+            
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
@@ -143,11 +156,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
-        private IQuestion GetQuestionByVariableName(QuestionnaireDocument questionnaire, string variableName)
-        {
-            return questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption.Equals(variableName, StringComparison.InvariantCultureIgnoreCase));
-        }
-
+        
         private decimal[] GetAnswerOptionsAsValues(IQuestion question)
         {
             return

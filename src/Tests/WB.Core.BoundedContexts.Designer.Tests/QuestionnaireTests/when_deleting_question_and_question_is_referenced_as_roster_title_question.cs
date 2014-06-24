@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.Apply(new NewQuestionAdded
             {
                 PublicKey = rosterSizeQuestionId,
-                QuestionType = QuestionType.MultyOption,
+                QuestionType = QuestionType.Numeric,
                 GroupPublicKey = chapterId
             });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });

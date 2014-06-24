@@ -30,6 +30,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
+            InterviewData interviewData = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document);
+            if(interviewData!= null && interviewData.CreatedOnClient)
+                return;
+
             writer.Store(new InterviewFeedEntry
             {
                 SupervisorId = evnt.Payload.SupervisorId.FormatGuid(),

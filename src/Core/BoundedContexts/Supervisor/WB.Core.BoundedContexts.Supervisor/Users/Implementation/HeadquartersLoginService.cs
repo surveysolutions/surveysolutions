@@ -21,13 +21,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
     {
         private readonly ILogger logger;
         private readonly Action<ICommand> executeCommand;
-        private readonly HttpMessageHandler messageHandler;
+        private readonly Func<HttpMessageHandler> messageHandler;
         private readonly HeadquartersSettings headquartersSettings;
         private readonly IHeadquartersUserReader headquartersUserReader;
 
         public HeadquartersLoginService(ILogger logger, 
             ICommandService commandService,
-            HttpMessageHandler messageHandler,
+            Func<HttpMessageHandler> messageHandler,
             HeadquartersSettings headquartersSettings,
             IHeadquartersUserReader headquartersUserReader)
         {
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
         {
             try
             {
-                using (var client = new HttpClient(messageHandler))
+                using (var client = new HttpClient(this.messageHandler()))
                 {
                     client.AppendAuthToken(this.headquartersSettings);
                 

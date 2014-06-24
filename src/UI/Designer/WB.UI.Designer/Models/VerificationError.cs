@@ -14,7 +14,8 @@ namespace WB.UI.Designer.Models
     public class VerificationReference
     {
         public QuestionnaireVerificationReferenceType Type { get; set; }
-        public Guid Id { get; set; }
+        public string ItemId { get; set; }
         public string Title { get; set; }
+        public string ChapterId { get; set; }
     }
 }

@@ -42,5 +42,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.QuestionDataParserTests
         protected static string answer;
         protected static KeyValuePair<Guid, object> parcedValue;
         protected static ValueParsingResult parsingResult;
+        protected static IQuestion question;
     }
 }

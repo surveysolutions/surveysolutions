@@ -39,15 +39,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireDeleted>
     {
-        private readonly IQuestionDetailsFactory questionDetailsFactory;
+        private readonly IQuestionDetailsViewMapper questionDetailsViewMapper;
         private readonly IQuestionFactory questionFactory;
 
         public QuestionsAndGroupsCollectionDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
-            IQuestionDetailsFactory questionDetailsFactory, IQuestionFactory questionFactory)
+            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionFactory questionFactory)
             : base(readsideRepositoryWriter)
         {
-            this.questionDetailsFactory = questionDetailsFactory;
+            this.questionDetailsViewMapper = questionDetailsViewMapper;
             this.questionFactory = questionFactory;
         }
 
@@ -370,7 +370,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             questionnaire.ConnectChildrenWithParent();
             var questions = questionnaire.GetAllQuestions<IQuestion>()
-                .Select(question => this.questionDetailsFactory.CreateQuestion(question, question.GetParent().PublicKey))
+                .Select(question => this.questionDetailsViewMapper.Map(question, question.GetParent().PublicKey))
                 .Where(q => q != null)
                 .ToList();
 
@@ -434,7 +434,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 return null;
             }
 
-            var questionDetailsView = this.questionDetailsFactory.CreateQuestion(question, parentGroupId);
+            var questionDetailsView = this.questionDetailsViewMapper.Map(question, parentGroupId);
             currentState.Questions.Add(questionDetailsView);
             UpdateBreadcrumbs(currentState, questionDetailsView, questionDetailsView.ParentGroupId);
             return currentState;
@@ -455,7 +455,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             }
 
             currentState.Questions.Remove(oldQuestion);
-            var questionDetailsView = this.questionDetailsFactory.CreateQuestion(question, oldQuestion.ParentGroupId);
+            var questionDetailsView = this.questionDetailsViewMapper.Map(question, oldQuestion.ParentGroupId);
             UpdateBreadcrumbs(currentState, questionDetailsView, questionDetailsView.ParentGroupId);
             currentState.Questions.Add(questionDetailsView);
             return currentState;

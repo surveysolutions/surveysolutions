@@ -7,9 +7,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
 {
     internal class QuestionDetailsFactoryTestContext
     {
-        protected static QuestionDetailsFactory CreateQuestionDetailsFactory()
+        protected static QuestionDetailsViewMapper CreateQuestionDetailsFactory()
         {
-            return new QuestionDetailsFactory();
+            return new QuestionDetailsViewMapper();
         }
     }
 }

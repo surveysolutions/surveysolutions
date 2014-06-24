@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Main.Core.Documents;
 using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Designer.Api;
@@ -23,7 +25,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
             IVerificationErrorsMapper verificationErrorsMapper = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null)
         {
-            return new QuestionnaireController(
+            var questionnaireController = new QuestionnaireController(
                 chapterInfoViewFactory ?? Mock.Of<IChapterInfoViewFactory>(),
                 questionnaireInfoViewFactory ?? Mock.Of<IQuestionnaireInfoViewFactory>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
@@ -31,6 +33,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>()
                 );
+            return questionnaireController;
         }
 
         public static QuestionnaireView CreateQuestionnaireView(QuestionnaireDocument questionnaireDocument1)
@@ -76,7 +79,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
                         new VerificationReference
                         {
                             Type = QuestionnaireVerificationReferenceType.Question,
-                            Id = Guid.NewGuid(),
+                            ItemId = Guid.NewGuid().FormatGuid(),
                             Title = "aaaaaaaaaaaaaaaaaaaaaa"
                         }
                     }
@@ -91,7 +94,7 @@ namespace WB.UI.Designer.Tests.QuestionnaireApiControllerTests
                         new VerificationReference
                         {
                             Type = QuestionnaireVerificationReferenceType.Question,
-                            Id = Guid.NewGuid(),
+                            ItemId = Guid.NewGuid().FormatGuid(),
                             Title = "aaaaaaaaaaaaaaaaaaaaaa"
                         }
                     }

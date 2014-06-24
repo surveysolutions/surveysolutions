@@ -25,11 +25,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
                 QuestionScope = scope
             };
 
-            factory = CreateQuestionDetailsFactory();
+            viewMapper = CreateQuestionDetailsFactory();
         };
 
         Because of = () =>
-            questionView = factory.CreateQuestion(question, parentGroupId);
+            questionView = viewMapper.Map(question, parentGroupId);
 
         It should_set_Type_in_DateTime = () =>
             questionView.Type.ShouldEqual(questionType);
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
         private static QuestionScope scope = QuestionScope.Supervisor;
         private static string variableName = "variable";
 
-        private static QuestionDetailsFactory factory;
+        private static QuestionDetailsViewMapper viewMapper;
         private static QuestionDetailsView questionView;
     }
 }

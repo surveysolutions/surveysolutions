@@ -1,20 +1,16 @@
 ﻿using System;
 using System.ServiceModel;
-using System.ServiceModel.Security;
-using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
-using Raven.Client.Linq.Indexing;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
-using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.DesignerPublicService;
-using WB.UI.Supervisor.Models;
 
 namespace WB.UI.Supervisor.Controllers
 {
-    [AllowAnonymous]
+    [Authorize()]
     public class ControlPanelController : Controller
     {
         private readonly IServiceLocator serviceLocator;
@@ -41,48 +37,63 @@ namespace WB.UI.Supervisor.Controllers
             get { return this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>(); }
         }
 
+        [AllowAnonymous]
         public ActionResult NConfig()
         {
             return this.View();
         }
 
+        
+        public ActionResult Settings()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
         public ActionResult Designer()
         {
             return this.Designer(null, null);
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult Designer(string login, string password)
         {
             return this.View(model: this.DiagnoseDesignerConnection(login, password));
         }
 
+        [AllowAnonymous]
         public ActionResult IncomingDataWithErrors()
         {
             return this.View(incomePackagesRepository.GetListOfUnhandledPackages());
         }
 
+        [AllowAnonymous]
         public FileResult GetIncomingDataWithError(Guid id)
         {
             return this.File(incomePackagesRepository.GetUnhandledPackagePath(id), System.Net.Mime.MediaTypeNames.Application.Octet);
         }
 
+        [AllowAnonymous]
         public ActionResult ReadLayer()
         {
             return this.RedirectToActionPermanent("ReadSide");
         }
 
+        [AllowAnonymous]
         public ActionResult ReadSide()
         {
             return this.View(this.ReadSideAdministrationService.GetAllAvailableHandlers());
         }
 
+        [AllowAnonymous]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public string GetReadSideStatus()
         {
             return this.ReadSideAdministrationService.GetReadableStatus();
         }
 
+        [AllowAnonymous]
         public ActionResult RebuildReadSidePartially(string[] handlers)
         {
             this.ReadSideAdministrationService.RebuildViewsAsync(handlers);
@@ -90,6 +101,7 @@ namespace WB.UI.Supervisor.Controllers
             return this.RedirectToAction("ReadSide");
         }
 
+        [AllowAnonymous]
         public ActionResult RebuildReadSide(int skipEvents = 0)
         {
             this.ReadSideAdministrationService.RebuildAllViewsAsync(skipEvents);
@@ -97,6 +109,7 @@ namespace WB.UI.Supervisor.Controllers
             return this.RedirectToAction("ReadSide");
         }
 
+        [AllowAnonymous]
         public ActionResult StopReadSideRebuilding()
         {
             this.ReadSideAdministrationService.StopAllViewsRebuilding();
@@ -173,10 +186,16 @@ namespace WB.UI.Supervisor.Controllers
 
         #endregion
 
+        [AllowAnonymous]
         public ActionResult Headquarters()
         {
             bool areHeadquartersFunctionsEnabled = bool.Parse(WebConfigurationManager.AppSettings["HeadquartersFunctionsEnabled"]);
             return this.View(areHeadquartersFunctionsEnabled);
+        }
+
+        public ActionResult InterviewDetails()
+        {
+            return this.View();
         }
     }
 }

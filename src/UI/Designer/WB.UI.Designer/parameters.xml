@@ -100,4 +100,10 @@
       scope="\\web.config$"
       match="/configuration/appSettings/add[@key='IsTrackingEnabled']/@value" />
    </parameter>
+   <parameter name="Show new design"
+      defaultValue="false">
+   <parameterEntry kind="XmlFile"
+      scope="\\web.config$"
+      match="/configuration/appSettings/add[@key='IsNewDesignerEditPageEnabled']/@value" />
+   </parameter>
   </parameters>

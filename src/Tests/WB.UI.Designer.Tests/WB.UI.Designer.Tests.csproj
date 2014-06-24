@@ -144,7 +144,6 @@
     <Compile Include="QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
-    <Compile Include="QuestionnaireApiControllerTests\when_getting_questionnaire_and_questionnaire_exists.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
     <Compile Include="SynchronizationControllerTests.cs" />
     <Compile Include="VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
@@ -168,6 +167,10 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{dcbfc3f0-8e8c-4529-b474-b6a79225450e}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

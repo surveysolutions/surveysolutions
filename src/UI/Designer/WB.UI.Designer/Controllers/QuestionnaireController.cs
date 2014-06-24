@@ -1,30 +1,26 @@
-﻿using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+﻿using Main.Core.View;
+using Ncqrs.Commanding.ServiceModel;
+using System;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using System.Linq;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
+using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
-using WB.UI.Shared.Web.Extensions;
+using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Models;
+using WB.UI.Designer.Utils;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
-    using System;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
-    using Main.Core.View;
-    using Ncqrs.Commanding.ServiceModel;
-
-    using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
-    using WB.UI.Designer.Extensions;
-    using WB.UI.Designer.Models;
-    using WB.UI.Designer.Utils;
-    using WB.UI.Shared.Web.Membership;
-
     [CustomAuthorize]
     public class QuestionnaireController : BaseController
     {

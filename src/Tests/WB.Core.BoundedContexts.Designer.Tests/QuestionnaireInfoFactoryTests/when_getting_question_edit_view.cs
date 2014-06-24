@@ -29,10 +29,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
             result.ShouldNotBeNull();
 
         It should_return_question_with_Id_equals_questionId = () =>
-            result.Question.Id.ShouldEqual(questionId);
+            result.Id.ShouldEqual(questionId);
 
         It should_return_question_equals_g3 = () =>
-            result.Question.ShouldEqual(GetQuestion(questionId));
+            result.Title.ShouldEqual(GetQuestion(questionId).Title);
 
         It should_return_grouped_list_of_multi_questions_with_one_pair = () =>
             result.SourceOfLinkedQuestions.Count.ShouldEqual(2);
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         private static QuestionsAndGroupsCollectionView questionnaireView;
         private static Mock<IReadSideRepositoryReader<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
-        private static Guid questionId = q3Id;
+        private static Guid questionId = q2Id;
         private static string linkedQuestionsKey1 = "Group 1 / Roster 1.1";
         private static string linkedQuestionsKey2 = "Group 1 / Roster 1.1 / Group 1.1.2";
 

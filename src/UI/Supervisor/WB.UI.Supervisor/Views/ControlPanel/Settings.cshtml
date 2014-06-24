@@ -1,0 +1,25 @@
+﻿@{
+    this.Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: Settings";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        All settings with values
+    </div>
+    <div class="panel-body">
+        <table class="table table-condensed">
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+            @foreach (var setting in WB.UI.Shared.Web.Settings.SettingsProvider.GetSettings())
+            {
+                <tr>
+                    <td>@setting.Name</td>
+                    <td>@setting.Value</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

@@ -29,11 +29,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
                 Answers = options
             };
 
-            factory = CreateQuestionDetailsFactory();
+            viewMapper = CreateQuestionDetailsFactory();
         };
 
         Because of = () =>
-            questionView = (SingleOptionDetailsView)factory.CreateQuestion(question, parentGroupId);
+            questionView = (SingleOptionDetailsView)viewMapper.Map(question, parentGroupId);
 
         It should_set_LinkedToQuestionId_in_linkedToQuestionId = () =>
             questionView.LinkedToQuestionId.ShouldEqual(linkedToQuestionId);
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
             new Answer{ AnswerValue = "2", AnswerText = "2"}
         };
 
-        private static QuestionDetailsFactory factory;
+        private static QuestionDetailsViewMapper viewMapper;
         private static SingleOptionDetailsView questionView;
     }
 }

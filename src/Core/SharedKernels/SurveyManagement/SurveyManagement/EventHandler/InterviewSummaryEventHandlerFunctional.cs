@@ -353,15 +353,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
-                if (currentState.WasCreatedOnClient && evnt.Payload.FeaturedQuestionsMeta != null)
+                if (currentState.WasCreatedOnClient)
                 {
-                    foreach (var answeredQuestionSynchronizationDto in evnt.Payload.FeaturedQuestionsMeta)
+                    if (evnt.Payload.FeaturedQuestionsMeta != null)
                     {
-                        if (interview.AnswersToFeaturedQuestions.ContainsKey(answeredQuestionSynchronizationDto.Id))
+                        foreach (var answeredQuestionSynchronizationDto in evnt.Payload.FeaturedQuestionsMeta)
                         {
-                            interview.AnswersToFeaturedQuestions[answeredQuestionSynchronizationDto.Id].Answer = answeredQuestionSynchronizationDto.Answer.ToString();
+                            if (interview.AnswersToFeaturedQuestions.ContainsKey(answeredQuestionSynchronizationDto.Id))
+                            {
+                                interview.AnswersToFeaturedQuestions[answeredQuestionSynchronizationDto.Id].Answer =
+                                    answeredQuestionSynchronizationDto.Answer.ToString();
+                            }
                         }
                     }
+                    var responsible = this.users.GetById(currentState.ResponsibleId);
+                    if (responsible != null && responsible.Supervisor != null)
+                    {
+                        currentState.TeamLeadId = responsible.Supervisor.Id;
+                        currentState.TeamLeadName = responsible.Supervisor.Name;
+                    }
+                    currentState.Status = evnt.Payload.Status;    
                 }
             });
         }

@@ -1,0 +1,25 @@
+﻿using System.Linq;
+using System.Web.Http;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
+using WB.UI.Headquarters.Models;
+
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
+{
+    public class ControlPanelApiController : ApiController
+    {
+        private readonly InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext;
+
+        public ControlPanelApiController(InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext)
+        {
+            this.interviewDetailsDataProcessorContext = interviewDetailsDataProcessorContext;
+        }
+
+        public InterviewDetailsSchedulerViewModel InterviewDetails()
+        {
+            return new InterviewDetailsSchedulerViewModel()
+            {
+                Messages = this.interviewDetailsDataProcessorContext.GetMessages().ToArray()
+            };
+        }
+    }
+}

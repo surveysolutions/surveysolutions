@@ -1,8 +1,6 @@
-﻿using System.Net.Http;
-using Ninject.Activation;
+﻿using System;
+using System.Net.Http;
 using Ninject.Modules;
-using Quartz;
-using Quartz.Impl;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.EventHandlers;
@@ -50,7 +48,8 @@ namespace WB.Core.BoundedContexts.Supervisor
 
             this.Bind<IEventHandler>().To<ReadyToSendToHeadquartersInterviewDenormalizer>().InSingletonScope();
 
-            this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
+            this.Bind<Func<HttpMessageHandler>>().ToMethod(x => () => new HttpClientHandler());
+            //this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
         }
     }
 }
