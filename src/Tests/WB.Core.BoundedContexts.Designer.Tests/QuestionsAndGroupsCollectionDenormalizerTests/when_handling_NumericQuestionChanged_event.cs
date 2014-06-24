@@ -18,9 +18,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         Establish context = () =>
         {
             InitializePreviousState();
-            questionDetailsFactoryMock = new Mock<IQuestionDetailsFactory>();
-            questionDetailsFactoryMock
-                .Setup(x => x.CreateQuestion(Moq.It.IsAny<IQuestion>(), Moq.It.IsAny<Guid>()))
+            questionDetailsViewMapperMock = new Mock<IQuestionDetailsViewMapper>();
+            questionDetailsViewMapperMock
+                .Setup(x => x.Map(Moq.It.IsAny<IQuestion>(), Moq.It.IsAny<Guid>()))
                 .Returns((IQuestion q, Guid p) => new NumericDetailsView
                 {
                     Id = q.PublicKey,
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             evnt = CreateNumericQuestionChangedEvent(q4Id);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
-                questionDetailsFactory: questionDetailsFactoryMock.Object,
+                questionDetailsViewMapper: questionDetailsViewMapperMock.Object,
                 questionFactory: questionFactoryMock.Object);
         };
 
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         private static QuestionsAndGroupsCollectionDenormalizer denormalizer;
         private static IPublishedEvent<NumericQuestionChanged> evnt;
         private static QuestionsAndGroupsCollectionView newState = null;
-        private static Mock<IQuestionDetailsFactory> questionDetailsFactoryMock = null;
+        private static Mock<IQuestionDetailsViewMapper> questionDetailsViewMapperMock = null;
         private static Mock<IQuestionFactory> questionFactoryMock;
         private static string newTitle = "New title";
     }

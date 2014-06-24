@@ -1,6 +1,8 @@
-﻿@using System.Web.Optimization
+﻿@using System.Diagnostics
+@using System.Web.Optimization
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.UI.Headquarters.Code
-@using WB.UI.Headquarters.Models
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,9 +11,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="@Url.Content("~/Content/img/favicon.ico")" />
-    @{
-        var page = ViewBag.ActivePage ?? MenuItem.Logon;
-    }
     @Styles.Render("~/Content/main")
     @RenderSection("styles", false)
 </head>
@@ -25,55 +24,38 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="@Url.Action("Index", "HQ")">
-                    Headquarters
-                </a>
+                @if (User.IsInRole("Headquarter"))
+                {
+                    <a class="navbar-brand" href="@Url.Action("Index", "HQ")">Headquarters</a>
+                }
+                else
+                {
+                    <a class="navbar-brand" href="@Url.Action("Index", "Survey")">Supervisor</a>
+                }
             </div>
             <div class="collapse navbar-collapse">
+
                 <ul class="nav navbar-nav" role="menu">
-                    <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="@(page == MenuItem.Surveys ? "active" : "")">
-                                <a href="@Url.Action("SurveysAndStatuses", "HQ")">Surveys and Statuses</a>
-                            </li>
-                            <li class="@(page == MenuItem.Summary ? "active" : "")">
-                                <a href="@Url.Action("SupervisorsAndStatuses", "HQ")">Teams and Statuses</a>
-                            </li>
-                            <li class="@(page == MenuItem.MapReport ? "active" : "")">
-                                <a href="@Url.Action("MapReport", "HQ")">Map Report</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="@(page == MenuItem.Docs ? "active" : "")">
-                        <a href="@Url.Action("Interviews", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Interviews</a>
-                    </li>
-                    <li class="@(page == MenuItem.Teams ? "active" : "")">
-                        <a href="@Url.Action("Index", "Team")"><i class="glyphicon glyphicon-user"></i> Supervisors</a>
-                    </li>
-                    <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
-                        <a href="@Url.Action("Index", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> Questionnaries</a>
-                    </li>
+                    @if (User.IsInRole("Headquarter"))
+                    {
+                        @Html.Partial("HeadquartersMainMenu")
+                    }
+                    else
+                    {
+                        @Html.Partial("SupervisorMainMenu")
+                    }
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right" role="menu">
-                    <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-                            Administration <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Backup", "Index", "Backup")</li>
-                        </ul>
-                    </li>
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
+                            <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
                         </ul>
                     </li>
                 </ul>
             </div>
+
         </div>
     </div>
 
@@ -117,15 +99,23 @@
                 © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
             </div>
             <div class="text-center">
-                @ViewContext.Controller.GetType().Assembly.GetName().Version @*(@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) *@
+                @FileVersionInfo.GetVersionInfo(ViewContext.Controller.GetType().Assembly.Location).ProductVersion
+                @*@ViewContext.Controller.GetType().Assembly.GetName().Version*@ 
                 @if (AppSettings.IsDebugBuilded)
                 {
                     <span id="build-config">[.NET Debug]</span>
                 }
+                
                 @if (HttpContext.Current.IsDebuggingEnabled)
                 {
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
+                
+                @if (LegacyOptions.SupervisorFunctionsEnabled)
+                {
+                    <text>|</text> <a href="@Url.Action("GetLatestVersion", "Sync", new { area = string.Empty })">Get CAPI</a>
+                }
+
             </div>
         </footer>
     </div>

@@ -5,21 +5,23 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFactoryTests
 {
-    internal class WhenCreatingExportViewFactoryFromContainingMultyOptionsRosterSizeQuestionAndMultyOptionLinkedQuestion : ExportViewFactoryTestsContext
+    internal class WhenCreatingExportViewFactoryFromContainingMultyOptionsRosterSizeQuestionAndMultyOptionLinkedQuestion :
+        ExportViewFactoryTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             rosterSizeQuestionId = Guid.Parse("AAF000AAA111EE2DD2EE111AAA000FFF");
             var rosterGroupId = Guid.Parse("00F000AAA111EE2DD2EE111AAA000FFF");
+            var rosterGroupId2 = Guid.Parse("00F000AAA111EE2DD2EE111AAA000BBB");
             linkedQuestionId = Guid.Parse("BBF000AAA111EE2DD2EE111AAA000FFF");
             referencedQuestionId = Guid.Parse("CCF000AAA111EE2DD2EE111AAA000FFF");
+            var questionId = Guid.Parse("BBF000AAA111EE2DD2EE111AAA000AAA");
 
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 new MultyOptionsQuestion("multy options roster size question")
@@ -42,19 +44,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFacto
                     Children = new List<IComposite>
                     {
                         new NumericQuestion() { PublicKey = referencedQuestionId, QuestionType = QuestionType.Numeric },
-                        new MultyOptionsQuestion() { LinkedToQuestionId = referencedQuestionId,PublicKey = linkedQuestionId, QuestionType = QuestionType.MultyOption}
+                        new MultyOptionsQuestion()
+                        {
+                            LinkedToQuestionId = referencedQuestionId,
+                            PublicKey = linkedQuestionId,
+                            QuestionType = QuestionType.MultyOption
+                        }
+                    }
+                },
+                new Group("roster group 2")
+                {
+                    PublicKey = rosterGroupId2,
+                    IsRoster = true,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    Children = new List<IComposite>
+                    {
+                        new NumericQuestion() { PublicKey = questionId, QuestionType = QuestionType.Numeric }
                     }
                 });
             exportViewFactory = CreateExportViewFactory();
         };
 
-        Because of = () =>
+        private Because of = () =>
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1);
 
-        It should_create_header_with_2_column = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
+        private It should_create_header_with_2_column = () =>
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[linkedQuestionId]
+                .ColumnNames.Length.ShouldEqual(2);
 
-        It should_create_header_with_nullable_level_labels = () =>
+        private It should_create_header_with_nullable_level_labels = () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.ShouldBeNull();
 
         private static QuestionnaireExportStructure questionnaireExportStructure;

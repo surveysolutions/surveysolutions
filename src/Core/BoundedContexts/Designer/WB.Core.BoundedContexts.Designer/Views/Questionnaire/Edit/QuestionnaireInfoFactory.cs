@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EmitMapper;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -145,16 +147,53 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var question = questionnaire.Questions.FirstOrDefault(x => x.Id == questionId);
             if (question == null)
                 return null;
-            var result = new NewEditQuestionView
-            {
-                Question = question,
-                Breadcrumbs = this.GetBreadcrumbs(questionnaire,question),
-                SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire),
-                QuestionTypeOptopns = this.questionTypeOptopns,
-                QuestionScopeOptions = this.questionScopeOptions
-            };
+            
+            NewEditQuestionView result = MapQuestionFields(question);
+            result.Options = result.Options ?? new CategoricalOption[0];
+            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
+            result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire);
+            result.QuestionTypeOptions = this.questionTypeOptopns;
+            result.QuestionScopeOptions = this.questionScopeOptions;
 
             return result;
+        }
+
+        private static NewEditQuestionView MapQuestionFields(QuestionDetailsView question)
+        {
+            switch (question.Type)
+            {
+                case QuestionType.MultyOption:
+                    return
+                        ObjectMapperManager.DefaultInstance.GetMapper<MultiOptionDetailsView, NewEditQuestionView>()
+                            .Map(question as MultiOptionDetailsView);
+                case QuestionType.SingleOption:
+                    return
+                        ObjectMapperManager.DefaultInstance.GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
+                            .Map(question as SingleOptionDetailsView);
+                case QuestionType.Text:
+                    return
+                        ObjectMapperManager.DefaultInstance.GetMapper<TextDetailsView, NewEditQuestionView>()
+                            .Map(question as TextDetailsView);
+                case QuestionType.DateTime:
+                    return
+                        ObjectMapperManager.DefaultInstance.GetMapper<DateTimeDetailsView, NewEditQuestionView>()
+                            .Map(question as DateTimeDetailsView);
+                case QuestionType.Numeric:
+                    return
+                        ObjectMapperManager.DefaultInstance.GetMapper<NumericDetailsView, NewEditQuestionView>()
+                            .Map(question as NumericDetailsView);
+                case QuestionType.GpsCoordinates:
+                    return ObjectMapperManager.DefaultInstance.GetMapper<GeoLocationDetailsView, NewEditQuestionView>()
+                        .Map(question as GeoLocationDetailsView);
+                case QuestionType.TextList:
+                    return
+                        ObjectMapperManager.DefaultInstance.GetMapper<TextListDetailsView, NewEditQuestionView>()
+                            .Map(question as TextListDetailsView);
+                case QuestionType.QRBarcode:
+                    return ObjectMapperManager.DefaultInstance.GetMapper<QrBarcodeDetailsView, NewEditQuestionView>()
+                        .Map(question as QrBarcodeDetailsView);
+            }
+            return null;
         }
 
         private Dictionary<string, QuestionBrief[]> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)

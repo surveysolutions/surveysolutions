@@ -5,7 +5,6 @@
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")">
-    @Styles.Render("~/Content/bootstrap-bundle")
     @Styles.Render("~/css/main-not-loggedin")
 </head>
 <body>
@@ -15,10 +14,10 @@
         </div>
     </div>
     <div class="row-fluid" id="footer-block">
-            <hr>
-            <footer class="text-center">
-                <a href="@Url.Action("GetLatestVersion", "Sync")" class="btn ">Get CAPI</a>
-            </footer>
+        <hr>
+        <footer class="text-center">
+            <a href="@Url.Action("GetLatestVersion", "Sync", new { area = string.Empty })" class="btn btn-default">Get CAPI</a>
+        </footer>
     </div>
     @Scripts.Render("~/js/main")
     @RenderSection("scripts", false)

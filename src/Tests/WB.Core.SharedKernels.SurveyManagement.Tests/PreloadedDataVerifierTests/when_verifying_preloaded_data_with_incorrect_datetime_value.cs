@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             KeyValuePair<Guid, object> outValue;
 
             preloadedDataServiceMock.Setup(
-                x => x.ParseQuestion(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), out outValue)).Returns(ValueParsingResult.AnswerAsDateTimeWasNotParsed);
+                x => x.ParseQuestion(Moq.It.IsAny<string>(), Moq.It.IsAny<IQuestion>(), out outValue)).Returns(ValueParsingResult.AnswerAsDateTimeWasNotParsed);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };

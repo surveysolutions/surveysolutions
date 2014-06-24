@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers
             {
                 return HttpNotFound();
             }
-            return Redirect("~/app#/" + id.FormatGuid());
+            return Redirect("~/UpdatedDesigner#/" + id.FormatGuid());
         }
     }
 }

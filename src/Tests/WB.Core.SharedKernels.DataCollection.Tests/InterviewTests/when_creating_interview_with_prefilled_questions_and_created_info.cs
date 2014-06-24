@@ -16,20 +16,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
     internal class when_creating_interview_with_no_featured_questions_ : InterviewTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             eventContext = new EventContext();
-
-            interviewId = Guid.Parse("11000000000000000000000000000000");
-            questionnaireId = Guid.Parse("10000000000000000000000000000000");
-            userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
-            questionnaireVersion = 18;
-
-            interviewStatus = InterviewStatus.Completed;
-            featuredQuestionsMeta = null;
-            comments = "status chance comment";
-            valid = false;
 
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.Version == questionnaireVersion);
@@ -43,52 +32,50 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(questionnaireRepository);
         };
 
-        private Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, questionnaireVersion, DateTime.Now, responsibleSupervisorId, interviewStatus,
-                featuredQuestionsMeta, comments, valid);
+        Because of = () =>
+            new Interview(interviewId, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid);
 
-        private It should_raise_InterviewCreated_event = () =>
+        It should_event_context_contains_3_events = () =>
+            eventContext.Events.Count().ShouldEqual(3);
+
+        It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewOnClientCreated>();
 
-        private It should_provide_questionnaire_id_in_InterviewCreated_event = () =>
+        It should_provide_questionnaire_id_in_InterviewCreated_event = () =>
             eventContext.GetEvent<InterviewOnClientCreated>()
                 .QuestionnaireId.ShouldEqual(questionnaireId);
 
-        private It should_provide_questionnaire_version_in_InterviewCreated_event = () =>
+        It should_provide_questionnaire_version_in_InterviewCreated_event = () =>
             eventContext.GetEvent<InterviewOnClientCreated>()
                 .QuestionnaireVersion.ShouldEqual(questionnaireVersion);
 
-        private It should_raise_SynchronizationMetadataApplied_event = () =>
+        It should_raise_SynchronizationMetadataApplied_event = () =>
             eventContext.ShouldContainEvent<SynchronizationMetadataApplied>();
 
-        private It should_provide_status_in_SynchronizationMetadataApplied_event = () =>
+        It should_provide_status_in_SynchronizationMetadataApplied_event = () =>
             eventContext.GetEvent<SynchronizationMetadataApplied>()
                 .Status.ShouldEqual(interviewStatus);
 
-        private It should_provide_comments_in_InterviewStatusChanged_event = () =>
-            eventContext.GetEvents<InterviewStatusChanged>().Last()
-                .Comment.ShouldEqual(comments);
+        It should_provide_userId_in_SynchronizationMetadataApplied_event = () =>
+            eventContext.GetEvent<SynchronizationMetadataApplied>()
+                .UserId.ShouldEqual(userId);
 
-        private It should_raise_InterviewDeclaredInvalid_event = () =>
-            eventContext.ShouldContainEvent<InterviewDeclaredInvalid>();
-
+        It should_provide_InterviewDeclaredValid_event = () =>
+            eventContext.ShouldContainEvent<InterviewDeclaredValid>();
         
-        private Cleanup stuff = () =>
+        Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;
         };
 
         private static EventContext eventContext;
-        private static Guid questionnaireId;
-        private static long questionnaireVersion;
-        private static Guid userId;
-        private static Guid responsibleSupervisorId;
-        private static Guid interviewId;
-
-        private static bool valid;
-        private static string comments;
-        private static AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta;
-        private static InterviewStatus interviewStatus;
+        private static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
+        private static long questionnaireVersion = 18;
+        private static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static Guid interviewId = Guid.Parse("11000000000000000000000000000000");
+        private static bool isValid = true;
+        private static AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta = null;
+        private static InterviewStatus interviewStatus = InterviewStatus.Completed;
     }
 }

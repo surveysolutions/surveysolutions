@@ -183,11 +183,15 @@
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_in_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupStoppedBeingARoster_event_received.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupBecameARoster_event_received.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="CreateQuestionnaireCommandTests\when_creating_new_questionnaire.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
+    <Compile Include="QuestionnaireTests\when_deleting_question_and_question_is_referenced_as_roster_title_question_in_roster_triggered_by_multy_option_question.cs" />
     <Compile Include="QuestionnaireTests\when_moving_numeric_question_with_title_which_contains_roster_title_as_substitution_reference_from_roster_to_group.cs" />
     <Compile Include="QuestionnaireTests\when_moving_roster_nested_group_with_numeric_question_with_title_which_contains_roster_title_as_substitution_to_group.cs" />
     <Compile Include="QuestionnaireTests\when_updating_group_and_roster_become_a_group_with_question_with_rostertitle_in_substitution.cs" />
@@ -385,7 +389,6 @@
     <Compile Include="MembershipProviderTests\when_creating_user_and_account_with_membership_provider.cs" />
     <Compile Include="MembershipProviderTests\MembershipProviderTestsContext.cs" />
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
-    <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\PdfQuestionnaireDenormalizerTestContext.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />

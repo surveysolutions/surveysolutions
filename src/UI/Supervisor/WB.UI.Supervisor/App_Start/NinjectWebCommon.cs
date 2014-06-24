@@ -34,9 +34,11 @@ using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
+using WB.Core.SharedKernels.SurveyManagement.Web;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
 using WB.UI.Supervisor.Code;
-using WB.UI.Supervisor.Code.CommandDeserialization;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
 using WB.UI.Supervisor.App_Start;
@@ -96,8 +98,8 @@ namespace WB.UI.Supervisor.App_Start
             }
 
             string storePath = isEmbeded
-                                   ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
-                                   : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+                ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
+                : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
             int? pageSize = GetEventStorePageSize();
 
@@ -108,7 +110,7 @@ namespace WB.UI.Supervisor.App_Start
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
 
-            var schedulerSettings = new SchedulerSettings(bool.Parse(WebConfigurationManager.AppSettings["Scheduler.Enabled"]), 
+            var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
 
             var baseHqUrl = new Uri(WebConfigurationManager.AppSettings["Headquarters.BaseUrl"]);
@@ -120,6 +122,11 @@ namespace WB.UI.Supervisor.App_Start
                 WebConfigurationManager.AppSettings["Headquarters.AccessToken"],
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]));
 
+            var interviewDetailsDataLoaderSettings =
+                new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
+                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+                    LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
+
             bool useStreamingForAllEvents;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
             {
@@ -127,13 +134,20 @@ namespace WB.UI.Supervisor.App_Start
             }
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
-            Version applicationBuildVersion = typeof (SyncController).Assembly.GetName().Version;
+            Version applicationBuildVersion = typeof (AccountController).Assembly.GetName().Version;
+
+            var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
+                appDataDirectory: AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                incomingCapiPackagesDirectoryName: LegacyOptions.SynchronizationIncomingCapiPackagesDirectory,
+                incomingCapiPackagesWithErrorsDirectoryName:
+                    LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
+                incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: !LegacyOptions.HqFunctionsEnabled),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 pageSize.HasValue
@@ -143,15 +157,16 @@ namespace WB.UI.Supervisor.App_Start
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
-                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), new SyncSettings(reevaluateInterviewWhenSynchronized:true)),
-                new SupervisorCommandDeserializationModule(),
+                new SynchronizationModule(synchronizationSettings),
+                new SurveyManagementWebModule(),
                 new SurveyManagementSharedKernelModule(
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
                     isDebug,
-                    applicationBuildVersion),
+                    applicationBuildVersion,
+                    interviewDetailsDataLoaderSettings),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
 
@@ -161,17 +176,17 @@ namespace WB.UI.Supervisor.App_Start
 
             PrepareNcqrsInfrastucture(kernel);
 
-            var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
+            var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(),
+                NcqrsEnvironment.Get<IAggregateSnapshotter>());
             kernel.Bind<IDomainRepository>().ToConstant(repository);
             kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
 
-            if (!LegacyOptions.HqFunctionsEnabled)
-            {
-                ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
-            }
+            ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
 
+
+            ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
-            
+
             return kernel;
         }
 

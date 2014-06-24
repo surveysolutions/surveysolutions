@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                         this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
                         this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, newAnswer));
             }
-            else
+            else if (this.etComments.Visibility!=ViewStates.Visible)
             {
                 base.FireAnswerSavedEvent();
             }

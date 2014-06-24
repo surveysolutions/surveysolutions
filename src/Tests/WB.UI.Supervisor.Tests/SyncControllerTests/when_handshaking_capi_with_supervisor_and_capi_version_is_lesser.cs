@@ -7,6 +7,7 @@ using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 

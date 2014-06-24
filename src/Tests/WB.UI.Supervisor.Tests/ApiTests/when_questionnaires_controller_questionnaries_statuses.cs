@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using WB.UI.Supervisor.API;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using It = Machine.Specifications.It;
 
 namespace WB.UI.Supervisor.Tests.ApiTests

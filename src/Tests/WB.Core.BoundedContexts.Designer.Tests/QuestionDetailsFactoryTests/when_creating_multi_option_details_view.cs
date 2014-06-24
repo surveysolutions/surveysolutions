@@ -31,11 +31,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
                 AreAnswersOrdered = areAnswersOrdered
             };
 
-            factory = CreateQuestionDetailsFactory();
+            viewMapper = CreateQuestionDetailsFactory();
         };
 
         Because of = () =>
-            questionView = (MultiOptionDetailsView)factory.CreateQuestion(question, parentGroupId);
+            questionView = (MultiOptionDetailsView)viewMapper.Map(question, parentGroupId);
 
         It should_set_LinkedToQuestionId_in_linkedToQuestionId = () =>
             questionView.LinkedToQuestionId.ShouldEqual(linkedToQuestionId);
@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
             new Answer{ AnswerValue = "2", AnswerText = "2"}
         };
 
-        private static QuestionDetailsFactory factory;
+        private static QuestionDetailsViewMapper viewMapper;
         private static MultiOptionDetailsView questionView;
     }
 }

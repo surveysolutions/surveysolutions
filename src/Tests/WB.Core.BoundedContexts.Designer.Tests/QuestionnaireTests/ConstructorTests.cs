@@ -67,24 +67,5 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(title));
             }
         }
-
-        [Test]
-        public void ctor_When_called_Then_raised_NewQuestionnaireCreated_event_with_creation_date_equal_to_current_date()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var currentDate = new DateTime(2010, 10, 20, 17, 00, 00);
-                var clockStub = Mock.Of<IClock>(clock
-                    => clock.UtcNow() == currentDate);
-                NcqrsEnvironment.SetDefault(clockStub);
-
-                // act
-                new Questionnaire(Guid.NewGuid(), "some title");
-
-                // assert
-                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).CreationDate, Is.EqualTo(currentDate));
-            }
-        }
     }
 }
