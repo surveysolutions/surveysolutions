@@ -52,7 +52,8 @@ namespace WB.Core.BoundedContexts.Supervisor
 
             this.Bind<IEventHandler>().To<ReadyToSendToHeadquartersInterviewDenormalizer>().InSingletonScope();
 
-            this.Bind<Func<HttpMessageHandler>>().ToMethod(x=> () => new HttpClientHandler());
+            this.Bind<Func<HttpMessageHandler>>().ToMethod(x => () => new HttpClientHandler());
+            this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
         }
     }
 }
