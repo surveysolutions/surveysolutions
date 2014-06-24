@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Main.Core.Documents;
-using Main.Core.View;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
-namespace WB.UI.Designer.Utils
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class ExpressionReplacer : IExpressionReplacer
     {
@@ -42,7 +40,7 @@ namespace WB.UI.Designer.Utils
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;
             var map = new Dictionary<string, string>();
-            foreach (var pair in variableMap.StataMap)
+            foreach (var pair in this.variableMap.StataMap)
             {
                 if (string.IsNullOrWhiteSpace(pair.Value) || map.ContainsKey(pair.Value))
                     continue;
@@ -66,7 +64,7 @@ namespace WB.UI.Designer.Utils
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;
             var map = new Dictionary<string, string>();
-            foreach (var pair in variableMap.StataMap)
+            foreach (var pair in this.variableMap.StataMap)
             {
                 var key = pair.Key.ToString();
                 if (string.IsNullOrWhiteSpace(key) || map.ContainsKey(key))
