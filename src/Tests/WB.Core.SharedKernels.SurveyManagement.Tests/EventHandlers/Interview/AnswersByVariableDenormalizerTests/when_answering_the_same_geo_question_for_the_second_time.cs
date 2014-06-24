@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.AnswersByVariableDenormalizerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.AnswersByVariableDenormalizerTests
 {
     internal class when_answering_the_same_geo_question_for_the_second_time : AnswersByVariableDenormalizerTestContext
     {

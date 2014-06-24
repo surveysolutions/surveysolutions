@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.StatisticsDenormalizerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.StatisticsDenormalizerTests
 {
     internal class when_handling_interview_status_change_event : StatisticsDenormalizerTestContext
     {

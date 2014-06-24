@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -20,7 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using QuestionAnswer = WB.Core.SharedKernels.SurveyManagement.Views.Interview.QuestionAnswer;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewSummaryEventHandlerFunctionalTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
     [TestFixture]
     internal class InterviewSummaryEventHandlerUpdateAnswerTest
@@ -43,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewSu
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
-                    CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, 1)));
+                    this.CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, 1)));
             Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo(answerText));
         }
 
@@ -70,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewSu
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
-                    CreatePublishableEvent(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
+                    this.CreatePublishableEvent(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
                         new decimal[] { 1, 3, 8 })));
             Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo("1,3,8"));
         }
@@ -95,8 +92,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewSu
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
 
-            var updatedInterviewSummary = CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
-                CreateQuestionAnsweredEventByQuestionType(questionId, type, answer));
+            var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
+                this.CreateQuestionAnsweredEventByQuestionType(questionId, type, answer));
 
             Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo(answer.ToString()));
         }
@@ -126,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewSu
 
             var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId, InterviewStatus.Created, featuredQuestionsMeta, false, null);
 
-            var updatedInterviewSummary = CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
+            var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 synchronizationMetadataApplied);
 
             Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions[questionId].Answer, Is.EqualTo(answer.ToString()));
