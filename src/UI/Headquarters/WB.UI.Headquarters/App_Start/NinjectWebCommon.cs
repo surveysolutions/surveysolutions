@@ -110,7 +110,7 @@ namespace WB.UI.Headquarters
                 WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
 
             var interviewDetailsDataLoaderSettings =
-                new InterviewDetailsDataLoaderSettings(LegacyOptions.InterviewDetailsDataSchedulerEnabled,
+                new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled && LegacyOptions.SupervisorFunctionsEnabled,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
                     LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
             
