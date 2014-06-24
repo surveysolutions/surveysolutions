@@ -4,6 +4,7 @@ using System.Data.Odbc;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
@@ -21,30 +22,44 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class InterviewExportedDataDenormalizer : IEventHandler<InterviewApprovedByHQ>, 
-      /*  IEventHandler<SupervisorAssigned>,
+        IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewRestarted>,
         IEventHandler<InterviewApproved>,
         IEventHandler<InterviewRejected>,
-        IEventHandler<InterviewRejectedByHQ>,*/
+        IEventHandler<InterviewRejectedByHQ>,
+        IEventHandler<TextQuestionAnswered>,
+        IEventHandler< MultipleOptionsQuestionAnswered>,
+        IEventHandler<SingleOptionQuestionAnswered>,
+        IEventHandler<NumericRealQuestionAnswered>,
+        IEventHandler<NumericQuestionAnswered>,
+        IEventHandler<NumericIntegerQuestionAnswered>,
+        IEventHandler<DateTimeQuestionAnswered>,
+        IEventHandler<GeoLocationQuestionAnswered>,
+        IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IEventHandler<SingleOptionLinkedQuestionAnswered>,
+        IEventHandler<TextListQuestionAnswered>,
+        IEventHandler<QRBarcodeQuestionAnswered>,
+
         IEventHandler
     {
         private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
+        private readonly IReadSideRepositoryWriter<InterviewActionLog> interviewActionLogs;
         private readonly IDataExportService dataExportService;
 
         public InterviewExportedDataDenormalizer(IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
-            IDataExportService dataExportService, IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummares)
+            IDataExportService dataExportService, IReadSideRepositoryWriter<UserDocument> users,
+            IReadSideRepositoryWriter<InterviewActionLog> interviewActionLogs)
         {
             this.interviewDataWriter = interviewDataWriter;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
             this.dataExportService = dataExportService;
             this.users = users;
-            this.interviewSummares = interviewSummares;
+            this.interviewActionLogs = interviewActionLogs;
         }
 
         public string Name { get { return this.GetType().Name; } }
@@ -59,67 +74,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
             var interview = this.interviewDataWriter.GetById(evnt.EventSourceId);
-            var interviewSummary = this.interviewSummares.GetById(evnt.EventSourceId);
 
             var exportStructure = this.questionnaireExportStructureWriter.GetById(interview.Document.QuestionnaireId,
                 interview.Document.QuestionnaireVersion);
 
-            var interviewDataExportView = new InterviewDataExportView(interview.Document.QuestionnaireId, interview.Document.QuestionnaireVersion,
+            var interviewDataExportView = new InterviewDataExportView(interview.Document.QuestionnaireId,
+                interview.Document.QuestionnaireVersion,
                 exportStructure.HeaderToLevelMap.Values.Select(
-                    exportStructureForLevel => 
-                        new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector, exportStructureForLevel.LevelName, 
+                    exportStructureForLevel =>
+                        new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector, exportStructureForLevel.LevelName,
                             this.BuildRecordsForHeader(interview.Document, exportStructureForLevel))).ToArray());
-            
+
             this.dataExportService.AddExportedDataByInterview(interviewDataExportView);
 
-            StoreInterviewActionForUser(interview.Document.QuestionnaireId,
-                interview.Document.QuestionnaireVersion, evnt.EventSourceId, evnt.Payload.UserId,
-                interviewSummary == null ? new List<InterviewCommentedStatus>() : interviewSummary.CommentedStatusesHistory,
-                evnt.EventTimeStamp);
-        }
 
-        private void StoreInterviewActionForUser(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid userId, List<InterviewCommentedStatus> commentedStatusesHistory, DateTime timestamptimestamp)
-        {
-            UserDocument responsible = this.users.GetById(userId);
-            var userName = responsible != null ? responsible.UserName : "<UNKNOWN USER>";
-            var isApprovedByHeadquarterRecorded = false;
-            foreach (var interviewCommentedStatus in commentedStatusesHistory)
-            {
-                if (interviewCommentedStatus.Status == InterviewStatus.ApprovedByHeadquarters)
-                    isApprovedByHeadquarterRecorded = true;
+            var interviewActionLog = interviewActionLogs.GetById(evnt.EventSourceId);
+            if (interviewActionLog == null)
+                return;
 
-                var action = CreateActionFromStatus(interviewCommentedStatus.Status);
-                if (action.HasValue)
-                    this.dataExportService.AddInterviewAction(new InterviewActionExportView(questionnaireId,
-                        questionnaireVersion, interviewId.FormatGuid(), action.Value, interviewCommentedStatus.Responsible, interviewCommentedStatus.Date));
-            }
-            if (!isApprovedByHeadquarterRecorded)
-                this.dataExportService.AddInterviewAction(new InterviewActionExportView(questionnaireId,
-                       questionnaireVersion, interviewId.FormatGuid(), InterviewExportedAction.ApproveByHeadquarter, userName, timestamptimestamp));
-        }
+            var userName = this.GetUserName(evnt.Payload.UserId);
+            interviewActionLog.Actions.Add(new InterviewActionExportView(evnt.EventSourceId.FormatGuid(),
+                InterviewExportedAction.ApproveByHeadquarter, userName, evnt.EventTimeStamp));
 
-        private InterviewExportedAction? CreateActionFromStatus(InterviewStatus status)
-        {
-            switch (status)
-            {
-                case InterviewStatus.SupervisorAssigned:
-                    return InterviewExportedAction.SupervisorAssigned;
-                case InterviewStatus.InterviewerAssigned:
-                    return InterviewExportedAction.InterviewerAssigned;
-                case InterviewStatus.Completed:
-                    return InterviewExportedAction.Completed;
-                case InterviewStatus.Restarted:
-                    return InterviewExportedAction.Restarted;
-                case InterviewStatus.ApprovedBySupervisor:
-                    return InterviewExportedAction.ApproveBySupervisor;
-                case InterviewStatus.ApprovedByHeadquarters:
-                    return InterviewExportedAction.ApproveByHeadquarter;
-                case InterviewStatus.RejectedBySupervisor:
-                    return InterviewExportedAction.RejectedBySupervisor;
-                case InterviewStatus.RejectedByHeadquarters:
-                    return InterviewExportedAction.RejectedByHeadquarter;
-            }
-            return null;
+            this.dataExportService.AddInterviewActions(interview.Document.QuestionnaireId,
+                interview.Document.QuestionnaireVersion, interviewActionLog.Actions);
+
+            interviewActionLogs.Remove(evnt.EventSourceId);
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
@@ -228,46 +208,146 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector));
         }
 
-    /*    public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
+        public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            this.StoreInterviewActionForUser(evnt.EventSourceId, evnt.Payload.UserId, InterviewExportedAction.SupervisorAssigned,
-              evnt.EventTimeStamp);
+            var userName = this.GetUserName(evnt.Payload.UserId);
+            interviewActionLogs.Store(
+                new InterviewActionLog(evnt.EventSourceId,
+                    new List<InterviewActionExportView>()
+                    {
+                        new InterviewActionExportView(evnt.EventSourceId.FormatGuid(), InterviewExportedAction.SupervisorAssigned, userName,
+                            evnt.EventTimeStamp)
+                    }), evnt.EventSourceId);
+        }
+
+        private string GetUserName(Guid userId)
+        {
+            UserDocument responsible = this.users.GetById(userId);
+            var userName = responsible != null ? responsible.UserName : "<UNKNOWN USER>";
+            return userName;
+        }
+
+        private void AddInterviewAction(Guid interviewId, DateTime timeStamp,InterviewExportedAction action, Guid userId)
+        {
+            var interviewActionLog = interviewActionLogs.GetById(interviewId);
+            if (interviewActionLog == null)
+                return;
+            var userName = this.GetUserName(userId);
+
+            interviewActionLog.Actions.Add(new InterviewActionExportView(interviewId.FormatGuid(), action, userName, timeStamp));
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            this.StoreInterviewActionForUser(evnt.EventSourceId, evnt.Payload.UserId, InterviewExportedAction.InterviewerAssigned,
-                evnt.EventTimeStamp);
+            AddInterviewAction(evnt.EventSourceId, evnt.EventTimeStamp, InterviewExportedAction.InterviewerAssigned, evnt.Payload.UserId);
         }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
-            this.StoreInterviewActionForUser(evnt.EventSourceId, evnt.Payload.UserId, InterviewExportedAction.Completed,
-              evnt.Payload.CompleteTime);
+            AddInterviewAction(evnt.EventSourceId, evnt.Payload.CompleteTime, InterviewExportedAction.Completed, evnt.Payload.UserId);
         }
 
         public void Handle(IPublishedEvent<InterviewRestarted> evnt)
         {
-            this.StoreInterviewActionForUser(evnt.EventSourceId, evnt.Payload.UserId, InterviewExportedAction.Restarted,
-                evnt.Payload.RestartTime);
+            AddInterviewAction(evnt.EventSourceId, evnt.Payload.RestartTime, InterviewExportedAction.Restarted, evnt.Payload.UserId);
         }
 
         public void Handle(IPublishedEvent<InterviewApproved> evnt)
         {
-            this.StoreInterviewActionForUser(evnt.EventSourceId, evnt.Payload.UserId, InterviewExportedAction.ApproveBySupervisor,
-               evnt.EventTimeStamp);
+            AddInterviewAction(evnt.EventSourceId, evnt.EventTimeStamp, InterviewExportedAction.ApproveBySupervisor, evnt.Payload.UserId);
         }
 
         public void Handle(IPublishedEvent<InterviewRejected> evnt)
         {
-            this.StoreInterviewActionForUser(evnt.EventSourceId, evnt.Payload.UserId, InterviewExportedAction.RejectedBySupervisor,
-               evnt.EventTimeStamp);
+            AddInterviewAction(evnt.EventSourceId, evnt.EventTimeStamp, InterviewExportedAction.RejectedBySupervisor, evnt.Payload.UserId);
         }
 
         public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
         {
-            this.StoreInterviewActionForUser(evnt.EventSourceId, evnt.Payload.UserId, InterviewExportedAction.RejectedByHeadquarter,
-                evnt.EventTimeStamp);
-        }*/
+            AddInterviewAction(evnt.EventSourceId, evnt.EventTimeStamp, InterviewExportedAction.RejectedByHeadquarter, evnt.Payload.UserId);
+        }
+
+        public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        private void RecordFirstAnswerIfNeeded(Guid interviewId, Guid userId, DateTime answerTime)
+        {
+            var interviewActionLog = this.interviewActionLogs.GetById(interviewId);
+            if (interviewActionLog == null)
+                return;
+
+            if (!interviewActionLog.Actions.Any() || !this.IsActionRequireToRecordFirstAnswerEvent(interviewActionLog.Actions.Last().Action))
+                return;
+
+            UserDocument responsible = this.users.GetById(userId);
+            if(responsible == null || !responsible.Roles.Contains(UserRoles.Operator))
+                return;
+
+            interviewActionLog.Actions.Add(new InterviewActionExportView(interviewId.FormatGuid(),
+                InterviewExportedAction.FirstAnswerSet, responsible.UserName, answerTime));
+        }
+
+        private bool IsActionRequireToRecordFirstAnswerEvent(InterviewExportedAction action)
+        {
+            return action == InterviewExportedAction.InterviewerAssigned || action == InterviewExportedAction.Restarted ||
+                action == InterviewExportedAction.RejectedBySupervisor;
+        }
+
+        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
     }
 }

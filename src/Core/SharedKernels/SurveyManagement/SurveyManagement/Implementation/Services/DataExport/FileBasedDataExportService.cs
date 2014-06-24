@@ -132,13 +132,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        public void AddInterviewAction(InterviewActionExportView interviewActionExportView)
+        public void AddInterviewActions(Guid questionnaireId, long questionnaireVersion, IEnumerable<InterviewActionExportView> actions)
         {
-            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(interviewActionExportView.TemplateId, interviewActionExportView.TemplateVersion);
+            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
 
-            this.ThrowArgumentExceptionIfDataFolderMissing(interviewActionExportView.TemplateId, interviewActionExportView.TemplateVersion, dataFolderForTemplatePath);
+            this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, questionnaireVersion, dataFolderForTemplatePath);
 
-            this.dataFileExportService.AddActionRecord(interviewActionExportView, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
+            this.dataFileExportService.AddActionRecords(actions, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
         }
 
         private void ThrowArgumentExceptionIfDataFolderMissing(Guid questionnaireId, long version, string dataDirectoryPath)

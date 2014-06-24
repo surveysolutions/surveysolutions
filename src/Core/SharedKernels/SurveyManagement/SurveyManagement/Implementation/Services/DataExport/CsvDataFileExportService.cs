@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using CsvHelper;
@@ -54,7 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        public void AddActionRecord(InterviewActionExportView interviewActionExportView, string filePath)
+        public void AddActionRecords(IEnumerable<InterviewActionExportView> actions, string filePath)
         {
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, true))
 
@@ -62,14 +63,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             using (var writer = new CsvWriter(streamWriter))
             {
                 writer.Configuration.Delimiter = this.delimiter;
+                foreach (var interviewActionExportView in actions)
+                {
+                    writer.WriteField(interviewActionExportView.InterviewId);
+                    writer.WriteField(interviewActionExportView.Action);
+                    writer.WriteField(interviewActionExportView.Originator);
+                    writer.WriteField(interviewActionExportView.Timestamp.ToString("d", CultureInfo.InvariantCulture));
+                    writer.WriteField(interviewActionExportView.Timestamp.ToString("T", CultureInfo.InvariantCulture));
 
-                writer.WriteField(interviewActionExportView.InterviewId);
-                writer.WriteField(interviewActionExportView.Action);
-                writer.WriteField(interviewActionExportView.Originator);
-                writer.WriteField(interviewActionExportView.Timestamp.ToString("d", CultureInfo.InvariantCulture));
-                writer.WriteField(interviewActionExportView.Timestamp.ToString("T", CultureInfo.InvariantCulture));
-
-                writer.NextRecord();
+                    writer.NextRecord();
+                }
                 streamWriter.Flush();
             }
         }
