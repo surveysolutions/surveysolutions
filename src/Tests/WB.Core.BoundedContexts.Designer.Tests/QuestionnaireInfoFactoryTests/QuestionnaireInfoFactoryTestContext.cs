@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         Id = g4Id,
                         Title = "Group 1.1.2",
                         Description = "Group 1.1.2 Description",
-                        EnablementCondition = "Group 1.1.2 Condition",
+                        EnablementCondition = "[" + q1Id +"] > 40",
                         ParentGroupId = g2Id,
                         ParentGroupsIds = new Guid[] { g2Id, g1Id },
                         RosterScopeIds = new Guid[] { q2Id }
