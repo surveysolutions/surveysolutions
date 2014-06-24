@@ -56,10 +56,10 @@
 <script type="text/ng-template" id="Numeric-template.html">
     <div class="form-group">
         <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
-        <select id="edit-roster-numeric-source" class="form-control input-lg" ng-model="activeRoster.source" ng-options="numeric.id as numeric.title for numeric in activeRoster.numerics"></select>
+        <select id="edit-roster-numeric-source" class="form-control input-lg" ng-model="activeRoster.rosterSizeQuestionId" ng-options="numeric.id as numeric.title for numeric in activeRoster.numerics"></select>
 
         <label for="edit-roster-numeric-titles" class="wb-label">Titles for rows (optional): <span>(<a>?</a>)</span></label><br>
-        <select id="edit-roster-numeric-titles" class="form-control input-lg"></select>
+        <select id="edit-roster-numeric-titles" class="form-control input-lg" ng-model="activeRoster.rosterTitleQuestionId" ng-options="multiOption.id as multiOption.title for multiOption in activeRoster.multiOption"></select>
     </div>
 </script>
 

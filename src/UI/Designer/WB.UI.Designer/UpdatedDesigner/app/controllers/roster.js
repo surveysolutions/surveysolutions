@@ -22,15 +22,16 @@
                     $scope.activeRoster.breadcrumbs = result.breadcrumbs;
                     $scope.activeRoster.numerics = manualUnion(_.toArray(result.numericIntegerQuestions));
                     $scope.activeRoster.lists = manualUnion(_.toArray(result.textListsQuestions));
+                    $scope.activeRoster.multiOption = manualUnion(_.toArray(result.notLinkedMultiOptionQuestions));
 
                     var roster = result.roster;
-                    $scope.activeRoster.rosterSizeQuestionId = roster.rosterSizeQuestionId;
-                    $scope.activeRoster.rosterTitleQuestionId = roster.rosterTitleQuestionId;
                     $scope.activeRoster.title = roster.title;
                     $scope.activeRoster.description = roster.description;
                     $scope.activeRoster.enablementCondition = roster.enablementCondition;
                     $scope.activeRoster.rosterSizeSourceType = roster.rosterSizeSourceType;
                     $scope.activeRoster.rosterFixedTitles = roster.rosterFixedTitles;
+                    $scope.activeRoster.rosterSizeQuestionId = roster.rosterSizeQuestionId;
+                    $scope.activeRoster.rosterTitleQuestionId = roster.rosterTitleQuestionId;
 
                     $scope.getRosterTemplate();
                 };
