@@ -26,8 +26,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>());
 
             interviewActionLog = new InterviewActionLog(interviewId, new List<InterviewActionExportView>());
-            interviewActionLog.Actions.Add(new InterviewActionExportView(interviewId.FormatGuid(),
-                InterviewExportedAction.InterviewerAssigned, "test", DateTime.Now));
+            interviewActionLog.Actions.Add(CreateInterviewActionExportView(interviewId,
+                InterviewExportedAction.InterviewerAssigned));
 
             interviewActionLogWriter.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(interviewActionLog);
 
