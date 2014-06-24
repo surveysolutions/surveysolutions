@@ -2,7 +2,7 @@
     <div class="breadcrumbs">
         <ul>
             <li ng-repeat="breadcrumb in activeQuestion.breadcrumbs"><a
-                    ng-href="{{breadcrumb.id}}">{{breadcrumb.title}}</a></li>
+                                                                         ng-href="{{breadcrumb.id}}">{{breadcrumb.title}}</a></li>
         </ul>
     </div>
 
@@ -30,9 +30,19 @@
         </div>
 
         <div class="form-group">
-            <button class="btn btn-lg btn-link">Add Instruction</button>
+            <button class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
         </div>
 
+        <div class="row" ng-show="showInstruction">
+            <div class="form-group col-xs-11">
+                <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.instructions"
+                       class="form-control" placeholder="Instruction">
+            </div>
+
+            <div class="form-group col-xs-1 pull-right">
+                <button class="btn" ng-click="showInstruction=false">X</button>        
+            </div>
+        </div>
         <div ng-include="activeQuestion.type + '-template.html'" ng-if="activeQuestion.type != undefined">
         </div>
 
@@ -54,18 +64,18 @@
                    class="form-control">            
         </div>           
 
-            <div class="form-group">
-                <label for="edit-question-scope">Question scope</label>
-                <select for="edit-question-scope" ng-model="activeQuestion.questionScope"
-                        ng-options="scope.value as scope.text for scope in activeQuestion.questionScopeOptions "
-                        class="form-control"></select>
-            </div>
-            <div class="form-group">
-                <label for="edit-question-instructions">Instructions</label>
-                <input id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions"
-                       class="form-control">
-            </div>
-</form>
+        <div class="form-group">
+            <label for="edit-question-scope">Question scope</label>
+            <select for="edit-question-scope" ng-model="activeQuestion.questionScope"
+                    ng-options="scope.value as scope.text for scope in activeQuestion.questionScopeOptions "
+                    class="form-control"></select>
+        </div>
+        <div class="form-group">
+            <label for="edit-question-instructions">Instructions</label>
+            <input id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions"
+                   class="form-control">
+        </div>
+    </form>
 
     <script type="text/ng-template" id="SingleOption-template.html">
         <div class="checkbox">
@@ -131,7 +141,7 @@
 
 <script lang="text/javascript">
     /* this block is needed for prettyCheckable initialization, should be called after DOM update */
-    $(function (){
+    $(function() {
         $.each($('input.wb-checkbox'), function(i, el) {
             $(el).prettyCheckable();
         });

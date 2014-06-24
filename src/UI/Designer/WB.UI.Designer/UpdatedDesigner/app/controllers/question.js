@@ -19,6 +19,7 @@
                     $scope.activeQuestion.validationExpression = result.validationExpression;
                     $scope.activeQuestion.validationMessage = result.validationMessage;
                     $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
+                    $scope.activeQuestion.instructions = result.instructions;   
                 }
 
                 $scope.loadQuestion = function () {
