@@ -110,7 +110,7 @@ namespace WB.UI.Supervisor.App_Start
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
 
-            var schedulerSettings = new SchedulerSettings(bool.Parse(WebConfigurationManager.AppSettings["Scheduler.Enabled"]),
+            var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
 
             var baseHqUrl = new Uri(WebConfigurationManager.AppSettings["Headquarters.BaseUrl"]);
@@ -123,7 +123,7 @@ namespace WB.UI.Supervisor.App_Start
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]));
 
             var interviewDetailsDataLoaderSettings =
-                new InterviewDetailsDataLoaderSettings(LegacyOptions.InterviewDetailsDataSchedulerEnabled,
+                new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
                     LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
 

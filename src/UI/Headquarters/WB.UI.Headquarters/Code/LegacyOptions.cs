@@ -9,9 +9,9 @@ namespace WB.UI.Headquarters.Code
             get { return bool.Parse(WebConfigurationManager.AppSettings["SupervisorFunctionsEnabled"]); }
         }
 
-        public static bool InterviewDetailsDataSchedulerEnabled
+        public static bool SchedulerEnabled
         {
-            get { return bool.Parse(WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.Enabled"]); }
+            get { return bool.Parse(WebConfigurationManager.AppSettings["Scheduler.Enabled"]); }
         }
 
         public static int InterviewDetailsDataSchedulerSynchronizationInterval
