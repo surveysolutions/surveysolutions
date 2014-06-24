@@ -436,7 +436,6 @@
     <Content Include="UpdatedDesigner\app\services\utilityService.js" />
     <Content Include="UpdatedDesigner\app\services\verificationService.js" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css" />
-    <Content Include="UpdatedDesigner\content\dropdown.css" />
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\body.css" />
     <Content Include="Content\bootstrap-mvc-validation.css" />
