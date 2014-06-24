@@ -6019,6 +6019,91 @@ body {
   font-size: 18px;
   font-weight: bold;
 }
+.bootstrap-select:not([class*="span"]):not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+  width: 100%;
+  margin-top: 3px;
+}
+.bootstrap-select > .btn {
+  background-color: #fff;
+  width: 100%;
+  text-align: left;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  font-weight: normal;
+  color: #c1c7cb;
+  border: none;
+}
+.bootstrap-select.btn-group .btn .caret {
+  background: url('../i/dropdown-arrow.png') center center no-repeat;
+  width: 19px;
+  height: 12px;
+  margin: 0;
+  border: none;
+  margin-top: -6px;
+}
+.dropup.bootstrap-select.btn-group .btn .caret {
+  background: url('../i/dropup-arrow.png') center center no-repeat;
+}
+.bootstrap-select .dropdown-menu {
+  border: 2px solid #dbdfe2;
+  top: -4px;
+}
+.bootstrap-select.btn-group .dropdown-menu dt {
+  font-family: "Lucida Console", Monaco, monospace;
+  color: #c1c7cb;
+  font-weight: normal;
+}
+.bootstrap-select.btn-group .dropdown-menu li small {
+  display: none;
+}
+.bootstrap-select.btn-group .btn .filter-option small {
+  display: block;
+}
+/* chapter dropdown menu */
+.chapter-menu.dropdown-menu {
+  padding: 15px;
+  min-width: 320px;
+}
+.chapter-menu.dropdown-menu > h1 {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  margin-top: 0;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #949da3;
+}
+.chapter-menu.dropdown-menu > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.chapter-menu.dropdown-menu > ul > li {
+  margin-top: 15px;
+}
+.chapter-menu.dropdown-menu > ul > li > a {
+  cursor: default;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #3f3f3f;
+}
+.chapter-menu.dropdown-menu > ul > li > a:not([disabled]) {
+  cursor: pointer;
+}
+.chapter-menu.dropdown-menu > ul > li > a[disabled] {
+  color: #bbb;
+}
+.chapter-menu.dropdown-menu > ul > li > a:hover {
+  text-decoration: none;
+}
+.chapter-menu.dropdown-menu > ul > li > a:hover:not([disabled]) {
+  color: #2a81cb;
+}
+.chapter-menu.dropdown-menu > ul > li > a > small {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 12px;
+  color: #9ca4aa;
+}
 /*
   string @color: 'blue' or 'gray'
 */
@@ -6631,7 +6716,7 @@ li.chapter-panel-item.current > .holder > .inner > h1 {
 #designer-editor.container section#main > .question-editor > .form-buttons-holder .pull-right > * {
   margin-left: 12px;
 }
-#designer-editor.container section#main > .question-editor > .form-buttons-holder > div a {
+#designer-editor.container section#main > .question-editor > .form-buttons-holder > div > a {
   cursor: pointer;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   text-transform: uppercase;

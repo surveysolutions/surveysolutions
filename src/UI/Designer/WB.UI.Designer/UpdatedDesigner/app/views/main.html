@@ -220,13 +220,16 @@
             Move to <span class="caret"></span>
         </button>
 
-        <ul role="menu" class="dropdown-menu dropdown-menu-right">
-            <li ng-repeat="chapter in questionnaire.chapters">
-                <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId">
-                    {{chapter.title}}
-                    <small>({{chapter.questionsCount}} questions, {{chapter.groupsCount}} groups, {{chapter.rostersCount}} rosters)</small>
-                </a>
-            </li>
-        </ul>
+        <div role="menu" class="chapter-menu dropdown-menu dropdown-menu-right">
+            <h1>Move to another chapter:</h1>
+            <ul>
+                <li ng-repeat="chapter in questionnaire.chapters">
+                    <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId">
+                        {{chapter.title}}<br/>
+                        <small>({{chapter.questionsCount}} questions, {{chapter.groupsCount}} groups, {{chapter.rostersCount}} rosters)</small>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </script>
