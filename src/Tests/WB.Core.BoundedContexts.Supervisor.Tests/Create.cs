@@ -26,14 +26,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
     internal static class Create
     {
         public static HeadquartersLoginService HeadquartersLoginService(IHeadquartersUserReader headquartersUserReader = null,
-            HttpMessageHandler messageHandler = null,
+            Func<HttpMessageHandler> messageHandler = null,
             ILogger logger = null,
             ICommandService commandService = null,
             HeadquartersSettings headquartersSettings = null)
         {
             return new HeadquartersLoginService(logger ?? Substitute.For<ILogger>(),
                 commandService ?? Substitute.For<ICommandService>(),
-                messageHandler ?? Substitute.For<HttpMessageHandler>(),
+                messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(),
                 headquartersSettings ?? HeadquartersSettings(),
                 headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>());
         }
