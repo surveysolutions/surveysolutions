@@ -4,14 +4,11 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using Main.Core.Documents;
-using Main.Core.Utility;
 using Main.Core.View.User;
 using Moq;
 using Moq.Protected;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
-using NSubstitute;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Utils;
@@ -55,7 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
             userReader.Setup(x => x.GetUserByUri(new Uri(UserDetailsUri)))
                 .ReturnsAsync(HeadquartersUser);
 
-            service = Create.HeadquartersLoginService(headquartersUserReader: userReader.Object, messageHandler: handler.Object,
+            service = Create.HeadquartersLoginService(headquartersUserReader: userReader.Object, messageHandler: () => handler.Object,
                 commandService: commandService.Object);
         };
 
