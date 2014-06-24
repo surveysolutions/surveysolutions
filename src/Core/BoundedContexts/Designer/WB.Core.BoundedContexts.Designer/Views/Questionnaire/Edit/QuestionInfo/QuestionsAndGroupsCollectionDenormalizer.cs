@@ -385,7 +385,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     RosterSizeQuestionId = g.RosterSizeQuestionId,
                     RosterSizeSourceType = g.RosterSizeSource,
                     RosterTitleQuestionId = g.RosterTitleQuestionId,
-                    ParentGroupId = g.GetParent().PublicKey == questionnaire.PublicKey ? Guid.Empty : g.GetParent().PublicKey
+                    ParentGroupId = g.GetParent().PublicKey == questionnaire.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
+                    EnablementCondition = g.ConditionExpression
                 })
                 .ToList();
 

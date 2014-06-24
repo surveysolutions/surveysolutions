@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public NewEditGroupView GetGroupEditView(string questionnaireId, Guid groupId)
         {
-            var questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+            QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
             if (questionnaire == null)
                 return null;
             var group = questionnaire.Groups.FirstOrDefault(x => x.Id == groupId);
@@ -98,16 +98,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 return null;
             var result = new NewEditGroupView
             {
-                Group = new GroupDetailsView
+                Group = ReplaceGuidsInValidationAndConditionRules(new GroupDetailsView
                 {
                     Id = group.Id,
                     Title = group.Title,
                     EnablementCondition = group.EnablementCondition,
                     Description = group.Description
-                },
+                }, questionnaire, questionnaireId),
                 Breadcrumbs = this.GetBreadcrumbs(questionnaire, group)
             };
             return result;
+        }
+
+
+        private GroupDetailsView ReplaceGuidsInValidationAndConditionRules(GroupDetailsView model, QuestionsAndGroupsCollectionView questionnaire, string questionnaireKey)
+        {
+            var expressionReplacer = new ExpressionReplacer(questionnaire);
+            Guid questionnaireGuid = Guid.Parse(questionnaireKey);
+            model.EnablementCondition = expressionReplacer.ReplaceGuidsWithStataCaptions(model.EnablementCondition, questionnaireGuid);
+            return model;
         }
 
         public NewEditRosterView GetRosterEditView(string questionnaireId, Guid rosterId)
