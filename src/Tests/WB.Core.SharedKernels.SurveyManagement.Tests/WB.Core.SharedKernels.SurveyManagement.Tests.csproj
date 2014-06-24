@@ -190,6 +190,7 @@
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
+    <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_2_capi_packages_and_max_per_process_is_1.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_broken_capi_package.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_capi_package_and_throws_unhandled_exception.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_1_capi_package.cs" />
