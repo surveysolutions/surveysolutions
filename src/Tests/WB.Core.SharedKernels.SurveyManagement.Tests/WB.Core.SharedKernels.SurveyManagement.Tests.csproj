@@ -140,6 +140,9 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextListQuestionAnswered_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataEventHandlerTestContext.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_ApprovedBySupervisor_recived.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_Completed_recived.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_created_from_template_containing_2_questions.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_1_answerd_questions_and_1_unananswered.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_linked_question_on_second_.cs" />
@@ -149,6 +152,14 @@
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_roster_triggered_by_text_list_question.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_roster_with_2_rows.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived_by_interview_with_roster_with_2_rows_with_nested_groups.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewerAssigned_recived.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_RejectedByHeadquarter_recived.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_RejectedBySupervisor_recived.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_Restarted_recived.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_SupervisorAssigned_recived.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_previous_action_is_completed.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_previous_action_is_interviewer_assigned.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_user_who_gave_answer_is_supervisor.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerFunctionalTestsContext.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApprovedByHQ_event_and_responsible_user_not_found.cs" />

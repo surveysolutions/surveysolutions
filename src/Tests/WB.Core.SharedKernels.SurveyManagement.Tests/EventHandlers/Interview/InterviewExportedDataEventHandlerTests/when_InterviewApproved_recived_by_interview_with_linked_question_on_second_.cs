@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
     internal class when_InterviewApproved_recived_by_interview_with_linked_question_on_second_level_referenced_on_third : InterviewExportedDataEventHandlerTestContext
     {
@@ -72,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
         };
 
         Because of = () =>
-             interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
+             interviewExportedDataDenormalizer.Handle(CreateInterviewApprovedByHQPublishableEvent());
 
         It should_linked_question_have_one_answer = () =>
            GetLevel(result, new[] { rosterId }).Records[0].Questions[0].Answers.Length.ShouldEqual(1);

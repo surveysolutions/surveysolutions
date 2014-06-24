@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -14,8 +10,8 @@ using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
-using it = Moq.It;
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.AnswersByVariableDenormalizerTests
+
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.AnswersByVariableDenormalizerTests
 {
     internal class when_answering_geo_question_and_collection_was_not_created : AnswersByVariableDenormalizerTestContext
     {
@@ -23,7 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.AnswersByVa
         {
             answersByVariableStorageMock = new Mock<IReadSideRepositoryWriter<AnswersByVariableCollection>>();
             answersByVariableStorageMock
-                .Setup(x => x.Store(it.IsAny<AnswersByVariableCollection>(), it.IsAny<string>()))
+                .Setup(x => x.Store(Moq.It.IsAny<AnswersByVariableCollection>(), Moq.It.IsAny<string>()))
                 .Callback((AnswersByVariableCollection collection, string id) => answersCollection = collection);
 
             var interviewBriefMock = Mock.Of<InterviewBrief>(i => i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == 1);
