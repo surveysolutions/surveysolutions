@@ -81,6 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         Title = "Integer 1",
                         MaxValue = 20,
                         ParentGroupId = g1Id,
+                        VariableName = "q1",
                         ParentGroupsIds = new Guid[] { g1Id },
                         RosterScopeIds = new Guid[] {  }
                     },
@@ -95,7 +96,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         Title = "MultiOption",
                         ParentGroupId = g1Id,
                         ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] {  }
+                        RosterScopeIds = new Guid[] {  },
+                        EnablementCondition = "["+ q1Id +"] > 25"
                     },
                     new TextDetailsView
                     {
