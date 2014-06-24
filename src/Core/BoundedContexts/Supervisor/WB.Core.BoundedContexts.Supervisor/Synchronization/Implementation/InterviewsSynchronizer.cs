@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IJsonUtils jsonUtils;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
-        private readonly HttpMessageHandler httpMessageHandler;
+        private readonly Func<HttpMessageHandler> httpMessageHandler;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
             IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
-            HttpMessageHandler httpMessageHandler)
+            Func<HttpMessageHandler> httpMessageHandler)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.executeCommand(new RejectInterviewFromHeadquartersCommand(interviewDetails.Id, 
                 userIdGuid, 
                 supervisorIdGuid, 
-                feedEntry.InterviewId != null ? (Guid?)Guid.Parse(feedEntry.InterviewerId) : null,
+                feedEntry.InterviewerId != null ? (Guid?)Guid.Parse(feedEntry.InterviewerId) : null,
                 interviewDetails, 
                 DateTime.Now, 
                 feedEntry.Comment));
@@ -316,6 +316,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             InterviewCommentedStatus lastInterviewCommentedStatus = interviewSummary.CommentedStatusesHistory.LastOrDefault();
             string lastComment = lastInterviewCommentedStatus != null ? lastInterviewCommentedStatus.Comment : string.Empty;
 
+
+            var featuredQuestionList = interviewSummary.WasCreatedOnClient
+                ? interviewSummary.AnswersToFeaturedQuestions
+                    .Select(
+                        featuredQuestion =>
+                            new FeaturedQuestionMeta(featuredQuestion.Key, featuredQuestion.Value.Title, featuredQuestion.Value.Answer)).ToList()
+                : null;
+
             var metadata = new InterviewMetaInfo
             {
                 PublicKey = interviewId,
@@ -326,6 +334,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 Valid = !interviewSummary.HasErrors,
                 CreatedOnClient = interviewSummary.WasCreatedOnClient,
                 TemplateVersion = interviewSummary.QuestionnaireVersion,
+                FeaturedQuestionsMeta = featuredQuestionList
             };
 
             var syncItem = new SyncItem
@@ -342,7 +351,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void SendInterviewData(Guid interviewId, string interviewData)
         {
-            using (var client = new HttpClient(this.httpMessageHandler).AppendAuthToken(this.settings))
+            using (var client = new HttpClient(this.httpMessageHandler()).AppendAuthToken(this.settings))
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, this.settings.InterviewsPushUrl) {
                     Content = new StringContent(interviewData)

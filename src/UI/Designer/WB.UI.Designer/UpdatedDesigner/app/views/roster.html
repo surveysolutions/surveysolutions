@@ -1,0 +1,63 @@
+﻿<div class="form-holder">
+    <div class="breadcrumbs">
+        <ul>
+            <li ng-repeat="breadcrumb in activeRoster.breadcrumbs"><a ng-href="breadcrumb.id">{{breadcrumb.title}}</a></li>
+        </ul>
+    </div>
+
+    <form role="form" name="editRosterForm">
+        <div class="form-group">
+            <select class="form-control input-lg" ng-model="activeRoster.rosterSizeSourceType">
+                <option value="Question">Answer to numeric question</option>
+                <option value="Question">Answer to list question</option>
+                <option value="FixedTitles">Manual list</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
+            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.title">
+        </div>
+
+        <div class="form-group">
+            <label for="edit-group-description" class="wb-label">Description <span>(<a>?</a>)</span></label><br>
+            <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.description">
+        </div>
+
+        <div class="form-group">
+            <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
+            <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.enablementCondition">
+        </div>
+        
+        <div ng-include="activeRoster.rosterSizeSourceType + '-template.html'">
+        </div>
+
+    </form>
+</div>
+<div class="form-buttons-holder">
+    <div class="pull-left">
+        <button id="edit-roster-save-button" class="btn btn-lg btn-primary" ng-click="saveRoster()">Save</button>
+        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="resetRoster()">Cancel</button>
+    </div>
+    <div class="pull-right">
+        <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteRoster()">Delete</button>
+        <button id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneRoster()">Clone</button>
+    </div>
+</div>
+
+<script type="text/ng-template" id="Question-template.html">
+    <div class="form-group">
+        <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
+        <select id="edit-roster-numeric-source" class="form-control input-lg" ng-model="activeRoster.source" ng-options="n.title for n in activeRoster.numerics"></select>
+
+        <label for="edit-roster-numeric-titles" class="wb-label">Titles for rows (optional): <span>(<a>?</a>)</span></label><br>
+        <select id="edit-roster-numeric-titles" class="form-control input-lg"></select>
+    </div>
+</script>
+
+<script type="text/ng-template" id="FixedTitles-template.html">
+    <div class="form-group">
+        <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <span>(<a>?</a>)</span></label>
+        <textarea id="edit-fixed-roster-title" rows="5" cols="100" split-array ng-model="activeRoster.rosterFixedTitles"></textarea>
+    </div>
+</script>

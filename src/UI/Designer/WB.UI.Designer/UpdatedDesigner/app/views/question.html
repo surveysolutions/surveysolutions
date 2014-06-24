@@ -1,0 +1,150 @@
+﻿<div class="form-holder">
+    <div class="breadcrumbs">
+        <ul>
+            <li ng-repeat="breadcrumb in activeQuestion.breadcrumbs"><a
+                    ng-href="{{breadcrumb.id}}">{{breadcrumb.title}}</a></li>
+        </ul>
+    </div>
+
+    <form role="form">
+        <div class="row">
+            <div class="form-group col-xs-8">
+                <!--<label for="edit-question-type">Type</label>-->
+                <select id="edit-question-type" class="form-control" ng-model="activeQuestion.type"
+                        ng-options="scope.value as scope.text for scope in activeQuestion.questionTypeOptions"></select>
+            </div>
+
+            <div class="form-group col-xs-3 pull-right">
+                <!--<label for="edit-question-variable-name">Variable name</label>-->
+                <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variableName"
+                       class="form-control" placeholder="Set variable">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <!--<label for="edit-question-title">Question Title</label>-->
+            <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text">
+
+            <div class="has-pretty-child gray">
+                <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" data-label="Mandatory question"/>
+                <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isPreFilled" data-label="Filled by supervisor"/>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-lg btn-link">Add Instruction</button>
+        </div>
+
+        <div ng-include="activeQuestion.type + '-template.html'">
+        </div>
+
+        <div class="form-group">
+            <label for="edit-question-enablement-condition">Condition expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
+            <input id="edit-question-enablement-condition" type="text" ng-model="activeQuestion.enablementCondition"
+                   class="form-control">
+        </div>
+
+        <div class="row">
+            <div class="form-group col-xs-8">
+                <div class="form-group">
+                    <label for="edit-question-validation-expression">Validation expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
+                    <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression"
+                           class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group col-xs-4 pull-right">
+                <div class="form-group">
+                    <label for="edit-question-validation-message">Validation message (<a href="#">?</a>)</label>
+                    <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage"
+                           class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="edit-question-scope">Question scope</label>
+            <select for="edit-question-scope" ng-model="activeQuestion.questionScope"
+                    ng-options="scope.value as scope.text for scope in activeQuestion.questionScopeOptions "
+                    class="form-control"></select>
+        </div>
+        <div class="form-group">
+            <label for="edit-question-instructions">Instructions</label>
+            <input id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions"
+                   class="form-control">
+        </div>
+    </form>
+
+    <script type="text/ng-template" id="SingleOption-template.html">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="activeQuestion.isLinked">
+                Is linked
+            </label>
+        </div>
+        <div ng-repeat="option in activeQuestion.options">
+            <div class="form-group">
+                <div class="col-xs-4">
+                    <input type="text" ng-model="option.value" class="form-control">
+                </div>
+                <div class="col-xs-8">
+                    <input type="text" ng-model="option.title" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                <input type="text" ng-model="optionValue" class="form-control">
+            </div>
+            <div class="col-xs-8">
+                <input type="text" ng-model="optionTitle" class="form-control">
+            </div>
+        </div>
+        <p>
+            <input type="submit" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
+        </p>
+    </script>
+    <script type="text/ng-template" id="MultyOption-template.html">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="activeQuestion.isLinked">
+                Is linked
+            </label>
+        </div>
+    </script>
+    <script type="text/ng-template" id="Numeric-template.html">
+        <p>Hello, im Numeric</p>
+    </script>
+    <script type="text/ng-template" id="DateTime-template.html">
+    </script>
+    <script type="text/ng-template" id="Text-template.html">
+    </script>
+    <script type="text/ng-template" id="GpsCoordinates-template.html">
+    </script>
+    <script type="text/ng-template" id="TextList-template.html">
+        <p>Hello, im TextList</p>
+    </script>
+    <script type="text/ng-template" id="QRBarcode-template.html">
+    </script>
+</div>
+
+<div class="form-buttons-holder">
+    <div class="pull-left">
+        <button cid="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveQuestion()">Save</button>
+        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="resetQuestion()">Cancel</button>
+        
+    </div>
+    <div class="pull-right">
+        <ng-include src="'moveToChapterSnippet'" />
+    </div>
+</div>
+
+<script lang="text/javascript">
+    /* this block is needed for prettyCheckable initialization, should be called after DOM update */
+    $(function (){
+        $.each($('input.wb-checkbox'), function(i, el) {
+            $(el).prettyCheckable();
+        });
+    });
+</script>

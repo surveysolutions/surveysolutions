@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="LANG">1033</String>
+  <String Id="ProductName">Headquarters</String>
+  <String Id="CompanyName">Survey Solutions</String>
+  <String Id="DowngradeErrorMessage">A newer version of Headquarters is already installed.</String>
+  <String Id="IISVersion">IIS version 6 or above must be present.</String>
+  <String Id="DotNet4">.Net version 4 or above must be present.</String>
+  <String Id="Administrator">You must have admin rights to proceed.</String>
+</WixLocalization>

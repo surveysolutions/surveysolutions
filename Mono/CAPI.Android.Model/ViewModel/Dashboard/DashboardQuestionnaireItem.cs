@@ -1,29 +1,15 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DashboardQuestionnaireItem.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The dashboard questionnaire item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
-using System.Windows.Input;
-using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
-    /// <summary>
-    /// The dashboard questionnaire item.
-    /// </summary>
-    public class DashboardQuestionnaireItem 
+    public class DashboardQuestionnaireItem
     {
         #region Constructors and Destructors
 
-        
-        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, InterviewStatus status, IList<FeaturedItem> properties, string title, bool? createdOnClient = false)
+        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, InterviewStatus status, IList<FeaturedItem> properties,
+            string title, bool? createdOnClient = false, bool canBeDeleted = false)
         {
             this.PublicKey = publicKey;
             this.status = status;
@@ -31,20 +17,15 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             this.SurveyKey = surveyKey;
             this.Title = title;
             this.CreatedOnClient = createdOnClient;
+            this.CanBeDeleted = canBeDeleted;
         }
 
         #endregion
 
         #region Public Properties
 
-        /// <summary>
-        /// Gets the properties.
-        /// </summary>
         public IList<FeaturedItem> Properties { get; private set; }
 
-        /// <summary>
-        /// Gets the public key.
-        /// </summary>
         public Guid PublicKey { get; private set; }
 
         public string Title { get; private set; }
@@ -52,17 +33,14 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         public Guid SurveyKey { get; private set; }
 
         public bool? CreatedOnClient { get; set; }
-        /// <summary>
-        /// Gets the status.
-        /// </summary>
-        public InterviewStatus Status
-        {
-            get { return status; }
-        }
+
+        public bool CanBeDeleted { get; set; }
 
         private InterviewStatus status;
-        
-     
+        public InterviewStatus Status
+        {
+            get { return this.status; }
+        }
 
         #endregion
     }

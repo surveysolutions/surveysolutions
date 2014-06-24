@@ -1,0 +1,22 @@
+{
+    "questionnaireId": "7c97b1925b0244b782ed6741a5035fae",
+    "title": "Test",
+    "isPublic": "false",
+    "sharedPersons":[{"id":"27ff9d7e-fade-4bee-aeaa-168eed17bd14","email":"test1@test.com"},{"id":"f460f92c-433f-48bc-a506-248f1a4e954c","email":"share@temp.org"}],
+    "chapters": [{
+        "itemId": "6e240642274c4bdea937baa78cd4ad6f",
+        "title": "Chapter",
+        "questionsCount": 0,
+        "groupsCount": 0,
+        "rostersCount": 0
+    }, {
+        "itemId": "34e31f00cdbff703a680db5fa66bf8b5",
+        "title": "New Chapter",
+        "questionsCount": 0,
+        "groupsCount": 0,
+        "rostersCount": 0
+    }],
+    "questionsCount": 24,
+    "groupsCount": 18,
+    "rostersCount": 0
+}

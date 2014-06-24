@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.View;
+using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -43,7 +44,7 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
                 Comments = interview.Comments,
                 Valid = interview.Valid,
                 FeaturedQuestionsMeta = featuredQuestionList,
-                CreatedOnClient = interview.CreatedOnClient,
+                CreatedOnClient = interview.JustInitilized,
                 TemplateVersion = interview.SurveyVersion
             };
         }

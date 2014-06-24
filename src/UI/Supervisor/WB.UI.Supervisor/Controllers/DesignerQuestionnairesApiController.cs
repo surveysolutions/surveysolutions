@@ -14,13 +14,9 @@ using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
-using WB.UI.Shared.Web;
-using WB.UI.Shared.Web.Extensions;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Supervisor.DesignerPublicService;
-using WB.UI.Supervisor.Models;
-using IPublicService = WB.UI.Supervisor.DesignerPublicService.IPublicService;
-using QuestionnaireVersion = WB.UI.Supervisor.DesignerPublicService.QuestionnaireVersion;
-using RemoteFileInfo = WB.UI.Supervisor.DesignerPublicService.RemoteFileInfo;
 
 namespace WB.UI.Supervisor.Controllers
 {

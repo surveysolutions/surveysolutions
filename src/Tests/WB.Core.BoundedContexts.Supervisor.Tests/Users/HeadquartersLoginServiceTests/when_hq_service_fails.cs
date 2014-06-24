@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Users.HeadquartersLoginServic
                     Content = new StringContent("exception")
                 }));
 
-            service = Create.HeadquartersLoginService(messageHandler: handler.Object,
+            service = Create.HeadquartersLoginService(messageHandler: () => handler.Object,
                 logger: logger.Object, commandService: commandService.Object);
         };
 

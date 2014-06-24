@@ -28,6 +28,8 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
+using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
+using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Rest.Android;
@@ -277,10 +279,11 @@ namespace WB.UI.Capi
 
             this.kernel.Unbind<IAnswerOnQuestionCommandService>();
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
+            this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
 
-            this.kernel.Unbind<ISyncPackageApplier>();
-            this.kernel.Bind<ISyncPackageApplier>().To<SyncPackageApplier>().InSingletonScope();
+            this.kernel.Unbind<ISyncPackageRestoreService>();
+            this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
             
             #region register handlers
 

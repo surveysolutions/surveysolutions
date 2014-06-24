@@ -1,0 +1,39 @@
+.wb-input {
+  border-radius: 4px;
+  .wb-input-text-fontstyle();
+  padding: 10px 15px;
+
+  &.bg-white {
+    background-color: white;
+    border: solid #dbdfe2 2px;
+  }
+
+  &.width-auto {
+    width: 100%;
+  }
+}
+
+.prettycheckbox > a, .prettyradio > a {
+  background: url(../../i/pretty-checkable-sprites.png)
+}
+
+.prettycheckbox {
+  label {
+    font-size: 14px !important;
+    margin: 4px 6px 4px 0;
+    .wb-checkbox-fontstyle();
+  }
+}
+
+.form-control {
+  border-width: 2px;
+  .placeholder-style() {
+    .lucida-console-font();
+    font-size: 16px;
+    color: #c1c7cb;
+  }
+
+  &::-moz-placeholder { .placeholder-style(); }
+  &:-ms-input-placeholder { .placeholder-style(); }
+  &::-webkit-input-placeholder { .placeholder-style(); }
+}

@@ -16,16 +16,20 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private readonly Queue<InterviewItemId> executionLine = new Queue<InterviewItemId>();
         private readonly ICommandService commandService;
+        private readonly IAnswerProgressIndicator answerProgressIndicator;
 
 
-        public AnswerOnQuestionCommandService(ICommandService commandService)
+        public AnswerOnQuestionCommandService(ICommandService commandService, IAnswerProgressIndicator answerProgressIndicator)
         {
             this.commandService = commandService;
+            this.answerProgressIndicator = answerProgressIndicator;
+
             Task.Factory.StartNew(() =>
             {
                 while (true)
                 {
                     this.ExecuteFirstInLineSaveAnswerCommand();
+
                     Thread.Sleep(300);
                 }
             });
@@ -52,12 +56,23 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void ExecuteFirstInLineSaveAnswerCommand()
         {
-            CommandAndErrorCallback nextCommand;
-
             if (this.executionLine.Count == 0)
-            {
                 return;
+
+            this.answerProgressIndicator.Show();
+            try
+            {
+                this.ExecuteFirstInLineSaveAnswerCommandImpl();
             }
+            finally
+            {
+                this.answerProgressIndicator.Hide();
+            }
+        }
+
+        private void ExecuteFirstInLineSaveAnswerCommandImpl()
+        {
+            CommandAndErrorCallback nextCommand;
 
             InterviewItemId key = this.executionLine.Dequeue();
 

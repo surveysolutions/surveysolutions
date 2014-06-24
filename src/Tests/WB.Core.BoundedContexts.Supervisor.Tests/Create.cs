@@ -25,24 +25,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
 {
     internal static class Create
     {
-        public static HeadquartersLoginService HeadquartersLoginService(IHeadquartersUserReader headquartersUserReader = null, 
-            HttpMessageHandler messageHandler = null, 
-            ILogger logger = null, 
-            ICommandService commandService = null, 
+        public static HeadquartersLoginService HeadquartersLoginService(IHeadquartersUserReader headquartersUserReader = null,
+            Func<HttpMessageHandler> messageHandler = null,
+            ILogger logger = null,
+            ICommandService commandService = null,
             HeadquartersSettings headquartersSettings = null)
         {
-            return new HeadquartersLoginService(logger ?? Substitute.For<ILogger>(), 
-                commandService ?? Substitute.For<ICommandService>(), 
-                messageHandler ?? Substitute.For<HttpMessageHandler>(),
+            return new HeadquartersLoginService(logger ?? Substitute.For<ILogger>(),
+                commandService ?? Substitute.For<ICommandService>(),
+                messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(),
                 headquartersSettings ?? HeadquartersSettings(),
                 headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>());
         }
 
-        public static UserChangedFeedReader UserChangedFeedReader(HeadquartersSettings settings = null, HttpMessageHandler messageHandler = null)
+        public static UserChangedFeedReader UserChangedFeedReader(HeadquartersSettings settings = null,
+            Func<HttpMessageHandler> messageHandler = null)
         {
-            return new UserChangedFeedReader(settings ?? HeadquartersSettings(), 
-                messageHandler ?? Substitute.For<HttpMessageHandler>(),
-                HeadquartersPullContext());
+            return new UserChangedFeedReader(settings ?? HeadquartersSettings(),
+                messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(), HeadquartersPullContext());
         }
 
         public static HeadquartersPullContext HeadquartersPullContext()
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
         public static InterviewsSynchronizer InterviewsSynchronizer(
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter = null,
             IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter = null,
-            HttpMessageHandler httpMessageHandler = null,
+            Func<HttpMessageHandler> httpMessageHandler = null,
             IEventStore eventStore = null,
             ILogger logger = null,
             IJsonUtils jsonUtils = null,
@@ -81,20 +81,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 interviewSummaryRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 readyToSendInterviewsRepositoryWriter ?? Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(),
-                httpMessageHandler ?? Mock.Of<HttpMessageHandler>());
+                httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>());
         }
 
-        public static HeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null, 
-            Uri usersChangedFeedUri = null, 
-            Uri interviewsFeedUri = null, 
-            string questionnaireDetailsEndpoint = "", 
+        public static HeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,
+            Uri usersChangedFeedUri = null,
+            Uri interviewsFeedUri = null,
+            string questionnaireDetailsEndpoint = "",
             string accessToken = "",
             Uri interviewsPushUrl = null)
         {
-            return new HeadquartersSettings(loginServiceUri ?? new Uri("http://localhost/"), 
-                usersChangedFeedUri ?? new Uri("http://localhost/"), 
-                interviewsFeedUri ?? new Uri("http://localhost/"), 
-                questionnaireDetailsEndpoint, 
+            return new HeadquartersSettings(loginServiceUri ?? new Uri("http://localhost/"),
+                usersChangedFeedUri ?? new Uri("http://localhost/"),
+                interviewsFeedUri ?? new Uri("http://localhost/"),
+                questionnaireDetailsEndpoint,
                 accessToken,
                 interviewsPushUrl ?? new Uri("http://localhost"));
         }

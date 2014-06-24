@@ -52,7 +52,7 @@ function CheckPrerequisites() {
 
 
 function IsSetupSolution($Solution) {
-    return $Solution.EndsWith('Setup.sln')
+    return ($Solution.EndsWith('Setup.sln') -or $Solution.EndsWith('SetupHeadquarters.sln'))
 }
 
 function ShouldSolutionBeIgnored($Solution) {
@@ -265,7 +265,7 @@ function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
 	$ver = $Version + "." + $BuildNumber
 	$NewVersion = 'AssemblyVersion("' + $ver + '")';
 	$NewFileVersion = 'AssemblyFileVersion("' + $ver + '")';
-	$NewInformationalVerson = 'AssemblyInformationalVersion("' + $Version + ' (Build ' + $BuildNumber + ')")'
+	$NewInformationalVerson = 'AssemblyInformationalVersion("' + $Version + ' (build ' + $BuildNumber + ')")'
 
 	$TmpFile = $tempFile = [System.IO.Path]::GetTempFileName()
 
@@ -278,13 +278,6 @@ function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
 	Write-Host "##teamcity[message text='Updated $file to version $ver']"
 }
 
-function GetAssemblyFilePath([string]$Project)
-{
-	$file = get-childitem $Project
-	$ret = Join-Path $file.directoryname "Properties\AssemblyInfo.cs"
-	return $ret
-}
-
 function GetVersionString([string]$Project)
 {
 	$file = get-childitem $Project
@@ -295,7 +288,9 @@ function GetVersionString([string]$Project)
 
 function UpdateProjectVersion([string]$BuildNumber, [string]$Project)
 {
-	UpdateSourceVersion -Version (GetVersionString $Project) `
-		-BuildNumber $BuildNumber `
-		-file (GetAssemblyFilePath $Project)
+	$ver = GetVersionString $Project
+	$foundFiles = get-childitem $path -include *AssemblyInfo.cs -recurse
+	foreach ($file in $foundFiles) {
+		UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
+	}
 }

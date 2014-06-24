@@ -85,9 +85,15 @@ namespace WB.Tools.CapiDataGenerator.Models
                 viewsDatabase: ConfigurationManager.AppSettings["Headquarters.Raven.Databases.Views"],
                 plainDatabase: ConfigurationManager.AppSettings["Headquarters.Raven.Databases.PlainStorage"]);
 
+            var synchronizationSettings = new SyncSettings(reevaluateInterviewWhenSynchronized: true,
+                appDataDirectory: AppDomain.CurrentDomain.BaseDirectory,
+                incomingCapiPackagesDirectoryName: ConfigurationManager.AppSettings["Synchronization.IncomingCapiPackagesDirectory"],
+                incomingCapiPackagesWithErrorsDirectoryName: ConfigurationManager.AppSettings["Synchronization.IncomingCapiPackagesWithErrorsDirectory"],
+                incomingCapiPackageFileNameExtension: ConfigurationManager.AppSettings["Synchronization.IncomingCapiPackageFileNameExtension"]);
+
             new StandardKernel(
                 new RavenReadSideInfrastructureModule(ravenSupervisorSettings),
-                new SynchronizationModule(AppDomain.CurrentDomain.BaseDirectory, new SyncSettings(reevaluateInterviewWhenSynchronized: true)),
+                new SynchronizationModule(synchronizationSettings),
                 new RavenPlainStorageInfrastructureModule(ravenSupervisorSettings),
                 new CapiDataGeneratorRegistry(),
                 new NLogLoggingModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),

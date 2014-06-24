@@ -1,0 +1,89 @@
+.btn {
+  padding: 5px 6px;
+  border: none;
+  background-color: @inline-button-bg-color;
+  font-style: normal;
+  &:hover { background-color: darken(@inline-button-bg-color, 5%); }
+  &.lighter-hover {
+    &:hover { background-color: lighten(@inline-button-bg-color, 5%); }
+  }
+  border-radius: 3px;
+  //vertical-align: text-bottom;
+  color: @inline-button-normal-color;
+
+  .inline-button-fontstyle();
+
+  &.error {
+    color: @inline-button-error-color;
+  }
+
+  &[disabled] {
+    opacity: 1;
+    color: #fff;
+    background-color: transparent;
+    background: url(../../i/btn-disabled.png);
+  }
+}
+
+.btn-lg {
+  &, &:hover, &:focus, &:active, &.active {
+    padding: 17px;
+    border: none;
+    border-radius: 3px;
+  }
+}
+
+.btn-primary {
+  background-color: @inline-button-medium-bg-color;
+  &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
+  .inline-button-fontstyle();
+  text-transform: uppercase;
+  color: @inline-button-medium-fg-color;
+}
+
+.btn-link {
+  &, &:active, &:hover {
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+.wb-dropdown-button() {
+  vertical-align: middle;
+  width: 37px;
+  height: 30px;
+  background: url(../../i/btn-dropdown-blue.png) center -5px no-repeat;
+  &:hover {
+    background-position: center -42px;
+  }
+}
+
+.dropdown {
+  &.width60 {
+    width: 60%;
+  }
+
+  > .wb-dropdown-button, ul.dropdown-menu {
+    width: 100%;
+
+    .arrow {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 40px;
+      background: url(../../i/dropdown-arrow.png) no-repeat center center;
+    }
+  }
+
+  > .wb-dropdown-button {
+    background-color: #fff;
+    width: 100%;
+    text-align: left;
+    .wb-input-text-fontstyle();
+
+  }
+
+}
+

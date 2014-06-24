@@ -94,6 +94,8 @@
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_2_rows_in_roster_already_present.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_contains_nested_group.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_add_roster_row_method_called_and_row_is_nested_roster.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_creating_interview_with_answered_supervisor_questions_in_fixed_roster.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_creating_interview_with_one_answered_prefilled_question.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_creating_interview_with_one_unanswered_question.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_cteating_interview_on_CAPI_and_questionnaire_has_questions_that_reference_prefilled_one_in_title.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_cteating_interview_with_sync_data_and_questionnaire_has_questions_that_reference_prefilled_one_in_title.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_it_at_first_level.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_it_at_parallel_roster_level.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_it_at_top_level.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_ordered_multy_option_linked_and_manual_questions.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_roster_with_2_rows_and_linked_question_out_of_roster.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_roster_with_question_which_has_rostertitle_in_substitution.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_textlist_roster_with_question_which_has_rostertitle_in_substitution.cs" />

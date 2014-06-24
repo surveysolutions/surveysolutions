@@ -15,13 +15,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         Establish context = () =>
         {
             InitializePreviousState();
-            questionDetailsFactoryMock = new Mock<IQuestionDetailsFactory>();
+            questionDetailsFactoryMock = new Mock<IQuestionDetailsViewMapper>();
             questionFactoryMock = new Mock<IQuestionFactory>();
 
             evnt = CreateNewGroupAddedEvent(groupId, g3Id, enablementCondition, description, title);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
-                questionDetailsFactory: questionDetailsFactoryMock.Object,
+                questionDetailsViewMapper: questionDetailsFactoryMock.Object,
                 questionFactory: questionFactoryMock.Object);
         };
 
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         private static QuestionsAndGroupsCollectionDenormalizer denormalizer;
         private static IPublishedEvent<NewGroupAdded> evnt;
         private static QuestionsAndGroupsCollectionView newState = null;
-        private static Mock<IQuestionDetailsFactory> questionDetailsFactoryMock = null;
+        private static Mock<IQuestionDetailsViewMapper> questionDetailsFactoryMock = null;
         private static Mock<IQuestionFactory> questionFactoryMock;
         private static Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static string enablementCondition = "expression";

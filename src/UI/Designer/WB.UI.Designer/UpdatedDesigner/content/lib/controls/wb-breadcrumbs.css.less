@@ -1,0 +1,27 @@
+/*
+  string @color: 'blue' or 'gray'
+*/
+.wb-breadcrumbs(@color) {
+  > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    > li, > li > a {
+      display: inline-block;
+      .breadcrumbs-fontstyle(@color);
+    }
+
+    > li:after {
+      position: relative;
+      top: 3px;
+      display: inline-block;
+      width: 7px;
+      height: 14px;
+      content: '';
+      margin: 0 7px;
+      background: url(../i/breadcrumb-slash.png) no-repeat;
+    }
+  }
+}
+

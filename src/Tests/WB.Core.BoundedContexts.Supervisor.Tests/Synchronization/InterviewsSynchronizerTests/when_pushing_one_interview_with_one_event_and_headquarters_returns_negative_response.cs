@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 eventStore: eventStore,
                 logger: loggerMock.Object,
                 jsonUtils: jsonUtils,
-                httpMessageHandler: httpMessageHandler,
+                httpMessageHandler: ()=> httpMessageHandler,
                 headquartersPushContext: headquartersPushContextMock.Object);
         };
 
