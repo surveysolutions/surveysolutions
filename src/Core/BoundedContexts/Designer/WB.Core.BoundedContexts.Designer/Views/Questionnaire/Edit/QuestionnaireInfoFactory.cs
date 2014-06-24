@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EmitMapper;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -141,10 +142,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId)
         {
-            var questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+            QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
             if (questionnaire == null)
                 return null;
-            var question = questionnaire.Questions.FirstOrDefault(x => x.Id == questionId);
+            QuestionDetailsView question = questionnaire.Questions.FirstOrDefault(x => x.Id == questionId);
             if (question == null)
                 return null;
             
@@ -155,7 +156,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.QuestionTypeOptions = this.questionTypeOptopns;
             result.QuestionScopeOptions = this.questionScopeOptions;
 
+            this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
+
             return result;
+        }
+
+        private void ReplaceGuidsInValidationAndConditionRules(NewEditQuestionView model, QuestionsAndGroupsCollectionView questionnaire, string questionnaireKey)
+        {
+            var expressionReplacer = new ExpressionReplacer(questionnaire);
+            Guid questionnaireGuid = Guid.Parse(questionnaireKey);
+            model.EnablementCondition = expressionReplacer.ReplaceGuidsWithStataCaptions(model.EnablementCondition, questionnaireGuid);
+            model.ValidationExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(model.ValidationExpression, questionnaireGuid);
         }
 
         private static NewEditQuestionView MapQuestionFields(QuestionDetailsView question)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -21,6 +22,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var questionnaireDocument = questionnaire as QuestionnaireDocument;
             if (questionnaireDocument != null)
                 this.variableMap = new QuestionnaireStataMapView(questionnaireDocument);
+        }
+
+        public ExpressionReplacer(QuestionsAndGroupsCollectionView questionnaireView)
+        {
+            this.variableMap = new QuestionnaireStataMapView(questionnaireView);
         }
 
         /// <summary>

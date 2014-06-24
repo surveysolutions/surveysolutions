@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -25,6 +26,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.StataMap = doc.Questions
                                .Select(q => new KeyValuePair<Guid, string>(q.Id, q.Alias))
                                .ToList();
+        }
+
+        public QuestionnaireStataMapView(QuestionsAndGroupsCollectionView questionnaireView)
+        {
+            this.StataMap = questionnaireView.Questions
+                              .Select(q => new KeyValuePair<Guid, string>(q.Id, q.VariableName))
+                              .ToList();
         }
 
         public List<KeyValuePair<Guid, string>> StataMap { get; set; }
