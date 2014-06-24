@@ -1,4 +1,4 @@
-﻿@import "../vendor/bootstrap-select/bootstrap-select.min.css";
+@import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/prettycheckable/dist/prettyCheckable.css";
 /**
@@ -6082,6 +6082,100 @@ body {
   border-bottom: solid 1px #FAD540;
   border-radius: 3px;
 }
+li.chapter-panel-item {
+  position: relative;
+  display: block;
+  height: 70px;
+  padding-left: 18px;
+  border-bottom: 1px #d7dbde solid;
+  cursor: pointer;
+}
+li.chapter-panel-item > .holder {
+  display: inline-table;
+  width: 100%;
+  height: 100%;
+  min-width: 336px;
+}
+li.chapter-panel-item > .holder > .inner {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+}
+li.chapter-panel-item > .holder > .inner > .handler {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 18px;
+}
+li.chapter-panel-item > .holder > .inner > h1 {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #3f3f3f;
+}
+li.chapter-panel-item > .holder > .inner > span {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 12px;
+  color: #64686d;
+}
+li.chapter-panel-item > .holder > .inner > .btn-group {
+  position: absolute;
+  top: 11px;
+  right: 8px;
+}
+li.chapter-panel-item > .holder > .inner > .btn-group.open > .dropdown-toggle {
+  display: inline-block;
+  box-shadow: none;
+}
+li.chapter-panel-item > .holder > .inner > .btn-group > .dropdown-toggle {
+  display: none;
+  vertical-align: middle;
+  width: 37px;
+  height: 30px;
+  background: url(i/btn-dropdown-blue.png) center -5px no-repeat;
+}
+li.chapter-panel-item > .holder > .inner > .btn-group > .dropdown-toggle:hover {
+  background-position: center -42px;
+}
+li.chapter-panel-item > .holder > .inner > .btn-group > ul.dropdown-menu {
+  list-style: none;
+  margin: 6px 0;
+  padding: 0;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 30px;
+  color: #2a81cb;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+li.chapter-panel-item > .holder > .inner > .btn-group > ul.dropdown-menu li a {
+  letter-spacing: inherit;
+  color: inherit;
+  display: block;
+  padding: 0 12px;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  line-height: inherit;
+}
+li.chapter-panel-item > .holder > .inner > .btn-group > ul.dropdown-menu li a:hover {
+  color: #fff;
+  background-color: #2a81cb;
+}
+li.chapter-panel-item > .holder > .inner:hover {
+  background-color: #dbdfe2;
+}
+li.chapter-panel-item > .holder > .inner:hover > .holder > .inner > .btn-group > .dropdown-toggle {
+  display: inline-block;
+}
+li.chapter-panel-item > .holder > .inner:hover > .handler {
+  background: #dbdfe2 url(i/chapter-list-li-dots.png) center no-repeat;
+}
+li.chapter-panel-item.current > .holder > .inner > h1 {
+  font-weight: bold;
+}
 #designer-editor.container {
   width: 100%;
   height: 100%;
@@ -6400,89 +6494,6 @@ body {
   list-style: none;
   margin: 0;
   padding: 0;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li {
-  position: relative;
-  display: block;
-  height: 70px;
-  padding-left: 18px;
-  border-bottom: 1px #d7dbde solid;
-  cursor: pointer;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder {
-  display: inline-table;
-  width: 100%;
-  height: 100%;
-  min-width: 336px;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner {
-  display: table-cell;
-  vertical-align: middle;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > h1 {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  color: #3f3f3f;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > span {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 12px;
-  color: #64686d;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .btn-group {
-  position: absolute;
-  top: 11px;
-  right: 8px;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .btn-group.open > .dropdown-toggle {
-  display: inline-block;
-  box-shadow: none;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .btn-group > .dropdown-toggle {
-  display: none;
-  vertical-align: middle;
-  width: 37px;
-  height: 30px;
-  background: url(i/btn-dropdown-blue.png) center -5px no-repeat;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .btn-group > .dropdown-toggle:hover {
-  background-position: center -42px;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .btn-group > ul.dropdown-menu {
-  list-style: none;
-  margin: 6px 0;
-  padding: 0;
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 30px;
-  color: #2a81cb;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .btn-group > ul.dropdown-menu li a {
-  letter-spacing: inherit;
-  color: inherit;
-  display: block;
-  padding: 0 12px;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  line-height: inherit;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li > .holder > .inner > .btn-group > ul.dropdown-menu li a:hover {
-  color: #fff;
-  background-color: #2a81cb;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li.current > .holder > .inner > h1 {
-  font-weight: bold;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li:hover {
-  background: #dbdfe2 url(i/chapter-list-li-dots.png) 5px center no-repeat;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters > li:hover > .holder > .inner > .btn-group > .dropdown-toggle {
-  display: inline-block;
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel .button-holder {
   display: none;
@@ -7157,4 +7168,3 @@ body {
 .share-question-dialog .form-group .invite-button {
   line-height: 0px;
 }
-/*# sourceMappingURL=markup.css.css.map */

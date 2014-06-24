@@ -61,10 +61,10 @@
         <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
             <ul class="chapters" ui-tree-nodes ng-model="questionnaire.chapters">
-                <li ng-repeat="chapter in questionnaire.chapters" ui-tree-node ng-class="{current: currentChapterId == chapter.itemId}" ng-click="changeChapter(chapter);">
+                <li class="chapter-panel-item" ng-repeat="chapter in questionnaire.chapters" ui-tree-node ng-class="{current: currentChapterId == chapter.itemId}" ng-click="changeChapter(chapter);">
                     <div class="holder">
                         <div class="inner">
-                            <a class="handler" ui-tree-handle style="display: none">+</a>
+                            <a class="handler" ui-tree-handle ></a>
                             <h1>{{chapter.title}}</h1>
                             <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
                                 <a class="dropdown-toggle" data-toggle="dropdown"></a>
@@ -90,7 +90,7 @@
                  class="question item {{answerTypeClass[item.type]}}"
                  ng-class="{'selected' : item.itemId == currentItemId}">
 
-                <div class="handler" ui-tree-handle></div>
+                <a class="handler" ui-tree-handle></a>
                 <div class="icon"></div>
                 <span ng-bind-html="item.title | highlight:search.searchText"></span>
 
@@ -117,7 +117,7 @@
                  ng-click="setItem(item)"
                  ng-if="!isQuestion(item) && !item.isDeleted">
 
-                <div class="handler" ui-tree-handle></div>
+                <a class="handler" ui-tree-handle></a>
 
                 <span ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"></span>
                 <span ng-bind-html="item.title | highlight:search.searchText"></span>

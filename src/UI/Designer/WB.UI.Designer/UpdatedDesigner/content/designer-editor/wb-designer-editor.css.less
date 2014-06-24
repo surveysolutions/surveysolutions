@@ -11,6 +11,105 @@
     border-radius: 3px;
 }
 
+li.chapter-panel-item {
+  position: relative;
+  display: block;
+  height: 70px;
+  padding-left: 18px;
+  border-bottom: 1px #d7dbde solid;
+  cursor: pointer;
+
+  > .holder {
+    display: inline-table;
+    width: 100%;
+    height: 100%;
+    min-width: 336px;
+
+    > .inner {
+      position: relative;
+      display: table-cell;
+      vertical-align: middle;
+
+      > .handler {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 18px;
+      }
+
+      > h1 {
+        margin: 0;
+        .questionnarie-chapter-list-fontstyle();
+      }
+
+      > span {
+        .questionnarie-chapter-list-span-fontstyle();
+      }
+
+      > .btn-group {
+        position: absolute;
+        top: 11px;
+        right: 8px;
+
+        &.open > .dropdown-toggle {
+          display: inline-block;
+          box-shadow: none;
+        }
+
+        > .dropdown-toggle {
+          //display: inline-block;
+          display: none;
+          //position: absolute;
+          //top: 11px;
+          //right: 8px;
+          .wb-dropdown-button();
+        }
+
+        > ul.dropdown-menu {
+          list-style: none;
+          margin: 6px 0;
+          padding: 0;
+
+          .context-menu-fontstyle();
+
+          li {
+            a {
+              letter-spacing: inherit;
+              color: inherit;
+              display: block;
+              padding: 0 12px;
+              width: 100%;
+              height: 100%;
+              text-decoration: none;
+              line-height: inherit;
+              &:hover {
+                color: #fff;
+                background-color: @common-blue-color;
+              }
+            }
+          }
+        }
+      }
+
+      &:hover {
+        > .holder > .inner > .btn-group > .dropdown-toggle {
+          display: inline-block;
+        }
+
+        background-color: #dbdfe2;
+        > .handler {
+          background: #dbdfe2 url(../i/chapter-list-li-dots.png) center no-repeat;
+        }
+      }
+    }
+  }
+
+  &.current > .holder > .inner > h1 {
+    font-weight: bold;
+  }
+}
+
 #designer-editor.container {
 
   width: 100%;
@@ -276,92 +375,6 @@
           padding: 0;
           //overflow: hidden;
 
-          > li {
-            position: relative;
-            display: block;
-            height: 70px;
-            padding-left: 18px;
-            border-bottom: 1px #d7dbde solid;
-            cursor: pointer;
-
-            > .holder {
-              display: inline-table;
-              width: 100%;
-              height: 100%;
-              min-width: 336px;
-
-              > .inner {
-                display: table-cell;
-                vertical-align: middle;
-
-                > h1 {
-                  margin: 0;
-                  .questionnarie-chapter-list-fontstyle();
-                }
-
-                > span {
-                  .questionnarie-chapter-list-span-fontstyle();
-                }
-
-                > .btn-group {
-                  position: absolute;
-                  top: 11px;
-                  right: 8px;
-
-                  &.open > .dropdown-toggle {
-                    display: inline-block;
-                    box-shadow: none;
-                  }
-
-                  > .dropdown-toggle {
-                    //display: inline-block;
-                    display: none;
-                    //position: absolute;
-                    //top: 11px;
-                    //right: 8px;
-                    .wb-dropdown-button();
-                  }
-
-                  > ul.dropdown-menu {
-                    list-style: none;
-                    margin: 6px 0;
-                    padding: 0;
-
-                    .context-menu-fontstyle();
-
-                    li {
-                      a {
-                        letter-spacing: inherit;
-                        color: inherit;
-                        display: block;
-                        padding: 0 12px;
-                        width: 100%;
-                        height: 100%;
-                        text-decoration: none;
-                        line-height: inherit;
-                        &:hover {
-                          color: #fff;
-                          background-color: @common-blue-color;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-            &.current > .holder > .inner > h1 {
-              font-weight: bold;
-            }
-
-            &:hover {
-              background: #dbdfe2 url(../i/chapter-list-li-dots.png) 5px center no-repeat;
-
-              > .holder > .inner > .btn-group > .dropdown-toggle {
-                display: inline-block;
-              }
-            }
-          }
         }
 
         .button-holder {
