@@ -265,7 +265,7 @@ function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
 	$ver = $Version + "." + $BuildNumber
 	$NewVersion = 'AssemblyVersion("' + $ver + '")';
 	$NewFileVersion = 'AssemblyFileVersion("' + $ver + '")';
-	$NewInformationalVerson = 'AssemblyInformationalVersion("' + $Version + ' (Build ' + $BuildNumber + ')")'
+	$NewInformationalVerson = 'AssemblyInformationalVersion("' + $Version + ' (build ' + $BuildNumber + ')")'
 
 	$TmpFile = $tempFile = [System.IO.Path]::GetTempFileName()
 
