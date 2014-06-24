@@ -235,6 +235,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var userName = this.GetUserName(userId);
 
             interviewActionLog.Actions.Add(new InterviewActionExportView(interviewId.FormatGuid(), action, userName, timeStamp));
+            interviewActionLogs.Store(interviewActionLog, interviewId);
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
@@ -287,6 +288,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             interviewActionLog.Actions.Add(new InterviewActionExportView(interviewId.FormatGuid(),
                 InterviewExportedAction.FirstAnswerSet, responsible.UserName, answerTime));
+            interviewActionLogs.Store(interviewActionLog, interviewId);
         }
 
         private bool IsActionRequireToRecordFirstAnswerEvent(InterviewExportedAction action)
