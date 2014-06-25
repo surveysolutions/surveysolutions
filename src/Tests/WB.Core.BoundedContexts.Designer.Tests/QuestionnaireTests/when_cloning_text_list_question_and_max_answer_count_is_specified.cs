@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => questionnaire.CloneTextListQuestion(questionId, chapterId, "title", "var1", false, null, null, sourceQuestionId, 0, responsibleId, maxAnswerCountValue));
+            exception = Catch.Exception(() => questionnaire.CloneTextListQuestion(questionId, chapterId, "title", "var1", null, false, null, null, sourceQuestionId, 0, responsibleId, maxAnswerCountValue));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

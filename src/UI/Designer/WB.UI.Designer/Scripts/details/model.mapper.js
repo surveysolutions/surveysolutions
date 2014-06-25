@@ -80,7 +80,7 @@
                     item.instruction(dto.Instructions);
 
                     item.alias(dto.Alias);
-
+                    item.variableLabel(dto.VariableLabel);
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
 

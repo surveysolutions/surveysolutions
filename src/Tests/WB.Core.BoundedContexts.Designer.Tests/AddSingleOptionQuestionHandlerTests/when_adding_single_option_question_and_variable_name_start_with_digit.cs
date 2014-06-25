@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
                     parentGroupId: chapterId,
                     title: title,
                     variableName: variableNameStartsWithDigit,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,

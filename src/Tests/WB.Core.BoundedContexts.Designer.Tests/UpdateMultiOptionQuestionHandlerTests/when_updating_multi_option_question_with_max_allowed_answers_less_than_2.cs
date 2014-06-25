@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
                     questionId: questionId,
                     title: "title",
                     variableName: "var",
+                variableLabel: null,
                     isMandatory: false,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: null,

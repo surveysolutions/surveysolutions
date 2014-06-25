@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         Because of = () =>
             questionnaire.CloneNumericQuestion(questionId, chapterId, "title",
-                "var1", false, false, QuestionScope.Interviewer, null, null, null, null,
+                "var1",null, false, false, QuestionScope.Interviewer, null, null, null, null,
                 sourceQuestionId, 0, responsibleId, maxValue, false, null);
 
         Cleanup stuff = () =>

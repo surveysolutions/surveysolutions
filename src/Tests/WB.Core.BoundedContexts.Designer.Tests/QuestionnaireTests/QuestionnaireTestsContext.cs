@@ -153,10 +153,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: groupId, responsibleId: responsibleId);
 
-            questionnaire.AddTextQuestion(Guid.NewGuid(), groupId, "Title", "text", false, false,
+            questionnaire.AddTextQuestion(Guid.NewGuid(), groupId, "Title", "text", null, false, false,
                                          QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId);
 
-            questionnaire.AddTextQuestion(secondQuestionId, groupId, "Title", "name", false, false,
+            questionnaire.AddTextQuestion(secondQuestionId, groupId, "Title","name", null , false, false,
                                          QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId);
 
             return questionnaire;
@@ -277,7 +277,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             if (IsNumericQuestion(questionType))
             {
-                questionnaire.AddNumericQuestion(questionId, groupId, "Title", alias, false,
+                questionnaire.AddNumericQuestion(questionId, groupId, "Title", alias, null, false,
                     false,
                     QuestionScope.Interviewer, condition, validation, "", "", null, responsible, true, null);
                 return;
@@ -285,8 +285,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.AddTextQuestion(
                 questionId, 
                 groupId, 
-                "Title", 
-                alias, 
+                "Title",
+                alias, null, 
                 false,
                 false,
                 QuestionScope.Interviewer, 

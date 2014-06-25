@@ -13,6 +13,7 @@
                self.title = ko.observable('New Question').extend({ required: true });
                self.parent = ko.observable();
                self.alias = ko.observable('');
+               self.variableLabel = ko.observable('');
 
                self.type = ko.observable("QuestionView"); // Object type
                self.template = "QuestionView"; // tempate id in html file
@@ -124,7 +125,7 @@
                self.isNullo = false;
                self.cloneSource = ko.observable();
 
-               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype,
+               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias,self.variableLabel, self.qtype,
                    self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression,
                    self.validationMessage, self.instruction, self.answerOptions, self.maxValue,
                    self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces,
@@ -513,6 +514,9 @@
                    item.alias('');
                    item.alias.valueHasMutated();
 
+                   item.variableLabel('');
+                   item.variableLabel.valueHasMutated();
+                   
                    item.isLinked(this.isLinked());
                    item.selectedLinkTo(this.selectedLinkTo());
 
@@ -533,6 +537,7 @@
            update: function (data) {
                this.title(data.title);
                this.alias(data.alias);
+               this.variableLabel(data.variableLabel);
                this.qtype(data.qtype);
                this.isFeatured(data.isFeatured);
                this.isMandatory(data.isMandatory);

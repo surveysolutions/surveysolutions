@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
                 QuestionScope.Interviewer, 
                 title ?? "title", 
                 variable ?? "var", 
+                null,
                 condition ?? "", 
                 "", 
                 "",

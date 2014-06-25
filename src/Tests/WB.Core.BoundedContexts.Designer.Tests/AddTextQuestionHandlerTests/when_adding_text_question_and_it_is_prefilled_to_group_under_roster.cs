@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
                     parentGroupId: groupFromRosterId,
                     title: title,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPrefilled,
                     scope: QuestionScope.Interviewer,
