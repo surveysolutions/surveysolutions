@@ -1,8 +1,9 @@
 ﻿<div class="form-holder">
     <div class="breadcrumbs">
         <ul>
-            <li ng-repeat="breadcrumb in activeQuestion.breadcrumbs"><a
-                                                                         ng-href="{{breadcrumb.id}}">{{breadcrumb.title}}</a></li>
+            <li ng-repeat="breadcrumb in activeQuestion.breadcrumbs">
+                <a ng-href="{{breadcrumb.id}}">{{breadcrumb.title}}</a>
+            </li>
         </ul>
     </div>
 
@@ -24,8 +25,6 @@
 
             <div class="has-pretty-child gray">
                 <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" data-label="Mandatory question"/>
-                <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isPreFilled" data-label="Filled by supervisor"/>
-
             </div>
         </div>
 
@@ -35,8 +34,7 @@
 
         <div class="row" ng-show="showInstruction">
             <div class="form-group col-xs-11">
-                <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.instructions"
-                       class="form-control" placeholder="Instruction">
+                <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.instructions" class="form-control" placeholder="Instruction">
             </div>
 
             <div class="form-group col-xs-1 pull-right">
@@ -68,7 +66,8 @@
             <label for="edit-question-scope">Question scope</label>
             <select for="edit-question-scope" ng-model="activeQuestion.questionScope"
                     ng-options="scope.value as scope.text for scope in activeQuestion.questionScopeOptions "
-                    class="form-control"></select>
+                    class="form-control">
+            </select>
         </div>
         <div class="form-group">
             <label for="edit-question-instructions">Instructions</label>
