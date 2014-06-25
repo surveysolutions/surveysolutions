@@ -12,6 +12,7 @@ namespace Main.Core.Entities
             QuestionScope questionScope,
             string questionText,
             string stataExportCaption,
+            string variableLabel,
             string conditionExpression,
             string validationExpression,
             string validationMessage,
@@ -36,6 +37,7 @@ namespace Main.Core.Entities
             this.QuestionScope = questionScope;
             this.QuestionText = questionText;
             this.StataExportCaption = stataExportCaption;
+            this.VariableLabel = variableLabel;
             this.ConditionExpression = conditionExpression;
             this.ValidationExpression = validationExpression;
             this.ValidationMessage = validationMessage;
@@ -62,6 +64,7 @@ namespace Main.Core.Entities
         public readonly QuestionScope QuestionScope;
         public readonly string QuestionText;
         public readonly string StataExportCaption;
+        public readonly string VariableLabel;
         public readonly string ConditionExpression;
         public readonly string ValidationExpression;
         public readonly string ValidationMessage;

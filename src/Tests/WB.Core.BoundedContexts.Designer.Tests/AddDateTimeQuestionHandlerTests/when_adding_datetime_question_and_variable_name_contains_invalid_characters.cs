@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddDateTimeQuestionHandlerTests
                     parentGroupId: chapterId,
                     title: title,
                     variableName: variableNameWithInvalidCharacters,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,

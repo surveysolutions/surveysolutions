@@ -46,6 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.ValidationExpression = doc.ValidationExpression;
             this.ValidationMessage = doc.ValidationMessage;
             this.Alias = doc.StataExportCaption;
+            this.VariableLabel = doc.VariableLabel;
             this.Instructions = doc.Instructions;
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
@@ -115,6 +116,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public QuestionScope QuestionScope { get; set; }
 
         public string Alias { get; set; }
+
+        public string VariableLabel { get; set; }
 
         public string Title { get; set; }
 

@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public string QuestionText { get; set; }
         public QuestionScope QuestionScope { get; set; }
         public string StataExportCaption { get; set; }
+        public string VariableLabel { get; set; }
         public string ValidationExpression { get; set; }
         public string ValidationMessage { get; set; }
     }

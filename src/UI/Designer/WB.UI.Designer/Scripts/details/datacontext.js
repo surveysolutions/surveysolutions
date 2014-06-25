@@ -545,6 +545,7 @@
                 questionId: question.id(),
                 title: question.title(),
                 variableName: question.alias(),
+                variableLabel: question.variableLabel(),
                 isMandatory: question.isMandatory(),
                 enablementCondition: question.condition(),
                 instructions: question.instruction()
@@ -556,6 +557,7 @@
             delete command.isFeatured;
             delete command.type;
             delete command.alias;
+            delete command.variableLabel;
             delete command.scope;
             delete command.validationExpression;
             delete command.validationMessage;
@@ -569,6 +571,7 @@
                 title: question.title(),
                 type: question.qtype(),
                 variableName: question.alias(),
+                variableLabel: question.variableLabel(),
                 isPreFilled: question.isFeatured(),
                 isMandatory: question.isMandatory(),
                 scope: question.scope(),

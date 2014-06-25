@@ -122,6 +122,8 @@ namespace Main.Core.Entities.SubEntities
 
         public string StataExportCaption { get; set; }
 
+        public string VariableLabel { get; set; }
+
         public string ValidationExpression { get; set; }
 
         public string ValidationMessage { get; set; }
