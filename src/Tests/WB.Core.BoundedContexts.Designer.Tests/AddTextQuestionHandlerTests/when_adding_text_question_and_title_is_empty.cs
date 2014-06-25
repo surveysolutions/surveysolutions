@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
                     parentGroupId: chapterId,
                     title: emptyTitle,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,

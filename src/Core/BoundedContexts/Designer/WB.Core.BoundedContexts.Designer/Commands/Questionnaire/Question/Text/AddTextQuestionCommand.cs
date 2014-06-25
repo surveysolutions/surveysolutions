@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text
             Guid questionId,
             Guid parentGroupId,
             string title,
-            string variableName,
+            string variableName, string variableLabel,
             bool isMandatory,
             string enablementCondition,
             string instructions,
@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,
-                parentGroupId: parentGroupId)
+                parentGroupId: parentGroupId, variableLabel:variableLabel)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;

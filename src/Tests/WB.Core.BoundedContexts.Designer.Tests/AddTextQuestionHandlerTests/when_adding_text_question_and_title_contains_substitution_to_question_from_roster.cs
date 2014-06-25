@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
                     parentGroupId: chapterId,
                     title: titleWithSubstitution,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,

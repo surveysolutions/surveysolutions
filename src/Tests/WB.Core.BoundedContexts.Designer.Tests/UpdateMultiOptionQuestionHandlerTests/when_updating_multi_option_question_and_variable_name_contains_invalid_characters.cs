@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
                     questionId: questionId,
                     title: title,
                     variableName: variableNameWithInvalidCharacters,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     scope: scope,
                     enablementCondition: enablementCondition,

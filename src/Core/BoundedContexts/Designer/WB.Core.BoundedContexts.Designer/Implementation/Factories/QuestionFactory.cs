@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.QuestionScope,
                 data.QuestionText,
                 data.StataExportCaption,
+                data.VariableLabel,
                 data.ConditionExpression,
                 data.ValidationExpression,
                 data.ValidationMessage,
@@ -113,6 +114,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             QuestionScope questionScope,
             string questionText,
             string stataExportCaption,
+            string variableLabel,
             string conditionExpression,
             string validationExpression,
             string validationMessage,
@@ -134,6 +136,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.QuestionScope = questionScope;
             question.QuestionText = questionText;
             question.StataExportCaption = stataExportCaption;
+            question.VariableLabel = variableLabel;
             question.ConditionExpression = conditionExpression;
             question.ValidationExpression = validationExpression;
             question.ValidationMessage = validationMessage;

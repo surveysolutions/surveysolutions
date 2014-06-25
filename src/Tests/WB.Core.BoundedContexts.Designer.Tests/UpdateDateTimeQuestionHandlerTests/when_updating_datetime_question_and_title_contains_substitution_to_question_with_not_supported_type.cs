@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateDateTimeQuestionHandlerTe
                     questionId: questionId,
                     title: titleWithSubstitution,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,

@@ -40,6 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateMultiOptionQuestionHandle
                     questionId: questionId,
                     title: title,
                     variableName: notUniqueVariableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     scope: scope,
                     enablementCondition: enablementCondition,

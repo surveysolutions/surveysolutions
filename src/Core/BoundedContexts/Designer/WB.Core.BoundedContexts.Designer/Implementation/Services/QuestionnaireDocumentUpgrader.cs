@@ -103,6 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     question.QuestionScope,
                     question.QuestionText,
                     question.StataExportCaption,
+                    question.VariableLabel,
                     question.ConditionExpression,
                     question.ValidationExpression,
                     question.ValidationMessage,

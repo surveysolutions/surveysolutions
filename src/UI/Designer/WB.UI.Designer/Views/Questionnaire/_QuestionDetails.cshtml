@@ -21,6 +21,12 @@
                                 <input id="alias" placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
                             </div>
                         </div>
+                        <div class="control-group">
+                            <label class="control-label" data-bind="validationElement: variableLabel">Variable Label</label>
+                            <div class="controls">
+                                <input id="variableLabel" placeholder="variable label" data-bind="value: variableLabel, valueUpdate: 'afterkeydown'" type="text" class="span12" />
+                            </div>
+                        </div>
                     </div>
                     <div class="row-fluid">
                         <div class="control-group" data-bind="validationElement: qtype">
