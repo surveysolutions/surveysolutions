@@ -198,7 +198,7 @@
 
                 $scope.currentChapterId = null;
 
-                $scope.resetSelection = function() {
+                $scope.resetSelection = function () {
                     navigationService.openChapter($routeParams.questionnaireId, $scope.currentChapterId);
                     $scope.currentItemId = null;
                     $scope.activeRoster = null;
@@ -317,12 +317,12 @@
 
                 $scope.addQuestion = function(parent) {
                     var newId = utilityService.guid();
-                    var variable = "q" + newId.substring(0, 5);
+                    var variable = 'q' + newId.substring(0, 5);
                     var emptyQuestion = {
                         "itemId": newId,
-                        "title": "New Question",
+                        "title": 'New Question',
                         "variable": variable,
-                        "type": 7, // todo: explain parameter
+                        "type": 'Text',
                         "linkedVariables": [],
                         "brokenLinkedVariables": null
                     };

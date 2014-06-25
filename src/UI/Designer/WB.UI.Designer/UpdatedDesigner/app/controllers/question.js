@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$scope', '$routeParams', 'questionnaireService', 'commandService', '$log',
-            function($scope, $routeParams, questionnaireService, commandService, $log) {
+            '$scope', '$routeParams', 'questionnaireService', 'commandService', 'navigationService', '$log',
+            function($scope, $routeParams, questionnaireService, commandService, navigationService, $log) {
 
                 var dataBind = function(result) {
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
@@ -36,6 +36,20 @@
                             $log.error(result.Error);
                         }
                     });
+                };
+
+
+                $scope.deleteQuestion = function() {
+                    if (confirm("Are you sure want to delete question?")) {
+                        commandService.deleteQuestion($routeParams.questionnaireId, $scope.activeQuestion.itemId).success(function(result) {
+                            if (result.IsSuccess) {
+                                $scope.activeQuestion.isDeleted = true;
+                                navigationService.openQuestionnaire($routeParams.questionnaireId);
+                            } else {
+                                $log.error(result);
+                            }
+                        });
+                    }
                 };
 
                 $scope.moveToChapter = function(chapterId) {

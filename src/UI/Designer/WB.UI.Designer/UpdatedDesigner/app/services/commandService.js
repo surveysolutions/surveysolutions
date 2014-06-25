@@ -211,6 +211,15 @@
                     return commandCall("DeleteGroup", command);
                 };
 
+                commandService.deleteQuestion = function (questionnaireId, itemId) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "questionId": itemId
+                    };
+
+                    return commandCall("DeleteQuestion", command);
+                };
+
                 return commandService;
             }
         ]);

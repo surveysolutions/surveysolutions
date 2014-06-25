@@ -44,7 +44,6 @@
                                     $scope.activeChapter.isDeleted = true;
                                 }
                                 navigationService.openQuestionnaire($routeParams.questionnaireId);
-                                $scope.close();
                             } else {
                                 $("#edit-chapter-save-button").popover({
                                     content: result.Error,
