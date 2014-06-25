@@ -167,7 +167,7 @@
                             connectTree();
                         };
 
-                        if (event.dest.destNode !== event.source.nodeScope || event.dest.index !== event.source.index) {
+                        if (event.dest.nodesScope !== event.source.nodesScope || event.dest.index !== event.source.index) {
                             if ($scope.isQuestion(movedItem)) {
                                 questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $routeParams.questionnaireId)
                                     .success(function(data) {
