@@ -69,6 +69,25 @@
                     });
                 };
 
+                $scope.searchItem = function(item) {
+                    if (!$scope.search.searchText) return true;
+                    var variableMatches = item.variable && item.variable.toLowerCase().indexOf($scope.search.searchText.toLowerCase()) != -1;
+                    var titleMatches = item.title && item.title.toLowerCase().indexOf($scope.search.searchText.toLowerCase()) != -1;
+
+                    var found = variableMatches || titleMatches;
+
+                    if (!found) {
+                        angular.forEach(item.items, function (item) {
+                            var match = $scope.searchItem(item);
+                            if (match) {
+                                found = true;
+                            }
+                        });
+                    }
+
+                    return found;
+                };
+
                 $scope.navigateTo = function(itemId, chapterId) {
                     questionnaireService.getChapterById($routeParams.questionnaireId, chapterId)
                         .success(function(result) {

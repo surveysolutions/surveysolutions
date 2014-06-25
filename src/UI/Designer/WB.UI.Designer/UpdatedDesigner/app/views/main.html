@@ -41,7 +41,7 @@
         <div class="chapter-title" ng-switch on="filtersBoxMode">
             <div class="search-box" ng-switch-when="search">
                 <div class="input-group">
-                    <input type="text" ng-model="search.searchText" focus-on="focusSearch" hotkey="{esc: hideSearch, allowIn: ['INPUT']}" />
+                    <input type="text" ng-model="search.searchText" ng-model-options="{debounce: 300}" focus-on="focusSearch" hotkey="{esc: hideSearch, allowIn: ['INPUT']}" />
                     <span class="input-group-addon glyphicon glyphicon-search" title="Search"></span>
                 </div>
                 <button ng-click="hideSearch()" title="Cancel search">
@@ -125,7 +125,7 @@
             </div>
 
             <div ng-hide="collapsed" class="slide" ui-tree-nodes="item.items" ng-model="item.items">
-                <div ng-repeat="item in item.items | filter:search.searchText" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
+                <div ng-repeat="item in item.items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
                 </div>
             </div>
 
@@ -138,7 +138,7 @@
 
         <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
             <div ui-tree-nodes ng-model="items">
-                <div ng-repeat="item in items | filter:search.searchText" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
+                <div ng-repeat="item in items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
                 </div>
             </div>
 
