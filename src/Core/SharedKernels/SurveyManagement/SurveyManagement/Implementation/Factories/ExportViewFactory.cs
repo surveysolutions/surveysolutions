@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             exportedHeaderItem.PublicKey = question.PublicKey;
             exportedHeaderItem.QuestionType = question.QuestionType;
             exportedHeaderItem.VariableName = question.StataExportCaption;
-            exportedHeaderItem.Titles = new string[] { question.QuestionText };
+            exportedHeaderItem.Titles = new []{ string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel };
             exportedHeaderItem.ColumnNames = new string[] { question.StataExportCaption };
 
             exportedHeaderItem.Labels = new Dictionary<Guid, LabelItem>();
