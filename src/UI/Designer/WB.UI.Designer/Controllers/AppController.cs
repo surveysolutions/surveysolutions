@@ -26,7 +26,10 @@ namespace WB.UI.Designer.Controllers
             {
                 return HttpNotFound();
             }
-            return Redirect("~/UpdatedDesigner#/" + id.FormatGuid());
+            string url = "~/UpdatedDesigner#/" + id.FormatGuid();
+
+            ViewBag.RedirectTo = Url.Content(url);
+            return View();
         }
     }
 }
