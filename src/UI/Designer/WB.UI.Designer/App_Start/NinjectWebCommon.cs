@@ -66,7 +66,8 @@ namespace WB.UI.Designer.App_Start
                 username: AppSettings.Instance.RavenUserName, password: AppSettings.Instance.RavenUserPassword,
                 eventsDatabase: AppSettings.Instance.RavenEventsDatabase,
                 viewsDatabase: AppSettings.Instance.RavenViewsDatabase,
-                plainDatabase: AppSettings.Instance.RavenPlainDatabase);
+                plainDatabase: AppSettings.Instance.RavenPlainDatabase,
+                useReplication: AppSettings.Instance.UseReplication);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),

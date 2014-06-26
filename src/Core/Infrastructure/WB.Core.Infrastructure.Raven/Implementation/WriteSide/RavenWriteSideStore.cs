@@ -8,10 +8,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 {
     internal class RavenWriteSideStore
     {
-        protected internal static DocumentConvention CreateStoreConventions(string ravenCollectionName)
+        protected internal static DocumentConvention CreateStoreConventions(string ravenCollectionName, bool useReplication = false)
         {
             return new DocumentConvention
             {
+                FailoverBehavior = useReplication ? FailoverBehavior.ReadFromAllServers : FailoverBehavior.FailImmediately,
                 JsonContractResolver = new PropertiesOnlyContractResolver(),
                 FindTypeTagName = x => ravenCollectionName,
                 CustomizeJsonSerializer = CustomizeJsonSerializer,
