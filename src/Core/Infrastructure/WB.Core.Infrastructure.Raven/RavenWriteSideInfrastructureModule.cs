@@ -11,11 +11,13 @@ namespace WB.Core.Infrastructure.Raven
         private readonly int pageSize;
         private IStreamableEventStore singleEventStore;
         private readonly bool useStreamingForAllEvents;
+        private readonly bool useReplication;
 
         public RavenWriteSideInfrastructureModule(RavenConnectionSettings settings, bool useStreamingForAllEvents = true, int pageSize = 50)
             : base(settings)
         {
-            this.pageSize = pageSize; 
+            this.pageSize = pageSize;
+            this.useReplication = settings.UseReplication;
             this.useStreamingForAllEvents = useStreamingForAllEvents;
         }
 
@@ -34,7 +36,7 @@ namespace WB.Core.Infrastructure.Raven
             return this.singleEventStore ?? (this.singleEventStore =
                 new RavenDBEventStore(
                     this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(),
-                    this.pageSize, useStreamingForAllEvents));
+                    this.pageSize, useReplication, useStreamingForAllEvents));
         }
     }
 }
