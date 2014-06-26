@@ -21,6 +21,12 @@
                 $scope.openMenu = function(chapter) {
                     chapter.isMenuOpen = true;
                 };
+                $scope.changeChapter = function (chapter) {
+                    navigationService.openChapter($routeParams.questionnaireId, chapter.itemId);
+                    $scope.$parent.currentChapterId = chapter.itemId;
+                    $scope.$parent.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+                    $scope.foldback();
+                };
 
                 $scope.editChapter = function(chapter) {
                     console.log(chapter);

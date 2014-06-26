@@ -275,12 +275,6 @@
                     $scope.nav($routeParams.questionnaireId, $scope.currentChapterId, item);
                 };
 
-                $scope.changeChapter = function(chapter) {
-                    navigationService.openChapter($routeParams.questionnaireId, chapter.itemId);
-                    $scope.currentChapterId = chapter.itemId;
-                    $scope.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
-                };
-
                 var connectTree = function() {
                     var setParent = function(item, parent) {
                         item.getParentItem = function() {
