@@ -174,6 +174,8 @@ namespace WB.UI.Headquarters
             kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(System.Web.Http.Filters.FilterScope.Controller)
                .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
 
+            kernel.Bind<IIdentityManager>().To<IdentityManager>().InSingletonScope();
+
             if (LegacyOptions.SupervisorFunctionsEnabled)
             {
                 ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();

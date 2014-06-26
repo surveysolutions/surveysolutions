@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters
         {
             filters.Add(new HandleErrorAttribute());
             filters.Add(new SupervisorFunctionsEnabledAttribute());
+            filters.Add(new InstallationAttribute());
         }
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)

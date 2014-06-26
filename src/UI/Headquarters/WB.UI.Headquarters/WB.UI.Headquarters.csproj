@@ -237,6 +237,7 @@
     <Content Include="Views\Supervisor\Index.cshtml" />
     <Content Include="Views\Supervisor\Interviewers.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
+    <Content Include="Views\Install\Finish.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -275,6 +276,8 @@
   <ItemGroup>
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
+    <Compile Include="Code\IdentityManager.cs" />
+    <Compile Include="Code\IIdentityManager.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
     <Compile Include="Code\Security\ITokenVerifier.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
@@ -299,6 +302,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
+    <Compile Include="Controllers\InstallController.cs" />
+    <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />
     <Compile Include="API\SyncController.cs" />
     <Compile Include="Controllers\SupervisorController.cs" />
