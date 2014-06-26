@@ -60,6 +60,11 @@ namespace WB.UI.Designer
             get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.PlainStorage"); }
         }
 
+        public bool UseReplication
+        {
+            get { return ConfigurationManager.AppSettings.GetBool("Raven.Databases.UseReplication", false); }
+        }
+
         public string WKHtmlToPdfExecutablePath
         {
             get { return ConfigurationManager.AppSettings.GetString("WKHtmlToPdfExecutablePath"); }

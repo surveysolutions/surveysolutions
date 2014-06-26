@@ -40,6 +40,7 @@ using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
+using WB.UI.Shared.Web.Extensions;
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -107,7 +108,8 @@ namespace WB.UI.Headquarters
             var ravenSettings = new RavenConnectionSettings(storePath, isEmbeded, WebConfigurationManager.AppSettings["Raven.Username"],
                 WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 WebConfigurationManager.AppSettings["Raven.Databases.Views"],
-                WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
+                WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
+                useReplication: WebConfigurationManager.AppSettings.GetBool("Raven.Databases.UseReplication", false));
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled && LegacyOptions.SupervisorFunctionsEnabled,

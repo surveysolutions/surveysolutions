@@ -38,6 +38,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Intervie
 using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
@@ -108,7 +109,8 @@ namespace WB.UI.Supervisor.App_Start
                 password: WebConfigurationManager.AppSettings["Raven.Password"],
                 eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
-                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
+                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
+                useReplication: WebConfigurationManager.AppSettings.GetBool("Raven.Databases.UseReplication", false));
 
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));

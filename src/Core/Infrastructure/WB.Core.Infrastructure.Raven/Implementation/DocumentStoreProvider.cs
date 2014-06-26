@@ -13,7 +13,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation
     internal class DocumentStoreProvider : Provider<DocumentStore>
     {
         private readonly RavenConnectionSettings settings;
-
         private EmbeddableDocumentStore embeddedStorage;
         private DocumentStore serverStorage;
 
@@ -75,6 +74,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation
                 DefaultDatabase = databaseName,
                 Conventions =
                 {
+                    FailoverBehavior = settings.UseReplication ? FailoverBehavior.ReadFromAllServers : FailoverBehavior.FailImmediately,
                     JsonContractResolver = new PropertiesOnlyContractResolver(),
                     CustomizeJsonSerializer = serializer =>
                     {
