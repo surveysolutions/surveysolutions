@@ -20,6 +20,7 @@
                     $scope.activeQuestion.validationMessage = result.validationMessage;
                     $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
                     $scope.activeQuestion.instructions = result.instructions;
+                    $scope.activeQuestion.options = result.options;
                 }
 
                 $scope.loadQuestion = function() {
@@ -62,6 +63,17 @@
 
                 $scope.resetQuestion = function() {
                     dataBind($scope.initialQuestion);
+                };
+
+                $scope.addOption = function () {
+                    $scope.activeQuestion.options.push({
+                        "value": null,
+                        "title": ''
+                    });;
+                };
+
+                $scope.removeOption = function (index) {
+                    $scope.activeQuestion.options.splice(index, 1);
                 };
 
                 $scope.loadQuestion();
