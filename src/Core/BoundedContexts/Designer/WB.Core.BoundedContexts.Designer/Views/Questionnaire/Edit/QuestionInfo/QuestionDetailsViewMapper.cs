@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             questionView.QuestionScope = question.QuestionScope;
             questionView.Title = question.QuestionText;
             questionView.VariableName = question.StataExportCaption;
+            questionView.VariableLabel = question.VariableLabel;
             questionView.EnablementCondition = question.ConditionExpression;
             questionView.ValidationExpression = question.ValidationExpression;
             questionView.ValidationMessage = question.ValidationMessage;

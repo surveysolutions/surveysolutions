@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool IsMandatory { get; set; }
         public QuestionScope QuestionScope { get; set; }
         public string VariableName { get; set; }
+        public string VariableLabel { get; set; }
         public string Title { get; set; }
         public string ValidationExpression { get; set; }
         public string ValidationMessage { get; set; }
