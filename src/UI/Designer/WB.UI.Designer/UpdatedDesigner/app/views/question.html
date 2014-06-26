@@ -24,23 +24,24 @@
             <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text">
 
             <div class="has-pretty-child gray">
-                <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" data-label="Mandatory question"/>
+                <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" data-label="Mandatory question" />
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" ng-show="activeQuestion.instructions == null">
             <button class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
         </div>
 
-        <div class="row" ng-show="showInstruction">
+        <div class="row" ng-show="showInstruction || activeQuestion.instructions != null">
             <div class="form-group col-xs-11">
-                <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.instructions" class="form-control" placeholder="Instruction">
+                <input id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions" class="form-control" placeholder="Instruction">
             </div>
 
             <div class="form-group col-xs-1 pull-right">
-                <button class="btn" ng-click="showInstruction=false">X</button>        
+                <button class="btn" ng-click="showInstruction=false;activeQuestion.instructions=null;">X</button>
             </div>
         </div>
+
         <div ng-include="activeQuestion.type + '-template.html'" ng-if="activeQuestion.type != undefined">
         </div>
 
@@ -50,29 +51,23 @@
                    class="form-control">
         </div>
 
-        <div class="form-group">
+        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
             <label for="edit-question-validation-expression">Validation expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
             <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression"
                    class="form-control">
         </div>
-        
-        <div class="form-group">
+
+        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
             <label for="edit-question-validation-message">Validation message (<a href="#">?</a>)</label>
             <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage"
-                   class="form-control">            
-        </div>           
+                   class="form-control">
+        </div>
 
         <div class="form-group">
             <label for="edit-question-scope">Question scope</label>
             <select for="edit-question-scope" ng-model="activeQuestion.questionScope"
                     ng-options="scope.value as scope.text for scope in activeQuestion.questionScopeOptions "
-                    class="form-control">
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="edit-question-instructions">Instructions</label>
-            <input id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions"
-                   class="form-control">
+                    class="form-control"></select>
         </div>
     </form>
 
@@ -114,6 +109,16 @@
         </div>
     </script>
     <script type="text/ng-template" id="Numeric-template.html">
+        <div class="form-group">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default">Integer</button>
+                <button type="button" class="btn btn-default">Real</button>
+            </div>
+         </div>
+        <div class="form-group">
+            <label for="edit-question-max-value">Max value</label>
+            <input id="edit-question-max-value" type="text" ng-model="activeQuestion.instructions" class="form-control">
+        </div>
     </script>
     <script type="text/ng-template" id="DateTime-template.html">
     </script>
@@ -122,6 +127,10 @@
     <script type="text/ng-template" id="GpsCoordinates-template.html">
     </script>
     <script type="text/ng-template" id="TextList-template.html">
+        <div class="form-group">
+            <label for="edit-question-max-answers-number">Maximum number of answers</label>
+            <input id="edit-question-max-answers-number" type="text" ng-model="activeQuestion.instructions" class="form-control">
+        </div>
     </script>
     <script type="text/ng-template" id="QRBarcode-template.html">
     </script>
@@ -131,7 +140,6 @@
     <div class="pull-left">
         <button cid="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveQuestion()">Save</button>
         <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="resetQuestion()">Cancel</button>
-        
     </div>
     <div class="pull-right">
         <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion()">Delete</button>

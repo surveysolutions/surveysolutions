@@ -102,8 +102,6 @@
 
                     <span ng-bind-html="item.variable | highlight:search.searchText"></span>
                     
-                    
-
                     <!--<div class="btn-group dropdown">
             <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"></a>
             <ul class="dropdown-menu">
@@ -129,7 +127,7 @@
             </div>
 
             <div ng-hide="collapsed" class="slide" ui-tree-nodes="item.items" ng-model="item.items">
-                <div ng-repeat="item in item.items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
+                <div ng-repeat="item in item.items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
                 </div>
             </div>
 
