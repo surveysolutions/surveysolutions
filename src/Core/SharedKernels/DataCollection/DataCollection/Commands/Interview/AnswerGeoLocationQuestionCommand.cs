@@ -12,10 +12,9 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public double Longitude { get; private set; }
         public double Accuracy { get; private set; }
         public double Altitude { get; private set; }
-        public double AltitudeAccuracy { get; private set; }
 
         public AnswerGeoLocationQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector,
-            DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, double altitudeAccuracy, 
+            DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, 
             DateTimeOffset timestamp)
             : base(interviewId, userId, questionId, rosterVector, answerTime)
         {
@@ -24,7 +23,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.Accuracy = accuracy;
             this.Timestamp = timestamp;
             this.Altitude = altitude;
-            this.AltitudeAccuracy = altitudeAccuracy;
         }
     }
 }
