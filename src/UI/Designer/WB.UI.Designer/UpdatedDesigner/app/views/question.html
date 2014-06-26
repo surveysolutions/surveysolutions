@@ -98,10 +98,36 @@
     <script type="text/ng-template" id="MultyOption-template.html">
         <div class="checkbox">
             <label>
+                <input type="checkbox" class="wb-checkbox">
+                Ordered
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="edit-question-max-answers-number">Maximum number of answers</label>
+            <input id="edit-question-max-answers-number" type="text" class="form-control">
+        </div>
+        <div class="checkbox">
+            <label>
                 <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked">
                 Is linked
             </label>
         </div>
+        <div ng-repeat="option in activeQuestion.options">
+            <div class="form-group">
+                <div class="col-xs-4">
+                    <input type="text" ng-model="option.value" class="form-control">
+                </div>
+                <div class="col-xs-7">
+                    <input type="text" ng-model="option.title" class="form-control">
+                </div>
+                <div class="col-xs-1">
+                    <a href ng:click="removeOption($index)" class="btn">X</a>
+                </div>
+            </div>
+        </div>
+        <p>
+            <input type="submit" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
+        </p>
     </script>
     <script type="text/ng-template" id="Numeric-template.html">
         <div class="form-group">
@@ -109,7 +135,7 @@
                 <button type="button" class="btn btn-default">Integer</button>
                 <button type="button" class="btn btn-default">Real</button>
             </div>
-         </div>
+        </div>
         <div class="form-group">
             <label for="edit-question-max-value">Max value</label>
             <input id="edit-question-max-value" type="text" ng-model="activeQuestion.instructions" class="form-control">
@@ -145,8 +171,8 @@
 
 <script lang="text/javascript">
     /* this block is needed for prettyCheckable initialization, should be called after DOM update */
-    $(function() {
-        $.each($('input.wb-checkbox'), function(i, el) {
+    $(function () {
+        $.each($('input.wb-checkbox'), function (i, el) {
             $(el).prettyCheckable();
         });
     });
