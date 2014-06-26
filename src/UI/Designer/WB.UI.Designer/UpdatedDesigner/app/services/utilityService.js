@@ -19,7 +19,7 @@
                 utilityService.format = function(format) {
                     var args = Array.prototype.slice.call(arguments, 1);
                     return format.replace(/{(\d+)}/g, function(match, number) {
-                        return typeof args[number] != 'undefined'
+                        return typeof args[number] !== 'undefined'
                             ? args[number]
                             : match;
                     });
@@ -36,7 +36,6 @@
                     arrays.forEach(function (array) {
                         array.forEach(function (element) {
                             if (union.indexOf(element) === -1) {
-                                //element.chapter = array;
                                 union.push(element);
                             }
                         });

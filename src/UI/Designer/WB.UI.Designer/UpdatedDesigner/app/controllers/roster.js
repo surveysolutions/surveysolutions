@@ -3,7 +3,7 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', [
-            '$scope', '$routeParams', 'questionnaireService', 'commandService', 'utilityService','$log',
+            '$scope', '$routeParams', 'questionnaireService', 'commandService', 'utilityService', '$log',
             function($scope, $routeParams, questionnaireService, commandService, utilityService, $log) {
 
                 var dataBind = function(result) {
@@ -24,7 +24,7 @@
                     $scope.getRosterTemplate();
                 };
 
-                $scope.getRosterTemplate = function () {
+                $scope.getRosterTemplate = function() {
                     if ($scope.activeRoster !== undefined && $scope.activeRoster.rosterSizeSourceType !== undefined) {
                         if ($scope.activeRoster.rosterSizeSourceType === 'FixedTitles') {
                             $scope.activeRoster.rosterTemplate = 'FixedTitles-template.html';
