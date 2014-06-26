@@ -27,49 +27,51 @@
                 <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" data-label="Mandatory question" />
             </div>
         </div>
+        <div class="form-group">
+            <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" placeholder="Variable label"></div>
 
         <div ng-include="activeQuestion.type + '-template.html'" ng-if="activeQuestion.type != undefined">
         </div>
 
         <div class="form-group" ng-show="activeQuestion.instructions == null">
-            <button class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
-        </div>
+                <button class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
+            </div>
 
         <div class="row" ng-show="showInstruction || activeQuestion.instructions != null">
-            <div class="form-group col-xs-11">
+                <div class="form-group col-xs-11">
                 <input id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions" class="form-control" placeholder="Instruction">
-            </div>
+                </div>
 
-            <div class="form-group col-xs-1 pull-right">
+                <div class="form-group col-xs-1 pull-right">
                 <button class="btn" ng-click="showInstruction=false;activeQuestion.instructions=null;">X</button>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label for="edit-question-enablement-condition">Condition expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
-            <input id="edit-question-enablement-condition" type="text" ng-model="activeQuestion.enablementCondition"
-                   class="form-control">
-        </div>
-
-        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
-            <label for="edit-question-validation-expression">Validation expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
-            <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression"
-                   class="form-control">
-        </div>
+            <div class="form-group">
+                <label for="edit-question-enablement-condition">Condition expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
+                <input id="edit-question-enablement-condition" type="text" ng-model="activeQuestion.enablementCondition"
+                       class="form-control">
+            </div>
 
         <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
-            <label for="edit-question-validation-message">Validation message (<a href="#">?</a>)</label>
-            <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage"
+                <label for="edit-question-validation-expression">Validation expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
+                <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression"
+                       class="form-control">
+            </div>
+
+        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
+                <label for="edit-question-validation-message">Validation message (<a href="#">?</a>)</label>
+                <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage"
                    class="form-control">
         </div>
 
-        <div class="form-group">
-            <label for="edit-question-scope">Question scope</label>
-            <select for="edit-question-scope" ng-model="activeQuestion.questionScope"
-                    ng-options="scope.value as scope.text for scope in activeQuestion.questionScopeOptions "
+            <div class="form-group">
+                <label for="edit-question-scope">Question scope</label>
+                <select for="edit-question-scope" ng-model="activeQuestion.questionScope"
+                        ng-options="scope.value as scope.text for scope in activeQuestion.questionScopeOptions "
                     class="form-control"></select>
-        </div>
-    </form>
+            </div>
+</form>
 
     <script type="text/ng-template" id="SingleOption-template.html">
         <div class="checkbox">

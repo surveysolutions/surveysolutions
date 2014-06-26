@@ -11,6 +11,7 @@
 
                     $scope.activeQuestion.type = result.type;
                     $scope.activeQuestion.variable = result.variableName;
+                    $scope.activeQuestion.variableLabel = result.variableLabel;
                     $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
                     $scope.activeQuestion.title = result.title;
                     $scope.activeQuestion.isPreFilled = result.isPreFilled;
