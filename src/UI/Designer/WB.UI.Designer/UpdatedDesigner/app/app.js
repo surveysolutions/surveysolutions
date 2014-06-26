@@ -58,7 +58,13 @@
                     redirectTo: '/'
                 });
         }
-    ]);
+    ]).run(['$location', '$cookies', 'utilityService', function ($location, $cookies, utilityService) {
+        if (!$location.hash()) {
+            var questionnaireId = $cookies.questionnaireId;
+            var url = utilityService.format('/{0}', questionnaireId);
+            $location.path(url);
+        }
+    }]);
     angular.module('designerApp').config(['$httpProvider', function($httpProvider) {
         $httpProvider.interceptors.push('errorReportingInterceptor');
     }]);
