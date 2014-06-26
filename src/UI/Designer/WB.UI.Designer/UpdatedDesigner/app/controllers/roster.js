@@ -3,26 +3,14 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', [
-            '$scope', '$routeParams', 'questionnaireService', 'commandService', '$log',
-            function($scope, $routeParams, questionnaireService, commandService, $log) {
-
-                var manualUnion = function(arrays) {
-                    var union = [];
-                    arrays.forEach(function(array) {
-                        array.forEach(function(element) {
-                            if (union.indexOf(element) === -1) {
-                                union.push(element);
-                            }
-                        });
-                    });
-                    return union;
-                };
+            '$scope', '$routeParams', 'questionnaireService', 'commandService', 'utilityService','$log',
+            function($scope, $routeParams, questionnaireService, commandService, utilityService, $log) {
 
                 var dataBind = function(result) {
                     $scope.activeRoster.breadcrumbs = result.breadcrumbs;
-                    $scope.activeRoster.numerics = manualUnion(_.toArray(result.numericIntegerQuestions));
-                    $scope.activeRoster.lists = manualUnion(_.toArray(result.textListsQuestions));
-                    $scope.activeRoster.multiOption = manualUnion(_.toArray(result.notLinkedMultiOptionQuestions));
+                    $scope.activeRoster.numerics = utilityService.union(_.toArray(result.numericIntegerQuestions));
+                    $scope.activeRoster.lists = utilityService.union(_.toArray(result.textListsQuestions));
+                    $scope.activeRoster.multiOption = utilityService.union(_.toArray(result.notLinkedMultiOptionQuestions));
 
                     var roster = result.roster;
                     $scope.activeRoster.title = roster.title;
