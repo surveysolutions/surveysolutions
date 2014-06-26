@@ -59,7 +59,7 @@
                 });
         }
     ]).run(['$location', '$cookies', 'utilityService', function ($location, $cookies, utilityService) {
-        if (!$location.hash()) {
+        if (!$location.url()) {
             var questionnaireId = $cookies.questionnaireId;
             var url = utilityService.format('/{0}', questionnaireId);
             $location.path(url);
