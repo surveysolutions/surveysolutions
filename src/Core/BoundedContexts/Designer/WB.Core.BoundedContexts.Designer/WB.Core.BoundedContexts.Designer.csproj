@@ -210,6 +210,7 @@
     <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\Questionnaire\Edit\Breadcrumb.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoStatisticsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IQuestionnaireItem.cs" />

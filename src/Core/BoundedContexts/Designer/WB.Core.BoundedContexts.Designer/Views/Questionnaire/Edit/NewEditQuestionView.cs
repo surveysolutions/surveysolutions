@@ -35,6 +35,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public Dictionary<string, QuestionBrief[]> SourceOfLinkedQuestions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] QuestionScopeOptions { get; set; }
-        public GroupBrief[] Breadcrumbs { get; set; }
+        public Breadcrumb[] Breadcrumbs { get; set; }
     }
 }

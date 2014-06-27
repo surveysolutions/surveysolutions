@@ -410,7 +410,6 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="UpdatedDesigner\app\controllers\breadcrumbs.js" />
     <Content Include="UpdatedDesigner\app\controllers\share.js" />
     <Content Include="UpdatedDesigner\app\directives\animations.js" />
     <Content Include="UpdatedDesigner\app\directives\itemBreadcrumbs.js" />
