@@ -263,10 +263,6 @@
       <Project>{41e11b34-5beb-48e6-b9b0-2dea05cfa7fb}</Project>
       <Name>WB.UI.Supervisor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
-      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
-      <Name>SynchronizationMessages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>

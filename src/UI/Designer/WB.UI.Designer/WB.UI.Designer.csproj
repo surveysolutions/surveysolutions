@@ -1211,10 +1211,6 @@
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
-      <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
-      <Name>WB.UI.Designer.Providers.CQRS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
       <Project>{8263ca84-bfb5-4a7b-ae31-f5fc5b05e7c1}</Project>
       <Name>WB.UI.Designer.WebServices</Name>
