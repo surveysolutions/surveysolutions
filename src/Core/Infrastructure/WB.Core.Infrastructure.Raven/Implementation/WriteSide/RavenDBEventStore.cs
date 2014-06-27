@@ -31,12 +31,12 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         private readonly int timeout = 180;
 
-        public RavenDBEventStore(string ravenUrl, int pageSize, bool useStreamingForAllEvents = true, bool useReplication=false)
+        public RavenDBEventStore(string ravenUrl, int pageSize, bool useStreamingForAllEvents = true, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately)
         {
             this.DocumentStore = new DocumentStore
             {
                 Url = ravenUrl,
-                Conventions = CreateStoreConventions(CollectionName, useReplication)
+                Conventions = CreateStoreConventions(CollectionName, failoverBehavior)
             }.Initialize();
 
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
@@ -50,9 +50,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
             IndexCreation.CreateIndexes(typeof (EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
         }
 
-        public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize, bool useReplication = false, bool useStreamingForAllEvents = true)
+        public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately, bool useStreamingForAllEvents = true)
         {
-            externalDocumentStore.Conventions = CreateStoreConventions(CollectionName, useReplication);
+            externalDocumentStore.Conventions = CreateStoreConventions(CollectionName, failoverBehavior);
             this.DocumentStore = externalDocumentStore;
 
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>

@@ -110,7 +110,7 @@ namespace WB.UI.Supervisor.App_Start
                 eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
-                useReplication: WebConfigurationManager.AppSettings.GetBool("Raven.Databases.UseReplication", false));
+                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"]);
 
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));

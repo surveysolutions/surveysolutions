@@ -67,7 +67,7 @@ namespace WB.UI.Designer.App_Start
                 eventsDatabase: AppSettings.Instance.RavenEventsDatabase,
                 viewsDatabase: AppSettings.Instance.RavenViewsDatabase,
                 plainDatabase: AppSettings.Instance.RavenPlainDatabase,
-                useReplication: AppSettings.Instance.UseReplication);
+                failoverBehavior: AppSettings.Instance.FailoverBehavior);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
