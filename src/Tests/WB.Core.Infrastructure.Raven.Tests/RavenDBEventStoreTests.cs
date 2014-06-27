@@ -154,7 +154,7 @@ namespace WB.Core.Infrastructure.Raven.Tests
         [Test]
         public void Retrieving_all_events_should_return_the_same_as_added()
         {
-            var targetStore = new RavenDBEventStore(_documentStore, 100, true);
+            var targetStore = new RavenDBEventStore(_documentStore, 100);
             var id = Guid.NewGuid();
 
             int sequenceCounter = 0;

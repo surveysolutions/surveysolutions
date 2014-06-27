@@ -109,7 +109,7 @@ namespace WB.UI.Headquarters
                 WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
-                useReplication: WebConfigurationManager.AppSettings.GetBool("Raven.Databases.UseReplication", false));
+                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"]);
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled && LegacyOptions.SupervisorFunctionsEnabled,
