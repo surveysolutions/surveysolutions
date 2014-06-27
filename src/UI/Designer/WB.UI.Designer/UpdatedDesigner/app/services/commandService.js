@@ -30,13 +30,13 @@
                         type: question.type,
                         variableName: question.variable,
                         variableLabel: question.variableLabel,
-                        isPreFilled: question.isPreFilled,
+                        isPreFilled: question.questionScope == 'Headquarter',
                         isMandatory: question.isMandatory,
                         scope: question.questionScope,
                         enablementCondition: question.enablementCondition,
                         validationExpression: question.validationExpression,
                         validationMessage: question.validationMessage,
-                        instructions: question.instruction
+                        instructions: question.instructions
                     };
 
                     switch (question.type) {

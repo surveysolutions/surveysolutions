@@ -13,8 +13,7 @@
                     $scope.activeQuestion.variable = result.variableName;
                     $scope.activeQuestion.variableLabel = result.variableLabel;
                     $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
-                    $scope.activeQuestion.title = result.title;
-                    $scope.activeQuestion.isPreFilled = result.isPreFilled;
+                    $scope.activeQuestion.title = result.title;                    
                     $scope.activeQuestion.isMandatory = result.isMandatory;
                     $scope.activeQuestion.enablementCondition = result.enablementCondition;
                     $scope.activeQuestion.validationExpression = result.validationExpression;
@@ -22,6 +21,10 @@
                     $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
                     $scope.activeQuestion.instructions = result.instructions;
                     $scope.activeQuestion.options = result.options;
+
+                    if (result.isPreFilled) {
+                        $scope.activeQuestion.questionScope = 'Headquarter';
+                    }
                 }
 
                 $scope.loadQuestion = function() {
@@ -39,7 +42,6 @@
                         }
                     });
                 };
-
 
                 $scope.deleteQuestion = function() {
                     if (confirm("Are you sure want to delete question?")) {
@@ -66,15 +68,21 @@
                     dataBind($scope.initialQuestion);
                 };
 
-                $scope.addOption = function () {
+                $scope.addOption = function() {
                     $scope.activeQuestion.options.push({
                         "value": null,
                         "title": ''
                     });;
                 };
 
-                $scope.removeOption = function (index) {
+                $scope.removeOption = function(index) {
                     $scope.activeQuestion.options.splice(index, 1);
+                };
+
+                $scope.changeQuestionScope = function() {
+                    if ($scope.activeQuestion.questionScope == 'Headquarter') {
+                        $scope.activeQuestion.enablementCondition = '';
+                    }
                 };
 
                 $scope.loadQuestion();
