@@ -462,7 +462,7 @@
                     return;
                 }
 
-                if (isDropedOutsideAnyChapter) {
+                if (isDropedOutsideAnyChapter && moveItemType == "group" && arg.item.isRoster()) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveAutoPropagatedGroupOutsideGroup);
                     return;
