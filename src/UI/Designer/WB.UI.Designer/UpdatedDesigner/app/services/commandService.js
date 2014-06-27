@@ -58,9 +58,9 @@
                         ];
                         break;
                     case "Numeric":
-                        command.isInteger = true;
-                        command.countOfDecimalPlaces = null;
-                        command.maxValue = 20;
+                        command.isInteger = question.isInteger;
+                        command.countOfDecimalPlaces = question.countOfDecimalPlaces;
+                        command.maxValue = question.maxValue;
                         break;
                     case "DateTime":
                     case "GpsCoordinates":

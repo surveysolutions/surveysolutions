@@ -13,7 +13,7 @@
                     $scope.activeQuestion.variable = result.variableName;
                     $scope.activeQuestion.variableLabel = result.variableLabel;
                     $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
-                    $scope.activeQuestion.title = result.title;                    
+                    $scope.activeQuestion.title = result.title;
                     $scope.activeQuestion.isMandatory = result.isMandatory;
                     $scope.activeQuestion.enablementCondition = result.enablementCondition;
                     $scope.activeQuestion.validationExpression = result.validationExpression;
@@ -21,11 +21,16 @@
                     $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
                     $scope.activeQuestion.instructions = result.instructions;
                     $scope.activeQuestion.options = result.options;
+                    $scope.activeQuestion.isInteger = result.isInteger;
+                    $scope.activeQuestion.maxValue = result.maxValue;
+                    $scope.activeQuestion.countOfDecimalPlaces = result.countOfDecimalPlaces;
 
                     if (result.isPreFilled) {
                         $scope.activeQuestion.questionScope = 'Headquarter';
+                    } else {
+                        $scope.activeQuestion.questionScope = 'Interviewer';
                     }
-                }
+                };
 
                 $scope.loadQuestion = function() {
                     questionnaireService.getQuestionDetailsById($routeParams.questionnaireId, $scope.activeQuestion.itemId)
