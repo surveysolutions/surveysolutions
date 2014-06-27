@@ -18,6 +18,8 @@ namespace WB.UI.Headquarters.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            if (filterContext.Controller is ControlPanelController) return;
+
             var isInstallController = filterContext.Controller is InstallController;
             var isUserAuthenticated = filterContext.HttpContext.User.Identity.IsAuthenticated;
             var isHQUserExists = identityManager.GetUsersInRole(UserRoles.Headquarter.ToString()).Any();
