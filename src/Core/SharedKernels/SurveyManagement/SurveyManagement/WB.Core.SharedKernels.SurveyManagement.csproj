@@ -84,7 +84,9 @@
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
+    <Compile Include="Implementation\Factories\CsvWriterFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
+    <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoader.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataProcessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
@@ -137,6 +140,7 @@
       <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
+    <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IDataExportService.cs" />
     <Compile Include="Services\IDataFileExportService.cs" />
     <Compile Include="Services\IDataFileService.cs" />

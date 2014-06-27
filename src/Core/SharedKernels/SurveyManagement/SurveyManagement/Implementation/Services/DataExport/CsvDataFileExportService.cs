@@ -2,8 +2,9 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
-using CsvHelper;
+
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -12,23 +13,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
     internal class CsvDataFileExportService : IDataFileExportService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ICsvWriterFactory csvWriterFactory;
 
-        public CsvDataFileExportService(IFileSystemAccessor fileSystemAccessor)
+        public CsvDataFileExportService(IFileSystemAccessor fileSystemAccessor, ICsvWriterFactory csvWriterFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.csvWriterFactory = csvWriterFactory;
         }
-
-        private readonly string delimiter = ",";
          
         public void AddRecord(InterviewDataExportLevelView items, string filePath)
         {
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, true))
-
-            using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-            using (var writer = new CsvWriter(streamWriter))
+            using (var writer = csvWriterFactory.OpenCsvWriter(fileStream))
             {
-                writer.Configuration.Delimiter = this.delimiter;
-
                 foreach (var item in items.Records)
                 {
                     writer.WriteField(item.RecordId);
@@ -51,18 +48,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     }
                     writer.NextRecord();
                 }
-                streamWriter.Flush();
             }
         }
 
         public void AddActionRecords(IEnumerable<InterviewActionExportView> actions, string filePath)
         {
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, true))
-
-            using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-            using (var writer = new CsvWriter(streamWriter))
+            using (var writer = csvWriterFactory.OpenCsvWriter(fileStream))
             {
-                writer.Configuration.Delimiter = this.delimiter;
                 foreach (var interviewActionExportView in actions)
                 {
                     writer.WriteField(interviewActionExportView.InterviewId);
@@ -74,17 +67,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
                     writer.NextRecord();
                 }
-                streamWriter.Flush();
             }
         }
 
         public void CreateHeader(HeaderStructureForLevel header, string filePath)
         {
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, false))
-            using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-            using (var writer = new CsvWriter(streamWriter))
+            using (var writer = csvWriterFactory.OpenCsvWriter(fileStream))
             {
-                writer.Configuration.Delimiter = this.delimiter;
                 writer.WriteField(header.LevelIdColumnName);
 
                 if (header.IsTextListScope)
@@ -107,20 +97,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 {
                     writer.WriteField(string.Format("ParentId{0}", i + 1));
                 }
-
                 writer.NextRecord();
-                streamWriter.Flush();
             }
         }
 
         public void CreateHeaderForActionFile(string filePath)
         {
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, false))
-            using (var streamWriter = new StreamWriter(fileStream, Encoding.UTF8))
-            using (var writer = new CsvWriter(streamWriter))
-            {
-                writer.Configuration.Delimiter = this.delimiter;
-
+             using (var writer = csvWriterFactory.OpenCsvWriter(fileStream))
+            {   
                 writer.WriteField("Id");
                 writer.WriteField("Action");
                 writer.WriteField("Originator");
@@ -129,7 +114,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 writer.WriteField("Time");
 
                 writer.NextRecord();
-                streamWriter.Flush();
             }
         }
 
