@@ -174,7 +174,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     string accuracy = string.Empty,
                         latitude = string.Empty,
                         longitude = string.Empty,
-                        timestamp = string.Empty;
+                        timestamp = string.Empty,
+                        altitude = string.Empty;
 
                     var answerAsGeoPosition = dto.Answer as GeoPosition;
                     if (answerAsGeoPosition != null)
@@ -182,6 +183,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         accuracy = answerAsGeoPosition.Accuracy.ToString();
                         latitude = answerAsGeoPosition.Latitude.ToString();
                         longitude = answerAsGeoPosition.Longitude.ToString();
+                        altitude = answerAsGeoPosition.Altitude.ToString();
                         timestamp = answerAsGeoPosition.Timestamp.ToString();
                     }
                     model = new GpsQuestionModel()
@@ -189,7 +191,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                         accuracy = accuracy,
                         latitude = latitude,
                         longitude = longitude,
-                        timestamp = timestamp
+                        timestamp = timestamp,
+                        altitude = altitude
                     };
                     break;
                 case QuestionType.AutoPropagate:
@@ -412,6 +415,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string longitude { set; get; }
         public string accuracy { set; get; }
         public string timestamp { set; get; }
+        public string altitude { set; get; }
     }
     public class TextQuestionModel : QuestionModel
     {
