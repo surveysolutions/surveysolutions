@@ -74,7 +74,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation
                 DefaultDatabase = databaseName,
                 Conventions =
                 {
-                    FailoverBehavior = settings.UseReplication ? FailoverBehavior.ReadFromAllServers : FailoverBehavior.FailImmediately,
+                    FailoverBehavior = settings.FailoverBehavior,
                     JsonContractResolver = new PropertiesOnlyContractResolver(),
                     CustomizeJsonSerializer = serializer =>
                     {

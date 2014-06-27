@@ -60,9 +60,9 @@ namespace WB.UI.Designer
             get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.PlainStorage"); }
         }
 
-        public bool UseReplication
+        public string FailoverBehavior
         {
-            get { return ConfigurationManager.AppSettings.GetBool("Raven.Databases.UseReplication", false); }
+            get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.FailoverBehavior"); }
         }
 
         public string WKHtmlToPdfExecutablePath
