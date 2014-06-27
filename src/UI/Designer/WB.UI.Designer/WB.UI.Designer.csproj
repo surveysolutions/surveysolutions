@@ -410,12 +410,15 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="UpdatedDesigner\app\controllers\breadcrumbs.js" />
     <Content Include="UpdatedDesigner\app\controllers\share.js" />
     <Content Include="UpdatedDesigner\app\directives\animations.js" />
+    <Content Include="UpdatedDesigner\app\directives\itemBreadcrumbs.js" />
     <Content Include="UpdatedDesigner\app\directives\directives.js" />
     <Content Include="UpdatedDesigner\app\fixtures\no-backend.js" />
     <Content Include="UpdatedDesigner\app\services\errorReportingService.js" />
     <Content Include="UpdatedDesigner\app\services\shareService.js" />
+    <Content Include="UpdatedDesigner\app\views\itemBreadcrumbs.html" />
     <Content Include="UpdatedDesigner\app\views\share.html" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\index.html" />
