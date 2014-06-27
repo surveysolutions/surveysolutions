@@ -1,7 +1,5 @@
 ﻿using System;
-//using Newtonsoft.Json;
 using System.Diagnostics;
-using Ncqrs.Eventing.Sourcing;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
