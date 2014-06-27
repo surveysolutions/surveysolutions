@@ -140,6 +140,7 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextListQuestionAnswered_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataEventHandlerTestContext.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataDenormalizerShouldExtensions.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_ApprovedBySupervisor_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_Completed_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived.cs" />
@@ -200,6 +201,13 @@
     <Compile Include="QuestionDataParserTests\when_parsing_answer_on_numeric_int_roster_size_question_and_answer_is_negative.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_int_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_is_greater_then_allowed.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\CsvDataFileExportServiceTestContext.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_CreateHeaderForActionFile_called.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_CreateHeader_called.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_AddActionRecords_called_for_list_of_actions.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_AddRecord_called_for_interview_export_view.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewActionFileName_is_called.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewExportedDataFileName_called_for_level_name.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_2_capi_packages_and_max_per_process_is_1.cs" />
