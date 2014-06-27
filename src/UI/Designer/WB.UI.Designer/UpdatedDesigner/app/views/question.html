@@ -1,11 +1,6 @@
 ﻿<div class="form-holder">
-    <div class="breadcrumbs">
-        <ul>
-            <li ng-repeat="breadcrumb in activeQuestion.breadcrumbs">
-                <a ng-href="{{breadcrumb.id}}">{{breadcrumb.title}}</a>
-            </li>
-        </ul>
-    </div>
+    <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>
+    
 
     <form role="form">
         <div class="row">
