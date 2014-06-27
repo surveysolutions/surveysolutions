@@ -5,6 +5,7 @@ using EmitMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
@@ -293,11 +294,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }).ToArray());
         }
 
-        private GroupBrief[] GetBreadcrumbs(QuestionsAndGroupsCollectionView questionsCollection, DescendantItemView question)
+        private Breadcrumb[] GetBreadcrumbs(QuestionsAndGroupsCollectionView questionsCollection, DescendantItemView question)
         {
-            return question.ParentGroupsIds.Reverse().Select(x => questionsCollection.Groups.Single(g => g.Id == x)).Select(x => new GroupBrief
+            return question.ParentGroupsIds.Reverse().Select(x => questionsCollection.Groups.Single(g => g.Id == x)).Select(x => new Breadcrumb
             {
-                Id = x.Id,
+                Id = x.Id.FormatGuid(),
                 Title = x.Title
             }).ToArray();
         }
