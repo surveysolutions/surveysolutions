@@ -41,10 +41,10 @@
       match="/configuration/appSettings/add[@key='SupervisorFunctionsEnabled']/@value" />
    </parameter>
    <parameter name="Database replication"
-      description="Turn database failover on/off"
-      defaultValue="false">
+      description="Turn database failover options"
+      defaultValue="FailImmediately">
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Raven.Databases.UseReplication']/@value" />
+      match="/configuration/appSettings/add[@key='Raven.Databases.FailoverBehavior']/@value" />
    </parameter>
 </parameters>
