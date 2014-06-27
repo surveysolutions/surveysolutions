@@ -100,10 +100,11 @@
       scope="\\web.config$"
       match="/configuration/appSettings/add[@key='IsTrackingEnabled']/@value" />
    </parameter>
-   <parameter name="Show new design"
+   <parameter name="Database replication"
+      description="Turn database failover on/off"
       defaultValue="false">
-   <parameterEntry kind="XmlFile"
-      scope="\\web.config$"
-      match="/configuration/appSettings/add[@key='IsNewDesignerEditPageEnabled']/@value" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Raven.Databases.UseReplication']/@value" />
    </parameter>
   </parameters>
