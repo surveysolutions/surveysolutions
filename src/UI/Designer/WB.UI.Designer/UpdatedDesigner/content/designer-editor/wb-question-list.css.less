@@ -39,19 +39,22 @@
 
     & when (@purpose='questionnarie') {
       
-       > .handler {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 25px;
-        height: 100%;
-        z-index: 100;
+      > .handler {
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 25px;
+         height: 100%;
+         z-index: 100;
       }
 
       &:hover {
-        background-image: url(../i/question-item-dots.png);
-        background-position: 5px center;
-        background-repeat: no-repeat;
+        > .handler {
+          background-image: url(../i/question-item-dots.png);
+          background-position: 5px center;
+          background-repeat: no-repeat;
+        }
+
         background-color: @questionnarie-question-list-item-hover-color;
         &:after {
           background: none;
@@ -103,22 +106,25 @@
       font-weight: normal;
     }
 
-     span.btn-collapse, span.btn-expand {
+     button.btn-collapse, button.btn-expand {
       @side: 16px;
       display: inline-block;
       position: relative;
-      top: 2px;
+      top: -10px;
       margin-right: 5px;
       width: @side;
       height: @side;
       background: url(../i/section-collapse-glyph.png) no-repeat;
       //outline: 1px red dotted;
+      border: none;
+      vertical-align: bottom;
+      outline: none;
     }
 
-     span.btn-collapse {
+    button.btn-collapse {
       background-position: center -8px;
     }
-     span.btn-expand {
+    button.btn-expand {
       background-position: center -40px;
     }
 

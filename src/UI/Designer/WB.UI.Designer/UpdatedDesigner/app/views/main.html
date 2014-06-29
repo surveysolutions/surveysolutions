@@ -126,7 +126,7 @@
 
                 <a class="handler" ui-tree-handle></a>
 
-                <span ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"></span>
+                <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"></button>
                 <span ng-bind-html="item.title | highlight:search.searchText"></span>
             </div>
 
