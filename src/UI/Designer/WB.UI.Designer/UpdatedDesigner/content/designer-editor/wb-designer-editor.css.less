@@ -370,32 +370,41 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             display: block;
           }
 
-          > ul.chapters {
-            display: block;
-          }
+          > .ul-holder {
+            > ul.chapters {
+              display: block;
+            }
 
-          > .button-holder {
-            display: block;
-          }
-        }
-
-        > ul.chapters {
-          display: none;
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          //overflow: hidden;
-
-          .angular-ui-tree-placeholder {
-            outline: 2px dashed white;
+            > .button-holder {
+              display: block;
+            }
           }
         }
 
-        .button-holder {
-          display: none;
+        > .ul-holder {
           width: 100%;
-          margin: 10px 0 0 10px;
-          overflow: hidden;
+          height: 100%;
+          overflow-x: hidden;
+          overflow-y: auto;
+
+          > ul.chapters {
+            display: none;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            //overflow: hidden;
+
+            .angular-ui-tree-placeholder {
+              outline: 2px dashed white;
+            }
+          }
+
+          .button-holder {
+            display: none;
+            width: 100%;
+            margin: 10px 0 0 10px;
+            overflow: hidden;
+          }
         }
       }
 
