@@ -6107,9 +6107,6 @@ body {
 /*
   string @color: 'blue' or 'gray'
 */
-.angular-ui-tree-placeholder {
-  outline: 2px dashed #BCC3C8;
-}
 .mCSB_container {
   margin-right: 0;
 }
@@ -6171,7 +6168,6 @@ li.chapter-panel-item {
   position: relative;
   display: block;
   height: 70px;
-  padding-left: 18px;
   border-bottom: 1px #d7dbde solid;
   cursor: pointer;
 }
@@ -6185,6 +6181,7 @@ li.chapter-panel-item > .holder > .inner {
   position: relative;
   display: table-cell;
   vertical-align: middle;
+  padding-left: 18px;
 }
 li.chapter-panel-item > .holder > .inner > .handler {
   position: absolute;
@@ -6250,16 +6247,24 @@ li.chapter-panel-item > .holder > .inner > .btn-group > ul.dropdown-menu li a:ho
   background-color: #2a81cb;
 }
 li.chapter-panel-item > .holder > .inner:hover {
-  background-color: #dbdfe2;
+  /*background-color: #dbdfe2;
+        > .handler {
+          background: #dbdfe2 url(../i/chapter-list-li-dots.png) center no-repeat;
+        } */
 }
 li.chapter-panel-item > .holder > .inner:hover > .holder > .inner > .btn-group > .dropdown-toggle {
   display: inline-block;
 }
-li.chapter-panel-item > .holder > .inner:hover > .handler {
-  background: #dbdfe2 url(i/chapter-list-li-dots.png) center no-repeat;
-}
 li.chapter-panel-item.current > .holder > .inner > h1 {
   font-weight: bold;
+}
+ul.chapters.angular-ui-tree-drag > li.chapter-panel-item > .holder > .inner,
+li.chapter-panel-item:hover > .holder > .inner {
+  background-color: #dbdfe2;
+}
+ul.chapters.angular-ui-tree-drag > li.chapter-panel-item > .holder > .inner > .handler,
+li.chapter-panel-item:hover > .holder > .inner > .handler {
+  background: #dbdfe2 url(i/chapter-list-li-dots.png) center no-repeat;
 }
 #designer-editor.container {
   width: 100%;
@@ -6580,6 +6585,9 @@ li.chapter-panel-item.current > .holder > .inner > h1 {
   margin: 0;
   padding: 0;
 }
+#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > ul.chapters .angular-ui-tree-placeholder {
+  outline: 2px dashed white;
+}
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel .button-holder {
   display: none;
   width: 100%;
@@ -6591,6 +6599,9 @@ li.chapter-panel-item.current > .holder > .inner > h1 {
   width: 100%;
   height: 100%;
   overflow: auto;
+}
+#designer-editor.container section#main > .questionnaire-tree > .question-list .angular-ui-tree-placeholder {
+  outline: 2px dashed #BCC3C8;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list > .start-box {
   font-family: Arial, Helvetica, sans-serif;

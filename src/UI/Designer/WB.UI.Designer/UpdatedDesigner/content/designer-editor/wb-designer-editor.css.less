@@ -15,7 +15,6 @@ li.chapter-panel-item {
   position: relative;
   display: block;
   height: 70px;
-  padding-left: 18px;
   border-bottom: 1px #d7dbde solid;
   cursor: pointer;
 
@@ -29,6 +28,7 @@ li.chapter-panel-item {
       position: relative;
       display: table-cell;
       vertical-align: middle;
+      padding-left: 18px;
 
       > .handler {
         position: absolute;
@@ -97,16 +97,27 @@ li.chapter-panel-item {
           display: inline-block;
         }
 
-        background-color: #dbdfe2;
+        /*background-color: #dbdfe2;
         > .handler {
           background: #dbdfe2 url(../i/chapter-list-li-dots.png) center no-repeat;
-        }
+        } */
       }
     }
   }
 
   &.current > .holder > .inner > h1 {
     font-weight: bold;
+  }
+}
+
+ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:hover {
+  > .holder {
+    > .inner {
+      background-color: #dbdfe2;
+      > .handler {
+        background: #dbdfe2 url(../i/chapter-list-li-dots.png) center no-repeat;
+      }
+    }
   }
 }
 
@@ -375,6 +386,9 @@ li.chapter-panel-item {
           padding: 0;
           //overflow: hidden;
 
+          .angular-ui-tree-placeholder {
+            outline: 2px dashed white;
+          }
         }
 
         .button-holder {
@@ -390,6 +404,10 @@ li.chapter-panel-item {
         width: 100%;
         height: 100%;
         overflow: auto;
+
+        .angular-ui-tree-placeholder {
+          outline: 2px dashed #BCC3C8;
+        }
 
         > .start-box {
           .questionnarie-startbox-fontstyle();
