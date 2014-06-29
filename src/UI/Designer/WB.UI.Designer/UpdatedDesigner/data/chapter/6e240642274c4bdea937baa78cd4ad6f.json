@@ -6,7 +6,7 @@
         "title": "Group 1",
         "items": [{
             "itemId": "20ec89157c0e41e49d77db46e929db5d",
-            "title": "How much in total did the household spend (in TSH) on in the past 4 weeks for all illness. Lorem ipsum dolor sit amet",
+            "title": "How much in total did the household spend (in TSH) on in the past 4 weeks for all illness",
             "variable": "q1",
             "type": "Text",
             "linkedVariables": ["q2"],

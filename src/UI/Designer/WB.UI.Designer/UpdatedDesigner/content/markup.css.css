@@ -6734,7 +6734,6 @@ li.chapter-panel-item.current > .holder > .inner > h1 {
   padding-left: 50px;
   padding-right: 10px;
   margin-right: 28px;
-  overflow: hidden;
   white-space: nowrap;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
@@ -6893,9 +6892,6 @@ li.chapter-panel-item.current > .holder > .inner > h1 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00dbdfe2', endColorstr='#ffdbdfe2', GradientType=1);
 }
 .item > .qname-block > .btn-group {
-  /*position: absolute;
-        top: 11px;
-        right: 8px;*/
   position: relative;
   left: 10px;
 }
@@ -6904,7 +6900,6 @@ li.chapter-panel-item.current > .holder > .inner > h1 {
   box-shadow: none;
 }
 .item > .qname-block > .btn-group > .dropdown-toggle {
-  display: none;
   vertical-align: middle;
   width: 37px;
   height: 30px;
@@ -6992,7 +6987,6 @@ li.chapter-panel-item.current > .holder > .inner > h1 {
   padding-left: 50px;
   padding-right: 10px;
   margin-right: 28px;
-  overflow: hidden;
   white-space: nowrap;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
@@ -7110,9 +7104,6 @@ li.chapter-panel-item.current > .holder > .inner > h1 {
   left: -75px;
 }
 #verify-popover-content .question-list .item > .qname-block > .btn-group {
-  /*position: absolute;
-        top: 11px;
-        right: 8px;*/
   position: relative;
   left: 10px;
 }
@@ -7121,7 +7112,6 @@ li.chapter-panel-item.current > .holder > .inner > h1 {
   box-shadow: none;
 }
 #verify-popover-content .question-list .item > .qname-block > .btn-group > .dropdown-toggle {
-  display: none;
   vertical-align: middle;
   width: 37px;
   height: 30px;
