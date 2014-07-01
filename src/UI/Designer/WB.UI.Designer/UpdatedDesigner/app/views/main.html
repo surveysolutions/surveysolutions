@@ -105,9 +105,7 @@
                     <span ng-bind-html="item.variable | highlight:search.searchText"></span>
                     
                     <div class="btn-group dropdown">
-                        <!--<a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"></a>-->
-                        <!-- TODO: move stopPropagation somewhere, or disable item selection when menu is clicked in setItem() function  -->
-                        <a href="javascript:void(0);" onclick="if(event.stopPropagation){event.stopPropagation();}event.cancelBubble=true;" data-toggle="dropdown" class="dropdown-toggle"></a>
+                        <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a>Delete</a>
