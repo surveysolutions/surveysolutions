@@ -419,6 +419,11 @@
     <Content Include="UpdatedDesigner\app\services\shareService.js" />
     <Content Include="UpdatedDesigner\app\views\itemBreadcrumbs.html" />
     <Content Include="UpdatedDesigner\app\views\share.html" />
+    <Content Include="UpdatedDesigner\content\i\btn-disabled.png" />
+    <Content Include="UpdatedDesigner\content\i\chapter-panel-btn-small.png" />
+    <Content Include="UpdatedDesigner\content\i\cross.png" />
+    <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
+    <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\index.html" />
     <Content Include="UpdatedDesigner\app\app.js" />
@@ -1146,6 +1151,7 @@
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\README.md" />
+    <Content Include="UpdatedDesigner\content\dropdown.css.less" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
