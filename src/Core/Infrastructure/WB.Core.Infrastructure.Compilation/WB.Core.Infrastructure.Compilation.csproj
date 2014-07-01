@@ -54,16 +54,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDynamicCompiler.cs" />
+    <Compile Include="IEvaluatorGenerator.cs" />
     <Compile Include="InterviewCompiler.cs" />
+    <Compile Include="InterviewEvaluatorGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
+      <Name>Main.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WB.Core.Infrastructure.BaseStructures\WB.Core.Infrastructure.BaseStructures.csproj">
       <Project>{074be728-92ed-400f-bd28-80c8693ce259}</Project>
       <Name>WB.Core.Infrastructure.BaseStructures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
