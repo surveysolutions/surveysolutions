@@ -24,14 +24,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.MapReportTests
                 Mock.Of<AnswersByVariableCollection>(x => x.Answers == new Dictionary<Guid, Dictionary<string, string>>
                 {
                     {
-                        Guid.Parse("44444444444444444444444444444444"), new Dictionary<string, string>
+                        interview1Id, new Dictionary<string, string>
                         {
                             { "0.5", "11.11;11.11" },
                             { "1.5", "22;22" },
                         }
                     },
                     {
-                        Guid.Parse("55555555555555555555555555555555"), new Dictionary<string, string>
+                        interview2Id, new Dictionary<string, string>
                         {
                             { "#", "5555;66666" }
                         }
@@ -49,13 +49,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.MapReportTests
         Because of = () =>
             view = mapReport.Load(input);
 
-        It should_return_view_with_2_records_in_collection_of_abswers = () =>
-            view.Answers.Length.ShouldEqual(2);
+        It should_return_view_with_2_records_in_collection_of_points = () =>
+            view.Points.Length.ShouldEqual(2);
 
-        private It should_set_concrete_values_in_views_Answers_property = () =>
-            view.Answers.ShouldContainOnly(new[] { "11.11;11.11|22;22", "5555;66666" });
+        It should_interview_id_in_first_point_be_equal_to_interview1Id = () =>
+            view.Points[0].InterviewId.ShouldEqual(interview1Id.ToString());
+
+        It should_answers_in_first_point_be_specified_value = () =>
+            view.Points[0].Answers.ShouldEqual("11.11;11.11|22;22");
+
+        It should_interview_id_in_second_point_be_equal_to_interview2Id = () =>
+            view.Points[1].InterviewId.ShouldEqual(interview2Id.ToString());
+
+        It should_answers_in_second_point_be_specified_value = () =>
+            view.Points[1].Answers.ShouldEqual("5555;66666");
 
         private static string repositoryId = "var-11111111111111111111111111111111-1";
+        private static Guid interview1Id = Guid.Parse("11111111111111111111111111111111");
+        private static Guid interview2Id = Guid.Parse("22222222222222222222222222222222");
         private static MapReport mapReport;
         private static MapReportInputModel input;
         private static MapReportView view;

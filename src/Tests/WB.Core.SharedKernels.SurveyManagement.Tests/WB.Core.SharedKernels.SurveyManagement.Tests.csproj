@@ -378,6 +378,10 @@
     <Compile Include="ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="SupportedVersionProviderTests\SupportedVersionProviderTestContext.cs" />
     <Compile Include="SupportedVersionProviderTests\when_getting_supported_questionnaire_version_for_supervisor_app.cs" />
+    <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\InterviewSummaryViewFactoryTestsContext.cs" />
+    <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_interview_has_deleted_status.cs" />
+    <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_summary_does_not_exists.cs" />
+    <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
