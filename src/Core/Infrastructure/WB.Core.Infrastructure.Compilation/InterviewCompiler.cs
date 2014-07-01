@@ -11,7 +11,7 @@ namespace WB.Core.Infrastructure.Compilation
 {
     public class InterviewCompiler : IDynamicCompiler
     {
-        private const string ProfileToBuild = "Profile7";
+        private const string ProfileToBuild = "Profile24";
 
         private readonly string portableAttribute;
         private readonly string portableAssembliesPath;
@@ -20,6 +20,7 @@ namespace WB.Core.Infrastructure.Compilation
             public class InterviewEvaluator : IInterviewEvaluator
             {
                 public static object Evaluate()
+
                 {
                     return 2+2*2;
                 }
@@ -31,19 +32,21 @@ namespace WB.Core.Infrastructure.Compilation
  
             }";
 
-        private readonly string[] usingItems = new[] { "using System.Runtime.Versioning;", "using WB.Core.Infrastructure.BaseStructures;" };
+        private readonly string[] usingItems = new[] { "System.Runtime.Versioning", "WB.Core.Infrastructure.BaseStructures" };
+
+        private readonly string[] defaultReferencedPortableAssemblies = new[] { "System.Core.dll", "mscorlib.dll" };
 
 
         public InterviewCompiler()
         {
             //should be resolve
-            portableAssembliesPath = String.Format("C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\{0}", ProfileToBuild);
-
-            portableAttribute = String.Format(
-                @"[assembly: TargetFramework("".NETPortable,Version=v4.5,Profile={0}"", FrameworkDisplayName="".NET Portable Subset"")]", ProfileToBuild);
+            this.portableAssembliesPath =
+                String.Format("C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.0\\Profile\\{0}",
+                    ProfileToBuild);
         }
 
-        public EmitResult GenerateAssemblyAsString(Guid templateId, string classCode, out string generatedAssembly)
+        public EmitResult GenerateAssemblyAsString(Guid templateId, string classCode, string[] aditionalNamespaces,
+            string[] referencedPortableAssemblies, out string generatedAssembly)
         {
             generatedAssembly = string.Empty;
 
@@ -51,21 +54,37 @@ namespace WB.Core.Infrastructure.Compilation
 
             foreach (var usingitem in this.usingItems)
             {
-                builder.AppendLine(usingitem);
+                builder.AppendLine(String.Format("using {0};", usingitem));
+            }
+
+            foreach (var usingitem in aditionalNamespaces)
+            {
+                builder.AppendLine(String.Format("using {0};", usingitem));
             }
 
             builder.AppendLine(this.portableAttribute);
 
-            builder.Append(classCode);
+            builder.AppendLine(classCode);
 
             var tree = SyntaxFactory.ParseSyntaxTree(builder.ToString());
 
-            var metadataFileReference = new List<MetadataFileReference>
+            var metadataFileReference = new List<MetadataFileReference>();
+
+            foreach (var defaultReferencedPortableAssembly in this.defaultReferencedPortableAssemblies)
             {
-                new MetadataFileReference(Path.Combine(this.portableAssembliesPath, "System.Runtime.dll")),
-                new MetadataFileReference(Path.Combine(this.portableAssembliesPath, "mscorlib.dll")),
-                new MetadataFileReference(typeof(IInterviewEvaluator).Assembly.Location)
-            };
+                metadataFileReference.Add(
+                    new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly)));
+            }
+
+
+            foreach (var defaultReferencedPortableAssembly in referencedPortableAssemblies)
+            {
+                metadataFileReference.Add(
+                    new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly)));
+            }
+
+            metadataFileReference.Add(new MetadataFileReference(typeof (IInterviewEvaluator).Assembly.Location));
+
 
             var compilation = CSharpCompilation.Create(
                 String.Format("rules-{0}.dll", templateId),
