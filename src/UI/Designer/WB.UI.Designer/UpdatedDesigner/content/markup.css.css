@@ -6178,7 +6178,6 @@ li.chapter-panel-item > .holder {
   min-width: 336px;
 }
 li.chapter-panel-item > .holder > .inner {
-  position: relative;
   display: table-cell;
   vertical-align: middle;
   padding-left: 18px;
