@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Android.Content;
 using Android.Text;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
@@ -24,9 +25,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             get { return InputTypes.ClassNumber | InputTypes.NumberFlagSigned; }
         }
 
+        protected override string FormatString(string s)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0:n0}", int.Parse(s, NumberStyles.AllowThousands));
+        }
+
         protected override bool IsParseAnswerStringSucceeded(string newAnswer, out int answer)
         {
-            return int.TryParse(newAnswer, out answer);
+            return int.TryParse(newAnswer, NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out answer);
         }
 
         protected override AnswerQuestionCommand CreateAnswerQuestionCommand(int answer)

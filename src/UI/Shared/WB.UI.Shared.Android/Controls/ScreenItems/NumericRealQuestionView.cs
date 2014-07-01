@@ -27,6 +27,13 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             get { return InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned; }
         }
 
+        protected override string FormatString(string s)
+        {
+            if (s.EndsWith(NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                return s;
+
+            return decimal.Parse(s).ToString("##,###.############################", CultureInfo.InvariantCulture);
+        }
 
         protected override void Initialize()
         {
