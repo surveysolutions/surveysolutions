@@ -92,11 +92,11 @@
         <script type="text/ng-template" id="tree_item_renderer.html">
             <div ng-click="setItem(item)"
                  ng-if="isQuestion(item) && !item.isDeleted"
-                 class="question item {{answerTypeClass[item.type]}}"
+                 class="question item"
                  ng-class="{'selected' : item.itemId == currentItemId}">
 
                 <a class="handler" ui-tree-handle></a>
-                <div class="icon"></div>
+                <div class="icon {{answerTypeClass[item.type]}}"></div>
                 <span ng-bind-html="item.title | highlight:search.searchText"></span>
 
                 <div class="qname-block">

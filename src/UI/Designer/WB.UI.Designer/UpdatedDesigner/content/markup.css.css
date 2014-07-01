@@ -6107,6 +6107,41 @@ body {
 /*
   string @color: 'blue' or 'gray'
 */
+.icon {
+  position: absolute;
+  left: 16px;
+  top: 0;
+  width: 25px;
+  height: 100%;
+  background: transparent center center no-repeat;
+}
+.icon-multianswer {
+  background-image: url(i/icon-cat-multianswer-sm.png);
+}
+.icon-singleanswer {
+  background-image: url(i/icon-cat-singleanswer-sm.png);
+}
+.icon-multimedia {
+  background-image: url(i/icon-cat-multimedia-sm.png);
+}
+.icon-datetime {
+  background-image: url(i/icon-cat-datetime-sm.png);
+}
+.icon-geoloc {
+  background-image: url(i/icon-cat-geoloc-sm.png);
+}
+.icon-textarea {
+  background-image: url(i/icon-cat-textarea-sm.png);
+}
+.icon-textedit {
+  background-image: url(i/icon-cat-textedit-sm.png);
+}
+.icon-floatedit {
+  background-image: url(i/icon-cat-floatedit-sm.png);
+}
+.icon-intedit {
+  background-image: url(i/icon-cat-intedit-sm.png);
+}
 .mCSB_container {
   margin-right: 0;
 }
@@ -6838,41 +6873,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .item button.btn-expand {
   background-position: center -40px;
 }
-.item .icon {
-  position: absolute;
-  left: 16px;
-  top: 0;
-  width: 25px;
-  height: 100%;
-  background: transparent center center no-repeat;
-}
-.item.cat-multianswer > .icon {
-  background-image: url(i/icon-cat-multianswer-sm.png);
-}
-.item.cat-singleanswer > .icon {
-  background-image: url(i/icon-cat-singleanswer-sm.png);
-}
-.item.cat-multimedia > .icon {
-  background-image: url(i/icon-cat-multimedia-sm.png);
-}
-.item.cat-datetime > .icon {
-  background-image: url(i/icon-cat-datetime-sm.png);
-}
-.item.cat-geoloc > .icon {
-  background-image: url(i/icon-cat-geoloc-sm.png);
-}
-.item.cat-textarea > .icon {
-  background-image: url(i/icon-cat-textarea-sm.png);
-}
-.item.cat-textedit > .icon {
-  background-image: url(i/icon-cat-textedit-sm.png);
-}
-.item.cat-floatedit > .icon {
-  background-image: url(i/icon-cat-floatedit-sm.png);
-}
-.item.cat-intedit > .icon {
-  background-image: url(i/icon-cat-intedit-sm.png);
-}
 .item > .qname-block {
   position: absolute;
   right: 0px;
@@ -7058,41 +7058,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #verify-popover-content .question-list .item button.btn-expand {
   background-position: center -40px;
 }
-#verify-popover-content .question-list .item .icon {
-  position: absolute;
-  left: 16px;
-  top: 0;
-  width: 25px;
-  height: 100%;
-  background: transparent center center no-repeat;
-}
-#verify-popover-content .question-list .item.cat-multianswer > .icon {
-  background-image: url(i/icon-cat-multianswer-sm.png);
-}
-#verify-popover-content .question-list .item.cat-singleanswer > .icon {
-  background-image: url(i/icon-cat-singleanswer-sm.png);
-}
-#verify-popover-content .question-list .item.cat-multimedia > .icon {
-  background-image: url(i/icon-cat-multimedia-sm.png);
-}
-#verify-popover-content .question-list .item.cat-datetime > .icon {
-  background-image: url(i/icon-cat-datetime-sm.png);
-}
-#verify-popover-content .question-list .item.cat-geoloc > .icon {
-  background-image: url(i/icon-cat-geoloc-sm.png);
-}
-#verify-popover-content .question-list .item.cat-textarea > .icon {
-  background-image: url(i/icon-cat-textarea-sm.png);
-}
-#verify-popover-content .question-list .item.cat-textedit > .icon {
-  background-image: url(i/icon-cat-textedit-sm.png);
-}
-#verify-popover-content .question-list .item.cat-floatedit > .icon {
-  background-image: url(i/icon-cat-floatedit-sm.png);
-}
-#verify-popover-content .question-list .item.cat-intedit > .icon {
-  background-image: url(i/icon-cat-intedit-sm.png);
-}
 #verify-popover-content .question-list .item > .qname-block {
   position: absolute;
   right: 0px;
@@ -7267,3 +7232,4 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog .form-group .invite-button {
   line-height: 0px;
 }
+/*# sourceMappingURL=markup.css.css.map */

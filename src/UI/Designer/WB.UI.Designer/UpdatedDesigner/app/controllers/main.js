@@ -97,17 +97,17 @@
                 };
 
                 $scope.answerTypeClass = {
-                    YesNo: 'cat-singleanswer',
-                    DropDownList: 'cat-singleanswer',
-                    MultyOption: 'cat-multianswer',
-                    Numeric: 'cat-intedit',
-                    DateTime: 'cat-datetime',
-                    GpsCoordinates: 'cat-geoloc',
-                    AutoPropagate: 'cat-textedit',
-                    TextList: 'cat-textarea',
-                    QRBarcode: 'cat-multimedia',
-                    Text: 'cat-textedit',
-                    SingleOption: 'cat-singleanswer'
+                    YesNo: 'icon-singleanswer',
+                    DropDownList: 'icon-singleanswer',
+                    MultyOption: 'icon-multianswer',
+                    Numeric: 'icon-intedit',
+                    DateTime: 'icon-datetime',
+                    GpsCoordinates: 'icon-geoloc',
+                    AutoPropagate: 'icon-textedit',
+                    TextList: 'icon-textarea',
+                    QRBarcode: 'icon-multimedia',
+                    Text: 'icon-textedit',
+                    SingleOption: 'icon-singleanswer'
                 };
 
                 $scope.chapters = [];

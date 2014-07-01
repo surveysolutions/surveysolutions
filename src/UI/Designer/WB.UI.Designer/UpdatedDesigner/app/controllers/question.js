@@ -48,6 +48,10 @@
                     });
                 };
 
+                $scope.setQuestionType = function(type) {
+                    $scope.activeQuestion.type = type;
+                };
+
                 $scope.deleteQuestion = function() {
                     if (confirm("Are you sure want to delete question?")) {
                         commandService.deleteQuestion($routeParams.questionnaireId, $scope.activeQuestion.itemId).success(function(result) {

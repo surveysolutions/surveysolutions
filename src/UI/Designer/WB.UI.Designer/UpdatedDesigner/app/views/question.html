@@ -5,8 +5,22 @@
     <form role="form">
         <div class="row">
             <div class="form-group col-xs-8">
-                <select id="edit-question-type" class="form-control" ng-model="activeQuestion.type"
-                        ng-options="scope.value as scope.text for scope in activeQuestion.questionTypeOptions"></select>
+                <div class="btn-group" dropdown>
+                    <button id="questionTypeBtn" class="btn btn-default dropdown-toggle" type="button">
+                        <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
+                        {{activeQuestion.type}}
+                        <span class="caret"></span>
+                    </button>
+
+                    <ul class="dropdown-menu " role="menu" aria-labelledby="questionTypeBtn">
+                        <li role="presentation" ng-repeat="type in activeQuestion.questionTypeOptions">
+                            <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="setQuestionType(type.value)">
+                                <i class="icon {{answerTypeClass[type.value]}}"></i>
+                                {{type.text}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="form-group col-xs-3 pull-right">

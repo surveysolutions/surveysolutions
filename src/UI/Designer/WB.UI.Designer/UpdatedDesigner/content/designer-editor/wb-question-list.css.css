@@ -1,4 +1,36 @@
-﻿.angular-ui-tree-placeholder {
-  outline: 2px dashed #BCC3C8;
+﻿.icon {
+  position: absolute;
+  left: 16px;
+  top: 0;
+  width: 25px;
+  height: 100%;
+  background: transparent center center no-repeat;
+}
+.icon-multianswer {
+  background-image: url(../i/icon-cat-multianswer-sm.png);
+}
+.icon-singleanswer {
+  background-image: url(../i/icon-cat-singleanswer-sm.png);
+}
+.icon-multimedia {
+  background-image: url(../i/icon-cat-multimedia-sm.png);
+}
+.icon-datetime {
+  background-image: url(../i/icon-cat-datetime-sm.png);
+}
+.icon-geoloc {
+  background-image: url(../i/icon-cat-geoloc-sm.png);
+}
+.icon-textarea {
+  background-image: url(../i/icon-cat-textarea-sm.png);
+}
+.icon-textedit {
+  background-image: url(../i/icon-cat-textedit-sm.png);
+}
+.icon-floatedit {
+  background-image: url(../i/icon-cat-floatedit-sm.png);
+}
+.icon-intedit {
+  background-image: url(../i/icon-cat-intedit-sm.png);
 }
 /*# sourceMappingURL=wb-question-list.css.css.map */
