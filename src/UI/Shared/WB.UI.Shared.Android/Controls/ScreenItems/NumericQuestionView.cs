@@ -1,13 +1,17 @@
 using System;
+using System.Globalization;
 using Android.Content;
 using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Java.Util.Logging;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems{
@@ -18,6 +22,13 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
         {
             get;
         }
+
+        protected ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
+        protected abstract string FormatString(string s);
 
         public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey,
             ICommandService commandService,
@@ -42,7 +53,53 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
             this.etAnswer.SetSingleLine(true);
             this.etAnswer.EditorAction += this.etAnswer_EditorAction;
             this.etAnswer.FocusChange += this.etAnswer_FocusChange;
+            this.etAnswer.AfterTextChanged += etAnswer_AfterTextChanged;
             this.llWrapper.AddView(this.etAnswer);
+        }
+
+        private void etAnswer_AfterTextChanged(object sender, AfterTextChangedEventArgs e)
+        {
+            this.etAnswer.AfterTextChanged -= etAnswer_AfterTextChanged;
+            try
+            {
+                var newValue = FormatString(etAnswer.Text);
+                var newCursorPosition = GetNewCursorPosition(etAnswer.Text, newValue, etAnswer.SelectionEnd);
+                etAnswer.Text = newValue;
+                etAnswer.SetSelection(newCursorPosition);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Exception during numeric question's answer formatting", ex);
+            }
+            finally
+            {
+                this.etAnswer.AfterTextChanged += etAnswer_AfterTextChanged;
+            }
+        }
+
+        private int GetNewCursorPosition(string oldText, string newText, int oldCursorPosition)
+        {
+            var newCursorPosition = newText.Length;
+            var indexOfOldValue = 0;
+            
+            for (int i = 0; i < newText.Length; i++)
+            {
+                while (newText[i] != oldText[indexOfOldValue])
+                {
+                    if (!Char.IsNumber(newText[i]))
+                        break;
+
+                    indexOfOldValue++;
+                }
+
+                if (indexOfOldValue + 1 >= oldCursorPosition)
+                {
+                    newCursorPosition = i + 1;
+                    break;
+                }
+            }
+
+            return newCursorPosition;
         }
 
         void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
@@ -55,8 +112,16 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
             string newAnswer = this.etAnswer.Text.Trim();
 
             T answer;
-            if (!this.IsParseAnswerStringSucceeded(newAnswer, out answer))
+            try
+            {
+                if (!this.IsParseAnswerStringSucceeded(newAnswer, out answer))
+                    return;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Exception during numeric question's answer parsing", ex);
                 return;
+            }
 
             if (this.Model.AnswerObject != null && answer.Equals(this.Model.AnswerObject))
             {
