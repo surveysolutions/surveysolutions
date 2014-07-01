@@ -37,6 +37,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="InterviewEvaluatorPrototype.cs" />
     <Compile Include="IInterviewEvaluator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
