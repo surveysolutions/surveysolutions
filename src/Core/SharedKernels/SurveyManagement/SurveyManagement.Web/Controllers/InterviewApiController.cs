@@ -10,6 +10,8 @@ using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
@@ -25,18 +27,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
         private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory;
+        private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
         public InterviewApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
             IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory)
+            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory,
+            IInterviewSummaryViewFactory interviewSummaryViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.teamInterviewViewFactory = teamInterviewViewFactory;
             this.changeStatusFactory = changeStatusFactory;
             this.interviewDetailsFactory = interviewDetailsFactory;
+            this.interviewSummaryViewFactory = interviewSummaryViewFactory;
         }
 
         [HttpPost]
@@ -143,6 +148,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             };
 
             return ret;
+        }
+
+        [Authorize(Roles = "Headquarter")]
+        public InterviewSummaryForMapPointView InterviewSummaryForMapPoint(InterviewSummaryForMapPointViewModel data)
+        {
+            if (data == null)
+                return null;
+
+            var interviewSummaryView = this.interviewSummaryViewFactory.Load(data.InterviewId);
+            if (interviewSummaryView == null)
+                return null;
+
+            var interviewSummaryForMapPointView = new InterviewSummaryForMapPointView()
+            {
+                InterviewerName = interviewSummaryView.ResponsibleName,
+                SupervisorName = interviewSummaryView.TeamLeadName
+            };
+
+            if (interviewSummaryView.CommentedStatusesHistory != null &&
+                interviewSummaryView.CommentedStatusesHistory.Any())
+            {
+                var lastStatus = interviewSummaryView.CommentedStatusesHistory.Last();
+
+                interviewSummaryForMapPointView.LastStatus = lastStatus.Status.ToLocalizeString();
+                interviewSummaryForMapPointView.LastStatusChangeDate = AnswerUtils.AnswerToString(lastStatus.Date);
+            }
+            return interviewSummaryForMapPointView;
         }
 
         private QuestionModel SelectModelByQuestion(InterviewGroupView parentGroup, InterviewQuestionView dto)

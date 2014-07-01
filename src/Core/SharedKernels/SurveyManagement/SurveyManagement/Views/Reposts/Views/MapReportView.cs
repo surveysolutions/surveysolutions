@@ -2,6 +2,6 @@
 {
     public class MapReportView
     {
-        public string[] Answers { get; set; }
+        public MapPointView[] Points { get; set; }
     }
 }

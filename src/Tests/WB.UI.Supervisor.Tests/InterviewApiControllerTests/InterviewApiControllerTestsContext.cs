@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.UI.Supervisor.Controllers;
 
 namespace WB.UI.Supervisor.Tests.InterviewApiControllerTests
 {
@@ -20,7 +19,8 @@ namespace WB.UI.Supervisor.Tests.InterviewApiControllerTests
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory = null,
             IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory = null,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
-            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory = null)
+            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory = null,
+            IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
             return new InterviewApiController(commandService: commandService ?? Mock.Of<ICommandService>(),
                 globalInfo: globalInfo ?? Mock.Of<IGlobalInfoProvider>(), logger: logger ?? Mock.Of<ILogger>(),
@@ -31,7 +31,8 @@ namespace WB.UI.Supervisor.Tests.InterviewApiControllerTests
                 changeStatusFactory:
                     changeStatusFactory ?? Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>(),
                 interviewDetailsFactory:
-                    interviewDetailsFactory ?? Mock.Of<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>());
+                    interviewDetailsFactory ?? Mock.Of<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>(),
+                interviewSummaryViewFactory: interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
         }
     }
 }

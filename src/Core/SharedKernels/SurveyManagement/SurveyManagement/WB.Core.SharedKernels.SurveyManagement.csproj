@@ -204,9 +204,12 @@
     <Compile Include="Views\Interview\AllInterviewsView.cs" />
     <Compile Include="Views\Interview\AllInterviewsViewItem.cs" />
     <Compile Include="Views\Interview\AnswersByVariableCollection.cs" />
+    <Compile Include="Views\Interview\IInterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewBrief.cs" />
     <Compile Include="Views\Interview\InterviewData.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
+    <Compile Include="Views\Interview\InterviewSummaryViewFactory.cs" />
+    <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
@@ -249,6 +252,7 @@
     <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\MapPointView.cs" />
     <Compile Include="Views\Reposts\Views\MapReportView.cs" />
     <Compile Include="Views\Reposts\Views\QuestionnaireAndVersionsView.cs" />
     <Compile Include="Views\Reposts\Views\QuestionnaireQuestionInfoView.cs" />

@@ -266,3 +266,8 @@ box-sizing: border-box;
 -moz-box-shadow:    0px -5px 25px 0px rgba(255, 255, 255, 0.75);
 box-shadow:         0px -5px 25px 0px rgba(255, 255, 255, 0.75);
 }
+
+.map-point-tooltip {
+    width: 220px;
+    height: 95px;
+}
