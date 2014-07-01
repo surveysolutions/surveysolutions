@@ -61,28 +61,28 @@
         <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
             <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
             <div class="ul-holder">
-            <ul class="chapters" ui-tree-nodes ng-model="questionnaire.chapters">
-                <li class="chapter-panel-item"
-                    ng-repeat="chapter in questionnaire.chapters"
-                    ui-tree-node
-                    ng-class="{current: currentChapterId == chapter.itemId}"
-                    ng-click="changeChapter(chapter);$event.stopPropagation()">
-                    <div class="holder">
-                        <div class="inner">
-                            <a class="handler" ui-tree-handle></a>
-                            <h1>{{chapter.title}}</h1>
-                            <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
-                                <a class="dropdown-toggle" data-toggle="dropdown"></a>
-                                <ul class="dropdown-menu">
-                                    <li><a ng-click="editChapter(chapter);$event.stopPropagation()">Edit</a></li>
-                                    <li><a ng-click="cloneChapter(chapter);$event.stopPropagation()">Clone</a></li>
-                                    <li><a ng-click="deleteChapter(chapter);$event.stopPropagation()">Delete</a></li>
-                                </ul>
+                <ul class="chapters" ui-tree-nodes ng-model="questionnaire.chapters">
+                    <li class="chapter-panel-item"
+                        ng-repeat="chapter in questionnaire.chapters"
+                        ui-tree-node
+                        ng-class="{current: currentChapterId == chapter.itemId}"
+                        ng-click="changeChapter(chapter);$event.stopPropagation()">
+                        <div class="holder">
+                            <div class="inner">
+                                <a class="handler" ui-tree-handle></a>
+                                <h1>{{chapter.title}}</h1>
+                                <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
+                                    <a class="dropdown-toggle" data-toggle="dropdown"></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a ng-click="editChapter(chapter);$event.stopPropagation()">Edit</a></li>
+                                        <li><a ng-click="cloneChapter(chapter);$event.stopPropagation()">Clone</a></li>
+                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation()">Delete</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
                 <div class="button-holder">
                     <input type="button" class="btn lighter-hover" value="ADD NEW CHAPTER" ng-click="addNewChapter()">
                 </div>
@@ -185,19 +185,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><!--&times;--></button>
-                <!--<h4 class="modal-title">Modal title</h4>-->
             </div>
             <div class="modal-body">
                 <div>
                     <div id="verify-popover-content">
                         <div class="question-list">
                             <div ng-repeat="error in verificationStatus.errors">
-                                <!--<div class="breadcrumbs">
-                                        <ul>
-                                            <li><a href="#">Chapter 1. Household</a></li>
-                                            <li><a href="#">members information</a></li>
-                                        </ul>
-                                    </div>-->
                                 <div class="question item cat-multianswer">
                                     <div class="icon"></div>
                                     {{error.message}}
@@ -213,10 +206,9 @@
                     </div>
                 </div>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
+        </div>
+    </div>
+</div>
 
 <script type="text/ng-template" id="moveToChapterSnippet">
     <div class="btn-group dropup">
