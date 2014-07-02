@@ -27,12 +27,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override string FormatString(string s)
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0:n0}", int.Parse(s, NumberStyles.AllowThousands));
+            return string.Format(CultureInfo.CurrentCulture, "{0:n0}", int.Parse(s, NumberStyles.AllowThousands, CultureInfo.CurrentCulture));
         }
 
         protected override bool IsParseAnswerStringSucceeded(string newAnswer, out int answer)
         {
-            return int.TryParse(newAnswer, NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out answer);
+            return int.TryParse(newAnswer, NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out answer);
         }
 
         protected override AnswerQuestionCommand CreateAnswerQuestionCommand(int answer)
