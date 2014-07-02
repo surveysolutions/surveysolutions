@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('ChapterCtrl', [
-            '$scope', '$routeParams', 'questionnaireService', 'commandService', 'utilityService', 'navigationService',
-            function($scope, $routeParams, questionnaireService, commandService, math, navigationService) {
+            '$scope', 'questionnaireService', 'commandService', 'utilityService', 'navigationService',
+            function($scope, questionnaireService, commandService, math, navigationService) {
 
                 $scope.loadGroup = function() {
                     questionnaireService.getGroupDetailsById($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function(result) {

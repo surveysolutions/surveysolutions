@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$scope', '$routeParams', 'questionnaireService', 'commandService', 'navigationService', '$log',
-            function($scope, $routeParams, questionnaireService, commandService, navigationService, $log) {
+            '$scope', 'questionnaireService', 'commandService', 'navigationService', '$log',
+            function($scope, questionnaireService, commandService, navigationService, $log) {
 
                 var dataBind = function(result) {
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;

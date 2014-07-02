@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('VerificationCtrl', [
-            '$scope', '$routeParams', 'verificationService',
-            function($scope, $routeParams, verificationService) {
+            '$scope', 'verificationService',
+            function($scope, verificationService) {
                 $scope.verificationStatus = {
                     errorsCount: 0,
                     errors: []

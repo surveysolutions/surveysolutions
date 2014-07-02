@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('ChaptersCtrl', [
-            '$scope', '$routeParams', '$location', '$route', 'commandService', 'utilityService', 'navigationService',
-            function($scope, $routeParams, $location, $route, commandService, math, navigationService) {
+            '$scope', '$location', 'commandService', 'utilityService', 'navigationService',
+            function($scope, $location, commandService, math, navigationService) {
 
                 $scope.chapters = [];
 

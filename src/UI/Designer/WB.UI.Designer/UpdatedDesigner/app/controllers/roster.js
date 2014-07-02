@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', [
-            '$scope', '$routeParams', 'questionnaireService', 'commandService', 'utilityService', '$log',
-            function($scope, $routeParams, questionnaireService, commandService, utilityService, $log) {
+            '$scope', 'questionnaireService', 'commandService', 'utilityService', '$log',
+            function($scope, questionnaireService, commandService, utilityService, $log) {
 
                 var dataBind = function(result) {
                     $scope.activeRoster.breadcrumbs = result.breadcrumbs;
