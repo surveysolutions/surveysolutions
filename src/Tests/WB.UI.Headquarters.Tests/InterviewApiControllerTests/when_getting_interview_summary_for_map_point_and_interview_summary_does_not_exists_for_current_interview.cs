@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -26,6 +27,6 @@ namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
 
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;
-        private static string interviewId = "11111111111111111111111111111111";
+        private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
     }
 }

@@ -159,6 +159,8 @@
                         google.maps.event.addListener(marker, 'click', function () {
                             var marker = this;
                             self.SendRequest(self.interiewSummaryUrl, { InterviewId: interviewId }, function (data) {
+                                if (data == undefined || data == null)
+                                    return;
 
                                 data["InterviewId"] = interviewId;
 

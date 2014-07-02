@@ -1,5 +1,7 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
@@ -11,7 +13,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ViewsTests.InterviewTests
         Establish context = () =>
         {
             var interviewSummaryReaderMock = new Mock<IReadSideRepositoryReader<InterviewSummary>>();
-            interviewSummaryReaderMock.Setup(_ => _.GetById(interviewId)).Returns(() => null);
+            interviewSummaryReaderMock.Setup(_ => _.GetById(interviewId.FormatGuid())).Returns(() => null);
             factory = CreateFactory(interviewSummaryReader: interviewSummaryReaderMock.Object);
         };
 
@@ -22,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ViewsTests.InterviewTests
 
         private static InterviewSummaryViewFactory factory;
 
-        private static string interviewId = "11111111111111111111111111111111";
+        private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
 
         private static InterviewSummary viewModel;
     }
