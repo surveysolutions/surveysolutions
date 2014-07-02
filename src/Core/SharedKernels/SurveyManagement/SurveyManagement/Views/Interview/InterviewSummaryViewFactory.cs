@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using System;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -11,7 +12,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.interviewSummaryReader = interviewSummaryReader;
         }
 
-        public InterviewSummary Load(string interviewId)
+        public InterviewSummary Load(Guid interviewId)
         {
             var interview = this.interviewSummaryReader.GetById(interviewId);
             if (interview == null || interview.IsDeleted)
