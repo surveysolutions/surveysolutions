@@ -46,14 +46,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
             this.etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
             this.etAnswer.InputType = this.KeyboardTypeFlags;
 
-            this.PutAnswerStoredInModelToUI();
-
             this.etAnswer.SetSelectAllOnFocus(true);
             this.etAnswer.ImeOptions = ImeAction.Done;
             this.etAnswer.SetSingleLine(true);
             this.etAnswer.EditorAction += this.etAnswer_EditorAction;
             this.etAnswer.FocusChange += this.etAnswer_FocusChange;
             this.etAnswer.AfterTextChanged += etAnswer_AfterTextChanged;
+
+            this.PutAnswerStoredInModelToUI();
             this.llWrapper.AddView(this.etAnswer);
         }
 
@@ -63,9 +63,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems{
             try
             {
                 var newValue = FormatString(etAnswer.Text);
-                var newCursorPosition = GetNewCursorPosition(etAnswer.Text, newValue, etAnswer.SelectionEnd);
-                etAnswer.Text = newValue;
-                etAnswer.SetSelection(newCursorPosition);
+                if (newValue != etAnswer.Text)
+                {
+                    var newCursorPosition = GetNewCursorPosition(etAnswer.Text, newValue, etAnswer.SelectionEnd);
+                    etAnswer.Text = newValue;
+                    etAnswer.SetSelection(newCursorPosition);
+                }
             }
             catch (Exception ex)
             {
