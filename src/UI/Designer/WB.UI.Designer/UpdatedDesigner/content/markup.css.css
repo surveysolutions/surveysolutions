@@ -6286,7 +6286,7 @@ li.chapter-panel-item > .holder > .inner:hover {
           background: #dbdfe2 url(../i/chapter-list-li-dots.png) center no-repeat;
         } */
 }
-li.chapter-panel-item > .holder > .inner:hover > .holder > .inner > .btn-group > .dropdown-toggle {
+li.chapter-panel-item > .holder > .inner:hover > .btn-group > .dropdown-toggle {
   display: inline-block;
 }
 li.chapter-panel-item.current > .holder > .inner > h1 {
@@ -6616,8 +6616,8 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .ul-holder {
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  /*overflow-x: hidden;
+          overflow-y: auto;*/
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .ul-holder > ul.chapters {
   display: none;
