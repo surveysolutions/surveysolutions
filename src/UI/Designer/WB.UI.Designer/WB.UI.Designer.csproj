@@ -638,12 +638,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\README.md" />
-    <Content Include="UpdatedDesigner\vendor\angular-route\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-route\angular-route.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-route\angular-route.min.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-route\angular-route.min.js.map" />
-    <Content Include="UpdatedDesigner\vendor\angular-route\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-route\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\angular-sanitize.js" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\angular-sanitize.min.js" />
@@ -656,6 +650,20 @@
     <Content Include="UpdatedDesigner\vendor\angular-scenario\jstd-scenario-adapter-config.js" />
     <Content Include="UpdatedDesigner\vendor\angular-scenario\jstd-scenario-adapter.js" />
     <Content Include="UpdatedDesigner\vendor\angular-scenario\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\release\angular-ui-router.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\release\angular-ui-router.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\common.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\compat.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\resolve.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\state.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\stateDirectives.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\stateFilters.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\templateFactory.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\urlMatcherFactory.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\urlRouter.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\view.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\viewDirective.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\viewScroll.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\.gitignore" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\build\compiler.jar" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\demo\css\demo-horizontal.css" />
@@ -829,6 +837,7 @@
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-number.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-object.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-string.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery-cookie\jquery.cookie.js" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\ChangeLog.md" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\jquery.mousewheel.js" />
@@ -1152,6 +1161,13 @@
     <Content Include="UpdatedDesigner\vendor\angular-animate\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\README.md" />
     <Content Include="UpdatedDesigner\content\dropdown.css.less" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\CHANGELOG.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-router\README.md" />
+    <Content Include="UpdatedDesigner\app\partials\chapter.detail.html" />
+    <Content Include="UpdatedDesigner\vendor\jquery-cookie\.bower.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
