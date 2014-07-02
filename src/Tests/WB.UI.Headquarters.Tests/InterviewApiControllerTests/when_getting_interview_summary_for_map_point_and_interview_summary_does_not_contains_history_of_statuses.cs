@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
 
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;
-        private static string interviewId = "11111111111111111111111111111111";
+        private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static string interviewerName = "interviewer";
         private static string supervisorName = "supervisor";
         private static InterviewStatus lastStatus = InterviewStatus.Completed;

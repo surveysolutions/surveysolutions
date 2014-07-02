@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -14,7 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ViewsTests.InterviewTests
         Establish context = () =>
         {
             var interviewSummaryReaderMock = new Mock<IReadSideRepositoryReader<InterviewSummary>>();
-            interviewSummaryReaderMock.Setup(_ => _.GetById(interviewId)).Returns(new InterviewSummary()
+            interviewSummaryReaderMock.Setup(_ => _.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary()
             {
                 ResponsibleName = interviewerName,
                 TeamLeadName = supervisorName,
@@ -53,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ViewsTests.InterviewTests
 
         private static InterviewSummaryViewFactory factory;
 
-        private static string interviewId = "11111111111111111111111111111111";
+        private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static string interviewerName = "interviewer";
         private static string supervisorName = "supervisor";
         private static InterviewStatus lastStatus = InterviewStatus.Completed;
