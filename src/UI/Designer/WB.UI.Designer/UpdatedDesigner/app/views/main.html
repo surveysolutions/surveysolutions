@@ -96,8 +96,10 @@
                  ng-class="{'selected' : item.itemId == currentItemId}">
 
                 <a class="handler" ui-tree-handle></a>
-                <div class="icon {{answerTypeClass[item.type]}}"></div>
-                <span ng-bind-html="item.title | highlight:search.searchText"></span>
+                <div class="text">
+                    <div class="icon {{answerTypeClass[item.type]}}"></div>
+                    <span ng-bind-html="item.title | highlight:search.searchText"></span>
+                </div>
 
                 <div class="qname-block">
                     <a ng-if="item.linkedToQuestionId" href="javascript:void(0);" class="linked"></a>
