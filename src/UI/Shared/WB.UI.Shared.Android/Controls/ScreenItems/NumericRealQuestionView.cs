@@ -29,10 +29,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override string FormatString(string s)
         {
-            if (s.EndsWith(NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+            if (s.EndsWith(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator))
                 return s;
-
-            return decimal.Parse(s).ToString("##,###.############################", CultureInfo.InvariantCulture);
+            decimal parsedAnswer;
+            if (!IsParseAnswerStringSucceeded(s, out parsedAnswer))
+                return s;
+            return parsedAnswer.ToString("##,###.############################", CultureInfo.CurrentCulture);
         }
 
         protected override void Initialize()
@@ -54,9 +56,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override bool IsParseAnswerStringSucceeded(string newAnswer, out decimal answer)
         {
-            var replacedAnswer = newAnswer.Replace(".", NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
-
-            return decimal.TryParse(replacedAnswer, out answer);
+            var replacedAnswer = newAnswer.Replace(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator, CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+            Console.WriteLine("text to parse - {0}, with culture {1}", replacedAnswer, CultureInfo.CurrentCulture.Name);
+            return decimal.TryParse(replacedAnswer, NumberStyles.Number, CultureInfo.CurrentCulture, out answer);
         }
 
         protected override AnswerQuestionCommand CreateAnswerQuestionCommand(decimal answer)
