@@ -4204,7 +4204,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             try
             {
-                Logger.Error(expression);
                 return this.ExpressionProcessor.EvaluateBooleanExpression(expression,
                     getValueForIdentifier: identifier => involvedAnswers[mapIdentifierToQuestionId(identifier)]);
             }
