@@ -3,10 +3,11 @@
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$scope', 'questionnaireService', 'commandService', 'navigationService', '$log',
-            function($scope, questionnaireService, commandService, navigationService, $log) {
+            '$scope', '$stateParams', 'questionnaireId', 'questionnaireService', 'commandService', 'navigationService', '$log',
+            function ($scope, $stateParams, questionaireId, questionnaireService, commandService, navigationService, $log) {
 
-                var dataBind = function(result) {
+                var dataBind = function (result) {
+                    $scope.activeQuestion = $scope.activeQuestion || {};
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
 
                     $scope.activeQuestion.type = result.type;
@@ -33,7 +34,7 @@
                 };
 
                 $scope.loadQuestion = function() {
-                    questionnaireService.getQuestionDetailsById($routeParams.questionnaireId, $scope.activeQuestion.itemId)
+                    questionnaireService.getQuestionDetailsById(questionaireId, $stateParams.itemId)
                         .success(function(result) {
                             $scope.initialQuestion = angular.copy(result);
                             dataBind(result);
@@ -41,7 +42,7 @@
                 };
 
                 $scope.saveQuestion = function() {
-                    commandService.sendUpdateQuestionCommand($routeParams.questionnaireId, $scope.activeQuestion).success(function(result) {
+                    commandService.sendUpdateQuestionCommand(questionaireId, $scope.activeQuestion).success(function (result) {
                         if (!result.IsSuccess) {
                             $log.error(result.Error);
                         }
@@ -54,10 +55,10 @@
 
                 $scope.deleteQuestion = function() {
                     if (confirm("Are you sure want to delete question?")) {
-                        commandService.deleteQuestion($routeParams.questionnaireId, $scope.activeQuestion.itemId).success(function(result) {
+                        commandService.deleteQuestion(questionaireId, $scope.activeQuestion.itemId).success(function (result) {
                             if (result.IsSuccess) {
                                 $scope.activeQuestion.isDeleted = true;
-                                navigationService.openQuestionnaire($routeParams.questionnaireId);
+                                navigationService.openQuestionnaire(questionaireId);
                             } else {
                                 $log.error(result);
                             }
@@ -66,7 +67,7 @@
                 };
 
                 $scope.moveToChapter = function(chapterId) {
-                    questionnaireService.moveQuestion($scope.activeQuestion.itemId, 0, chapterId, $routeParams.questionnaireId);
+                    questionnaireService.moveQuestion($scope.activeQuestion.itemId, 0, chapterId, questionaireId);
 
                     var removeFrom = $scope.activeQuestion.getParentItem() || $scope;
                     removeFrom.items.splice(_.indexOf(removeFrom.items, $scope.activeQuestion), 1);

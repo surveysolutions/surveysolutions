@@ -1,5 +1,6 @@
 ﻿<ul>
     <li ng-repeat="breadcrumb in crumbs">
-        <a href="{{itemUrl(breadcrumb.id)}}">{{breadcrumb.title}}</a>
+        <!--href="{{itemUrl(breadcrumb.id)}}"-->
+        <a ui-sref="questionnaire.chapter.group({itemId: item.parent.itemId})">{{breadcrumb.title}}</a>
     </li>
 </ul>

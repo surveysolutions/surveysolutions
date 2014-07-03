@@ -80,7 +80,12 @@
                 views: {
                     '': {
                         templateUrl: "app/views/tree.html",
-                        controller: 'TreeCtrl'
+                        controller: 'TreeCtrl',
+                        resolve: {
+                            questionnaireId: ['$stateParams', function($stateParams) {
+                                return $stateParams.questionnaireId;
+                            }]
+                        }
                     }
                 }
                 
@@ -89,7 +94,12 @@
                 views: {
                     '': {
                         templateUrl: 'app/views/question.html',
-                        controller: 'QuestionCtrl'
+                        controller: 'QuestionCtrl',
+                        resolve: {
+                            questionnaireId: ['$stateParams', function ($stateParams) {
+                                return $stateParams.questionnaireId;
+                            }]
+                        }
                     }
                 }
             }).state('questionnaire.chapter.group', {
