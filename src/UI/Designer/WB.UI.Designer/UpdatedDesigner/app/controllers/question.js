@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$scope', '$stateParams', 'questionnaireId', 'questionnaireService', 'commandService', 'navigationService', '$log',
-            function ($scope, $stateParams, questionaireId, questionnaireService, commandService, navigationService, $log) {
+            '$scope', '$stateParams', 'questionnaireId', 'questionnaireService', 'commandService', '$log',
+            function ($scope, $stateParams, questionaireId, questionnaireService, commandService, $log) {
 
                 var dataBind = function (result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};

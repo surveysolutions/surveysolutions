@@ -36,14 +36,6 @@
                     });
                 };
 
-                $scope.navigateTo = function (itemId, chapterId) {
-                    questionnaireService.getChapterById($stateParams.questionnaireId, chapterId)
-                        .success(function (result) {
-                            var itemToFind = questionnaireService.findItem(result.items, itemId);
-                            $scope.nav($stateParams.questionnaireId, chapterId, itemToFind);
-                        });
-                };
-
                 $scope.answerTypeClass = {
                     YesNo: 'icon-singleanswer',
                     DropDownList: 'icon-singleanswer',
@@ -91,34 +83,6 @@
                 $scope.currentChapter = null;
 
                 $scope.currentChapterId = null;
-
-                $scope.resetSelection = function () {
-                    navigationService.openChapter($stateParams.questionnaireId, $scope.currentChapterId);
-                    $scope.currentItemId = null;
-                    $scope.activeRoster = null;
-                    $scope.activeQuestion = null;
-                };
-
-                $scope.nav = function (questionnaireId, currentChapterId, item) {
-                    $scope.currentItemId = item.itemId;
-                    $scope.currentItem = item;
-                    if ($scope.isQuestion(item)) {
-                        $scope.activeRoster = undefined;
-                        $scope.activeChapter = undefined;
-                        $scope.activeQuestion = item;
-                        navigationService.openQuestion(questionnaireId, currentChapterId, item.itemId);
-                    } else if (item.isRoster) {
-                        $scope.activeRoster = item;
-                        $scope.activeQuestion = undefined;
-                        $scope.activeChapter = undefined;
-                        navigationService.openRoster(questionnaireId, currentChapterId, item.itemId);
-                    } else {
-                        $scope.activeRoster = undefined;
-                        $scope.activeQuestion = undefined;
-                        $scope.activeChapter = item;
-                        navigationService.openGroup(questionnaireId, currentChapterId, item.itemId);
-                    }
-                };
 
                 $scope.isQuestion = function (item) {
                     return item.hasOwnProperty('type');
@@ -196,10 +160,6 @@
                             }
                         }
                     });
-                };
-
-                $scope.toggle = function (scope) {
-                    scope.toggle();
                 };
 
                 questionnaireService.getQuestionnaireById($stateParams.questionnaireId)

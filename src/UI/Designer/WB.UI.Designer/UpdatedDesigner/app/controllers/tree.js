@@ -119,6 +119,10 @@ angular.module('designerApp')
                 }
             };
 
+            $scope.toggle = function (scope) {
+                scope.toggle();
+            };
+
             var connectTree = function () {
                 var setParent = function (item, parent) {
                     item.getParentItem = function () {
