@@ -56,7 +56,7 @@ namespace WB.UI.Supervisor.Controllers
         [HttpPost]
         public ActionResult Revalidate(RevalidateModel input)
         {
-            return this.RedirectToAction("ConfirmInterviewRevalidation", new {id = input.InterviewId });
+            return this.RedirectToAction("ConfirmRevalidation", new { id = input.InterviewId });
         }
 
         [Authorize(Roles = "Headquarter, Supervisor")]

@@ -1560,16 +1560,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
-            List<Identity> questionsToBeEnabled = new List<Identity>();
             List<Identity> processedAndEnabledQuestions = new List<Identity>();
-            List<Identity> questionsToBeDisabled = new List<Identity>();
             List<Identity> processedAndDisabledQuestions = new List<Identity>();
+
+            List<Identity> questionsToBeEnabled = new List<Identity>();
+            List<Identity> questionsToBeDisabled = new List<Identity>();
 
             List<Identity> groupsToBeEnabled = new List<Identity>();
             List<Identity> groupsToBeDisabled = new List<Identity>();
 
             List<Identity> questionsDeclaredValid = new List<Identity>();
             List<Identity> questionsDeclaredInvalid = new List<Identity>();
+
+            Action<Identity, bool> makrQuestionAsProcessed = (questionId, isEnabled) =>
+            {
+                if (isEnabled && !processedAndEnabledQuestions.Any(q => AreEqual(q, questionId)))
+                {
+                    processedAndEnabledQuestions.Add(questionId);
+                }
+                if (!isEnabled && !processedAndDisabledQuestions.Any(q => AreEqual(q,questionId)))
+                {
+                    processedAndDisabledQuestions.Add(questionId);
+                }
+            };
+
+            Func<Identity, bool?> getCachedEnablementState = (questionId) =>
+            {
+                if (processedAndDisabledQuestions.Any(q => AreEqual(q, questionId)))
+                    return false;
+                if (processedAndEnabledQuestions.Any(q => AreEqual(q, questionId)))
+                    return true;
+                return null;
+            };
 
             Func<Identity, bool> isQuestionDisabled =
                 (questionIdAtInterview) => IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire,
@@ -1581,18 +1603,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             IsQuestionDisabled(this.interviewState, questionIdAtInterview)) &&
                             !questionsToBeEnabled.Any(q => AreEqual(q, question)));
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getEnabledQuestionAnswerSupportedInExpressionsForGrous = (state, questionId) =>
-            {
-                return GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState,
-                    questionId,
-                    (currentState, q) => this.ShouldQuestionBeDisabledByCustomCondition(this.interviewState, q, questionnaire),
-                    (currentState, g) => this.ShouldGroupBeDisabledByCustomCondition(this.interviewState, g, questionnaire),
-                    questionnaire);
-            };
-
             Func<InterviewStateDependentOnAnswers, Identity, object> getEnabledQuestionAnswerSupportedInExpressions = (state, questionId) =>
             {
-                if (isQuestionDisabled(questionId))
+                if (processedAndDisabledQuestions.Any(q => AreEqual(q, questionId)))
                     return null;
 
                 if (processedAndEnabledQuestions.Any(q => AreEqual(q, questionId)))
@@ -1606,8 +1619,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 return GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState,
                     questionId,
-                    (currentState, q) => this.ShouldQuestionBeDisabledByCustomCondition(this.interviewState, q, questionnaire),
-                    (currentState, g) => this.ShouldGroupBeDisabledByCustomCondition(this.interviewState, g, questionnaire),
+                    (currentState, q) => this.ShouldQuestionBeDisabledByCustomCondition(this.interviewState, q, questionnaire, makrQuestionAsProcessed, getCachedEnablementState),
+                    (currentState, g) => this.ShouldGroupBeDisabledByCustomCondition(this.interviewState, g, questionnaire, makrQuestionAsProcessed, getCachedEnablementState),
                     questionnaire);
             };
 
@@ -1623,7 +1636,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
                         isNewStateEnabled:
                             this.ShouldGroupBeEnabledByCustomEnablementCondition(this.interviewState, groupIdAtInterview, questionnaire,
-                                getEnabledQuestionAnswerSupportedInExpressionsForGrous),
+                                getEnabledQuestionAnswerSupportedInExpressions),
                         isOldStateEnabled: !IsGroupDisabled(this.interviewState, groupIdAtInterview));
                 }
             }
@@ -1641,10 +1654,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.interviewState,
                         questionIdAtInterview,
                         questionnaire,
-                        getEnabledQuestionAnswerSupportedInExpressions);
-
-                    if (isNewStateEnabled)
-                        processedAndEnabledQuestions.Add(questionIdAtInterview);
+                        getEnabledQuestionAnswerSupportedInExpressions,
+                        markQuestionAsProcessed: makrQuestionAsProcessed,
+                        getCachedEnablementState: getCachedEnablementState);
 
                     bool isOldStateEnabled = !IsQuestionDisabled(this.interviewState, questionIdAtInterview);
 
@@ -3477,7 +3489,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
-        private bool ShouldQuestionBeDisabledByCustomCondition(InterviewStateDependentOnAnswers state, Identity questionId, IQuestionnaire questionnaire)
+        private bool ShouldQuestionBeDisabledByCustomCondition(InterviewStateDependentOnAnswers state, Identity questionId, IQuestionnaire questionnaire,
+            Action<Identity, bool> makrQuestionAsProcessed, Func<Identity, bool?> getCachedEnablementState)
         {
             var questionsInvolvedInConditions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionId.Id);
             if (!questionsInvolvedInConditions.Any() || questionsInvolvedInConditions.Any(q => q == questionId.Id))
@@ -3486,20 +3499,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return !this.ShouldQuestionBeEnabledByCustomEnablementCondition(state, questionId, questionnaire,
                 (currentState, questionInCondition) =>
                     GetEnabledQuestionAnswerSupportedInExpressions(state, 
-                        questionInCondition, 
-                        (currState, q) => this.ShouldQuestionBeDisabledByCustomCondition(state, q, questionnaire),
-                        (currState, g) => this.ShouldGroupBeDisabledByCustomCondition(state, g, questionnaire), 
-                        questionnaire));
+                        questionInCondition,
+                        (currState, q) => this.ShouldQuestionBeDisabledByCustomCondition(state, q, questionnaire, makrQuestionAsProcessed, getCachedEnablementState),
+                        (currState, g) => this.ShouldGroupBeDisabledByCustomCondition(state, g, questionnaire, makrQuestionAsProcessed, getCachedEnablementState), 
+                        questionnaire),
+                        makrQuestionAsProcessed,
+                        getCachedEnablementState);
         }
 
-        private bool ShouldGroupBeDisabledByCustomCondition(InterviewStateDependentOnAnswers state, Identity groupId, IQuestionnaire questionnaire)
+        private bool ShouldGroupBeDisabledByCustomCondition(InterviewStateDependentOnAnswers state, Identity groupId, IQuestionnaire questionnaire,
+            Action<Identity, bool> makrQuestionAsProcessed, Func<Identity, bool?> getCachedEnablementState)
         {
             return !ShouldGroupBeEnabledByCustomEnablementCondition(state, groupId, questionnaire,
                 (currentState, questionInCondition) =>
                     GetEnabledQuestionAnswerSupportedInExpressions(state,
                         questionInCondition,
-                        (currState, q) => this.ShouldQuestionBeDisabledByCustomCondition(state, q, questionnaire),
-                        (currState, g) => this.ShouldGroupBeDisabledByCustomCondition(state, g, questionnaire),
+                        (currState, q) => this.ShouldQuestionBeDisabledByCustomCondition(state, q, questionnaire, makrQuestionAsProcessed, getCachedEnablementState),
+                        (currState, g) => this.ShouldGroupBeDisabledByCustomCondition(state, g, questionnaire, makrQuestionAsProcessed, getCachedEnablementState),
                         questionnaire));
         } 
 
@@ -3971,14 +3987,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private bool ShouldQuestionBeEnabledByCustomEnablementCondition(InterviewStateDependentOnAnswers state, Identity question,
             IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer)
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
+            Action<Identity, bool> markQuestionAsProcessed = null,
+            Func<Identity, bool?> getCachedEnablementState = null)
         {
-            return this.ShouldBeEnabledByCustomEnablementCondition(state,
+            if (getCachedEnablementState != null)
+            {
+                var cachedState = getCachedEnablementState(question);
+                if (cachedState.HasValue)
+                    return cachedState.Value;
+            }
+
+            bool shouldQuestionBeEnabledByCustomEnablementCondition = this.ShouldBeEnabledByCustomEnablementCondition(state,
                 questionnaire.GetCustomEnablementConditionForQuestion(question.Id),
                 question.RosterVector,
                 questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(question.Id),
                 questionnaire,
                 getAnswer);
+
+            if (markQuestionAsProcessed != null)
+            {
+                markQuestionAsProcessed(question, shouldQuestionBeEnabledByCustomEnablementCondition);
+            }
+
+            return shouldQuestionBeEnabledByCustomEnablementCondition;
         }
 
         private bool ShouldBeEnabledByCustomEnablementCondition(InterviewStateDependentOnAnswers state, string enablementCondition,
@@ -4178,7 +4210,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool? EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(InterviewStateDependentOnAnswers state,
             string expression,
             IEnumerable<KeyValuePair<string, Identity>> involvedQuestions,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, bool? resultIfExecutionFailsWhenAnswersAreEnough,
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, 
+            bool? resultIfExecutionFailsWhenAnswersAreEnough,
             Guid? thisIdentifierQuestionId = null)
         {
             Dictionary<Guid, object> involvedAnswers = involvedQuestions.ToDictionary(
