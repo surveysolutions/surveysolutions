@@ -211,6 +211,99 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
     height: @main-height;
     //overflow: hidden;
 
+    > .chapter-panel {
+      @unfolded_width: 354px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 10;
+      width: @left-column-width;
+      height: 100%;
+      background: @designer-editor-mediumblue-bg-color url(../i/chapter-panel-btn.png) 0 19px no-repeat;
+      cursor: pointer;
+      .transition(width 0.4s ease);
+      &:hover {
+        background-position: -555px 19px;
+      }
+
+      > .foldback-button {
+        @side: 55px;
+        display: none;
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        right: -@side;
+        z-index: 15;
+
+        width: @side;
+        height: @side;
+        background: #dbdfe2 url(../i/arrow-left.png) center 0 no-repeat;
+        //.box-shadow(50px 0 50px -15px rgba(0, 0, 0, 0.25));
+
+        &:hover {
+          background-position: 0 -@side;
+        }
+      }
+
+      &.unfolded {
+        width: @unfolded_width;
+        cursor: default;
+        background-image: none;
+        //.box-shadow(0 5px 100px rgba(0, 0, 0, .45));
+        //.box-shadow(50px 0 50px -15px rgba(0, 0, 0, 0.25));
+        &:after {
+          @shadow-width: 219px;
+          position: absolute;
+          content: '';
+          width: @shadow-width;
+          height: 100%;
+          top: 0;
+          right: -@shadow-width;
+          background: url(../i/left-panel-shadow.png) repeat-y;
+        }
+
+        > .foldback-button {
+          display: block;
+        }
+
+        > .ul-holder {
+          > ul.chapters {
+            display: block;
+          }
+
+          > .button-holder {
+            display: block;
+          }
+        }
+      }
+
+      > .ul-holder {
+        width: 100%;
+        height: 100%;
+        /*overflow-x: hidden;
+        overflow-y: auto;*/
+
+        > ul.chapters {
+          display: none;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          //overflow: hidden;
+
+          .angular-ui-tree-placeholder {
+            outline: 2px dashed white;
+          }
+        }
+
+        .button-holder {
+          display: none;
+          width: 100%;
+          margin: 10px 0 0 10px;
+          overflow: hidden;
+        }
+      }
+    }
+
     > .questionnaire-tree {
       height: 100%;
       padding-left: @content-padding-left;
@@ -310,99 +403,6 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             &:hover {
               background-position: 0 -40px;
             }
-          }
-        }
-      }
-
-      > .chapter-panel {
-        @unfolded_width: 354px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: 10;
-        width: @left-column-width;
-        height: 100%;
-        background: @designer-editor-mediumblue-bg-color url(../i/chapter-panel-btn.png) 0 19px no-repeat;
-        cursor: pointer;
-        .transition(width 0.4s ease);
-        &:hover {
-          background-position: -555px 19px;
-        }
-
-        > .foldback-button {
-          @side: 55px;
-          display: none;
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          right: -@side;
-          z-index: 15;
-
-          width: @side;
-          height: @side;
-          background: #dbdfe2 url(../i/arrow-left.png) center 0 no-repeat;
-          //.box-shadow(50px 0 50px -15px rgba(0, 0, 0, 0.25));
-
-          &:hover {
-            background-position: 0 -@side;
-          }
-        }
-
-        &.unfolded {
-          width: @unfolded_width;
-          cursor: default;
-          background-image: none;
-          //.box-shadow(0 5px 100px rgba(0, 0, 0, .45));
-          //.box-shadow(50px 0 50px -15px rgba(0, 0, 0, 0.25));
-          &:after {
-            @shadow-width: 219px;
-            position: absolute;
-            content: '';
-            width: @shadow-width;
-            height: 100%;
-            top: 0;
-            right: -@shadow-width;
-            background: url(../i/left-panel-shadow.png) repeat-y;
-          }
-
-          > .foldback-button {
-            display: block;
-          }
-
-          > .ul-holder {
-            > ul.chapters {
-              display: block;
-            }
-
-            > .button-holder {
-              display: block;
-            }
-          }
-        }
-
-        > .ul-holder {
-          width: 100%;
-          height: 100%;
-          /*overflow-x: hidden;
-          overflow-y: auto;*/
-
-          > ul.chapters {
-            display: none;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            //overflow: hidden;
-
-            .angular-ui-tree-placeholder {
-              outline: 2px dashed white;
-            }
-          }
-
-          .button-holder {
-            display: none;
-            width: 100%;
-            margin: 10px 0 0 10px;
-            overflow: hidden;
           }
         }
       }

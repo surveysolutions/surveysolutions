@@ -6432,6 +6432,79 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   position: relative;
   height: calc(100% - 77px);
 }
+#designer-editor.container section#main > .chapter-panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  width: 55px;
+  height: 100%;
+  background: #bcc3c8 url(i/chapter-panel-btn.png) 0 19px no-repeat;
+  cursor: pointer;
+  -webkit-transition: width 0.4s ease;
+  transition: width 0.4s ease;
+}
+#designer-editor.container section#main > .chapter-panel:hover {
+  background-position: -555px 19px;
+}
+#designer-editor.container section#main > .chapter-panel > .foldback-button {
+  display: none;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  right: -55px;
+  z-index: 15;
+  width: 55px;
+  height: 55px;
+  background: #dbdfe2 url(i/arrow-left.png) center 0 no-repeat;
+}
+#designer-editor.container section#main > .chapter-panel > .foldback-button:hover {
+  background-position: 0 -55px;
+}
+#designer-editor.container section#main > .chapter-panel.unfolded {
+  width: 354px;
+  cursor: default;
+  background-image: none;
+}
+#designer-editor.container section#main > .chapter-panel.unfolded:after {
+  position: absolute;
+  content: '';
+  width: 219px;
+  height: 100%;
+  top: 0;
+  right: -219px;
+  background: url(i/left-panel-shadow.png) repeat-y;
+}
+#designer-editor.container section#main > .chapter-panel.unfolded > .foldback-button {
+  display: block;
+}
+#designer-editor.container section#main > .chapter-panel.unfolded > .ul-holder > ul.chapters {
+  display: block;
+}
+#designer-editor.container section#main > .chapter-panel.unfolded > .ul-holder > .button-holder {
+  display: block;
+}
+#designer-editor.container section#main > .chapter-panel > .ul-holder {
+  width: 100%;
+  height: 100%;
+  /*overflow-x: hidden;
+        overflow-y: auto;*/
+}
+#designer-editor.container section#main > .chapter-panel > .ul-holder > ul.chapters {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#designer-editor.container section#main > .chapter-panel > .ul-holder > ul.chapters .angular-ui-tree-placeholder {
+  outline: 2px dashed white;
+}
+#designer-editor.container section#main > .chapter-panel > .ul-holder .button-holder {
+  display: none;
+  width: 100%;
+  margin: 10px 0 0 10px;
+  overflow: hidden;
+}
 #designer-editor.container section#main > .questionnaire-tree {
   height: 100%;
   padding-left: 75px;
@@ -6560,79 +6633,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 #designer-editor.container section#main > .questionnaire-tree > .chapter-title > .search-box > button:hover {
   background-position: 0 -40px;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 10;
-  width: 55px;
-  height: 100%;
-  background: #bcc3c8 url(i/chapter-panel-btn.png) 0 19px no-repeat;
-  cursor: pointer;
-  -webkit-transition: width 0.4s ease;
-  transition: width 0.4s ease;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel:hover {
-  background-position: -555px 19px;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .foldback-button {
-  display: none;
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  right: -55px;
-  z-index: 15;
-  width: 55px;
-  height: 55px;
-  background: #dbdfe2 url(i/arrow-left.png) center 0 no-repeat;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .foldback-button:hover {
-  background-position: 0 -55px;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded {
-  width: 354px;
-  cursor: default;
-  background-image: none;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded:after {
-  position: absolute;
-  content: '';
-  width: 219px;
-  height: 100%;
-  top: 0;
-  right: -219px;
-  background: url(i/left-panel-shadow.png) repeat-y;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded > .foldback-button {
-  display: block;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded > .ul-holder > ul.chapters {
-  display: block;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel.unfolded > .ul-holder > .button-holder {
-  display: block;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .ul-holder {
-  width: 100%;
-  height: 100%;
-  /*overflow-x: hidden;
-          overflow-y: auto;*/
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .ul-holder > ul.chapters {
-  display: none;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .ul-holder > ul.chapters .angular-ui-tree-placeholder {
-  outline: 2px dashed white;
-}
-#designer-editor.container section#main > .questionnaire-tree > .chapter-panel > .ul-holder .button-holder {
-  display: none;
-  width: 100%;
-  margin: 10px 0 0 10px;
-  overflow: hidden;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-list {
   position: relative;
