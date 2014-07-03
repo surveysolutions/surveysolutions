@@ -123,10 +123,10 @@
     <Compile Include="DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
     <Compile Include="FilterTests\InstallationAttributeTests\InstallationAttributeTestsContext.cs" />
-    <Compile Include="FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists.cs" />
-    <Compile Include="FilterTests\InstallationAttributeTests\when_action_executing_and_install_controller_and_hq_user_exists.cs" />
+    <Compile Include="FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists_and_not_install_controller.cs" />
+    <Compile Include="FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_exists_and_install_controller.cs" />
     <Compile Include="FilterTests\InstallationAttributeTests\when_action_executing_and_control_panel_controller.cs" />
-    <Compile Include="FilterTests\InstallationAttributeTests\when_action_executing_and_user_authenticated_and_install_controller.cs" />
+    <Compile Include="FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists_and_install_controller.cs" />
     <Compile Include="HQControllerTests\HQControllerTestContext.cs" />
     <Compile Include="HQControllerTests\when_BatchUploadModel_model_contains_property__File__to_upload_file_data.cs" />
     <Compile Include="HQControllerTests\when_hq_controller_gets_empty_file_while_batch_upload.cs" />

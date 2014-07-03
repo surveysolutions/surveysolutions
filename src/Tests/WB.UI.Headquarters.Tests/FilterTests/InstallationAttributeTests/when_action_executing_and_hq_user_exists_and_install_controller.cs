@@ -15,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.UI.Headquarters.Tests.FilterTests.InstallationAttributeTests
 {
-    internal class when_action_executing_and_install_controller_and_hq_user_exists : InstallationAttributeTestsContext
+    internal class when_action_executing_and_hq_user_exists_and_install_controller : InstallationAttributeTestsContext
     {
         Establish context = () =>
         {
@@ -29,8 +29,7 @@ namespace WB.UI.Headquarters.Tests.FilterTests.InstallationAttributeTests
             exception =
                 Catch.Exception(
                     () =>
-                        attribute.OnActionExecuting(CreateFilterContext(isUserAuthenticated: false,
-                            specifiedController: new InstallController(null, null, null))));
+                        attribute.OnActionExecuting(CreateFilterContext(new InstallController(null, null, null))));
 
         It should_exception_not_be_null = () =>
             exception.ShouldNotBeNull();

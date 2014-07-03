@@ -7,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.UI.Headquarters.Tests.FilterTests.InstallationAttributeTests
 {
-    internal class when_action_executing_and_hq_user_does_not_exists : InstallationAttributeTestsContext
+    internal class when_action_executing_and_hq_user_does_not_exists_and_not_install_controller : InstallationAttributeTestsContext
     {
         Establish context = () =>
         {
@@ -44,6 +44,6 @@ namespace WB.UI.Headquarters.Tests.FilterTests.InstallationAttributeTests
         }
 
         private static InstallationAttribute attribute;
-        private static ActionExecutingContext actionExecutingContext = CreateFilterContext(isUserAuthenticated: false);
+        private static ActionExecutingContext actionExecutingContext = CreateFilterContext();
     }
 }

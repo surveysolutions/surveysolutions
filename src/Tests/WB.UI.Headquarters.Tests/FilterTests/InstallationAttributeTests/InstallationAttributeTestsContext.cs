@@ -23,19 +23,9 @@ namespace WB.UI.Headquarters.Tests.FilterTests.InstallationAttributeTests
             return new InstallationAttribute();
         }
 
-        protected static ActionExecutingContext CreateFilterContext(bool isUserAuthenticated,
-            ControllerBase specifiedController = null)
+        protected static ActionExecutingContext CreateFilterContext(ControllerBase specifiedController = null)
         {
-            var identityMock = new Mock<IIdentity>();
-            identityMock.Setup(_ => _.IsAuthenticated).Returns(isUserAuthenticated);
-
-            var principalMock = new Mock<IPrincipal>();
-            principalMock.Setup(_ => _.Identity).Returns(identityMock.Object);
-
-            var httpContext = new Mock<HttpContextBase>();
-            httpContext.Setup(_ => _.User).Returns(principalMock.Object);
-
-            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            var requestContext = new RequestContext(Mock.Of<HttpContextBase>(), new RouteData());
 
             var controllerContext = new ControllerContext(requestContext,
                 specifiedController ?? Mock.Of<ControllerBase>());
