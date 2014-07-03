@@ -6,12 +6,15 @@ namespace WB.Core.Infrastructure.BaseStructures
 {
     public class InterviewEvaluatorPrototype : IInterviewEvaluator
     {
+        public List<Identity> ExecuteValidations()
+        {
+            return new List<Identity>();
+        }
 
         public InterviewEvaluatorPrototype(Func<Guid, object> getValue)
         {
             this.getValue = getValue;
             this.validations.Add("age", age_GeneratedValidation);
-
         }
         
         private Func<Guid, object> getValue;
@@ -28,12 +31,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             }
         }
 
-
-        public static object Evaluate()
-        {
-            return 2 + 2 * 2;
-        }
-
+        
         public Func<bool> GetValidationByVarName(string varName)
         {
             return this.validations.ContainsKey(varName) ? this.validations[varName] : null;
@@ -45,6 +43,16 @@ namespace WB.Core.Infrastructure.BaseStructures
         public int Test()
         {
             return this.values.Sum(i => i);
+        }
+
+        public List<Identity> CalculateValidationChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Identity> CalculateConditionChanges()
+        {
+            throw new NotImplementedException();
         }
 
 
