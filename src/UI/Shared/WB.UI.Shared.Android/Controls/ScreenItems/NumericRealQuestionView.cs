@@ -57,7 +57,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         protected override bool IsParseAnswerStringSucceeded(string newAnswer, out decimal answer)
         {
             var replacedAnswer = newAnswer.Replace(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator, CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            Console.WriteLine("text to parse - {0}, with culture {1}", replacedAnswer, CultureInfo.CurrentCulture.Name);
             return decimal.TryParse(replacedAnswer, NumberStyles.Number, CultureInfo.CurrentCulture, out answer);
         }
 
