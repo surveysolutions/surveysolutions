@@ -51,7 +51,8 @@
     </div>
     <div class="section item"
          ng-class="{'selected' : item.itemId == currentItemId}"
-         ng-if="!isQuestion(item) && !item.isDeleted">
+         ng-if="!isQuestion(item) && !item.isDeleted"
+         ui-sref-active="selected">
 
         <a class="handler" ui-tree-handle></a>
 

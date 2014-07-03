@@ -1,13 +1,19 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl', [
-        '$scope', '$stateParams', 'questionnaireId', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$log',
-        function ($scope, $stateParams, questionnaireId, questionnaireService, commandService, verificationService, utilityService, hotkeys, $log) {
+        '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$log',
+        function ($scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $log) {
             'use strict';
             var me = this;
 
             var filtersBlockModes = {
                 default: 'default',
                 search: 'search'
+            };
+
+            var itemTypes = {
+                question: 'question',
+                roster: 'roster',
+                group: 'group'
             };
 
             $scope.search = { searchText: '' };
@@ -71,24 +77,28 @@
                 return found;
             };
 
-
             var upDownMove = function (updownStepValue) {
-                if ($scope.items && $scope.currentItem) {
-                    var parent = $scope.currentItem.getParentItem();
+                if ($scope.items && $state.params.itemId) {
+                    var currentItem = getCurrentItem();
+                    var parent = currentItem.getParentItem();
+                    var target = null;
 
                     if (_.isNull(parent)) {
-                        var siblingIndex = _.indexOf($scope.items, $scope.currentItem) + updownStepValue;
+                        var siblingIndex = _.indexOf($scope.items, currentItem) + updownStepValue;
                         if (siblingIndex < $scope.items.length && siblingIndex >= 0) {
-                            $scope.nav($stateParams.questionnaireId, $scope.currentChapterId, $scope.items[siblingIndex]);
+                            target = $scope.items[siblingIndex];
                         }
-                        return;
+                    } else {
+                        var nextItemIndex = _.indexOf(parent.items, currentItem) + updownStepValue;
+
+                        if (nextItemIndex < $scope.items.length && nextItemIndex >= 0) {
+                            target = parent.items[nextItemIndex];
+                        }
                     }
 
-                    var nextItemIndex = _.indexOf(parent.items, $scope.currentItem) + updownStepValue;
-
-                    if (nextItemIndex < $scope.items.length && nextItemIndex >= 0) {
-                        $scope.nav($stateParams.questionnaireId, $scope.currentChapterId, parent.items[nextItemIndex]);
-                    }
+                    $state.go('questionnaire.chapter.' + getItemType(target), {
+                        itemId: target.itemId
+                    });
                 }
             };
 
@@ -101,18 +111,24 @@
             };
 
             $scope.goToParent = function () {
-                if ($scope.items && $scope.currentItem) {
-                    var parent = $scope.currentItem.getParentItem();
+                if ($scope.items && $state.params.itemId) {
+                    var parent = getCurrentItem().getParentItem();
                     if (parent != null) {
-                        $scope.nav($stateParams.questionnaireId, $scope.currentChapterId, parent);
+                        $state.go('questionnaire.chapter.' + getItemType(parent), {
+                            itemId: parent.itemId
+                        });
                     }
                 }
             };
 
             $scope.goToChild = function () {
-                if ($scope.items && $scope.currentItem) {
-                    if (!_.isEmpty($scope.currentItem.items)) {
-                        $scope.nav($stateParams.questionnaireId, $scope.currentChapterId, $scope.currentItem.items[0]);
+                if ($scope.items && $state.params.itemId) {
+                    var currentItem = getCurrentItem();
+                    if (!_.isEmpty(currentItem.items)) {
+                        var target = currentItem.items[0];
+                        $state.go('questionnaire.chapter.' + getItemType(target), {
+                            itemId: target.itemId
+                        });
                     }
                 }
             };
@@ -120,6 +136,10 @@
             $scope.toggle = function (scope) {
                 scope.toggle();
             };
+
+            var getCurrentItem = function() {
+                return questionnaireService.findItem($scope.items, $state.params.itemId);
+            }
 
             var connectTree = function () {
                 var setParent = function (item, parent) {
@@ -134,6 +154,18 @@
                 _.each($scope.items, function (item) {
                     setParent(item, null);
                 });
+            };
+
+            var getItemType = function (item) {
+                if (item.hasOwnProperty('type')) {
+                    return itemTypes.question;
+                }
+                if (item.isRoster) {
+                    return itemTypes.roster;
+                }
+                if (!item.hasOwnProperty('type'))
+                    return itemTypes.group;
+                throw 'unknown item type: ' + item;
             };
 
             $scope.groupsTree = {
@@ -161,7 +193,7 @@
 
                     if (event.dest.nodesScope !== event.source.nodesScope || event.dest.index !== event.source.index) {
                         if ($scope.isQuestion(movedItem)) {
-                            questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $stateParams.questionnaireId)
+                            questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .success(function (data) {
                                     if (!data.IsSuccess) {
                                         putItem(movedItem, me.draggedFrom, event.source.index);
@@ -171,7 +203,7 @@
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
                         } else {
-                            questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $stateParams.questionnaireId)
+                            questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .success(function (data) {
                                     if (!data.IsSuccess) {
                                         putItem(movedItem, me.draggedFrom, event.source.index);
@@ -186,12 +218,12 @@
                 }
             };
 
-            questionnaireService.getChapterById(questionnaireId, $stateParams.chapterId)
+            questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
                 .success(function (result) {
                     $scope.items = result.items;
                     $scope.currentChapter = result;
                     connectTree();
-                    
+
                     window.ContextMenuController.get().init();
                 });
         }

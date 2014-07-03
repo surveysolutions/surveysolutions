@@ -71,7 +71,10 @@
                     };
 
                     for (var j = 0; j < items.length; j++) {
-                        var resultItem = findFunc(items[j], itemId)
+                        var item = items[j];
+                        if (item.itemId === itemId) return item;
+
+                        var resultItem = findFunc(item, itemId);
                         if (resultItem) {
                             return resultItem;
                         };
