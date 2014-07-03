@@ -419,6 +419,7 @@
     <Content Include="UpdatedDesigner\app\services\shareService.js" />
     <Content Include="UpdatedDesigner\app\views\itemBreadcrumbs.html" />
     <Content Include="UpdatedDesigner\app\views\share.html" />
+    <Content Include="UpdatedDesigner\app\views\tree.html" />
     <Content Include="UpdatedDesigner\content\i\btn-disabled.png" />
     <Content Include="UpdatedDesigner\content\i\chapter-panel-btn-small.png" />
     <Content Include="UpdatedDesigner\content\i\cross.png" />
