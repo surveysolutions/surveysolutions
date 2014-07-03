@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('ChaptersCtrl', [
-            '$scope', '$location', 'commandService', 'utilityService', 'navigationService',
-            function($scope, $location, commandService, math, navigationService) {
+            '$scope', '$stateParams', 'commandService', 'utilityService', 'navigationService',
+            function ($scope, $stateParams,commandService, math, navigationService) {
 
                 $scope.chapters = [];
 
@@ -22,9 +22,9 @@
                     chapter.isMenuOpen = true;
                 };
                 $scope.changeChapter = function (chapter) {
-                    navigationService.openChapter($routeParams.questionnaireId, chapter.itemId);
+                    navigationService.openChapter($stateParams.questionnaireId, chapter.itemId);
                     $scope.$parent.currentChapterId = chapter.itemId;
-                    $scope.$parent.loadChapterDetails($routeParams.questionnaireId, $scope.currentChapterId);
+                    $scope.$parent.loadChapterDetails($stateParams.questionnaireId, $scope.currentChapterId);
                     $scope.foldback();
                 };
 
@@ -33,7 +33,7 @@
                     chapter.isMenuOpen = false;
                     chapter.itemId = chapter.itemId;
                     $scope.setItem(chapter);
-                    //navigationService.editChapter($routeParams.questionnaireId, chapter.itemId);
+                    //navigationService.editChapter($stateParams.questionnaireId, chapter.itemId);
                 };
 
                 $scope.addNewChapter = function() {
@@ -44,7 +44,7 @@
                         itemId: newId
                     };
 
-                    commandService.addChapter($routeParams.questionnaireId, newChapter).success(function() {
+                    commandService.addChapter($stateParams.questionnaireId, newChapter).success(function() {
                         $scope.questionnaire.chapters.push(newChapter);
                     });
                 };
@@ -54,20 +54,20 @@
                     var newId = math.guid();
                     var chapterDescription = "";
 
-                    commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, chapter, chapterDescription).success(function() {
+                    commandService.cloneGroupWithoutChildren($stateParams.questionnaireId, newId, chapter, chapterDescription).success(function() {
                         var newChapter = {
                             title: chapter.title,
                             itemId: newId
                         };
                         $scope.questionnaire.chapters.push(newChapter);
-                        navigationService.openChapter($routeParams.questionnaireId, newId);
+                        navigationService.openChapter($stateParams.questionnaireId, newId);
                     });
                 };
 
                 $scope.deleteChapter = function(chapter) {
                     chapter.isMenuOpen = false;
                     if (confirm("Are you sure want to delete?")) {
-                        commandService.deleteGroup($routeParams.questionnaireId, chapter.itemId).success(function() {
+                        commandService.deleteGroup($stateParams.questionnaireId, chapter.itemId).success(function() {
                             var index = $scope.questionnaire.chapters.indexOf(chapter);
                             if (index > -1) {
                                 $scope.questionnaire.chapters.splice(index, 1);

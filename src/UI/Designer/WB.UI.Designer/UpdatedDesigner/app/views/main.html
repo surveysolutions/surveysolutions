@@ -70,7 +70,7 @@
                         <div class="holder">
                             <div class="inner">
                                 <a class="handler" ui-tree-handle></a>
-                            <h1><a ui-sref="chapter.detail({chapterId: chapter.id})"></a>{{chapter.title}}</h1>
+                            <h1><a ui-sref="questionnaire.chapter.detail({chapterId: chapter.id})">{{chapter.title}}</a></h1>
                                 <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
                                     <a class="dropdown-toggle" data-toggle="dropdown"></a>
                                     <ul class="dropdown-menu">
