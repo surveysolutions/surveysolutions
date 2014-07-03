@@ -1561,7 +1561,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             List<Identity> questionsToBeEnabled = new List<Identity>();
+            List<Identity> processedAndEnabledQuestions = new List<Identity>();
             List<Identity> questionsToBeDisabled = new List<Identity>();
+            List<Identity> processedAndDisabledQuestions = new List<Identity>();
 
             List<Identity> groupsToBeEnabled = new List<Identity>();
             List<Identity> groupsToBeDisabled = new List<Identity>();
@@ -1569,12 +1571,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> questionsDeclaredValid = new List<Identity>();
             List<Identity> questionsDeclaredInvalid = new List<Identity>();
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getEnabledQuestionAnswerSupportedInExpressions = (state, questionId) =>
-                GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, 
+            Func<Identity, bool> isQuestionDisabled =
+                (questionIdAtInterview) => IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire,
+                    (group) =>
+                        (groupsToBeDisabled.Any(q => AreEqual(q, group)) || IsGroupDisabled(this.interviewState, group)) &&
+                            !groupsToBeEnabled.Any(q => AreEqual(q, group)),
+                    (question) =>
+                        (questionsToBeDisabled.Any(q => AreEqual(q, question)) ||
+                            IsQuestionDisabled(this.interviewState, questionIdAtInterview)) &&
+                            !questionsToBeEnabled.Any(q => AreEqual(q, question)));
+
+            Func<InterviewStateDependentOnAnswers, Identity, object> getEnabledQuestionAnswerSupportedInExpressionsForGrous = (state, questionId) =>
+            {
+                return GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState,
                     questionId,
-                    (currentState, q) => this.ShouldQuestionBeDisabledByCustomCondition(this.interviewState, q, questionnaire), 
-                    (currentState, g) => this.ShouldGroupBeDisabledByCustomCondition(this.interviewState, g, questionnaire), 
+                    (currentState, q) => this.ShouldQuestionBeDisabledByCustomCondition(this.interviewState, q, questionnaire),
+                    (currentState, g) => this.ShouldGroupBeDisabledByCustomCondition(this.interviewState, g, questionnaire),
                     questionnaire);
+            };
+
+            Func<InterviewStateDependentOnAnswers, Identity, object> getEnabledQuestionAnswerSupportedInExpressions = (state, questionId) =>
+            {
+                if (isQuestionDisabled(questionId))
+                    return null;
+
+                if (processedAndEnabledQuestions.Any(q => AreEqual(q, questionId)))
+                {
+                    string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId.Id, questionId.RosterVector);
+
+                    return state.AnswersSupportedInExpressions.ContainsKey(questionKey)
+                            ? state.AnswersSupportedInExpressions[questionKey]
+                            : null;
+                }
+
+                return GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState,
+                    questionId,
+                    (currentState, q) => this.ShouldQuestionBeDisabledByCustomCondition(this.interviewState, q, questionnaire),
+                    (currentState, g) => this.ShouldGroupBeDisabledByCustomCondition(this.interviewState, g, questionnaire),
+                    questionnaire);
+            };
 
             foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions())
             {
@@ -1588,7 +1623,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
                         isNewStateEnabled:
                             this.ShouldGroupBeEnabledByCustomEnablementCondition(this.interviewState, groupIdAtInterview, questionnaire,
-                                getEnabledQuestionAnswerSupportedInExpressions),
+                                getEnabledQuestionAnswerSupportedInExpressionsForGrous),
                         isOldStateEnabled: !IsGroupDisabled(this.interviewState, groupIdAtInterview));
                 }
             }
@@ -1602,25 +1637,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     Identity questionIdAtInterview = new Identity(questionWithNotEmptyEnablementCondition, availableRosterLevel);
 
+                    bool isNewStateEnabled = this.ShouldQuestionBeEnabledByCustomEnablementCondition(
+                        this.interviewState,
+                        questionIdAtInterview,
+                        questionnaire,
+                        getEnabledQuestionAnswerSupportedInExpressions);
+
+                    if (isNewStateEnabled)
+                        processedAndEnabledQuestions.Add(questionIdAtInterview);
+
+                    bool isOldStateEnabled = !IsQuestionDisabled(this.interviewState, questionIdAtInterview);
+
                     PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled,
                         questionsToBeDisabled,
-                        isNewStateEnabled:
-                            this.ShouldQuestionBeEnabledByCustomEnablementCondition(this.interviewState, questionIdAtInterview,
-                                questionnaire,
-                                getEnabledQuestionAnswerSupportedInExpressions),
-                        isOldStateEnabled: !IsQuestionDisabled(this.interviewState, questionIdAtInterview));
+                        isNewStateEnabled: isNewStateEnabled,
+                        isOldStateEnabled: isOldStateEnabled);
                 }
             }
-
-            Func<Identity, bool> isQuestionDisabled =
-                (questionIdAtInterview) => IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire,
-                    (group) =>
-                        (groupsToBeDisabled.Any(q => AreEqual(q, group)) || IsGroupDisabled(this.interviewState, group)) &&
-                            !groupsToBeEnabled.Any(q => AreEqual(q, group)),
-                    (question) =>
-                        (questionsToBeDisabled.Any(q => AreEqual(q, question)) ||
-                            IsQuestionDisabled(this.interviewState, questionIdAtInterview)) &&
-                            !questionsToBeEnabled.Any(q => AreEqual(q, question)));
 
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
                 (state, question) =>
