@@ -411,6 +411,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="UpdatedDesigner\app\controllers\share.js" />
+    <Content Include="UpdatedDesigner\app\controllers\tree.js" />
     <Content Include="UpdatedDesigner\app\directives\animations.js" />
     <Content Include="UpdatedDesigner\app\directives\itemBreadcrumbs.js" />
     <Content Include="UpdatedDesigner\app\directives\directives.js" />
@@ -439,7 +440,6 @@
     <Content Include="UpdatedDesigner\app\controllers\roster.js" />
     <Content Include="UpdatedDesigner\app\controllers\verification.js" />
     <Content Include="UpdatedDesigner\app\services\commandService.js" />
-    <Content Include="UpdatedDesigner\app\services\navigationService.js" />
     <Content Include="UpdatedDesigner\app\services\questionnaireService.js" />
     <Content Include="UpdatedDesigner\app\services\utilityService.js" />
     <Content Include="UpdatedDesigner\app\services\verificationService.js" />
