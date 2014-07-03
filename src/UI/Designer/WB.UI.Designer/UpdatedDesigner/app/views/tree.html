@@ -18,7 +18,6 @@
     </div>
 </div>
 
-
 <script type="text/ng-template" id="tree_item_renderer.html">
     <div ng-if="isQuestion(item) && !item.isDeleted"
          class="question item"
@@ -57,7 +56,8 @@
         <a class="handler" ui-tree-handle></a>
 
         <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"></button>
-        <a ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
+        <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
+        <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
     </div>
 
     <div ng-hide="collapsed" class="slide" ui-tree-nodes="item.items" ng-model="item.items">

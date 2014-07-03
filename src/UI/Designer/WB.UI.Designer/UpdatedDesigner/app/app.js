@@ -71,8 +71,17 @@
                 }
             }).state('questionnaire.chapter.roster', {
                 url: "/roster/{itemId}",
-                templateUrl: "app/views/main.html",
-                controller: 'MainCtrl'
+                views: {
+                    '': {
+                        templateUrl: 'app/views/roster.html',
+                        controller: 'RosterCtrl',
+                        resolve: {
+                            questionnaireId: ['$stateParams', function ($stateParams) {
+                                return $stateParams.questionnaireId;
+                            }]
+                        }
+                    }
+                }
             });
     }]).config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('errorReportingInterceptor');
