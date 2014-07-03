@@ -36,7 +36,38 @@
     <div class="right"></div>
 </section>
 
-<section id="main" class="row" ui-view></section>
+<section id="main" class="row" >
+    <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
+        <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="ul-holder">
+            <ul class="chapters" ui-tree-nodes ng-model="questionnaire.chapters">
+                <li class="chapter-panel-item"
+                    ng-repeat="chapter in questionnaire.chapters"
+                    ui-tree-node
+                    ui-sref-active="current">
+                    <div class="holder">
+                        <div class="inner">
+                            <a class="handler" ui-tree-handle></a>
+                            <h1><a ui-sref="questionnaire.chapter({chapterId: chapter.itemId})">{{chapter.title}}</a></h1>
+                            <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
+                                <a class="dropdown-toggle" data-toggle="dropdown"></a>
+                                <ul class="dropdown-menu">
+                                    <li><a ng-click="editChapter(chapter);$event.stopPropagation()">Edit</a></li>
+                                    <li><a ng-click="cloneChapter(chapter);$event.stopPropagation()">Clone</a></li>
+                                    <li><a ng-click="deleteChapter(chapter);$event.stopPropagation()">Delete</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="button-holder">
+                <input type="button" class="btn lighter-hover" value="ADD NEW CHAPTER" ng-click="addNewChapter()">
+            </div>
+        </div>
+    </div>
+    <div class="questionnaire-tree col-xs-6" ui-view></div>
+</section>
 
 <div id="verification-modal" class="modal fade">
     <div class="modal-dialog modal-lg">
