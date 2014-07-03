@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('MainCtrl', [
-            '$scope', '$stateParams', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', 'navigationService', '$modal', '$log',
-            function ($scope, $stateParams, questionnaireService, commandService, verificationService, utilityService, hotkeys, navigationService, $modal, $log) {
+            '$scope', '$stateParams', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$state', '$modal', '$log',
+            function ($scope, $stateParams, questionnaireService, commandService, verificationService, utilityService, hotkeys, $state, $modal, $log) {
                 var me = this;
                 hotkeys.add({
                     combo: 'ctrl+f',
@@ -402,9 +402,10 @@
                             $scope.loadChapterDetails($stateParams.questionnaireId, $scope.currentChapterId);
                         } else {
                             if (result.chapters.length > 0) {
-                                $scope.currentChapter = result.chapters[0];
-                                $scope.currentChapterId = $scope.currentChapter.itemId;
-                                $scope.loadChapterDetails($stateParams.questionnaireId, $scope.currentChapterId);
+                                $state.go('questionnaire.chapter', { chapterId: _.first(result.chapters).itemId });
+                                //$scope.currentChapter = result.chapters[0];
+                                //$scope.currentChapterId = $scope.currentChapter.itemId;
+                                //$scope.loadChapterDetails($stateParams.questionnaireId, $scope.currentChapterId);
                             }
                         }
                         if ($stateParams.itemId) {

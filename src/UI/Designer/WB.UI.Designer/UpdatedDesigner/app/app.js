@@ -77,16 +77,20 @@
                 templateUrl: "app/views/main.html",
                 controller: 'MainCtrl'
             })
-            .state('questionnaire.chapter.detail', {
+            .state('questionnaire.chapter', {
                 url: "/chapter/{chapterId}",
                 templateUrl: "app/views/main.html",
                 controller: 'MainCtrl'
             })
-            .state('questionnaire.chapter.detail.item', {
-                url: "/item/:itemId",
+            .state('questionnaire.chapter.question', {
+                url: "/question/{itemId}",
                 tempalteUrl: "app/views/main.html",
                 controller: 'MainCtrl'
-        });
+            }).state('questionnaire.chapter.group', {
+                url: "/group/{itemId}",
+                templateUrl: "app/views/main.html",
+                controller: 'MainCtrl'
+            });
     }]).config(['$httpProvider', function($httpProvider) {
         $httpProvider.interceptors.push('errorReportingInterceptor');
     }]);
