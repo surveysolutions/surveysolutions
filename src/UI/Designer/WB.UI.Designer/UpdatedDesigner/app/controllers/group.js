@@ -3,12 +3,13 @@
 
     angular.module('designerApp')
         .controller('ChapterCtrl', [
-            '$scope', 'questionnaireService', 'commandService', 'utilityService', 
-            function($scope, questionnaireService, commandService, math) {
+            '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService',
+            function($scope, $stateParams, questionnaireService, commandService, math) {
 
                 $scope.loadGroup = function() {
-                    questionnaireService.getGroupDetailsById($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function(result) {
+                    questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
                             var group = result.group;
+                            $scope.activeChapter = $scope.activeQuestion || {};
                             $scope.activeChapter.title = group.title;
                             $scope.activeChapter.description = group.description;
                             $scope.activeChapter.enablementCondition = group.enablementCondition;
@@ -19,7 +20,7 @@
 
                 $scope.saveChapter = function() {
                     $("#edit-chapter-save-button").popover('destroy');
-                    commandService.updateGroup($routeParams.questionnaireId, $scope.activeChapter).success(function(result) {
+                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeChapter).success(function(result) {
                         if (!result.IsSuccess) {
                             $("#edit-chapter-save-button").popover({
                                 content: result.Error,
@@ -32,7 +33,7 @@
 
                 $scope.deleteChapter = function() {
                     if (confirm("Are you sure want to delete?")) {
-                        commandService.deleteGroup($routeParams.questionnaireId, $scope.activeChapter.itemId).success(function(result) {
+                        commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
                             $("#edit-chapter-save-button").popover('destroy');
                             if (result.IsSuccess) {
                                 if ($scope.isChapter($scope.activeChapter)) {
@@ -43,7 +44,6 @@
                                 } else {
                                     $scope.activeChapter.isDeleted = true;
                                 }
-                                navigationService.openQuestionnaire($routeParams.questionnaireId);
                             } else {
                                 $("#edit-chapter-save-button").popover({
                                     content: result.Error,
@@ -59,7 +59,7 @@
                     var newId = math.guid();
                     var chapterDescription = "";
 
-                    commandService.cloneGroupWithoutChildren($routeParams.questionnaireId, newId, $scope.activeChapter, chapterDescription).success(function(result) {
+                    commandService.cloneGroupWithoutChildren($stateParams.questionnaireId, newId, $scope.activeChapter, chapterDescription).success(function(result) {
                         $("#edit-chapter-save-button").popover('destroy');
                         if (result.IsSuccess) {
                             var newChapter = {
@@ -69,7 +69,6 @@
                             };
                             $scope.questionnaire.chapters.push(newChapter);
                             $scope.close();
-                            navigationService.openChapter($routeParams.questionnaireId, newId);
                         } else {
                             $("#edit-chapter-save-button").popover({
                                 content: result.Error,
@@ -81,17 +80,13 @@
                 };
 
                 $scope.moveToChapter = function(chapterId) {
-                    questionnaireService.moveGroup($scope.activeChapter.itemId, 0, chapterId, $routeParams.questionnaireId);
+                    questionnaireService.moveGroup($scope.activeChapter.itemId, 0, chapterId, $stateParams.questionnaireId);
                     var removeFrom = $scope.activeChapter.getParentItem() || $scope;
                     removeFrom.items.splice(_.indexOf(removeFrom.items, $scope.activeChapter), 1);
                     $scope.resetSelection();
                 };
 
                 $scope.loadGroup();
-
-                $scope.$watch('activeChapter', function() {
-                    $scope.loadGroup();
-                });
             }
         ]);
 }());

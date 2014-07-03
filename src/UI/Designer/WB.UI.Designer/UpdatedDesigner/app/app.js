@@ -104,8 +104,17 @@
                 }
             }).state('questionnaire.chapter.group', {
                 url: "/group/{itemId}",
-                templateUrl: "app/views/main.html",
-                controller: 'MainCtrl'
+                views: {
+                    '': {
+                        templateUrl: 'app/views/chapter.html',
+                        controller: 'ChapterCtrl',
+                        resolve: {
+                            questionnaireId: ['$stateParams', function ($stateParams) {
+                                return $stateParams.questionnaireId;
+                            }]
+                        }
+                    }
+                }
             }).state('questionnaire.chapter.roster', {
                 url: "/roster/{itemId}",
                 templateUrl: "app/views/main.html",
