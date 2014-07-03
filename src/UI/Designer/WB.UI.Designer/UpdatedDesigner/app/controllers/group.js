@@ -8,20 +8,15 @@
 
                 $scope.loadGroup = function() {
                     questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
-                            var group = result.group;
-                            $scope.activeChapter = $scope.activeQuestion || {};
-                            $scope.activeChapter.itemId = $stateParams.itemId;
-                            $scope.activeChapter.title = group.title;
-                            $scope.activeChapter.description = group.description;
-                            $scope.activeChapter.enablementCondition = group.enablementCondition;
-                            $scope.activeChapter.breadcrumbs = result.breadcrumbs;
+                            $scope.activeChapter = result;
+                            $scope.activeChapter.group.itemId = $stateParams.itemId;
                         }
                     );
                 };
 
                 $scope.saveChapter = function() {
                     $("#edit-chapter-save-button").popover('destroy');
-                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeChapter).success(function(result) {
+                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeChapter.group).success(function (result) {
                         if (!result.IsSuccess) {
                             $("#edit-chapter-save-button").popover({
                                 content: result.Error,
@@ -38,7 +33,7 @@
                             $("#edit-chapter-save-button").popover('destroy');
                             if (result.IsSuccess) {
                                 if ($scope.isChapter($scope.activeChapter)) {
-                                    var index = $scope.questionnaire.chapters.indexOf($scope.activeChapter);
+                                    var index = $scope.questionnaire.chapters.indexOf($scope.activeChapter.group);
                                     if (index > -1) {
                                         $scope.questionnaire.chapters.splice(index, 1);
                                     }
@@ -60,7 +55,7 @@
                     var newId = math.guid();
                     var chapterDescription = "";
 
-                    commandService.cloneGroupWithoutChildren($stateParams.questionnaireId, newId, $scope.activeChapter, chapterDescription).success(function(result) {
+                    commandService.cloneGroupWithoutChildren($stateParams.questionnaireId, newId, $scope.activeChapter.group, chapterDescription).success(function(result) {
                         $("#edit-chapter-save-button").popover('destroy');
                         if (result.IsSuccess) {
                             var newChapter = {
