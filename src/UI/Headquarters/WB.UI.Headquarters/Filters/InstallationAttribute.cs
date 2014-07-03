@@ -21,10 +21,9 @@ namespace WB.UI.Headquarters.Filters
             if (filterContext.Controller is ControlPanelController) return;
 
             var isInstallController = filterContext.Controller is InstallController;
-            var isUserAuthenticated = filterContext.HttpContext.User.Identity.IsAuthenticated;
             var isHQUserExists = identityManager.GetUsersInRole(UserRoles.Headquarter.ToString()).Any();
 
-            if (isInstallController && (isUserAuthenticated || isHQUserExists))
+            if (isInstallController && isHQUserExists)
                 throw new HttpException(404, string.Empty);
 
             if (!isInstallController && !isHQUserExists)
