@@ -410,6 +410,7 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="UpdatedDesigner\app\controllers\group.js" />
     <Content Include="UpdatedDesigner\app\controllers\share.js" />
     <Content Include="UpdatedDesigner\app\controllers\tree.js" />
     <Content Include="UpdatedDesigner\app\directives\animations.js" />
@@ -418,6 +419,7 @@
     <Content Include="UpdatedDesigner\app\fixtures\no-backend.js" />
     <Content Include="UpdatedDesigner\app\services\errorReportingService.js" />
     <Content Include="UpdatedDesigner\app\services\shareService.js" />
+    <Content Include="UpdatedDesigner\app\views\group.html" />
     <Content Include="UpdatedDesigner\app\views\itemBreadcrumbs.html" />
     <Content Include="UpdatedDesigner\app\views\share.html" />
     <Content Include="UpdatedDesigner\app\views\tree.html" />
@@ -433,7 +435,6 @@
     <Content Include="UpdatedDesigner\app\components\markup.js" />
     <Content Include="UpdatedDesigner\app\components\ujs.js" />
     <Content Include="UpdatedDesigner\app\components\wb-designer-editor.js" />
-    <Content Include="UpdatedDesigner\app\controllers\chapter.js" />
     <Content Include="UpdatedDesigner\app\controllers\chapters.js" />
     <Content Include="UpdatedDesigner\app\controllers\main.js" />
     <Content Include="UpdatedDesigner\app\controllers\question.js" />
@@ -596,7 +597,6 @@
     <Content Include="UpdatedDesigner\content\lib\i\breadcrumb-slash.png" />
     <Content Include="UpdatedDesigner\content\lib\i\btn-dropdown-blue.png" />
     <Content Include="UpdatedDesigner\content\markup.css.css" />
-    <Content Include="UpdatedDesigner\app\views\chapter.html" />
     <Content Include="UpdatedDesigner\app\views\main.html" />
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
