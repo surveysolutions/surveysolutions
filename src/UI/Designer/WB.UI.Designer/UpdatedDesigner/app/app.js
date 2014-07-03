@@ -106,8 +106,8 @@
                 url: "/group/{itemId}",
                 views: {
                     '': {
-                        templateUrl: 'app/views/chapter.html',
-                        controller: 'ChapterCtrl',
+                        templateUrl: 'app/views/group.html',
+                        controller: 'GroupCtrl',
                         resolve: {
                             questionnaireId: ['$stateParams', function ($stateParams) {
                                 return $stateParams.questionnaireId;

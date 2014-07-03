@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('designerApp')
-        .controller('ChapterCtrl', [
+        .controller('GroupCtrl', [
             '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService',
             function($scope, $stateParams, questionnaireService, commandService, math) {
 
