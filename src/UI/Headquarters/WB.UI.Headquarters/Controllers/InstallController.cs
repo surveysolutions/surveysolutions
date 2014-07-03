@@ -33,13 +33,11 @@ namespace WB.UI.Headquarters.Controllers
                     this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(), userName: model.UserName,
                     password: SimpleHash.ComputeHash(model.Password), email: model.Email, isLockedBySupervisor: false,
                     isLockedByHQ: false, roles: new[] { UserRoles.Headquarter }, supervsor: null));
-                    this.Success("Headquarters user successfully created. Now you can login into the system");
                     return this.RedirectToAction("LogOn", "Account");
                 }
                 catch (Exception ex)
                 {
                     this.Logger.Fatal("Error when creating headquarters user", ex);
-                    this.Error("Error when creating headquarters user. Please, contact to the software developer");
                 }
             }
 
