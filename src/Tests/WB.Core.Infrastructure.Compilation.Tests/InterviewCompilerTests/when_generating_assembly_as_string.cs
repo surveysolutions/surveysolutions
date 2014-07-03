@@ -42,6 +42,16 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
                 {
                     return values.Sum(i => i);
                 }
+
+                public List<Identity> CalculateValidationChanges()
+                {
+                    return new List<Identity>();
+                }
+
+                public List<Identity> CalculateConditionChanges()
+                {
+                    return new List<Identity>();
+                }
  
             }";
     }
