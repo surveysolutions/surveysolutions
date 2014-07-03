@@ -1,9 +1,7 @@
-﻿
-
-angular.module('designerApp')
+﻿angular.module('designerApp')
     .controller('TreeCtrl', [
-        '$scope', '$stateParams', 'questionnaireId', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$state', '$modal', '$log',
-        function ($scope, $stateParams, questionnaireId, questionnaireService, commandService, verificationService, utilityService, hotkeys, $state, $modal, $log) {
+        '$scope', '$stateParams', 'questionnaireId', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$log',
+        function ($scope, $stateParams, questionnaireId, questionnaireService, commandService, verificationService, utilityService, hotkeys, $log) {
             'use strict';
             var me = this;
 
@@ -193,7 +191,7 @@ angular.module('designerApp')
                     $scope.items = result.items;
                     $scope.currentChapter = result;
                     connectTree();
-
+                    
                     window.ContextMenuController.get().init();
                 });
         }
