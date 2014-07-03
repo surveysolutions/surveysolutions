@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
     'use strict';
 
     angular.module('designerApp', [
@@ -71,27 +71,37 @@
         var url = '/' + questionnaireId;
         $urlRouterProvider.otherwise(url);
 
-        $stateProvider
-            .state('questionnaire', {
+        $stateProvider.state('questionnaire', {
                 url: "/{questionnaireId}",
                 templateUrl: "app/views/main.html",
                 controller: 'MainCtrl'
-            })
-            .state('questionnaire.chapter', {
+            }).state('questionnaire.chapter', {
                 url: "/chapter/{chapterId}",
-                templateUrl: "app/views/main.html",
-                controller: 'MainCtrl'
-            })
-            .state('questionnaire.chapter.question', {
+                views: {
+                    '': {
+                        templateUrl: "app/views/tree.html",
+                        controller: 'TreeCtrl'
+                    }
+                }
+                
+            }).state('questionnaire.chapter.question', {
                 url: "/question/{itemId}",
-                tempalteUrl: "app/views/main.html",
-                controller: 'MainCtrl'
+                views: {
+                    '': {
+                        templateUrl: 'app/views/question.html',
+                        controller: 'QuestionCtrl'
+                    }
+                }
             }).state('questionnaire.chapter.group', {
                 url: "/group/{itemId}",
                 templateUrl: "app/views/main.html",
                 controller: 'MainCtrl'
+            }).state('questionnaire.chapter.roster', {
+                url: "/roster/{itemId}",
+                templateUrl: "app/views/main.html",
+                controller: 'MainCtrl'
             });
-    }]).config(['$httpProvider', function($httpProvider) {
+    }]).config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('errorReportingInterceptor');
     }]);
 }(jQuery));
