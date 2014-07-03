@@ -5,18 +5,6 @@ using System.Linq;
 // ReSharper disable InconsistentNaming
 namespace WB.Core.Infrastructure.BaseStructures
 {
-    public class Identity
-    {
-        // should be shared
-        public Guid Id { get; private set; }
-        public decimal[] RosterVector { get; private set; }
-        public Identity(Guid id, decimal[] rosterVector)
-        {
-            this.Id = id;
-            this.RosterVector = rosterVector;
-        }
-    }
-
     public interface IValidatable
     {
         void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
@@ -39,7 +27,13 @@ namespace WB.Core.Infrastructure.BaseStructures
         public string id;
         public int? persons_count;
 
-        public void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid) { }
+        //nested roster
+        public HhMember[] Members;
+
+        public void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        {
+            //Members.Count(m => m.age > 15);
+        }
 
     }
 
@@ -130,7 +124,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         public string id { get { return parent.id; } }
         public int? persons_count { get { return parent.persons_count; } }
         public string name { get { return parent.name; } }
-        public int? age { get { return parent.age; } }
+        public int? age { get { return parent.age; } } 
         public DateTime? date { get { return parent.date; } }
         public decimal? sex { get { return parent.sex; } }
         public decimal? role { get { return parent.role; } }
@@ -176,7 +170,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         public static readonly Guid best_job_ownerId = Guid.Parse("246ad6a8-cd73-4d0c-b5fc-1aa21c101ffe");
 
         public static readonly Guid[] hhMemberScopeIds = new[] { persons_countId };
-        public static readonly Guid[] foodConsumptionIds = new[] { foodId };
+        public static readonly Guid[] foodConsumptionIds = new[] { persons_countId, foodId };
     }
 
     public class StronglyTypedInterviewEvaluator : IInterviewEvaluator
@@ -187,6 +181,8 @@ namespace WB.Core.Infrastructure.BaseStructures
         {
             return rosterVector.Take(rosterVector.Length - 1).ToArray();
         }
+
+
         public StronglyTypedInterviewEvaluator()
         {
             var emptyRosterVector = new decimal[0];
@@ -344,6 +340,17 @@ namespace WB.Core.Infrastructure.BaseStructures
             }
             return 8;
         }
+
+        public List<Identity> CalculateValidationChanges()
+        {
+            return new List<Identity>();
+        }
+
+        public List<Identity> CalculateConditionChanges()
+        {
+            throw new NotImplementedException();
+        }
+        
     }
 }
 // ReSharper restore InconsistentNaming
