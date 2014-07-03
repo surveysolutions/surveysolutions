@@ -10,6 +10,7 @@
                     questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
                             var group = result.group;
                             $scope.activeChapter = $scope.activeQuestion || {};
+                            $scope.activeChapter.itemId = $stateParams.itemId;
                             $scope.activeChapter.title = group.title;
                             $scope.activeChapter.description = group.description;
                             $scope.activeChapter.enablementCondition = group.enablementCondition;
