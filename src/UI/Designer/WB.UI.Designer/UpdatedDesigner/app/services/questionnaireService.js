@@ -53,6 +53,15 @@
                     );
                 };
 
+                questionnaireService.removeItemWithId = function(items, itemId) {
+                    var item = questionnaireService.findItem(items, itemId);
+                    if (item) {
+                        var parent = item.getParentItem();
+                        var itemsToRemoveFrom = parent ? parent.items : items;
+                        itemsToRemoveFrom.splice(_.indexOf(itemsToRemoveFrom, item), 1);
+                    }
+                };
+
                 questionnaireService.findItem = function(items, itemId) {
                     var findFunc = function(item, itemToRemoveId) {
                         var itemToFind = _.findWhere(item.items, { itemId: itemId });

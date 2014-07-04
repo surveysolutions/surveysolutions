@@ -40,7 +40,7 @@
                     <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a>Delete</a>
+                            <a ng-click="deleteQuestion(item.itemId)">Delete</a>
                         </li>
                         <li>
                             <a>Clone</a>
@@ -57,8 +57,22 @@
             <a class="handler" ui-tree-handle></a>
 
             <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"></button>
-            <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
-            <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
+            
+                <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
+                <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
+            <div class="qname-block">
+                <div class="btn-group dropdown">
+                    <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ng-click="deleteGroup(item.itemId)">Delete</a>
+                        </li>
+                        <li>
+                            <a>Clone</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <div ng-hide="collapsed" class="slide" ui-tree-nodes="item.items" ng-model="item.items">
@@ -79,14 +93,14 @@
             </div>
         </div>
 
-        <div class="start-box" ng-show="currentChapter==undefined || currentChapter.items.length == 0">
+        <div class="start-box" ng-if="_.isEmpty(items)">
             <div class="buttons-item">
                 <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
             </div>
 
-            <p>This questionnaire is empty.</p>
+            <p>This chapter is empty.</p>
 
             <p>
                 You can start by using <button class="btn" disabled>ADD QUESTION</button> and <button class="btn" disabled>ADD GROUP</button> buttons<br />
