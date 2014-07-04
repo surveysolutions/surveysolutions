@@ -46,7 +46,7 @@
                     ui-tree-node
                     ui-sref-active="current">
                     <div class="holder">
-                        <div class="inner">
+                        <div class="inner" onclick=" $(this).find('h1 > a').trigger('click'); ">
                             <a class="handler" ui-tree-handle></a>
                             <h1><a ui-sref="questionnaire.chapter({chapterId: chapter.itemId})">{{chapter.title}}</a></h1>
                             <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
