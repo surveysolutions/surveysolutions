@@ -6,10 +6,12 @@
         <div class="row">
             <div class="form-group col-xs-8">
                 <div class="btn-group" dropdown>
-                    <button id="questionTypeBtn" class="btn btn-default dropdown-toggle" type="button">
+                    <button id="questionTypeBtn" class="btn btn-default dropdown-toggle form-control" type="button">
                         <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
+                        <span class="vertical-line"></span>
                         {{activeQuestion.type}}
-                        <span class="caret"></span>
+                        <!--<span class="caret"></span>-->
+                        <span class="dropdown-arrow"></span>
                     </button>
 
                     <ul class="dropdown-menu " role="menu" aria-labelledby="questionTypeBtn">

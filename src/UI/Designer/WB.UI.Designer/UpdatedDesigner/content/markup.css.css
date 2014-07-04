@@ -5911,6 +5911,36 @@ body {
   font-weight: normal;
   color: #c1c7cb;
 }
+button#questionTypeBtn {
+  padding: 10px 40px 10px 50px;
+  background-color: #ffffff;
+  border: 2px solid #cccccc;
+  text-transform: none;
+}
+button#questionTypeBtn > i {
+  left: 7px;
+}
+button#questionTypeBtn > span.vertical-line {
+  border-left: 2px solid #cccccc;
+  height: 93%;
+  position: absolute;
+  top: 1px;
+  left: 40px;
+}
+button#questionTypeBtn > span.dropdown-arrow {
+  background: url(i/dropdown-arrow.png) no-repeat center center;
+  width: 19px;
+  height: 12px;
+  position: absolute;
+  right: 10px;
+}
+ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
+  position: relative;
+  padding-left: 40px;
+}
+ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
+  left: 7px;
+}
 .wb-label {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
