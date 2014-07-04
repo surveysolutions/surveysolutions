@@ -26,7 +26,7 @@
 
             <a class="handler" ui-tree-handle></a>
             <a ui-sref="questionnaire.chapter.question({itemId: item.itemId})">
-                <div class="text">
+                <div class="item-text">
                     <div class="icon {{answerTypeClass[item.type]}}"></div>
                     <span ng-bind-html="item.title | highlight:search.searchText"></span>
                 </div>

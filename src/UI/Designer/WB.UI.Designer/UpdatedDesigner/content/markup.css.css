@@ -6876,7 +6876,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .item button.btn-expand {
   background-position: center -40px;
 }
-.item > .text {
+.item .item-text {
   overflow: hidden;
 }
 .item > .qname-block {
@@ -7064,7 +7064,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #verify-popover-content .question-list .item button.btn-expand {
   background-position: center -40px;
 }
-#verify-popover-content .question-list .item > .text {
+#verify-popover-content .question-list .item .item-text {
   overflow: hidden;
 }
 #verify-popover-content .question-list .item > .qname-block {
