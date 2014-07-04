@@ -306,211 +306,215 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 
     > .questionnaire-tree {
       height: 100%;
-      padding-left: @content-padding-left;
-      padding-top: 55px;
-      padding-right: 0;
-      background: @designer-editor-lightblue-bg-color;
 
-      > .chapter-title {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: @left-column-width;
+      > .questionnaire-tree-holder {
+        height: 100%;
         padding-left: @content-padding-left;
+        padding-top: 55px;
+        padding-right: 0;
         background: @designer-editor-lightblue-bg-color;
-        .questionnarie-chapter-title-fontstyle();
-        line-height: @left-column-width;
-        box-shadow: -5px 5px 10px rgba(0, 0, 0, .25);
-        z-index: 5;
 
-        > span {
-          .questionnarie-chapter-title-span-fontstyle();
-        }
-
-        ul.controls-right {
-          display: block;
+        > .chapter-title {
           position: absolute;
-          top: 7px;
-          right: 5px;
-          margin: 0;
-          padding: 0;
-          list-style: none;
-          .clearfix();
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: @left-column-width;
+          padding-left: @content-padding-left;
+          background: @designer-editor-lightblue-bg-color;
+          .questionnarie-chapter-title-fontstyle();
+          line-height: @left-column-width;
+          box-shadow: -5px 5px 10px rgba(0, 0, 0, .25);
+          z-index: 5;
 
-          li {
-            float: left;
-            @side: 40px;
-            width: @side;
-            height: @side;
-            a {
+          > span {
+            .questionnarie-chapter-title-span-fontstyle();
+          }
+
+          ul.controls-right {
+            display: block;
+            position: absolute;
+            top: 7px;
+            right: 5px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            .clearfix();
+
+            li {
+              float: left;
+              @side: 40px;
+              width: @side;
+              height: @side;
+              a {
+                display: block;
+                width: 100%;
+                height: 100%;
+                background: no-repeat center 0;
+                &:hover {
+                  background-position: center (-@side);
+                }
+                &.filter {
+                  background-image: url(../i/filter-glyph.png);
+                }
+                &.search {
+                  background-image: url(../i/search-glyph.png);
+                }
+              }
+            }
+          }
+
+          > .search-box {
+            @h: 40px;
+            .clearfix();
+            > .input-group {
+              margin-top: 7px;
+              line-height: @h;
+              width: ~"calc(100% - 50px)";
+              float: left;
+              > input {
+                height: @h;
+                border: none;
+                border-radius: 3px 0 0 3px;
+                padding: 0 14px;
+                width: 100%;
+                .arial-font();
+                font-size: 16px;
+                color: #000;
+                outline: none;
+              }
+              > span {
+                height: @h;
+                border: none;
+                border-radius: 0 3px 3px 0;
+                background-color: #fff;
+                cursor: pointer;
+                top: 0;
+              }
+            }
+            > button {
+              @btn-size: 40px;
+              margin: 7px 0 0 3px;
+              line-height: @h;
+              width: @btn-size;
+              height: @btn-size;
+              border: none;
+              padding: 0;
               display: block;
-              width: 100%;
-              height: 100%;
-              background: no-repeat center 0;
+              float: left;
+              background: transparent url(../i/cross.png) 0 0;
               &:hover {
-                background-position: center (-@side);
-              }
-              &.filter {
-                background-image: url(../i/filter-glyph.png);
-              }
-              &.search {
-                background-image: url(../i/search-glyph.png);
+                background-position: 0 -40px;
               }
             }
           }
         }
 
-        > .search-box {
-          @h: 40px;
-          .clearfix();
-          > .input-group {
-            margin-top: 7px;
-            line-height: @h;
-            width: ~"calc(100% - 50px)";
-            float: left;
-            > input {
-              height: @h;
-              border: none;
-              border-radius: 3px 0 0 3px;
-              padding: 0 14px;
-              width: 100%;
-              .arial-font();
-              font-size: 16px;
-              color: #000;
-              outline: none;
-            }
-            > span {
-              height: @h;
-              border: none;
-              border-radius: 0 3px 3px 0;
-              background-color: #fff;
-              cursor: pointer;
-              top: 0;
-            }
+        > .question-list {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+
+          .angular-ui-tree-placeholder {
+            outline: 2px dashed #BCC3C8;
           }
-          > button {
-            @btn-size: 40px;
-            margin: 7px 0 0 3px;
-            line-height: @h;
-            width: @btn-size;
-            height: @btn-size;
-            border: none;
-            padding: 0;
-            display: block;
-            float: left;
-            background: transparent url(../i/cross.png) 0 0;
-            &:hover {
-              background-position: 0 -40px;
+
+          > .start-box {
+            .questionnarie-startbox-fontstyle();
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            top: 30%;
+
+            button {
+              margin-left: 5px; margin-right: 5px;
+              background-color: #edeff1;
+            }
+
+            p {
+              line-height: 175%;
+              margin: 1.5em 0;
+            }
+
+            span.left-panel-glyph {
+              display: inline-block;
+              @s: 26px;
+              background: #cbd1d5 url(../i/chapter-panel-btn-small.png) no-repeat center;
+              border-radius: 3px;
+              width: @s;
+              height: @s;
+              vertical-align: middle;
             }
           }
         }
       }
 
-      > .question-list {
+      > .question-editor {
         position: relative;
-        width: 100%;
         height: 100%;
-        overflow: auto;
+        background: white;
 
-        .angular-ui-tree-placeholder {
-          outline: 2px dashed #BCC3C8;
+        @form-btns-hldr-height: 95px;
+        @form-holder-height: calc(~"100%" - (@form-btns-hldr-height));
+
+        > .form-holder {
+          padding: 36px 40px;
+          height: @form-holder-height;
+          overflow: auto;
+
+          > .breadcrumbs {
+            margin-bottom: 10px;
+            .wb-breadcrumbs('gray');
+          }
+
+          .gray {
+            padding: 8px;
+            background: #f1f2f3;
+            border-radius: 4px;
+            .clearfix();
+          }
+
+          .form-group {
+            > label {
+              .lucida-console-font();
+              font-size: 14px;
+              color: #5d5d5d;
+              font-weight: normal;
+            }
+          }
         }
 
-        > .start-box {
-          .questionnarie-startbox-fontstyle();
-          text-align: center;
+        > .form-buttons-holder {
+          padding: 25px 40px;
           position: absolute;
           width: 100%;
-          top: 30%;
+          height: @form-btns-hldr-height;
+          bottom: 0;
+          left: 0;
 
-          button {
-            margin-left: 5px; margin-right: 5px;
-            background-color: #edeff1;
-          }
-
-          p {
-            line-height: 175%;
-            margin: 1.5em 0;
-          }
-
-          span.left-panel-glyph {
-            display: inline-block;
-            @s: 26px;
-            background: #cbd1d5 url(../i/chapter-panel-btn-small.png) no-repeat center;
-            border-radius: 3px;
-            width: @s;
-            height: @s;
-            vertical-align: middle;
-          }
-        }
-      }
-    }
-
-    > .question-editor {
-      position: relative;
-      height: 100%;
-      background: white;
-
-      @form-btns-hldr-height: 95px;
-      @form-holder-height: calc(~"100%" - (@form-btns-hldr-height));
-
-      > .form-holder {
-        padding: 36px 40px;
-        height: @form-holder-height;
-        overflow: auto;
-
-        > .breadcrumbs {
-          margin-bottom: 10px;
-          .wb-breadcrumbs('gray');
-        }
-
-        .gray {
-          padding: 8px;
-          background: #f1f2f3;
-          border-radius: 4px;
+          //margin: 16px 0px;
           .clearfix();
-        }
 
-        .form-group {
-          > label {
-            .lucida-console-font();
-            font-size: 14px;
-            color: #5d5d5d;
-            font-weight: normal;
+          .pull-left, .pull-right {
+            height: 42px;
           }
-        }
-      }
 
-      > .form-buttons-holder {
-        padding: 25px 40px;
-        position: absolute;
-        width: 100%;
-        height: @form-btns-hldr-height;
-        bottom: 0;
-        left: 0;
-
-        //margin: 16px 0px;
-        .clearfix();
-
-        .pull-left, .pull-right {
-          height: 42px;
-        }
-
-        .pull-left {
-          > * {
-            margin-right: 12px;
+          .pull-left {
+            > * {
+              margin-right: 12px;
+            }
           }
-        }
-        .pull-right {
-          > * {
-            margin-left: 12px;
+          .pull-right {
+            > * {
+              margin-left: 12px;
+            }
           }
-        }
 
-        > div > a {
-          cursor: pointer;
-          .inline-button-fontstyle();
+          > div > a {
+            cursor: pointer;
+            .inline-button-fontstyle();
+          }
         }
       }
     }
