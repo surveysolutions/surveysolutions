@@ -76,7 +76,7 @@
 
                 return found;
             };
-
+            
             var upDownMove = function (updownStepValue) {
                 if ($scope.items && $state.params.itemId) {
                     var currentItem = getCurrentItem();
@@ -168,6 +168,14 @@
                 throw 'unknown item type: ' + item;
             };
 
+            $scope.isQuestion = function (item) {
+                return item.hasOwnProperty('type');
+            };
+
+            $scope.isGroup = function (item) {
+                return !item.hasOwnProperty('type');
+            };
+
             $scope.groupsTree = {
                 accept: function (sourceNodeScope, destNodesScope) {
                     var message = _.isNull(destNodesScope.item) || $scope.isGroup(destNodesScope.item);
@@ -215,6 +223,17 @@
                                 });
                         }
                     }
+                }
+            };
+
+            $scope.deleteQuestion = function (itemId) {
+                var itemIdToDelete = itemId || $state.params.itemId;
+                if (confirm("Are you sure want to delete question?")) {
+                    commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete).success(function (result) {
+                        if (result.IsSuccess) {
+                            questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                        }
+                    });
                 }
             };
 

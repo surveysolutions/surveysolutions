@@ -53,19 +53,7 @@
                     $scope.activeQuestion.type = type;
                 };
 
-                $scope.deleteQuestion = function() {
-                    if (confirm("Are you sure want to delete question?")) {
-                        commandService.deleteQuestion(questionaireId, $scope.activeQuestion.itemId).success(function (result) {
-                            if (result.IsSuccess) {
-                                $scope.activeQuestion.isDeleted = true;
-                                navigationService.openQuestionnaire(questionaireId);
-                            } else {
-                                $log.error(result);
-                            }
-                        });
-                    }
-                };
-
+            
                 $scope.moveToChapter = function(chapterId) {
                     questionnaireService.moveQuestion($scope.activeQuestion.itemId, 0, chapterId, questionaireId);
 

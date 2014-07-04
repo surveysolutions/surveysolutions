@@ -84,14 +84,6 @@
 
                 $scope.currentChapterId = null;
 
-                $scope.isQuestion = function (item) {
-                    return item.hasOwnProperty('type');
-                };
-
-                $scope.isGroup = function (item) {
-                    return !item.hasOwnProperty('type');
-                };
-
                 $scope.addQuestion = function (parent) {
                     var newId = utilityService.guid();
                     var variable = 'q' + newId.substring(0, 5);
