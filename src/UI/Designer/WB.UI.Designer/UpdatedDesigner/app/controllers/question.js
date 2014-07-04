@@ -56,7 +56,7 @@
             
                 $scope.moveToChapter = function(chapterId) {
                     questionnaireService.moveQuestion($scope.activeQuestion.itemId, 0, chapterId, questionaireId);
-
+                    
                     var removeFrom = $scope.activeQuestion.getParentItem() || $scope;
                     removeFrom.items.splice(_.indexOf(removeFrom.items, $scope.activeQuestion), 1);
                     $scope.resetSelection();

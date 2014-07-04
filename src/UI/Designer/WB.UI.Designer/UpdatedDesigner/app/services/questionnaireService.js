@@ -56,8 +56,9 @@
                 questionnaireService.removeItemWithId = function(items, itemId) {
                     var item = questionnaireService.findItem(items, itemId);
                     if (item) {
-                        var parentItems = item.getParentItem() || items;
-                        parentItems.splice(_.indexOf(parentItems, item), 1);
+                        var parent = item.getParentItem();
+                        var itemsToRemoveFrom = parent ? parent.items : items;
+                        itemsToRemoveFrom.splice(_.indexOf(itemsToRemoveFrom, item), 1);
                     }
                 };
 

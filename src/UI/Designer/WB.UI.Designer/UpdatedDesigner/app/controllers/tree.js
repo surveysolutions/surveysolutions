@@ -229,13 +229,32 @@
             $scope.deleteQuestion = function (itemId) {
                 var itemIdToDelete = itemId || $state.params.itemId;
                 if (confirm("Are you sure want to delete question?")) {
-                    commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete).success(function (result) {
-                        if (result.IsSuccess) {
-                            questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
-                        }
+                    commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete)
+                        .success(function (result) {
+                            if (result.IsSuccess) {
+                                questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                                $scope.resetSelection();
+                            }
                     });
                 }
             };
+
+            $scope.deleteGroup = function (itemId) {
+                var itemIdToDelete = itemId || $state.params.itemId;
+                if (confirm("Are you sure want to delete chapter?")) {
+                    commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
+                        .success(function(result) {
+                            if (result.IsSuccess) {
+                                questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                                $scope.resetSelection();
+                            }
+                        });
+                }
+            };
+
+            $scope.resetSelection = function() {
+                $state.go('questionnaire.chapter', { chapterId: $state.params.chapterId });
+            }
 
             questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
                 .success(function (result) {

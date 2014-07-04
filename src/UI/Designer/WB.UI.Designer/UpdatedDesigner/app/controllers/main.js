@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('MainCtrl', [
-            '$scope', '$stateParams', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$state', '$modal', '$log',
-            function ($scope, $stateParams, questionnaireService, commandService, verificationService, utilityService, hotkeys, $state, $modal, $log) {
+            '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$modal', '$log',
+            function ($scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, $log) {
                 var me = this;
 
                 $scope.verificationStatus = {
@@ -67,7 +67,7 @@
 
                         if (event.dest.index !== event.source.index) {
                             var group = event.source.nodeScope.chapter;
-                            questionnaireService.moveGroup(group.itemId, event.dest.index, null, $stateParams.questionnaireId)
+                            questionnaireService.moveGroup(group.itemId, event.dest.index, null, $state.params.questionnaireId)
                                 .success(function (data) {
                                     if (!data.IsSuccess) {
                                         rollback(group, event.source.index);
@@ -93,10 +93,11 @@
                         "variable": variable,
                         "type": 'Text',
                         "linkedVariables": [],
-                        "brokenLinkedVariables": null
+                        "brokenLinkedVariables": null,
+                        getParentItem: function () { return parent; }
                     };
 
-                    commandService.addQuestion($stateParams.questionnaireId, parent.itemId, newId, variable).success(function (result) {
+                    commandService.addQuestion($state.params.questionnaireId, parent.itemId, newId, variable).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyQuestion);
                         } else {
@@ -111,9 +112,10 @@
                     var emptyGroup = {
                         "itemId": newId,
                         "title": "New group",
-                        "items": []
+                        "items": [],
+                        getParentItem: function () { return parent; }
                     };
-                    commandService.addGroup($stateParams.questionnaireId, emptyGroup, parent.itemId).success(function (result) {
+                    commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyGroup);
                         } else {
@@ -128,10 +130,11 @@
                         "itemId": newId,
                         "title": "New roster",
                         "items": [],
-                        isRoster: true
+                        isRoster: true,
+                        getParentItem: function () { return parent; }
                     };
 
-                    commandService.addRoster($stateParams.questionnaireId, emptyRoster, parent.itemId).success(function (result) {
+                    commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyRoster);
                         } else {
@@ -153,12 +156,12 @@
                         }
                     });
                 };
-
-                questionnaireService.getQuestionnaireById($stateParams.questionnaireId)
+                
+                questionnaireService.getQuestionnaireById($state.params.questionnaireId)
                     .success(function (result) {
                         $scope.questionnaire = result;
 
-                        if ($stateParams.chapterId) {
+                        if ($state.params.chapterId) {
                             //$scope.currentChapterId = $stateParams.chapterId;
                             //$scope.loadChapterDetails($stateParams.questionnaireId, $scope.currentChapterId);
                         } else {

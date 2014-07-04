@@ -63,18 +63,6 @@
                         navigationService.openChapter($stateParams.questionnaireId, newId);
                     });
                 };
-
-                $scope.deleteChapter = function(chapter) {
-                    chapter.isMenuOpen = false;
-                    if (confirm("Are you sure want to delete?")) {
-                        commandService.deleteGroup($stateParams.questionnaireId, chapter.itemId).success(function() {
-                            var index = $scope.questionnaire.chapters.indexOf(chapter);
-                            if (index > -1) {
-                                $scope.questionnaire.chapters.splice(index, 1);
-                            }
-                        });
-                    }
-                };
             }
         ]);
 }());
