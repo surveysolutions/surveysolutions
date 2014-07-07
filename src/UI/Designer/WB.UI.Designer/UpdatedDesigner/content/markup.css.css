@@ -5916,6 +5916,8 @@ button#questionTypeBtn {
   background-color: #ffffff;
   border: 2px solid #cccccc;
   text-transform: none;
+  text-align: left;
+  width: 450px;
 }
 button#questionTypeBtn > i {
   left: 7px;
@@ -5935,6 +5937,7 @@ button#questionTypeBtn > span.dropdown-arrow {
   right: 10px;
 }
 ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
+  width: 448px;
   position: relative;
   padding-left: 40px;
 }
@@ -6272,9 +6275,16 @@ li.chapter-panel-item > .holder > .inner > .handler {
 }
 li.chapter-panel-item > .holder > .inner > h1 {
   margin: 0;
+}
+li.chapter-panel-item > .holder > .inner > h1,
+li.chapter-panel-item > .holder > .inner > h1 > a {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #3f3f3f;
+}
+li.chapter-panel-item > .holder > .inner > h1 > a,
+li.chapter-panel-item > .holder > .inner > h1 a:hover {
+  text-decoration: none;
 }
 li.chapter-panel-item > .holder > .inner > span {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -6283,7 +6293,7 @@ li.chapter-panel-item > .holder > .inner > span {
 }
 li.chapter-panel-item > .holder > .inner > .btn-group {
   position: absolute;
-  top: 11px;
+  top: 20px;
   right: 8px;
 }
 li.chapter-panel-item > .holder > .inner > .btn-group.open > .dropdown-toggle {
@@ -6692,6 +6702,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .question-list .angular-ui-tree-placeholder {
   outline: 2px dashed #BCC3C8;
 }
+#designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .question-list .item:after,
+#designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .question-list .buttons-item:after {
+  display: block;
+  content: '';
+  width: 100%;
+  height: 1px;
+  background: #e6e9ec;
+}
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .question-list > .start-box {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
@@ -6835,17 +6853,20 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding-right: 10px;
   margin-right: 28px;
   white-space: nowrap;
+}
+.item,
+.buttons-item,
+.item > a,
+.buttons-item > a {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #404040;
 }
-.item:after,
-.buttons-item:after {
-  display: block;
-  content: '';
-  width: 100%;
-  height: 1px;
-  background: #e6e9ec;
+.item > a,
+.buttons-item > a,
+.item > a:hover,
+.buttons-item > a:hover {
+  text-decoration: none;
 }
 .item {
   cursor: pointer;
@@ -6859,7 +6880,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   left: 0;
   width: 25px;
   height: 100%;
-  z-index: 100;
+  z-index: 5;
 }
 .item:hover {
   background-color: #edeff1;
@@ -7064,17 +7085,20 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding-right: 10px;
   margin-right: 28px;
   white-space: nowrap;
+}
+#verify-popover-content .question-list .item,
+#verify-popover-content .question-list .buttons-item,
+#verify-popover-content .question-list .item > a,
+#verify-popover-content .question-list .buttons-item > a {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #404040;
 }
-#verify-popover-content .question-list .item:after,
-#verify-popover-content .question-list .buttons-item:after {
-  display: block;
-  content: '';
-  width: 100%;
-  height: 1px;
-  background: #e6e9ec;
+#verify-popover-content .question-list .item > a,
+#verify-popover-content .question-list .buttons-item > a,
+#verify-popover-content .question-list .item > a:hover,
+#verify-popover-content .question-list .buttons-item > a:hover {
+  text-decoration: none;
 }
 #verify-popover-content .question-list .item {
   background-color: #edeff1;
