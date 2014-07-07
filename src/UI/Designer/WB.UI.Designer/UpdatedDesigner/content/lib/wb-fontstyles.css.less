@@ -64,9 +64,11 @@
 }
 
 .questionnarie-chapter-list-fontstyle() {
-  .arial-font();
-  font-size: 16px;
-  color: @designer-editor-chapter-list-color;
+  &, > a {
+    .arial-font();
+    font-size: 16px;
+    color: @designer-editor-chapter-list-color;
+  }
 }
 
 .questionnarie-chapter-list-span-fontstyle() {
@@ -76,9 +78,11 @@
 }
 
 .questionnarie-question-list-item-fontstyle() {
-  .arial-font();
-  font-size: 16px;
-  color: @questionnarie-question-list-item-color;
+  &, > a {
+    .arial-font();
+    font-size: 16px;
+    color: @questionnarie-question-list-item-color;
+  }
 }
 
 .questionnarie-question-list-item-qname-fontstyle() {

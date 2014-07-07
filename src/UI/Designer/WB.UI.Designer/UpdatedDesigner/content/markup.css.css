@@ -6272,9 +6272,16 @@ li.chapter-panel-item > .holder > .inner > .handler {
 }
 li.chapter-panel-item > .holder > .inner > h1 {
   margin: 0;
+}
+li.chapter-panel-item > .holder > .inner > h1,
+li.chapter-panel-item > .holder > .inner > h1 > a {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #3f3f3f;
+}
+li.chapter-panel-item > .holder > .inner > h1 > a,
+li.chapter-panel-item > .holder > .inner > h1 a:hover {
+  text-decoration: none;
 }
 li.chapter-panel-item > .holder > .inner > span {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -6835,9 +6842,20 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding-right: 10px;
   margin-right: 28px;
   white-space: nowrap;
+}
+.item,
+.buttons-item,
+.item > a,
+.buttons-item > a {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #404040;
+}
+.item > a,
+.buttons-item > a,
+.item > a:hover,
+.buttons-item > a:hover {
+  text-decoration: none;
 }
 .item:after,
 .buttons-item:after {
@@ -6859,7 +6877,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   left: 0;
   width: 25px;
   height: 100%;
-  z-index: 100;
+  z-index: 5;
 }
 .item:hover {
   background-color: #edeff1;
@@ -7064,9 +7082,20 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding-right: 10px;
   margin-right: 28px;
   white-space: nowrap;
+}
+#verify-popover-content .question-list .item,
+#verify-popover-content .question-list .buttons-item,
+#verify-popover-content .question-list .item > a,
+#verify-popover-content .question-list .buttons-item > a {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #404040;
+}
+#verify-popover-content .question-list .item > a,
+#verify-popover-content .question-list .buttons-item > a,
+#verify-popover-content .question-list .item > a:hover,
+#verify-popover-content .question-list .buttons-item > a:hover {
+  text-decoration: none;
 }
 #verify-popover-content .question-list .item:after,
 #verify-popover-content .question-list .buttons-item:after {

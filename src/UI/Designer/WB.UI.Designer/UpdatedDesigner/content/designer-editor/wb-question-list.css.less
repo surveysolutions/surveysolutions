@@ -13,6 +13,10 @@
     white-space: nowrap;
     .questionnarie-question-list-item-fontstyle();
 
+    > a, > a:hover {
+      text-decoration: none;
+    }
+
     &:after {
       // horizontal grid line
       display: block;
@@ -24,6 +28,10 @@
   }
 
   .item {
+    &:first-child {
+      margin-top: 5px;
+    }
+
     & when (@purpose = 'verify') {
       background-color: #edeff1;
       color: @verify-popup-color;
@@ -31,21 +39,14 @@
 
     & when (@purpose = 'questionnarie') {
       cursor: pointer;
-    }
 
-    &:first-child {
-      margin-top: 5px;
-    }
-
-    & when (@purpose='questionnarie') {
-      
       > .handler {
          position: absolute;
          top: 0;
          left: 0;
          width: 25px;
          height: 100%;
-         z-index: 100;
+         z-index: 5;
       }
 
       &:hover {
@@ -60,9 +61,7 @@
           background: none;
         }
       }
-    }
 
-    & when (@purpose='questionnarie') {
       &.selected {
         margin-right: 0;
         border-top-right-radius: 0;
