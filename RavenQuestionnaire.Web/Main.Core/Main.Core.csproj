@@ -198,6 +198,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\GeoPosition.cs" />
+    <Compile Include="Entities\SubEntities\IStaticText.cs" />
     <Compile Include="Entities\SubEntities\NumericQuestionUtils.cs" />
     <Compile Include="Entities\SubEntities\QuestionIdAndVariableName.cs" />
     <Compile Include="Entities\SubEntities\Question\IQRBarcodeQuestion.cs" />
