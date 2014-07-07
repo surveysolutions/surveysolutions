@@ -1,9 +1,5 @@
 ﻿<div class="form-holder">
-    <div class="breadcrumbs">
-        <ul>
-            <li ng-repeat="breadcrumb in activeRoster.breadcrumbs"><a ng-href="breadcrumb.id">{{breadcrumb.title}}</a></li>
-        </ul>
-    </div>
+    <div data-item-breadcrumbs data-crumbs="activeRoster.breadcrumbs"></div>
 
     <form role="form" name="editRosterForm">
         <div class="form-group">
