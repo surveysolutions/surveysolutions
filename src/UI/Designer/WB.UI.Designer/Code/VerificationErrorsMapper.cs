@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Code
                     yield return new VerificationReference
                     {
                         ItemId = reference.Id.FormatGuid(),
-                        Type = reference.Type,
+                        Type = group.IsRoster ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
                         Title = group.Title
                     };
                 }
