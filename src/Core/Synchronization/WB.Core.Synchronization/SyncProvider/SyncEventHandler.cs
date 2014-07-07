@@ -40,14 +40,22 @@ namespace WB.Core.Synchronization.SyncProvider
         {
             if (stream != null)
             {
-                this.IncomeEvents.AddRange(this.BuildEventStreams(stream));
+               // this.IncomeEvents.AddRange(this.BuildEventStreams(stream));
+                var newStream = new UncommittedEventStream(Guid.NewGuid(),"backup");
+                foreach (var aggregateRootEvent in stream)
+                {
+                    newStream.Append(new UncommittedEvent(aggregateRootEvent.EventIdentifier, aggregateRootEvent.EventSourceId,
+                        aggregateRootEvent.EventSequence, 0, aggregateRootEvent.EventTimeStamp, aggregateRootEvent.Payload,
+                        aggregateRootEvent.EventVersion));
+                }
+                this.IncomeEvents.AddRange(new[] { newStream });
             }
 
-            // check for events with null Payload
+           /* // check for events with null Payload
             if (this.IncomeEvents.SelectMany(eventStream => eventStream).Any(c => c.Payload == null))
             {
                 throw new Exception("Event is wrong");
-            }
+            }*/
         }
 
         /// <summary>
@@ -55,16 +63,16 @@ namespace WB.Core.Synchronization.SyncProvider
         /// </summary>
         private void Commit()
         {
-            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+          /*  var myEventBus = NcqrsEnvironment.Get<IEventBus>();
             if (myEventBus == null)
             {
                 throw new Exception("IEventBus is not properly initialized.");
-            }
+            }*/
 
             foreach (UncommittedEventStream uncommittedEventStream in this.IncomeEvents)
             {
                 this.eventStore.Store(uncommittedEventStream);
-                myEventBus.Publish(uncommittedEventStream.Select(e => e as IPublishableEvent));
+              //  myEventBus.Publish(uncommittedEventStream.Select(e => e as IPublishableEvent));
             }
         }
 

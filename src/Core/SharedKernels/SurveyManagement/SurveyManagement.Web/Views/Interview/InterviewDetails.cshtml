@@ -38,6 +38,9 @@
             ko.applyBindings(model);
             model.load();
         });
+        function GetAnswer(answer) {
+            return $.isFunction(answer) ? answer() : answer;
+        };
     </script>
 
     <script type="text/html" id="SingleOptionReadOnly">
@@ -68,7 +71,7 @@
     <script type="text/html" id="NumericReadOnly">
         <div class="form-group">
             <div class="controls">
-                <input class="form-control" type="text" data-bind="value: answer" disabled="disabled" />
+                <input class="form-control" type="text" data-bind="value: GetAnswer(answer) ?  parseFloat(GetAnswer(answer)).toLocaleString() : '' " disabled="disabled" />
             </div>
         </div>
     </script>
@@ -205,7 +208,7 @@
         <span data-bind="html: answer"></span>
     </script>
     <script type="text/html" id="Numeric">
-        <span data-bind=" text: answer"></span>
+        <span data-bind=" text:  GetAnswer(answer) ?  parseFloat(GetAnswer(answer)).toLocaleString() : '' "></span>
     </script>
     <script type="text/html" id="DateTime">
         <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
