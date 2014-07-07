@@ -6290,7 +6290,7 @@ li.chapter-panel-item > .holder > .inner > span {
 }
 li.chapter-panel-item > .holder > .inner > .btn-group {
   position: absolute;
-  top: 11px;
+  top: 20px;
   right: 8px;
 }
 li.chapter-panel-item > .holder > .inner > .btn-group.open > .dropdown-toggle {
