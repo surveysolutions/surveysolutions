@@ -1622,58 +1622,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> questionsDeclaredValid = new List<Identity>();
             List<Identity> questionsDeclaredInvalid = new List<Identity>();
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getEnabledQuestionAnswerSupportedInExpressions = (state, questionId) =>
-                GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState,
-                    questionId,
-                    (currentState, q) => this.ShouldQuestionBeDisabledByCustomCondition(this.interviewState, q, questionnaire),
-                    (currentState, g) => this.ShouldGroupBeDisabledByCustomCondition(this.interviewState, g, questionnaire),
-                    questionnaire);
 
-            foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions())
-            {
-                var availableRosterLevels = this.AvailableRosterLevelsForGroup(this.interviewState, questionnaire,
-                    groupWithNotEmptyCustomEnablementCondition);
-
-                foreach (var availableRosterLevel in availableRosterLevels)
-                {
-                    Identity groupIdAtInterview = new Identity(groupWithNotEmptyCustomEnablementCondition, availableRosterLevel);
-
-                    PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
-                        isNewStateEnabled:
-                            this.ShouldGroupBeEnabledByCustomEnablementCondition(this.interviewState, groupIdAtInterview, questionnaire,
-                                getEnabledQuestionAnswerSupportedInExpressions),
-                        isOldStateEnabled: !IsGroupDisabled(this.interviewState, groupIdAtInterview));
-                }
-            }
-
-            foreach (var questionWithNotEmptyEnablementCondition in questionnaire.GetAllQuestionsWithNotEmptyCustomEnablementConditions())
-            {
-                var availableRosterLevels = this.AvailableRosterLevelsForQuestion(this.interviewState, questionnaire,
-                    questionWithNotEmptyEnablementCondition);
-
-                foreach (var availableRosterLevel in availableRosterLevels)
-                {
-                    Identity questionIdAtInterview = new Identity(questionWithNotEmptyEnablementCondition, availableRosterLevel);
-
-                    PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled,
-                        questionsToBeDisabled,
-                        isNewStateEnabled:
-                            this.ShouldQuestionBeEnabledByCustomEnablementCondition(this.interviewState, questionIdAtInterview,
-                                questionnaire,
-                                getEnabledQuestionAnswerSupportedInExpressions),
-                        isOldStateEnabled: !IsQuestionDisabled(this.interviewState, questionIdAtInterview));
-                }
-            }
-
-            Func<Identity, bool> isQuestionDisabled =
-                (questionIdAtInterview) => IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire,
-                    (group) =>
-                        (groupsToBeDisabled.Any(q => AreEqual(q, group)) || IsGroupDisabled(this.interviewState, group)) &&
-                            !groupsToBeEnabled.Any(q => AreEqual(q, group)),
-                    (question) =>
-                        (questionsToBeDisabled.Any(q => AreEqual(q, question)) ||
-                            IsQuestionDisabled(this.interviewState, questionIdAtInterview)) &&
-                            !questionsToBeEnabled.Any(q => AreEqual(q, question)));
 
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
                 (state, question) =>
@@ -1682,6 +1631,92 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         (currstate, currquestion) => !questionsToBeEnabled.Any(q => AreEqual(q, currquestion)) && IsQuestionDisabled(currstate, currquestion),
                         (currstate, currgroup) => !groupsToBeEnabled.Any(q => AreEqual(q, currgroup)) && IsGroupDisabled(currstate, currgroup),
                         questionnaire);
+
+            var conditionStack = new Stack<KeyValuePair<Guid, string>>();
+
+            var calculatedConditions = new HashSet<Guid> { };
+
+            foreach (var questionWithNotEmptyEnablementCondition in questionnaire.GetAllQuestionsWithNotEmptyCustomEnablementConditions())
+            {
+                conditionStack.Push(new KeyValuePair<Guid, string>(questionWithNotEmptyEnablementCondition, "q"));
+            }
+            foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions().Reverse())
+            {
+                conditionStack.Push(new KeyValuePair<Guid, string>(groupWithNotEmptyCustomEnablementCondition, "g"));
+            }
+            while (conditionStack.Any())
+            {
+                var currentNode = conditionStack.Peek();
+                if (currentNode.Value == "g")
+                {
+                    var questionsInvolvedInGroupConditions =
+                        questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(currentNode.Key).Where(q => !calculatedConditions.Contains(q));
+                    var containsUnprocessedConditionsForGroup = questionsInvolvedInGroupConditions.Any();
+
+                    foreach (var questionsInvolvedInGroupCondition in questionsInvolvedInGroupConditions)
+                    {
+                        conditionStack.Push(new KeyValuePair<Guid, string>(questionsInvolvedInGroupCondition, "q"));
+                    }
+                    if (!containsUnprocessedConditionsForGroup)
+                    {
+                        var availableRosterLevelsForGroup = this.AvailableRosterLevelsForGroup(this.interviewState, questionnaire,
+                            currentNode.Key);
+
+                        foreach (var availableRosterLevel in availableRosterLevelsForGroup)
+                        {
+                            Identity groupIdAtInterview = new Identity(currentNode.Key, availableRosterLevel);
+                            PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
+                                isNewStateEnabled:
+                                    this.ShouldGroupBeEnabledByCustomEnablementCondition(this.interviewState, groupIdAtInterview,
+                                        questionnaire, getAnswer
+                                        ),
+                                isOldStateEnabled: !IsGroupDisabled(this.interviewState, groupIdAtInterview));
+                        }
+                        calculatedConditions.Add(currentNode.Key);
+                        conditionStack.Pop();
+                    }
+                }
+                if (currentNode.Value == "q")
+                {
+                    var questionsInvolvedInQuestionCondition =
+                        questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(currentNode.Key).Where(q => !calculatedConditions.Contains(q));
+                    var containsUnprocessedConditionsForQuestion = questionsInvolvedInQuestionCondition.Any();
+
+                    foreach (var questionInvolvedInQuestionCondition in questionsInvolvedInQuestionCondition)
+                    {
+                        conditionStack.Push(new KeyValuePair<Guid, string>(questionInvolvedInQuestionCondition, "q"));
+                    }
+                    if (!containsUnprocessedConditionsForQuestion)
+                    {
+                        var availableRosterLevelsForQuestion = this.AvailableRosterLevelsForQuestion(this.interviewState, questionnaire,
+                           currentNode.Key);
+                        foreach (var availableRosterLevelForQuestion in availableRosterLevelsForQuestion)
+                        {
+                            Identity questionIdAtInterview = new Identity(currentNode.Key, availableRosterLevelForQuestion);
+
+                            PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled,
+                                questionsToBeDisabled,
+                                isNewStateEnabled:
+                                    this.ShouldQuestionBeEnabledByCustomEnablementCondition(this.interviewState, questionIdAtInterview,
+                                        questionnaire, getAnswer),
+                                isOldStateEnabled: !IsQuestionDisabled(this.interviewState, questionIdAtInterview));
+                        }
+                        calculatedConditions.Add(currentNode.Key);
+                        conditionStack.Pop();
+                    }
+                }
+            }
+
+
+            Func<Identity, bool> isQuestionDisabled =
+             (questionIdAtInterview) => IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire,
+                 (group) =>
+                     (groupsToBeDisabled.Any(q => AreEqual(q, group)) || IsGroupDisabled(this.interviewState, group)) &&
+                         !groupsToBeEnabled.Any(q => AreEqual(q, group)),
+                 (question) =>
+                     (questionsToBeDisabled.Any(q => AreEqual(q, question)) ||
+                         IsQuestionDisabled(this.interviewState, questionIdAtInterview)) &&
+                         !questionsToBeEnabled.Any(q => AreEqual(q, question)));
 
             foreach (var questionWithNotEmptyValidationExpression in questionnaire.GetAllQuestionsWithNotEmptyValidationExpressions())
             {
