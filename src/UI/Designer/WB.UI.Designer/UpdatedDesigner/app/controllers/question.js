@@ -3,13 +3,14 @@
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$scope', '$state', 'questionnaireId', 'questionnaireService', 'commandService', '$log',
-            function ($scope, $state, questionaireId, questionnaireService, commandService, $log) {
+            '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log',
+            function ($scope, $state, utilityService, questionnaireService, commandService, $log) {
 
                 var dataBind = function (result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
 
+                    $scope.activeQuestion.itemId = $state.params.itemId;
                     $scope.activeQuestion.type = result.type;
                     $scope.activeQuestion.variable = result.variableName;
                     $scope.activeQuestion.variableLabel = result.variableLabel;
@@ -34,7 +35,7 @@
                 };
 
                 $scope.loadQuestion = function() {
-                    questionnaireService.getQuestionDetailsById(questionaireId, $state.params.itemId)
+                    questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
                         .success(function(result) {
                             $scope.initialQuestion = angular.copy(result);
                             dataBind(result);
@@ -42,7 +43,7 @@
                 };
 
                 $scope.saveQuestion = function() {
-                    commandService.sendUpdateQuestionCommand(questionaireId, $scope.activeQuestion).success(function (result) {
+                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function (result) {
                         if (!result.IsSuccess) {
                             $log.error(result.Error);
                         }
@@ -60,8 +61,9 @@
                 $scope.addOption = function() {
                     $scope.activeQuestion.options.push({
                         "value": null,
-                        "title": ''
-                    });;
+                        "title": '',
+                        "id": utilityService.guid()
+                    });
                 };
 
                 $scope.removeOption = function(index) {

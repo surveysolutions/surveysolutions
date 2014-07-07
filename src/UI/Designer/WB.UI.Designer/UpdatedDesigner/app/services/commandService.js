@@ -44,18 +44,7 @@
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
-                        command.options = [
-                            {
-                                id: "11111111111111111111111111111111",
-                                title: "Option 1",
-                                value: 1
-                            },
-                            {
-                                id: "22222222222222222222222222222222",
-                                title: "Option 1",
-                                value: 1
-                            }
-                        ];
+                        command.options = question.options;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;
