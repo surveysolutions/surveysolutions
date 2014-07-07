@@ -80,6 +80,13 @@
                     }
                 };
 
+                $scope.navigateTo = function (reference) {
+                    $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
+                        chapterId: reference.chapterId,
+                        itemId: reference.itemId
+                    });
+                };
+
                 $scope.currentChapter = null;
 
                 $scope.currentChapterId = null;

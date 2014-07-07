@@ -6,6 +6,7 @@ using System.Web.Http;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Designer.Code;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -116,8 +117,8 @@ namespace WB.UI.Designer.Api
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
 
-            var verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
-            var errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
+            QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            VerificationError[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
             var verificationResult = new VerificationErrors
             {
                 Errors = errors
