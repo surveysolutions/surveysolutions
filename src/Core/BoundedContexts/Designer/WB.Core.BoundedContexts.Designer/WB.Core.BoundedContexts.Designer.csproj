@@ -148,6 +148,10 @@
     <Compile Include="Events\Questionnaire\AbstractQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionCloned.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireEntityEvent.cs" />
+    <Compile Include="Events\Questionnaire\StaticTextCloned.cs" />
+    <Compile Include="Events\Questionnaire\StaticTextUpdated.cs" />
+    <Compile Include="Events\Questionnaire\StaticTextAdded.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionAdded.cs" />
