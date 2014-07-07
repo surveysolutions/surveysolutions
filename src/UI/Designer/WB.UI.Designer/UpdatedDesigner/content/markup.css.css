@@ -5916,6 +5916,8 @@ button#questionTypeBtn {
   background-color: #ffffff;
   border: 2px solid #cccccc;
   text-transform: none;
+  text-align: left;
+  width: 450px;
 }
 button#questionTypeBtn > i {
   left: 7px;
@@ -5935,6 +5937,7 @@ button#questionTypeBtn > span.dropdown-arrow {
   right: 10px;
 }
 ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
+  width: 448px;
   position: relative;
   padding-left: 40px;
 }
