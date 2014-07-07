@@ -13,7 +13,7 @@
                 };
 
                 $scope.verify = function () {
-                    verificationService.verify($stateParams.questionnaireId).success(function (result) {
+                    verificationService.verify($state.params.questionnaireId).success(function (result) {
                         $scope.verificationStatus.errors = result.errors;
                         $scope.verificationStatus.errorsCount = result.errors.length;
 
