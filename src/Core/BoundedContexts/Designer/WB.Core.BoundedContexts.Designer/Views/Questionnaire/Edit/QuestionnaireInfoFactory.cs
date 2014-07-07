@@ -299,7 +299,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return question.ParentGroupsIds.Reverse().Select(x => questionsCollection.Groups.Single(g => g.Id == x)).Select(x => new Breadcrumb
             {
                 Id = x.Id.FormatGuid(),
-                Title = x.Title
+                Title = x.Title,
+                IsRoster = x.IsRoster
             }).ToArray();
         }
 
