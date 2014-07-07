@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$scope', '$stateParams', 'questionnaireId', 'questionnaireService', 'commandService', '$log',
-            function ($scope, $stateParams, questionaireId, questionnaireService, commandService, $log) {
+            '$scope', '$state', 'questionnaireId', 'questionnaireService', 'commandService', '$log',
+            function ($scope, $state, questionaireId, questionnaireService, commandService, $log) {
 
                 var dataBind = function (result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};
@@ -34,7 +34,7 @@
                 };
 
                 $scope.loadQuestion = function() {
-                    questionnaireService.getQuestionDetailsById(questionaireId, $stateParams.itemId)
+                    questionnaireService.getQuestionDetailsById(questionaireId, $state.params.itemId)
                         .success(function(result) {
                             $scope.initialQuestion = angular.copy(result);
                             dataBind(result);
@@ -51,15 +51,6 @@
 
                 $scope.setQuestionType = function(type) {
                     $scope.activeQuestion.type = type;
-                };
-
-            
-                $scope.moveToChapter = function(chapterId) {
-                    questionnaireService.moveQuestion($scope.activeQuestion.itemId, 0, chapterId, questionaireId);
-                    
-                    var removeFrom = $scope.activeQuestion.getParentItem() || $scope;
-                    removeFrom.items.splice(_.indexOf(removeFrom.items, $scope.activeQuestion), 1);
-                    $scope.resetSelection();
                 };
 
                 $scope.resetQuestion = function() {

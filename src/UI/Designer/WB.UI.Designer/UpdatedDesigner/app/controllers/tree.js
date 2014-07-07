@@ -252,6 +252,18 @@
                 }
             };
 
+            $scope.moveToChapter = function (chapterId) {
+                var itemToMoveId = $state.params.itemId;
+
+                questionnaireService.moveQuestion(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function (result) {
+                    if (result.IsSuccess) {
+                        questionnaireService.removeItemWithId($scope.items, itemToMoveId);
+                        $scope.resetSelection();
+                    }
+                });
+            };
+
+
             $scope.resetSelection = function() {
                 $state.go('questionnaire.chapter', { chapterId: $state.params.chapterId });
             }
