@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 IQuestion newNumericQuestion = CreateNumericQuestion(question, maxValue);
 
-                document.ReplaceQuestionWithNew(question, newNumericQuestion);
+                document.ReplaceEntity(question, newNumericQuestion);
                 document.ConnectChildrenWithParent();
                 foreach (var groupId in triggers)
                 {
