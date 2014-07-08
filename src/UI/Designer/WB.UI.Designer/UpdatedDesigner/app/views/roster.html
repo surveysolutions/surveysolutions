@@ -51,7 +51,17 @@
 <script type="text/ng-template" id="List-template.html">
     <div class="form-group">
         <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
-        <select id="edit-roster-numeric-source" class="form-control input-lg" ng-model="activeRoster.rosterSizeQuestionId" ng-options="item.id as item.title for item in activeRoster.lists"></select>
+        <div class="btn-group" dropdown>
+            <button id="questionTypeBtn" class="btn dropdown-toggle" type="button">
+                {{ getCurrentList() }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation" ng-repeat="list in activeRoster.lists">
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterSizeQuestionId = list.id">{{ list.title }}</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </script>
 

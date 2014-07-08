@@ -34,6 +34,14 @@
                     $scope.getRosterTemplate();
                 };
 
+                $scope.getCurrentList = function() {
+                    var currentList = _.find($scope.activeRoster.lists, { 'id': $scope.activeRoster.rosterSizeQuestionId });
+                    if (!_.isUndefined(currentList)) {
+                        return currentList.title;
+                    }
+                    return '';
+                }
+
                 $scope.getRosterTemplate = function() {
                     if ($scope.activeRoster !== undefined && $scope.activeRoster.rosterSizeSourceType !== undefined) {
                         if ($scope.activeRoster.rosterSizeSourceType === 'FixedTitles') {
