@@ -135,7 +135,6 @@
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChangeStructures.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\DistinctDecimalList.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\EnablementChanges.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Identity.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />

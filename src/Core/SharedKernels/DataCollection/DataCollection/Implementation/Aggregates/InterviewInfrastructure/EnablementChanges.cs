@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.Infrastructure.BaseStructures;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {

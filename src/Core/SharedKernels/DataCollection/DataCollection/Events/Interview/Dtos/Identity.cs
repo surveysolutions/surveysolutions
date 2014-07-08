@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
@@ -20,6 +21,16 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
         public override string ToString()
         {
             return string.Format("{0}<{1}>", this.Id.FormatGuid(), string.Join("-", this.RosterVector));
+        }
+
+        public static Identity ToEventIdentity(Infrastructure.BaseStructures.Identity identity)
+        {
+            return new Identity(identity.Id, identity.RosterVector);
+        }
+
+        public static IEnumerable<Identity> ToEventIdentities(IEnumerable<Infrastructure.BaseStructures.Identity> identities)
+        {
+            return identities.Select(ToEventIdentity).ToArray();
         }
     }
 }
