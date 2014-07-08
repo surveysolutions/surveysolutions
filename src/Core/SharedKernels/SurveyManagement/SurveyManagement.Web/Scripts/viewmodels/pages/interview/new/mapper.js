@@ -33,12 +33,15 @@
                 item.settings(dto.Settings);
                 var isSettingsEmpty = _.isEmpty(dto.Settings);
                 var isInteger = isSettingsEmpty || dto.Settings.IsInteger;
-                item.selectedOption.extend({ number: true, required: true });
+                item.selectedOption.extend({ required: true });
                 if (isInteger) {
-                    item.selectedOption.extend({ digit: true, required: true });
+                    item.selectedOption.extend({ numericValidator: -1 });
                 }
-                else if (!isSettingsEmpty && _.isNumber(dto.Settings.CountOfDecimalPlaces)) {
-                    item.selectedOption.extend({ precision: dto.Settings.CountOfDecimalPlaces });
+                else if (!isSettingsEmpty) {
+                    if(_.isNumber(dto.Settings.CountOfDecimalPlaces))
+                        item.selectedOption.extend({ numericValidator: dto.Settings.CountOfDecimalPlaces });
+                    else
+                        item.selectedOption.extend({ numericValidator: true });
                 }
                 if (!isSettingsEmpty && _.isNumber(dto.Settings.MaxValue)) {
                     item.selectedOption.extend({ max: dto.Settings.MaxValue });
