@@ -2411,8 +2411,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             
             this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
-            this.ThrowDomainExceptionIfMoreThanOneEntityExists(entityId);
-
             this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
 
             this.ApplyEvent(new StaticTextUpdated()
@@ -2429,8 +2427,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfEntityDoesNotExists(sourceEntityId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
-            this.ThrowDomainExceptionIfMoreThanOneEntityExists(entityId);
-            
             this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
 
             this.ApplyEvent(new StaticTextCloned()
