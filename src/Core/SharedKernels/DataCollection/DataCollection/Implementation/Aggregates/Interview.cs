@@ -38,6 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private long questionnaireVersion;
         private bool wasCompleted;
         private InterviewStatus status;
+        private Infrastructure.BaseStructures.IExpressionProcessor expressionProcessorState;
 
         private InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
@@ -133,6 +134,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateTextAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(QRBarcodeQuestionAnswered @event)
@@ -141,6 +144,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateQrBarcodeAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         private void Apply(NumericQuestionAnswered @event)
@@ -157,6 +162,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateDecimalAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(NumericIntegerQuestionAnswered @event)
@@ -165,6 +172,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateIntAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(DateTimeQuestionAnswered @event)
@@ -173,6 +182,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateDateAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(SingleOptionQuestionAnswered @event)
@@ -181,6 +192,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.SelectedValue;
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateSingleOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedValue);
         }
 
         internal void Apply(MultipleOptionsQuestionAnswered @event)
@@ -197,6 +210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.interviewState.AnsweredQuestions.Remove(questionKey);
             }
+            expressionProcessorState.UpdateMultiOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedValues);
         }
 
         internal void Apply(GeoLocationQuestionAnswered @event)
@@ -204,6 +218,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateGeoLocationAnswer(@event.QuestionId, @event.PropagationVector, @event.Latitude, @event.Longitude);
         }
 
         internal void Apply(TextListQuestionAnswered @event)
@@ -211,6 +227,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
             this.interviewState.TextListAnswers[questionKey] = @event.Answers;
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateTextListAnswer(@event.QuestionId, @event.PropagationVector, @event.Answers);
         }
 
         private void Apply(SingleOptionLinkedQuestionAnswered @event)
@@ -220,6 +238,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.LinkedSingleOptionAnswersBuggy[questionKey] = Tuple.Create(@event.QuestionId, @event.PropagationVector,
                 @event.SelectedPropagationVector);
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVector);
         }
 
         internal void Apply(MultipleOptionsLinkedQuestionAnswered @event)
@@ -237,6 +257,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.interviewState.AnsweredQuestions.Remove(questionKey);
             }
+
+            expressionProcessorState.UpdateLinkedMultiOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVectors);
         }
 
         private void Apply(AnswerDeclaredValid @event)
@@ -282,11 +304,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal void Apply(GroupsDisabled @event)
         {
             this.interviewState.DisableGroups(@event.Groups);
+
+            expressionProcessorState.DisableGroups(@event.Groups.ToIdentities());
         }
 
         internal void Apply(GroupsEnabled @event)
         {
             this.interviewState.EnableGroups(@event.Groups);
+
+            expressionProcessorState.EnableGroups(@event.Groups.ToIdentities());
         }
 
         internal void Apply(QuestionDisabled @event)
@@ -306,11 +332,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal void Apply(QuestionsDisabled @event)
         {
             this.interviewState.DisableQuestions(@event.Questions);
+
+            expressionProcessorState.DisableQuestions(@event.Questions.ToIdentities());
         }
 
         internal void Apply(QuestionsEnabled @event)
         {
             this.interviewState.EnableQuestions(@event.Questions);
+
+            expressionProcessorState.EnableQuestions(@event.Questions.ToIdentities());
+
         }
 
         internal void Apply(AnswerCommented @event)
@@ -345,6 +376,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterRowInstances.Add(@event.RosterInstanceId);
 
             this.interviewState.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+
+            expressionProcessorState.AddRoster(@event.GroupId, @event.OuterRosterVector, @event.RosterInstanceId, @event.SortIndex);
         }
 
         private void Apply(RosterRowRemoved @event)
@@ -357,6 +390,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterRowInstances.Remove(@event.RosterInstanceId);
 
             this.interviewState.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+
+            expressionProcessorState.RemoveRoster(@event.GroupId, @event.OuterRosterVector, @event.RosterInstanceId);
         }
 
         private void Apply(RosterRowTitleChanged @event) { }
@@ -446,11 +481,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState.RosterGroupInstanceIds,
                 this.interviewState.ValidAnsweredQuestions,
                 this.interviewState.InvalidAnsweredQuestions,
-                this.wasCompleted);
+                this.wasCompleted,
+                this.expressionProcessorState);
         }
 
         public void RestoreFromSnapshot(InterviewState snapshot)
         {
+            this.expressionProcessorState = snapshot.ExpressionProcessorState;
             this.questionnaireId = snapshot.QuestionnaireId;
             this.questionnaireVersion = snapshot.QuestionnaireVersion;
             this.status = snapshot.Status;
@@ -503,6 +540,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Interview() { }
 
+        
+
         public Interview(Guid id, Guid userId, Guid questionnaireId, long version, PreloadedDataDto preloadedData, DateTime answersTime,
             Guid supervisorId)
             : base(id)
@@ -517,7 +556,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var fixedRosterCalculationData in fixedRosterCalculationDatas)
             {
-
                 var fixedRosterChanges = new InterviewChanges(null, null, null, fixedRosterCalculationData, null, null, null);
                 interviewChangeStructures.State.ApplyInterviewChanges(fixedRosterChanges);
                 interviewChangeStructures.Changes.Add(fixedRosterChanges);
@@ -553,6 +591,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+        }
+
+
+        private void InitializeExpressionProcessorState(Guid questionnaireId, long version)
+        {
+            this.expressionProcessorState = new StronglyTypedInterviewEvaluator(questionnaireId, version);
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions,
@@ -667,6 +711,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
+        
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
             : base(id)
         {
