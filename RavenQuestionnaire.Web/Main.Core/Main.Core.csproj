@@ -264,6 +264,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\RosterSizeSourceType.cs" />
+    <Compile Include="Entities\SubEntities\StaticText.cs" />
     <Compile Include="Entities\SubEntities\UserLight.cs">
       <SubType>Code</SubType>
     </Compile>
