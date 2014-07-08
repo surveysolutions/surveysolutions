@@ -2369,7 +2369,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
-            this.ThrowDomainExceptionIfStaticTextAlreadyExists(entityId);
+            this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
 
             this.ApplyEvent(new StaticTextAdded()
@@ -2385,8 +2385,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             
-            this.ThrowDomainExceptionIfStaticTextDoesNotExists(entityId);
-            this.ThrowDomainExceptionIfMoreThanOneStaticTextExists(entityId);
+            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
+            this.ThrowDomainExceptionIfMoreThanOneEntityExists(entityId);
 
             this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
 
@@ -2402,9 +2402,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
-            this.ThrowDomainExceptionIfStaticTextDoesNotExists(sourceEntityId);
-            this.ThrowDomainExceptionIfStaticTextAlreadyExists(entityId);
-            this.ThrowDomainExceptionIfMoreThanOneStaticTextExists(entityId);
+            this.ThrowDomainExceptionIfEntityDoesNotExists(sourceEntityId);
+            this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
+            this.ThrowDomainExceptionIfMoreThanOneEntityExists(entityId);
             
             this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
 
@@ -2682,14 +2682,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfStaticTextDoesNotExists(Guid entityId)
+        private void ThrowDomainExceptionIfEntityDoesNotExists(Guid entityId)
         {
-            var staticText = this.innerDocument.Find<IStaticText>(entityId);
+            var staticText = this.innerDocument.Find<IComposite>(entityId);
             if (staticText == null)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.StaticTextNotFound,
-                    string.Format("Static text with public key {0} can't be found", entityId));
+                    DomainExceptionType.EntityNotFound,
+                    string.Format("Questionnaire item with id {0} can't be found", entityId));
             }
         }
 
@@ -2950,17 +2950,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfStaticTextAlreadyExists(Guid entityId)
+        private void ThrowDomainExceptionIfEntityAlreadyExists(Guid entityId)
         {
-            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IStaticText>(
+            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IComposite>(
                 elementId: entityId,
                 expectedCount: 0,
-                exceptionType: DomainExceptionType.StaticTextWithSuchIdAlreadyExists,
+                exceptionType: DomainExceptionType.EntityWithSuchIdAlreadyExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more static text(s) with same ID {0} already exist:{1}{2}",
-                        entityId,
-                        Environment.NewLine,
-                        string.Join(Environment.NewLine, elementsWithSameId.Select(entity => entity.Text ?? "<untitled>"))));
+                    elementsWithSameId => string.Format("One or more questionnaire item(s) with same ID {0} already exists",
+                        entityId));
         }
 
         private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)
@@ -2989,17 +2987,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));
         }
 
-        private void ThrowDomainExceptionIfMoreThanOneStaticTextExists(Guid entityId)
+        private void ThrowDomainExceptionIfMoreThanOneEntityExists(Guid entityId)
         {
-            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IStaticText>(
+            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IComposite>(
                 elementId: entityId,
                 expectedCount: 1,
-                exceptionType: DomainExceptionType.MoreThanOneStaticTextsWithSuchIdExists,
+                exceptionType: DomainExceptionType.MoreThanOneEntityWithSuchIdExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more staitc text(s) with same ID {0} already exist:{1}{2}",
-                        entityId,
-                        Environment.NewLine,
-                        string.Join(Environment.NewLine, elementsWithSameId.Select(entity => entity.Text ?? "<untitled>"))));
+                    elementsWithSameId => string.Format("One or more questionnaire item(s) with same ID {0} already exists",
+                        entityId));
         }
 
         private void ThrowDomainExceptionIfMoreThanOneQuestionExists(Guid questionId)

@@ -15,7 +15,7 @@
 
         QuestionnaireTitleRequired,
 
-        StaticTextNotFound,
+        EntityNotFound,
 
         QuestionNotFound, 
 
@@ -47,13 +47,13 @@
 
         NotAllowedQuestionType,
 
-        StaticTextWithSuchIdAlreadyExists,
+        EntityWithSuchIdAlreadyExists,
 
         QuestionWithSuchIdAlreadyExists,
         
         GroupWithSuchIdAlreadyExists,
 
-        MoreThanOneStaticTextsWithSuchIdExists,
+        MoreThanOneEntityWithSuchIdExists,
 
         MoreThanOneQuestionsWithSuchIdExists,
 
