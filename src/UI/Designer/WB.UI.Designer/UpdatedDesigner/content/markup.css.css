@@ -6242,6 +6242,12 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
 .mCS-wb-dark-thick > .mCSB_scrollTools .mCSB_buttonRight {
   background-position: -100px -56px;
 }
+input#edit-question-title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #000;
+  font-weight: bold;
+}
 .ui-match {
   background-color: #FFCC00;
   border-top: solid 1px #FAD540;

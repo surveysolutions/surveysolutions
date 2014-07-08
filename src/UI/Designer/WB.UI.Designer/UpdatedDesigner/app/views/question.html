@@ -31,14 +31,15 @@
         </div>
 
         <div class="form-group">
+            <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" placeholder="Variable label"></div>
+
+        <div class="form-group">
             <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text">
 
             <div class="has-pretty-child gray">
                 <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" data-label="Mandatory question" />
             </div>
         </div>
-        <div class="form-group">
-            <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" placeholder="Variable label"></div>
 
         <div ng-include="activeQuestion.type + '-template.html'" ng-if="activeQuestion.type != undefined">
         </div>
@@ -84,12 +85,6 @@
     </form>
 
     <script type="text/ng-template" id="SingleOption-template.html">
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked">
-                Is linked
-            </label>
-        </div>
         <div ng-repeat="option in activeQuestion.options">
             <div class="form-group">
                 <div class="col-xs-4">
@@ -106,6 +101,12 @@
         <p>
             <input type="submit" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
         </p>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked">
+                Is linked
+            </label>
+        </div>
     </script>
     <script type="text/ng-template" id="MultyOption-template.html">
         <div class="checkbox">
