@@ -198,7 +198,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         };
     }
 
-    public class StronglyTypedInterviewEvaluator : IInterviewEvaluator
+    public class StronglyTypedInterviewEvaluator : IExpressionProcessor
     {
         private readonly Dictionary<Identity[], IValidatable> interviewScopes = new Dictionary<Identity[], IValidatable>();
 
@@ -256,6 +256,7 @@ namespace WB.Core.Infrastructure.BaseStructures
                 interviewScopes.Remove(rosterVectorKey);
             }
         }
+
         public void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, int answer)
         {
             var rosterKey = this.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
@@ -358,11 +359,8 @@ namespace WB.Core.Infrastructure.BaseStructures
             }
         }
 
-        public int Test()
+        public void ProcessExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
         {
-            var questionsToBeValid = new List<Identity>();
-            var questionsToBeInvalid = new List<Identity>();
-
             foreach (var interviewScopeKvp in interviewScopes)
             {
                 if (interviewScopeKvp.Value is AbstractRosterLevel)
@@ -384,17 +382,6 @@ namespace WB.Core.Infrastructure.BaseStructures
                     interviewScopeKvp.Value.Validate(questionsToBeValid, questionsToBeInvalid);
                 }
             }
-            return 8;
-        }
-
-        public List<Identity> CalculateValidationChanges()
-        {
-            return new List<Identity>();
-        }
-
-        public List<Identity> CalculateConditionChanges()
-        {
-            throw new NotImplementedException();
         }
     }
 
