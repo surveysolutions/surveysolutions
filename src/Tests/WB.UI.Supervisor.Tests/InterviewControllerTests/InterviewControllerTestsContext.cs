@@ -5,6 +5,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 
@@ -18,13 +19,13 @@ namespace WB.UI.Supervisor.Tests.InterviewControllerTests
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
             IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory = null)
         {
-            return new InterviewController(commandService: commandService ?? Mock.Of<ICommandService>(),
-                provider: provider ?? Mock.Of<IGlobalInfoProvider>(), logger: logger ?? Mock.Of<ILogger>(),
-                changeStatusFactory:
-                    changeStatusFactory ?? Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>(),
-                revalidateInterviewViewFactory:
-                    revalidateInterviewViewFactory ??
-                    Mock.Of<IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>>());
+            return new InterviewController(
+                commandService ?? Mock.Of<ICommandService>(),
+                provider ?? Mock.Of<IGlobalInfoProvider>(),
+                logger ?? Mock.Of<ILogger>(),
+                changeStatusFactory ?? Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>(),
+                revalidateInterviewViewFactory ?? Mock.Of<IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>>(),
+                Mock.Of<IInterviewSummaryViewFactory>());
         }
     }
 }
