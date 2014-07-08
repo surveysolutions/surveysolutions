@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
         It should_create_question_with_QuestionType_field_equals__Text__ = () =>
             resultQuestion.QuestionType.ShouldEqual(QuestionType.Text);
 
-        private static QuestionFactory factory;
+        private static QuestionnaireEntityFactory factory;
         private static QuestionData textQuestionData;
         private static IQuestion resultQuestion;
     }

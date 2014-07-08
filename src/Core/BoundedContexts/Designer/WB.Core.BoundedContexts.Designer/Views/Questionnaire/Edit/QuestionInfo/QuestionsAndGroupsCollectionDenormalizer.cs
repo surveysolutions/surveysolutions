@@ -41,17 +41,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireDeleted>
     {
         private readonly IQuestionDetailsViewMapper questionDetailsViewMapper;
-        private readonly IQuestionFactory questionFactory;
+        private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
         private readonly IQuestionnaireDocumentUpgrader questionnaireUpgrader;
 
         public QuestionsAndGroupsCollectionDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
-            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionFactory questionFactory, 
+            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionnaireEntityFactory questionnaireEntityFactory,
             IQuestionnaireDocumentUpgrader questionnaireUpgrader)
             : base(readsideRepositoryWriter)
         {
             this.questionDetailsViewMapper = questionDetailsViewMapper;
-            this.questionFactory = questionFactory;
+            this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.questionnaireUpgrader = questionnaireUpgrader;
         }
 
@@ -82,83 +82,83 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewQuestionAdded> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NewQuestionAddedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NewQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey.Value, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionCloned> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QuestionClonedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey.Value, question);
 
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionChanged> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QuestionChangedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QuestionChangedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<NumericQuestionAdded> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionAddedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<NumericQuestionChanged> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<NumericQuestionCloned> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionClonedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<TextListQuestionAdded> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionAddedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupId, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<TextListQuestionCloned> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionClonedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupId, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<TextListQuestionChanged> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<QRBarcodeQuestionAdded> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionAddedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.ParentGroupId, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<QRBarcodeQuestionCloned> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.ParentGroupId, question);
         }
 

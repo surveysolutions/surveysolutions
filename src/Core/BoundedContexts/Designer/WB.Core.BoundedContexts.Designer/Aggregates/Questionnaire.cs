@@ -188,7 +188,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(NewQuestionAdded e)
         {
             IQuestion question =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(NumericQuestionAdded e)
         {
             IQuestion question =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.Numeric,
@@ -275,7 +275,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(TextListQuestionAdded e)
         {
             IQuestion question =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
@@ -313,7 +313,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(QuestionCloned e)
         {
             IQuestion question =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -354,7 +354,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(NumericQuestionCloned e)
         {
             IQuestion question =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.Numeric,
@@ -398,7 +398,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(TextListQuestionCloned e)
         {
             IQuestion question =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
@@ -447,7 +447,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         question.PublicKey,
                         e.QuestionType,
@@ -485,7 +485,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         question.PublicKey,
                         QuestionType.Numeric,
@@ -523,7 +523,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
@@ -583,7 +583,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(QRBarcodeQuestionAdded e)
         {
             IQuestion question =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.QRBarcode,
@@ -621,7 +621,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionId);
             IQuestion newQuestion =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.QRBarcode,
@@ -658,7 +658,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(QRBarcodeQuestionCloned e)
         {
             IQuestion question =
-                this.questionFactory.CreateQuestion(
+                this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.QRBarcode,
@@ -720,7 +720,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Dependencies
 
-        private readonly IQuestionFactory questionFactory;
+        private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
 
         private readonly ILogger logger;
 
@@ -757,14 +757,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire()
             : base()
         {
-            this.questionFactory = new QuestionFactory();
+            this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         public Questionnaire(Guid publicKey)
             : base(publicKey)
         {
-            this.questionFactory = new QuestionFactory();
+            this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
         }
 
         public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
@@ -772,7 +772,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
 
-            this.questionFactory = new QuestionFactory();
+            this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
 
             this.ApplyEvent(
                 new NewQuestionnaireCreated
