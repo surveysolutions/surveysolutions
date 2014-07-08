@@ -702,9 +702,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(StaticTextUpdated e)
         {
             var oldStaticText = this.innerDocument.Find<IStaticText>(e.EntityId);
-            if (oldStaticText == null)
-                return;
-
             var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text);
 
             this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
@@ -2395,6 +2392,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
             this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(parentId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
 
             this.ApplyEvent(new StaticTextAdded()
@@ -2427,6 +2425,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfEntityDoesNotExists(sourceEntityId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(parentId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
 
             this.ApplyEvent(new StaticTextCloned()
