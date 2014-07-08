@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities;
+﻿using System;
+using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Factories

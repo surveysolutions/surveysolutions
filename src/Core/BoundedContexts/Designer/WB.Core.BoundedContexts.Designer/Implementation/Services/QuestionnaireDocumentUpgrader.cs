@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public QuestionnaireDocumentUpgrader(IQuestionnaireEntityFactory questionnaireEntityFactory)
         {
-            questionnaireEntityFactory = questionnaireEntityFactory;
+            this.questionnaireEntityFactory = questionnaireEntityFactory;
         }
 
         public QuestionnaireDocument TranslatePropagatePropertiesToRosterProperties(QuestionnaireDocument originalDocument)

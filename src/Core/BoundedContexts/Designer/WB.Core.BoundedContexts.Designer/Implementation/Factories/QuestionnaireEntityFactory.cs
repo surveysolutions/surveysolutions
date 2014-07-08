@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 
@@ -9,6 +10,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
     internal class QuestionnaireEntityFactory : IQuestionnaireEntityFactory
     {
+        public IStaticText CreateStaticText(Guid entityId, string text)
+        {
+            return new StaticText(entityId: entityId, text: text);
+        }
+
         public IQuestion CreateQuestion(QuestionData data)
         {
             AbstractQuestion q = CreateQuestion(data.QuestionType, data.PublicKey);

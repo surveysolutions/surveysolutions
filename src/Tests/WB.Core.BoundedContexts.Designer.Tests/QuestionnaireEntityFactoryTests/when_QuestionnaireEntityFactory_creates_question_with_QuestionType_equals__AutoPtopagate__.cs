@@ -4,15 +4,15 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireEntityFactoryTests
 {
-    internal class when_QuestionFactory_creates_question_with_QuestionType_equals__AutoPtopagate__ : QuestionFactoryTestContext
+    internal class when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__AutoPtopagate__ : QuestionnaireEntityFactoryTestContext
     {
         Establish context = () =>
         {
             autoPropagateQuestionData = CreateQuestionData(questionType: QuestionType.AutoPropagate);
 
-            factory = CreateQuestionFactory();
+            factory = CreateFactory();
         };
 
         Because of = () =>
