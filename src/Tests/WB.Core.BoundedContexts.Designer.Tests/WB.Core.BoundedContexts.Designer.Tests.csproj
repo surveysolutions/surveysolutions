@@ -412,9 +412,9 @@
     <Compile Include="QuestionDetailsFactoryTests\when_creating_single_option_details_view.cs" />
     <Compile Include="QuestionDetailsFactoryTests\when_creating_text_list_question_details_view.cs" />
     <Compile Include="QuestionDetailsFactoryTests\when_creating_text_question_details_view.cs" />
-    <Compile Include="QuestionFactoryTests\QuestionFactoryTestContext.cs" />
-    <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__QRBarcode__.cs" />
-    <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__Text__.cs" />
+    <Compile Include="QuestionnaireEntityFactoryTests\QuestionnaireEntityFactoryTestContext.cs" />
+    <Compile Include="QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__QRBarcode__.cs" />
+    <Compile Include="QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__Text__.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
@@ -773,7 +773,7 @@
     <Compile Include="RoleRepositoryTests\when_adding_role_to_user_with_role_repository.cs" />
     <Compile Include="RoleRepositoryTests\RoleRepositoryTestsContext.cs" />
     <Compile Include="ShouldExtensions.cs" />
-    <Compile Include="QuestionFactoryTests\when_QuestionFactory_creates_question_with_QuestionType_equals__AutoPtopagate__.cs" />
+    <Compile Include="QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__AutoPtopagate__.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_that_is_linked_and_prefilled.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
