@@ -190,7 +190,7 @@
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Exceptions\DomainExceptionType.cs" />
     <Compile Include="Implementation\Factories\IQuestionnaireEntityFactory.cs" />
-    <Compile Include="Implementation\Factories\QuestionFactory.cs" />
+    <Compile Include="Implementation\Factories\QuestionnaireEntityFactory.cs" />
     <Compile Include="Implementation\Services\ExpressionReplacer.cs" />
     <Compile Include="Implementation\Services\JsonExportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />

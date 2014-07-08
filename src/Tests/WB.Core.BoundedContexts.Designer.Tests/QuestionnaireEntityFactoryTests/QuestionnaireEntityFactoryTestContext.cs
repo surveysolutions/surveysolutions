@@ -4,11 +4,11 @@ using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireEntityFactoryTests
 {
-    internal class QuestionFactoryTestContext
+    internal class QuestionnaireEntityFactoryTestContext
     {
-        protected static QuestionnaireEntityFactory CreateQuestionFactory()
+        protected static QuestionnaireEntityFactory CreateFactory()
         {
             return new QuestionnaireEntityFactory();
         }

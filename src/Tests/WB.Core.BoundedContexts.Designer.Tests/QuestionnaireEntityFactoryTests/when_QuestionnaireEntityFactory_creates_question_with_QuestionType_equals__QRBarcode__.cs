@@ -5,9 +5,9 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireEntityFactoryTests
 {
-    internal class when_QuestionFactory_creates_question_with_QuestionType_equals__QRBarcode__ : QuestionFactoryTestContext
+    internal class when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__QRBarcode__ : QuestionnaireEntityFactoryTestContext
     {
         Establish context = () =>
         {
@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
                 title: title,
                 instructions: instructions);
 
-            factory = CreateQuestionFactory();
+            factory = CreateFactory();
         };
 
         Because of = () =>
