@@ -7,7 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
-    internal class QuestionFactory : IQuestionFactory
+    internal class QuestionnaireEntityFactory : IQuestionnaireEntityFactory
     {
         public IQuestion CreateQuestion(QuestionData data)
         {

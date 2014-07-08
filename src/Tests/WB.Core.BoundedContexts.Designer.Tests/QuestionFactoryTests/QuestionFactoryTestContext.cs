@@ -8,9 +8,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
 {
     internal class QuestionFactoryTestContext
     {
-        protected static QuestionFactory CreateQuestionFactory()
+        protected static QuestionnaireEntityFactory CreateQuestionFactory()
         {
-            return new QuestionFactory();
+            return new QuestionnaireEntityFactory();
         }
 
         protected static QuestionData CreateQuestionData(QuestionType questionType, Guid? questionId = null, string title = null,

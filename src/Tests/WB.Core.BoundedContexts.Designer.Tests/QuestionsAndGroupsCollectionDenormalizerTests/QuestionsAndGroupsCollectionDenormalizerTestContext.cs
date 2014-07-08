@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         protected static QuestionsAndGroupsCollectionDenormalizer CreateQuestionnaireInfoDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter = null,
             IQuestionDetailsViewMapper questionDetailsViewMapper = null, 
-            IQuestionFactory questionFactory = null,
+            IQuestionnaireEntityFactory questionnaireEntityFactory = null,
             IQuestionnaireDocumentUpgrader upgrader = null)
         {
             var upgraderMock = new Mock<IQuestionnaireDocumentUpgrader>();
@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
 
             return new QuestionsAndGroupsCollectionDenormalizer(readsideRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView>>(),
                 questionDetailsViewMapper ?? Mock.Of<IQuestionDetailsViewMapper>(),
-                questionFactory ?? Mock.Of<IQuestionFactory>(),
+                questionnaireEntityFactory ?? Mock.Of<IQuestionnaireEntityFactory>(),
                 upgrader ?? upgraderMock.Object);
         }
 

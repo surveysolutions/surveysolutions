@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionDetailsViewMapper>().To<QuestionDetailsViewMapper>().InSingletonScope();
             this.Bind<IJsonExportService>().To<JsonExportService>().InSingletonScope();
             this.Bind<IQuestionnaireDocumentUpgrader>().To<QuestionnaireDocumentUpgrader>().InSingletonScope();
-            this.Bind<IQuestionFactory>().To<QuestionFactory>().InSingletonScope();
+            this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IQuestionnaireVersioner>().To<QuestionnaireVersioner>().InSingletonScope();
 
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);

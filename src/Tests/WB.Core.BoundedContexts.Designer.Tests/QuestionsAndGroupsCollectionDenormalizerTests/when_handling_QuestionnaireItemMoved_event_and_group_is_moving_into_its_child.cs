@@ -15,13 +15,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         {
             InitializePreviousState();
             questionDetailsViewMapperMock = new Mock<IQuestionDetailsViewMapper>();
-            questionFactoryMock = new Mock<IQuestionFactory>();
+            questionFactoryMock = new Mock<IQuestionnaireEntityFactory>();
 
             evnt = CreateQuestionnaireItemMovedEvent(g2Id, g4Id);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsViewMapperMock.Object,
-                questionFactory: questionFactoryMock.Object);
+                questionnaireEntityFactory: questionFactoryMock.Object);
         };
 
         Because of = () =>
@@ -49,6 +49,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         private static IPublishedEvent<QuestionnaireItemMoved> evnt;
         private static QuestionsAndGroupsCollectionView newState = null;
         private static Mock<IQuestionDetailsViewMapper> questionDetailsViewMapperMock = null;
-        private static Mock<IQuestionFactory> questionFactoryMock;
+        private static Mock<IQuestionnaireEntityFactory> questionFactoryMock;
     }
 }
