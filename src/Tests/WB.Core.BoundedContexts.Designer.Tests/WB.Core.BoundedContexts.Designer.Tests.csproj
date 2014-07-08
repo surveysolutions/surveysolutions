@@ -183,6 +183,11 @@
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_in_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_text_contains_only_whitespaces.cs" />
+    <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_to_chapter.cs" />
+    <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_entity_with_same_id_already_exists.cs" />
+    <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_text_is_empty.cs" />
+    <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupStoppedBeingARoster_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupBecameARoster_event_received.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
