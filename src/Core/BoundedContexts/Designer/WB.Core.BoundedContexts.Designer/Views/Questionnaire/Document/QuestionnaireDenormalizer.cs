@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             IQuestion newQuestion = this.questionnaireEntityFactory.CreateQuestion(data);
 
-            document.ReplaceQuestionWithNew(question, newQuestion);
+            document.ReplaceEntity(question, newQuestion);
 
             document.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
 

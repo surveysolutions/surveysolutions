@@ -473,7 +473,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAllowedAnswers,
                         null));
 
-            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+            this.innerDocument.ReplaceEntity(question, newQuestion);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
 
@@ -511,7 +511,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null));
-            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+            this.innerDocument.ReplaceEntity(question, newQuestion);
 
             this.innerDocument.UpdateRosterGroupsIfNeeded(e.Triggers, e.PublicKey);
 
@@ -554,7 +554,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
             }
 
-            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+            this.innerDocument.ReplaceEntity(question, newQuestion);
 
         }
 
@@ -652,7 +652,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
             }
 
-            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+            this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
         internal void Apply(QRBarcodeQuestionCloned e)
@@ -1378,7 +1378,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             variableName = variableName.Trim();
             title = title.Trim();
 
-            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
@@ -1511,7 +1511,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
 
-            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
@@ -1616,7 +1616,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
 
-            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
@@ -1721,7 +1721,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
 
-            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
@@ -1847,7 +1847,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int? maxAllowedAnswers)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
-            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
@@ -1980,7 +1980,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? linkedToQuestionId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
-            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
@@ -2161,7 +2161,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             variableName = variableName.Trim();
             title = title.Trim();
 
-            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
@@ -2270,7 +2270,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             variableName = variableName.Trim();
             title = title.Trim();
-            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName,
                 isPrefilled, responsibleId);
@@ -2515,7 +2515,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var parentGroup = parentGroupId.HasValue
                 ? this.GetGroupById(parentGroupId.Value)
-                : this.innerDocument.GetParentOfQuestion(questionId);
+                : this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, false, parentGroup);
         }

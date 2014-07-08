@@ -185,22 +185,21 @@ namespace Main.Core.Documents
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        public void ReplaceQuestionWithNew(IQuestion oldQuestion, IQuestion newQuestion)
+        public void ReplaceEntity(IComposite oldEntity, IComposite newEntity)
         {
-            Guid oldQuestionId = oldQuestion.PublicKey;
+            Guid oldEntityId = oldEntity.PublicKey;
 
-            IComposite questionParent = this.GetParentOfQuestion(oldQuestionId);
-
-            if (questionParent != null)
+            var entityParent = this.GetParentById(oldEntityId);
+            if (entityParent != null)
             {
-                int indexOfQuestion = questionParent.Children.FindIndex(child => IsQuestionWithSpecifiedId(child, oldQuestionId));
-                questionParent.Children[indexOfQuestion] = newQuestion;
+                int indexOfEntity = entityParent.Children.FindIndex(child => IsEntityWithSpecifiedId(child, oldEntityId));
+                entityParent.Children[indexOfEntity] = newEntity;
             }
             else
             {
                 logger.Warn(string.Format(
-                    "Failed to replace question '{0}' with new because it's parent is not found.",
-                    oldQuestionId));
+                    "Failed to replace entity '{0}' with new because it's parent is not found.",
+                    oldEntityId));
             }
         }
 
@@ -257,7 +256,7 @@ namespace Main.Core.Documents
 
         public void RemoveQuestion(Guid questionId)
         {
-            IComposite questionParent = this.GetParentOfQuestion(questionId);
+            IComposite questionParent = this.GetParentById(questionId);
 
             if (questionParent != null)
             {
@@ -276,7 +275,7 @@ namespace Main.Core.Documents
 
         private static void RemoveChildQuestionBySpecifiedId(IComposite container, Guid questionId)
         {
-            RemoveFirstChild(container, child => IsQuestionWithSpecifiedId(child, questionId));
+            RemoveFirstChild(container, child => IsEntityWithSpecifiedId(child, questionId));
         }
 
         private static void RemoveFirstChild(IComposite container, Predicate<IComposite> condition)
@@ -309,10 +308,10 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
-        public IGroup GetParentOfQuestion(Guid questionId)
+        public IGroup GetParentById(Guid entityId)
         {
             return this
-                .Find<IGroup>(group => ContainsChildQuestionWithSpecifiedId(group, questionId))
+                .Find<IGroup>(group => ContainsEntityWithSpecifiedId(group, entityId))
                 .SingleOrDefault();
         }
 
@@ -392,9 +391,9 @@ namespace Main.Core.Documents
             return container.Children.Any(child => IsGroupWithSpecifiedId(child, groupId));
         }
 
-        private static bool ContainsChildQuestionWithSpecifiedId(IComposite container, Guid questionId)
+        private static bool ContainsEntityWithSpecifiedId(IComposite container, Guid entityId)
         {
-            return container.Children.Any(child => IsQuestionWithSpecifiedId(child, questionId));
+            return container.Children.Any(child => IsEntityWithSpecifiedId(child, entityId));
         }
 
         private static bool ContainsChildItem(IComposite container, IComposite item)
@@ -407,9 +406,9 @@ namespace Main.Core.Documents
             return child is IGroup && ((IGroup)child).PublicKey == groupId;
         }
 
-        private static bool IsQuestionWithSpecifiedId(IComposite child, Guid questionId)
+        private static bool IsEntityWithSpecifiedId(IComposite entity, Guid entityId)
         {
-            return child is IQuestion && ((IQuestion)child).PublicKey == questionId;
+            return entity.PublicKey == entityId;
         }
 
         public void ConnectChildrenWithParent()
@@ -537,7 +536,7 @@ namespace Main.Core.Documents
         {
             if (groupPublicKey == null)
             {
-                IComposite questionParent = this.GetParentOfQuestion(questionId);
+                IComposite questionParent = this.GetParentById(questionId);
                 groupPublicKey = questionParent.PublicKey;
             }
 
