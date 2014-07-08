@@ -692,6 +692,31 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Insert(e.TargetIndex, question, e.ParentGroupId);
         }
 
+        internal void Apply(StaticTextAdded e)
+        {
+            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text);
+
+            this.innerDocument.Add(c: staticText, parent: e.ParentId, parentPropagationKey: null);
+        }
+
+        internal void Apply(StaticTextUpdated e)
+        {
+            var oldStaticText = this.innerDocument.Find<IStaticText>(e.EntityId);
+            if (oldStaticText == null)
+                return;
+
+            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text);
+
+            this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
+        }
+
+        internal void Apply(StaticTextCloned e)
+        {
+            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text);
+
+            this.innerDocument.Insert(e.TargetIndex, staticText, e.ParentId);
+        }
+
         public QuestionnaireState CreateSnapshot()
         {
             return new QuestionnaireState
