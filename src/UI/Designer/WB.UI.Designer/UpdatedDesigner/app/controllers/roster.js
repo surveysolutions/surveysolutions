@@ -6,8 +6,16 @@
             '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log',
             function($scope, $stateParams, questionnaireService, commandService, utilityService, $log) {
 
+                $scope.rosterTypes = {
+                    'Numeric-template.html': 'Answer to numeric question',
+                    'List-template.html': 'Answer to list question',
+                    'FixedTitles-template.html': 'Manual list'
+                };
+
                 var dataBind = function(result) {
                     $scope.activeRoster = $scope.activeRoster || {};
+
+                    $scope.activeRoster.itemId = $stateParams.itemId;
 
                     $scope.activeRoster.breadcrumbs = result.breadcrumbs;
                     $scope.activeRoster.numerics = utilityService.union(_.toArray(result.numericIntegerQuestions));
@@ -41,7 +49,9 @@
                     }
                 };
 
-                $scope.updateRosterType = function() {
+                $scope.updateRosterType = function(i) {
+                    $scope.activeRoster.rosterTemplate = (_.invert($scope.rosterTypes))[i];
+
                     if ($scope.activeRoster.rosterTemplate === 'FixedTitles-template.html') {
                         $scope.activeRoster.rosterSizeSourceType = 'FixedTitles';
                         $scope.activeRoster.rosterSizeQuestionId = null;
@@ -52,7 +62,7 @@
                 };
 
                 $scope.loadRoster = function() {
-                    questionnaireService.getRosterDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function (result) {
+                    questionnaireService.getRosterDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
                             $scope.initialRoster = angular.copy(result);
                             dataBind(result);
                         }
@@ -61,7 +71,7 @@
 
                 $scope.saveRoster = function() {
                     $("#edit-roster-save-button").popover('destroy');
-                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function (result) {
+                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function(result) {
                         if (!result.IsSuccess) {
                             $("#edit-roster-save-button").popover({
                                 content: result.Error,
@@ -75,7 +85,7 @@
 
                 $scope.deleteRoster = function() {
                     if (confirm("Are you sure want to delete roster?")) {
-                        commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function (result) {
+                        commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
                             if (result.IsSuccess) {
                                 $scope.activeRoster.isDeleted = true;
                             } else {

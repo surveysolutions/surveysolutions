@@ -53,7 +53,7 @@
                 $scope.setQuestionType = function(type) {
                     $scope.activeQuestion.type = type;
                 };
-
+            
                 $scope.resetQuestion = function() {
                     dataBind($scope.initialQuestion);
                 };
@@ -77,10 +77,6 @@
                 };
 
                 $scope.loadQuestion();
-
-                $scope.$watch('activeQuestion', function() {
-                    $scope.loadQuestion();
-                });
             }
         ]);
 }());
