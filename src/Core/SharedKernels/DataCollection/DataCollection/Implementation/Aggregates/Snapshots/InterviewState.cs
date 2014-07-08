@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.Infrastructure.BaseStructures;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots
@@ -11,7 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers, Dictionary<string, Tuple<decimal, string>[]> textListAnswers,
             HashSet<string> answeredQuestions,
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, DistinctDecimalList> rosterGroupInstanceIds,
-            HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted)
+            HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted,
+            IExpressionProcessor expressionProcessorState)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
@@ -27,6 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             this.ValidAnsweredQuestions = validAnsweredQuestions;
             this.InvalidAnsweredQuestions = invalidAnsweredQuestions;
             this.WasCompleted = wasCompleted;
+            this.ExpressionProcessorState = expressionProcessorState;
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -43,5 +46,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public HashSet<string> InvalidAnsweredQuestions { get; private set; }
         public bool WasCompleted { get; private set; }
         public Dictionary<string, Tuple<decimal, string>[]> TextListAnswers { get; set; }
+        public IExpressionProcessor ExpressionProcessorState { get; set; }
     }
 }
