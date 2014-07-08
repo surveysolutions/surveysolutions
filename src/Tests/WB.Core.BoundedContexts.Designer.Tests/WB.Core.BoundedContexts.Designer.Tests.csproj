@@ -196,6 +196,7 @@
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
+    <Compile Include="QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_static_text.cs" />
     <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_chapter_moved.cs" />
     <Compile Include="QuestionnaireInfoViewFactoryTests\when_loading_non_empty_questionnaire.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_question_by_id.cs" />
