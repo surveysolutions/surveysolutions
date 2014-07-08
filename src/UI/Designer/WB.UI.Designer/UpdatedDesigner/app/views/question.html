@@ -1,6 +1,5 @@
 ﻿<div class="form-holder">
-    <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>
-    
+    <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>  
 
     <form role="form">
         <div class="row">
@@ -76,10 +75,21 @@
         </div>
 
         <div class="form-group">
-            <label for="edit-question-scope">Question scope</label>
-            <select id="edit-question-scope" ng-model="activeQuestion.questionScope" ng-change="changeQuestionScope()"
-                    ng-options="scope.value as scope.text for scope in activeQuestion.questionScopeOptions "
-                    class="form-control"></select>
+            <label for="edit-question-scope">Question scope</label><br>
+            <div class="btn-group" dropdown>
+                <button class="btn dropdown-toggle" type="button">
+                    {{ activeQuestion.questionScope }}
+                    <span class="caret"></span>
+                </button>
+
+                <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation" ng-repeat="scope in activeQuestion.questionScopeOptions">
+                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
+                            {{scope.text}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </form>
 

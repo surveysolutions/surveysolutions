@@ -89,7 +89,9 @@
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                 <li role="presentation" ng-repeat="multiOption in activeRoster.multiOption">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterTitleQuestionId = multiOption.id">{{ multiOption.title }}</a>
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterTitleQuestionId = multiOption.id">
+                        {{ multiOption.title }}
+                    </a>
                 </li>
             </ul>
         </div>
