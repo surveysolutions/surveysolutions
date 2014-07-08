@@ -428,6 +428,7 @@
     <Content Include="UpdatedDesigner\content\i\cross.png" />
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
+    <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\index.html" />
     <Content Include="UpdatedDesigner\app\app.js" />
@@ -1169,6 +1170,8 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-router\README.md" />
     <Content Include="UpdatedDesigner\app\partials\chapter.detail.html" />
     <Content Include="UpdatedDesigner\vendor\jquery-cookie\.bower.json" />
+    <Content Include="UpdatedDesigner\data\questionnaire\empty.json" />
+    <Content Include="UpdatedDesigner\data\editQuestion\3c0ff7a6d1614aa2b9af21aaa40cdb47.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
