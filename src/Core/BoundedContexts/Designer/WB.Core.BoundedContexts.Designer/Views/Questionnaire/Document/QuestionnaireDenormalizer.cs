@@ -53,15 +53,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
     {
         private readonly IQuestionnaireDocumentUpgrader upgrader;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
-        private readonly IQuestionFactory questionFactory;
+        private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
-            IQuestionFactory questionFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader)
+            IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader)
         {
             this.upgrader = upgrader;
             this.documentStorage = documentStorage;
-            this.questionFactory = questionFactory;
+            this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
         }
 
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             {
                 return;
             }
-            IQuestion result = questionFactory.CreateQuestion(data);
+            IQuestion result = questionnaireEntityFactory.CreateQuestion(data);
             IGroup group = item.Find<IGroup>(groupId);
 
             if (result == null || group == null)
@@ -221,7 +221,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            IQuestion newQuestion = this.questionFactory.CreateQuestion(data);
+            IQuestion newQuestion = this.questionnaireEntityFactory.CreateQuestion(data);
 
             document.ReplaceQuestionWithNew(question, newQuestion);
 
@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            IQuestion result = questionFactory.CreateQuestion(data);
+            IQuestion result = questionnaireEntityFactory.CreateQuestion(data);
             IGroup group = document.Find<IGroup>(groupId);
 
             if (result == null || group == null)

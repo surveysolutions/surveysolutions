@@ -41,13 +41,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(storage
                 => storage.GetById(it.IsAny<string>()) == questionnaire);
 
-            var questionFactory = Mock.Of<IQuestionFactory>();
+            var questionFactory = Mock.Of<IQuestionnaireEntityFactory>();
 
             Mock.Get(questionFactory)
                 .Setup(factory => factory.CreateQuestion(it.IsAny<QuestionData>()))
-                .Returns((QuestionData question) => new QuestionFactory().CreateQuestion(question));
+                .Returns((QuestionData question) => new QuestionnaireEntityFactory().CreateQuestion(question));
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory);
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionnaireEntityFactory: questionFactory);
         };
 
         Because of = () =>

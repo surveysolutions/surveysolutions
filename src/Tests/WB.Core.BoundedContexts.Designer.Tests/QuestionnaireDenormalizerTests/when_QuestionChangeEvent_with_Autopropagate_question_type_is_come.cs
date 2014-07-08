@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 .AddChapter(Guid.NewGuid())
                 .AddQuestion(autoQuestionId, type: QuestionType.AutoPropagate, triggers: new List<Guid>(), maxValue: 8);
 
-            var questionFactoryMock = Mock.Of<IQuestionFactory>(factory => factory.CreateQuestion(Moq.It.IsAny<QuestionData>()) == new NumericQuestion("Text")
+            var questionFactoryMock = Mock.Of<IQuestionnaireEntityFactory>(factory => factory.CreateQuestion(Moq.It.IsAny<QuestionData>()) == new NumericQuestion("Text")
                     {
                         PublicKey = autoQuestionId,
                         IsInteger = true,

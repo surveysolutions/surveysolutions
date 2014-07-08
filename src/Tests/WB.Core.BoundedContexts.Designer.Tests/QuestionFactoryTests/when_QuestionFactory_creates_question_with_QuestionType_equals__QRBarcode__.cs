@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionFactoryTests
         It should_create_question_with_Instructions_field_equals_instructions = () =>
             resultQuestion.Instructions.ShouldEqual(instructions);
 
-        private static QuestionFactory factory;
+        private static QuestionnaireEntityFactory factory;
         private static QuestionData textQuestionData;
         private static IQuestion resultQuestion;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

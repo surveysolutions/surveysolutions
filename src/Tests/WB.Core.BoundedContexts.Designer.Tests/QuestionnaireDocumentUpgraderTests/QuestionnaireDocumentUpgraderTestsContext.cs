@@ -18,10 +18,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTe
     [Subject(typeof(QuestionnaireDocumentUpgrader))]
     internal class QuestionnaireDocumentUpgraderTestsContext
     {
-        protected static QuestionnaireDocumentUpgrader CreateQuestionnaireDocumentUpgrader(IQuestionFactory questionFactory = null)
+        protected static QuestionnaireDocumentUpgrader CreateQuestionnaireDocumentUpgrader(IQuestionnaireEntityFactory questionnaireEntityFactory = null)
         {
             return new QuestionnaireDocumentUpgrader(
-                questionFactory ?? Mock.Of<IQuestionFactory>(factory
+                questionnaireEntityFactory ?? Mock.Of<IQuestionnaireEntityFactory>(factory
                     => factory.CreateQuestion(it.IsAny<QuestionData>()) == Mock.Of<IQuestion>()));
         }
 
