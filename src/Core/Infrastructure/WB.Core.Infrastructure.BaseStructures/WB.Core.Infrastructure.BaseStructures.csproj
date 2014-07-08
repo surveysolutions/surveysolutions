@@ -38,6 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Identity.cs" />
+    <Compile Include="IdentityComparer.cs" />
+    <Compile Include="IExpressionProcessor.cs" />
     <Compile Include="InterviewExpressionMate.cs" />
     <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="InterviewEvaluatorPrototype.cs" />
