@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.AddQrBarcodeQuestionHandlerTests
+namespace WB.Core.BoundedContexts.Designer.Tests.AddStaticTextHandlerTests
 {
     internal class when_adding_static_text_and_text_is_empty : QuestionnaireTestsContext
     {

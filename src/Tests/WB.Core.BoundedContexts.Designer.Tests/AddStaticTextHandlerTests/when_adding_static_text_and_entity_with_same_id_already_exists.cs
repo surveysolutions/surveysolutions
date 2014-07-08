@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.AddQrBarcodeQuestionHandlerTests
+namespace WB.Core.BoundedContexts.Designer.Tests.AddStaticTextHandlerTests
 {
     internal class when_adding_static_text_and_entity_with_same_id_already_exists : QuestionnaireTestsContext
     {
