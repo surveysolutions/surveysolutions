@@ -218,14 +218,15 @@ namespace WB.Core.Infrastructure.BaseStructures
             return rosterScopeIds.Select(x => new Identity(x, rosterVector)).ToArray();
         }
 
-        public void AddRoster(Guid rosterId, decimal[] rosterVector)
+        public void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {
             if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))
             {
                 return;
             }
 
-            decimal[] parentRosterVector = rosterVector.Shrink();
+            decimal[] rosterVector = GetRosterVector(outerRosterVector, rosterInstanceId);
+            decimal[] parentRosterVector = outerRosterVector;
 
             var rosterParentIdentityKey = parentRosterVector.Length == 0 
                 ? this.GetRosterKey(new[] { IdOf.questionnaire }, new decimal[0]) 
@@ -247,8 +248,16 @@ namespace WB.Core.Infrastructure.BaseStructures
             }
         }
 
-        public void RemoveRoster(Guid rosterId, decimal[] rosterVector)
+        private decimal[] GetRosterVector(decimal[] outerRosterVector, decimal rosterInstanceId)
         {
+            var outerRosterList = outerRosterVector.ToList();
+            outerRosterList.Add(rosterInstanceId);
+            return outerRosterList.ToArray();
+        }
+
+        public void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
+        {
+            decimal[] rosterVector = this.GetRosterVector(outerRosterVector, rosterInstanceId);
             var rosterIdentityKey = this.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
             var dependentRosters = interviewScopes.Keys.Where(x => x.Take(rosterVector.Length).SequenceEqual(rosterIdentityKey));
             foreach (var rosterVectorKey in dependentRosters)
@@ -259,8 +268,7 @@ namespace WB.Core.Infrastructure.BaseStructures
 
         public void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, int answer)
         {
-            var rosterKey = this.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
-            var targetLevel = interviewScopes.ContainsKey(rosterKey) ? interviewScopes[rosterKey] : null;
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.persons_count)
@@ -280,8 +288,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         }
         public void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
         {
-            var rosterKey = this.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
-            var targetLevel = interviewScopes.ContainsKey(rosterKey) ? interviewScopes[rosterKey] : null;
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.price_for_food)
@@ -291,8 +298,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         }
         public void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)
         {
-            var rosterKey = this.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
-            var targetLevel = interviewScopes.ContainsKey(rosterKey) ? interviewScopes[rosterKey] : null;
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.date)
@@ -302,8 +308,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         }
         public void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
-            var rosterKey = this.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
-            var targetLevel = interviewScopes.ContainsKey(rosterKey) ? interviewScopes[rosterKey] : null;
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.id)
@@ -321,10 +326,26 @@ namespace WB.Core.Infrastructure.BaseStructures
                 (targetLevel as HhMember).job_title = answer;
             }
         }
+
+        private IValidatable GetRosterToUpdateAnswer(Guid questionId, decimal[] rosterVector)
+        {
+            if (!IdOf.parentsMap.ContainsKey(questionId))
+                return null;
+
+            var rosterKey = this.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
+
+            return this.interviewScopes.ContainsKey(rosterKey) ? this.interviewScopes[rosterKey] : null;
+        }
+
+        public void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        {
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            if (targetLevel == null) return;
+        }
+
         public void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
         {
-            var rosterKey = this.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
-            var targetLevel = interviewScopes.ContainsKey(rosterKey) ? interviewScopes[rosterKey] : null;
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.sex)
@@ -349,8 +370,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         }
         public void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
         {
-            var rosterKey = this.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
-            var targetLevel = interviewScopes.ContainsKey(rosterKey) ? interviewScopes[rosterKey] : null;
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.food)
@@ -382,6 +402,46 @@ namespace WB.Core.Infrastructure.BaseStructures
                     interviewScopeKvp.Value.Validate(questionsToBeValid, questionsToBeInvalid);
                 }
             }
+        }
+
+        public void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude)
+        {
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            if (targetLevel == null) return;
+        }
+
+        public void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
+        {
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            if (targetLevel == null) return;
+        }
+
+        public void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
+        {
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            if (targetLevel == null) return;
+        }
+
+        public void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] selectedPropagationVectors)
+        {
+            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            if (targetLevel == null) return;
+        }
+
+        public void DisableGroups(IEnumerable<Identity> groupsToDisable)
+        {
+        }
+
+        public void EnableGroups(IEnumerable<Identity> groupsToEnable)
+        {
+        }
+
+        public void DisableQuestions(IEnumerable<Identity> questionsToDisable)
+        {
+        }
+
+        public void EnableQuestions(IEnumerable<Identity> questionsToEnable)
+        {
         }
     }
 
