@@ -14,6 +14,8 @@
             );
 
 
+
+
             $httpBackend.whenGET('../api/questionnaire/chapter/7c97b1925b0244b782ed6741a5035fae?chapterId=6e240642274c4bdea937baa78cd4ad6f').respond(
                 $resource('./data/chapter/6e240642274c4bdea937baa78cd4ad6f.json').get()
             );
@@ -24,6 +26,14 @@
 
             $httpBackend.whenGET('../api/questionnaire/editQuestion/7c97b1925b0244b782ed6741a5035fae?questionId=20ec89157c0e41e49d77db46e929db5d').respond(
                 $resource('./data/editQuestion/20ec89157c0e41e49d77db46e929db5d.json').get()
+            );
+
+            $httpBackend.whenGET('../api/questionnaire/editQuestion/7c97b1925b0244b782ed6741a5035fae?questionId=3c0ff7a6d1614aa2b9af21aaa40cdb47').respond(
+                $resource('./data/editQuestion/3c0ff7a6d1614aa2b9af21aaa40cdb47.json').get()
+            );
+
+            $httpBackend.whenGET('../api/questionnaire/editQuestion/7c97b1925b0244b782ed6741a5035fae?questionId=d6c5faeed9fe43338b76e7a3ef184f5a').respond(
+                $resource('./data/editQuestion/d6c5faeed9fe43338b76e7a3ef184f5a.json').get()
             );
 
             //Empty Questionnaire

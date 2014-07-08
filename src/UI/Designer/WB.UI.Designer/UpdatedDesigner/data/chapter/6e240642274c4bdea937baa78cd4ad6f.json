@@ -11,7 +11,30 @@
             "type": "Text",
             "linkedVariables": ["q2"],
             "brokenLinkedVariables": null
-        }, {
+        }, 
+        {
+         "itemId":"3c0ff7a6d1614aa2b9af21aaa40cdb47",
+         "title":"Categorical: single answer",
+         "variable":"type_of_food",
+         "linkedToQuestionId":null,
+         "type":"SingleOption",
+         "linkedVariables":[
+
+         ],
+         "brokenLinkedVariables":null
+      },
+      {
+         "itemId":"d6c5faeed9fe43338b76e7a3ef184f5a",
+         "title":"Categorical multiple answers",
+         "variable":"drinks",
+         "linkedToQuestionId":null,
+         "type":"MultyOption",
+         "linkedVariables":[
+
+         ],
+         "brokenLinkedVariables":null
+      }, 
+      {
             "itemId": "a6aa60ac221c441e9215ad3882c81204",
             "title": "Q2",
             "variable": "q2",
