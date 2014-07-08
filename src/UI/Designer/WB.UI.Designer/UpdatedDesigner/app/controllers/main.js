@@ -80,6 +80,10 @@
                     }
                 };
 
+                $scope.openChapter = function(chapterId) {
+                    $state.go('questionnaire.chapter', { chapterId: chapterId });
+                };
+
                 $scope.navigateTo = function (reference) {
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,
@@ -164,43 +168,12 @@
                     });
                 };
                 
-                questionnaireService.getQuestionnaireById($state.params.questionnaireId)
-                    .success(function (result) {
-                        $scope.questionnaire = result;
-
-                        if ($state.params.chapterId) {
-                            //$scope.currentChapterId = $stateParams.chapterId;
-                            //$scope.loadChapterDetails($stateParams.questionnaireId, $scope.currentChapterId);
-                        } else {
-                            if (result.chapters.length > 0) {
-                                $state.go('questionnaire.chapter', { chapterId: _.first(result.chapters).itemId });
-                                //$scope.currentChapter = result.chapters[0];
-                                //$scope.currentChapterId = $scope.currentChapter.itemId;
-                                //$scope.loadChapterDetails($stateParams.questionnaireId, $scope.currentChapterId);
-                            }
-                        }
-                        //if ($stateParams.itemId) {
-                        //    $scope.currentItemId = $stateParams.itemId;
-
-                        //    if (document.URL.indexOf('question') > 0) {
-                        //        $scope.activeRoster = undefined;
-                        //        $scope.activeChapter = undefined;
-                        //        $scope.activeQuestion = { itemId: $stateParams.itemId };
-                        //    }
-
-                        //    if (document.URL.indexOf('group') > 0) {
-                        //        $scope.activeRoster = undefined;
-                        //        $scope.activeChapter = { itemId: $stateParams.itemId };
-                        //        $scope.activeQuestion = undefined;
-                        //    }
-
-                        //    if (document.URL.indexOf('roster') > 0) {
-                        //        $scope.activeRoster = { itemId: $stateParams.itemId };
-                        //        $scope.activeChapter = undefined;
-                        //        $scope.activeQuestion = undefined;
-                        //    }
-                        //}
-                    });
+                questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (result) {
+                    $scope.questionnaire = result;
+                    if (!$state.params.chapterId && result.chapters.length > 0) {
+                        $state.go('questionnaire.chapter', { chapterId: _.first(result.chapters).itemId });
+                    } 
+                });
             }
         ]);
 }());

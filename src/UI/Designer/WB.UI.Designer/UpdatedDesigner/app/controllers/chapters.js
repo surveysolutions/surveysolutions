@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('ChaptersCtrl', [
-            '$scope', '$stateParams', 'commandService', 'utilityService', 
-            function ($scope, $stateParams,commandService, math) {
+            '$rootScope', '$scope', '$state', 'commandService', 'utilityService', 
+            function ($rootScope, $scope, $state, commandService, math) {
 
                 $scope.chapters = [];
 
@@ -21,19 +21,12 @@
                 $scope.openMenu = function(chapter) {
                     chapter.isMenuOpen = true;
                 };
-                $scope.changeChapter = function (chapter) {
-                    navigationService.openChapter($stateParams.questionnaireId, chapter.itemId);
-                    $scope.$parent.currentChapterId = chapter.itemId;
-                    $scope.$parent.loadChapterDetails($stateParams.questionnaireId, $scope.currentChapterId);
-                    $scope.foldback();
-                };
 
                 $scope.editChapter = function(chapter) {
                     console.log(chapter);
                     chapter.isMenuOpen = false;
                     chapter.itemId = chapter.itemId;
                     $scope.setItem(chapter);
-                    //navigationService.editChapter($stateParams.questionnaireId, chapter.itemId);
                 };
 
                 $scope.addNewChapter = function() {
@@ -44,7 +37,7 @@
                         itemId: newId
                     };
 
-                    commandService.addChapter($stateParams.questionnaireId, newChapter).success(function() {
+                    commandService.addChapter($state.params.questionnaireId, newChapter).success(function() {
                         $scope.questionnaire.chapters.push(newChapter);
                     });
                 };
@@ -54,15 +47,19 @@
                     var newId = math.guid();
                     var chapterDescription = "";
 
-                    commandService.cloneGroupWithoutChildren($stateParams.questionnaireId, newId, chapter, chapterDescription).success(function() {
+                    commandService.cloneGroupWithoutChildren($state.params.questionnaireId, newId, chapter, chapterDescription).success(function () {
                         var newChapter = {
                             title: chapter.title,
                             itemId: newId
                         };
                         $scope.questionnaire.chapters.push(newChapter);
-                        navigationService.openChapter($stateParams.questionnaireId, newId);
+                        navigationService.openChapter($state.params.questionnaireId, newId);
                     });
                 };
+
+                $rootScope.$on('$stateChangeSuccess', function () {
+                    $scope.foldback();
+                });
             }
         ]);
 }());
