@@ -208,13 +208,13 @@ Supervisor.VM.InterviewDetails = function (settings) {
                             question.answer = ko.observable(question.answer).extend({ required: true });
                             break;
                         case config.questionTypes.Numeric:
-                            question.answer = ko.observable(question.answer).extend({ required: true, number: true });
-                            
+                            question.answer = ko.observable(question.answer).extend({ required: true });
                             if (question.isInteger) {
-                                question.answer.extend({ digit: true });
-                            }
-                            else if (!_.isNull(question.countOfDecimalPlaces)) {
-                                question.answer.extend({ precision: question.countOfDecimalPlaces });
+                                question.answer.extend({ numericValidator: -1 });
+                            } else if (!_.isNull(question.countOfDecimalPlaces)) {
+                                question.answer.extend({ numericValidator: question.countOfDecimalPlaces });
+                            } else {
+                                question.answer.extend({ numericValidator: true });
                             }
                             break;
                         case config.questionTypes.SingleOption:
