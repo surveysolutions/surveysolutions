@@ -49,8 +49,8 @@
                         <div class="inner">
                             <a class="handler" ui-tree-handle></a>
                             <h1><a ui-sref="questionnaire.chapter({chapterId: chapter.itemId})">{{chapter.title}}</a></h1>
-                            <div class="btn-group dropdown">
-                                <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"></a>
+                            <div class="btn-group" dropdown >
+                                <a href="javascript:void(0);" data-toggle="dropdown" ng-click="$event.stopPropagation()" class="dropdown-toggle"></a>
                                 <ul class="dropdown-menu">
                                     <li><a ng-click="editChapter(chapter);$event.stopPropagation()">Edit</a></li>
                                     <li><a ng-click="cloneChapter(chapter);$event.stopPropagation()">Clone</a></li>
