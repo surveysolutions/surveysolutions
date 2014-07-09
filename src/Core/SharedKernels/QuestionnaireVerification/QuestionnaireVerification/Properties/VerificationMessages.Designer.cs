@@ -584,5 +584,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0066_QuestionTypeIsNotAllowed", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster has empty variable name..
+        /// </summary>
+        internal static string WB0067_RosterHasEmptyVariableName {
+            get {
+                return ResourceManager.GetString("WB0067_RosterHasEmptyVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster has not unique variable name..
+        /// </summary>
+        internal static string WB0068_RosterHasNotUniqueVariableName {
+            get {
+                return ResourceManager.GetString("WB0068_RosterHasNotUniqueVariableName", resourceCulture);
+            }
+        }
     }
 }

@@ -31,12 +31,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = rosterGroupId,
                 IsRoster = true,
+                VariableName = "a",
                 RosterSizeQuestionId = rosterSizeQiestionId,
                 Children = new List<IComposite>()
                 {
                     new Group()
                     {
                         IsRoster = true,
+                        VariableName = "b",
                         RosterSizeQuestionId = rosterSizeQiestionId
                     }
                 }

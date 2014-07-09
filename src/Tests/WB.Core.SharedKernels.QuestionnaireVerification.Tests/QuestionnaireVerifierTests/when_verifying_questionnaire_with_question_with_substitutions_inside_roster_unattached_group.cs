@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 MaxValue = 3,
                 StataExportCaption = rosterSizeQuestionId.ToString()
             });
-            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId };
+            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, VariableName = "a", RosterSizeQuestionId = rosterSizeQuestionId };
 
             rosterGroup.Children.Add(new NumericQuestion()
             {
