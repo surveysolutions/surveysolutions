@@ -17,13 +17,7 @@
 
                 self.isRoster = ko.observable(false);
 
-                self.variableName = ko.observable('').extend({
-                    required: {
-                        onlyIf: function () {
-                            return self.isRoster();
-                        }
-                    }
-                });
+                self.variableName = ko.observable('');
 
                 self.rosterSizeSource = ko.observable(config.rosterSizeSourceTypes.Question);
                 self.isRosterSizeSourceQuestion = ko.computed(function () {
@@ -150,7 +144,20 @@
                         }]
                     });
                 };
-                
+
+                self.variableName.extend({
+                    validatable: true,
+                    required: {
+                        onlyIf: function () {
+                            return self.isRoster();
+                        }
+                    },
+                    maxLength: 32,
+                    pattern: {
+                        message: "Valid variable name should contain only letters, digits and the underscore character and should not start with a digit",
+                        params: '^[_A-Za-z][_A-Za-z0-9]*$'
+                    }
+                });
                 return self;
             };
         
