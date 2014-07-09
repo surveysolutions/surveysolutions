@@ -1,25 +1,64 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace WB.Core.Infrastructure.BaseStructures
 {
     // ReSharper disable InconsistentNaming
 
-    public class InterviewExpressionMate : IInterviewEvaluator
+    public class InterviewExpressionMate : IExpressionProcessor
     {
         public InterviewExpressionMate()
         {
+
+            var RosterGroupInstance = new Dictionary<string, DistinctDecimalList>();
+
             //build by interview or interview state
             main = new Main_Intervew();
-
+            
+            
+            
             var roster_Person = new Roster_Person(main, new decimal []{ 0 });
-
             var roster_Pet = new Roster_Pet(roster_Person, new decimal [] {0, 0});
 
             allRosters.Add(roster_Person);
-
+            
             allRosters.Add(roster_Pet);
 
+        }
+
+        private Dictionary<string, IRoster> RosterInstances { set; get; }
+
+
+        
+        public void AddRosterInstances(IEnumerable<RosterInstanceItem> instances)
+        {
+            foreach (var rosterInstance in instances)
+            {
+
+                this.AddRoster(rosterInstance.GroupId, rosterInstance.OuterRosterVector, rosterInstance.RosterInstanceId);
+                //add roster instance
+            }
+        }
+
+        private void AddRoster(Guid groupId, decimal[] outerRosterVector, decimal rosterInstanceId)
+        {
+            
+        }
+
+        public void RemoveRosterInstances(IEnumerable<RosterInstanceItem> instances)
+        {
+            foreach (var rosterInstance in instances)
+            {
+                //remove roster instance
+            }
+        }
+
+        public void SetAnswer(Guid QuestionId, decimal[] PropagationVector)
+        {
+            //set value
         }
 
         private Main_Intervew main;
@@ -51,7 +90,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             return validation;
         }
         
-        public class Main_Intervew : IValidationPerformer
+        public class Main_Intervew : IValidationPerformer, IRoster
         {
             public Guid id { get; set; }
             public string title { get; set; }
@@ -59,9 +98,10 @@ namespace WB.Core.Infrastructure.BaseStructures
 
             public decimal[] RosterVector { get; private set; }
 
+            public Dictionary<Guid, List<object>> rosters = new Dictionary<Guid, List<object>>();
 
-            public Roster_Person[] persons;
 
+            public Roster_Person[] persons = new Roster_Person[0];
 
             private Dictionary<Guid, Func<bool>> validations;
 
@@ -177,14 +217,176 @@ namespace WB.Core.Infrastructure.BaseStructures
                 return invalidIdentities;
             }
         }
+        
+        public void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, int answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateGeoLocationAnswer(Guid questionId, decimal[] propagationVector, double latitude, double longitude)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateTextListAnswer(Guid questionId, decimal[] propagationVector, Tuple<decimal, string>[] answers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[] selectedPropagationVector)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[][] selectedPropagationVectors)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableGroups(IEnumerable<Identity> groupsToDisable)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnableGroups(IEnumerable<Identity> groupsToEnable)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableQuestions(IEnumerable<Identity> questionsToDisable)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnableQuestions(IEnumerable<Identity> questionsToEnable)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IExpressionProcessor Copy()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static string ConvertIdAndRosterVectorToString(Guid id, decimal[] rosterVector)
+        {
+            return string.Format("{0:N}[{1}]", id, string.Join("-", rosterVector.Select(v => v.ToString("0.############################", CultureInfo.InvariantCulture))));
+        }
     }
 
-    
+    public interface IRoster {}
+
+
     public interface IValidationPerformer
     {
         List<Identity> PerformValidation();
     }
 
-    
+
+
+    public class RosterInstanceItem
+    {
+        public Guid GroupId { get; private set; }
+        public decimal[] OuterRosterVector { get; private set; }
+        public decimal RosterInstanceId { get; private set; }
+
+        public RosterInstanceItem(Guid groupId, decimal[] outerRosterVector, decimal rosterInstanceId)
+        {
+            this.GroupId = groupId;
+            this.OuterRosterVector = outerRosterVector;
+            this.RosterInstanceId = rosterInstanceId;
+        }
+    }
+
+
+
+    internal class DistinctDecimalList : IEnumerable<decimal>
+    {
+        private readonly List<decimal> list = new List<decimal>();
+
+        public DistinctDecimalList() { }
+
+        public DistinctDecimalList(IEnumerable<decimal> decimals)
+            : this()
+        {
+            this.list.AddRange(decimals.Distinct());
+        }
+
+        public void Add(decimal value)
+        {
+            if (!this.list.Contains(value))
+            {
+                this.list.Add(value);
+            }
+        }
+
+        public void Remove(decimal value)
+        {
+            this.list.Remove(value);
+        }
+
+        public bool Contains(decimal value)
+        {
+            return this.list.Contains(value);
+        }
+
+        public IEnumerator<decimal> GetEnumerator()
+        {
+            return this.list.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)this.list).GetEnumerator();
+        }
+    }
+
+
+
     // ReSharper restore InconsistentNaming
 }
