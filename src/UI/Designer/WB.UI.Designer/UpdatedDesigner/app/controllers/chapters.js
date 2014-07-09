@@ -32,6 +32,7 @@
 
                     commandService.addChapter($state.params.questionnaireId, newChapter).success(function() {
                         $scope.questionnaire.chapters.push(newChapter);
+                        $state.go('questionnaire.chapter.group', { chapterId: newChapter.itemId, itemId: newChapter.itemId });
                     });
                 };
 
