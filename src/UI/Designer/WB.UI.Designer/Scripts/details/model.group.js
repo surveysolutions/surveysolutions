@@ -11,12 +11,20 @@
                 
                 self.title = ko.observable('New Group').extend({ required: true });
                 self.parent = ko.observable();
-                self.variableName = ko.observable('')/*.extend({ required: true })*/;
 
                 self.type = ko.observable("GroupView"); // Object type
                 self.template = "GroupView"; // inner html template name
 
                 self.isRoster = ko.observable(false);
+
+                self.variableName = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () {
+                            return self.isRoster();
+                        }
+                    }
+                });
+
                 self.rosterSizeSource = ko.observable(config.rosterSizeSourceTypes.Question);
                 self.isRosterSizeSourceQuestion = ko.computed(function () {
                     return self.isRoster() && (self.rosterSizeSource() == config.rosterSizeSourceTypes.Question);
