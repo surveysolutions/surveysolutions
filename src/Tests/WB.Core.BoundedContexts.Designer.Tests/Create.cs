@@ -212,6 +212,38 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             });
         }
 
+        public static IPublishedEvent<StaticTextAdded> StaticTextAddedEvent(string entityId = null, string parentId = null, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextAdded()
+            {
+                EntityId = GetQuestionnaireItemId(entityId),
+                ParentId = GetQuestionnaireItemId(parentId),
+                Text = text
+            });
+        }
+
+        public static IPublishedEvent<StaticTextUpdated> StaticTextUpdatedEvent(string entityId = null, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextUpdated()
+            {
+                EntityId = GetQuestionnaireItemId(entityId),
+                Text = text
+            });
+        }
+
+        public static IPublishedEvent<StaticTextCloned> StaticTextClonedEvent(string entityId = null,
+            string parentId = null, string sourceEntityId = null, string text = null, int targetIndex = 0)
+        {
+            return ToPublishedEvent(new StaticTextCloned()
+            {
+                EntityId = GetQuestionnaireItemId(entityId),
+                ParentId = GetQuestionnaireItemId(parentId),
+                SourceEntityId = GetQuestionnaireItemId(sourceEntityId),
+                Text = text,
+                TargetIndex = targetIndex
+            });
+        }
+
         public static IPublishedEvent<NumericQuestionCloned> NumericQuestionClonedEvent(string questionId = null,
             string parentGroupId = null, string questionVariable = null, string questionTitle = null,
             string questionConditionExpression = null, string sourceQuestionId = null)

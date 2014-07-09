@@ -66,5 +66,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTes
                 QuestionType = type
             };
         }
+
+        protected static PdfStaticTextView CreateStaticText(Guid? entityId = null, string title = "Static Text X")
+        {
+            return new PdfStaticTextView()
+            {
+                PublicId = entityId ?? Guid.NewGuid(),
+                Title = title
+            };
+        }
     }
 }
