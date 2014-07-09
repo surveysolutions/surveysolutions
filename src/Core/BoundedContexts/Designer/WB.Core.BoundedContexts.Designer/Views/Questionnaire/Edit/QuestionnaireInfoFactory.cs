@@ -104,7 +104,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Id = group.Id,
                     Title = group.Title,
                     EnablementCondition = group.EnablementCondition,
-                    Description = group.Description
+                    Description = group.Description,
+                    VariableName = group.VariableName
                 }, questionnaire, questionnaireId),
                 Breadcrumbs = this.GetBreadcrumbs(questionnaire, group)
             };
@@ -139,7 +140,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     RosterFixedTitles = roster.RosterFixedTitles,
                     RosterSizeQuestionId = roster.RosterSizeQuestionId,
                     RosterSizeSourceType = roster.RosterSizeSourceType,
-                    RosterTitleQuestionId = roster.RosterTitleQuestionId
+                    RosterTitleQuestionId = roster.RosterTitleQuestionId,
+                    VariableName = roster.VariableName
                 },
                 NotLinkedMultiOptionQuestions = this.GetNotLinkedMultiOptionQuestionBriefs(questionnaire),
                 NumericIntegerQuestions = this.GetNumericIntegerQuestionBriefs(questionnaire),

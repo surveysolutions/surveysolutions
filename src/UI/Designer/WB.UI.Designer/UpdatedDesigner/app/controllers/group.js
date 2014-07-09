@@ -10,6 +10,7 @@
                     questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
                             $scope.activeChapter = result;
                             $scope.activeChapter.group.itemId = $stateParams.itemId;
+                            $scope.activeChapter.group.variableName = $stateParams.variableName;
                         }
                     );
                 };

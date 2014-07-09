@@ -95,7 +95,8 @@
                         "rosterSizeSource": "Question",
                         "rosterFixedTitles": null,
                         "rosterTitleQuestionId": null,
-                        "parentGroupId": null
+                        "parentGroupId": null,
+                        "variableName": null
                     };
 
                     return commandCall("AddGroup", command);
@@ -113,7 +114,8 @@
                         "rosterSizeSource": "Question",
                         "rosterFixedTitles": null,
                         "rosterTitleQuestionId": null,
-                        "parentGroupId": parentGroupId
+                        "parentGroupId": parentGroupId,
+                        "variableName":null
                     };
                     return commandCall("AddGroup", command);
                 };
@@ -130,7 +132,8 @@
                         "rosterSizeSource": "FixedTitles",
                         "rosterFixedTitles": ["111"], // todo: temp solution
                         "rosterTitleQuestionId": null,
-                        "parentGroupId": parentGroupId
+                        "parentGroupId": parentGroupId,
+                        "variableName": group.variableName
                     };
 
                     return commandCall("AddGroup", command);
@@ -147,7 +150,8 @@
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "Question",
                         "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null
+                        "rosterTitleQuestionId": null,
+                        "variableName":null
                     };
 
                     return commandCall("UpdateGroup", command);
@@ -164,7 +168,8 @@
                         "rosterSizeQuestionId": roster.rosterSizeQuestionId,
                         "rosterSizeSource": roster.rosterSizeSourceType,
                         "rosterFixedTitles": roster.rosterFixedTitles,
-                        "rosterTitleQuestionId": roster.rosterTitleQuestionId
+                        "rosterTitleQuestionId": roster.rosterTitleQuestionId,
+                        "variableName": roster.variableName
                     };
 
                     return commandCall("UpdateGroup", command);

@@ -30,7 +30,7 @@
                     $scope.activeRoster.rosterFixedTitles = roster.rosterFixedTitles;
                     $scope.activeRoster.rosterSizeQuestionId = roster.rosterSizeQuestionId;
                     $scope.activeRoster.rosterTitleQuestionId = roster.rosterTitleQuestionId;
-
+                    $scope.activeRoster.variableName = roster.variableName;
                     $scope.getRosterTemplate();
                 };
 
