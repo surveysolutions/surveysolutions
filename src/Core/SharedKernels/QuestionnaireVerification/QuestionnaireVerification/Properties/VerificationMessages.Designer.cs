@@ -442,7 +442,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Groups cannot have custom condition expression referencing child question.
+        ///   Looks up a localized string similar to Groups cannot have custom condition expression referencing child question..
         /// </summary>
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
@@ -478,7 +478,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster can have no more than 3 parent rosters.
+        ///   Looks up a localized string similar to Roster can have no more than 3 parent rosters..
         /// </summary>
         internal static string WB0055_RosterHasRosterLevelMoreThan4 {
             get {
@@ -487,7 +487,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Circular references are not allowed.
+        ///   Looks up a localized string similar to Circular references are not allowed..
         /// </summary>
         internal static string WB0056_QuestionShouldNotHaveCircularReferences {
             get {
@@ -514,7 +514,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If question uses %rostertitle% in title it need to be placed inside roster.
+        ///   Looks up a localized string similar to If question uses %rostertitle% in title it need to be placed inside roster..
         /// </summary>
         internal static string WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster {
             get {
@@ -523,7 +523,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has less than 2 options.
+        ///   Looks up a localized string similar to Question has less than 2 options..
         /// </summary>
         internal static string WB0060_CategoricalQuestionHasLessThan2Options {
             get {
@@ -532,7 +532,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has max allowed answers less than 2.
+        ///   Looks up a localized string similar to Question has max allowed answers less than 2..
         /// </summary>
         internal static string WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2 {
             get {
@@ -541,7 +541,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has not unique variable name .
+        ///   Looks up a localized string similar to Question has not unique variable name..
         /// </summary>
         internal static string WB0062_VariableNameForQuestionIsNotUnique {
             get {
@@ -568,7 +568,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation message is required if question has validation expression.
+        ///   Looks up a localized string similar to Validation message is required if question has validation expression..
         /// </summary>
         internal static string WB0065_QuestionHasValidationExpressionWithoutValidationMessage {
             get {
@@ -577,7 +577,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question of this type is not supported.
+        ///   Looks up a localized string similar to Question of this type is not supported..
         /// </summary>
         internal static string WB0066_QuestionTypeIsNotAllowed {
             get {

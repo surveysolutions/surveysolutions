@@ -137,7 +137,7 @@
                 scope.toggle();
             };
 
-            var getCurrentItem = function() {
+            var getCurrentItem = function () {
                 return questionnaireService.findItem($scope.items, $state.params.itemId);
             }
 
@@ -190,7 +190,7 @@
                     var destItem = event.dest.nodesScope.item;
                     var destGroupId = destItem ? destItem.itemId : $scope.questionnaire.chapters[0].itemId;
                     var putItem = function(item, parent, index) {
-                        var dropFrom = item.parent || $scope;
+                        var dropFrom = item.getParentItem() || $scope;
 
                         dropFrom.items.splice(_.indexOf(dropFrom.items, item), 1);
                         var itemsToAddTo = _.isNull(parent) ? $scope.items : parent.items;
@@ -224,6 +224,28 @@
                         }
                     }
                 }
+            };
+
+
+            $scope.cloneQuestion = function (questionId) {
+                var itemIdToClone = questionId || $state.params.itemId;
+                var newId = utilityService.guid();
+                commandService.cloneItem($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
+                    if (result.IsSuccess) {
+                        var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
+                        var parentItem = clonnedItem.getParentItem() || $scope;
+
+                        var cloneDeep = {
+                            itemId: newId,
+                            variable: '',
+                            title: 'Copy of - ' + clonnedItem.title,
+                            type: clonnedItem.type
+                        };
+
+                        var indexOf = _.indexOf(parentItem.items, clonnedItem);
+                        parentItem.items.splice(indexOf + 1, 0, cloneDeep);
+                    }
+                });
             };
 
             $scope.deleteQuestion = function(item) {
@@ -294,7 +316,7 @@
             };
 
 
-            $scope.resetSelection = function() {
+            $scope.resetSelection = function () {
                 $state.go('questionnaire.chapter', { chapterId: $state.params.chapterId });
             }
 

@@ -53,7 +53,7 @@
                             itemId: newId
                         };
                         $scope.questionnaire.chapters.push(newChapter);
-                        navigationService.openChapter($state.params.questionnaireId, newId);
+                        $state.go('questionnaire.chapter', {chapterId: newId});
                     });
                 };
 

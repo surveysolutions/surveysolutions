@@ -2,6 +2,7 @@
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Raven.Abstractions.Extensions;
+using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -1213,6 +1214,45 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #endregion
+
+        public void CloneQuestionById(Guid questionId, Guid responsibleId, Guid targetId)
+        {
+            IQuestion question = this.GetQuestion(questionId);
+
+            this.innerDocument.ConnectChildrenWithParent();
+            IComposite parentGroup = question.GetParent();
+
+            var asMultioptions = question as IMultyOptionsQuestion;
+
+            this.ApplyEvent(new QuestionCloned
+            {
+                PublicKey = targetId,
+
+                GroupPublicKey = parentGroup.PublicKey,
+                QuestionText = "Copy of - " + question.QuestionText,
+                QuestionType = question.QuestionType,
+                VariableLabel = question.VariableLabel,
+
+                Mandatory = question.Mandatory,
+                Featured = question.Featured,
+                Capital = question.Capital,
+
+                QuestionScope = question.QuestionScope,
+                ConditionExpression = question.ConditionExpression,
+                ValidationExpression = question.ValidationExpression,
+                ValidationMessage = question.ValidationMessage,
+                Instructions = question.Instructions,
+
+                Answers = question.Answers.ToArray(),
+                SourceQuestionId = questionId,
+                TargetIndex =  parentGroup.Children.IndexOf(question) + 1,
+                ResponsibleId = responsibleId,
+                LinkedToQuestionId = question.LinkedToQuestionId,
+
+                AreAnswersOrdered = asMultioptions != null ? (bool?)asMultioptions.AreAnswersOrdered : null,
+                MaxAllowedAnswers = asMultioptions != null ? (int?)asMultioptions.MaxAllowedAnswers : null
+            });
+        }
 
         public void CloneQuestion(Guid questionId,
             Guid parentGroupId, string title, QuestionType type, string variableName, string variableLabel,

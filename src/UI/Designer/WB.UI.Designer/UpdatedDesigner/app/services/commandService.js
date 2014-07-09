@@ -22,6 +22,14 @@
                     return commandCall(type, command);
                 };
 
+                commandService.cloneItem = function(questionnaireId, itemIdToClone, newId) {
+                    return commandCall('CloneQuestionById', {
+                        questionId: itemIdToClone,
+                        targetId: newId,
+                        questionnaireId: questionnaireId
+                    });
+                };
+
                 commandService.sendUpdateQuestionCommand = function(questionnaireId, question) {
                     var command = {
                         questionnaireId: questionnaireId,
