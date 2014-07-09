@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log',
-            function ($scope, $state, utilityService, questionnaireService, commandService, $log) {
+            '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log', '$rootScope',
+            function ($scope, $state, utilityService, questionnaireService, commandService, $log, $rootScope) {
                 var dataBind = function (result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
@@ -32,6 +32,11 @@
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
                 };
+
+                $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+                    // где то в toState должно быть поле со значением которое startsWith 'questionnaire.chapter.'
+                    console.log(toState);
+                });
 
                 $scope.loadQuestion = function() {
                     questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
