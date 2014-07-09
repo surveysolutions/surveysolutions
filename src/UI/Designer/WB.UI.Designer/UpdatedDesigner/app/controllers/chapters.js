@@ -29,6 +29,7 @@
                     $scope.setItem(chapter);
                 };
 
+
                 $scope.addNewChapter = function() {
                     var newId = math.guid();
 
@@ -43,17 +44,18 @@
                 };
 
                 $scope.cloneChapter = function(chapter) {
-                    chapter.isMenuOpen = false;
                     var newId = math.guid();
-                    var chapterDescription = "";
+                    var indexOf = _.indexOf($scope.questionnaire.chapters, chapter) + 1;
 
-                    commandService.cloneGroupWithoutChildren($state.params.questionnaireId, newId, chapter, chapterDescription).success(function () {
-                        var newChapter = {
-                            title: chapter.title,
-                            itemId: newId
-                        };
-                        $scope.questionnaire.chapters.push(newChapter);
-                        $state.go('questionnaire.chapter', {chapterId: newId});
+                    commandService.cloneGroup($state.params.questionnaireId, chapter.itemId, indexOf, newId).success(function (result) {
+                        if (result.IsSuccess) {
+                            var newChapter = {
+                                title: chapter.title,
+                                itemId: newId
+                            };
+                            $scope.questionnaire.chapters.splice(indexOf, 0, newChapter);
+                            $state.go('questionnaire.chapter', { chapterId: newId });
+                        }
                     });
                 };
 
