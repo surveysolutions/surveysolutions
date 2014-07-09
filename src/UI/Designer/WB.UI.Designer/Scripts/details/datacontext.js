@@ -430,6 +430,7 @@
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
                 title: group.title(),
+                variableName: group.variableName(),
                 description: group.description(),
                 condition: group.condition(),
                 isRoster: group.isRoster(),

@@ -37,6 +37,7 @@
                     item.id(this.getDtoId(dto));
                     item.level(dto.Level);
                     item.title(dto.Title);
+                    item.variableName(dto.VariableName);
                     item.parent(dto.ParentId);
                     item.description(dto.Description);
                     item.condition(dto.ConditionExpression);

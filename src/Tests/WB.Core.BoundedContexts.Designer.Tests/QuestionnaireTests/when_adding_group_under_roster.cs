@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = new EventContext();
         };
 
-        Because of = () => questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: title, condition: condition,
+        Because of = () => questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, variableName: null, title: title, condition: condition,
                     description: description, parentGroupId: parentRosterId, isRoster: false,
                     rosterSizeSource: RosterSizeSourceType.Question, rosterSizeQuestionId: null, rosterFixedTitles: null,
                     rosterTitleQuestionId: null);
