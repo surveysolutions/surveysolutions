@@ -1,3 +1,76 @@
 input#edit-question-title {
   .edit-question-title-fontstyle();
 }
+
+.question-editor .singleOption {
+  background-color: #f1f2f3;
+  margin-top: -20px;
+  padding: 0 15px;
+
+  .table-holder {
+    display: table;
+    width: 100%;
+
+    .table-row {
+      display: table-row;
+      height: 38px;
+
+      .column-1, .column-2, .column-3, .column-4 {
+        padding-left: 0;
+        padding-right: 0;
+        display: table-cell;
+      }
+
+      .column-1, .column-4 {
+        width: 40px;
+      }
+
+      .column-2 {width: 100px;}
+
+      .column-1 {
+
+        > .backing {
+          background-color: #ffffff;
+          border-color: #fff;
+          box-shadow: none;
+          border-radius: 4px 0 0 4px;
+          height: 34px;
+
+          > input {
+            margin: 0;
+            height: inherit;
+          }
+        }
+      }
+
+      .column-2 input{
+        border: 2px solid #f1f2f3;
+        border-radius: 0;
+        border-top-color: #fff;
+        border-bottom-color: #fff;
+        box-shadow: none;
+        .questionnarie-question-list-item-qname-fontstyle();
+        font-size: 14px;
+      }
+
+      .column-3 input{
+        border-color: #fff;
+        box-shadow: none;
+        border-radius: 0 4px 4px 0;
+        .arial-font();
+      }
+
+      .column-4{
+        //height: 38px;
+        // width: 45px;
+        > a {
+          display: block;
+          background: url("../i/cross-red.png") center center no-repeat;
+          width: 34px;
+          height: 34px;
+        }
+      }
+
+    }
+  }
+}

@@ -95,20 +95,26 @@
     </form>
 
     <script type="text/ng-template" id="SingleOption-template.html">
-        <div ng-repeat="option in activeQuestion.options">
-            <div class="form-group">
-                <div class="col-xs-4">
-                    <input type="text" ng-model="option.value" class="form-control">
-                </div>
-                <div class="col-xs-7">
-                    <input type="text" ng-model="option.title" class="form-control">
-                </div>
-                <div class="col-xs-1">
-                    <a href ng:click="removeOption($index)" class="btn">X</a>
+        <div class="singleOption">
+            <div class="table-holder">
+                <div class="table-row" ng-repeat="option in activeQuestion.options">
+                    <div class="column-1">
+                        <div class="backing">
+                            <input type="radio" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <div class="column-2">
+                        <input type="text" ng-model="option.value" class="form-control">
+                    </div>
+                    <div class="column-3">
+                        <input type="text" ng-model="option.title" class="form-control">
+                    </div>
+                    <div class="column-4">
+                        <a href ng:click="removeOption($index)" class="btn"></a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <p>
+            <p>
             <input type="submit" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
         </p>
         <div class="checkbox">
@@ -116,6 +122,7 @@
                 <input type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked">
                 Is linked
             </label>
+        </div>
         </div>
     </script>
     <script type="text/ng-template" id="MultyOption-template.html">
