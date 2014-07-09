@@ -210,13 +210,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewGroupAdded> evnt)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description,
+            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.VariableName, evnt.Payload.Description,
                 evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupCloned> evnt)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description,
+            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.VariableName, evnt.Payload.Description,
                 evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
@@ -300,6 +300,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             group.Title = evnt.Payload.GroupText;
             group.Description = evnt.Payload.Description;
             group.EnablementCondition = evnt.Payload.ConditionExpression;
+            group.VariableName = evnt.Payload.VariableName;
 
             return currentState;
         }
@@ -386,7 +387,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     RosterSizeSourceType = g.RosterSizeSource,
                     RosterTitleQuestionId = g.RosterTitleQuestionId,
                     ParentGroupId = g.GetParent().PublicKey == questionnaire.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
-                    EnablementCondition = g.ConditionExpression
+                    EnablementCondition = g.ConditionExpression,
+                    VariableName = g.VariableName
                 })
                 .ToList();
 
@@ -403,7 +405,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         }
 
         private static QuestionsAndGroupsCollectionView UpdateStateWithAddedGroup(QuestionsAndGroupsCollectionView currentState,
-            Guid groupId, string title, string description, string enablementCondition, Guid parentGroupId)
+            Guid groupId, string title,string variableName, string description, string enablementCondition, Guid parentGroupId)
         {
             if (currentState == null)
             {
@@ -419,7 +421,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 Description = description,
                 EnablementCondition = enablementCondition,
                 ParentGroupsIds = new Guid[0],
-                RosterScopeIds = new Guid[0]
+                RosterScopeIds = new Guid[0],
+                VariableName = variableName
             };
 
             currentState.Groups.Add(group);
