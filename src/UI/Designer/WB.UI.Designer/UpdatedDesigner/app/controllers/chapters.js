@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('ChaptersCtrl', [
-            '$rootScope', '$scope', '$state', 'commandService', 'utilityService', 
-            function ($rootScope, $scope, $state, commandService, math) {
+            '$rootScope', '$scope', '$state', 'commandService', 'utilityService', '$log', '$modal', 'questionnaireService',
+            function ($rootScope, $scope, $state, commandService, math, $log, $modal, questionnaireService) {
 
                 $scope.chapters = [];
 
@@ -18,17 +18,9 @@
                     $scope.isFolded = false;
                 };
 
-                $scope.openMenu = function(chapter) {
-                    chapter.isMenuOpen = true;
-                };
-
                 $scope.editChapter = function(chapter) {
-                    console.log(chapter);
-                    chapter.isMenuOpen = false;
-                    chapter.itemId = chapter.itemId;
-                    $scope.setItem(chapter);
+                    $state.go('questionnaire.chapter', { chapterId: chapter.itemId });
                 };
-
 
                 $scope.addNewChapter = function() {
                     var newId = math.guid();
@@ -57,6 +49,37 @@
                             $state.go('questionnaire.chapter', { chapterId: newId });
                         }
                     });
+                };
+
+                $scope.deleteChapter = function (chapter) {
+                    var itemIdToDelete = chapter.itemId || $state.params.itemId;
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'app/views/confirm.html',
+                        controller: 'confirmCtrl',
+                        windowClass: 'confirm-window',
+                        resolve:
+                        {
+                            item: function () {
+                                return chapter;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function (confirmResult) {
+                        if (confirmResult === 'ok') {
+                            commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
+                                .success(function (result) {
+                                    if (result.IsSuccess) {
+                                        var index = $scope.questionnaire.chapters.indexOf(chapter);
+                                        if (index > -1) {
+                                            $scope.questionnaire.chapters.splice(index, 1);
+                                        }
+                                    }
+                                });
+                        }
+                    });
+
                 };
 
                 $rootScope.$on('$stateChangeSuccess', function () {
