@@ -137,9 +137,9 @@
                 scope.toggle();
             };
 
-            var getCurrentItem = function () {
+            var getCurrentItem = function() {
                 return questionnaireService.findItem($scope.items, $state.params.itemId);
-            }
+            };
 
             var connectTree = function() {
                 var setParent = function(item, parent) {
@@ -174,6 +174,10 @@
 
             $scope.isGroup = function(item) {
                 return !item.hasOwnProperty('type');
+            };
+
+            $scope.showStartScreen = function () {
+                return _.isEmpty($scope.items);
             };
 
             $scope.groupsTree = {
@@ -226,8 +230,7 @@
                 }
             };
 
-
-            $scope.cloneQuestion = function (questionId) {
+            $scope.cloneQuestion = function(questionId) {
                 var itemIdToClone = questionId || $state.params.itemId;
                 var newId = utilityService.guid();
                 commandService.cloneQuestion($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
@@ -248,20 +251,20 @@
                 });
             };
 
-
-            $scope.cloneGroup = function (groupId) {
+            $scope.cloneGroup = function(groupId) {
                 var itemIdToClone = groupId || $state.params.itemId;
                 var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
                 var parentItem = clonnedItem.getParentItem() || $scope;
                 var indexOf = _.indexOf(parentItem.items, clonnedItem);
                 var newId = utilityService.guid();
 
-                commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function (result) {
+                commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function(result) {
                     if (result.IsSuccess) {
                         $scope.refreshTree();
                     }
                 });
             };
+
             $scope.deleteQuestion = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
@@ -329,20 +332,19 @@
                 });
             };
 
-
-            $scope.resetSelection = function () {
+            $scope.resetSelection = function() {
                 $state.go('questionnaire.chapter', { chapterId: $state.params.chapterId });
-            }
+            };
 
             $scope.refreshTree = function() {
                 questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
-                .success(function(result) {
-                     $scope.items = result.items;
-                     $scope.currentChapter = result;
-                     connectTree();
+                    .success(function(result) {
+                        $scope.items = result.items;
+                        $scope.currentChapter = result;
+                        connectTree();
 
-                     window.ContextMenuController.get().init();
-                 });
+                        window.ContextMenuController.get().init();
+                    });
             }
             $scope.refreshTree();
         }

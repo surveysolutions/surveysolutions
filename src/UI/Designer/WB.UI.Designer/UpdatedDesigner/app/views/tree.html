@@ -57,9 +57,9 @@
             <a class="handler" ui-tree-handle></a>
 
             <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"></button>
-            
-                <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
-                <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
+
+            <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
+            <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
             <div class="qname-block">
                 <div class="btn-group dropdown">
                     <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
@@ -88,12 +88,14 @@
     </script>
 
     <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
+        
         <div ui-tree-nodes ng-model="items">
             <div ng-repeat="item in items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
             </div>
         </div>
 
-        <div class="start-box" ng-if="_.isEmpty(items)">
+        <div class="start-box" ng-if="showStartScreen()">
+
             <div class="buttons-item">
                 <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
