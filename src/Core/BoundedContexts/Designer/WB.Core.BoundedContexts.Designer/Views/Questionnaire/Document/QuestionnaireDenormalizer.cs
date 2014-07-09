@@ -49,6 +49,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<QRBarcodeQuestionCloned>,
 
+        IEventHandler<StaticTextAdded>,
+        IEventHandler<StaticTextUpdated>,
+        IEventHandler<StaticTextCloned>,
+
         IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader upgrader;
@@ -254,6 +258,71 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.UpdateQuestionnaire(evnt, document);
         }
 
+        #region Static text modifications
+        private void AddStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, string text)
+        {
+            QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
+            if (questionnaireDocument == null)
+            {
+                return;
+            }
+
+            var parentGroup = questionnaireDocument.Find<IGroup>(parentId);
+            if (parentGroup == null)
+            {
+                return;
+            }
+
+            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+
+            questionnaireDocument.Add(staticText, parentId, null);
+
+            this.UpdateQuestionnaire(evnt, questionnaireDocument);
+        }
+
+        private void UpdateStaticText(IPublishableEvent evnt, Guid entityId, string text)
+        {
+            QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
+            if (questionnaireDocument == null)
+            {
+                return;
+            }
+
+            var oldStaticText = questionnaireDocument.Find<IStaticText>(entityId);
+            if (oldStaticText == null)
+            {
+                return;
+            }
+
+            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+
+            questionnaireDocument.ReplaceEntity(oldStaticText, newStaticText);
+
+            this.UpdateQuestionnaire(evnt, questionnaireDocument);
+        }
+
+        private void CloneStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, int targetIndex, string text)
+        {
+            QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
+            if (questionnaireDocument == null)
+            {
+                return;
+            }
+
+            var parentGroup = questionnaireDocument.Find<IGroup>(parentId);
+            if (parentGroup == null)
+            {
+                return;
+            }
+
+            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+
+            questionnaireDocument.Insert(index: targetIndex, c: staticText, parent: parentId);
+
+            this.UpdateQuestionnaire(evnt, questionnaireDocument);
+        }
+        #endregion
+
         public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
         {
             AddQuestion(evnt, evnt.Payload.GroupPublicKey,EventConverter.NumericQuestionAddedToQuestionData(evnt));
@@ -431,6 +500,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QRBarcodeQuestionCloned e = evnt.Payload;
             CloneQuestion(evnt, e.ParentGroupId, e.TargetIndex,EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
+        }
+
+        public void Handle(IPublishedEvent<StaticTextAdded> evnt)
+        {
+            this.AddStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, parentId: evnt.Payload.ParentId,
+                text: evnt.Payload.Text);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextUpdated> evnt)
+        {
+            this.UpdateStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, text: evnt.Payload.Text);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextCloned> evnt)
+        {
+            this.CloneStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, parentId: evnt.Payload.ParentId,
+                targetIndex: evnt.Payload.TargetIndex, text: evnt.Payload.Text);
         }
 
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
