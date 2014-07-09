@@ -43,6 +43,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 upgrader ?? Mock.Of<IQuestionnaireDocumentUpgrader>());
         }
 
+        protected static T GetEntityById<T>(QuestionnaireDocument document, Guid entityId)
+            where T : class, IComposite
+        {
+            return document.FirstOrDefault<T>(entity => entity.PublicKey == entityId);
+        }
+
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] children)
         {
             return CreateQuestionnaireDocument(children.AsEnumerable());
@@ -125,6 +131,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionType = QuestionType.TextList
             };
+        }
+
+        protected static StaticText CreateStaticText(Guid entityId, string text)
+        {
+            return new StaticText(entityId: entityId, text: text);
         }
 
         protected static IPublishedEvent<GroupDeleted> CreateGroupDeletedEvent(Guid groupId)
@@ -348,5 +359,36 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             });
         }
 
+        protected static IPublishedEvent<StaticTextAdded> CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextAdded()
+            {
+                EntityId = entityId,
+                ParentId = parentId,
+                Text = text
+            });
+        }
+
+        protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextUpdated()
+            {
+                EntityId = entityId,
+                Text = text
+            });
+        }
+
+        protected static IPublishedEvent<StaticTextCloned> CreateStaticTextClonedEvent(Guid targetEntityId,
+            Guid sourceEntityId, Guid parentId, string text = null, int targetIndex = 0)
+        {
+            return ToPublishedEvent(new StaticTextCloned()
+            {
+                EntityId = targetEntityId,
+                SourceEntityId = sourceEntityId,
+                ParentId = parentId,
+                Text = text,
+                TargetIndex = targetIndex
+            });
+        }
     }
 }
