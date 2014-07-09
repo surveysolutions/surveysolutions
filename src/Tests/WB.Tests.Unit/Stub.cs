@@ -1,6 +1,6 @@
 using Moq;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
+namespace WB.Tests.Unit
 {
     internal static class Stub<T>
         where T : class
