@@ -35,10 +35,19 @@
          "brokenLinkedVariables":null
       }, 
       {
+            "itemId": "5ebbab39c975441cab18b44fdea5be72",
+            "title": "Roster: manual list",
+            "isRoster": true,
+            "items": [],
+            "questionsCount": 0,
+            "groupsCount": 0,
+            "rostersCount": 0
+      },
+      {
             "itemId": "a6aa60ac221c441e9215ad3882c81204",
-            "title": "Q2",
-            "variable": "q2",
-            "type": "Text",
+            "title": "numeric roster",
+            "variable": "numeric_roster",
+            "type": "Numeric",
             "linkedVariables": ["q1"],
             "brokenLinkedVariables": null
         }, {

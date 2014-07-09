@@ -13,8 +13,9 @@
                 $resource('./data/questionnaire/7c97b1925b0244b782ed6741a5035fae.json').get()
             );
 
-
-
+            $httpBackend.whenGET('../api/questionnaire/editRoster/7c97b1925b0244b782ed6741a5035fae?rosterId=5ebbab39c975441cab18b44fdea5be72').respond(
+                $resource('./data/editGroup/manualListRoster.json').get()
+            );
 
             $httpBackend.whenGET('../api/questionnaire/chapter/7c97b1925b0244b782ed6741a5035fae?chapterId=6e240642274c4bdea937baa78cd4ad6f').respond(
                 $resource('./data/chapter/6e240642274c4bdea937baa78cd4ad6f.json').get()

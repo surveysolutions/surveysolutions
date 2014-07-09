@@ -1,0 +1,69 @@
+﻿{
+    "roster": {
+        "rosterSizeQuestionId": null,
+        "rosterSizeSourceType": "FixedTitles",
+        "rosterFixedTitles": [ "111", "222", "333" ],
+        "rosterTitleQuestionId": null,
+        "id": "fd3e8bad-540d-4090-af3f-520b8d7e5cb2",
+        "title": "Roster: manual list",
+        "description": "",
+        "enablementCondition": ""
+    },
+    "numericIntegerQuestions": {
+        "main": [
+            {
+                "id": "a6aa60ac-221c-441e-9215-ad3882c81204",
+                "title": "Number of persons in this household"
+            }
+        ]
+    },
+    "notLinkedMultiOptionQuestions": {
+        "housing": [
+            {
+                "id": "c38fd676-872a-43dd-9dde-8220642aa944",
+                "title": "H7 Indicate whether your household owns any of the following\r\nitems? (Items must be in good working condition and can be\r\nowned by any household member)"
+            },
+            {
+                "id": "7c493b3d-b153-45ed-9a21-8cba9cf775b6",
+                "title": "H7 Indicate whether your household owns any of the following\r\nitems? (Items must be in good working condition and can be\r\nowned by any household member)"
+            },
+            {
+                "id": "cb1ddf13-48bb-4980-bd86-302141efacd9",
+                "title": "H7 Indicate whether your household owns any of the following\r\nitems? (Items must be in good working condition and can be\r\nowned by any household member)"
+            }
+        ]
+    },
+    "textListsQuestions": {
+        "housing": [
+            {
+                "id": "c38fd676-872a-43dd-9dde-8220642aa944",
+                "title": "H7 Indicate whether your household owns any of the following\r\nitems? (Items must be in good working condition and can be\r\nowned by any household member)"
+            },
+            {
+                "id": "7c493b3d-b153-45ed-9a21-8cba9cf775b6",
+                "title": "H7 Indicate whether your household owns any of the following\r\nitems? (Items must be in good working condition and can be\r\nowned by any household member)"
+            },
+            {
+                "id": "cb1ddf13-48bb-4980-bd86-302141efacd9",
+                "title": "H7 Indicate whether your household owns any of the following\r\nitems? (Items must be in good working condition and can be\r\nowned by any household member)"
+            }
+        ]
+    },
+    "breadcrumbs": [
+        {
+            "id": "00000000000000000000000000000000",
+            "title": " ECONOMIC ACTIVITY",
+            "isRoster": true
+        },
+        {
+            "id": "62a22f4bfcd645a3abf43b00497ae091",
+            "title": "Household Info",
+            "isRoster": false
+        },
+        {
+            "id": "00d5857922149acbfd6bddb3ec7bf56b",
+            "title": " ECONOMIC ACTIVITY",
+            "isRoster": true
+        }
+    ]
+}
