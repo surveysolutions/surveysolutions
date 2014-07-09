@@ -52,6 +52,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateMultiOptionQuestion", typeof (UpdateMultiOptionQuestionCommand) },
                     { "UpdateSingleOptionQuestion", typeof (UpdateSingleOptionQuestionCommand) },
                     { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestionCommand) },
+                    { "CloneQuestionById", typeof(CloneQuestionByIdCommand) }
                 };
             }
 

@@ -232,7 +232,7 @@
     <value>Condition expression cannot refer to a question from a deeper roster level.</value>
   </data>
   <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
-    <value>Groups cannot have custom condition expression referencing child question</value>
+    <value>Groups cannot have custom condition expression referencing child question.</value>
   </data>
   <data name="WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression" xml:space="preserve">
     <value>QR Barcode question should not have a validation expression.</value>
@@ -256,10 +256,10 @@
     <value>Roster should have deeper or the same roster level as it's roster size question.</value>
   </data>
   <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
-    <value>Roster can have no more than 3 parent rosters</value>
+    <value>Roster can have no more than 3 parent rosters.</value>
   </data>
   <data name="WB0056_QuestionShouldNotHaveCircularReferences" xml:space="preserve">
-    <value>Circular references are not allowed</value>
+    <value>Circular references are not allowed.</value>
   </data>
   <data name="WB0057_QuestionHasEmptyVariableName" xml:space="preserve">
     <value>Question has empty variable name.</value>
@@ -268,16 +268,16 @@
     <value>Question has variable name reserved for service needs.</value>
   </data>
   <data name="WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster" xml:space="preserve">
-    <value>If question uses %rostertitle% in title it need to be placed inside roster</value>
+    <value>If question uses %rostertitle% in title it need to be placed inside roster.</value>
   </data>
   <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
-    <value>Question has less than 2 options</value>
+    <value>Question has less than 2 options.</value>
   </data>
   <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
-    <value>Question has max allowed answers less than 2</value>
+    <value>Question has max allowed answers less than 2.</value>
   </data>
   <data name="WB0062_VariableNameForQuestionIsNotUnique" xml:space="preserve">
-    <value>Question has not unique variable name </value>
+    <value>Question has not unique variable name.</value>
   </data>
   <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
     <value>Categorical linked question cannot be used in validation expressions.</value>
@@ -286,9 +286,9 @@
     <value>Categorical linked question cannot be used in enablement conditions.</value>
   </data>
   <data name="WB0065_QuestionHasValidationExpressionWithoutValidationMessage" xml:space="preserve">
-    <value>Validation message is required if question has validation expression</value>
+    <value>Validation message is required if question has validation expression.</value>
   </data>
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
-    <value>Question of this type is not supported</value>
+    <value>Question of this type is not supported.</value>
   </data>
 </root>

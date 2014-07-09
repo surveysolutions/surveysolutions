@@ -100,6 +100,7 @@
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\CloneQuestionByIdCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DateTime\AddDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DateTime\CloneDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DateTime\UpdateDateTimeQuestionCommand.cs" />
