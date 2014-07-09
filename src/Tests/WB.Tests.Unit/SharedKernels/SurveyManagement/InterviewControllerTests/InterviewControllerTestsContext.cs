@@ -15,18 +15,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
     {
         protected static InterviewController CreateController(
             ICommandService commandService = null,
-            IGlobalInfoProvider provider = null,
+            IGlobalInfoProvider globalInfoProvider = null,
             ILogger logger = null,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
-            IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory = null)
+            IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory = null,
+            IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
             return new InterviewController(
                 commandService ?? Mock.Of<ICommandService>(),
-                provider ?? Mock.Of<IGlobalInfoProvider>(),
+                globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
                 logger ?? Mock.Of<ILogger>(),
-                changeStatusFactory ?? Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>(),
+                changeStatusFactory ?? Stub<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>.WithNotEmptyValues,
                 revalidateInterviewViewFactory ?? Mock.Of<IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>>(),
-                Mock.Of<IInterviewSummaryViewFactory>());
+                interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues);
         }
     }
 }
