@@ -44,6 +44,10 @@
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -51,11 +55,29 @@
     <Reference Include="Moq">
       <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -84,6 +106,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Applications\Designer\AttributesTests\AttributesTestContext.cs" />
+    <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials.cs" />
+    <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials.cs" />
+    <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value.cs" />
+    <Compile Include="Applications\Designer\CommandDeserializerTests\CommandControllerTests.cs" />
+    <Compile Include="Applications\Designer\CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
+    <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id.cs" />
+    <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__DeleteQuestion__with_questionnaire_id_and_question_id.cs" />
+    <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup.cs" />
+    <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
+    <Compile Include="Applications\Designer\MessageHandlerTests\MessageHandlerTestContext.cs" />
+    <Compile Include="Applications\Designer\MessageHandlerTests\when_https_verifier_reseives_https_request.cs" />
+    <Compile Include="Applications\Designer\MessageHandlerTests\when_https_verifier_reseives_non_https_request.cs" />
+    <Compile Include="Applications\Designer\PublicServiceTests\when_downloading_questionnaire_with_higher_version.cs" />
+    <Compile Include="Applications\Designer\PublicServiceTests\PublicServiceTestContext.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\QuestionnaireApiControllerTestContext.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_chapter.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
+    <Compile Include="Applications\Designer\SynchronizationControllerTests.cs" />
+    <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
+    <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
+    <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\InterviewControllerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
@@ -92,7 +139,6 @@
     <Compile Include="Stub.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Applications\Designer\" />
     <Folder Include="Applications\Headquarters\" />
     <Folder Include="Applications\Supervisor\" />
     <Folder Include="BoundedContexts\Designer\" />
@@ -118,13 +164,25 @@
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
       <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
+      <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
+      <Name>WB.Core.BoundedContexts.Designer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj">
       <Project>{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}</Project>
@@ -133,6 +191,22 @@
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
+      <Project>{8263CA84-BFB5-4A7B-AE31-F5FC5B05E7C1}</Project>
+      <Name>WB.UI.Designer.WebServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
+      <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
+      <Name>WB.UI.Designer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
