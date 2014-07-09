@@ -1,6 +1,5 @@
 @import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
-@import "../vendor/prettycheckable/dist/prettyCheckable.css";
 /**
  * WorldBank Designer
  * file: markup.css.less
@@ -5971,16 +5970,52 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
 .wb-input.width-auto {
   width: 100%;
 }
-.prettycheckbox > a,
-.prettyradio > a {
-  background: url(i/pretty-checkable-sprites.png);
+.checkbox {
+  padding-left: 0;
 }
-.prettycheckbox label {
-  font-size: 14px !important;
+input.wb-checkbox,
+input.wb-radio {
+  display: none;
+}
+input.wb-checkbox + label,
+input.wb-radio + label {
+  font-size: 14px;
   margin: 4px 6px 4px 0;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: normal;
   font-size: 12px;
+}
+input.wb-checkbox + label span,
+input.wb-radio + label span {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background: transparent url(i/pretty-checkable-sprites.png) no-repeat;
+  vertical-align: middle;
+}
+input.wb-checkbox + label span {
+  background-position: 0 0;
+}
+input.wb-checkbox:checked + label span {
+  background-position: -60px 0;
+}
+input.wb-checkbox:disabled + label span {
+  background-position: -30px 0;
+}
+input.wb-checkbox:checked:disabled + label span {
+  background-position: -90px 0;
+}
+input.wb-radio + label span {
+  background-position: -180 0;
+}
+input.wb-radio:checked + label span {
+  background-position: -240px 0;
+}
+input.wb-radio:disabled + label span {
+  background-position: -210px 0;
+}
+input.wb-radio:checked:disabled + label span {
+  background-position: -270px 0;
 }
 .form-control {
   border-width: 2px;
@@ -6276,6 +6311,9 @@ input#edit-question-title {
 .question-editor .singleOption .table-holder .table-row .column-2 {
   width: 100px;
 }
+.question-editor .singleOption .table-holder .table-row .column-1 {
+  text-align: center;
+}
 .question-editor .singleOption .table-holder .table-row .column-1 > .backing {
   background-color: #ffffff;
   border-color: #fff;
@@ -6283,9 +6321,11 @@ input#edit-question-title {
   border-radius: 4px 0 0 4px;
   height: 34px;
 }
-.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input {
-  margin: 0;
-  height: inherit;
+.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label {
+  margin-right: 0;
+}
+.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label span {
+  vertical-align: inherit;
 }
 .question-editor .singleOption .table-holder .table-row .column-2 input {
   border: 2px solid #f1f2f3;

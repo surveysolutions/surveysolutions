@@ -28,6 +28,7 @@ input#edit-question-title {
       .column-2 {width: 100px;}
 
       .column-1 {
+        text-align: center;
 
         > .backing {
           background-color: #ffffff;
@@ -36,9 +37,11 @@ input#edit-question-title {
           border-radius: 4px 0 0 4px;
           height: 34px;
 
-          > input {
-            margin: 0;
-            height: inherit;
+          > input.wb-radio + label {
+            margin-right: 0;
+            span {
+              vertical-align: inherit;
+            }
           }
         }
       }
