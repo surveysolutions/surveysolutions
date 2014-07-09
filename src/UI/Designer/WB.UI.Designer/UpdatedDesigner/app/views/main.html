@@ -25,7 +25,6 @@
         <div class="title">
             {{questionnaire.title}} <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
             <input id="verification-btn" type="button" class="btn" value="VERIFY" ng-click="verify()" />
-            <!--<input id="verification-btn" type="button" class="btn error" value="VERIFY" ng-click="verify()" />--> <!-- red button -->
             <span id="verify-btn" data-toggle="modal" data-target="#verification-modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>
             <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK<em>, saved at 12:43</em></span>
         </div>
@@ -46,16 +45,16 @@
                     ng-repeat="chapter in questionnaire.chapters"
                     ui-tree-node
                     ui-sref-active="current">
-                    <div class="holder" ng-click="openChapter(chapter.itemId);$event.stopPropagation()">
+                    <div class="holder">
                         <div class="inner">
                             <a class="handler" ui-tree-handle></a>
-                            <h1><a ui-sref="questionnaire.chapter({chapterId: chapter.itemId})">{{chapter.title}}</a></h1>
+                            <h1><a ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">{{chapter.title}}</a></h1>
                             <div class="btn-group" dropdown >
                                 <a href="javascript:void(0);" data-toggle="dropdown" ng-click="$event.stopPropagation()" class="dropdown-toggle"></a>
                                 <ul class="dropdown-menu">
-                                    <li><a ng-click="editChapter(chapter);$event.stopPropagation()">Edit</a></li>
-                                    <li><a ng-click="cloneChapter(chapter);$event.stopPropagation()">Clone</a></li>
-                                    <li><a ng-click="deleteChapter(chapter);$event.stopPropagation()">Delete</a></li>
+                                    <li><a ng-click="editChapter(chapter);">Edit</a></li>
+                                    <li><a ng-click="cloneChapter(chapter);">Clone</a></li>
+                                    <li><a ng-click="deleteChapter(chapter);">Delete</a></li>
                                 </ul>
                             </div>
                         </div>

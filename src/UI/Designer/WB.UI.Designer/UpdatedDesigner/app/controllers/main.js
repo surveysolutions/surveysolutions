@@ -80,10 +80,6 @@
                     }
                 };
 
-                $scope.openChapter = function(chapterId) {
-                    $state.go('questionnaire.chapter', { chapterId: chapterId });
-                };
-
                 $scope.navigateTo = function (reference) {
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,
@@ -171,8 +167,9 @@
                 questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (result) {
                     $scope.questionnaire = result;
                     if (!$state.params.chapterId && result.chapters.length > 0) {
-                        $state.go('questionnaire.chapter', { chapterId: _.first(result.chapters).itemId });
-                    } 
+                        var itemId = _.first(result.chapters).itemId;
+                        $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
+                    }
                 });
             }
         ]);

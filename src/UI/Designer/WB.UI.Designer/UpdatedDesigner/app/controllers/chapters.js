@@ -4,7 +4,7 @@
     angular.module('designerApp')
         .controller('ChaptersCtrl', [
             '$rootScope', '$scope', '$state', 'commandService', 'utilityService', '$log', '$modal', 'questionnaireService',
-            function ($rootScope, $scope, $state, commandService, math, $log, $modal, questionnaireService) {
+            function($rootScope, $scope, $state, commandService, math, $log, $modal, questionnaireService) {
 
                 $scope.chapters = [];
 
@@ -19,7 +19,7 @@
                 };
 
                 $scope.editChapter = function(chapter) {
-                    $state.go('questionnaire.chapter', { chapterId: chapter.itemId });
+                    $state.go('questionnaire.chapter.group', { chapterId: chapter.itemId, itemId: chapter.itemId });
                 };
 
                 $scope.addNewChapter = function() {
@@ -39,7 +39,7 @@
                     var newId = math.guid();
                     var indexOf = _.indexOf($scope.questionnaire.chapters, chapter) + 1;
 
-                    commandService.cloneGroup($state.params.questionnaireId, chapter.itemId, indexOf, newId).success(function (result) {
+                    commandService.cloneGroup($state.params.questionnaireId, chapter.itemId, indexOf, newId).success(function(result) {
                         if (result.IsSuccess) {
                             var newChapter = {
                                 title: chapter.title,
@@ -51,7 +51,7 @@
                     });
                 };
 
-                $scope.deleteChapter = function (chapter) {
+                $scope.deleteChapter = function(chapter) {
                     var itemIdToDelete = chapter.itemId || $state.params.itemId;
 
                     var modalInstance = $modal.open({
@@ -60,16 +60,16 @@
                         windowClass: 'confirm-window',
                         resolve:
                         {
-                            item: function () {
+                            item: function() {
                                 return chapter;
                             }
                         }
                     });
 
-                    modalInstance.result.then(function (confirmResult) {
+                    modalInstance.result.then(function(confirmResult) {
                         if (confirmResult === 'ok') {
                             commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                                .success(function (result) {
+                                .success(function(result) {
                                     if (result.IsSuccess) {
                                         var index = $scope.questionnaire.chapters.indexOf(chapter);
                                         if (index > -1) {
@@ -82,7 +82,7 @@
 
                 };
 
-                $rootScope.$on('$stateChangeSuccess', function () {
+                $rootScope.$on('$stateChangeSuccess', function() {
                     $scope.foldback();
                 });
             }

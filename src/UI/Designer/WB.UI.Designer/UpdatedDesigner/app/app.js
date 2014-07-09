@@ -22,7 +22,8 @@
         var url = '/' + questionnaireId;
         $urlRouterProvider.otherwise(url);
 
-        $stateProvider.state('questionnaire', {
+        $stateProvider
+            .state('questionnaire', {
                 url: "/{questionnaireId}",
                 templateUrl: "app/views/main.html",
                 controller: 'MainCtrl'
