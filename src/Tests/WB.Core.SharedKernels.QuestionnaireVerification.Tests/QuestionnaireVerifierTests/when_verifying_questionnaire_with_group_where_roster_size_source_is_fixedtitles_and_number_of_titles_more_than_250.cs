@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 PublicKey = rosterGroupId,
                 IsRoster = true,
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                VariableName = "a",
                 RosterFixedTitles = fixedTitles.ToArray(),
                 Children = new List<IComposite>() { new TextQuestion(){StataExportCaption = "var"} }
             });

@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = rosterGroupId,
                     IsRoster = true,
+                    VariableName = "a",
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>
                     {

@@ -291,4 +291,10 @@
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
     <value>Question of this type is not supported.</value>
   </data>
+  <data name="WB0067_RosterHasEmptyVariableName" xml:space="preserve">
+    <value>Roster has empty variable name.</value>
+  </data>
+  <data name="WB0068_RosterHasNotUniqueVariableName" xml:space="preserve">
+    <value>Roster has not unique variable name.</value>
+  </data>
 </root>

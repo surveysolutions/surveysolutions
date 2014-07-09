@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument();
             questionnaire.Children.Add(new TextQuestion("question 1") { PublicKey = rosterSizeQuestionId, StataExportCaption = "var" });
-            questionnaire.Children.Add(new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId});
+            questionnaire.Children.Add(new Group() { PublicKey = rosterGroupId, IsRoster = true, VariableName = "a", RosterSizeQuestionId = rosterSizeQuestionId });
             verifier = CreateQuestionnaireVerifier();
         };
 

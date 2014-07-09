@@ -35,6 +35,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     Title = "Roster 1. Triggered by rosterSizeQuestion2",
                     PublicKey = roster1Id,
                     IsRoster = true,
+                    VariableName = "a",
                     RosterSizeSource = RosterSizeSourceType.Question,
                     RosterSizeQuestionId = rosterSizeQuestion2Id,
                     RosterTitleQuestionId = rosterTitleQuestionId,
@@ -52,6 +53,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     Title = "Roster 2. Triggered by rosterSizeQuestion1",
                     PublicKey = roster2Id,
                     IsRoster = true,
+                    VariableName = "b",
                     RosterSizeSource = RosterSizeSourceType.Question,
                     RosterSizeQuestionId = rosterSizeQuestion1Id,
                     RosterTitleQuestionId = rosterTitleQuestionId
