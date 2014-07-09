@@ -8,21 +8,26 @@ namespace WB.Core.Infrastructure.BaseStructures
 {
     public class StronglyTypedInterviewEvaluator : IExpressionProcessor
     {
-        public readonly Dictionary<Identity[], IValidatable> interviewScopes = new Dictionary<Identity[], IValidatable>();
+        public readonly Dictionary<string, IValidatable> interviewScopes = new Dictionary<string, IValidatable>();
 
         public StronglyTypedInterviewEvaluator()
         {
             var emptyRosterVector = new decimal[0];
             var questionnaireIdentityKey = this.GetRosterKey(new[] { IdOf.questionnaire }, emptyRosterVector);
-            
+
             var questionnaireLevel = new QuestionnaireLevel(emptyRosterVector, questionnaireIdentityKey);
 
-            this.interviewScopes.Add(questionnaireIdentityKey, questionnaireLevel);
+            this.interviewScopes.Add(GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
         }
 
-        public StronglyTypedInterviewEvaluator(Dictionary<Identity[], IValidatable> interviewScopes)
+        public StronglyTypedInterviewEvaluator(Dictionary<string, IValidatable> interviewScopes)
         {
             this.interviewScopes = interviewScopes;
+        }
+
+        private string GetRosterStringKey(Identity[] scopeIds)
+        {
+            return string.Join("$", scopeIds.Select(ConversionHelper.ConvertIdentityToString));
         }
 
         private Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
@@ -44,19 +49,19 @@ namespace WB.Core.Infrastructure.BaseStructures
                 ? this.GetRosterKey(new[] { IdOf.questionnaire }, new decimal[0])
                 : this.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId].Shrink(), parentRosterVector);
 
-            var parent = this.interviewScopes[rosterParentIdentityKey];
+            var parent = this.interviewScopes[GetRosterStringKey(rosterParentIdentityKey)];
             var rosterIdentityKey = this.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
 
             if (rosterId == IdOf.hhMember || rosterId == IdOf.jobActivity)
             {
                 var rosterLevel = new HhMember(rosterVector, rosterIdentityKey, parent as QuestionnaireLevel);
-                this.interviewScopes.Add(rosterIdentityKey, rosterLevel);
+                this.interviewScopes.Add(GetRosterStringKey(rosterIdentityKey), rosterLevel);
             }
 
             if (rosterId == IdOf.foodConsumption)
             {
                 var rosterLevel = new FoodConsumption(rosterVector, rosterIdentityKey, parent as HhMember);
-                this.interviewScopes.Add(rosterIdentityKey, rosterLevel);
+                this.interviewScopes.Add(GetRosterStringKey(rosterIdentityKey), rosterLevel);
             }
         }
 
@@ -71,7 +76,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         {
             decimal[] rosterVector = this.GetRosterVector(outerRosterVector, rosterInstanceId);
             var rosterIdentityKey = this.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
-            var dependentRosters = this.interviewScopes.Keys.Where(x => x.Take(rosterVector.Length).SequenceEqual(rosterIdentityKey));
+            var dependentRosters = this.interviewScopes.Keys.Where(x => x.StartsWith(GetRosterStringKey((rosterIdentityKey))));
             foreach (var rosterVectorKey in dependentRosters)
             {
                 this.interviewScopes.Remove(rosterVectorKey);
@@ -148,8 +153,8 @@ namespace WB.Core.Infrastructure.BaseStructures
                 return null;
 
             var rosterKey = this.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
-
-            return this.interviewScopes.ContainsKey(rosterKey) ? this.interviewScopes[rosterKey] : null;
+            var rosterStringKey = GetRosterStringKey(rosterKey);
+            return this.interviewScopes.ContainsKey(rosterStringKey) ? this.interviewScopes[rosterStringKey] : null;
         }
 
         public void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
@@ -203,11 +208,11 @@ namespace WB.Core.Infrastructure.BaseStructures
                 {
                     var interviewScope = interviewScopeKvp.Value as AbstractRosterLevel;
 
-                    var parentRosterVector = interviewScopeKvp.Key.Shrink();
+                    var parentRosterVector = interviewScopeKvp.Value.GetRosterKey().Shrink();
 
                     var parentRosterVectorLength = parentRosterVector.Length;
                     var rosters = this.interviewScopes.Where(x
-                        => x.Key.Take(parentRosterVectorLength).SequenceEqual(parentRosterVector)
+                        => x.Key.StartsWith(this.GetRosterStringKey(parentRosterVector))
                             && x.Key.Length == parentRosterVectorLength + 1)
                         .Select(x => x.Value);
                     interviewScope.Validate(rosters, questionsToBeValid, questionsToBeInvalid);
@@ -244,13 +249,13 @@ namespace WB.Core.Infrastructure.BaseStructures
             if (targetLevel == null) return;
         }
 
-        public void DisableGroups(IEnumerable<Identity> groupsToDisable) {}
+        public void DisableGroups(IEnumerable<Identity> groupsToDisable) { }
 
-        public void EnableGroups(IEnumerable<Identity> groupsToEnable) {}
+        public void EnableGroups(IEnumerable<Identity> groupsToEnable) { }
 
-        public void DisableQuestions(IEnumerable<Identity> questionsToDisable) {}
+        public void DisableQuestions(IEnumerable<Identity> questionsToDisable) { }
 
-        public void EnableQuestions(IEnumerable<Identity> questionsToEnable) {}
+        public void EnableQuestions(IEnumerable<Identity> questionsToEnable) { }
 
         public IExpressionProcessor Copy()
         {
@@ -260,8 +265,8 @@ namespace WB.Core.Infrastructure.BaseStructures
             foreach (var interviewScope in interviewScopes)
             {
                 var parent = interviewScope.Value.GetParent();
-                if(parent != null)
-                    newScopes[interviewScope.Key].SetParent(newScopes[parent.GetRosterKey()]);
+                if (parent != null)
+                    newScopes[interviewScope.Key].SetParent(newScopes[this.GetRosterStringKey(parent.GetRosterKey())]);
             }
 
             return new StronglyTypedInterviewEvaluator(newScopes);
@@ -269,7 +274,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         }
     }
 
-    public interface IValidatable 
+    public interface IValidatable
     {
         void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
 
@@ -321,7 +326,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             //Members.Count(m => m.age > 15);
         }
 
-        public IValidatable CopyMembers() 
+        public IValidatable CopyMembers()
         {
             //var level = this.MemberwiseClone() as QuestionnaireLevel;
 
@@ -330,7 +335,7 @@ namespace WB.Core.Infrastructure.BaseStructures
                 id = this.id,
                 persons_count = this.persons_count
             };
-            
+
             return level;
         }
 
@@ -351,8 +356,8 @@ namespace WB.Core.Infrastructure.BaseStructures
 
     public class HhMember : AbstractRosterLevel, IValidatable, IValidatableRoster
     {
-        public HhMember(decimal[] rosterVector, Identity[] rosterKey , QuestionnaireLevel parent)
-            : this(rosterVector, rosterKey )
+        public HhMember(decimal[] rosterVector, Identity[] rosterKey, QuestionnaireLevel parent)
+            : this(rosterVector, rosterKey)
         {
             this.parent = parent;
         }
@@ -422,7 +427,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             this.Validate(Enumerable.Empty<HhMember>(), questionsToBeValid, questionsToBeInvalid);
         }
 
-        public IValidatable CopyMembers() 
+        public IValidatable CopyMembers()
         {
             var level = new HhMember(this.rosterVector, this.rosterKey)
             {
@@ -437,7 +442,7 @@ namespace WB.Core.Infrastructure.BaseStructures
                 best_job_owner = this.best_job_owner
             };
 
-            return level ;
+            return level;
         }
 
         public Identity[] GetRosterKey()
@@ -467,7 +472,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         public FoodConsumption(decimal[] rosterVector, Identity[] rosterKey)
             : base(rosterVector, rosterKey)
         {
-            
+
         }
 
         private HhMember parent;
@@ -529,7 +534,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         public decimal price_for_food;
 
 
-        private void Validate(IEnumerable<FoodConsumption> roters, List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid) {}
+        private void Validate(IEnumerable<FoodConsumption> roters, List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid) { }
 
         public override void Validate(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid,
             List<Identity> questionsToBeInvalid)
@@ -546,11 +551,11 @@ namespace WB.Core.Infrastructure.BaseStructures
         public IValidatable CopyMembers()
         {
             //this.MemberwiseClone() as FoodConsumption;
-            
+
             var level = new FoodConsumption(this.rosterVector, this.rosterKey)
             {
-              price_for_food  = this.price_for_food,
-              times_per_week = this.times_per_week
+                price_for_food = this.price_for_food,
+                times_per_week = this.times_per_week
 
             };
 
@@ -599,8 +604,8 @@ namespace WB.Core.Infrastructure.BaseStructures
 
         public static Dictionary<Guid, Guid[]> parentsMap = new Dictionary<Guid, Guid[]>
         {
-            { id, new Guid[0] },
-            { persons_count, new Guid[0] },
+            { id, new []{questionnaire} },
+            { persons_count, new []{questionnaire}},
             { name, hhMemberScopeIds },
             { age, hhMemberScopeIds },
             { date, hhMemberScopeIds },

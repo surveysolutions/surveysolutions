@@ -119,6 +119,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.RosterGroupInstanceIds = BuildRosterInstanceIdsFromSynchronizationDto(@event.InterviewData);
 
+            var orderedRosterInstances = @event.InterviewData.RosterGroupInstances.OrderBy(x => ConversionHelper.ConvertIdAndRosterVectorToString(x.Key.Id, x.Key.InterviewItemPropagationVector)).Select(x => x.Value).ToList();
+            
+            foreach (RosterSynchronizationDto roster in orderedRosterInstances.SelectMany(rosters => rosters)) {
+                this.expressionProcessorState.AddRoster(roster.RosterId, roster.OuterScopePropagationVector,roster.RosterInstanceId, roster.SortIndex);
+            }
+
+            if (@event.InterviewData.Answers != null)
+            {
+                foreach (var question in @event.InterviewData.Answers)
+                {
+                    decimal[] questionPropagationVector = question.QuestionPropagationVector;
+                    if (question.Answer is int)
+                    {
+                        this.expressionProcessorState.UpdateIntAnswer(question.Id, questionPropagationVector, Convert.ToInt32(question.Answer));
+                    }
+                    if (question.Answer is decimal)
+                    {
+                        this.expressionProcessorState.UpdateDecimalAnswer(question.Id, questionPropagationVector, Convert.ToDecimal(question.Answer));
+                        this.expressionProcessorState.UpdateSingleOptionAnswer(question.Id, questionPropagationVector, Convert.ToDecimal(question.Answer));
+                    }
+                    var answer = question.Answer as string;
+                    if (answer != null)
+                    {
+                        this.expressionProcessorState.UpdateTextAnswer(question.Id, questionPropagationVector, answer);
+                        this.expressionProcessorState.UpdateQrBarcodeAnswer(question.Id, questionPropagationVector, answer);
+                    }
+                    if (question.Answer is decimal[])
+                    {
+                        this.expressionProcessorState.UpdateMultiOptionAnswer(question.Id, questionPropagationVector, (decimal[])(question.Answer));
+                    }
+                }
+            }
+
             this.interviewState.ValidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.ValidAnsweredQuestions);
             this.interviewState.InvalidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);
         }
