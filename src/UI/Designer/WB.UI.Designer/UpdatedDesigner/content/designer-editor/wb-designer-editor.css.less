@@ -294,8 +294,8 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
       > .ul-holder {
         width: 100%;
         height: 100%;
-        /*overflow-x: hidden;
-        overflow-y: auto;*/
+        overflow-x: hidden;
+        overflow-y: auto;
 
         > ul.chapters {
           display: none;
@@ -306,6 +306,11 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 
           .angular-ui-tree-placeholder {
             outline: 2px dashed white;
+          }
+
+          .btn-group ul.dropdown-menu {
+            left: inherit;
+            right: 0;
           }
         }
 
