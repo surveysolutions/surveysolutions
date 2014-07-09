@@ -89,8 +89,6 @@
 
                 $scope.currentChapter = null;
 
-                $scope.currentChapterId = null;
-
                 $scope.addQuestion = function (parent) {
                     var newId = utilityService.guid();
                     var variable = 'q' + newId.substring(0, 5);
@@ -167,7 +165,9 @@
                 questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (result) {
                     $scope.questionnaire = result;
                     if (!$state.params.chapterId && result.chapters.length > 0) {
-                        var itemId = _.first(result.chapters).itemId;
+                        var defaultChapter = _.first(result.chapters);
+                        var itemId = defaultChapter.itemId;
+                        $scope.currentChapter = defaultChapter;
                         $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
                     }
                 });
