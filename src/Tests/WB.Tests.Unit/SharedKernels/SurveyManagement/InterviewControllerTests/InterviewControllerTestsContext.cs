@@ -9,13 +9,14 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 
-namespace WB.UI.Supervisor.Tests.InterviewControllerTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
 {
-    [Subject(typeof(InterviewController))]
     internal class InterviewControllerTestsContext
     {
-        protected static InterviewController CreateController(ICommandService commandService = null,
-            IGlobalInfoProvider provider = null, ILogger logger = null,
+        protected static InterviewController CreateController(
+            ICommandService commandService = null,
+            IGlobalInfoProvider provider = null,
+            ILogger logger = null,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
             IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory = null)
         {
