@@ -37,6 +37,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConversionHelper.cs" />
     <Compile Include="Identity.cs" />
     <Compile Include="IdentityComparer.cs" />
     <Compile Include="IExpressionProcessor.cs" />
