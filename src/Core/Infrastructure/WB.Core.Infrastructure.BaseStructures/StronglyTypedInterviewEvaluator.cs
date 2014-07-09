@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace WB.Core.Infrastructure.BaseStructures
 {
-    public class StronglyTypedInterviewEvaluator : IExpressionProcessor
+    public class StronglyTypedInterviewEvaluator : IInterviewExpressionState 
     {
         public readonly Dictionary<string, IValidatable> interviewScopes = new Dictionary<string, IValidatable>();
 
@@ -81,6 +81,11 @@ namespace WB.Core.Infrastructure.BaseStructures
 
         public void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
+            if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))
+            {
+                return;
+            }
+
             decimal[] rosterVector = this.GetRosterVector(outerRosterVector, rosterInstanceId);
             var rosterIdentityKey = this.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
             var dependentRosters = this.interviewScopes.Keys.Where(x => x.StartsWith(GetRosterStringKey((rosterIdentityKey)))).ToArray();
@@ -264,7 +269,7 @@ namespace WB.Core.Infrastructure.BaseStructures
 
         public void EnableQuestions(IEnumerable<Identity> questionsToEnable) { }
 
-        public IExpressionProcessor Copy()
+        public IInterviewExpressionState Copy()
         {
             var newScopes = this.interviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers());
 
