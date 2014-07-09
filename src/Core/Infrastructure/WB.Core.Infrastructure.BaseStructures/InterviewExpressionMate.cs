@@ -8,7 +8,7 @@ namespace WB.Core.Infrastructure.BaseStructures
 {
     // ReSharper disable InconsistentNaming
 
-    public class InterviewExpressionMate : IExpressionProcessor
+    public class InterviewExpressionMate : IInterviewExpressionState
     {
         public InterviewExpressionMate()
         {
@@ -303,12 +303,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             throw new NotImplementedException();
         }
 
-        public void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IExpressionProcessor Copy()
+        public IInterviewExpressionState Copy()
         {
             throw new NotImplementedException();
         }

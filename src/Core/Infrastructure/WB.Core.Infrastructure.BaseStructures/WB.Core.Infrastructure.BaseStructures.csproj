@@ -38,9 +38,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConversionHelper.cs" />
+    <Compile Include="ExpressionProcessor.cs" />
     <Compile Include="Identity.cs" />
     <Compile Include="IdentityComparer.cs" />
     <Compile Include="IExpressionProcessor.cs" />
+    <Compile Include="IInterviewExpressionState.cs" />
     <Compile Include="InterviewExpressionMate.cs" />
     <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="InterviewEvaluatorPrototype.cs" />
