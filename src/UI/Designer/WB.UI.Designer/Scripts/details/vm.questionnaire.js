@@ -124,6 +124,7 @@
                 group.isSelected(true);
                 group.allowedQuestions(datacontext.questions.getAllAllowedQuestionsForSelect());
                 group.rosterSizeQuestion.valueHasMutated();
+                group.variableName.valueHasMutated();
                 selectedGroup(group);
                 openDetails("show-group");
             },

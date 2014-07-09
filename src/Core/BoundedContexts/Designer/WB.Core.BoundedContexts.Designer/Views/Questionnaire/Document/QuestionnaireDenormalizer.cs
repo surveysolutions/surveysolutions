@@ -89,6 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
+            group.VariableName = evnt.Payload.VariableName;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -124,6 +125,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
+            group.VariableName = evnt.Payload.VariableName;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -330,7 +332,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             item.UpdateGroup(
                 evnt.Payload.GroupPublicKey,
-                evnt.Payload.GroupText,
+                evnt.Payload.GroupText, evnt.Payload.VariableName,
                 evnt.Payload.Description,
                 evnt.Payload.ConditionExpression);
 

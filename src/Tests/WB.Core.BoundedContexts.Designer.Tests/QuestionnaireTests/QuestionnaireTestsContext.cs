@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 responsibleId: responsibleId, isRoster: propagationKind == Propagate.AutoPropagated);
 
             questionnaire.AddGroup(secondGroup,
-                responsibleId: responsibleId, title: "Second group", rosterSizeQuestionId: null, description: null, condition: null,
+                responsibleId: responsibleId, title: "Second group", variableName:null, rosterSizeQuestionId: null, description: null, condition: null,
                 parentGroupId: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return questionnaire;
@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             string[] rosterFixedTitles = null, Guid? rosterTitleQuestionId = null)
         {
             questionnaire.AddGroup(groupId,
-                responsibleId: responsibleId, title: "New group", rosterSizeQuestionId: rosterSizeQuestionId, description: null,
+                responsibleId: responsibleId, title: "New group", variableName: null, rosterSizeQuestionId: rosterSizeQuestionId, description: null,
                 condition: condition, parentGroupId: parentGroupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterFixedTitles: rosterFixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId);
@@ -190,7 +190,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneRosterGroup(groupId: autoGroupPublicKey,
                 responsibleId: responsibleId);
 
-            questionnaire.AddGroup(secondGroup, responsibleId, "Second group", null, null, null, null, isRoster: false,
+            questionnaire.AddGroup(secondGroup, responsibleId, "Second group",null, null, null, null, null, isRoster: false,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return questionnaire;
@@ -323,7 +323,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 responsibleId: responsibleId);
 
             questionnaire.AddGroup(Guid.NewGuid(),
-                responsibleId: responsibleId, title: "New group", rosterSizeQuestionId: null, description: null, condition: null,
+                responsibleId: responsibleId, title: "New group", variableName: null, rosterSizeQuestionId: null, description: null, condition: null,
                 parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return questionnaire;

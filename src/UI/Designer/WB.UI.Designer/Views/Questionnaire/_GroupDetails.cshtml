@@ -24,6 +24,16 @@
                 </div>
                 <div class="control-group" data-bind="visible: isRoster">
                     <div class="controls">
+                        <label class="control-label required">Roster variable name</label>
+                        <div class="controls">
+                            @*<input id="variableName" placeholder="var. name" type="text" data-bind="value: variableName, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />*@
+                            
+                            <input id="variableName" placeholder="var. name" maxlength="32" type="text" data-bind="autoGrowArea: variableName, valueUpdate: 'afterkeydown'" class="input-block-level"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group" data-bind="visible: isRoster">
+                    <div class="controls">
                         <label class="control-label">Roster size source</label>
                         <div class="btn-group">
                             <button type="button" class="btn btn-small" data-value="Question" data-bind="checkedButtons: rosterSizeSource">Question</button>
