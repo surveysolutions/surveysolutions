@@ -130,13 +130,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IQuestion>(QuestionHasValidationExpressionWithoutValidationMessage, "WB0065", VerificationMessages.WB0065_QuestionHasValidationExpressionWithoutValidationMessage),
-                     Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
+                    Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
+                    Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
-                    ErrorsByQuestionsWithDuplicateVariableName
+                    ErrorsByQuestionsWithDuplicateVariableName,
+                    ErrorsByRostersWithDuplicateVariableName
                 };
             }
         }
@@ -431,6 +433,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return string.IsNullOrWhiteSpace(arg.StataExportCaption);
         }
 
+        private bool RosterHasEmptyVariableName(IGroup group)
+        {
+            if (!group.IsRoster)
+                return false;
+            return string.IsNullOrWhiteSpace(group.VariableName);
+        }
+
         private EntityVerificationResult<IComposite> QuestionShouldNotHaveCircularReferences(IQuestion entity, QuestionnaireDocument questionnaire)
         {
             if (String.IsNullOrEmpty(entity.ConditionExpression))
@@ -636,6 +645,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
             foreach (IQuestion questionsDuplicate in questionsDuplicates)
                 yield return VariableNameIsUsedAsOtherQuestionVariableName(questionsDuplicate);
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByRostersWithDuplicateVariableName(QuestionnaireDocument questionnaire)
+        {
+            var rosterVariableNameMappedOnRosters = questionnaire.Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
+                .GroupBy(s => s.VariableName, StringComparer.InvariantCultureIgnoreCase).ToDictionary(r => r.Key, r => r.ToArray());
+            
+            foreach (var rosterVariableNameMappedOnRoster in rosterVariableNameMappedOnRosters)
+            {
+                if (rosterVariableNameMappedOnRoster.Value.Length < 2)
+                    continue;
+
+                yield return new QuestionnaireVerificationError("WB0068",
+                    VerificationMessages.WB0068_RosterHasNotUniqueVariableName,
+                    rosterVariableNameMappedOnRoster.Value.Select(CreateReference).ToArray());
+            }
+
         }
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithSubstitutions(QuestionnaireDocument questionnaire)
