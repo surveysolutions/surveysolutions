@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasCompleted;
         private InterviewStatus status;
 
-        private Infrastructure.BaseStructures.IExpressionProcessor expressionProcessorState;
+        private Infrastructure.BaseStructures.IExpressionProcessor expressionProcessorState = new StronglyTypedInterviewEvaluator();
 
         private readonly InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
@@ -427,7 +427,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
 
-            expressionProcessorState.RemoveRoster(@event.GroupId, @event.OuterRosterVector, @event.RosterInstanceId);
+           
         }
 
         private void Apply(RosterRowTitleChanged @event) { }
@@ -437,11 +437,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal void Apply(RosterInstancesAdded @event)
         {
             this.interviewState.AddRosterInstances(@event.Instances);
+            foreach (var instance in @event.Instances)
+            {
+                expressionProcessorState.AddRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
+            }
         }
 
         private void Apply(RosterInstancesRemoved @event)
         {
             this.interviewState.RemoveRosterInstances(@event.Instances);
+            foreach (var instance in @event.Instances)
+            {
+                expressionProcessorState.RemoveRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId);
+            }
         }
 
         internal void Apply(InterviewStatusChanged @event)
@@ -576,14 +584,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Interview() { }
 
-        
-
         public Interview(Guid id, Guid userId, Guid questionnaireId, long version, PreloadedDataDto preloadedData, DateTime answersTime,
             Guid supervisorId)
             : base(id)
         {
-            InitializeExpressionProcessorState();
-
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, version);
 
             var interviewChangeStructures = new InterviewChangeStructures();
@@ -631,17 +635,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-
-        private void InitializeExpressionProcessorState()
-        {
-            this.expressionProcessorState = new StronglyTypedInterviewEvaluator();
-        }
-
         public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions,
             DateTime answersTime, Guid supervisorId)
             : base(id)
         {
-            InitializeExpressionProcessorState();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
 
             var interviewChangeStructures = new InterviewChangeStructures();
@@ -679,7 +676,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             DateTime answersTime)
             : base(id)
         {
-            InitializeExpressionProcessorState();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
 
             var interviewChangeStructures = new InterviewChangeStructures();
@@ -713,7 +709,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Interview(Guid id, Guid userId, Guid questionnaireId, long? questionnaireVersion, DateTime answersTime, Guid supervisorId)
             : base(id)
         {
-            InitializeExpressionProcessorState();
             IQuestionnaire questionnaire = questionnaireVersion.HasValue
                 ? this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
                 : this.GetQuestionnaireOrThrow(questionnaireId);
@@ -741,7 +736,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid)
             : base(id)
         {
-            InitializeExpressionProcessorState();
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true, null));
             this.ApplyValidationEvent(isValid);
@@ -751,14 +745,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
             : base(id)
         {
-            InitializeExpressionProcessorState();
             this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
         
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
             : base(id)
         {
-            InitializeExpressionProcessorState();
             this.SynchronizeInterviewFromHeadquarters(id, userId, supervisorId, interviewDto, synchronizationTime);
         }
 

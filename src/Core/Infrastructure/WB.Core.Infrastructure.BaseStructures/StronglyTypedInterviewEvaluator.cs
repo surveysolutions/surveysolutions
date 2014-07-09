@@ -43,6 +43,14 @@ namespace WB.Core.Infrastructure.BaseStructures
             }
 
             decimal[] rosterVector = this.GetRosterVector(outerRosterVector, rosterInstanceId);
+
+            var rosterIdentityKey = this.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
+
+            if (this.interviewScopes.ContainsKey(GetRosterStringKey(rosterIdentityKey)))
+            {
+                return;
+            }
+
             decimal[] parentRosterVector = outerRosterVector;
 
             var rosterParentIdentityKey = parentRosterVector.Length == 0
@@ -50,7 +58,6 @@ namespace WB.Core.Infrastructure.BaseStructures
                 : this.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId].Shrink(), parentRosterVector);
 
             var parent = this.interviewScopes[GetRosterStringKey(rosterParentIdentityKey)];
-            var rosterIdentityKey = this.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
 
             if (rosterId == IdOf.hhMember || rosterId == IdOf.jobActivity)
             {
@@ -76,10 +83,10 @@ namespace WB.Core.Infrastructure.BaseStructures
         {
             decimal[] rosterVector = this.GetRosterVector(outerRosterVector, rosterInstanceId);
             var rosterIdentityKey = this.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
-            var dependentRosters = this.interviewScopes.Keys.Where(x => x.StartsWith(GetRosterStringKey((rosterIdentityKey))));
-            foreach (var rosterVectorKey in dependentRosters)
+            var dependentRosters = this.interviewScopes.Keys.Where(x => x.StartsWith(GetRosterStringKey((rosterIdentityKey)))).ToArray();
+            foreach (var rosterKey in dependentRosters)
             {
-                this.interviewScopes.Remove(rosterVectorKey);
+                this.interviewScopes.Remove(rosterKey);
             }
         }
 
