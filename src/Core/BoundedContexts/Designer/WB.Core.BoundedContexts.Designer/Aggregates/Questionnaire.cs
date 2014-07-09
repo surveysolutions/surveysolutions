@@ -865,6 +865,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles,
             Guid? rosterTitleQuestionId)
         {
+            this.PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
 
@@ -1113,6 +1115,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
             RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
+            this.PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
@@ -3385,8 +3389,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void PrepareGeneralProperties(ref string title, ref string variableName)
         {
-            variableName = variableName.Trim();
-            title = title.Trim();
+            if (variableName != null)
+                variableName = variableName.Trim();
+
+            if (title != null)
+                title = title.Trim();
         }
 
         private void ValidateSubstitutionReferences(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
