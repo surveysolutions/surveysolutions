@@ -2,8 +2,10 @@
     'use strict';
     angular.module('designerApp').controller('confirmCtrl',
     [
-        '$scope', '$log', '$modalInstance',
-        function($scope, $log, $modalInstance) {
+        '$scope', '$log', '$modalInstance', 'item',
+        function ($scope, $log, $modalInstance, item) {
+            $scope.item = item;
+
             $scope.ok = function() {
                 $modalInstance.close('ok');
             };

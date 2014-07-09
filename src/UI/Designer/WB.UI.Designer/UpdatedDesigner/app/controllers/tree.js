@@ -226,8 +226,8 @@
                 }
             };
 
-            $scope.deleteQuestion = function(itemId) {
-                var itemIdToDelete = itemId || $state.params.itemId;
+            $scope.deleteQuestion = function(item) {
+                var itemIdToDelete = item.itemId || $state.params.itemId;
 
                 var modalInstance = $modal.open({
                     templateUrl: 'app/views/confirm.html',
@@ -235,13 +235,13 @@
                     windowClass: 'confirm-window',
                     resolve:
                     {
-                        questionnaire: function() {
-                            return $scope.questionnaire;
+                        item: function() {
+                            return item;
                         }
                     }
                 });
 
-                modalInstance.result.then(function (confirmResult) {
+                modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
                         commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete)
                             .success(function(result) {
@@ -255,17 +255,32 @@
             };
 
 
-            $scope.deleteGroup = function(itemId) {
-                var itemIdToDelete = itemId || $state.params.itemId;
-                if (confirm("Are you sure want to delete chapter?")) {
-                    commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                        .success(function(result) {
-                            if (result.IsSuccess) {
-                                questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
-                                $scope.resetSelection();
-                            }
-                        });
-                }
+            $scope.deleteGroup = function(item) {
+                var itemIdToDelete = item.itemId || $state.params.itemId;
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'app/views/confirm.html',
+                    controller: 'confirmCtrl',
+                    windowClass: 'confirm-window',
+                    resolve:
+                    {
+                        item: function() {
+                            return item;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(confirmResult) {
+                    if (confirmResult === 'ok') {
+                        commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
+                            .success(function(result) {
+                                if (result.IsSuccess) {
+                                    questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                                    $scope.resetSelection();
+                                }
+                            });
+                    }
+                });
             };
 
             $scope.moveToChapter = function(chapterId) {
