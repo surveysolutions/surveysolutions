@@ -230,7 +230,7 @@
             $scope.cloneQuestion = function (questionId) {
                 var itemIdToClone = questionId || $state.params.itemId;
                 var newId = utilityService.guid();
-                commandService.cloneItem($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
+                commandService.cloneQuestion($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
                     if (result.IsSuccess) {
                         var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
                         var parentItem = clonnedItem.getParentItem() || $scope;
@@ -248,6 +248,20 @@
                 });
             };
 
+
+            $scope.cloneGroup = function (groupId) {
+                var itemIdToClone = groupId || $state.params.itemId;
+                var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
+                var parentItem = clonnedItem.getParentItem() || $scope;
+                var indexOf = _.indexOf(parentItem.items, clonnedItem);
+                var newId = utilityService.guid();
+
+                commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function (result) {
+                    if (result.IsSuccess) {
+                        $scope.refreshTree();
+                    }
+                });
+            };
             $scope.deleteQuestion = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
@@ -320,13 +334,16 @@
                 $state.go('questionnaire.chapter', { chapterId: $state.params.chapterId });
             }
 
-            questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
+            $scope.refreshTree = function() {
+                questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
                 .success(function(result) {
-                    $scope.items = result.items;
-                    $scope.currentChapter = result;
-                    connectTree();
+                     $scope.items = result.items;
+                     $scope.currentChapter = result;
+                     connectTree();
 
-                    window.ContextMenuController.get().init();
-                });
+                     window.ContextMenuController.get().init();
+                 });
+            }
+            $scope.refreshTree();
         }
     ]);

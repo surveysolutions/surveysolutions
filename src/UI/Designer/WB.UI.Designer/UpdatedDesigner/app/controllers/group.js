@@ -27,30 +27,6 @@
                     });
                 };
                 
-                $scope.cloneChapter = function() {
-                    var newId = math.guid();
-                    var chapterDescription = "";
-
-                    commandService.cloneGroupWithoutChildren($stateParams.questionnaireId, newId, $scope.activeChapter.group, chapterDescription).success(function(result) {
-                        $("#edit-chapter-save-button").popover('destroy');
-                        if (result.IsSuccess) {
-                            var newChapter = {
-                                title: $scope.activeChapter.title,
-                                itemId: newId,
-                                description: chapterDescription
-                            };
-                            $scope.questionnaire.chapters.push(newChapter);
-                            $scope.close();
-                        } else {
-                            $("#edit-chapter-save-button").popover({
-                                content: result.Error,
-                                placement: top,
-                                animation: true
-                            }).popover('show');
-                        }
-                    });
-                };
-
                 $scope.moveToChapter = function(chapterId) {
                     questionnaireService.moveGroup($scope.activeChapter.itemId, 0, chapterId, $stateParams.questionnaireId);
                     var removeFrom = $scope.activeChapter.getParentItem() || $scope;
