@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', [
-            '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log',
-            function($scope, $stateParams, questionnaireService, commandService, utilityService, $log) {
+            '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log', '$modal',
+            function($scope, $stateParams, questionnaireService, commandService, utilityService, $log, $modal) {
 
                 $scope.rosterTypes = {
                     'Numeric-template.html': 'Answer to numeric question',
@@ -91,16 +91,30 @@
                     });
                 };
 
-                $scope.deleteRoster = function() {
-                    if (confirm("Are you sure want to delete roster?")) {
-                        commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
-                            if (result.IsSuccess) {
-                                $scope.activeRoster.isDeleted = true;
-                            } else {
-                                $log.error(result);
+                $scope.deleteRoster = function () {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'app/views/confirm.html',
+                        controller: 'confirmCtrl',
+                        windowClass: 'confirm-window',
+                        resolve:
+                        {
+                            item: function () {
+                                return $scope.activeRoster;
                             }
-                        });
-                    }
+                        }
+                    });
+
+                    modalInstance.result.then(function (confirmResult) {
+                        if (confirmResult === 'ok') {
+                            commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function (result) {
+                                if (result.IsSuccess) {
+                                    var itemIdToDelete = $stateParams.itemId;
+                                    questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                                    $scope.resetSelection();
+                                }
+                            });
+                        }
+                    });
                 };
 
                 $scope.resetRoster = function() {

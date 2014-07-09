@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('GroupCtrl', [
-            '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService',
-            function($scope, $stateParams, questionnaireService, commandService, math) {
+            '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$modal',
+            function($scope, $stateParams, questionnaireService, commandService, math, $modal) {
 
                 $scope.loadGroup = function() {
                     questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
@@ -16,7 +16,7 @@
 
                 $scope.saveChapter = function() {
                     $("#edit-chapter-save-button").popover('destroy');
-                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeChapter.group).success(function (result) {
+                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeChapter.group).success(function(result) {
                         if (!result.IsSuccess) {
                             $("#edit-chapter-save-button").popover({
                                 content: result.Error,
@@ -27,28 +27,37 @@
                     });
                 };
 
-                $scope.deleteChapter = function() {
-                    if (confirm("Are you sure want to delete?")) {
-                        commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
-                            $("#edit-chapter-save-button").popover('destroy');
-                            if (result.IsSuccess) {
-                                if ($scope.isChapter($scope.activeChapter)) {
-                                    var index = $scope.questionnaire.chapters.indexOf($scope.activeChapter.group);
-                                    if (index > -1) {
-                                        $scope.questionnaire.chapters.splice(index, 1);
-                                    }
-                                } else {
-                                    $scope.activeChapter.isDeleted = true;
-                                }
-                            } else {
-                                $("#edit-chapter-save-button").popover({
-                                    content: result.Error,
-                                    placement: top,
-                                    animation: true
-                                }).popover('show');
+                $scope.deleteGroup = function() {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'app/views/confirm.html',
+                        controller: 'confirmCtrl',
+                        windowClass: 'confirm-window',
+                        resolve:
+                        {
+                            item: function() {
+                                return $scope.activeChapter.group;
                             }
-                        });
-                    }
+                        }
+                    });
+
+                    modalInstance.result.then(function(confirmResult) {
+                        if (confirmResult === 'ok') {
+                            commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
+                                $("#edit-chapter-save-button").popover('destroy');
+                                if (result.IsSuccess) {
+                                    var itemIdToDelete = $stateParams.itemId;
+                                    questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                                    $scope.resetSelection();
+                                } else {
+                                    $("#edit-chapter-save-button").popover({
+                                        content: result.Error,
+                                        placement: top,
+                                        animation: true
+                                    }).popover('show');
+                                }
+                            });
+                        }
+                    });
                 };
 
                 $scope.cloneChapter = function() {
