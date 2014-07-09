@@ -190,7 +190,7 @@
         <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="resetQuestion()">Cancel</button>
     </div>
     <div class="pull-right">
-        <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion()">Delete</button>
+        <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion(activeQuestion)">Delete</button>
         <button id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneQuestion()">Clone</button>
         <ng-include src="'moveToChapterSnippet'" />
     </div>

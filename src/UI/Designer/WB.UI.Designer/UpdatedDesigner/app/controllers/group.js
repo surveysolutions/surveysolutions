@@ -26,40 +26,7 @@
                         }
                     });
                 };
-
-                $scope.deleteGroup = function() {
-                    var modalInstance = $modal.open({
-                        templateUrl: 'app/views/confirm.html',
-                        controller: 'confirmCtrl',
-                        windowClass: 'confirm-window',
-                        resolve:
-                        {
-                            item: function() {
-                                return $scope.activeChapter.group;
-                            }
-                        }
-                    });
-
-                    modalInstance.result.then(function(confirmResult) {
-                        if (confirmResult === 'ok') {
-                            commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
-                                $("#edit-chapter-save-button").popover('destroy');
-                                if (result.IsSuccess) {
-                                    var itemIdToDelete = $stateParams.itemId;
-                                    questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
-                                    $scope.resetSelection();
-                                } else {
-                                    $("#edit-chapter-save-button").popover({
-                                        content: result.Error,
-                                        placement: top,
-                                        animation: true
-                                    }).popover('show');
-                                }
-                            });
-                        }
-                    });
-                };
-
+                
                 $scope.cloneChapter = function() {
                     var newId = math.guid();
                     var chapterDescription = "";

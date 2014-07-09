@@ -254,7 +254,6 @@
                 });
             };
 
-
             $scope.deleteGroup = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
