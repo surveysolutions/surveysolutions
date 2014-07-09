@@ -144,8 +144,6 @@
     <Compile Include="InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_input_view_model_is_null.cs" />
     <Compile Include="InterviewApiControllerTests\when_getting_interview_details_with_specified_interview_status.cs" />
     <Compile Include="InterviewApiControllerTests\when_getting_interview_details_with_specified_responsible_name.cs" />
-    <Compile Include="InterviewControllerTests\InterviewControllerTestsContext.cs" />
-    <Compile Include="InterviewControllerTests\when_getting_not_existing_interview_details.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportDataApiControllerTests\ReportDataApiControllerTestContext.cs" />
     <Compile Include="ReportDataApiControllerTests\when_map_report_data_is_being_queried.cs" />
