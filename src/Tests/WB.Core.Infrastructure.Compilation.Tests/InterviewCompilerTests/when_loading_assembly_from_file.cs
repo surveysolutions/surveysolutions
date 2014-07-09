@@ -21,7 +21,7 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
             {
                 File.WriteAllBytes(filePath, Convert.FromBase64String(resultAssembly));
 
-                var compiledAssembly = Assembly.LoadFile(filePath);
+                var compiledAssembly = Assembly.LoadFrom(filePath);
                 Type calculator = compiledAssembly.GetType("InterviewEvaluator");
                 evaluator = Activator.CreateInstance(calculator) as IInterviewEvaluator;
             }
