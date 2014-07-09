@@ -430,6 +430,7 @@
     <Content Include="UpdatedDesigner\content\i\cross.png" />
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
+    <Content Include="UpdatedDesigner\data\editGroup\manualListRoster.json" />
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\index.html" />
