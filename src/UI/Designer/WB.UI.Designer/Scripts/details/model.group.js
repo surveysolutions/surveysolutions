@@ -11,6 +11,7 @@
                 
                 self.title = ko.observable('New Group').extend({ required: true });
                 self.parent = ko.observable();
+                self.variableName = ko.observable('')/*.extend({ required: true })*/;
 
                 self.type = ko.observable("GroupView"); // Object type
                 self.template = "GroupView"; // inner html template name
@@ -106,7 +107,7 @@
                 self.cloneSource = ko.observable();
                 self.isSelected = ko.observable();
                 self.isNullo = false;
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.description, self.condition, self.isRoster, self.rosterSizeQuestion, self.rosterSizeSource, self.rosterFixedTitles, self.rosterTitleQuestion]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.variableName, self.description, self.condition, self.isRoster, self.rosterSizeQuestion, self.rosterSizeSource, self.rosterFixedTitles, self.rosterTitleQuestion]);
                 self.dirtyFlag().reset();
                 
                 self.errors = ko.validation.group(self);
@@ -181,6 +182,10 @@
                 clone = function () {
                     var item = new Group();
                     item.title(this.title());
+
+                    item.variableName('');
+                    item.variableName.valueHasMutated();
+
                     item.type(this.type());
                     item.condition(this.condition());
                     item.level(this.level());
@@ -239,6 +244,7 @@
             update: function (data) {
                 
                 this.title(data.title);
+                this.variableName(data.variableName);
                 this.description(data.description);
                 this.condition(data.condition);
                 this.isRoster(data.isRoster);

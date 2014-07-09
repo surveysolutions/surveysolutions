@@ -74,6 +74,8 @@ namespace Main.Core.Documents
 
         public string Description { get; set; }
 
+        public string VariableName { get; set; }
+
         public bool IsRoster
         {
             get { return false; }
@@ -234,12 +236,13 @@ namespace Main.Core.Documents
             }
         }
 
-        public void UpdateGroup(Guid groupId, string title, string description, string conditionExpression)
+        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression)
         {
             this.UpdateGroup(groupId, group =>
             {
                 @group.ConditionExpression = conditionExpression;
                 @group.Description = description;
+                @group.VariableName = variableName;
                 @group.Update(title);
             });
         }

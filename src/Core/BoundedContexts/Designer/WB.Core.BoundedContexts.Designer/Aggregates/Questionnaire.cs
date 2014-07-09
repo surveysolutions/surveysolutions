@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(GroupUpdated e)
         {
-            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description, e.ConditionExpression);
+            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText,e.VariableName, e.Description, e.ConditionExpression);
         }
 
         private void Apply(ImageDeleted e)
@@ -131,6 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var group = new Group();
             group.Title = e.GroupText;
+            group.VariableName = e.VariableName;
             group.Propagated = Propagate.None;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
@@ -154,6 +155,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var group = new Group();
             group.Title = e.GroupText;
+            group.VariableName = e.VariableName;
             group.Propagated = Propagate.None;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
@@ -859,7 +861,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region Group command handlers
 
         public void AddGroup(Guid groupId, Guid responsibleId,
-            string title, Guid? rosterSizeQuestionId, string description, string condition,
+            string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition,
             Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles,
             Guid? rosterTitleQuestionId)
         {
@@ -879,6 +881,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 PublicKey = groupId,
                 GroupText = title,
+                VariableName = variableName,
                 ParentGroupPublicKey = parentGroupId,
                 Description = description,
                 ConditionExpression = condition,
@@ -898,7 +901,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void CloneGroupWithoutChildren(Guid groupId, Guid responsibleId,
-            string title, Guid? rosterSizeQuestionId, string description, string condition,
+            string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition,
             Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster, RosterSizeSourceType rosterSizeSource,
             string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
@@ -918,6 +921,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 PublicKey = groupId,
                 GroupText = title,
+                VariableName = variableName,
                 ParentGroupPublicKey = parentGroupId,
                 Description = description,
                 ConditionExpression = condition,
@@ -962,7 +966,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isRoster: sourceGroup.IsRoster, rosterSizeSource: sourceGroup.RosterSizeSource,
                 rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId,
                 rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId,
-                rosterFixedTitles: sourceGroup.RosterFixedTitles);
+                rosterFixedTitles: sourceGroup.RosterFixedTitles, variableName:sourceGroup.VariableName);
 
             foreach (var questionnaireItem in sourceGroup.Children)
             {
@@ -1106,7 +1110,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
-            string title, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
+            string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
             RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -1143,6 +1147,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 GroupPublicKey = groupId,
                 GroupText = title,
+                VariableName = variableName,
                 Description = description,
                 ConditionExpression = condition,
                 ResponsibleId = responsibleId

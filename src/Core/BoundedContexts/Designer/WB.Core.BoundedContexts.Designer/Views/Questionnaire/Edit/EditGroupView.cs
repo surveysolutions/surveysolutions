@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.ParentId = parentId;
             this.Level = level;
             this.Title = group.Title;
+            this.VariableName = group.VariableName;
             this.IsRoster = group.IsRoster;
             this.RosterSizeQuestionId = group.RosterSizeQuestionId;
             this.RosterSizeSource = group.RosterSizeSource;
@@ -51,6 +52,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public Guid? ParentId { get; set; }
 
         public string Title { get; set; }
+
+        public string VariableName { get; set; }
 
         public List<QuestionnaireEntityNode> Children { get; set; }
     }

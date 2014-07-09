@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 document.UpdateGroup(
                     @group.PublicKey,
-                    @group.Title,
+                    @group.Title, null,
                     @group.Description,
                     conditionExpression: @group.ConditionExpression);
 
