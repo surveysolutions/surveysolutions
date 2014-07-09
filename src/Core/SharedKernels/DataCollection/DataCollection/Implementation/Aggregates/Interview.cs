@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasCompleted;
         private InterviewStatus status;
 
-        private Infrastructure.BaseStructures.IExpressionProcessor expressionProcessorState = new StronglyTypedInterviewEvaluator();
+        private Infrastructure.BaseStructures.IInterviewExpressionState expressionProcessorStatePrototype = new StronglyTypedInterviewEvaluator();
 
         private readonly InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var orderedRosterInstances = @event.InterviewData.RosterGroupInstances.OrderBy(x => ConversionHelper.ConvertIdAndRosterVectorToString(x.Key.Id, x.Key.InterviewItemPropagationVector)).Select(x => x.Value).ToList();
             
             foreach (RosterSynchronizationDto roster in orderedRosterInstances.SelectMany(rosters => rosters)) {
-                this.expressionProcessorState.AddRoster(roster.RosterId, roster.OuterScopePropagationVector,roster.RosterInstanceId, roster.SortIndex);
+                this.expressionProcessorStatePrototype.AddRoster(roster.RosterId, roster.OuterScopePropagationVector,roster.RosterInstanceId, roster.SortIndex);
             }
 
             if (@event.InterviewData.Answers != null)
@@ -132,22 +132,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     decimal[] questionPropagationVector = question.QuestionPropagationVector;
                     if (question.Answer is int)
                     {
-                        this.expressionProcessorState.UpdateIntAnswer(question.Id, questionPropagationVector, Convert.ToInt32(question.Answer));
+                        this.expressionProcessorStatePrototype.UpdateIntAnswer(question.Id, questionPropagationVector, Convert.ToInt32(question.Answer));
                     }
                     if (question.Answer is decimal)
                     {
-                        this.expressionProcessorState.UpdateDecimalAnswer(question.Id, questionPropagationVector, Convert.ToDecimal(question.Answer));
-                        this.expressionProcessorState.UpdateSingleOptionAnswer(question.Id, questionPropagationVector, Convert.ToDecimal(question.Answer));
+                        this.expressionProcessorStatePrototype.UpdateDecimalAnswer(question.Id, questionPropagationVector, Convert.ToDecimal(question.Answer));
+                        this.expressionProcessorStatePrototype.UpdateSingleOptionAnswer(question.Id, questionPropagationVector, Convert.ToDecimal(question.Answer));
                     }
                     var answer = question.Answer as string;
                     if (answer != null)
                     {
-                        this.expressionProcessorState.UpdateTextAnswer(question.Id, questionPropagationVector, answer);
-                        this.expressionProcessorState.UpdateQrBarcodeAnswer(question.Id, questionPropagationVector, answer);
+                        this.expressionProcessorStatePrototype.UpdateTextAnswer(question.Id, questionPropagationVector, answer);
+                        this.expressionProcessorStatePrototype.UpdateQrBarcodeAnswer(question.Id, questionPropagationVector, answer);
                     }
                     if (question.Answer is decimal[])
                     {
-                        this.expressionProcessorState.UpdateMultiOptionAnswer(question.Id, questionPropagationVector, (decimal[])(question.Answer));
+                        this.expressionProcessorStatePrototype.UpdateMultiOptionAnswer(question.Id, questionPropagationVector, (decimal[])(question.Answer));
                     }
                 }
             }
@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateTextAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
+            expressionProcessorStatePrototype.UpdateTextAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(QRBarcodeQuestionAnswered @event)
@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateQrBarcodeAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
+            expressionProcessorStatePrototype.UpdateQrBarcodeAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         private void Apply(NumericQuestionAnswered @event)
@@ -189,7 +189,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateDecimalAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
+            expressionProcessorStatePrototype.UpdateDecimalAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(NumericRealQuestionAnswered @event)
@@ -199,7 +199,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateDecimalAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
+            expressionProcessorStatePrototype.UpdateDecimalAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(NumericIntegerQuestionAnswered @event)
@@ -209,7 +209,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateIntAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
+            expressionProcessorStatePrototype.UpdateIntAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(DateTimeQuestionAnswered @event)
@@ -219,7 +219,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateDateAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
+            expressionProcessorStatePrototype.UpdateDateAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(SingleOptionQuestionAnswered @event)
@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.SelectedValue;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateSingleOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedValue);
+            expressionProcessorStatePrototype.UpdateSingleOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedValue);
         }
 
         internal void Apply(MultipleOptionsQuestionAnswered @event)
@@ -246,7 +246,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.interviewState.AnsweredQuestions.Remove(questionKey);
             }
-            expressionProcessorState.UpdateMultiOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedValues);
+            expressionProcessorStatePrototype.UpdateMultiOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedValues);
         }
 
         internal void Apply(GeoLocationQuestionAnswered @event)
@@ -255,7 +255,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateGeoLocationAnswer(@event.QuestionId, @event.PropagationVector, @event.Latitude, @event.Longitude);
+            expressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.PropagationVector, @event.Latitude, @event.Longitude);
         }
 
         internal void Apply(TextListQuestionAnswered @event)
@@ -264,7 +264,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.TextListAnswers[questionKey] = @event.Answers;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateTextListAnswer(@event.QuestionId, @event.PropagationVector, @event.Answers);
+            expressionProcessorStatePrototype.UpdateTextListAnswer(@event.QuestionId, @event.PropagationVector, @event.Answers);
         }
 
         private void Apply(SingleOptionLinkedQuestionAnswered @event)
@@ -275,7 +275,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 @event.SelectedPropagationVector);
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorState.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVector);
+            expressionProcessorStatePrototype.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVector);
         }
 
         internal void Apply(MultipleOptionsLinkedQuestionAnswered @event)
@@ -294,7 +294,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState.AnsweredQuestions.Remove(questionKey);
             }
 
-            expressionProcessorState.UpdateLinkedMultiOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVectors);
+            expressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVectors);
         }
 
         private void Apply(AnswerDeclaredValid @event)
@@ -341,14 +341,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.interviewState.DisableGroups(@event.Groups);
 
-            expressionProcessorState.DisableGroups(@event.Groups.ToIdentities());
+            expressionProcessorStatePrototype.DisableGroups(@event.Groups.ToIdentities());
         }
 
         internal void Apply(GroupsEnabled @event)
         {
             this.interviewState.EnableGroups(@event.Groups);
 
-            expressionProcessorState.EnableGroups(@event.Groups.ToIdentities());
+            expressionProcessorStatePrototype.EnableGroups(@event.Groups.ToIdentities());
         }
 
         internal void Apply(QuestionDisabled @event)
@@ -369,14 +369,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.interviewState.DisableQuestions(@event.Questions);
 
-            expressionProcessorState.DisableQuestions(@event.Questions.ToIdentities());
+            expressionProcessorStatePrototype.DisableQuestions(@event.Questions.ToIdentities());
         }
 
         internal void Apply(QuestionsEnabled @event)
         {
             this.interviewState.EnableQuestions(@event.Questions);
 
-            expressionProcessorState.EnableQuestions(@event.Questions.ToIdentities());
+            expressionProcessorStatePrototype.EnableQuestions(@event.Questions.ToIdentities());
 
         }
 
@@ -413,7 +413,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
 
-            expressionProcessorState.AddRoster(@event.GroupId, @event.OuterRosterVector, @event.RosterInstanceId, @event.SortIndex);
+            expressionProcessorStatePrototype.AddRoster(@event.GroupId, @event.OuterRosterVector, @event.RosterInstanceId, @event.SortIndex);
         }
 
         private void Apply(RosterRowRemoved @event)
@@ -439,7 +439,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AddRosterInstances(@event.Instances);
             foreach (var instance in @event.Instances)
             {
-                expressionProcessorState.AddRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
+                expressionProcessorStatePrototype.AddRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
             }
         }
 
@@ -448,7 +448,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.RemoveRosterInstances(@event.Instances);
             foreach (var instance in @event.Instances)
             {
-                expressionProcessorState.RemoveRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId);
+                expressionProcessorStatePrototype.RemoveRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId);
             }
         }
 
@@ -526,12 +526,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState.ValidAnsweredQuestions,
                 this.interviewState.InvalidAnsweredQuestions,
                 this.wasCompleted,
-                this.expressionProcessorState);
+                this.expressionProcessorStatePrototype);
         }
 
         public void RestoreFromSnapshot(InterviewState snapshot)
         {
-            this.expressionProcessorState = snapshot.ExpressionProcessorState;
+            this.expressionProcessorStatePrototype = snapshot.ExpressionProcessorState;
             this.questionnaireId = snapshot.QuestionnaireId;
             this.questionnaireVersion = snapshot.QuestionnaireVersion;
             this.status = snapshot.Status;
