@@ -6458,12 +6458,16 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   font-size: 18px;
   color: #3f3f3f;
 }
+#designer-editor.container section#header > .questionnarie-title > .title #verification-button {
+  margin-left: 5px;
+}
 #designer-editor.container section#header > .questionnarie-title > .title > span.gray {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   color: #b9c3ca;
 }
 #designer-editor.container section#header > .questionnarie-title > .title > span.error-message {
+  margin-left: 5px;
   font-family: Georgia, serif;
   font-size: 14px;
   font-style: italic;
@@ -6472,6 +6476,17 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #designer-editor.container section#header > .questionnarie-title > .title > span.error-message > a {
   text-decoration: underline;
   color: #d20426;
+}
+#designer-editor.container section#header > .questionnarie-title > .title > span.text-success {
+  margin-left: 5px;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 16px;
+  color: #2fc507;
+}
+#designer-editor.container section#header > .questionnarie-title > .title > span.text-success > em {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  color: #b9c3ca;
 }
 #designer-editor.container section#spacer {
   height: 2px;
