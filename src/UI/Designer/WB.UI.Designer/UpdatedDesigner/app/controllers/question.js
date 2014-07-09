@@ -5,7 +5,6 @@
         .controller('QuestionCtrl', [
             '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log',
             function ($scope, $state, utilityService, questionnaireService, commandService, $log) {
-
                 var dataBind = function (result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
@@ -70,7 +69,8 @@
                     $scope.activeQuestion.options.splice(index, 1);
                 };
 
-                $scope.changeQuestionScope = function() {
+                $scope.changeQuestionScope = function (scope) {
+                    $scope.activeQuestion.questionScope = scope.text;
                     if ($scope.activeQuestion.questionScope == 'Headquarter') {
                         $scope.activeQuestion.enablementCondition = '';
                     }
