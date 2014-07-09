@@ -38,9 +38,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private long questionnaireVersion;
         private bool wasCompleted;
         private InterviewStatus status;
+
         private Infrastructure.BaseStructures.IExpressionProcessor expressionProcessorState;
 
-        private InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
+        private readonly InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
         private void Apply(InterviewCreated @event)
         {
@@ -154,6 +155,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            expressionProcessorState.UpdateDecimalAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(NumericRealQuestionAnswered @event)

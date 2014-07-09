@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using Machine.Specifications;
 using Microsoft.CodeAnalysis.Emit;
@@ -6,7 +7,7 @@ using WB.Core.Infrastructure.BaseStructures;
 
 namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
 {
-    internal class when_loading_assembly_from_string
+    internal class when_loading_assembly_from_file
     {
         private Establish context = () =>
         {
@@ -14,9 +15,13 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
             emitResult = compiler.GenerateAssemblyAsString(id, testClass, new string[] { "System.Collections.Generic", "System.Linq" },
                 new string[] { }, out resultAssembly);
 
+            filePath = Path.GetTempFileName();
+
             if (emitResult.Success == true && !string.IsNullOrEmpty(resultAssembly))
             {
-                var compiledAssembly = Assembly.Load(Convert.FromBase64String(resultAssembly));
+                File.WriteAllBytes(filePath, Convert.FromBase64String(resultAssembly));
+
+                var compiledAssembly = Assembly.LoadFile(filePath);
                 Type calculator = compiledAssembly.GetType("InterviewEvaluator");
                 evaluator = Activator.CreateInstance(calculator) as IInterviewEvaluator;
             }
@@ -28,6 +33,12 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
         private It should_result_succeded = () =>
             evaluationResult.ShouldEqual(42);
 
+        Cleanup stuff = () =>
+        {
+            if (File.Exists(filePath))
+                File.Delete(filePath);
+        };
+
         private static IDynamicCompiler compiler;
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
@@ -36,7 +47,8 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
 
         private static int evaluationResult;
 
-        
+        private static string filePath;
+
         public static string testClass =
             @"public class InterviewEvaluator : IInterviewEvaluator
             {
