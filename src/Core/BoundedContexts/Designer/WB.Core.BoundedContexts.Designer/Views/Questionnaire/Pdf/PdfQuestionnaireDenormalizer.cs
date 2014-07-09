@@ -373,48 +373,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                PdfEntityView itemToMove = questionnaire.Children.TreeToEnumerable()
-                                                       .FirstOrDefault(x => x.PublicId == @event.PublicKey);
-                var targetContainer = questionnaire.Children.TreeToEnumerable()
-                                                            .FirstOrDefault(x => x.PublicId == @event.GroupKey) ?? questionnaire;
-
+                var itemToMove = questionnaire.Children.TreeToEnumerable().FirstOrDefault(x => x.PublicId == @event.PublicKey);
+                var appendTo = questionnaire.Children.TreeToEnumerable().FirstOrDefault(x => x.PublicId == @event.GroupKey) ?? questionnaire;
 
                 itemToMove.GetParent().Children.Remove(itemToMove);
-                itemToMove.Depth = targetContainer.Depth + 1;
-                if (@event.TargetIndex < 0)
-                {
-                    targetContainer.InsertChild(itemToMove, 0);
 
-                }
-                else if (@event.TargetIndex >= targetContainer.Children.Count)
-                {
-                    targetContainer.AddChild(itemToMove);
-                }
-                else
-                {
-                    targetContainer.InsertChild(itemToMove, @event.TargetIndex);
-                }
+                AppendItemTo(questionnaire: questionnaire, appendTo: appendTo, itemToMove: itemToMove,
+                    targetIndex: @event.TargetIndex);
 
                 return questionnaire;
             });
         }
 
-        private static void AppendItemTo(List<PdfEntityView> appendTo, PdfEntityView itemToMove, int targetIndex)
+        private static void AppendItemTo(PdfQuestionnaireView questionnaire, PdfEntityView appendTo, PdfEntityView itemToMove, int targetIndex)
         {
             if (appendTo == null) throw new ArgumentNullException("appendTo");
             if (itemToMove == null) throw new ArgumentNullException("itemToMove");
+
+            itemToMove.Depth = appendTo.Depth + 1;
             if (targetIndex < 0)
             {
-                appendTo.Insert(0, itemToMove);
+                appendTo.InsertChild(itemToMove, 0);
             }
-            else if (targetIndex >= appendTo.Count)
+            else if (targetIndex >= appendTo.Children.Count)
             {
-                appendTo.Add(itemToMove);
+                appendTo.AddChild(itemToMove);
             }
             else
             {
-                appendTo.Insert(targetIndex, itemToMove);
+                appendTo.InsertChild(itemToMove, targetIndex);
             }
+
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -539,13 +528,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var newQuestion = new PdfQuestionView
-                {
-                    PublicId = @event.EntityId,
-                    Title = @event.Text
-                };
+                var parentEntity =
+                    questionnaire.Children.TreeToEnumerable().FirstOrDefault(x => x.PublicId == @event.ParentId);
 
-                questionnaire.AddEntity(newQuestion, @event.ParentId);
+                if (parentEntity != null)
+                {
+                    var pdfStaticTextView = new PdfStaticTextView()
+                    {
+                        PublicId = @event.EntityId,
+                        Title = @event.Text
+                    };
+                    AppendItemTo(questionnaire: questionnaire, appendTo: parentEntity, itemToMove: pdfStaticTextView,
+                        targetIndex: @event.TargetIndex);
+
+                }
+
                 return questionnaire;
             });
         }
