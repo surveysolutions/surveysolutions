@@ -6,6 +6,7 @@ using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using It = Machine.Specifications.It;
+using it = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
 {
@@ -13,17 +14,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
     {
         Establish context = () =>
         {
-            var changeStatusFactoryMock = new Mock<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>();
-            changeStatusFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<ChangeStatusInputModel>()))
-                .Returns((ChangeStatusView) null);
+            var changeStatusFactory = Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>(_
+                => _.Load(it.IsAny<ChangeStatusInputModel>()) == null as ChangeStatusView);
 
-            controller = CreateController(changeStatusFactory: changeStatusFactoryMock.Object);
+            controller = CreateController(changeStatusFactory: changeStatusFactory);
         };
 
         Because of = () =>
-            actionResult = controller.InterviewDetails(new Guid(), string.Empty, null, null, null);
+            actionResult = controller.InterviewDetails(Guid.Parse("11111111111111111111111111111111"), string.Empty, null, null, null);
 
-        It should_action_result_be_type_of_http_not_found_result = () =>
+        It should_return_http_not_found_result = () =>
             actionResult.ShouldBeOfExactType<HttpNotFoundResult>();
 
         private static InterviewController controller;
