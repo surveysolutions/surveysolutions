@@ -39,7 +39,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
-        IEventHandler<TextListQuestionChanged>, IEventHandler
+        IEventHandler<TextListQuestionChanged>,
+        IEventHandler<StaticTextAdded>,
+        IEventHandler<StaticTextUpdated>,
+        IEventHandler<StaticTextCloned>, IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader updrader;
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
@@ -158,7 +161,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                 newQuestion.ValidationExpression = @event.ValidationExpression;
                 newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                questionnaire.AddEntity(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
             });
         }
@@ -167,7 +170,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
+                var existingQuestion = questionnaire.GetEntityById<PdfQuestionView>(@event.PublicKey);
                 if (existingQuestion == null)
                 {
                     return questionnaire;
@@ -207,7 +210,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 };
 
                 newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                questionnaire.AddEntity(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
             });
         }
@@ -228,7 +231,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                 newQuestion.ValidationExpression = @event.ValidationExpression;
                 newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                questionnaire.AddEntity(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
             });
         }
@@ -248,7 +251,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                 newQuestion.ValidationExpression = @event.ValidationExpression;
                 newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                questionnaire.AddEntity(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
             });
         }
@@ -257,7 +260,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
+                var existingQuestion = questionnaire.GetEntityById<PdfQuestionView>(@event.PublicKey);
                 if (existingQuestion == null)
                 {
                     return questionnaire;
@@ -287,7 +290,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 };
                 
                 newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddQuestion(newQuestion, @event.GroupId);
+                questionnaire.AddEntity(newQuestion, @event.GroupId);
                 return questionnaire;
             });
         }
@@ -306,7 +309,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 };
 
                 newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddQuestion(newQuestion, @event.GroupId);
+                questionnaire.AddEntity(newQuestion, @event.GroupId);
                 return questionnaire;
             });
         }
@@ -315,7 +318,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
+                var existingQuestion = questionnaire.GetEntityById<PdfQuestionView>(@event.PublicKey);
                 if (existingQuestion == null)
                 {
                     return questionnaire;
@@ -334,7 +337,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                questionnaire.RemoveQuestion(@event.QuestionId);
+                questionnaire.RemoveEntity(@event.QuestionId);
                 return questionnaire;
             });
         }
@@ -456,7 +459,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     ConditionExpression = @event.EnablementCondition
                 };
 
-                questionnaire.AddQuestion(newQuestion, @event.ParentGroupId);
+                questionnaire.AddEntity(newQuestion, @event.ParentGroupId);
                 return questionnaire;
             });
         }
@@ -475,7 +478,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     ConditionExpression = @event.EnablementCondition
                 };
 
-                questionnaire.AddQuestion(newQuestion, @event.ParentGroupId);
+                questionnaire.AddEntity(newQuestion, @event.ParentGroupId);
                 return questionnaire;
             });
         }
@@ -484,7 +487,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var existingQuestion = questionnaire.GetQuestion(@event.QuestionId);
+                var existingQuestion = questionnaire.GetEntityById<PdfQuestionView>(@event.QuestionId);
                 if (existingQuestion == null)
                 {
                     return questionnaire;
@@ -499,6 +502,54 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 return questionnaire;
             });
         }
+
+        #region Static text handlers
+        public void Handle(IPublishedEvent<StaticTextAdded> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var pdfStaticTextView = new PdfStaticTextView()
+                {
+                    PublicId = @event.EntityId,
+                    Title = @event.Text
+                };
+
+                questionnaire.AddEntity(pdfStaticTextView, @event.ParentId);
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<StaticTextUpdated> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var existingStaticTextView = questionnaire.GetEntityById<PdfStaticTextView>(@event.EntityId);
+                if (existingStaticTextView == null)
+                {
+                    return questionnaire;
+                }
+
+                existingStaticTextView.Title = @event.Text;
+
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<StaticTextCloned> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var newQuestion = new PdfQuestionView
+                {
+                    PublicId = @event.EntityId,
+                    Title = @event.Text
+                };
+
+                questionnaire.AddEntity(newQuestion, @event.ParentId);
+                return questionnaire;
+            });
+        }
+        #endregion
 
         public string Name
         {

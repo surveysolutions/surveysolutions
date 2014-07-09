@@ -1190,6 +1190,7 @@
     <Content Include="UpdatedDesigner\app\partials\chapter.detail.html" />
     <Content Include="UpdatedDesigner\vendor\jquery-cookie\.bower.json" />
     <Content Include="UpdatedDesigner\data\questionnaire\empty.json" />
+    <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
     <Content Include="UpdatedDesigner\data\editQuestion\3c0ff7a6d1614aa2b9af21aaa40cdb47.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\bower.json" />

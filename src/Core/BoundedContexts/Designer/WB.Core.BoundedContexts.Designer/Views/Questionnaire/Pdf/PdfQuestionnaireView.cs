@@ -84,28 +84,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
         }
 
-        internal void AddQuestion(PdfQuestionView newQuestion, Guid? groupPublicKey)
+        internal void AddEntity(PdfEntityView newEntity, Guid? groupPublicKey)
         {
-            if (newQuestion == null) throw new ArgumentNullException("newQuestion");
+            if (newEntity == null) throw new ArgumentNullException("newEntity");
 
             if (!groupPublicKey.HasValue)
             {
-                throw new ArgumentNullException("groupPublicKey", string.Format("Question {0} cant be created not inside group", newQuestion.PublicId));
+                throw new ArgumentNullException("groupPublicKey", string.Format("Item {0} can't be created outside group", newEntity.PublicId));
             }
 
             var group = this.GetGroup(groupPublicKey.Value);
             if (group!= null)
-                group.AddChild(newQuestion);
+                group.AddChild(newEntity);
         }
 
-        public PdfQuestionView GetQuestion(Guid publicKey)
+        public T GetEntityById<T>(Guid publicKey) where T: PdfEntityView
         {
-            return this.Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.PublicId == publicKey);
+            return this.Children.TreeToEnumerable().OfType<T>().FirstOrDefault(x => x.PublicId == publicKey);
         }
 
-        public void RemoveQuestion(Guid questionId)
+        public void RemoveEntity(Guid entityId)
         {
-            var item = this.Children.TreeToEnumerable().FirstOrDefault(x => x.PublicId == questionId);
+            var item = this.Children.TreeToEnumerable().FirstOrDefault(x => x.PublicId == entityId);
             if (item != null)
             {
                 item.GetParent().Children.Remove(item);
@@ -141,6 +141,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 {
                     var childQuestion = child as IQuestion;
                     var childGroup = child as IGroup;
+                    var childStaticText = child as IStaticText;
                     if (childQuestion != null)
                     {
                         var newQuestion=new PdfQuestionView
@@ -157,7 +158,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                         };
 
                         newQuestion.ConditionExpression = childQuestion.ConditionExpression;
-                        this.AddQuestion(newQuestion, item.PublicKey);
+                        this.AddEntity(newQuestion, item.PublicKey);
+                    }
+                    if (childStaticText != null)
+                    {
+                        var pdfStaticTextView = new PdfStaticTextView()
+                        {
+                            PublicId = childStaticText.PublicKey,
+                            Title = childStaticText.Text
+                        };
+
+                        this.AddEntity(pdfStaticTextView, item.PublicKey);
                     }
                     if (childGroup != null)
                     {
