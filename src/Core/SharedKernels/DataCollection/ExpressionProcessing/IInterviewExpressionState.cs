@@ -27,6 +27,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
 
-        IInterviewExpressionState Copy();
+        IInterviewExpressionState Clone();
     }
 }

@@ -308,7 +308,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             throw new NotImplementedException();
         }
 
-        public IInterviewExpressionState Copy()
+        public IInterviewExpressionState Clone()
         {
             throw new NotImplementedException();
         }

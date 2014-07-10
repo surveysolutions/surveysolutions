@@ -269,7 +269,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void EnableQuestions(IEnumerable<Identity> questionsToEnable) { }
 
-        public IInterviewExpressionState Copy()
+        public IInterviewExpressionState Clone()
         {
             var newScopes = this.interviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers());
 
