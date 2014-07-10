@@ -203,6 +203,9 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_edit_view_and_static_text_is_absent.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view_and_questionnaire_is_absent.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextCloned_event.cs" />

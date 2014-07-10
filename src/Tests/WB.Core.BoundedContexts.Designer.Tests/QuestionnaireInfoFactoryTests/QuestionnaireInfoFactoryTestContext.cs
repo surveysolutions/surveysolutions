@@ -130,6 +130,25 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         ParentGroupsIds = new Guid[] { g5Id },
                         RosterScopeIds = new Guid[] {  }
                     }
+                },
+                StaticTexts = new List<StaticTextDetailsView>()
+                {
+                    new StaticTextDetailsView()
+                    {
+                        Id = st1Id,
+                        ParentGroupId = g1Id,
+                        ParentGroupsIds = new [] { g1Id },
+                        RosterScopeIds = new Guid[] { },
+                        Text = "static text 1"
+                    },
+                    new StaticTextDetailsView()
+                    {
+                        Id = st2Id,
+                        ParentGroupId = g4Id,
+                        ParentGroupsIds = new Guid[] { g4Id, g2Id, g1Id },
+                        RosterScopeIds = new Guid[] { q2Id },
+                        Text = "static text 2"
+                    }
                 }
             };
         }
@@ -146,5 +165,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         protected static Guid q4Id = Guid.Parse("99999999999999999999999999999999");
         protected static Guid q5Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         protected static Guid q6Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+        protected static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        protected static Guid st2Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
     }
 }
