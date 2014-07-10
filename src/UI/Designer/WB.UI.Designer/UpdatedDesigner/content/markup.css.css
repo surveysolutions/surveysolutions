@@ -406,6 +406,23 @@ textarea {
   font-size: 18px;
   font-weight: bold;
 }
+.modal-header {
+  border-top: 8px solid #d7e4ee;
+}
+.modal-title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 36px;
+}
+.modal-body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #000;
+  font-weight: bold;
+}
+.modal-footer {
+  text-align: left;
+  border-top: none;
+}
 .bootstrap-select:not([class*="span"]):not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
   width: 100%;
   margin-top: 3px;
