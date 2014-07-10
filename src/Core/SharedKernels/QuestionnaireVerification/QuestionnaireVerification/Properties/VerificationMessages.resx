@@ -297,4 +297,7 @@
   <data name="WB0068_RosterHasNotUniqueVariableName" xml:space="preserve">
     <value>Roster has not unique variable name.</value>
   </data>
+  <data name="WB0069_RosterHasInvalidVariableName" xml:space="preserve">
+    <value>Roster has invalid variable name</value>
+  </data>
 </root>
