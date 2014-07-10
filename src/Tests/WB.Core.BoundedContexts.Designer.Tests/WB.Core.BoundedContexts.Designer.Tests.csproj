@@ -184,6 +184,12 @@
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_variable_name_roster_title.cs" />
     <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_parent_does_not_exists.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received_and_entity_does_not_exists.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextCloned_event_received_and_parent_of_entity_does_not_exists.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextAdded_event_received_and_parent_of_entity_does_not_exists.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextAdded_event_received.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextCloned_event_received.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_all_parameters_specified.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_parent_does_not_exists.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_entity_with_same_id_already_exists.cs" />
