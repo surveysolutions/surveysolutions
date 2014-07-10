@@ -40,6 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewStatus status;
 
         private Infrastructure.BaseStructures.IInterviewExpressionState expressionProcessorStatePrototype = new StronglyTypedInterviewEvaluator();
+        private Infrastructure.BaseStructures.IExpressionProcessor expressionSharpProcessor = new Infrastructure.BaseStructures.ExpressionProcessor();
 
         private readonly InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
@@ -426,8 +427,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterRowInstances.Remove(@event.RosterInstanceId);
 
             this.interviewState.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
-
-           
         }
 
         private void Apply(RosterRowTitleChanged @event) { }
@@ -2491,12 +2490,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 (currentState, question) => AreEqual(question, answeredQuestion)
                     ? answer
                     : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
-
+            
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
                 enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
+            
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
+            
+            //Apply other changes on expressionProcessorState
+            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
+            
+            answersDeclaredValid.Union(answersDeclaredValidC);
+            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
@@ -2562,6 +2572,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            expressionProcessorState.UpdateIntAnswer(questionId, rosterVector, answer);
+
+            //Apply other changes on expressionProcessorState
+            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
+
+            answersDeclaredValid.Union(answersDeclaredValidC);
+            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+
+
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
 
@@ -2606,6 +2627,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
                 enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
+
+            //Apply other changes on expressionProcessorState
+            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
+
+            answersDeclaredValid.Union(answersDeclaredValidC);
+            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
@@ -2674,6 +2706,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            expressionProcessorState.UpdateMultiOptionAnswer(questionId, rosterVector, selectedValues);
+
+            //Apply other changes on expressionProcessorState
+            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
+
+            answersDeclaredValid.Union(answersDeclaredValidC);
+            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues,
@@ -2723,6 +2765,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            expressionProcessorState.UpdateDecimalAnswer(questionId, rosterVector, answer);
+
+            //Apply other changes on expressionProcessorState
+            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
+
+            answersDeclaredValid.Union(answersDeclaredValidC);
+            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
 
@@ -2762,6 +2815,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
                 enablementChanges,
@@ -2771,6 +2825,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionId, rosterVector, questionnaire);
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue,
                 answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
+
+            //Apply other changes on expressionProcessorState
+            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
+
+            answersDeclaredValid.Union(answersDeclaredValidC);
+            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
