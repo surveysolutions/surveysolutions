@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.Infrastructure.BaseStructures;
 
-namespace WB.Core.Infrastructure.BaseStructures
+namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     public class InterviewEvaluatorPrototype : IInterviewEvaluator
     {
@@ -14,7 +15,7 @@ namespace WB.Core.Infrastructure.BaseStructures
         public InterviewEvaluatorPrototype(Func<Guid, object> getValue)
         {
             this.getValue = getValue;
-            this.validations.Add("age", age_GeneratedValidation);
+            this.validations.Add("age", this.age_GeneratedValidation);
         }
         
         private Func<Guid, object> getValue;
@@ -27,7 +28,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             {
                 //set from template
                 Guid questionId = Guid.Parse("111111111111111111111111");
-                return (int)getValue(questionId);
+                return (int)this.getValue(questionId);
             }
         }
 
@@ -58,7 +59,7 @@ namespace WB.Core.Infrastructure.BaseStructures
 
         public bool age_GeneratedValidation()
         {
-            return age >= 3;
+            return this.age >= 3;
         }
     }
 }

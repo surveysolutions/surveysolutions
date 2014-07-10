@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.Infrastructure.BaseStructures;
 
-namespace WB.Core.Infrastructure.BaseStructures
+namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     public class IdentityComparer : IEqualityComparer<Identity>
     {
@@ -9,7 +10,7 @@ namespace WB.Core.Infrastructure.BaseStructures
 
         public bool Equals(Identity x, Identity y)
         {
-            return x.Id == y.Id && x.RosterVector.SequenceEqual(y.RosterVector);
+            return x.Id == y.Id && Enumerable.SequenceEqual<decimal>(x.RosterVector, y.RosterVector);
         }
 
         public int GetHashCode(Identity obj)

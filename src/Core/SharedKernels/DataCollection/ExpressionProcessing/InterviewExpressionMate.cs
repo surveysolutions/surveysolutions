@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using WB.Core.Infrastructure.BaseStructures;
 
-namespace WB.Core.Infrastructure.BaseStructures
+namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     // ReSharper disable InconsistentNaming
 
@@ -16,16 +17,16 @@ namespace WB.Core.Infrastructure.BaseStructures
             var RosterGroupInstance = new Dictionary<string, DistinctDecimalList>();
 
             //build by interview or interview state
-            main = new Main_Intervew();
+            this.main = new Main_Intervew();
             
             
             
-            var roster_Person = new Roster_Person(main, new decimal []{ 0 });
+            var roster_Person = new Roster_Person(this.main, new decimal []{ 0 });
             var roster_Pet = new Roster_Pet(roster_Person, new decimal [] {0, 0});
 
-            allRosters.Add(roster_Person);
+            this.allRosters.Add(roster_Person);
             
-            allRosters.Add(roster_Pet);
+            this.allRosters.Add(roster_Pet);
 
         }
 
@@ -80,9 +81,9 @@ namespace WB.Core.Infrastructure.BaseStructures
         {
             var validation = new List<Identity>();
 
-            validation.AddRange(main.PerformValidation());
+            validation.AddRange(this.main.PerformValidation());
 
-            foreach (var validationPerformer in allRosters)
+            foreach (var validationPerformer in this.allRosters)
             {
                 validation.AddRange(validationPerformer.PerformValidation());
             }
@@ -109,7 +110,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             {
                 List<Identity> invalidIdentities = new List<Identity>();
 
-                foreach (var validation in validations)
+                foreach (var validation in this.validations)
                 {
                     if (!validation.Value())
                         invalidIdentities.Add(new Identity(validation.Key, this.RosterVector));
@@ -129,7 +130,7 @@ namespace WB.Core.Infrastructure.BaseStructures
                 //set from template
                 Guid name_questionId = Guid.Parse("111111111111111111111111");
                 
-                validations.Add(name_questionId, name_validate);
+                this.validations.Add(name_questionId, this.name_validate);
                 
             }
 
@@ -151,19 +152,19 @@ namespace WB.Core.Infrastructure.BaseStructures
             //generated
             public bool name_validate()
             {
-                return name.Length > 0;
+                return this.name.Length > 0;
             }
 
             public bool name_evaluate()
             {
-                return rooms > 0;
+                return this.rooms > 0;
             }
 
             public List<Identity> PerformValidation()
             {
                 List<Identity> invalidIdentities = new List<Identity>();
 
-                foreach (var validation in validations)
+                foreach (var validation in this.validations)
                 {
                     if(!validation.Value())
                         invalidIdentities.Add(new Identity(validation.Key, this.RosterVector));
@@ -208,7 +209,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             {
                 List<Identity> invalidIdentities = new List<Identity>();
 
-                foreach (var validation in validations)
+                foreach (var validation in this.validations)
                 {
                     if (!validation.Value())
                         invalidIdentities.Add(new Identity(validation.Key, this.RosterVector));
