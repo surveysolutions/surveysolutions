@@ -25,6 +25,8 @@ namespace WB.Core.Infrastructure.BaseStructures
         void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
 
 
+        void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
+
         IInterviewExpressionState Copy();
     }
 }

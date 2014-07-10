@@ -4,10 +4,14 @@ namespace WB.Core.Infrastructure.BaseStructures
 {
     public class ExpressionProcessor : IExpressionProcessor
     {
-        public void ProcessValidationExpressions(IInterviewExpressionState interviewExpressionState, List<Identity> questionsToBeValid,
-            List<Identity> questionsToBeInvalid)
+        public void ProcessValidationExpressions(IInterviewExpressionState interviewExpressionState, out List<Identity> questionsToBeValid,
+            out List<Identity> questionsToBeInvalid)
         {
-            throw new System.NotImplementedException();
+            questionsToBeValid = new List<Identity>();
+            questionsToBeInvalid = new List<Identity>();
+
+
+            interviewExpressionState.ProcessValidationExpressions(questionsToBeValid, questionsToBeInvalid);
         }
 
         public void ProcessConditionExpressions(IInterviewExpressionState interviewExpressionState,
