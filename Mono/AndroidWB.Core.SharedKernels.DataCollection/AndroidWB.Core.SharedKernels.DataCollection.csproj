@@ -629,13 +629,13 @@
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.BaseStructures\WB.Core.Infrastructure.BaseStructures.csproj">
-      <Project>{074be728-92ed-400f-bd28-80c8693ce259}</Project>
-      <Name>WB.Core.Infrastructure.BaseStructures</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\ExpressionProcessing\WB.Core.SharedKernels.ExpressionProcessing.csproj">
+      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessing</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
@@ -669,7 +669,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

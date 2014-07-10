@@ -66,13 +66,13 @@
     <Compile Include="when_StronglyTypedInterviewEvaluator_is_copying.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.BaseStructures\WB.Core.Infrastructure.BaseStructures.csproj">
-      <Project>{074be728-92ed-400f-bd28-80c8693ce259}</Project>
-      <Name>WB.Core.Infrastructure.BaseStructures</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Compilation\WB.Core.Infrastructure.Compilation.csproj">
       <Project>{13b91730-958c-4c6f-bb83-4d1ba7930cf2}</Project>
       <Name>WB.Core.Infrastructure.Compilation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\ExpressionProcessing\WB.Core.SharedKernels.ExpressionProcessing.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessing</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

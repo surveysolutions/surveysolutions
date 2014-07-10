@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using Machine.Specifications;
 using Microsoft.CodeAnalysis.Emit;
-using WB.Core.Infrastructure.BaseStructures;
+using WB.Core.SharedKernels.ExpressionProcessing;
 
 namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
 {

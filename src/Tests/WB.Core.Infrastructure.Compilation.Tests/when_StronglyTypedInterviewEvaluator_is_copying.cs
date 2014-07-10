@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
-using WB.Core.Infrastructure.BaseStructures;
 
 //should be moved to common test project or deleted after dynamic generation
+using WB.Core.SharedKernels.ExpressionProcessing;
 
 namespace WB.Core.Infrastructure.Compilation.Tests
 {

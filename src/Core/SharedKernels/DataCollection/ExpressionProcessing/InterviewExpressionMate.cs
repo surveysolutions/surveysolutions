@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using WB.Core.Infrastructure.BaseStructures;
 
 namespace WB.Core.SharedKernels.ExpressionProcessing
 {
