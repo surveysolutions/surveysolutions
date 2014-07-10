@@ -315,7 +315,7 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
-        public IEnumerable<T> GetAllQuestions<T>(IGroup startGroup = null) where T : class, IComposite
+        public IEnumerable<T> GetEntitiesByType<T>(IGroup startGroup = null) where T : class, IComposite
         {
             var result = new List<T>();
             var groups = new Queue<IComposite>();
@@ -324,10 +324,10 @@ namespace Main.Core.Documents
             while (groups.Count != 0)
             {
                 IComposite queueItem = groups.Dequeue();
-                var question = queueItem as T;
-                if (question != null)
+                var entity = queueItem as T;
+                if (entity != null)
                 {
-                    result.Add(question);
+                    result.Add(entity);
                     continue;
                 }
 
