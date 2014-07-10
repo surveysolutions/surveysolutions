@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace WB.Core.Infrastructure.BaseStructures
+namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     /// <summary>
     /// Full identity of group or question: id and roster vector.
@@ -51,7 +49,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Identity) obj);
+            return this.Equals((Identity) obj);
         }
     }
 }

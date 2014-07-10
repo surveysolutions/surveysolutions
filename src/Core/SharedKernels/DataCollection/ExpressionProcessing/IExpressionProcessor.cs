@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using WB.Core.Infrastructure.BaseStructures;
 
 namespace WB.Core.SharedKernels.ExpressionProcessing
 {

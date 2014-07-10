@@ -34,15 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.BaseStructures\WB.Core.Infrastructure.BaseStructures.csproj">
-      <Project>{074BE728-92ED-400F-BD28-80C8693CE259}</Project>
-      <Name>WB.Core.Infrastructure.BaseStructures</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="ExpressionProcessor.cs" />
+    <Compile Include="Identity.cs" />
     <Compile Include="IdentityComparer.cs" />
     <Compile Include="IExpressionProcessor.cs" />
     <Compile Include="IInterviewEvaluator.cs" />

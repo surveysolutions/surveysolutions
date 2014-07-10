@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
-using WB.Core.Infrastructure.BaseStructures;
+using WB.Core.SharedKernels.ExpressionProcessing;
 
 namespace WB.Core.Infrastructure.Compilation
 {
@@ -32,7 +32,7 @@ namespace WB.Core.Infrastructure.Compilation
  
             }";
 
-        private readonly string[] usingItems = new[] { "System.Runtime.Versioning", "WB.Core.Infrastructure.BaseStructures" };
+        private readonly string[] usingItems = new[] { "System.Runtime.Versioning", "WB.Core.SharedKernels.ExpressionProcessing" };
 
         private readonly string[] defaultReferencedPortableAssemblies = new[] { "System.Core.dll", "mscorlib.dll" };
 

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.Infrastructure.BaseStructures;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using Identity = WB.Core.Infrastructure.BaseStructures.Identity;
+using WB.Core.SharedKernels.ExpressionProcessing;
+using Identity = WB.Core.SharedKernels.ExpressionProcessing.Identity;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {

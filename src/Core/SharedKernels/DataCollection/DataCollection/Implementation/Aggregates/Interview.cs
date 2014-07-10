@@ -8,7 +8,6 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.BaseStructures;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -20,7 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.ExpressionProcessing;
-using Identity = WB.Core.Infrastructure.BaseStructures.Identity;
+using Identity = WB.Core.SharedKernels.ExpressionProcessing.Identity;
 using IExpressionProcessor = WB.Core.SharedKernels.ExpressionProcessor.Services.IExpressionProcessor;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates

@@ -23,22 +23,22 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
             return string.Format("{0}<{1}>", this.Id.FormatGuid(), string.Join("-", this.RosterVector));
         }
 
-        public static Identity ToEventIdentity(Infrastructure.BaseStructures.Identity identity)
+        public static Identity ToEventIdentity(ExpressionProcessing.Identity identity)
         {
             return new Identity(identity.Id, identity.RosterVector);
         }
 
-        public static IEnumerable<Identity> ToEventIdentities(IEnumerable<Infrastructure.BaseStructures.Identity> identities)
+        public static IEnumerable<Identity> ToEventIdentities(IEnumerable<ExpressionProcessing.Identity> identities)
         {
             return identities.Select(ToEventIdentity).ToArray();
         }
 
-        public static Infrastructure.BaseStructures.Identity ToIdentity(Identity identity)
+        public static ExpressionProcessing.Identity ToIdentity(Identity identity)
         {
-            return new Infrastructure.BaseStructures.Identity(identity.Id, identity.RosterVector);
+            return new ExpressionProcessing.Identity(identity.Id, identity.RosterVector);
         }
 
-        public static IEnumerable<Infrastructure.BaseStructures.Identity> ToIdentities(IEnumerable<Identity> identities)
+        public static IEnumerable<ExpressionProcessing.Identity> ToIdentities(IEnumerable<Identity> identities)
         {
             return identities.Select(ToIdentity).ToArray();
         }
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 
     public static class IdentityExtentions
     {
-        public static IEnumerable<Infrastructure.BaseStructures.Identity> ToIdentities(this IEnumerable<Identity> identities)
+        public static IEnumerable<ExpressionProcessing.Identity> ToIdentities(this IEnumerable<Identity> identities)
         {
             return Identity.ToIdentities(identities);
         }
