@@ -121,9 +121,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.RosterGroupInstanceIds = BuildRosterInstanceIdsFromSynchronizationDto(@event.InterviewData);
 
             var orderedRosterInstances = @event.InterviewData.RosterGroupInstances.OrderBy(x => ConversionHelper.ConvertIdAndRosterVectorToString(x.Key.Id, x.Key.InterviewItemPropagationVector)).Select(x => x.Value).ToList();
-            
-            foreach (RosterSynchronizationDto roster in orderedRosterInstances.SelectMany(rosters => rosters)) {
-                this.expressionProcessorStatePrototype.AddRoster(roster.RosterId, roster.OuterScopePropagationVector,roster.RosterInstanceId, roster.SortIndex);
+
+            foreach (RosterSynchronizationDto roster in orderedRosterInstances.SelectMany(rosters => rosters))
+            {
+                this.expressionProcessorStatePrototype.AddRoster(roster.RosterId, roster.OuterScopePropagationVector, roster.RosterInstanceId, roster.SortIndex);
             }
 
             if (@event.InterviewData.Answers != null)
@@ -146,9 +147,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.expressionProcessorStatePrototype.UpdateTextAnswer(question.Id, questionPropagationVector, answer);
                         this.expressionProcessorStatePrototype.UpdateQrBarcodeAnswer(question.Id, questionPropagationVector, answer);
                     }
+
                     if (question.Answer is decimal[])
                     {
                         this.expressionProcessorStatePrototype.UpdateMultiOptionAnswer(question.Id, questionPropagationVector, (decimal[])(question.Answer));
+                        this.expressionProcessorStatePrototype.UpdateLinkedSingleOptionAnswer(question.Id, questionPropagationVector, (decimal[])(question.Answer));
+                    }
+                    var geoAnswer = question.Answer as GeoPosition;
+                    if (geoAnswer != null)
+                    {
+                        this.expressionProcessorStatePrototype.UpdateGeoLocationAnswer(question.Id, questionPropagationVector, geoAnswer.Latitude, geoAnswer.Longitude);
+                    }
+                    if (question.Answer is DateTime)
+                    {
+                        this.expressionProcessorStatePrototype.UpdateDateAnswer(question.Id, questionPropagationVector, (DateTime)question.Answer);
+                    }
+                    if (question.Answer is decimal[][])
+                    {
+                        this.expressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(question.Id, questionPropagationVector, (decimal[][])(question.Answer));
+                    }
+                    if (question.Answer is Tuple<decimal, string>[])
+                    {
+                        this.expressionProcessorStatePrototype.UpdateTextListAnswer(question.Id, questionPropagationVector, (Tuple<decimal, string>[])(question.Answer));
                     }
                 }
             }
@@ -746,7 +766,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
-        
+
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
             : base(id)
         {
@@ -1578,7 +1598,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
-        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, 
+        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
             var answeredQuestion = new Identity(questionId, rosterVector);
@@ -2490,21 +2510,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 (currentState, question) => AreEqual(question, answeredQuestion)
                     ? answer
                     : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
-            
+
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
                 enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
-            
 
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
-            
+
             //Apply other changes on expressionProcessorState
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
-            
+
             answersDeclaredValid.Union(answersDeclaredValidC);
             answersDeclaredInvalid.Union(answersDeclaredInvalidC);
 
@@ -2572,7 +2592,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateIntAnswer(questionId, rosterVector, answer);
 
             //Apply other changes on expressionProcessorState
@@ -2628,7 +2648,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
 
             //Apply other changes on expressionProcessorState
@@ -2706,7 +2726,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 enablementChanges,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateMultiOptionAnswer(questionId, rosterVector, selectedValues);
 
             //Apply other changes on expressionProcessorState
@@ -2766,7 +2786,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
 
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateDecimalAnswer(questionId, rosterVector, answer);
 
             //Apply other changes on expressionProcessorState
@@ -2826,7 +2846,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue,
                 answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
 
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Copy();
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
 
             //Apply other changes on expressionProcessorState
