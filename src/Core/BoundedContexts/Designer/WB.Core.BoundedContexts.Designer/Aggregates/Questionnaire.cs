@@ -2776,7 +2776,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't starts with digit");
             }
 
-            var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
+            var captions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
                 .Where(q => q.PublicKey != questionPublicKey)
                 .Select(q => q.StataExportCaption);
 
@@ -3425,7 +3425,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(IGroup group)
         {
-            var hasAnyPrefilledQuestion = this.innerDocument.GetAllQuestions<AbstractQuestion>(@group).Any(question => question.Featured);
+            var hasAnyPrefilledQuestion = this.innerDocument.GetEntitiesByType<AbstractQuestion>(@group).Any(question => question.Featured);
 
             if (!hasAnyPrefilledQuestion) return;
 
@@ -3440,7 +3440,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(IGroup group)
         {
             var hasAnyQuestionsWithRosterTitleInSubstitutions =
-                this.innerDocument.GetAllQuestions<AbstractQuestion>(@group)
+                this.innerDocument.GetEntitiesByType<AbstractQuestion>(@group)
                     .Any(
                         question =>
                             SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
@@ -3519,7 +3519,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             questionsIncorrectTypeOfReferenced = new List<string>();
             questionsIllegalPropagationScope = new List<string>();
 
-            var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
+            var questions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
                 .Where(q => q.PublicKey != questionPublicKey)
                 .ToDictionary(q => q.StataExportCaption, q => q);
 
@@ -3810,7 +3810,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private string[] GetFilteredQuestionForException(IGroup @group, Func<AbstractQuestion, bool> filter)
         {
-            return this.innerDocument.GetAllQuestions<AbstractQuestion>(@group)
+            return this.innerDocument.GetEntitiesByType<AbstractQuestion>(@group)
                 .Where(filter)
                 .Select(question => string.Format("'{0}', [{1}]", question.QuestionText, question.StataExportCaption))
                 .ToArray();

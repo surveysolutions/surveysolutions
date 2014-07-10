@@ -31,6 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextAdded>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextUpdated>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextCloned>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireItemMoved>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NewGroupAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupDeleted>
@@ -162,6 +165,30 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.ParentGroupId, question);
         }
 
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<StaticTextAdded> evnt)
+        {
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
+                text: evnt.Payload.Text);
+            return this.UpdateStateWithAddedStaticText(currentState, evnt.Payload.ParentId, staticText);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<StaticTextUpdated> evnt)
+        {
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
+                text: evnt.Payload.Text);
+            return this.UpdateStateWithUpdatedStaticText(currentState, staticText);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<StaticTextCloned> evnt)
+        {
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
+                text: evnt.Payload.Text);
+            return this.UpdateStateWithAddedStaticText(currentState, evnt.Payload.ParentId, staticText);
+        }
+
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionDeleted> evnt)
         {
             if (currentState == null)
@@ -192,6 +219,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             {
                 question.ParentGroupId = evnt.Payload.GroupKey.Value;
                 UpdateBreadcrumbs(currentState, question, question.ParentGroupId);
+                return currentState;
+            }
+            var staticText = currentState.StaticTexts.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
+            if (staticText != null)
+            {
+                staticText.ParentGroupId = evnt.Payload.GroupKey.Value;
+                UpdateBreadcrumbs(currentState, staticText, staticText.ParentGroupId);
                 return currentState;
             }
 
@@ -375,7 +409,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             var convertedDocument = this.questionnaireUpgrader.TranslatePropagatePropertiesToRosterProperties(questionnaire);
             convertedDocument.ConnectChildrenWithParent();
-            var questions = convertedDocument.GetAllQuestions<IQuestion>()
+            var questions = questionnaire.GetEntitiesByType<IQuestion>()
                 .Select(question => this.questionDetailsViewMapper.Map(question, question.GetParent().PublicKey))
                 .Where(q => q != null)
                 .ToList();
@@ -397,14 +431,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 })
                 .ToList();
 
+            var staticTexts =
+                questionnaire.GetEntitiesByType<IStaticText>().Select(staticText => new StaticTextDetailsView()
+                {
+                    Id = staticText.PublicKey,
+                    ParentGroupId = staticText.GetParent().PublicKey,
+                    Text = staticText.Text
+                }).ToList();
+
             var questionCollection = new QuestionsAndGroupsCollectionView
             {
                 Questions = questions,
-                Groups = groups
+                Groups = groups,
+                StaticTexts = staticTexts
             };
 
             groups.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.Id));
             questions.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
+            staticTexts.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
 
             return questionCollection;
         }
@@ -470,6 +514,51 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return currentState;
         }
 
-       
+        private QuestionsAndGroupsCollectionView UpdateStateWithAddedStaticText(
+             QuestionsAndGroupsCollectionView currentState, Guid parentId, IStaticText staticText)
+        {
+            if (currentState == null)
+            {
+                return null;
+            }
+
+            var staticTextDetailsView = new StaticTextDetailsView()
+            {
+                Id = staticText.PublicKey,
+                ParentGroupId = parentId,
+                Text = staticText.Text
+            };
+
+            currentState.StaticTexts.Add(staticTextDetailsView);
+            UpdateBreadcrumbs(currentState, staticTextDetailsView, staticTextDetailsView.ParentGroupId);
+            return currentState;
+        }
+
+        private QuestionsAndGroupsCollectionView UpdateStateWithUpdatedStaticText(
+            QuestionsAndGroupsCollectionView currentState, IStaticText staticText)
+        {
+            if (currentState == null)
+            {
+                return null;
+            }
+
+            var oldstaticTextDetailsView = currentState.StaticTexts.FirstOrDefault(x => x.Id == staticText.PublicKey);
+            if (oldstaticTextDetailsView == null)
+            {
+                return currentState;
+            }
+
+            currentState.StaticTexts.Remove(oldstaticTextDetailsView);
+
+            var staticTextDetailsView = new StaticTextDetailsView()
+            {
+                Id = staticText.PublicKey,
+                ParentGroupId = oldstaticTextDetailsView.ParentGroupId,
+                Text = staticText.Text
+            };
+            UpdateBreadcrumbs(currentState, staticTextDetailsView, staticTextDetailsView.ParentGroupId);
+            currentState.StaticTexts.Add(staticTextDetailsView);
+            return currentState;
+        }
     }
 }
