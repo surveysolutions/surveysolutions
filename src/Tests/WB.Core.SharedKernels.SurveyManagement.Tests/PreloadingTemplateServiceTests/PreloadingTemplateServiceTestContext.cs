@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
                 Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>(
                     _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireExportStructure), "",
                 dataFileExportService ?? CreateIDataFileExportServiceMock().Object,
-                Mock.Of<IArchiveUtils>(), new DataFileService(currentFileSystemAccessor));
+                Mock.Of<IArchiveUtils>());
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

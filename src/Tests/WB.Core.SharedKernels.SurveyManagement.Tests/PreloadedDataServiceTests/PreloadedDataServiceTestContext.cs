@@ -29,9 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
-            var dataFileServiceMock = new Mock<IDataFileService>();
-            dataFileServiceMock.Setup(x => x.CreateValidFileName(Moq.It.IsAny<string>())).Returns<string>((fileName => fileName));
-            return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument, dataFileServiceMock.Object, new QuestionDataParser());
+            return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument, new QuestionDataParser());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormalizer
@@ -82,7 +83,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
 
         private QuestionnaireListViewItemDenormalizer CreateQuestionnaireDenormalizer(IQuestionnaireDocumentUpgrader updrader)
         {
-            return new QuestionnaireListViewItemDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object, updrader);
+            var questionnaireUpgradeServiceMock = new Mock<IQuestionnaireUpgradeService>();
+            questionnaireUpgradeServiceMock.Setup(x => x.CreateRostersVariableName(Moq.It.IsAny<QuestionnaireDocument>()))
+                .Returns<QuestionnaireDocument>(doc => doc);
+
+            return new QuestionnaireListViewItemDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object, updrader,
+                questionnaireUpgradeServiceMock.Object);
         }
 
         private Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>> questionnaireStorageMock = new Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>>();

@@ -1206,6 +1206,10 @@
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
+      <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
+      <Name>WB.Core.Infrastructure.Files</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
@@ -1225,6 +1229,10 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
+      <Project>{8C4B0E67-8C0A-4222-8646-3CF3131CADE5}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
