@@ -128,15 +128,43 @@
         </div>
     </script>
     <script type="text/ng-template" id="MultyOption-template.html">
-        <div class="checkbox">
-            <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" />
-            <label for="cb-is-ordered"><span></span>Ordered</label>
+        <div class="multyOption">
+            <div class="table-holder">
+                <div class="table-row" ng-repeat="option in activeQuestion.options">
+                    <div class="column-1">
+                        <div class="backing">
+                            <input type="checkbox" class="form-control wb-checkbox" disabled />
+                            <label><span></span></label>
+                        </div>
+                    </div>
+                    <div class="column-2">
+                        <input type="text" ng-model="option.value" class="form-control">
+                    </div>
+                    <div class="column-3">
+                        <input type="text" ng-model="option.title" class="form-control">
+                    </div>
+                    <div class="column-4">
+                        <a href ng:click="removeOption($index)" class="btn"></a>
+                    </div>
+                </div>
+            </div>
+            <p>
+                <input type="submit" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
+            </p>
+            <div class="checkbox">
+                <input id="cb-multyoption-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
+                <label for="cb-multyoption-is-linked"><span></span>Is linked</label>
+            </div>
+            <div class="form-group">
+                <label for="edit-question-max-answers-number">Maximum number of answers</label>
+                <input id="edit-question-max-answers-number" type="text" class="form-control">
+            </div>
+            <div class="checkbox">
+                <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" />
+                <label for="cb-is-ordered"><span></span>Ordered</label>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="edit-question-max-answers-number">Maximum number of answers</label>
-            <input id="edit-question-max-answers-number" type="text" class="form-control">
-        </div>
-        <div class="checkbox">
+        <!-- <div class="checkbox">
             <div class="checkbox">
                 <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
                 <label for="cb-is-linked"><span></span>Is linked</label>
@@ -157,7 +185,7 @@
         </div>
         <p>
             <input type="submit" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
-        </p>
+        </p>-->
     </script>
     <script type="text/ng-template" id="Numeric-template.html">
         <div class="checkbox">

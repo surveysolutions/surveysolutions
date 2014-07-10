@@ -2,10 +2,11 @@ input#edit-question-title {
   .edit-question-title-fontstyle();
 }
 
-.question-editor .singleOption {
+.question-editor .singleOption, .question-editor .multyOption {
   background-color: #f1f2f3;
   margin-top: -20px;
   padding: 0 15px;
+  border-radius: 4px;
 
   .table-holder {
     display: table;
@@ -37,12 +38,13 @@ input#edit-question-title {
           border-radius: 4px 0 0 4px;
           height: 34px;
 
-          > input.wb-radio + label {
+          > input.wb-radio + label,  > input.wb-checkbox + label{
             margin-right: 0;
             span {
               vertical-align: inherit;
             }
           }
+
         }
       }
 

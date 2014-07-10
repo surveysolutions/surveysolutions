@@ -6283,51 +6283,71 @@ input#edit-question-title {
   color: #000;
   font-weight: bold;
 }
-.question-editor .singleOption {
+.question-editor .singleOption,
+.question-editor .multyOption {
   background-color: #f1f2f3;
   margin-top: -20px;
   padding: 0 15px;
+  border-radius: 4px;
 }
-.question-editor .singleOption .table-holder {
+.question-editor .singleOption .table-holder,
+.question-editor .multyOption .table-holder {
   display: table;
   width: 100%;
 }
-.question-editor .singleOption .table-holder .table-row {
+.question-editor .singleOption .table-holder .table-row,
+.question-editor .multyOption .table-holder .table-row {
   display: table-row;
   height: 38px;
 }
 .question-editor .singleOption .table-holder .table-row .column-1,
+.question-editor .multyOption .table-holder .table-row .column-1,
 .question-editor .singleOption .table-holder .table-row .column-2,
+.question-editor .multyOption .table-holder .table-row .column-2,
 .question-editor .singleOption .table-holder .table-row .column-3,
-.question-editor .singleOption .table-holder .table-row .column-4 {
+.question-editor .multyOption .table-holder .table-row .column-3,
+.question-editor .singleOption .table-holder .table-row .column-4,
+.question-editor .multyOption .table-holder .table-row .column-4 {
   padding-left: 0;
   padding-right: 0;
   display: table-cell;
 }
 .question-editor .singleOption .table-holder .table-row .column-1,
-.question-editor .singleOption .table-holder .table-row .column-4 {
+.question-editor .multyOption .table-holder .table-row .column-1,
+.question-editor .singleOption .table-holder .table-row .column-4,
+.question-editor .multyOption .table-holder .table-row .column-4 {
   width: 40px;
 }
-.question-editor .singleOption .table-holder .table-row .column-2 {
+.question-editor .singleOption .table-holder .table-row .column-2,
+.question-editor .multyOption .table-holder .table-row .column-2 {
   width: 100px;
 }
-.question-editor .singleOption .table-holder .table-row .column-1 {
+.question-editor .singleOption .table-holder .table-row .column-1,
+.question-editor .multyOption .table-holder .table-row .column-1 {
   text-align: center;
 }
-.question-editor .singleOption .table-holder .table-row .column-1 > .backing {
+.question-editor .singleOption .table-holder .table-row .column-1 > .backing,
+.question-editor .multyOption .table-holder .table-row .column-1 > .backing {
   background-color: #ffffff;
   border-color: #fff;
   box-shadow: none;
   border-radius: 4px 0 0 4px;
   height: 34px;
 }
-.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label {
+.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label,
+.question-editor .multyOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label,
+.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-checkbox + label,
+.question-editor .multyOption .table-holder .table-row .column-1 > .backing > input.wb-checkbox + label {
   margin-right: 0;
 }
-.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label span {
+.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label span,
+.question-editor .multyOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label span,
+.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-checkbox + label span,
+.question-editor .multyOption .table-holder .table-row .column-1 > .backing > input.wb-checkbox + label span {
   vertical-align: inherit;
 }
-.question-editor .singleOption .table-holder .table-row .column-2 input {
+.question-editor .singleOption .table-holder .table-row .column-2 input,
+.question-editor .multyOption .table-holder .table-row .column-2 input {
   border: 2px solid #f1f2f3;
   border-radius: 0;
   border-top-color: #fff;
@@ -6338,19 +6358,22 @@ input#edit-question-title {
   color: #ff4200;
   font-size: 14px;
 }
-.question-editor .singleOption .table-holder .table-row .column-3 input {
+.question-editor .singleOption .table-holder .table-row .column-3 input,
+.question-editor .multyOption .table-holder .table-row .column-3 input {
   border-color: #fff;
   box-shadow: none;
   border-radius: 0 4px 4px 0;
   font-family: Arial, Helvetica, sans-serif;
 }
-.question-editor .singleOption .table-holder .table-row .column-4 > a {
+.question-editor .singleOption .table-holder .table-row .column-4 > a,
+.question-editor .multyOption .table-holder .table-row .column-4 > a {
   display: block;
   background: url("i/cross-red.png") center center no-repeat;
   width: 34px;
   height: 34px;
 }
-.question-editor .singleOption p input#edit-question-save-button {
+.question-editor .singleOption p input#edit-question-save-button,
+.question-editor .multyOption p input#edit-question-save-button {
   margin-top: 15px;
 }
 .row .form-group textarea {
