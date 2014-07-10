@@ -4,8 +4,8 @@ namespace WB.Core.Infrastructure.BaseStructures
 {
     public interface IExpressionProcessor
     {
-        void ProcessValidationExpressions(IInterviewExpressionState interviewExpressionState, List<Identity> questionsToBeValid,
-            List<Identity> questionsToBeInvalid);
+        void ProcessValidationExpressions(IInterviewExpressionState interviewExpressionState, out List<Identity> questionsToBeValid,
+            out List<Identity> questionsToBeInvalid);
 
         void ProcessConditionExpressions(IInterviewExpressionState interviewExpressionState,
             List<Identity> enabledGroups,
