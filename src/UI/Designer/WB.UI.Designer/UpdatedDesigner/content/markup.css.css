@@ -6056,6 +6056,9 @@ input.wb-radio:checked:disabled + label span {
 .form-group.input-variable-name > input {
   color: #ff4200;
 }
+textarea {
+  resize: vertical;
+}
 .popover {
   max-width: inherit;
 }
@@ -6385,8 +6388,9 @@ input#edit-question-title {
 .question-editor ul[aria-labelledby="rosterTypeBtn"] {
   width: 450px;
 }
-.row .form-group textarea {
-  resize: vertical;
+.question-editor button#edit-roster-numeric-source,
+.question-editor ul[aria-labelledby="edit-roster-numeric-source"] {
+  width: 100%;
 }
 .row .form-group button.cross {
   display: block;
@@ -6400,6 +6404,7 @@ input#edit-question-title {
   border: 2px solid #cccccc;
   text-transform: none;
   text-align: left;
+  min-height: 37px;
 }
 .row .form-group .btn-group button.dropdown-toggle > span.dropdown-arrow {
   background: url(i/dropdown-arrow.png) no-repeat center center;

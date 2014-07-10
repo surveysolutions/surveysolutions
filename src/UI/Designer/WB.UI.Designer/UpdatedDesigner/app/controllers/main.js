@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('MainCtrl', [
-            '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$modal', '$log', '$timeout',
-            function ($scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, $log, $timeout) {
+            '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$modal', '$log',
+            function ($scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, $log) {
                 var me = this;
 
                 $scope.verificationStatus = {
@@ -105,12 +105,9 @@
                     commandService.addQuestion($state.params.questionnaireId, parent.itemId, newId, variable).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyQuestion);
-                        } else {
-                            $log.error(result.Error);
+                            $state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId });
                         }
                     });
-
-                    $timeout(function () { $state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId }); }, 1000);
                 };
 
                 $scope.addGroup = function (parent) {
@@ -124,12 +121,9 @@
                     commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyGroup);
-                        } else {
-                            $log.error(result.Error);
+                            $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
                         }
                     });
-
-                    $timeout(function () { $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId }); }, 1000);
                 };
 
                 $scope.addRoster = function (parent) {
@@ -145,12 +139,9 @@
                     commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyRoster);
-                        } else {
-                            $log.error(result.Error);
+                            $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
                         }
                     });
-
-                    $timeout(function () { $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId }); }, 1000);
                 };
 
                 $scope.showShareInfo = function () {

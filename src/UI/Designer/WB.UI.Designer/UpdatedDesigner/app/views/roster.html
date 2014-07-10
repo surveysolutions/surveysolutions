@@ -3,7 +3,7 @@
 
     <form role="form" name="editRosterForm">
         <label for="edit-group-title" class="wb-label">Roster Type <span>(<a>?</a>)</span></label><br>
-        <div class="form-group col-xs-12">
+        <div class="form-group span-12">
             <div class="btn-group" dropdown>
                 <button id="rosterTypeBtn" class="btn dropdown-toggle" type="button">
                     {{rosterTypes[activeRoster.rosterTemplate]}}
@@ -56,12 +56,12 @@
 <script type="text/ng-template" id="List-template.html">
     <div class="form-group">
         <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
-        <div class="btn-group" dropdown>
-            <button id="questionTypeBtn" class="btn dropdown-toggle" type="button">
+        <div class="btn-group span-12" dropdown>
+            <button id="edit-roster-numeric-source" class="btn dropdown-toggle" type="button">
                 {{ getSelected(activeRoster.lists, activeRoster.rosterSizeQuestionId) }}
-                <span class="caret"></span>
+                <span class="dropdown-arrow"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
                 <li role="presentation" ng-repeat="list in activeRoster.lists">
                     <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterSizeQuestionId = list.id">{{ list.title }}</a>
                 </li>
@@ -106,6 +106,6 @@
 <script type="text/ng-template" id="FixedTitles-template.html">
     <div class="form-group">
         <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <span>(<a>?</a>)</span></label>
-        <textarea id="edit-fixed-roster-title" rows="5" cols="100" split-array ng-model="activeRoster.rosterFixedTitles"></textarea>
+        <textarea id="edit-fixed-roster-title" class="form-control" rows="5" cols="100" split-array ng-model="activeRoster.rosterFixedTitles"></textarea>
     </div>
 </script>
