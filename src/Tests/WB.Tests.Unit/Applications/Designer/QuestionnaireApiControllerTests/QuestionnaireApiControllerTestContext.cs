@@ -55,6 +55,11 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             return new QuestionnaireDocument();
         }
 
+        public static NewEditStaticTextView CreateStaticTextView()
+        {
+            return new NewEditStaticTextView();
+        }
+
         internal static QuestionnaireVerificationError[] CreateQuestionnaireVerificationErrors()
         {
             return new QuestionnaireVerificationError[2]
