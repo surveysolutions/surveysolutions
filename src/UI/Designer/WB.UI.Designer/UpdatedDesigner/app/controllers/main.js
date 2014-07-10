@@ -5,11 +5,15 @@
         .controller('MainCtrl', [
             '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$modal', '$log',
             function ($scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, $log) {
-                var me = this;
-
                 $scope.verificationStatus = {
                     errorsCount: null,
                     errors: []
+                };
+
+                $scope.questionnaire = {
+                    questionsCount: 0,
+                    groupsCount: 0,
+                    rostersCount: 0
                 };
 
                 $scope.verify = function () {
@@ -105,6 +109,7 @@
                     commandService.addQuestion($state.params.questionnaireId, parent.itemId, newId, variable).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyQuestion);
+                            $scope.questionnaire.questionsCount++;
                             $state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId });
                         }
                     });
@@ -121,6 +126,7 @@
                     commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyGroup);
+                            $scope.questionnaire.groupsCount++;
                             $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
                         }
                     });
@@ -139,6 +145,7 @@
                     commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyRoster);
+                            $scope.questionnaire.rostersCount++;
                             $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
                         }
                     });
