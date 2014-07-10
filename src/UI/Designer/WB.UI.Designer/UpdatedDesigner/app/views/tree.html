@@ -11,7 +11,9 @@
         <div ng-switch-when="default">
             {{currentChapter.title }}
             <ul class="controls-right">
-                <li><a class="filter" title="Toggle Filter"></a></li>
+                <li>
+                    <a class="filter" title="Toggle Filter"></a>
+                </li>
                 <li>
                     <a href="javascript:void(0);" ng-click="showSearch()" class="search" title="Toggle Search"></a>
                 </li>
@@ -80,7 +82,7 @@
             </div>
         </div>
 
-        <div class="buttons-item" ng-if="!isQuestion(item)" ng-class="{hidden: collapsed}">
+        <div class="buttons-item" ng-if="!isQuestion(item)" ng-class="{ hidden: collapsed }">
             <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
             <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
             <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(item)" />

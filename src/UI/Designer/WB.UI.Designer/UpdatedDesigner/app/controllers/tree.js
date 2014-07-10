@@ -176,7 +176,7 @@
                 return !item.hasOwnProperty('type');
             };
 
-            $scope.showStartScreen = function () {
+            $scope.showStartScreen = function() {
                 return _.isEmpty($scope.items);
             };
 
@@ -333,7 +333,7 @@
             };
 
             $scope.resetSelection = function() {
-                $state.go('questionnaire.chapter', { chapterId: $state.params.chapterId });
+                $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: $state.params.chapterId });
             };
 
             $scope.refreshTree = function() {

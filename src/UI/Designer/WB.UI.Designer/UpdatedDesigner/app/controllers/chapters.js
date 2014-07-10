@@ -47,7 +47,7 @@
                                 itemId: newId
                             };
                             $scope.questionnaire.chapters.splice(indexOf, 0, newChapter);
-                            $state.go('questionnaire.chapter', { chapterId: newId });
+                            $state.go('questionnaire.chapter.group', { chapterId: newId, itemId: newId });
                         }
                     });
                 };

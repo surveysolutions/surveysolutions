@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('MainCtrl', [
-            '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$modal', '$log',
-            function ($scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, $log) {
+            '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$modal', '$log', '$timeout',
+            function ($scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, $log, $timeout) {
                 var me = this;
 
                 $scope.verificationStatus = {
@@ -108,8 +108,9 @@
                         } else {
                             $log.error(result.Error);
                         }
-                    }
-                    );
+                    });
+
+                    $timeout(function () { $state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId }); }, 1000);
                 };
 
                 $scope.addGroup = function (parent) {
@@ -127,6 +128,8 @@
                             $log.error(result.Error);
                         }
                     });
+
+                    $timeout(function () { $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId }); }, 1000);
                 };
 
                 $scope.addRoster = function (parent) {
@@ -146,6 +149,8 @@
                             $log.error(result.Error);
                         }
                     });
+
+                    $timeout(function () { $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId }); }, 1000);
                 };
 
                 $scope.showShareInfo = function () {
