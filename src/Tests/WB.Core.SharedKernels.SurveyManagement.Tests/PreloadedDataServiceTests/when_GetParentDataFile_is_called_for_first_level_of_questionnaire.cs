@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     RosterFixedTitles = new[] { "1" },
+                    VariableName = "roster",
                     PublicKey = rosterGroupId
                 });
 

@@ -5,7 +5,9 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 
@@ -17,7 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFacto
         protected static ExportViewFactory CreateExportViewFactory(
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory = null)
         {
-            return new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(), questionnaireRosterStructureFactory??new QuestionnaireRosterStructureFactory());
+            return new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(), questionnaireRosterStructureFactory ?? new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

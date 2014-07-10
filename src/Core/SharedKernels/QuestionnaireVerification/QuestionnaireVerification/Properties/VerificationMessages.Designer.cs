@@ -611,5 +611,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0069_RosterHasInvalidVariableName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster has variable name equal to questionnaire title.
+        /// </summary>
+        internal static string WB0070_RosterHasVariableNameEqualToQuestionnaireTitle {
+            get {
+                return ResourceManager.GetString("WB0070_RosterHasVariableNameEqualToQuestionnaireTitle", resourceCulture);
+            }
+        }
     }
 }
