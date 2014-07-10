@@ -300,4 +300,7 @@
   <data name="WB0069_RosterHasInvalidVariableName" xml:space="preserve">
     <value>Roster has invalid variable name</value>
   </data>
+  <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+    <value>Roster has variable name equal to questionnaire title</value>
+  </data>
 </root>

@@ -11,6 +11,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -66,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
             var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
             var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
-                new QuestionnaireRosterStructureFactory());
+                new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
             questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
                 .Returns(exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1));
 

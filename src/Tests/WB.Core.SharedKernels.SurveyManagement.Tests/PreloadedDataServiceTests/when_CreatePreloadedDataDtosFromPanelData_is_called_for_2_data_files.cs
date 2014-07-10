@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                         RosterSizeSource = RosterSizeSourceType.FixedTitles,
                         PublicKey = rosterGroupId,
                         RosterFixedTitles = new []{"a"},
+                        VariableName = "Roster Group",
                         Children = new List<IComposite> { new NumericQuestion() { StataExportCaption = "nq2", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() } }
                     });
 

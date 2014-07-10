@@ -15,7 +15,6 @@ namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services
     internal class QuestionnaireUpgradeService : IQuestionnaireUpgradeService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-    //    private readonly Regex validVariableNameRegEx = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
 
         public QuestionnaireUpgradeService(IFileSystemAccessor fileSystemAccessor)
         {
@@ -25,8 +24,9 @@ namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services
         public QuestionnaireDocument CreateRostersVariableName(QuestionnaireDocument originalDocument)
         {
             var document = originalDocument.Clone();
+            document.VariableName = this.fileSystemAccessor.MakeValidFileName(originalDocument.Title);
             var rosters = document.Find<Group>(g => g.IsRoster);
-            var rostersVariableNames = new HashSet<string> { this.fileSystemAccessor.MakeValidFileName(originalDocument.Title) };
+            var rostersVariableNames = new HashSet<string> { document.VariableName };
 
             foreach (var roster in rosters)
             {
