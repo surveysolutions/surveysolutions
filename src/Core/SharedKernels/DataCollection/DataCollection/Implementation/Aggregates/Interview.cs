@@ -132,9 +132,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var question in @event.InterviewData.Answers)
                 {
                     decimal[] questionPropagationVector = question.QuestionPropagationVector;
-                    if (question.Answer is int)
+                    if (question.Answer is long)
                     {
-                        this.expressionProcessorStatePrototype.UpdateIntAnswer(question.Id, questionPropagationVector, Convert.ToInt32(question.Answer));
+                        this.expressionProcessorStatePrototype.UpdateIntAnswer(question.Id, questionPropagationVector, (long)question.Answer);
                     }
                     if (question.Answer is decimal)
                     {

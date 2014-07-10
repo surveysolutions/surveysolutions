@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, int answer)
+        public void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer)
         {
             var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -331,7 +331,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         }
 
         public string id;
-        public int? persons_count;
+        public long? persons_count;
 
         public void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
         {
@@ -386,13 +386,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             get { return this.parent.id; }
         }
 
-        public int? persons_count
+        public long? persons_count
         {
             get { return this.parent.persons_count; }
         }
 
         public string name { get; set; }
-        public int? age { get; set; }
+        public long? age { get; set; }
         public DateTime? date { get; set; }
         public decimal? sex { get; set; }
         public decimal? role { get; set; }
@@ -491,7 +491,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public string id { get { return this.parent.id; } }
 
-        public int? persons_count
+        public long? persons_count
         {
             get { return this.parent.persons_count; }
         }
@@ -501,7 +501,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             get { return this.parent.name; }
         }
 
-        public int? age
+        public long? age
         {
             get { return this.parent.age; }
         }
@@ -542,7 +542,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         }
 
 
-        public int times_per_week;
+        public long times_per_week;
         public decimal price_for_food;
 
 

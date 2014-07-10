@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     public interface IInterviewExpressionState
     {
-        void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, int answer);
+        void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer);
         void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer);
         void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer);
         void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer);
