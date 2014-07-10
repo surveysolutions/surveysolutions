@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 {
     internal class when_verifying_questionnaire_that_has_roster_with_empty_variable_name : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
