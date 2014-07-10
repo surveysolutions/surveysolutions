@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -132,6 +133,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(QuestionHasValidationExpressionWithoutValidationMessage, "WB0065", VerificationMessages.WB0065_QuestionHasValidationExpressionWithoutValidationMessage),
                     Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
                     Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
+                    Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -438,6 +440,18 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (!group.IsRoster)
                 return false;
             return string.IsNullOrWhiteSpace(group.VariableName);
+        }
+
+        private bool RosterHasInvalidVariableName(IGroup group)
+        {
+            if (!group.IsRoster)
+                return false;
+            if(string.IsNullOrEmpty(group.VariableName))
+                return false;
+            if (group.VariableName.Length > 32)
+                return true;
+            var regExp = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
+            return !regExp.IsMatch(group.VariableName);
         }
 
         private EntityVerificationResult<IComposite> QuestionShouldNotHaveCircularReferences(IQuestion entity, QuestionnaireDocument questionnaire)
