@@ -6376,6 +6376,10 @@ input#edit-question-title {
 .question-editor .multyOption p input#edit-question-save-button {
   margin-top: 15px;
 }
+.question-editor button#rosterTypeBtn,
+.question-editor ul[aria-labelledby="rosterTypeBtn"] {
+  width: 450px;
+}
 .row .form-group textarea {
   resize: vertical;
 }
@@ -6385,14 +6389,14 @@ input#edit-question-title {
   width: 34px;
   height: 34px;
 }
-.row .form-group .btn-group button#Question-scope {
+.row .form-group .btn-group button.dropdown-toggle {
   padding: 10px 40px 10px 10px;
   background-color: #ffffff;
   border: 2px solid #cccccc;
   text-transform: none;
   text-align: left;
 }
-.row .form-group .btn-group button#Question-scope > span.dropdown-arrow {
+.row .form-group .btn-group button.dropdown-toggle > span.dropdown-arrow {
   background: url(i/dropdown-arrow.png) no-repeat center center;
   width: 19px;
   height: 12px;

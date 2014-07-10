@@ -2,13 +2,14 @@
     <div data-item-breadcrumbs data-crumbs="activeRoster.breadcrumbs"></div>
 
     <form role="form" name="editRosterForm">
-        <div class="form-group">
+        <label for="edit-group-title" class="wb-label">Roster Type <span>(<a>?</a>)</span></label><br>
+        <div class="form-group col-xs-12">
             <div class="btn-group" dropdown>
-                <button id="questionTypeBtn" class="btn dropdown-toggle" type="button">
+                <button id="rosterTypeBtn" class="btn dropdown-toggle" type="button">
                     {{rosterTypes[activeRoster.rosterTemplate]}}
-                    <span class="caret"></span>
+                    <span class="dropdown-arrow"></span>
                 </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <ul class="dropdown-menu" role="menu" aria-labelledby="rosterTypeBtn">
                     <li role="presentation" ng-repeat="type in rosterTypes">
                         <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="updateRosterType(type)">{{ type }}</a>
                     </li>
