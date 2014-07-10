@@ -16,10 +16,12 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.QuestionnaireUpgrader;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
@@ -78,8 +80,10 @@ namespace WB.UI.Designer.App_Start
                 new DesignerBoundedContextModule(AppSettings.Instance.IsNewDesignerEditPageEnabled),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
+                new QuestionnaireUpgraderModule(),
                 new MembershipModule(),
                 new MainModule(),
+                 new FileInfrastructureModule(),
                 new DesignerRegistry()
                 );
 

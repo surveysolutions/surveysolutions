@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
@@ -41,6 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<TextListQuestionChanged>, IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader updrader;
+        private readonly IQuestionnaireUpgradeService questionnaireUpgradeService;
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
         private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
         private readonly ILogger logger;
@@ -48,9 +50,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public PdfQuestionnaireDenormalizer(IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter,
             ILogger logger,
             IReadSideRepositoryWriter<AccountDocument> accounts,
-            IQuestionnaireDocumentUpgrader updrader)
+            IQuestionnaireDocumentUpgrader updrader, IQuestionnaireUpgradeService questionnaireUpgradeService)
         {
             this.updrader = updrader;
+            this.questionnaireUpgradeService = questionnaireUpgradeService;
             this.repositoryWriter = repositoryWriter;
             this.logger = logger;
             this.accounts = accounts;
@@ -415,7 +418,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            this.HandleUpdateEvent(evnt, handle: (@event, questionnaire) => this.CreatePdfQuestionnaireViewFromQuestionnaireDocument(updrader.TranslatePropagatePropertiesToRosterProperties(@event.Source)));
+            this.HandleUpdateEvent(evnt,
+                handle:
+                    (@event, questionnaire) =>
+                        this.CreatePdfQuestionnaireViewFromQuestionnaireDocument(
+                            questionnaireUpgradeService.CreateRostersVariableName(updrader.TranslatePropagatePropertiesToRosterProperties(@event.Source))));
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)

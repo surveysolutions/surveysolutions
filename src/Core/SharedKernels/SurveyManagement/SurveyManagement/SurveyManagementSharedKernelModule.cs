@@ -62,7 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
-            this.Bind<IDataFileService>().To<DataFileService>();
             
             var applicationVersionSettings = new ApplicationVersionSettings
             {

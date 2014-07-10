@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.Infrastructure.FileSystem;
 using it = Moq.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTests

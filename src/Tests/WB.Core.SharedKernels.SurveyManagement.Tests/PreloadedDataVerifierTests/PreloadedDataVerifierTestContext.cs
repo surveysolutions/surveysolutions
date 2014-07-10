@@ -32,8 +32,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
-            var dataFileServiceMock = new Mock<IDataFileService>();
-            dataFileServiceMock.Setup(x => x.CreateValidFileName(Moq.It.IsAny<string>())).Returns<string>((name) => name);
             return
                 new PreloadedDataVerifier(
                     Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned>>(
