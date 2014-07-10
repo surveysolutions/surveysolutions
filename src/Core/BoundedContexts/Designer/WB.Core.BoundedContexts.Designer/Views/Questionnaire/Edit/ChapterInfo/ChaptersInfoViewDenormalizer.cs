@@ -36,6 +36,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionAdded>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionUpdated>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionCloned>,
+        IUpdateHandler<GroupInfoView, StaticTextAdded>,
+        IUpdateHandler<GroupInfoView, StaticTextUpdated>,
+        IUpdateHandler<GroupInfoView, StaticTextCloned>,
         IUpdateHandler<GroupInfoView, QuestionnaireItemMoved>,
         IUpdateHandler<GroupInfoView, GroupBecameARoster>,
         IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
@@ -126,8 +129,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public GroupInfoView Update(GroupInfoView currentState,IPublishedEvent<GroupDeleted> evnt)
         {
             var groupId = evnt.Payload.GroupPublicKey.FormatGuid();
-            var parentGroupView = this.FindParentOfGroupOrQuestion(questionnaireOrGroup: currentState,
-                groupId: groupId);
+            var parentGroupView = this.FindParentOfEntity(questionnaireOrGroup: currentState,
+                entityId: groupId);
 
             parentGroupView.Items.Remove(parentGroupView.Items.Find(group => group.ItemId == groupId));
 
@@ -236,7 +239,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<QuestionDeleted> evnt)
         {
             var questionId = evnt.Payload.QuestionId.FormatGuid();
-            var parentGroupOfQuestion = this.FindParentOfGroupOrQuestion(currentState, questionId);
+            var parentGroupOfQuestion = this.FindParentOfEntity(currentState, questionId);
 
             parentGroupOfQuestion.Items.Remove(
                 parentGroupOfQuestion.Items.Find(question => question.ItemId == questionId));
@@ -296,6 +299,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return currentState;
         }
 
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<StaticTextAdded> evnt)
+        {
+            this.AddStaticText(questionnaire: currentState, parentId: evnt.Payload.ParentId.FormatGuid(),
+                entityId: evnt.Payload.EntityId.FormatGuid(), text: evnt.Payload.Text);
+
+            return currentState;
+        }
+
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<StaticTextCloned> evnt)
+        {
+            this.AddStaticText(questionnaire: currentState, parentId: evnt.Payload.ParentId.FormatGuid(),
+                entityId: evnt.Payload.EntityId.FormatGuid(), text: evnt.Payload.Text,
+                orderIndex: evnt.Payload.TargetIndex);
+
+            return currentState;
+        }
+
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<StaticTextUpdated> evnt)
+        {
+            this.UpdateStaticText(questionnaire: currentState, entityId: evnt.Payload.EntityId.FormatGuid(),
+                text: evnt.Payload.Text);
+
+            return currentState;
+        }
+
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
             var groupOrQuestionKey = evnt.Payload.PublicKey.FormatGuid();
@@ -306,13 +334,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             var targetGroup = this.FindGroup(currentState, targetGroupKey);
 
-            var groupOrQuestionView = this.FindGroupOrQuestion<IQuestionnaireItem>(currentState, groupOrQuestionKey);
-            if (groupOrQuestionView != null)
+            var entityView = this.FindEntity<IQuestionnaireItem>(currentState, groupOrQuestionKey);
+            if (entityView != null)
             {
-                var parentOfGroup = this.FindParentOfGroupOrQuestion(currentState, groupOrQuestionView.ItemId);
+                var parentOfEntity = this.FindParentOfEntity(currentState, entityView.ItemId);
 
-                parentOfGroup.Items.Remove(groupOrQuestionView);
-                targetGroup.Items.Insert(Math.Min(evnt.Payload.TargetIndex, targetGroup.Items.Count), groupOrQuestionView);
+                parentOfEntity.Items.Remove(entityView);
+                targetGroup.Items.Insert(Math.Min(evnt.Payload.TargetIndex, targetGroup.Items.Count), entityView);
             }
 
             return currentState;
@@ -338,21 +366,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return currentState;
         }
 
+        private StaticTextInfoView FindStaticText(GroupInfoView questionnaireOrGroup, string entityId)
+        {
+            return this.FindEntity<StaticTextInfoView>(questionnaireOrGroup, entityId);
+        }
+
         private QuestionInfoView FindQuestion(GroupInfoView questionnaireOrGroup, string questionId)
         {
-            return this.FindGroupOrQuestion<QuestionInfoView>(questionnaireOrGroup, questionId);
+            return this.FindEntity<QuestionInfoView>(questionnaireOrGroup, questionId);
         }
 
         private GroupInfoView FindGroup(GroupInfoView questionnaireOrGroup, string groupId)
         {
-            return this.FindGroupOrQuestion<GroupInfoView>(questionnaireOrGroup, groupId);
+            return this.FindEntity<GroupInfoView>(questionnaireOrGroup, groupId);
         }
 
-        private T FindGroupOrQuestion<T>(IQuestionnaireItem questionnaireOrGroup, string groupOrQuestionId) where T : IQuestionnaireItem
+        private T FindEntity<T>(IQuestionnaireItem questionnaireOrGroup, string entityId) where T : IQuestionnaireItem
         {
             IQuestionnaireItem retVal = null;
 
-            if (questionnaireOrGroup.ItemId == groupOrQuestionId)
+            if (questionnaireOrGroup.ItemId == entityId)
                 retVal = questionnaireOrGroup;
             else
             {
@@ -361,7 +394,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 {
                     foreach (var groupInfoView in questionnaireItemAsGroup.Items)
                     {
-                        retVal = this.FindGroupOrQuestion<T>(groupInfoView, groupOrQuestionId);
+                        retVal = this.FindEntity<T>(groupInfoView, entityId);
                         if (retVal != null) break;
                     }    
                 }
@@ -371,17 +404,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return (T)retVal;
         }
 
-        private GroupInfoView FindParentOfGroupOrQuestion(GroupInfoView questionnaireOrGroup, string groupId)
+        private GroupInfoView FindParentOfEntity(GroupInfoView questionnaireOrGroup, string entityId)
         {
             GroupInfoView findedGroup = null;
 
-            if (questionnaireOrGroup.Items.Any(group => group.ItemId == groupId))
+            if (questionnaireOrGroup.Items.Any(group => group.ItemId == entityId))
                 findedGroup = questionnaireOrGroup;
             else
             {
                 foreach (var groupInfoView in questionnaireOrGroup.Items.OfType<GroupInfoView>())
                 {
-                    findedGroup = this.FindParentOfGroupOrQuestion(groupInfoView, groupId);
+                    findedGroup = this.FindParentOfEntity(groupInfoView, entityId);
                     if (findedGroup != null) break;
                 }
             }
@@ -455,7 +488,42 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             questionView.LinkedToQuestionId = linkedToQuestionId;
         }
 
-        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, bool isRoster = false, int? orderIndex = null)
+        private void AddStaticText(GroupInfoView questionnaire, string parentId, string entityId, string text,
+            int? orderIndex = null)
+        {
+            var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: parentId);
+            if (groupView == null)
+            {
+                return;
+            }
+
+            var staticTextInfoView = new StaticTextInfoView()
+            {
+                ItemId = entityId,
+                Text = text
+            };
+
+            if (orderIndex.HasValue)
+            {
+                groupView.Items.Insert(orderIndex.Value, staticTextInfoView);
+            }
+            else
+            {
+                groupView.Items.Add(staticTextInfoView);
+            }
+        }
+
+        private void UpdateStaticText(GroupInfoView questionnaire, string entityId, string text)
+        {
+            var staticTextInfoView = this.FindStaticText(questionnaireOrGroup: questionnaire, entityId: entityId);
+
+            if (staticTextInfoView == null)
+                return;
+
+            staticTextInfoView.Text = text;
+        }
+
+        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, int? orderIndex = null)
         {
             var parentGroup = string.IsNullOrEmpty(parentGroupId)
                 ? questionnaire
@@ -507,6 +575,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                     questionVariable: question.StataExportCaption,
                     questionConditionExpression: question.ConditionExpression,
                     linkedToQuestionId: Monads.Maybe(() => question.LinkedToQuestionId.FormatGuid()));
+            }
+
+            foreach (var staticText in sourceQuestionnaireOrGroup.Children.OfType<IStaticText>())
+            {
+                this.AddStaticText(questionnaire: currentState, parentId: staticText.GetParent().PublicKey.FormatGuid(),
+                    entityId: staticText.PublicKey.FormatGuid(), text: staticText.Text);
+
             }
         }
 
