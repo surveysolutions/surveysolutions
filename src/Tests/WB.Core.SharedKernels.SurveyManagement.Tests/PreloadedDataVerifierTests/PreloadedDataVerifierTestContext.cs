@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataVerifierTest
             var questionnaireExportStructure = (questionnaireDocument == null
                 ? null
                 : new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
-                    new QuestionnaireRosterStructureFactory()).CreateQuestionnaireExportStructure(questionnaireDocument, 1));
+                    new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>()).CreateQuestionnaireExportStructure(questionnaireDocument, 1));
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));

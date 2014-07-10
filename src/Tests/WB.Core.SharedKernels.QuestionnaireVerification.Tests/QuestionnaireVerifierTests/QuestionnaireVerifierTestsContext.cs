@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
@@ -18,7 +19,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
     {
         protected static QuestionnaireVerifier CreateQuestionnaireVerifier(IExpressionProcessor expressionProcessor = null)
         {
-            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object);
+            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, Mock.Of<IFileSystemAccessor>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)

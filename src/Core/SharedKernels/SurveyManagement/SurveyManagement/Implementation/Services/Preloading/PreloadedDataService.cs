@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             return
                 exportStructure.HeaderToLevelMap.Values.FirstOrDefault(
-                    header => levelFileName.EndsWith(header.LevelName, StringComparison.OrdinalIgnoreCase));
+                    header => levelFileName.StartsWith(header.LevelName, StringComparison.OrdinalIgnoreCase));
         }
 
         public PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels)
@@ -225,7 +225,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
         {
-            return allLevels.FirstOrDefault(l => l.FileName.EndsWith(name, StringComparison.OrdinalIgnoreCase));
+            return allLevels.FirstOrDefault(l => l.FileName.StartsWith(name, StringComparison.OrdinalIgnoreCase));
         }
 
         private PreloadedLevelDto[] GetHierarchicalAnswersByLevelName(string levelName, string[] parentIds, PreloadedDataByFile[] rosterData)

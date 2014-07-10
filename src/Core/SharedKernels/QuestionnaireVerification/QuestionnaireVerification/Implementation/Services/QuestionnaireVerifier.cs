@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -72,15 +73,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         #endregion
 
         private readonly IExpressionProcessor expressionProcessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         protected static ISubstitutionService SubstitutionService
         {
             get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
         }
 
-        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor)
+        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor)
         {
             this.expressionProcessor = expressionProcessor;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -134,6 +137,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
                     Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
                     Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
+                    Verifier<IGroup>(RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -452,6 +456,18 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return true;
             var regExp = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
             return !regExp.IsMatch(group.VariableName);
+        }
+
+        private bool RosterHasVariableNameEqualToQuestionnaireTitle(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            if (!group.IsRoster)
+                return false;
+            if (string.IsNullOrEmpty(group.VariableName))
+                return false;
+            
+            var questionnaireVariableName = this.fileSystemAccessor.MakeValidFileName(questionnaire.Title);
+
+            return group.VariableName.Equals(questionnaireVariableName, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private EntityVerificationResult<IComposite> QuestionShouldNotHaveCircularReferences(IQuestion entity, QuestionnaireDocument questionnaire)
