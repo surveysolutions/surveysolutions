@@ -5145,6 +5145,7 @@ button.close {
   padding: 15px;
   border-bottom: 1px solid #e5e5e5;
   min-height: 16.42857143px;
+  border-top: 8px solid #d7e4ee;
 }
 .modal-header .close {
   margin-top: -2px;
@@ -5152,16 +5153,20 @@ button.close {
 .modal-title {
   margin: 0;
   line-height: 1.42857143;
+  font-family: 'Roboto', sans-serif;
+  font-size: 36px;
 }
 .modal-body {
   position: relative;
   padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #000;
+  font-weight: bold;
 }
 .modal-footer {
   margin-top: 15px;
   padding: 19px 20px 20px;
-  text-align: right;
-  border-top: 1px solid #e5e5e5;
 }
 .modal-footer .btn + .btn {
   margin-left: 5px;

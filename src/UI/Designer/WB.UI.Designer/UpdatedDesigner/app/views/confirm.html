@@ -1,10 +1,11 @@
 ﻿<div class="modal-header">
-    <h3 class="modal-title">Confirm dialog</h3>
+    <button class="close" ng-click="cancel()" aria-hidden="true" type="button"></button>
+    <h3 class="modal-title">Confirmation</h3>
 </div>
 <div class="modal-body">
     Are you sure want to delete "{{ item.title }}"?
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">OK</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-lg" ng-click="ok()">DELETE</button>
+    <button class="btn btn-warning btn-link" ng-click="cancel()">BACK TO DESIGNER</button>
 </div>

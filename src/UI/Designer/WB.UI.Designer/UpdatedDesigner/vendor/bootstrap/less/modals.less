@@ -77,6 +77,7 @@
   padding: @modal-title-padding;
   border-bottom: 1px solid @modal-header-border-color;
   min-height: (@modal-title-padding + @modal-title-line-height);
+  border-top: 8px solid #d7e4ee;
 }
 // Close icon
 .modal-header .close {
@@ -87,6 +88,7 @@
 .modal-title {
   margin: 0;
   line-height: @modal-title-line-height;
+  .confirm-title();
 }
 
 // Modal body
@@ -94,14 +96,15 @@
 .modal-body {
   position: relative;
   padding: @modal-inner-padding;
+  .confirm-text();
 }
 
 // Footer (for actions)
 .modal-footer {
   margin-top: 15px;
   padding: (@modal-inner-padding - 1) @modal-inner-padding @modal-inner-padding;
-  text-align: right; // right align buttons
-  border-top: 1px solid @modal-footer-border-color;
+ // text-align: right; // right align buttons
+ // border-top: 1px solid @modal-footer-border-color;
   &:extend(.clearfix all); // clear it in case folks use .pull-* classes on buttons
 
   // Properly space out buttons
