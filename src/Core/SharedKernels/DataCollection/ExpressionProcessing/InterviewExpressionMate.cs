@@ -217,8 +217,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 return invalidIdentities;
             }
         }
-        
-        public void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, int answer)
+
+        public void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer)
         {
             throw new NotImplementedException();
         }
