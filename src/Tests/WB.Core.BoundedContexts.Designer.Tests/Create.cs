@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests
@@ -70,6 +71,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string chapter2QuestionId = null, string chapter2QuestionTitle = null,
             string chapter2QuestionVariable = null, 
             string chapter2QuestionConditionExpression = null,
+            string chapter1StaticTextId = null, string chapter1StaticText = null,
             bool? isPublic = null)
         {
             return ToPublishedEvent(new QuestionnaireCloned()
@@ -81,6 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                         chapter1GroupTitle: chapter1GroupTitle, chapter2QuestionId: chapter2QuestionId,
                         chapter2QuestionTitle: chapter2QuestionTitle, chapter2QuestionVariable: chapter2QuestionVariable,
                         chapter2QuestionConditionExpression: chapter2QuestionConditionExpression,
+                        chapter1StaticTextId: chapter1StaticTextId, chapter1StaticText: chapter1StaticText,
                         isPublic: isPublic ?? false)
             }, new Guid(questionnaireId));
         }
@@ -96,6 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string chapter2QuestionTitle = null,
             string chapter2QuestionVariable = null, 
             string chapter2QuestionConditionExpression = null,
+            string chapter1StaticTextId = null, string chapter1StaticText = null,
             bool? isPublic = null)
         {
             return ToPublishedEvent(new TemplateImported()
@@ -106,7 +110,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                         chapter2Title: chapter2Title, chapter1GroupId: chapter1GroupId,
                         chapter1GroupTitle: chapter1GroupTitle, chapter2QuestionId: chapter2QuestionId,
                         chapter2QuestionTitle: chapter2QuestionTitle, chapter2QuestionVariable: chapter2QuestionVariable,
-                        chapter2QuestionConditionExpression: chapter2QuestionConditionExpression, 
+                        chapter2QuestionConditionExpression: chapter2QuestionConditionExpression,
+                        chapter1StaticTextId: chapter1StaticTextId, chapter1StaticText: chapter1StaticText,
                         isPublic: isPublic ?? false)
             }, new Guid(questionnaireId));
         }
@@ -402,6 +407,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string chapter2QuestionTitle,
             string chapter2QuestionVariable, 
             string chapter2QuestionConditionExpression,
+            string chapter1StaticTextId, 
+            string chapter1StaticText,
             bool isPublic)
         {
             return new QuestionnaireDocument()
@@ -417,6 +424,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                         Title = chapter1Title,
                         Children = new List<IComposite>()
                         {
+                            new StaticText(entityId: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
                             new Group()
                             {
                                 PublicKey = GetQuestionnaireItemId(chapter1GroupId),
