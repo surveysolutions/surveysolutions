@@ -79,10 +79,11 @@
 
         <div class="form-group">
             <label for="edit-question-scope">Question scope</label><br>
-            <div class="btn-group" dropdown>
-                <button class="btn dropdown-toggle" type="button">
+            <div class="btn-group dropup" dropdown>
+                <button class="btn dropdown-toggle" id="Question-scope" type="button">
                     {{ activeQuestion.questionScope }}
-                    <span class="caret"></span>
+                   <!-- <span class="caret"></span>-->
+                    <span class="dropdown-arrow"></span>
                 </button>
 
                 <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1">

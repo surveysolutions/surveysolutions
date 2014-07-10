@@ -6359,6 +6359,20 @@ input#edit-question-title {
   width: 34px;
   height: 34px;
 }
+.row .form-group .btn-group button#Question-scope {
+  padding: 10px 40px 10px 10px;
+  background-color: #ffffff;
+  border: 2px solid #cccccc;
+  text-transform: none;
+  text-align: left;
+}
+.row .form-group .btn-group button#Question-scope > span.dropdown-arrow {
+  background: url(i/dropdown-arrow.png) no-repeat center center;
+  width: 19px;
+  height: 12px;
+  position: absolute;
+  right: 10px;
+}
 .ui-match {
   background-color: #FFCC00;
   border-top: solid 1px #FAD540;
