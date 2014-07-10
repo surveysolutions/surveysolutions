@@ -192,8 +192,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             if(!rootGroups.Any())
                 throw new InvalidOperationException("level is absent in template");
-            
-            var levelTitle = rootGroups.First().Title;
+
+            var firstRootGroup = rootGroups.First();
+            var levelTitle = firstRootGroup.VariableName ?? firstRootGroup.Title;
             
             var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, referenceInfoForLinkedQuestions,
                 maxValuesForRosterSizeQuestions, levelVector);

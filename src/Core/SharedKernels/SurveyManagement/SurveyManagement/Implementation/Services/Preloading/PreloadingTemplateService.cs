@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataFileExportService dataFileExportService;
         private readonly IArchiveUtils archiveUtils;
-        private readonly IDataFileService dataFileService;
         private const string FolderName = "PreLoadingTemplates";
         private readonly string path;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage;
@@ -30,13 +29,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public PreloadingTemplateService(IFileSystemAccessor fileSystemAccessor,
             IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage, string folderPath,
-            IDataFileExportService dataFileExportService, IArchiveUtils archiveUtils, IDataFileService dataFileService)
+            IDataFileExportService dataFileExportService, IArchiveUtils archiveUtils)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.dataFileExportService = dataFileExportService;
             this.archiveUtils = archiveUtils;
-            this.dataFileService = dataFileService;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
@@ -60,13 +58,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (fileSystemAccessor.IsFileExists(archiveFilePath))
                 return archiveFilePath;
 
-            var cleanedFileNamesForLevels =
-              this.dataFileService.CreateCleanedFileNamesForLevels(
-                  questionnaire.HeaderToLevelMap.Values.ToDictionary(h => h.LevelScopeVector, h => h.LevelName));
-            foreach (var header in questionnaire.HeaderToLevelMap.Values)
+              foreach (var header in questionnaire.HeaderToLevelMap.Values)
             {
                 var interviewTemplateFilePath = this.fileSystemAccessor.CombinePath(dataDirectoryPath,
-                    dataFileExportService.GetInterviewExportedDataFileName(cleanedFileNamesForLevels[header.LevelScopeVector]));
+                    dataFileExportService.GetInterviewExportedDataFileName(header.LevelName));
 
                 dataFileExportService.CreateHeader(header, interviewTemplateFilePath);
             }

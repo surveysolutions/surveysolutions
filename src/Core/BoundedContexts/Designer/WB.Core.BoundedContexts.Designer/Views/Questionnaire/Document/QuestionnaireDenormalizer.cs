@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 {
@@ -51,14 +52,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader upgrader;
+        private readonly IQuestionnaireUpgradeService questionnaireUpgradeService;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
         private readonly IQuestionFactory questionFactory;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
-            IQuestionFactory questionFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader)
+            IQuestionFactory questionFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader, IQuestionnaireUpgradeService questionnaireUpgradeService)
         {
             this.upgrader = upgrader;
+            this.questionnaireUpgradeService = questionnaireUpgradeService;
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;
             this.logger = logger;
@@ -436,6 +439,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             questionnaireDocument = this.upgrader.TranslatePropagatePropertiesToRosterProperties(questionnaireDocument);
             questionnaireDocument = this.upgrader.CleanExpressionCaches(questionnaireDocument);
+            questionnaireDocument = this.questionnaireUpgradeService.CreateRostersVariableName(questionnaireDocument);
             this.documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
         }
 

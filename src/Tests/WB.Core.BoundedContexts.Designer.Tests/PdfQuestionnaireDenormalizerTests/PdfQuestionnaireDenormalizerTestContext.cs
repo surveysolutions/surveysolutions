@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTests
 {
@@ -23,7 +24,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTes
             ILogger logger = null,
             IQuestionnaireDocumentUpgrader upgrader = null)
         {
-            return new PdfQuestionnaireDenormalizer(documentStorage, logger, null, upgrader);
+            var questionnaireUpgradeServiceMock = new Mock<IQuestionnaireUpgradeService>();
+            questionnaireUpgradeServiceMock.Setup(x => x.CreateRostersVariableName(Moq.It.IsAny<QuestionnaireDocument>()))
+                .Returns<QuestionnaireDocument>(doc => doc);
+            return new PdfQuestionnaireDenormalizer(documentStorage, logger, null, upgrader, questionnaireUpgradeServiceMock.Object);
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(T @event)
