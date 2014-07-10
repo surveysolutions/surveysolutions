@@ -39,22 +39,22 @@
 <section id="main" class="row" >
     <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
         <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
-        <div class="ul-holder">
+        <div class="ul-holder" >
             <ul class="chapters" ui-tree-nodes ng-model="questionnaire.chapters">
                 <li class="chapter-panel-item"
                     ng-repeat="chapter in questionnaire.chapters"
                     ui-tree-node
                     ui-sref-active="current">
-                    <div class="holder">
+                    <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
                         <div class="inner">
                             <a class="handler" ui-tree-handle></a>
                             <h1><a ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">{{chapter.title}}</a></h1>
-                            <div class="btn-group" dropdown >
+                            <div class="btn-group" dropdown>
                                 <a href="javascript:void(0);" data-toggle="dropdown" ng-click="$event.stopPropagation()" class="dropdown-toggle"></a>
                                 <ul class="dropdown-menu">
-                                    <li><a ng-click="editChapter(chapter);">Edit</a></li>
-                                    <li><a ng-click="cloneChapter(chapter);">Clone</a></li>
-                                    <li><a ng-click="deleteChapter(chapter);">Delete</a></li>
+                                    <li><a ng-click="editChapter(chapter);$event.stopPropagation();">Edit</a></li>
+                                    <li><a ng-click="cloneChapter(chapter);$event.stopPropagation();">Clone</a></li>
+                                    <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();">Delete</a></li>
                                 </ul>
                             </div>
                         </div>
