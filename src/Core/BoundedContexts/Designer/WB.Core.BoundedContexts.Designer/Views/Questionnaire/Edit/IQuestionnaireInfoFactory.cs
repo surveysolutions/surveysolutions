@@ -7,5 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         NewEditGroupView GetGroupEditView(string questionnaireId, Guid groupId);
         NewEditRosterView GetRosterEditView(string questionnaireId, Guid rosterId);
         NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId);
+        NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId);
     }
 }

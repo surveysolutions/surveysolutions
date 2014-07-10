@@ -113,6 +113,20 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [CamelCase]
+        public NewEditStaticTextView EditStaticText(string id, Guid staticTextId)
+        {
+            var staticTextEditView = questionnaireInfoFactory.GetStaticTextEditView(id, staticTextId);
+
+            if (staticTextEditView == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            return staticTextEditView;
+        }
+
+        [HttpGet]
+        [CamelCase]
         public VerificationErrors Verify(Guid id)
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
