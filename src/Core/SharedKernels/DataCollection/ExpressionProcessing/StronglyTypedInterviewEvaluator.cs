@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.Infrastructure.BaseStructures;
 
 // ReSharper disable InconsistentNaming
 
-namespace WB.Core.Infrastructure.BaseStructures
+namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     public class StronglyTypedInterviewEvaluator : IInterviewExpressionState 
     {
@@ -27,7 +28,7 @@ namespace WB.Core.Infrastructure.BaseStructures
 
         public static string GetRosterStringKey(Identity[] scopeIds)
         {
-            return string.Join("$", scopeIds.Select(ConversionHelper.ConvertIdentityToString));
+            return string.Join((string) "$", (IEnumerable<string>) scopeIds.Select(ConversionHelper.ConvertIdentityToString));
         }
 
         public static Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
@@ -274,7 +275,7 @@ namespace WB.Core.Infrastructure.BaseStructures
             var newScopes = this.interviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers());
 
             //set parents
-            foreach (var interviewScope in interviewScopes)
+            foreach (var interviewScope in this.interviewScopes)
             {
                 var parent = interviewScope.Value.GetParent();
                 if (parent != null)
@@ -353,7 +354,7 @@ namespace WB.Core.Infrastructure.BaseStructures
 
         public Identity[] GetRosterKey()
         {
-            return rosterKey;
+            return this.rosterKey;
         }
 
         public void SetParent(IValidatable parentLevel)
@@ -576,7 +577,7 @@ namespace WB.Core.Infrastructure.BaseStructures
 
         public Identity[] GetRosterKey()
         {
-            return rosterKey;
+            return this.rosterKey;
         }
 
         public void SetParent(IValidatable parentLevel)
