@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using WB.Core.Infrastructure.BaseStructures;
 
-namespace WB.Core.Infrastructure.BaseStructures
+namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     public static class ConversionHelper
     {
