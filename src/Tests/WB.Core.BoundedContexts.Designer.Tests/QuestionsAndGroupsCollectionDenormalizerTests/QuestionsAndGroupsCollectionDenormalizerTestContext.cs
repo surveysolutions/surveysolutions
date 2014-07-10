@@ -162,6 +162,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             });
         }
 
+        protected static IPublishedEvent<StaticTextAdded> CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextAdded
+            {
+                EntityId = entityId,
+                ParentId = parentId,
+                Text = text
+            });
+        }
+
         protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
             Guid questionId, Guid parentGroupId)
         {
@@ -199,6 +209,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             });
         }
 
+        protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextUpdated()
+            {
+                EntityId = entityId,
+                Text = text
+            });
+        }
+
         protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
             Guid questionId, int? maxValue = null, List<Guid> triggers = null)
         {
@@ -207,6 +226,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                 PublicKey = questionId,
                 MaxAllowedValue = maxValue,
                 Triggers = triggers ?? new List<Guid>()
+            });
+        }
+
+        protected static IPublishedEvent<StaticTextCloned> CreateStaticTextClonedEvent(Guid entityId, Guid parentId,
+            Guid? sourceEntityId = null, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextCloned
+            {
+                EntityId = entityId,
+                SourceEntityId = sourceEntityId ?? Guid.NewGuid(),
+                ParentId = parentId,
+                Text = text
             });
         }
 

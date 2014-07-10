@@ -67,6 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                                         PublicKey = g4Id,
                                         Children = new List<IComposite>
                                         {
+                                            new StaticText(entityId: st2Id, text: st2Text),
                                             new TextQuestion{ PublicKey = q5Id, QuestionType = QuestionType.Text},
                                         }
                                     }
@@ -79,6 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                         PublicKey = g5Id,
                         Children = new List<IComposite>
                         {
+                            new StaticText(entityId: st1Id, text: st1Text),
                             new TextQuestion{ PublicKey = q6Id, QuestionType = QuestionType.Text},
                         }
                     },
@@ -215,9 +217,47 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         It should_return_question_N6_with_empty_roster_scope_ids = () =>
             GetQuestion(q6Id).RosterScopeIds.ShouldBeEmpty();
 
+        It should_return_not_null_static_text_collection_in_result_view = () =>
+            newState.StaticTexts.ShouldNotBeNull();
+
+        It should_return_2_items_in_static_text_collection = () =>
+           newState.StaticTexts.Count.ShouldEqual(2);
+
+        It should_return_items_in_static_text_collection_with_specified_ids = () =>
+            newState.StaticTexts.Select(x => x.Id).ShouldContainOnly(st1Id, st2Id);
+
+        It should_return_static_text_N1_with_parent_id_equals_g5Id = () =>
+            GetStaticText(st1Id).ParentGroupId.ShouldEqual(g5Id);
+
+        It should_return_static_text_N1_with_breadcrumbs_with_g5Id = () =>
+            GetStaticText(st1Id).ParentGroupsIds.ShouldContainOnly(g5Id);
+
+        It should_return_static_text_N1_with_empty_roster_scope_ids = () =>
+           GetStaticText(st1Id).RosterScopeIds.ShouldBeEmpty();
+
+        It should_return_static_text_N1_with_specified_text = () =>
+          GetStaticText(st1Id).Text.ShouldEqual(st1Text);
+
+        It should_return_static_text_N2_with_parent_id_equals_g4Id = () =>
+            GetStaticText(st2Id).ParentGroupId.ShouldEqual(g4Id);
+
+        It should_return_static_text_N2_with_breadcrumbs_with_g1Id_g2Id_g4Id = () =>
+            GetStaticText(st2Id).ParentGroupsIds.ShouldContainOnly(g1Id, g2Id, g4Id);
+
+        It should_return_static_text_N2_with_roster_scope_ids_with_q2Id = () =>
+            GetStaticText(st2Id).RosterScopeIds.ShouldContainOnly(q2Id);
+
+        It should_return_static_text_N2_with_specified_text = () =>
+          GetStaticText(st2Id).Text.ShouldEqual(st2Text);
+
         private static QuestionDetailsView GetQuestion(Guid questionId)
         {
             return newState.Questions.Single(x => x.Id == questionId);
+        }
+
+        private static StaticTextDetailsView GetStaticText(Guid entityId)
+        {
+            return newState.StaticTexts.Single(x => x.Id == entityId);
         }
 
         private static QuestionsAndGroupsCollectionDenormalizer denormalizer;
@@ -239,5 +279,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         private static Guid q4Id = Guid.Parse("99999999999999999999999999999999");
         private static Guid q5Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid q6Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+        private static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static Guid st2Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
+        private static string st1Text = "static text 1";
+        private static string st2Text = "static text 2";
+
     }
 }

@@ -27,6 +27,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         It should_return_not_null_groups_collection_in_result_sview = () =>
             newState.Groups.ShouldBeEmpty();
 
+        It should_return_not_null_staitc_text_collection_in_result_view = () =>
+           newState.StaticTexts.ShouldBeEmpty();
+
         private static QuestionsAndGroupsCollectionDenormalizer denormalizer;
         private static IPublishedEvent<NewQuestionnaireCreated> evnt;
         private static QuestionsAndGroupsCollectionView newState = null;
