@@ -6350,6 +6350,15 @@ input#edit-question-title {
   width: 34px;
   height: 34px;
 }
+.row .form-group textarea {
+  resize: vertical;
+}
+.row .form-group button.cross {
+  display: block;
+  background: url("i/cross-red.png") center center no-repeat;
+  width: 34px;
+  height: 34px;
+}
 .ui-match {
   background-color: #FFCC00;
   border-top: solid 1px #FAD540;
