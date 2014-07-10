@@ -227,6 +227,7 @@
     <Compile Include="Views\Questionnaire\Edit\NewEditGroupView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\NewEditStaticTextView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionBrief.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\CategoricalOption.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DateTimeDetailsView.cs" />

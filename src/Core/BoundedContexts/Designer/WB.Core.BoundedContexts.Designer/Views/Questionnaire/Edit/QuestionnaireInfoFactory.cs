@@ -173,6 +173,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
+        public NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId)
+        {
+            QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+            if (questionnaire == null)
+                return null;
+            StaticTextDetailsView staticTextDetailsView = questionnaire.StaticTexts.FirstOrDefault(x => x.Id == staticTextId);
+            if (staticTextDetailsView == null)
+                return null;
+
+            var result = ObjectMapperManager.DefaultInstance.GetMapper<StaticTextDetailsView, NewEditStaticTextView>()
+                            .Map(staticTextDetailsView);
+            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, staticTextDetailsView);
+            
+            return result;
+        }
+
         private void ReplaceGuidsInValidationAndConditionRules(NewEditQuestionView model, QuestionsAndGroupsCollectionView questionnaire, string questionnaireKey)
         {
             var expressionReplacer = new ExpressionReplacer(questionnaire);
@@ -296,9 +312,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }).ToArray());
         }
 
-        private Breadcrumb[] GetBreadcrumbs(QuestionsAndGroupsCollectionView questionsCollection, DescendantItemView question)
+        private Breadcrumb[] GetBreadcrumbs(QuestionsAndGroupsCollectionView entitiesCollection, DescendantItemView entity)
         {
-            return question.ParentGroupsIds.Reverse().Select(x => questionsCollection.Groups.Single(g => g.Id == x)).Select(x => new Breadcrumb
+            return entity.ParentGroupsIds.Reverse().Select(x => entitiesCollection.Groups.Single(g => g.Id == x)).Select(x => new Breadcrumb
             {
                 Id = x.Id.FormatGuid(),
                 Title = x.Title,
