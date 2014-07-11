@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "file": "animations.css",
+  "sources": [
+    "animations.less"
+  ],
+  "names": [],
+  "mappings": "AAGI,gBADY,SACX;AAAW,gBADA,SACC;EACT,UAAA;EACA,oCAAA;;AAGL,gBANa,SAMZ;EACI,UAAA;EACA,oCAAA;;AAGL,gBAXa,SAWZ;EACI,UAAA;EACA,oCAAA;;AAGL,gBAhBa,SAgBZ;EACI,UAAA;EACA,oCAAA;;AAGL,gBArBa,SAqBZ;EACI,UAAA;EACA,oCAAA"
+}

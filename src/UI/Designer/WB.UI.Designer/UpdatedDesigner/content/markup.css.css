@@ -1,4 +1,4 @@
-/**
+﻿/**
  * WorldBank Designer
  * file: markup.css.less
  * description: LESS main import script
@@ -596,6 +596,27 @@ textarea {
 }
 .mCS-wb-dark-thick > .mCSB_scrollTools .mCSB_buttonRight {
   background-position: -100px -56px;
+}
+.question-editor[ui-view].ng-enter,
+.question-editor[ui-view].ng-leave {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+.question-editor[ui-view].ng-enter {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.question-editor[ui-view].ng-enter-active {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+.question-editor[ui-view].ng-leave {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+.question-editor[ui-view].ng-leave-active {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 }
 input#edit-question-title {
   font-family: Arial, Helvetica, sans-serif;
@@ -1825,3 +1846,4 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog .form-group .invite-button {
   line-height: 0px;
 }
+/*# sourceMappingURL=markup.css.css.map */

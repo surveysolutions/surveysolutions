@@ -1,0 +1,22 @@
+﻿.question-editor[ui-view].ng-enter,
+.question-editor[ui-view].ng-leave {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+.question-editor[ui-view].ng-enter {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.question-editor[ui-view].ng-enter-active {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+.question-editor[ui-view].ng-leave {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+.question-editor[ui-view].ng-leave-active {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+/*# sourceMappingURL=animations.css.map */
