@@ -13,6 +13,7 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
@@ -308,9 +309,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                 attemptCount++;
 
-                UpdateStatusMessage("Waiting 3 seconds while views are being deleted.");
+                UpdateStatusMessage("Waiting 7 seconds while views are being deleted.");
 
-                Thread.Sleep(3000);
+                Thread.Sleep(7000);
 
                 UpdateStatusMessage("Checking remaining views count.");
            
@@ -548,7 +549,12 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             return string.Format("{1}: {2}{0}{3}", Environment.NewLine,
                 error.Item1,
                 error.Item2,
-                shouldShowStackTrace ? error.Item3.ToString() : error.Item3.Message);
+                shouldShowStackTrace ? GetFullUnwrappedExceptionText(error.Item3) : error.Item3.Message);
+        }
+
+        private static string GetFullUnwrappedExceptionText(Exception exception)
+        {
+            return string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions());
         }
 
         #endregion // Error reporting methods
