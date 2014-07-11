@@ -2525,8 +2525,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
-            answersDeclaredValid.Union(answersDeclaredValidC);
-            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
+            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
@@ -2536,7 +2536,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.Text, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
                 null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answer);
         }
 
@@ -2599,8 +2599,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
-            answersDeclaredValid.Union(answersDeclaredValidC);
-            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
+            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
 
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
@@ -2611,7 +2611,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.NumericInteger, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
                 rosterCalculationData, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
         }
 
@@ -2655,8 +2655,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
-            answersDeclaredValid.Union(answersDeclaredValidC);
-            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
+            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
 
 
             var interviewByAnswerChange = new List<AnswerChange>
@@ -2664,7 +2664,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.DateTime, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
                 null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
         }
 
@@ -2733,8 +2733,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
-            answersDeclaredValid.Union(answersDeclaredValidC);
-            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
+            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
@@ -2746,7 +2746,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.MultipleOptions, userId, questionId, rosterVector, answerTime, selectedValues)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
                 rosterCalculationData,
                 answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
@@ -2793,8 +2793,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
-            answersDeclaredValid.Union(answersDeclaredValidC);
-            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
+            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
+            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
@@ -2804,7 +2804,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.NumericReal, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
                 null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
         }
 
@@ -2853,16 +2853,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
-            answersDeclaredValid.Union(answersDeclaredValidC);
-            answersDeclaredInvalid.Union(answersDeclaredInvalidC);
-
+            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
+            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(AnswerChangeType.SingleOption, userId, questionId, rosterVector, answerTime, selectedValue)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
                 null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
