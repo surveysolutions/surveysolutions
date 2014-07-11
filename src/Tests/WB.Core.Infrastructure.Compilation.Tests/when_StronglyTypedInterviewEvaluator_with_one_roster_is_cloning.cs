@@ -31,8 +31,8 @@ namespace WB.Core.Infrastructure.Compilation.Tests
 
         private static string GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
         {
-            return StronglyTypedInterviewEvaluator.GetRosterStringKey(
-                StronglyTypedInterviewEvaluator.GetRosterKey(rosterScopeIds, rosterVector));
+            return Util.GetRosterStringKey(
+                Util.GetRosterKey(rosterScopeIds, rosterVector));
         }
         private static IInterviewExpressionState stronglyTypedInterviewEvaluator;
         private static StronglyTypedInterviewEvaluator copyResult;
