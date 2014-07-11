@@ -42,7 +42,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<TextListQuestionChanged>, IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader updrader;
-        private readonly IQuestionnaireUpgradeService questionnaireUpgradeService;
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
         private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
         private readonly ILogger logger;
@@ -50,10 +49,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public PdfQuestionnaireDenormalizer(IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter,
             ILogger logger,
             IReadSideRepositoryWriter<AccountDocument> accounts,
-            IQuestionnaireDocumentUpgrader updrader, IQuestionnaireUpgradeService questionnaireUpgradeService)
+            IQuestionnaireDocumentUpgrader updrader)
         {
             this.updrader = updrader;
-            this.questionnaireUpgradeService = questionnaireUpgradeService;
             this.repositoryWriter = repositoryWriter;
             this.logger = logger;
             this.accounts = accounts;
@@ -421,8 +419,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.HandleUpdateEvent(evnt,
                 handle:
                     (@event, questionnaire) =>
-                        this.CreatePdfQuestionnaireViewFromQuestionnaireDocument(
-                            questionnaireUpgradeService.CreateRostersVariableName(updrader.TranslatePropagatePropertiesToRosterProperties(@event.Source))));
+                        this.CreatePdfQuestionnaireViewFromQuestionnaireDocument(updrader.TranslatePropagatePropertiesToRosterProperties(@event.Source)));
         }
 
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)

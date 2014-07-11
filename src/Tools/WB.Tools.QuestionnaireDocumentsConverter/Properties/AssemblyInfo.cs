@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WB.Core.Infrastructure.Raven")]
+[assembly: AssemblyTitle("WB.Tools.QuestionnaireDocumentsConverter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WB.Core.Infrastructure.Raven")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyProduct("WB.Tools.QuestionnaireDocumentsConverter")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5063700b-8316-43fc-bcac-72b5b540b3a7")]
+[assembly: Guid("a08cd1d6-0eeb-4202-b170-0f1cd2e3ea4d")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,12 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: InternalsVisibleTo("WB.Core.Infrastructure.Raven.Tests")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
-[assembly: InternalsVisibleTo("LoadTestDataGenerator")]
-[assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]
-[assembly: InternalsVisibleTo("WB.Tools.EventsConverter")]
-[assembly: InternalsVisibleTo("WB.Tools.InterviewExtractor")]
-[assembly: InternalsVisibleTo("WB.Tools.DatabaseCleaner")]
-[assembly: InternalsVisibleTo("WB.Tools.QuestionnaireDocumentsConverter")]
