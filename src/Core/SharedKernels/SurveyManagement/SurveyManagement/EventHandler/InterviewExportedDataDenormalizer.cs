@@ -253,17 +253,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string GetUserRole(UserDocument user)
         {
-            if (!user.Roles.Any())
+            if (user==null || !user.Roles.Any())
                 return UnknownUserRole;
             var firstRole = user.Roles.First();
             switch (firstRole)
             {
-                    case UserRoles.Operator:
-                    return "Interviewer";
-                    case UserRoles.Supervisor:
-                    return "Supervisor";
-                    case UserRoles.Headquarter:
-                    return "Headquarter";
+                case UserRoles.Operator: return "Interviewer";
+                case UserRoles.Supervisor: return "Supervisor";
+                case UserRoles.Headquarter: return "Headquarter";
             }
             return UnknownUserRole;
         }
