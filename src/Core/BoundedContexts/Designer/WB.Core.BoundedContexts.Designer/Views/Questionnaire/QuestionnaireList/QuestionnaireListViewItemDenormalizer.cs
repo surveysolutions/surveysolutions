@@ -34,15 +34,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
 
         private readonly IQuestionnaireDocumentUpgrader upgrader;
-        private readonly IQuestionnaireUpgradeService questionnaireUpgradeService;
 
         public QuestionnaireListViewItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireListViewItem> documentStorage,
-            IReadSideRepositoryWriter<AccountDocument> accountStorage, IQuestionnaireDocumentUpgrader upgrader, IQuestionnaireUpgradeService questionnaireUpgradeService)
+            IReadSideRepositoryWriter<AccountDocument> accountStorage, IQuestionnaireDocumentUpgrader upgrader)
         {
             this.documentStorage = documentStorage;
             this.accountStorage = accountStorage;
             this.upgrader = upgrader;
-            this.questionnaireUpgradeService = questionnaireUpgradeService;
         }
 
         #endregion
@@ -99,7 +97,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             QuestionnaireDocument upgradedQuestionnaireDocument = upgrader.TranslatePropagatePropertiesToRosterProperties(evnt.Payload.Source);
-            upgradedQuestionnaireDocument = this.questionnaireUpgradeService.CreateRostersVariableName(upgradedQuestionnaireDocument);
             this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(upgradedQuestionnaireDocument);
         }
 

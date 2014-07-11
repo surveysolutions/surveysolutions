@@ -143,14 +143,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(TemplateImported e)
         {
             var upgradedDocument = QuestionnaireDocumentUpgrader.TranslatePropagatePropertiesToRosterProperties(e.Source);
-            upgradedDocument = QuestionnaireUpgradeService.CreateRostersVariableName(upgradedDocument);
             this.innerDocument = upgradedDocument;
         }
 
         private void Apply(QuestionnaireCloned e)
         {
             var upgradedDocument = QuestionnaireDocumentUpgrader.TranslatePropagatePropertiesToRosterProperties(e.QuestionnaireDocument);
-            upgradedDocument = QuestionnaireUpgradeService.CreateRostersVariableName(upgradedDocument);
             this.innerDocument = upgradedDocument;
         }
 
@@ -749,11 +747,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private static IQuestionnaireDocumentUpgrader QuestionnaireDocumentUpgrader
         {
             get { return ServiceLocator.Current.GetInstance<IQuestionnaireDocumentUpgrader>(); }
-        }
-
-        private static IQuestionnaireUpgradeService QuestionnaireUpgradeService
-        {
-            get { return ServiceLocator.Current.GetInstance<IQuestionnaireUpgradeService>(); }
         }
 
         #endregion

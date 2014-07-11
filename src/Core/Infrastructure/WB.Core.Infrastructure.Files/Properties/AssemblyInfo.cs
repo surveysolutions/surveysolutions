@@ -36,3 +36,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: InternalsVisibleTo("WB.Tools.ConsoleTranslator")]
+[assembly: InternalsVisibleTo("WB.Tools.QuestionnaireDocumentsConverter")]

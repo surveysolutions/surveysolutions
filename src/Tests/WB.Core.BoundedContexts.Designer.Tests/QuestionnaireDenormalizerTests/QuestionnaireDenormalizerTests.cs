@@ -66,14 +66,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
         {
-            var questionnaireUpgradeServiceMock = new Mock<IQuestionnaireUpgradeService>();
-            questionnaireUpgradeServiceMock.Setup(x => x.CreateRostersVariableName(Moq.It.IsAny<QuestionnaireDocument>()))
-                .Returns<QuestionnaireDocument>(doc => doc);
-
             #warning: we shouldn't use CompleteQuestionFactory here?
-            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, new QuestionFactory(), Mock.Of<ILogger>(), Mock.Of<IQuestionnaireDocumentUpgrader>(), questionnaireUpgradeServiceMock.Object);
-
-            return denormalizer;
+            return new QuestionnaireDenormalizer(storageStub.Object, new QuestionFactory(), Mock.Of<ILogger>(), Mock.Of<IQuestionnaireDocumentUpgrader>());
         }
 
         private static Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
