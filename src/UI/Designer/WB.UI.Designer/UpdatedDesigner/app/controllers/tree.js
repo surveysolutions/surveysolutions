@@ -1,7 +1,7 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl', [
-        '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$log', '$modal',
-        function($scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $log, $modal) {
+        '$rootScope', '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$log', '$modal',
+        function($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $log, $modal) {
             'use strict';
             var me = this;
 
@@ -247,6 +247,7 @@
 
                         var indexOf = _.indexOf(parentItem.items, clonnedItem);
                         parentItem.items.splice(indexOf + 1, 0, cloneDeep);
+                        $rootScope.$emit('questionAdded');
                     }
                 });
             };
@@ -261,6 +262,7 @@
                 commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function(result) {
                     if (result.IsSuccess) {
                         $scope.refreshTree();
+                        $rootScope.$emit('groupAdded');
                     }
                 });
             };
@@ -287,6 +289,7 @@
                                 if (result.IsSuccess) {
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                     $scope.resetSelection();
+                                    $rootScope.$emit('questionDeleted');
                                 }
                             });
                     }
@@ -315,6 +318,7 @@
                                 if (result.IsSuccess) {
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                     $scope.resetSelection();
+                                    $rootScope.$emit(getItemType(item) + 'Deleted');
                                 }
                             });
                     }
