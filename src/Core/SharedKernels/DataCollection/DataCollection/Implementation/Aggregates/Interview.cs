@@ -1693,7 +1693,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         foreach (var availableRosterLevelForQuestion in availableRosterLevelsForQuestion)
                         {
                             Identity questionIdAtInterview = new Identity(currentNode.Key, availableRosterLevelForQuestion);
-
+                            
                             PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled,
                                 questionsToBeDisabled,
                                 isNewStateEnabled:
@@ -1738,7 +1738,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(this.interviewState,
                         questionIdAtInterview, questionnaire,
-                        getAnswer, a => null);
+                        getAnswer, a => null, (state, id) => isQuestionDisabled(id));
 
                     switch (dependentQuestionValidationResult)
                     {
@@ -3892,7 +3892,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private bool? PerformValidationOfQuestion(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, Func<Identity, bool?> getNewQuestionState)
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, Func<Identity, bool?> getNewQuestionState, Func<InterviewStateDependentOnAnswers, Identity, bool> isQuestionDisabled = null)
         {
             if (questionnaire.IsQuestionMandatory(question.Id))
             {
@@ -3912,7 +3912,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionChangedState == false)
                 return true;
 
-            if (questionChangedState == null && IsQuestionDisabled(state, question))
+            if (isQuestionDisabled == null)
+                isQuestionDisabled = IsQuestionDisabled;
+
+            if (questionChangedState == null && isQuestionDisabled(state, question))
                 return true;
 
             string validationExpression = questionnaire.GetCustomValidationExpression(question.Id);
