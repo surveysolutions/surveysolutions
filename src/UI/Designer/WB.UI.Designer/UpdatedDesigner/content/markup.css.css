@@ -1,4 +1,4 @@
-﻿/**
+/**
  * WorldBank Designer
  * file: markup.css.less
  * description: LESS main import script
@@ -204,25 +204,35 @@ body {
   font-weight: normal;
   color: #c1c7cb;
 }
-button#questionTypeBtn {
+button#questionSelectBtn {
   padding: 10px 0 10px 0px;
+  width: 100%;
+}
+button#questionTypeBtn {
+  padding: 10px 40px 10px 50px;
+  width: 450px;
+}
+button#questionTypeBtn,
+button#questionSelectBtn {
   background-color: #ffffff;
   border: 2px solid #cccccc;
   text-transform: none;
   text-align: left;
-  width: 100%;
 }
-button#questionTypeBtn > i {
+button#questionTypeBtn > i,
+button#questionSelectBtn > i {
   left: 7px;
 }
-button#questionTypeBtn > span.vertical-line {
+button#questionTypeBtn > span.vertical-line,
+button#questionSelectBtn > span.vertical-line {
   border-left: 2px solid #cccccc;
   height: 93%;
   position: absolute;
   top: 1px;
   left: 40px;
 }
-button#questionTypeBtn > span.dropdown-arrow {
+button#questionTypeBtn > span.dropdown-arrow,
+button#questionSelectBtn > span.dropdown-arrow {
   background: #ffffff url(i/dropdown-arrow.png) no-repeat center center;
   width: 40px;
   height: 12px;
@@ -1440,9 +1450,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .item.section {
   font-weight: bold;
   text-transform: uppercase;
-  padding-left: 25px;
-}
-.item.question {
+  padding-left: 22px;
   margin-left: 20px;
 }
 .item > span.var {
@@ -1639,7 +1647,8 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #verify-popover-content .question-list .item.section {
   font-weight: bold;
   text-transform: uppercase;
-  padding-left: 25px;
+  padding-left: 22px;
+  margin-left: 20px;
 }
 #verify-popover-content .question-list .item > span.var {
   font-style: italic;
@@ -1846,4 +1855,3 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog .form-group .invite-button {
   line-height: 0px;
 }
-/*# sourceMappingURL=markup.css.css.map */
