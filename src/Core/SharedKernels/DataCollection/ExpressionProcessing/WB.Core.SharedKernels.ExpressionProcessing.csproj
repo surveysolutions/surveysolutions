@@ -44,7 +44,9 @@
     <Compile Include="InterviewEvaluatorPrototype.cs" />
     <Compile Include="InterviewExpressionMate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireClasses.cs" />
     <Compile Include="StronglyTypedInterviewEvaluator.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
