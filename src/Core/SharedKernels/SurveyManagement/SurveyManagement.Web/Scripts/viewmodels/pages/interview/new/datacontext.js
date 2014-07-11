@@ -45,7 +45,7 @@
                 case "Numeric":
                         answer = {
                             id: question.id(),
-                            answer: question.selectedOption(),
+                            answer: question.selectedOption().split(',').join(''),
                             settings:  question.settings(),
                             type: question.type()
                         };

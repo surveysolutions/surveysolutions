@@ -78,7 +78,7 @@
         <div class="col-sm-2">
             <div class="input-group">
                 <span class="input-group-addon">#</span>
-                <input class="form-control" type="text" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
+                <input class="form-control" type="text" data-bind="numericformatter: selectedOption, valueUpdate: 'afterkeydown'" />
             </div>
             <span class="help-block" data-bind="validationMessage: selectedOption"></span>
         </div>
