@@ -140,6 +140,9 @@
     <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\AddStaticTextCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\CloneStaticTextCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
