@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,6 +19,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             var outerRosterList = outerRosterVector.ToList();
             outerRosterList.Add(rosterInstanceId);
             return outerRosterList.ToArray();
+        }
+
+        public static string GetRosterStringKey(Identity[] scopeIds)
+        {
+            return String.Join("$", scopeIds.Select(ConversionHelper.ConvertIdentityToString));
+        }
+
+        public static Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
+        {
+            return rosterScopeIds.Select(x => new Identity(x, rosterVector)).ToArray();
         }
     }
 }

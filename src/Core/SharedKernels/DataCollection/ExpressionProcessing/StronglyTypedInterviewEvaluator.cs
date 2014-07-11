@@ -13,26 +13,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public StronglyTypedInterviewEvaluator()
         {
             
-            var questionnaireIdentityKey = GetRosterKey(new[] { IdOf.questionnaire }, Util.EmptyRosterVector);
+            var questionnaireIdentityKey = Util.GetRosterKey(new[] { IdOf.questionnaire }, Util.EmptyRosterVector);
 
             var questionnaireLevel = new QuestionnaireLevel(Util.EmptyRosterVector, questionnaireIdentityKey);
 
-            this.interviewScopes.Add(GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
+            this.interviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
         }
 
         public StronglyTypedInterviewEvaluator(Dictionary<string, IValidatable> interviewScopes)
         {
             this.interviewScopes = interviewScopes;
-        }
-
-        public static string GetRosterStringKey(Identity[] scopeIds)
-        {
-            return string.Join("$", scopeIds.Select(ConversionHelper.ConvertIdentityToString));
-        }
-
-        public static Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
-        {
-            return rosterScopeIds.Select(x => new Identity(x, rosterVector)).ToArray();
         }
 
         public void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
@@ -44,9 +34,9 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
 
-            var rosterIdentityKey = GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
 
-            if (this.interviewScopes.ContainsKey(GetRosterStringKey(rosterIdentityKey)))
+            if (this.interviewScopes.ContainsKey(Util.GetRosterStringKey(rosterIdentityKey)))
             {
                 return;
             }
@@ -54,21 +44,21 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             decimal[] parentRosterVector = outerRosterVector;
 
             var rosterParentIdentityKey = parentRosterVector.Length == 0
-                ? GetRosterKey(new[] { IdOf.questionnaire }, new decimal[0])
-                : GetRosterKey(IdOf.rostersIdToScopeMap[rosterId].Shrink(), parentRosterVector);
+                ? Util.GetRosterKey(new[] { IdOf.questionnaire }, new decimal[0])
+                : Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId].Shrink(), parentRosterVector);
 
-            var parent = this.interviewScopes[GetRosterStringKey(rosterParentIdentityKey)];
+            var parent = this.interviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
 
             if (rosterId == IdOf.hhMember || rosterId == IdOf.jobActivity)
             {
                 var rosterLevel = new HhMember(rosterVector, rosterIdentityKey, parent as QuestionnaireLevel);
-                this.interviewScopes.Add(GetRosterStringKey(rosterIdentityKey), rosterLevel);
+                this.interviewScopes.Add(Util.GetRosterStringKey(rosterIdentityKey), rosterLevel);
             }
 
             if (rosterId == IdOf.foodConsumption)
             {
                 var rosterLevel = new FoodConsumption(rosterVector, rosterIdentityKey, parent as HhMember);
-                this.interviewScopes.Add(GetRosterStringKey(rosterIdentityKey), rosterLevel);
+                this.interviewScopes.Add(Util.GetRosterStringKey(rosterIdentityKey), rosterLevel);
             }
         }
 
@@ -80,8 +70,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
-            var rosterIdentityKey = GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
-            var dependentRosters = interviewScopes.Keys.Where(x => x.StartsWith(GetRosterStringKey((rosterIdentityKey)))).ToArray();
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
+            var dependentRosters = interviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
             foreach (var rosterKey in dependentRosters)
             {
                 this.interviewScopes.Remove(rosterKey);
@@ -162,8 +152,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             if (!IdOf.parentsMap.ContainsKey(questionId))
                 return null;
 
-            var rosterKey = GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
-            var rosterStringKey = GetRosterStringKey(rosterKey);
+            var rosterKey = Util.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
+            var rosterStringKey = Util.GetRosterStringKey(rosterKey);
             return this.interviewScopes.ContainsKey(rosterStringKey) ? this.interviewScopes[rosterStringKey] : null;
         }
 
@@ -222,7 +212,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
                     var parentRosterVectorLength = parentRosterVector.Length;
                     var rosters = this.interviewScopes.Where(x
-                        => x.Key.StartsWith(GetRosterStringKey(parentRosterVector))
+                        => x.Key.StartsWith(Util.GetRosterStringKey(parentRosterVector))
                             && x.Key.Length == parentRosterVectorLength + 1)
                         .Select(x => x.Value);
                     interviewScope.Validate(rosters, questionsToBeValid, questionsToBeInvalid);
@@ -286,7 +276,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             {
                 var parent = interviewScope.Value.GetParent();
                 if (parent != null)
-                    newScopes[interviewScope.Key].SetParent(newScopes[GetRosterStringKey(parent.GetRosterKey())]);
+                    newScopes[interviewScope.Key].SetParent(newScopes[Util.GetRosterStringKey(parent.GetRosterKey())]);
             }
 
             return new StronglyTypedInterviewEvaluator(newScopes);
