@@ -187,11 +187,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             {
                 (targetLevel as HhMember).has_job = answer;
             }
-
-            if (questionId == IdOf.best_job_owner)
-            {
-                (targetLevel as HhMember).best_job_owner = answer;
-            }
         }
 
         public void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
@@ -246,6 +241,11 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
             if (targetLevel == null) return;
+
+            if (questionId == IdOf.best_job_owner)
+            {
+                (targetLevel as HhMember).best_job_owner = selectedPropagationVector;
+            }
         }
 
         public void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] selectedPropagationVectors)
@@ -403,7 +403,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public decimal[] food { get; set; }
         public decimal? has_job { get; set; }
         public string job_title { get; set; }
-        public decimal? best_job_owner { get; set; }
+        public decimal[] best_job_owner { get; set; }
 
 
         //generated
@@ -564,7 +564,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             get { return this.parent.job_title; }
         }
 
-        public decimal? best_job_owner
+        public decimal[] best_job_owner
         {
             get { return this.parent.best_job_owner; }
         }
