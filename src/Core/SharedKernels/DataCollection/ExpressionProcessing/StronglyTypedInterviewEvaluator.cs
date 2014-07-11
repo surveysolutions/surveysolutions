@@ -12,10 +12,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public StronglyTypedInterviewEvaluator()
         {
-            var emptyRosterVector = new decimal[0];
-            var questionnaireIdentityKey = GetRosterKey(new[] { IdOf.questionnaire }, emptyRosterVector);
+            
+            var questionnaireIdentityKey = GetRosterKey(new[] { IdOf.questionnaire }, Util.EmptyRosterVector);
 
-            var questionnaireLevel = new QuestionnaireLevel(emptyRosterVector, questionnaireIdentityKey);
+            var questionnaireLevel = new QuestionnaireLevel(Util.EmptyRosterVector, questionnaireIdentityKey);
 
             this.interviewScopes.Add(GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
         }
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 return;
             }
 
-            decimal[] rosterVector = GetRosterVector(outerRosterVector, rosterInstanceId);
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
 
             var rosterIdentityKey = GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
 
@@ -72,13 +72,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public static decimal[] GetRosterVector(decimal[] outerRosterVector, decimal rosterInstanceId)
-        {
-            var outerRosterList = outerRosterVector.ToList();
-            outerRosterList.Add(rosterInstanceId);
-            return outerRosterList.ToArray();
-        }
-
         public void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))
@@ -86,9 +79,9 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 return;
             }
 
-            decimal[] rosterVector = GetRosterVector(outerRosterVector, rosterInstanceId);
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
             var rosterIdentityKey = GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
-            var dependentRosters = this.interviewScopes.Keys.Where(x => x.StartsWith(GetRosterStringKey((rosterIdentityKey)))).ToArray();
+            var dependentRosters = interviewScopes.Keys.Where(x => x.StartsWith(GetRosterStringKey((rosterIdentityKey)))).ToArray();
             foreach (var rosterKey in dependentRosters)
             {
                 this.interviewScopes.Remove(rosterKey);
@@ -286,6 +279,18 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         }
     }
 
+    public static class Util
+    {
+        public static decimal[] EmptyRosterVector = new decimal[0];
+
+        public static decimal[] GetRosterVector(decimal[] outerRosterVector, decimal rosterInstanceId)
+        {
+            var outerRosterList = outerRosterVector.ToList();
+            outerRosterList.Add(rosterInstanceId);
+            return outerRosterList.ToArray();
+        }
+    }
+
     public interface IValidatable
     {
         void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
@@ -307,6 +312,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public decimal[] rosterVector;
 
         public Identity[] rosterKey;
+
+        protected Dictionary<Identity, Func<bool>> validationExpressions = new Dictionary<Identity, Func<bool>>();
 
         protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey)
         {
@@ -377,19 +384,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public HhMember(decimal[] rosterVector, Identity[] rosterKey)
             : base(rosterVector, rosterKey)
         {
+            validationExpressions.Add(new Identity(IdOf.age, this.rosterVector),age_IsValid);
+            validationExpressions.Add(new Identity(IdOf.food, this.rosterVector), food_IsValid);
         }
 
-        public QuestionnaireLevel parent;
+        private QuestionnaireLevel parent;
+    
 
-        public string id
-        {
-            get { return this.parent.id; }
-        }
+        public string id { get { return this.parent.id; } }
 
-        public long? persons_count
-        {
-            get { return this.parent.persons_count; }
-        }
+        public long? persons_count { get { return this.parent.persons_count; } }
 
         public string name { get; set; }
         public long? age { get; set; }
@@ -401,30 +405,54 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public string job_title { get; set; }
         public decimal? best_job_owner { get; set; }
 
+
+        //generated
         private bool age_IsValid()
         {
             // person should not be too young and too old
             return this.age >= 0 && this.age < 100;
         }
 
+        
+        //generated
         private bool food_IsValid()
         {
-            // children should not dring alcohol
-            return this.food.Contains(38) && this.role == 3 && this.age >= 21;
+            // children should not drink alcohol
+            return this.food == null || (this.food.Contains(38) && this.role == 3 && this.age >= 21);
         }
+
+
 
         private void Validate(IEnumerable<HhMember> roters, List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
         {
-            //if (age_Validation().CanBeProcessed)
+            /*//if (age_Validation().CanBeProcessed)
             {
                 var ageIdentity = new Identity(IdOf.age, this.rosterVector);
                 (this.age_IsValid() ? questionsToBeValid : questionsToBeInvalid).Add(ageIdentity);
             }
             //if (food_IsValid().CanBeProcessed)
             {
-                var ageIdentity = new Identity(IdOf.age, this.rosterVector);
-                (this.age_IsValid() ? questionsToBeValid : questionsToBeInvalid).Add(ageIdentity);
+                var foodIdentity = new Identity(IdOf.food, this.rosterVector);
+                (this.food_IsValid() ? questionsToBeValid : questionsToBeInvalid).Add(foodIdentity);
+            }*/
+
+
+            foreach (var validationExpression in validationExpressions)
+            {
+                try
+                {
+                    if (validationExpression.Value())
+                        questionsToBeValid.Add(validationExpression.Key);
+                    else
+                        questionsToBeInvalid.Add(validationExpression.Key);
+                }
+                catch (Exception)
+                {
+                    // failed to execute are treated as valid
+                    questionsToBeValid.Add(validationExpression.Key);
+                }
             }
+
         }
 
 
