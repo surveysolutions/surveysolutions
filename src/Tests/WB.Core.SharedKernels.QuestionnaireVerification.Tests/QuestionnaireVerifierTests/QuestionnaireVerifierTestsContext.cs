@@ -19,7 +19,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
     {
         protected static QuestionnaireVerifier CreateQuestionnaireVerifier(IExpressionProcessor expressionProcessor = null)
         {
-            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, Mock.Of<IFileSystemAccessor>());
+            var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
+            fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
+            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, fileSystemAccessorMock.Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
