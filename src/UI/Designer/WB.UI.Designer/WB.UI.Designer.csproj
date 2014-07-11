@@ -433,17 +433,21 @@
     </Content>
     <Content Include="UpdatedDesigner\content\i\btn-disabled.png" />
     <Content Include="UpdatedDesigner\content\i\chapter-panel-btn-small.png" />
+    <Content Include="UpdatedDesigner\content\i\cross-red.png" />
     <Content Include="UpdatedDesigner\content\i\cross.png" />
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
     <Content Include="UpdatedDesigner\content\markup.css.min.css">
       <DependentUpon>markup.css.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\vendor.css.css" />
     <Content Include="UpdatedDesigner\data\editGroup\manualListRoster.json" />
     <Content Include="UpdatedDesigner\content\designer-editor\animations.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\animations.css.map">
       <DependentUpon>animations.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\vendor.css.less" />
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-question-editor.css.less" />
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\index.html" />
