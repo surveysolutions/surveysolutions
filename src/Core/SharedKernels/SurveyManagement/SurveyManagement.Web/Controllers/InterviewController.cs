@@ -68,10 +68,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [Authorize(Roles = "Headquarter, Supervisor")]
         [HttpPost]
-        public ActionResult ConfirmInterviewRevalidation(Guid interviewId)
+        public ActionResult ConfirmRevalidation(RevalidateModel input)
         {
-            this.CommandService.Execute(new ReevaluateSynchronizedInterview(interviewId));
-            var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = interviewId });
+            this.CommandService.Execute(new ReevaluateSynchronizedInterview(input.InterviewId));
+            var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = input.InterviewId });
             return this.View("ConfirmRevalidation", model);
         }
     }
