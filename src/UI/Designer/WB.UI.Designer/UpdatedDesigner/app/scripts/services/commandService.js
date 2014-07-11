@@ -140,6 +140,16 @@
                     return commandCall("AddGroup", command);
                 };
 
+                commandService.addStaticText = function (questionnaireId, staticText, parentId) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "entityId": staticText.itemId,
+                        "text": staticText.Text,
+                        "parentId": parentId
+                    };
+                    return commandCall("AddStaticText", command);
+                };
+
                 commandService.updateGroup = function(questionnaireId, group) {
                     var command = {
                         "questionnaireId": questionnaireId,
@@ -175,8 +185,18 @@
 
                     return commandCall("UpdateGroup", command);
                 };
+                
+                commandService.updateStaticText = function (questionnaireId, staticText) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "entityId": staticText.itemId,
+                        "text": staticText.text
+                    };
 
-                commandService.addQuestion = function(questionnaireId, parentGroupId, newId) {
+                    return commandCall("UpdateStaticText", command);
+                };
+
+                commandService.addQuestion = function(questionnaireId, parentGroupId, newId) {                    
                     var command = {
                         "questionnaireId": questionnaireId,
                         "questionId": newId,
@@ -194,6 +214,7 @@
 
                     return commandCall("AddQuestion", command);
                 };
+
 
                 commandService.cloneGroupWithoutChildren = function(questionnaireId, newId, chapter, chapterDescription) {
                     var command = {
@@ -231,6 +252,15 @@
                     };
 
                     return commandCall("DeleteQuestion", command);
+                };
+
+                commandService.deleteStaticText = function (questionnaireId, itemId) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "entityId": itemId
+                    };
+
+                    return commandCall("DeleteStaticText", command);
                 };
 
                 return commandService;

@@ -84,6 +84,19 @@
                         }
                     }
                 }
+            }).state('questionnaire.chapter.staticText', {
+                url: "/static-text/{itemId}",
+                views: {
+                    '': {
+                        templateUrl: 'app/views/static-text.html',
+                        controller: 'StaticTextCtrl',
+                        resolve: {
+                            questionnaireId: ['$stateParams', function ($stateParams) {
+                                return $stateParams.questionnaireId;
+                            }]
+                        }
+                    }
+                }
             });
     }]).config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('errorReportingInterceptor');

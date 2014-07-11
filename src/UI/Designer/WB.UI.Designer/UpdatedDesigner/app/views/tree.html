@@ -51,6 +51,34 @@
                 </div>
             </div>
         </div>
+        
+        <div ng-if="isStaticText(item) && !item.isDeleted"
+             class="question item"
+             ui-sref-active="selected">
+
+            <a class="handler" ui-tree-handle></a>
+            <a ui-sref="questionnaire.chapter.staticText({itemId: item.itemId})">
+                <div class="item-text">
+                    <div class="icon"></div>
+                    <span ng-bind-html="item.text | highlight:search.searchText"></span>
+                </div>
+            </a>
+
+            <div class="qname-block">
+                <div class="btn-group dropdown">
+                    <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ng-click="deleteStaticText(item.itemId)">Delete</a>
+                        </li>
+                        <li>
+                            <a>Clone</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
         <div class="section item"
              ng-class="{'selected' : item.itemId == currentItemId, 'highlighted': is_highlighted }"
              ng-if="!isQuestion(item) && !item.isDeleted"
@@ -86,6 +114,7 @@
         </div>
 
         <div class="buttons-item" ng-if="!isQuestion(item)" ng-class="{ hidden: collapsed }">
+            <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(item)" />
             <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
             <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
             <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(item)" />
@@ -98,6 +127,7 @@
             <div ng-repeat="item in items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
             </div>
             <div class="buttons-item">
+                <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />

@@ -148,6 +148,23 @@
                         }
                     });
                 };
+                
+                $scope.addStaticText = function (parent) {
+                    var newId = utilityService.guid();
+                    var emptyStaticText = {
+                        "itemId": newId,
+                        "text": "New static text",
+                        getParentItem: function () { return parent; }
+                    };
+
+                    commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId).success(function (result) {
+                        if (result.IsSuccess) {
+                            parent.items.push(emptyStaticText);
+                            $state.go('questionnaire.chapter.staticText', { chapterId: $state.params.chapterId, itemId: newId });
+                        }
+                    });
+                };
+
 
                 $rootScope.$on('groupDeleted', function() {
                     $scope.questionnaire.groupsCount--;

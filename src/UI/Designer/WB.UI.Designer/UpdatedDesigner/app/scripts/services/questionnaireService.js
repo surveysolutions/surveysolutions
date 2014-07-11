@@ -33,6 +33,11 @@
                     return $http.get(url);
                 };
 
+                questionnaireService.getStaticTextDetailsById = function (questionnaireId, staticTextId) {
+                    var url = string.format('{0}/editStaticText/{1}?staticTextId={2}', urlBase, questionnaireId, staticTextId);
+                    return $http.get(url);
+                };
+
                 questionnaireService.moveGroup = function(groupId, index, destGroupId, questionnaireId) {
                     return commandService.execute('MoveGroup', {
                             targetGroupId: destGroupId,
@@ -50,6 +55,16 @@
                             questionId: questionId,
                             questionnaireId: questionnaireId
                         }
+                    );
+                };
+
+                questionnaireService.moveStaticText = function (entityId, index, destGroupId, questionnaireId) {
+                    return commandService.execute('MoveStaticText', {
+                        targetGroupId: destGroupId,
+                        targetIndex: index,
+                        entityId: entityId,
+                        questionnaireId: questionnaireId
+                    }
                     );
                 };
 

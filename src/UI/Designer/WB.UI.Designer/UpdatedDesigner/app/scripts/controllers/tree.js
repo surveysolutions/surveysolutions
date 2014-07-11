@@ -13,7 +13,8 @@
             var itemTypes = {
                 question: 'question',
                 roster: 'roster',
-                group: 'group'
+                group: 'group',
+                staticText: 'staticText'
             };
 
             $scope.search = { searchText: '' };
@@ -166,6 +167,9 @@
                 }
                 if (!item.hasOwnProperty('type'))
                     return itemTypes.group;
+
+                if (!item.hasOwnProperty('text'))
+                    return itemTypes.staticText;
                 throw 'unknown item type: ' + item;
             };
 
@@ -177,9 +181,12 @@
                 return !item.hasOwnProperty('type');
             };
 
-            $scope.showStartScreen = function() {
-                return _.isEmpty($scope.items);
+            $scope.isStaticText = function (item) {
+                return item.hasOwnProperty('text');
             };
+            
+            $scope.showStartScreen = function() {
+                return _.isEmpty($scope.items);                
 
             $scope.groupsTree = {
                 accept: function(sourceNodeScope, destNodesScope) {
@@ -215,6 +222,16 @@
                                 .error(function() {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
+                        } else if ($scope.isStaticText(movedItem)) {
+                            questionnaireService.moveStaticText(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
+                                .success(function(data) {
+                                    if (!data.IsSuccess) {
+                                        putItem(movedItem, me.draggedFrom, event.source.index);
+                                    }
+                                })
+                                .error(function() {
+                                    putItem(movedItem, me.draggedFrom, event.source.index);
+                                });
                         } else {
                             questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .success(function(data) {
@@ -228,6 +245,19 @@
                                 });
                         }
                     }
+                }
+            };
+
+            $scope.deleteStaticText = function (itemId) {
+                var itemIdToDelete = itemId || $state.params.itemId;
+                if (confirm("Are you sure want to delete static text?")) {
+                    commandService.deleteStaticText($state.params.questionnaireId, itemIdToDelete)
+                        .success(function (result) {
+                            if (result.IsSuccess) {
+                                questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                                $scope.resetSelection();
+                            }
+                        });
                 }
             };
 

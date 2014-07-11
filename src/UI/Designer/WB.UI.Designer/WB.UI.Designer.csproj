@@ -418,6 +418,7 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\chapters.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\confirm.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\group.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\staticText.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\main.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\question.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\roster.js" />
@@ -435,6 +436,7 @@
     <Content Include="UpdatedDesigner\app\scripts\services\utilityService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\verificationService.js" />
     <Content Include="UpdatedDesigner\app\views\confirm.html" />
+    <Content Include="UpdatedDesigner\app\views\static-text.html" />
     <Content Include="UpdatedDesigner\app\views\group.html" />
     <Content Include="UpdatedDesigner\app\views\itemBreadcrumbs.html" />
     <Content Include="UpdatedDesigner\app\views\share.html" />
