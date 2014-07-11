@@ -24,10 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTes
             ILogger logger = null,
             IQuestionnaireDocumentUpgrader upgrader = null)
         {
-            var questionnaireUpgradeServiceMock = new Mock<IQuestionnaireUpgradeService>();
-            questionnaireUpgradeServiceMock.Setup(x => x.CreateRostersVariableName(Moq.It.IsAny<QuestionnaireDocument>()))
-                .Returns<QuestionnaireDocument>(doc => doc);
-            return new PdfQuestionnaireDenormalizer(documentStorage, logger, null, upgrader, questionnaireUpgradeServiceMock.Object);
+            return new PdfQuestionnaireDenormalizer(documentStorage, logger, null, upgrader);
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(T @event)

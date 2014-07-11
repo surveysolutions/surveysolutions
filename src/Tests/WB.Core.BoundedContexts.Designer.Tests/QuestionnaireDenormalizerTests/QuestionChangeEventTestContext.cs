@@ -20,12 +20,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
     {
         internal static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(IQuestionFactory questionFactoryMock, Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
         {
-            var questionnaireUpgradeServiceMock = new Mock<IQuestionnaireUpgradeService>();
-            questionnaireUpgradeServiceMock.Setup(x => x.CreateRostersVariableName(Moq.It.IsAny<QuestionnaireDocument>()))
-                .Returns<QuestionnaireDocument>(doc => doc);
-            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, questionFactoryMock, Mock.Of<ILogger>(), Mock.Of<IQuestionnaireDocumentUpgrader>(), questionnaireUpgradeServiceMock.Object);
-
-            return denormalizer;
+            return new QuestionnaireDenormalizer(storageStub.Object, questionFactoryMock, Mock.Of<ILogger>(),
+                Mock.Of<IQuestionnaireDocumentUpgrader>());
         }
 
         internal static Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)

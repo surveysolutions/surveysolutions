@@ -83,12 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormaliz
 
         private QuestionnaireListViewItemDenormalizer CreateQuestionnaireDenormalizer(IQuestionnaireDocumentUpgrader updrader)
         {
-            var questionnaireUpgradeServiceMock = new Mock<IQuestionnaireUpgradeService>();
-            questionnaireUpgradeServiceMock.Setup(x => x.CreateRostersVariableName(Moq.It.IsAny<QuestionnaireDocument>()))
-                .Returns<QuestionnaireDocument>(doc => doc);
-
-            return new QuestionnaireListViewItemDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object, updrader,
-                questionnaireUpgradeServiceMock.Object);
+            return new QuestionnaireListViewItemDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object, updrader);
         }
 
         private Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>> questionnaireStorageMock = new Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>>();
