@@ -8,7 +8,7 @@
     border-radius: 4px;
     padding-left: 50px;
     padding-right: 10px;
-    margin-right: 28px;
+    //margin-right: 28px;
     //overflow: hidden;
     white-space: nowrap;
     .questionnarie-question-list-item-fontstyle();
@@ -75,6 +75,13 @@
       text-transform: uppercase;
       padding-left: 22px;
       margin-left: 20px;
+      //padding-left: 25px;
+    }
+
+    &.section + .slide {
+      padding-left: 0;
+      margin: -5px 0px 0 20px;
+      border-radius: 0 0 4px 4px;
     }
 
     &.question {
@@ -251,6 +258,18 @@
           #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
         }
       }
+
+      &.section.highlighted { border-radius: 4px 4px 0 0; }
+
+      &.section.highlighted + .slide {
+        background-color: @questionnarie-question-list-item-hover-color;
+
+        .qname-block{
+          background-color: @questionnarie-question-list-item-hover-color;
+          &:before { #gradient > .horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0)); }
+        }
+      }
+
     }
   }
 }
