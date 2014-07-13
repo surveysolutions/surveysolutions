@@ -84,6 +84,7 @@
 html,
 body {
   height: 100%;
+  overflow: hidden;
 }
 /**
  * WorldBank Designer
@@ -249,6 +250,9 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
 }
 ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
   left: 7px;
+}
+.instructions-cross {
+  margin-top: 20px;
 }
 .wb-label {
   font-family: "Lucida Console", Monaco, monospace;
@@ -556,18 +560,6 @@ textarea {
 .icon-intedit {
   background-image: url(i/icon-cat-intedit-sm.png);
 }
-/*
-.item.section.highlighted + .slide {
-  background-color: @questionnarie-question-list-item-hover-color;
-
- .qname-block{
-  background-color: @questionnarie-question-list-item-hover-color;
- &:before { #gradient > .horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0)); }
- }
-}
-
-.item.section.highlighted {border-radius: 4px 4px 0 0;}
-*/
 .mCSB_container {
   margin-right: 0;
 }
