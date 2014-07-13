@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="section item"
-             ng-class="{'selected' : item.itemId == currentItemId}"
+             ng-class="{'selected' : item.itemId == currentItemId, 'highlighted': is_highlighted }"
              ng-if="!isQuestion(item) && !item.isDeleted"
              ui-sref-active="selected"
              ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
@@ -60,7 +60,8 @@
 
             <a class="handler" ui-tree-handle></a>
 
-            <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"></button>
+            <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
+                    ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
 
             <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
             <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
