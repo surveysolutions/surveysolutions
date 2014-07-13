@@ -54,7 +54,9 @@
         <div class="section item"
              ng-class="{'selected' : item.itemId == currentItemId}"
              ng-if="!isQuestion(item) && !item.isDeleted"
-             ui-sref-active="selected">
+             ui-sref-active="selected"
+             ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
+                                         'questionnaire.chapter.group({itemId: item.itemId})' }}">
 
             <a class="handler" ui-tree-handle></a>
 
