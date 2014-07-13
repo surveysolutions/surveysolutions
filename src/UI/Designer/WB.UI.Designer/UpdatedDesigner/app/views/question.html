@@ -45,12 +45,13 @@
         <div ng-include="activeQuestion.type + '-template.html'" ng-if="activeQuestion.type != undefined">
         </div>
 
-        <div class="form-group" ng-show="(showInstruction != undefined && !showInstruction) || initialQuestion.instructions === ''">
+        <div class="form-group" ng-show="!((showInstruction===undefined && initialQuestion.instructions) || showInstruction)">
             <button class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
         </div>
 
-        <div class="row" ng-show="showInstruction || initialQuestion.instructions !== ''">
+        <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
             <div class="form-group col-xs-11">
+                <label for="edit-question-instructions">Instruction (<a href="#">?</a>)</label>
                 <textarea id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions" class="form-control" placeholder="Instruction"></textarea>
             </div>
 

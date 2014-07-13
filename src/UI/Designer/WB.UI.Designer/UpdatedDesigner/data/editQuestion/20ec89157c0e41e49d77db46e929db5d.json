@@ -5,7 +5,7 @@
     "parentGroupId": "ddfaab0f-3739-4a67-9f08-8add19325cfe",
     "enablementCondition": "[q2]>0",
     "isPreFilled": false,
-    "instructions": null,
+    "instructions": "test instructions",
     "isMandatory": false,
     "questionScope": "Interviewer",
     "variableName": "q1",
