@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         protected AbstractConditionalLevel(decimal[] rosterVector)
         {
-            this.rosterVector = rosterVector;
+            this.RosterVector = rosterVector;
         }
 
         private State RunConditionExpression(Func<T[], bool> expression, T[] rosters)
@@ -124,12 +124,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             questionsToBeEnabled.Union(
                 this.enablementStatus
                     .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Question)
-                    .Select(x => new Identity(x.ItemId, this.rosterVector)));
+                    .Select(x => new Identity(x.ItemId, this.RosterVector)));
 
             questionsToBeDisabled.Union(
                 this.enablementStatus
                     .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Question)
-                    .Select(x => new Identity(x.ItemId, this.rosterVector)));
+                    .Select(x => new Identity(x.ItemId, this.RosterVector)));
 
             groupsToBeEnabled.Union(
                this.enablementStatus
@@ -145,6 +145,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
     public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T>, IValidatableRoster where T : IValidatable
     {
+        public Identity[] RosterKey { get; private set; }
+    
 
         protected Dictionary<Identity, Func<T[], bool>> validationExpressions = new Dictionary<Identity, Func<T[], bool>>();
 
