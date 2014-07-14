@@ -6,7 +6,8 @@ namespace WB.Core.Infrastructure.Raven
     public class RavenConnectionSettings
     {
         public RavenConnectionSettings(string storagePath, bool isEmbedded = false,
-            string username = null, string password = null, string eventsDatabase = "Events", string viewsDatabase = "Views", string plainDatabase = "PlainStorage", string failoverBehavior = null)
+            string username = null, string password = null, string eventsDatabase = "Events", string viewsDatabase = "Views",
+            string plainDatabase = "PlainStorage", string failoverBehavior = null, string activeBundles = null)
         {
             this.IsEmbedded = isEmbedded;
             this.Username = username;
@@ -21,6 +22,7 @@ namespace WB.Core.Infrastructure.Raven
                 failoverBehaviorValue = FailoverBehavior.FailImmediately;
 
             FailoverBehavior = failoverBehaviorValue;
+            ActiveBundles = activeBundles;
         }
 
         public bool IsEmbedded { get; private set; }
@@ -31,5 +33,6 @@ namespace WB.Core.Infrastructure.Raven
         public string ViewsDatabase { get; private set; }
         public string PlainDatabase { get; private set; }
         public FailoverBehavior FailoverBehavior { get; private set; }
+        public string ActiveBundles { get; private set; }
     }
 }
