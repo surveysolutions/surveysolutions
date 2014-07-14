@@ -2438,6 +2438,29 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId
             });
         }
+
+        public void DeleteStaticText(Guid entityId, Guid responsibleId)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
+
+            this.ApplyEvent(new StaticTextDeleted() { EntityId = entityId, ResponsibleId = responsibleId });
+        }
+
+        public void MoveStaticText(Guid entityId, Guid targetEntityId, int targetIndex, Guid responsibleId)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(targetEntityId);
+
+            this.ApplyEvent(new QuestionnaireItemMoved
+            {
+                PublicKey = entityId,
+                GroupKey = targetEntityId,
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId
+            });
+        }
         #endregion
 
         #region Shared Person command handlers
