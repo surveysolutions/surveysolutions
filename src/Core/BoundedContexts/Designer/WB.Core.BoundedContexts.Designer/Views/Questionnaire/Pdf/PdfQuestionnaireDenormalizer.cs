@@ -42,7 +42,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<TextListQuestionChanged>,
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
-        IEventHandler<StaticTextCloned>, IEventHandler
+        IEventHandler<StaticTextCloned>,
+        IEventHandler<StaticTextDeleted>, IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader updrader;
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
@@ -543,6 +544,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                 }
 
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<StaticTextDeleted> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                questionnaire.RemoveEntity(@event.EntityId);
                 return questionnaire;
             });
         }

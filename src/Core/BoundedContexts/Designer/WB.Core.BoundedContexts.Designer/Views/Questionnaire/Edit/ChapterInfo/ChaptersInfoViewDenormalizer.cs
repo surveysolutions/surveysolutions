@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, StaticTextAdded>,
         IUpdateHandler<GroupInfoView, StaticTextUpdated>,
         IUpdateHandler<GroupInfoView, StaticTextCloned>,
+        IUpdateHandler<GroupInfoView, StaticTextDeleted>,
         IUpdateHandler<GroupInfoView, QuestionnaireItemMoved>,
         IUpdateHandler<GroupInfoView, GroupBecameARoster>,
         IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
@@ -320,6 +321,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             this.UpdateStaticText(questionnaire: currentState, entityId: evnt.Payload.EntityId.FormatGuid(),
                 text: evnt.Payload.Text);
+
+            return currentState;
+        }
+
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<StaticTextDeleted> evnt)
+        {
+            var entityId = evnt.Payload.EntityId.FormatGuid();
+            var parentGroupOfEntity = this.FindParentOfEntity(currentState, entityId);
+
+            parentGroupOfEntity.Items.Remove(
+                parentGroupOfEntity.Items.Find(entity => entity.ItemId == entityId));
 
             return currentState;
         }
