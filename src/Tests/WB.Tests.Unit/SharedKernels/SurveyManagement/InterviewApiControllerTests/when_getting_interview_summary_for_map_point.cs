@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
             viewModel.LastStatus.ShouldEqual(lastStatus.ToLocalizeString());
 
         It should_last_status_date_be_equal_to_lastStatusDate = () =>
-            viewModel.LastStatusChangeDate.ShouldEqual(AnswerUtils.AnswerToString(lastStatusDateTime));
+            viewModel.LastCompletedDate.ShouldEqual(AnswerUtils.AnswerToString(lastStatusDateTime));
 
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;

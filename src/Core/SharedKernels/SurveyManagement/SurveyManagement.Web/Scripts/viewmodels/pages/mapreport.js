@@ -117,7 +117,7 @@
         });
     };
 
-    self.interviewDetailsTooltip = new google.maps.InfoWindow();
+    self.interviewDetailsTooltip = new InfoBubble();
     self.markers = {};
     self.markersSetsInfo = ko.observableArray([]);
     self.showPointsOnMap = function () {

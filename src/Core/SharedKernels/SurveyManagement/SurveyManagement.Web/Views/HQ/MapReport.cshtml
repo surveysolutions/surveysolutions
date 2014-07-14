@@ -56,11 +56,11 @@
     </div>
 </div>
 <script type="text/html" id="interview-tooltip-template">
-    <div class="map-point-tooltip">
+    <div>
         <div class="row-fluid"><strong>Interviewer:</strong>&nbsp;<span data-bind="text: InterviewerName">[interviewer name]</span></div>
         <div class="row-fluid"><strong>Supervisor:</strong>&nbsp;<span data-bind="text: SupervisorName">[supervisor name]</span> </div>
         <div class="row-fluid"><strong>Status:</strong>&nbsp;<span data-bind="text: LastStatus">[status]</span> </div>
-        <div class="row-fluid"><strong>Status date:</strong>&nbsp;<span data-bind="text: LastStatusChangeDate">[date of the latest status change]</span></div>
+        <div class="row-fluid"><strong>Completion date:</strong>&nbsp;<span data-bind="text: LastCompletedDate">[last completed date]</span></div>
         <div class="row-fluid" style="white-space:nowrap;"><strong>View interview content:</strong>&nbsp;<a target="_blank" data-bind="attr: { href: $interviewDetailsUrl + '/' + InterviewId }">details</a></div>
     </div>
 </script>
@@ -73,8 +73,7 @@
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.Instance.GoogleMapApiKey)&sensor=false">
     </script>
-    @Scripts.Render("~/Scripts/lodash.underscore.min.js", "~/Scripts/markerclusterer_compiled.js")
-    @Scripts.Render("~/Scripts/viewmodels/pages/mapreport.js")
+    @Scripts.Render("~/js/map-report")
     <script type="text/javascript">
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         var $questionnairesListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "Questionnaires" })';
