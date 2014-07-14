@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextDeleted>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireItemMoved>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NewGroupAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupDeleted>
@@ -187,6 +188,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
                 text: evnt.Payload.Text);
             return this.UpdateStateWithAddedStaticText(currentState, evnt.Payload.ParentId, staticText);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<StaticTextDeleted> evnt)
+        {
+            var staticText = currentState.StaticTexts.FirstOrDefault(x => x.Id == evnt.Payload.EntityId);
+            if (staticText != null)
+            {
+                currentState.StaticTexts.Remove(staticText);   
+            }
+            return currentState;
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionDeleted> evnt)

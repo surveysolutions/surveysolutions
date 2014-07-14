@@ -52,6 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
+        IEventHandler<StaticTextDeleted>,
 
         IEventHandler
     {
@@ -517,6 +518,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             this.CloneStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, parentId: evnt.Payload.ParentId,
                 targetIndex: evnt.Payload.TargetIndex, text: evnt.Payload.Text);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextDeleted> evnt)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            item.RemoveEntity(evnt.Payload.EntityId);
+            
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
