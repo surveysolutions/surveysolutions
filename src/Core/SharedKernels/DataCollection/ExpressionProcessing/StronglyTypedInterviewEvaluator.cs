@@ -289,6 +289,29 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         }
 
+        public void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled
+            , List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled)
+        {
+            foreach (var interviewScopeKvp in this.interviewScopes)
+            {
+                if (interviewScopeKvp.Value is IValidatableRoster)
+                {
+                    var roster = interviewScopeKvp.Value as IValidatableRoster;
+
+                    var siblingsKey = Util.GetSiblingsKey(interviewScopeKvp.Value.GetRosterKey().Select(x => x.Id).ToArray());
+
+                    var siblingRosters = this.siblingRosters[siblingsKey].Select(x => this.interviewScopes[x]);
+
+                    roster.RunConditions(siblingRosters, questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
+                }
+
+                if (interviewScopeKvp.Value is QuestionnaireLevel)
+                {
+                    (interviewScopeKvp.Value as QuestionnaireLevel).RunConditions(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
+                }
+            }
+        }
+
         public void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
         {
             foreach (var interviewScopeKvp in this.interviewScopes)

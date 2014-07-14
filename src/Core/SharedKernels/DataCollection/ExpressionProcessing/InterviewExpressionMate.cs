@@ -308,6 +308,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             throw new NotImplementedException();
         }
 
+        public void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled)
+        {
+        }
+
         public IInterviewExpressionState Clone()
         {
             throw new NotImplementedException();
