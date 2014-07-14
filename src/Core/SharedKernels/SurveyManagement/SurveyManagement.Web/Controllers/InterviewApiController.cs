@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
@@ -127,7 +128,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     User = this.GlobalInfo.GetCurrentUser()
                 });
 
-            var ret = new NewInterviewDetailsView()
+            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(data.InterviewId);
+
+            bool isAccessAllowed =
+                this.GlobalInfo.IsHeadquarter ||
+                (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
+
+            if (!isAccessAllowed)
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+
+            return new NewInterviewDetailsView()
             {
                 InterviewInfo = new InterviewInfoModel()
                 {
@@ -135,19 +145,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     questionnaireId = view.QuestionnairePublicKey.ToString(),
                     title = view.Title,
                     status = view.Status.ToLocalizeString(),
-                    responsible = view.Responsible.Name
+                    responsible = view.Responsible != null ? view.Responsible.Name : null
                 },
-                Groups = view.Groups.Select(group => new GroupModel(group.ParentId)
+                Groups = view.Groups.Select(@group => new GroupModel(@group.ParentId)
                 {
-                    id = group.Id.ToString(),
-                    depth = group.Depth,
-                    title = group.Title,
-                    rosterVector = group.RosterVector,
-                    questions = new List<QuestionModel>(group.Questions.Select(q => this.SelectModelByQuestion(group, q)))
+                    id = @group.Id.ToString(),
+                    depth = @group.Depth,
+                    title = @group.Title,
+                    rosterVector = @group.RosterVector,
+                    questions = new List<QuestionModel>(@group.Questions.Select(q => this.SelectModelByQuestion(@group, q)))
                 })
             };
-
-            return ret;
         }
 
         [Authorize(Roles = "Headquarter")]

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Web.Mvc;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Moq;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -27,11 +29,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
                             Responsible = new UserLight(new Guid(), "some user name")
                         });
 
-            controller = CreateController(interviewDetailsFactory: interviewDetailsFactoryMock.Object);
+            var globalInfoProvider = Mock.Of<IGlobalInfoProvider>(_
+                => _.IsHeadquarter == true);
+
+            controller = CreateController(
+                interviewDetailsFactory: interviewDetailsFactoryMock.Object,
+                globalInfoProvider: globalInfoProvider);
         };
 
         Because of = () =>
-            viewModel = controller.InterviewDetails(new InterviewDetailsViewModel() {InterviewId = new Guid()});
+            viewModel = controller.InterviewDetails(new InterviewDetailsViewModel {InterviewId = new Guid()});
 
         It should_view_model_contains_localized_interview_status_from_resources = () =>
             viewModel.InterviewInfo.status.ShouldEqual(verifiedStatus.ToLocalizeString());

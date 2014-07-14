@@ -15,24 +15,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
     internal class InterviewApiControllerTestsContext
     {
         protected static InterviewApiController CreateController(ICommandService commandService = null,
-            IGlobalInfoProvider globalInfo = null, ILogger logger = null,
+            IGlobalInfoProvider globalInfoProvider = null, ILogger logger = null,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory = null,
             IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory = null,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
             IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory = null,
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
-            return new InterviewApiController(commandService: commandService ?? Mock.Of<ICommandService>(),
-                globalInfo: globalInfo ?? Mock.Of<IGlobalInfoProvider>(), logger: logger ?? Mock.Of<ILogger>(),
-                allInterviewsViewFactory:
-                    allInterviewsViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
-                teamInterviewViewFactory:
-                    teamInterviewViewFactory ?? Mock.Of<IViewFactory<TeamInterviewsInputModel, TeamInterviewsView>>(),
-                changeStatusFactory:
-                    changeStatusFactory ?? Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>(),
-                interviewDetailsFactory:
-                    interviewDetailsFactory ?? Mock.Of<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>(),
-                interviewSummaryViewFactory: interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
+            return new InterviewApiController(
+                commandService ?? Mock.Of<ICommandService>(),
+                globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(), 
+                logger ?? Mock.Of<ILogger>(),
+                allInterviewsViewFactory ?? Stub<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>.WithNotEmptyValues,
+                teamInterviewViewFactory ?? Stub<IViewFactory<TeamInterviewsInputModel, TeamInterviewsView>>.WithNotEmptyValues,
+                changeStatusFactory ?? Stub<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>.WithNotEmptyValues,
+                interviewDetailsFactory ?? Stub<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>.WithNotEmptyValues,
+                interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues);
         }
     }
 }
