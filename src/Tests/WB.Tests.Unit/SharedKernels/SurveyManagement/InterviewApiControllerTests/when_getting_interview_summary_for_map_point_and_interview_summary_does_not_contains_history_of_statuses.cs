@@ -47,7 +47,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static string interviewerName = "interviewer";
         private static string supervisorName = "supervisor";
-        private static InterviewStatus lastStatus = InterviewStatus.Completed;
-        private static DateTime lastStatusDateTime = DateTime.Parse("2/2/2");
     }
 }
