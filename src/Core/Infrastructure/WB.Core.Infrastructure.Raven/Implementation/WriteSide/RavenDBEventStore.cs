@@ -31,22 +31,23 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 
         private readonly int timeout = 180;
 
-        public RavenDBEventStore(string ravenUrl, int pageSize, bool useStreamingForAllEvents = true, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately)
+        public RavenDBEventStore(string ravenUrl, int pageSize, bool useStreamingForAllEvents = true, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately, string activeBundles = null)
         {
             this.DocumentStore = new DocumentStore
             {
                 Url = ravenUrl,
                 Conventions = CreateStoreConventions(CollectionName, failoverBehavior)
             }.Initialize();
-
+           
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
             {
                 e.Request.Timeout = 30*60*1000; /*ms*/
             };
             this.pageSize = pageSize;
             this.useStreamingForAllEvents = useStreamingForAllEvents;
+            
+            this.DocumentStore.ActivateBundles(activeBundles);
             IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, DocumentStore);
-
             IndexCreation.CreateIndexes(typeof (EventsByTimeStampAndSequenceIndex).Assembly, DocumentStore);
         }
 

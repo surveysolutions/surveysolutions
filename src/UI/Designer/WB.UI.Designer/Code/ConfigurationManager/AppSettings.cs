@@ -65,6 +65,11 @@ namespace WB.UI.Designer
             get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.FailoverBehavior"); }
         }
 
+        public string ActiveBundles
+        {
+            get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.ActiveBundles"); }
+        }
+
         public string WKHtmlToPdfExecutablePath
         {
             get { return ConfigurationManager.AppSettings.GetString("WKHtmlToPdfExecutablePath"); }

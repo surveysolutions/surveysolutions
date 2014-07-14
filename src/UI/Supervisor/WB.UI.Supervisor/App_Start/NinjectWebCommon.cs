@@ -111,7 +111,8 @@ namespace WB.UI.Supervisor.App_Start
                 eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
-                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"]);
+                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
+                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"]);
 
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
