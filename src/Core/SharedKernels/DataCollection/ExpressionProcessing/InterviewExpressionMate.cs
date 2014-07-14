@@ -273,6 +273,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             throw new NotImplementedException();
         }
 
+        public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeclareAnswersValid(IEnumerable<Identity> validQuestions)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DisableGroups(IEnumerable<Identity> groupsToDisable)
         {
             throw new NotImplementedException();

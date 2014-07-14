@@ -326,6 +326,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.ValidAnsweredQuestions.Add(questionKey);
             this.interviewState.InvalidAnsweredQuestions.Remove(questionKey);
+
+            this.expressionProcessorStatePrototype.DeclareAnswersValid(new[] { new Identity(@event.QuestionId, @event.PropagationVector) });
         }
 
         private void Apply(AnswerDeclaredInvalid @event)
@@ -334,16 +336,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.ValidAnsweredQuestions.Remove(questionKey);
             this.interviewState.InvalidAnsweredQuestions.Add(questionKey);
+
+            this.expressionProcessorStatePrototype.DeclareAnswersInvalid(new[] { new Identity(@event.QuestionId, @event.PropagationVector) });
         }
 
         private void Apply(AnswersDeclaredValid @event)
         {
             this.interviewState.DeclareAnswersValid(@event.Questions);
+            this.expressionProcessorStatePrototype.DeclareAnswersValid(@event.Questions.ToIdentities());
         }
 
         internal void Apply(AnswersDeclaredInvalid @event)
         {
             this.interviewState.DeclareAnswersInvalid(@event.Questions);
+            this.expressionProcessorStatePrototype.DeclareAnswersInvalid(@event.Questions.ToIdentities());
         }
 
         internal void Apply(GroupDisabled @event)
@@ -351,6 +357,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.PropagationVector);
 
             this.interviewState.DisabledGroups.Add(groupKey);
+
+            expressionProcessorStatePrototype.DisableGroups(new[] { new Identity(@event.GroupId, @event.PropagationVector) });
         }
 
         internal void Apply(GroupEnabled @event)
@@ -358,6 +366,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.PropagationVector);
 
             this.interviewState.DisabledGroups.Remove(groupKey);
+
+            expressionProcessorStatePrototype.EnableGroups(new[] { new Identity(@event.GroupId, @event.PropagationVector) });
         }
 
         internal void Apply(GroupsDisabled @event)
@@ -379,6 +389,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.DisabledQuestions.Add(questionKey);
+
+            expressionProcessorStatePrototype.DisableQuestions(new[] { new Identity(@event.QuestionId, @event.PropagationVector) });
         }
 
         internal void Apply(QuestionEnabled @event)
@@ -386,6 +398,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.interviewState.DisabledQuestions.Remove(questionKey);
+
+            expressionProcessorStatePrototype.EnableQuestions(new[] { new Identity(@event.QuestionId, @event.PropagationVector)  });
         }
 
         internal void Apply(QuestionsDisabled @event)
@@ -423,6 +437,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.interviewState.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+
+            //expressionProcessorStatePrototype could also be changed but it's an old code.
         }
 
         internal void Apply(RosterRowAdded @event)
@@ -449,6 +465,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterRowInstances.Remove(@event.RosterInstanceId);
 
             this.interviewState.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+
+            expressionProcessorStatePrototype.RemoveRoster(@event.GroupId, @event.OuterRosterVector, @event.RosterInstanceId);
         }
 
         private void Apply(RosterRowTitleChanged @event) { }
@@ -458,6 +476,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         internal void Apply(RosterInstancesAdded @event)
         {
             this.interviewState.AddRosterInstances(@event.Instances);
+
             foreach (var instance in @event.Instances)
             {
                 expressionProcessorStatePrototype.AddRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);

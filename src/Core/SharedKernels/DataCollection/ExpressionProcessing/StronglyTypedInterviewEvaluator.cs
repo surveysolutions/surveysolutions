@@ -261,13 +261,35 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void DisableGroups(IEnumerable<Identity> groupsToDisable) { }
+        public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
+        {
+            
+        }
 
-        public void EnableGroups(IEnumerable<Identity> groupsToEnable) { }
+        public void DeclareAnswersValid(IEnumerable<Identity> validQuestions)
+        {
+            
+        }
 
-        public void DisableQuestions(IEnumerable<Identity> questionsToDisable) { }
+        public void DisableGroups(IEnumerable<Identity> groupsToDisable)
+        {
+            
+        }
 
-        public void EnableQuestions(IEnumerable<Identity> questionsToEnable) { }
+        public void EnableGroups(IEnumerable<Identity> groupsToEnable)
+        {
+            
+        }
+
+        public void DisableQuestions(IEnumerable<Identity> questionsToDisable)
+        {
+            
+        }
+
+        public void EnableQuestions(IEnumerable<Identity> questionsToEnable)
+        {
+            
+        }
 
         public IInterviewExpressionState Clone()
         {
@@ -305,7 +327,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                     roster.RunConditions(siblingRosters, questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
                 }
 
-                if (interviewScopeKvp.Value is QuestionnaireLevel)
+                else if (interviewScopeKvp.Value is QuestionnaireLevel)
                 {
                     (interviewScopeKvp.Value as QuestionnaireLevel).RunConditions(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
                 }
