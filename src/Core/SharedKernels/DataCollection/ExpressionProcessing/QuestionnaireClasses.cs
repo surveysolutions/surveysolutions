@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace WB.Core.SharedKernels.ExpressionProcessing
 {
@@ -50,7 +49,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
     ;
     public abstract class AbstractConditionalLevel<T>  where T : IValidatable
     {
-        public decimal[] rosterVector;
+        public decimal[] RosterVector { get; private set; }
         protected List<ConditionalState> enablementStatus = new List<ConditionalState>();
 
         protected abstract IEnumerable<Action<T[]>> ConditionExpressions { get; }
@@ -95,7 +94,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 }
             }
         }
-
         protected Action<T[]> Verifier(Func<T[], bool> isEnabled, Guid questionId, ConditionalState questionState)
         {
             return rosters =>
@@ -147,14 +145,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
     public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T>, IValidatableRoster where T : IValidatable
     {
-        public Identity[] rosterKey;
 
         protected Dictionary<Identity, Func<T[], bool>> validationExpressions = new Dictionary<Identity, Func<T[], bool>>();
 
         protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey)
             : base(rosterVector)
         {
-            this.rosterKey = rosterKey;
+            this.RosterKey = rosterKey;
         }
 
         public abstract void Validate(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid,
@@ -169,12 +166,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
     {
         protected Dictionary<Guid, bool?> enablementStatus = new Dictionary<Guid, bool?>();
 
-        public Identity[] rosterKey;
+        public Identity[] RosterKey { get; private set; }
 
         public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey)
             : base(rosterVector)
         {
-            this.rosterKey = rosterKey;
+            this.RosterKey = rosterKey;
         }
 
         public string id { get; set; }
@@ -182,7 +179,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public IValidatable CopyMembers()
         {
-            var level = new QuestionnaireLevel(this.rosterVector, this.rosterKey)
+            var level = new QuestionnaireLevel(this.RosterVector, this.RosterKey)
             {
                 id = this.id,
                 persons_count = this.persons_count
@@ -193,7 +190,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public Identity[] GetRosterKey()
         {
-            return this.rosterKey;
+            return this.RosterKey;
         }
 
         public void SetParent(IValidatable parentLevel)
@@ -234,8 +231,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public HhMember(decimal[] rosterVector, Identity[] rosterKey)
             : base(rosterVector, rosterKey)
         {
-            validationExpressions.Add(new Identity(IdOf.age, this.rosterVector), age_IsValid);
-            validationExpressions.Add(new Identity(IdOf.food, this.rosterVector), food_IsValid);
+            validationExpressions.Add(new Identity(IdOf.age, this.RosterVector), age_IsValid);
+            validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), food_IsValid);
             validationExpressions.Add(new Identity(IdOf.role, this.rosterVector), role_IsValid);
             
 
@@ -440,7 +437,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public IValidatable CopyMembers()
         {
-            var level = new HhMember(this.rosterVector, this.rosterKey)
+            var level = new HhMember(this.RosterVector, this.RosterKey)
             {
                 name = this.name,
                 age = this.age,
@@ -461,7 +458,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public Identity[] GetRosterKey()
         {
-            return this.rosterKey;
+            return this.RosterKey;
         }
 
         public void SetParent(IValidatable parentLevel)
@@ -486,6 +483,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public FoodConsumption(decimal[] rosterVector, Identity[] rosterKey)
             : base(rosterVector, rosterKey)
         {
+            validationExpressions.Add(new Identity(IdOf.times_per_week, this.RosterVector), times_per_week_validation);
         }
 
         private HhMember parent;
@@ -559,6 +557,11 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public long times_per_week { get; set; }
 
+        private bool times_per_week_validation()
+        {
+            return times_per_week > 0 && times_per_week < 7*5;
+        }
+
 
         public decimal? price_for_food
         {
@@ -593,7 +596,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public IValidatable CopyMembers()
         {
-            var level = new FoodConsumption(this.rosterVector, this.rosterKey)
+            var level = new FoodConsumption(this.RosterVector, this.RosterKey)
             {
                 price_for_food = this.price_for_food,
                 times_per_week = this.times_per_week
@@ -604,7 +607,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public Identity[] GetRosterKey()
         {
-            return this.rosterKey;
+            return this.RosterKey;
         }
 
         public void SetParent(IValidatable parentLevel)
