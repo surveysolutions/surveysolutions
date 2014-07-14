@@ -249,6 +249,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             });
         }
 
+        public static IPublishedEvent<StaticTextDeleted> StaticTextDeletedEvent(string entityId = null)
+        {
+            return ToPublishedEvent(new StaticTextDeleted()
+            {
+                EntityId = GetQuestionnaireItemId(entityId)
+            });
+        }
+
         public static IPublishedEvent<NumericQuestionCloned> NumericQuestionClonedEvent(string questionId = null,
             string parentGroupId = null, string questionVariable = null, string questionTitle = null,
             string questionConditionExpression = null, string sourceQuestionId = null)
