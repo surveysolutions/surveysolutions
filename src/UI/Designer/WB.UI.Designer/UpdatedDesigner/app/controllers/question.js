@@ -21,7 +21,12 @@
                     $scope.activeQuestion.validationMessage = result.validationMessage;
                     $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
                     $scope.activeQuestion.instructions = result.instructions;
-                    $scope.activeQuestion.options = result.options;
+                    var options = result.options || [];
+                    _.each(options, function(option) {
+                        option.id = utilityService.guid();
+                    });
+
+                    $scope.activeQuestion.options = options;
                     $scope.activeQuestion.isInteger = result.isInteger;
                     $scope.activeQuestion.maxValue = result.maxValue;
                     $scope.activeQuestion.countOfDecimalPlaces = result.countOfDecimalPlaces;
