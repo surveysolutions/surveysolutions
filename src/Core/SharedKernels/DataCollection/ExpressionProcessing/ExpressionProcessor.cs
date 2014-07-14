@@ -15,12 +15,18 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         }
 
         public void ProcessConditionExpressions(IInterviewExpressionState interviewExpressionState,
-            List<Identity> enabledGroups,
-            List<Identity> disabledGroups,
-            List<Identity> enabledQuestions,
-            List<Identity> disabledQuestions)
+            out List<Identity> enabledGroups,
+            out List<Identity> disabledGroups,
+            out List<Identity> questionsToBeEnabled,
+            out List<Identity> questionsToBeDisabled)
         {
-            throw new System.NotImplementedException();
+            enabledGroups = new List<Identity>();
+            disabledGroups = new List<Identity>();
+
+            questionsToBeEnabled = new List<Identity>();
+            questionsToBeDisabled = new List<Identity>();
+
+            interviewExpressionState.ProcessConditionExpressions(questionsToBeEnabled, questionsToBeDisabled, enabledGroups, disabledGroups);
         }
     }
 }
