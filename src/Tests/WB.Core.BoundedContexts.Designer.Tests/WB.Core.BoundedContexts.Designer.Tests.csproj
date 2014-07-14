@@ -197,6 +197,10 @@
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_text_contains_only_whitespaces.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_text_is_empty.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_user_dont_have_permissions.cs" />
+    <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_all_parameters_specified.cs" />
+    <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_target_entity_does_not_exists.cs" />
+    <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_entity_does_not_exists.cs" />
+    <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
@@ -210,6 +214,9 @@
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QuestionnaireItemMoved_event_and_moved_item_is_static_text.cs" />
+    <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_all_parameters_specified.cs" />
+    <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_entity_does_not_exists.cs" />
+    <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_text_contains_only_whitespaces.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_text_is_empty.cs" />
