@@ -18,6 +18,12 @@
 
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
+            $scope.items = [];
+            $scope.chapterCounters = {
+                questions: 0,
+                groups: 0,
+                rosters: 0
+            }
 
             hotkeys.add({
                 combo: 'ctrl+f',
@@ -316,9 +322,18 @@
                         commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
                             .success(function(result) {
                                 if (result.IsSuccess) {
+                                    var publishDelete = function(deleted) {
+                                        var children = deleted.items || [];
+                                        $rootScope.$emit(getItemType(deleted) + 'Deleted');
+                                        _.each(children, function(child) {
+                                            publishDelete(child);
+                                        });
+                                    }
+
+                                    publishDelete(questionnaireService.findItem($scope.items, itemIdToDelete));
+
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                     $scope.resetSelection();
-                                    $rootScope.$emit(getItemType(item) + 'Deleted');
                                 }
                             });
                     }
