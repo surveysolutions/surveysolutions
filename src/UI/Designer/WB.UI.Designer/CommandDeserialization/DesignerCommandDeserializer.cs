@@ -57,7 +57,9 @@ namespace WB.UI.Designer.CommandDeserialization
                     //Static text commands
                     { "AddStaticText", typeof (AddStaticTextCommand) },
                     { "UpdateStaticText", typeof (UpdateStaticTextCommand) },
-                    { "CloneStaticText", typeof (CloneStaticTextCommand) }
+                    { "CloneStaticText", typeof (CloneStaticTextCommand) },
+                    { "DeleteStaticText", typeof (DeleteStaticTextCommand) },
+                    { "MoveStaticText", typeof (MoveStaticTextCommand) },
                 };
             }
 
