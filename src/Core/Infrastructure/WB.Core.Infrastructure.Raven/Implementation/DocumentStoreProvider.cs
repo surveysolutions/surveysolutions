@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using Ninject.Activation;
 using Ninject.Planning.Targets;
+using Raven.Abstractions.Data;
+using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Client.Extensions;
@@ -13,6 +16,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation
     internal class DocumentStoreProvider : Provider<DocumentStore>
     {
         private readonly RavenConnectionSettings settings;
+        
         private EmbeddableDocumentStore embeddedStorage;
         private DocumentStore serverStorage;
 
@@ -72,6 +76,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation
             {
                 Url = this.settings.StoragePath,
                 DefaultDatabase = databaseName,
+                
                 Conventions =
                 {
                     FailoverBehavior = settings.FailoverBehavior,
@@ -88,14 +93,22 @@ namespace WB.Core.Infrastructure.Raven.Implementation
             {
                 store.Credentials = new NetworkCredential(this.settings.Username, this.settings.Password);
             }
-
             store.Initialize();
 
             if (!string.IsNullOrWhiteSpace(databaseName))
             {
                 store.DatabaseCommands.EnsureDatabaseExists(databaseName);
+                var systemStorage = new DocumentStore
+                {
+                    Url = this.settings.StoragePath
+                };
+                systemStorage.Initialize();
+                systemStorage.ActivateBundles(this.settings.ActiveBundles, databaseName);
             }
-
+            else
+            {
+                store.ActivateBundles(this.settings.ActiveBundles, databaseName);
+            }
             return store;
         }
 

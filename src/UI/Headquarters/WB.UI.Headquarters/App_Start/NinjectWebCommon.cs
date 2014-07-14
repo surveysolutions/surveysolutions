@@ -110,7 +110,8 @@ namespace WB.UI.Headquarters
                 WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 WebConfigurationManager.AppSettings["Raven.Databases.Views"],
                 WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
-                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"]);
+                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
+                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"]);
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled && LegacyOptions.SupervisorFunctionsEnabled,
