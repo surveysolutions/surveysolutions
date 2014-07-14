@@ -560,7 +560,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(QuestionDeleted e)
         {
-            this.innerDocument.RemoveQuestion(e.QuestionId);
+            this.innerDocument.RemoveEntity(e.QuestionId);
 
             this.innerDocument.RemoveHeadPropertiesFromRosters(e.QuestionId);
         }
@@ -712,6 +712,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text);
 
             this.innerDocument.Insert(e.TargetIndex, staticText, e.ParentId);
+        }
+
+        internal void Apply(StaticTextDeleted e)
+        {
+            this.innerDocument.RemoveEntity(e.EntityId);   
         }
 
         public QuestionnaireState CreateSnapshot()

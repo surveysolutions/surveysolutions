@@ -254,17 +254,17 @@ namespace Main.Core.Documents
                 update(@group);
         }
 
-        public void RemoveQuestion(Guid questionId)
+        public void RemoveEntity(Guid entityId)
         {
-            IComposite questionParent = this.GetParentById(questionId);
+            IComposite entityParent = this.GetParentById(entityId);
 
-            if (questionParent != null)
+            if (entityParent != null)
             {
-                RemoveChildQuestionBySpecifiedId(questionParent, questionId);
+                RemoveChildEntityBySpecifiedId(entityParent, entityId);
             }
             else
             {
-                logger.Warn(string.Format("Failed to remove question '{0}' because it's parent is not found.", questionId));
+                logger.Warn(string.Format("Failed to remove entity '{0}' because it's parent is not found.", entityId));
             }
         }
 
@@ -273,9 +273,9 @@ namespace Main.Core.Documents
             RemoveFirstChild(container, child => IsGroupWithSpecifiedId(child, groupId));
         }
 
-        private static void RemoveChildQuestionBySpecifiedId(IComposite container, Guid questionId)
+        private static void RemoveChildEntityBySpecifiedId(IComposite container, Guid entityId)
         {
-            RemoveFirstChild(container, child => IsEntityWithSpecifiedId(child, questionId));
+            RemoveFirstChild(container, child => IsEntityWithSpecifiedId(child, entityId));
         }
 
         private static void RemoveFirstChild(IComposite container, Predicate<IComposite> condition)
