@@ -17,10 +17,14 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[] selectedPropagationVector);
         void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[][] selectedPropagationVectors);
 
+        void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions);
+        void DeclareAnswersValid(IEnumerable<Identity> validQuestions);
+        
         void DisableGroups(IEnumerable<Identity> groupsToDisable);
         void EnableGroups(IEnumerable<Identity> groupsToEnable);
         void DisableQuestions(IEnumerable<Identity> questionsToDisable);
         void EnableQuestions(IEnumerable<Identity> questionsToEnable);
+        
         void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
         void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
 
