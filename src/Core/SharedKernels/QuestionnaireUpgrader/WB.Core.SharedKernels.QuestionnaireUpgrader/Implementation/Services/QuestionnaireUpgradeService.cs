@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services
     internal class QuestionnaireUpgradeService : IQuestionnaireUpgradeService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-
+        private readonly int maxLengthOfVariableName = 32;
         public QuestionnaireUpgradeService(IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -47,16 +47,16 @@ namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services
                     rostersVariableNames.Add(roster.VariableName);
                     continue;
                 }
-                var originalVariableName = CreateValidVariableNameFormGroupTitle(roster.Title);
+                var originalVariableName = CreateValidVariableNameFormGroupTitle(roster);
                 var variableName = originalVariableName;
 
                 int i = 1;
                 while (rostersVariableNames.Contains(variableName))
                 {
                     variableName = originalVariableName + i;
-                    if (variableName.Length > 32)
+                    if (variableName.Length > maxLengthOfVariableName)
                     {
-                        variableName = new string(originalVariableName.Take(originalVariableName.Length - i.ToString(CultureInfo.InvariantCulture).Length).ToArray()) + i;
+                        variableName = new string(originalVariableName.Take(maxLengthOfVariableName - i.ToString(CultureInfo.InvariantCulture).Length).ToArray()) + i;
                     }
                     i++;
                 }
@@ -66,22 +66,30 @@ namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services
             return result;
         }
 
-        private string CreateValidVariableNameFormGroupTitle(string title)
+        private string CreateValidVariableNameFormGroupTitle(IGroup roster)
         {
+            string title = string.IsNullOrEmpty(roster.VariableName) ? roster.Title : roster.VariableName;
             var invalidCharactersRegEx = new Regex("[^a-zA-Z0-9_]");
             var variableName = invalidCharactersRegEx.Replace(title, "").ToLowerInvariant();
+            while (!string.IsNullOrEmpty(variableName))
+            {
+                if (Char.IsNumber(variableName[0]))
+                    variableName = variableName.Substring(1, variableName.Length - 1);
+                else
+                    break;
+            }
             if (string.IsNullOrEmpty(variableName))
-                return "a";
-            if (variableName.Length <= 32)
+                return "roster";
+            if (variableName.Length <= maxLengthOfVariableName)
                 return variableName;
-            return new string(variableName.Take(32).ToArray());
+            return new string(variableName.Take(maxLengthOfVariableName).ToArray());
         }
 
         private bool IsRosterVariableNameValid(string rosterVariableName, HashSet<string> existingVariableNames)
         {
             if (string.IsNullOrEmpty(rosterVariableName))
                 return false;
-            if (rosterVariableName.Length > 32)
+            if (rosterVariableName.Length > maxLengthOfVariableName)
                 return false;
             var validVariableNameRegEx = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
             if (!validVariableNameRegEx.IsMatch(rosterVariableName))
