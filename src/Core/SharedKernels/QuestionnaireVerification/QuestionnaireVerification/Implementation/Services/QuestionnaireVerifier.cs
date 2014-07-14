@@ -7,8 +7,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Properties;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
