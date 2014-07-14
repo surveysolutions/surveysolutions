@@ -7,8 +7,10 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDenormalizerTests
 {
@@ -19,9 +21,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             IQuestionDetailsViewMapper questionDetailsViewMapper = null, 
             IQuestionFactory questionFactory = null)
         {
+            var upgraderMock = new Mock<IQuestionnaireDocumentUpgrader>();
+            upgraderMock.Setup(x => x.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()))
+                .Returns<QuestionnaireDocument>(document => document);
+
             return new QuestionsAndGroupsCollectionDenormalizer(readsideRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView>>(),
                 questionDetailsViewMapper ?? Mock.Of<IQuestionDetailsViewMapper>(),
-                questionFactory ?? Mock.Of<IQuestionFactory>());
+                questionFactory ?? Mock.Of<IQuestionFactory>(),
+                upgraderMock.Object);
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event)

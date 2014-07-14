@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -13,8 +15,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
             var readSideRepositoryWriter = new Mock<IReadSideRepositoryWriter<GroupInfoView>>();
             readSideRepositoryWriter.Setup(x => x.GetById(It.IsAny<string>())).Returns(view);
 
+            var upgraderMock = new Mock<IQuestionnaireDocumentUpgrader>();
+            upgraderMock.Setup(x => x.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()))
+                .Returns<QuestionnaireDocument>(document => document);
+
             return new ChaptersInfoViewDenormalizer(readSideRepositoryWriter.Object,
-                expressionProcessor ?? Mock.Of<IExpressionProcessor>());
+                expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
+                upgraderMock.Object);
         }
 
         protected static GroupInfoView CreateGroupInfoView()

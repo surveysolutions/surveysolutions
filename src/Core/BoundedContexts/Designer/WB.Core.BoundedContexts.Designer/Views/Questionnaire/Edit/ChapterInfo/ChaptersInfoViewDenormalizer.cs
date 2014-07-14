@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -39,11 +41,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, GroupStoppedBeingARoster>
     {
         private readonly IExpressionProcessor expressionProcessor;
+        private IQuestionnaireDocumentUpgrader questionnaireUpgrader;
 
-        public ChaptersInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer, IExpressionProcessor expressionProcessor)
+        public ChaptersInfoViewDenormalizer(IReadSideRepositoryWriter<GroupInfoView> writer, 
+            IExpressionProcessor expressionProcessor, 
+            IQuestionnaireDocumentUpgrader questionnaireUpgrader)
             : base(writer)
         {
             this.expressionProcessor = expressionProcessor;
+            this.questionnaireUpgrader = questionnaireUpgrader;
         }
 
         public override Type[] UsesViews
@@ -63,29 +69,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Create(IPublishedEvent<TemplateImported> evnt)
         {
-            var questionnaire = CreateQuestionnaire(evnt.EventSourceId);
-
-            evnt.Payload.Source.ConnectChildrenWithParent();
-            this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: evnt.Payload.Source);
+            GroupInfoView questionnaire = CreateQuestionnaire(evnt.EventSourceId);
+            this.BuildQuestionnaireFrom(evnt.Payload.Source, questionnaire);
 
             return questionnaire;
         }
 
         public GroupInfoView Create(IPublishedEvent<QuestionnaireCloned> evnt)
         {
-            var questionnaire = CreateQuestionnaire(evnt.EventSourceId);
-
-            evnt.Payload.QuestionnaireDocument.ConnectChildrenWithParent();
-            this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: evnt.Payload.QuestionnaireDocument);
+            GroupInfoView questionnaire = CreateQuestionnaire(evnt.EventSourceId);
+            this.BuildQuestionnaireFrom(evnt.Payload.QuestionnaireDocument,  questionnaire);
 
             return questionnaire;
+        }
+
+        private void BuildQuestionnaireFrom(QuestionnaireDocument questionnaireDocument, GroupInfoView questionnaire)
+        {
+            QuestionnaireDocument sourceQuestionnaireOrGroup =
+                this.questionnaireUpgrader.TranslatePropagatePropertiesToRosterProperties(questionnaireDocument);
+            sourceQuestionnaireOrGroup.ConnectChildrenWithParent();
+            this.AddQuestionnaireItem(currentState: questionnaire, sourceQuestionnaireOrGroup: sourceQuestionnaireOrGroup);
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<NewGroupAdded> evnt)
         {
             this.AddGroup(questionnaire: currentState,
                 parentGroupId: GetNullAsParentForChapterOrParentGroupIdForGroup(evnt.Payload.ParentGroupPublicKey, currentState.ItemId),
-                groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText);
+                groupId: evnt.Payload.PublicKey.FormatGuid(), 
+                groupTitle: evnt.Payload.GroupText);
 
 
             return currentState;
@@ -95,7 +106,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             this.AddGroup(questionnaire: currentState,
                 parentGroupId: GetNullAsParentForChapterOrParentGroupIdForGroup(evnt.Payload.ParentGroupPublicKey, currentState.ItemId),
-                groupId: evnt.Payload.PublicKey.FormatGuid(), groupTitle: evnt.Payload.GroupText, orderIndex: evnt.Payload.TargetIndex);
+                groupId: evnt.Payload.PublicKey.FormatGuid(), 
+                groupTitle: evnt.Payload.GroupText, 
+                orderIndex: evnt.Payload.TargetIndex);
 
             return currentState;
         }
@@ -442,7 +455,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             questionView.LinkedToQuestionId = linkedToQuestionId;
         }
 
-        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, int? orderIndex = null)
+        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, bool isRoster = false, int? orderIndex = null)
         {
             var parentGroup = string.IsNullOrEmpty(parentGroupId)
                 ? questionnaire
@@ -455,6 +468,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             {
                 ItemId = groupId,
                 Title = groupTitle,
+                IsRoster = isRoster,
                 Items = new List<IQuestionnaireItem>(),
                 GroupsCount = 0,
                 RostersCount = 0,
@@ -475,8 +489,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             foreach (var group in sourceQuestionnaireOrGroup.Children.OfType<IGroup>())
             {
-                this.AddGroup(questionnaire: currentState, groupId: group.PublicKey.FormatGuid(),
-                    parentGroupId: group.GetParent().PublicKey.FormatGuid(), groupTitle: group.Title);
+                this.AddGroup(questionnaire: currentState, 
+                    groupId: group.PublicKey.FormatGuid(),
+                    parentGroupId: group.GetParent().PublicKey.FormatGuid(),
+                    groupTitle: group.Title,
+                    isRoster: group.IsRoster);
                 this.AddQuestionnaireItem(currentState: currentState, sourceQuestionnaireOrGroup: @group);
             }
 
