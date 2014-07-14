@@ -303,4 +303,7 @@
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>Roster has variable name equal to questionnaire title</value>
   </data>
+  <data name="WB0067_StaticTextIsEmpty" xml:space="preserve">
+    <value>Static text is empty</value>
+  </data>
 </root>
