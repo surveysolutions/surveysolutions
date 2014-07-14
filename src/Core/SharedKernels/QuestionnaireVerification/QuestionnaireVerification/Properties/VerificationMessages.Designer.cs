@@ -620,5 +620,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0070_RosterHasVariableNameEqualToQuestionnaireTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static text is empty.
+        /// </summary>
+        internal static string WB0067_StaticTextIsEmpty {
+            get {
+                return ResourceManager.GetString("WB0067_StaticTextIsEmpty", resourceCulture);
+            }
+        }
     }
 }

@@ -138,6 +138,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
                     Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
                     Verifier<IGroup>(RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
+                    Verifier<IStaticText>(StaticTextIsEmpty, "WB0072", VerificationMessages.WB0072_StaticTextIsEmpty),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -147,6 +148,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByRostersWithDuplicateVariableName
                 };
             }
+        }
+
+        private bool StaticTextIsEmpty(IStaticText staticText)
+        {
+            return string.IsNullOrWhiteSpace(staticText.Text);
         }
 
         private bool QuestionTypeIsNotAllowed(IQuestion question)
@@ -826,7 +832,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {
             return new QuestionnaireVerificationReference(
-                entity is IGroup ? QuestionnaireVerificationReferenceType.Group : QuestionnaireVerificationReferenceType.Question,
+                entity is IGroup
+                    ? QuestionnaireVerificationReferenceType.Group
+                    : (entity is IStaticText
+                        ? QuestionnaireVerificationReferenceType.StaticText
+                        : QuestionnaireVerificationReferenceType.Question),
                 entity.PublicKey);
         }
 
