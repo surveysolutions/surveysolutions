@@ -39,10 +39,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasCompleted;
         private InterviewStatus status;
 
+        private readonly InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
+
         private IInterviewExpressionState expressionProcessorStatePrototype = new StronglyTypedInterviewEvaluator();
         private ExpressionProcessing.ExpressionProcessor expressionSharpProcessor = new ExpressionProcessing.ExpressionProcessor();
-
-        private readonly InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
         private void Apply(InterviewCreated @event)
         {
@@ -70,6 +70,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(InterviewSynchronized @event)
         {
+            this.expressionProcessorStatePrototype = new StronglyTypedInterviewEvaluator();
+
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
             this.status = @event.InterviewData.Status;
@@ -2253,7 +2255,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRostersEvents(params RosterCalculationData[] rosterDatas)
         {
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterDatas);
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterDatas);
 
             if (rosterInstancesToAdd.Any())
             {
@@ -2597,6 +2600,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateIntAnswer(questionId, rosterVector, answer);
 
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
+            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
+
+            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+
             //Apply other changes on expressionProcessorState
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
             List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
@@ -2736,6 +2747,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateMultiOptionAnswer(questionId, rosterVector, selectedValues);
+
+
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
+            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
+
+            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             //Apply other changes on expressionProcessorState
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
@@ -3262,9 +3282,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DetermineCustomEnablementStateOfGroupsInitializedByAddedRosterInstances(state,
                 rosterIds, rosterInstanceIdsBeingAdded, nearestToOuterRosterVector, questionnaire, getAnswer, getRosterInstanceIds,
                 out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
+            
             this.DetermineCustomEnablementStateOfQuestionsInitializedByAddedRosterInstances(state,
                 rosterIds, rosterInstanceIdsBeingAdded, nearestToOuterRosterVector, questionnaire, getAnswer, getRosterInstanceIds,
                 out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
+            
             DetermineValidityStateOfQuestionsInitializedByAddedRosterInstances(state,
                 rosterIds, rosterInstanceIdsBeingAdded, nearestToOuterRosterVector, questionnaire, initializedGroupsToBeDisabled,
                 initializedQuestionsToBeDisabled, getRosterInstanceIds, out initializedQuestionsToBeInvalid);
