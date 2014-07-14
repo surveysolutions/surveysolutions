@@ -117,6 +117,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js",
                 }
             },
+            {
+                "~/js/map-report", new[]
+                {
+                    "~/Scripts/lodash.underscore.js",
+                    "~/Scripts/markerclusterer_compiled.js",
+                    "~/Scripts/infobubble.js",
+                    "~/Scripts/viewmodels/pages/mapreport.js",
+                }
+            },
         };
 
         public override string AreaName

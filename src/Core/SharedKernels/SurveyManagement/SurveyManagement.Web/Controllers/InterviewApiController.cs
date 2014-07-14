@@ -13,6 +13,7 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
@@ -180,7 +181,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 var lastStatus = interviewSummaryView.CommentedStatusesHistory.Last();
 
                 interviewSummaryForMapPointView.LastStatus = lastStatus.Status.ToLocalizeString();
-                interviewSummaryForMapPointView.LastStatusChangeDate = AnswerUtils.AnswerToString(lastStatus.Date);
+
+                var lastCompletedStatus =
+                    interviewSummaryView.CommentedStatusesHistory.Last(statusInfo => statusInfo.Status == InterviewStatus.Completed);
+
+                if (lastCompletedStatus != null)
+                    interviewSummaryForMapPointView.LastCompletedDate =
+                        AnswerUtils.AnswerToString(lastCompletedStatus.Date);
             }
             return interviewSummaryForMapPointView;
         }

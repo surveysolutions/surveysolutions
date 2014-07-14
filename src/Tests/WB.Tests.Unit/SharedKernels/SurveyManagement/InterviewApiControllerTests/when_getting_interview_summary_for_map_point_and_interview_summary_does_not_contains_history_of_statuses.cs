@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
             viewModel.LastStatus.ShouldBeNull();
 
         It should_last_status_date_be_null = () =>
-            viewModel.LastStatusChangeDate.ShouldBeNull();
+            viewModel.LastCompletedDate.ShouldBeNull();
 
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;
