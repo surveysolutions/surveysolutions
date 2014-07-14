@@ -1,18 +1,19 @@
 ﻿using System;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
 {
     [Serializable]
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "AddStaticText")]
-    public class AddStaticTextCommand : UpdateStaticTextCommand
+    public class AddStaticTextCommand : QuestionnaireEntityAddCommand
     {
         public AddStaticTextCommand(Guid questionnaireId, Guid entityId, string text, Guid responsibleId, Guid parentId)
-            : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId, text: text)
+            : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId, parentId: parentId)
         {
-            this.ParentId = parentId;
+            this.Text = text;
         }
 
-        public Guid ParentId { get; set; }
+        public string Text { get; set; }
     }
 }

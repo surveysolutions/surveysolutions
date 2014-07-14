@@ -96,6 +96,10 @@
     <Compile Include="Commands\Questionnaire\Base\FullQuestionDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityAddCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityCloneCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityMoveCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
@@ -140,8 +144,10 @@
     <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\AddStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\CloneStaticTextCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
@@ -153,6 +159,7 @@
     <Compile Include="Events\Questionnaire\AbstractQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireEntityEvent.cs" />
     <Compile Include="Events\Questionnaire\StaticTextCloned.cs" />
+    <Compile Include="Events\Questionnaire\StaticTextDeleted.cs" />
     <Compile Include="Events\Questionnaire\StaticTextUpdated.cs" />
     <Compile Include="Events\Questionnaire\StaticTextAdded.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionCloned.cs" />
