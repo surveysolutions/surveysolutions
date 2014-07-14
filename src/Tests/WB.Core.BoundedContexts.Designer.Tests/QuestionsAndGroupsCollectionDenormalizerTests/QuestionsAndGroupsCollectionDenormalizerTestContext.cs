@@ -241,6 +241,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             });
         }
 
+        protected static IPublishedEvent<StaticTextDeleted> CreateStaticTextDeletedEvent(Guid entityId)
+        {
+            return ToPublishedEvent(new StaticTextDeleted()
+            {
+                EntityId = entityId
+            });
+        }
+
         protected static IPublishedEvent<QRBarcodeQuestionCloned> CreateQRBarcodeQuestionClonedEvent(Guid questionId,Guid parentGroupId, Guid? sourceQuestionId = null)
         {
             return ToPublishedEvent(new QRBarcodeQuestionCloned
