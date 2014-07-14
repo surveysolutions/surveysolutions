@@ -6,11 +6,9 @@ using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Controllers;
-using WB.UI.Headquarters.Models;
 using It = Machine.Specifications.It;
 
-namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
 {
     internal class when_getting_interview_details_with_specified_responsible_name : InterviewApiControllerTestsContext
     {
