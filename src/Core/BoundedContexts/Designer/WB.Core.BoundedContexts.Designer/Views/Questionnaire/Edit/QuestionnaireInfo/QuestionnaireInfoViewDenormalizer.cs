@@ -231,8 +231,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             if (!evnt.Payload.GroupKey.HasValue ||
                 evnt.Payload.GroupKey.Value.FormatGuid() == currentState.QuestionnaireId)
             {
-                CreateChapter(currentState: currentState, chapterId: groupOrQuestionKey,
-                    chapterTitle: this.groupTitles[groupOrQuestionKey], orderIndex: evnt.Payload.TargetIndex);
+                string chapterTitle = null;
+                if (!this.groupTitles.TryGetValue(groupOrQuestionKey, out chapterTitle))
+                {
+                    chapterTitle = Monads.Maybe(() => existsChapter.Title);
+                }
+
+                CreateChapter(currentState: currentState, 
+                    chapterId: groupOrQuestionKey,
+                    chapterTitle: chapterTitle, 
+                    orderIndex: evnt.Payload.TargetIndex);
             }
 
             return currentState;
