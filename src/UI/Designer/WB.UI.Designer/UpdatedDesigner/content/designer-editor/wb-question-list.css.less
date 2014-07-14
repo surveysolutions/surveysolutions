@@ -81,6 +81,11 @@
     &.section + .slide {
       padding-left: 0;
       margin: -5px 0px 0 20px;
+     // border-radius: 0 0 4px 4px;
+    }
+
+    &.section ~ .buttons-item {
+      margin: -5px 0px 0 20px;
       border-radius: 0 0 4px 4px;
     }
 
@@ -270,6 +275,9 @@
         }
       }
 
+      &.section.highlighted ~ .buttons-item {
+        background-color: @questionnarie-question-list-item-hover-color;
+      }
     }
   }
 }

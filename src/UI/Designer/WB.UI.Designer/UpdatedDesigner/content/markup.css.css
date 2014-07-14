@@ -1461,6 +1461,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .item.section + .slide {
   padding-left: 0;
   margin: -5px 0px 0 20px;
+}
+.item.section ~ .buttons-item {
+  margin: -5px 0px 0 20px;
   border-radius: 0 0 4px 4px;
 }
 .item > span.var {
@@ -1626,6 +1629,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
 }
+.item.section.highlighted ~ .buttons-item {
+  background-color: #edeff1;
+}
 /*
 #chapter-panel-context-menu {
   .wb-context-menu();
@@ -1676,6 +1682,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 #verify-popover-content .question-list .item.section + .slide {
   padding-left: 0;
+  margin: -5px 0px 0 20px;
+}
+#verify-popover-content .question-list .item.section ~ .buttons-item {
   margin: -5px 0px 0 20px;
   border-radius: 0 0 4px 4px;
 }
