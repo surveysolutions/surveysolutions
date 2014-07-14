@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 
-namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
 {
     [Subject(typeof(InterviewApiController))]
     internal class InterviewApiControllerTestsContext

@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using It = Machine.Specifications.It;
 
-namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
 {
     internal class when_getting_interview_summary_for_map_point_and_interview_summary_does_not_exists_for_current_interview : InterviewApiControllerTestsContext
     {
