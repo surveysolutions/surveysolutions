@@ -666,6 +666,7 @@ input#edit-question-title {
   padding-left: 0;
   padding-right: 0;
   display: table-cell;
+  vertical-align: top;
 }
 .question-editor .singleOption .table-holder .table-row .column-1,
 .question-editor .multyOption .table-holder .table-row .column-1,
