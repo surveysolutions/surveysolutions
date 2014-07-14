@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<QuestionDeleted> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            item.RemoveQuestion(evnt.Payload.QuestionId);
+            item.RemoveEntity(evnt.Payload.QuestionId);
 
             item.RemoveHeadPropertiesFromRosters(evnt.Payload.QuestionId);
 
