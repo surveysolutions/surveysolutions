@@ -2523,6 +2523,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //Apply other changes on expressionProcessorState
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
             var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
@@ -2597,6 +2599,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //Apply other changes on expressionProcessorState
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
+            
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
             var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
@@ -2653,6 +2658,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //Apply other changes on expressionProcessorState
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
+            
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
             var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
@@ -2731,6 +2739,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //Apply other changes on expressionProcessorState
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
+            
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
             var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
@@ -2791,6 +2802,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //Apply other changes on expressionProcessorState
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
+            
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
             var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
@@ -2851,6 +2865,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //Apply other changes on expressionProcessorState
             List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
 
             var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
