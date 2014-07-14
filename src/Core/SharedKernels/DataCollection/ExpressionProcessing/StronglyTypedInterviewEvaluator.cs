@@ -9,20 +9,25 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
     public class StronglyTypedInterviewEvaluator : IInterviewExpressionState 
     {
         public readonly Dictionary<string, IValidatable> interviewScopes = new Dictionary<string, IValidatable>();
+        public readonly Dictionary<string, List<string>> siblingRosters = new Dictionary<string, List<string>>();
 
         public StronglyTypedInterviewEvaluator()
         {
-            
-            var questionnaireIdentityKey = Util.GetRosterKey(new[] { IdOf.questionnaire }, Util.EmptyRosterVector);
+            var questionnaireLevelScope = new[] { IdOf.questionnaire };
+
+            var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
 
             var questionnaireLevel = new QuestionnaireLevel(Util.EmptyRosterVector, questionnaireIdentityKey);
 
             this.interviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
+
+            this.siblingRosters.Add("", new List<string>());
         }
 
-        public StronglyTypedInterviewEvaluator(Dictionary<string, IValidatable> interviewScopes)
+        public StronglyTypedInterviewEvaluator(Dictionary<string, IValidatable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
         {
             this.interviewScopes = interviewScopes;
+            this.siblingRosters = siblingRosters;
         }
 
         public void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
@@ -34,9 +39,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
 
-            var rosterIdentityKey = Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
+            Guid[] rosterScopeIds = IdOf.rostersIdToScopeMap[rosterId];
 
-            if (this.interviewScopes.ContainsKey(Util.GetRosterStringKey(rosterIdentityKey)))
+            var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
+
+            string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+
+            if (this.interviewScopes.ContainsKey(rosterStringKey))
             {
                 return;
             }
@@ -45,20 +54,34 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             var rosterParentIdentityKey = parentRosterVector.Length == 0
                 ? Util.GetRosterKey(new[] { IdOf.questionnaire }, new decimal[0])
-                : Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId].Shrink(), parentRosterVector);
+                : Util.GetRosterKey(rosterScopeIds.Shrink(), parentRosterVector);
+
+            var siblingsKey = Util.GetSiblingsKey(rosterScopeIds);
 
             var parent = this.interviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
 
+            var wasRosterAdded = false;
             if (rosterId == IdOf.hhMember || rosterId == IdOf.jobActivity)
             {
                 var rosterLevel = new HhMember(rosterVector, rosterIdentityKey, parent as QuestionnaireLevel);
-                this.interviewScopes.Add(Util.GetRosterStringKey(rosterIdentityKey), rosterLevel);
+                this.interviewScopes.Add(rosterStringKey, rosterLevel);
+                wasRosterAdded = true;
             }
 
             if (rosterId == IdOf.foodConsumption)
             {
                 var rosterLevel = new FoodConsumption(rosterVector, rosterIdentityKey, parent as HhMember);
-                this.interviewScopes.Add(Util.GetRosterStringKey(rosterIdentityKey), rosterLevel);
+                this.interviewScopes.Add(rosterStringKey, rosterLevel);
+                wasRosterAdded = true;
+            }
+
+            if (wasRosterAdded)
+            {
+                if (!this.siblingRosters.ContainsKey(siblingsKey))
+                {
+                    this.siblingRosters.Add(siblingsKey, new List<string>());
+                }
+                this.siblingRosters[siblingsKey].Add(rosterStringKey);
             }
         }
 
@@ -75,6 +98,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             foreach (var rosterKey in dependentRosters)
             {
                 this.interviewScopes.Remove(rosterKey);
+                foreach (var siblings in siblingRosters.Values)
+                {
+                    siblings.Remove(rosterKey);
+                }
             }
         }
 
@@ -200,31 +227,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-        {
-            foreach (var interviewScopeKvp in this.interviewScopes)
-            {
-                if (interviewScopeKvp.Value is AbstractRosterLevel)
-                {
-                    var interviewScope = interviewScopeKvp.Value as AbstractRosterLevel;
-
-                    var parentRosterVector = interviewScopeKvp.Value.GetRosterKey().Shrink();
-
-                    var parentRosterVectorLength = parentRosterVector.Length;
-                    var rosters = this.interviewScopes.Where(x
-                        => x.Key.StartsWith(Util.GetRosterStringKey(parentRosterVector))
-                            && x.Key.Length == parentRosterVectorLength + 1)
-                        .Select(x => x.Value);
-                    interviewScope.Validate(rosters, questionsToBeValid, questionsToBeInvalid);
-                }
-
-                if (interviewScopeKvp.Value is QuestionnaireLevel)
-                {
-                    interviewScopeKvp.Value.Validate(questionsToBeValid, questionsToBeInvalid);
-                }
-            }
-        }
-
         public void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude)
         {
             var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
@@ -270,6 +272,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public IInterviewExpressionState Clone()
         {
             var newScopes = this.interviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers());
+            var newSiblingRosters = this.siblingRosters
+                .ToDictionary(
+                    interviewScope => interviewScope.Key,
+                    interviewScope => new List<string>(interviewScope.Value));
 
             //set parents
             foreach (var interviewScope in this.interviewScopes)
@@ -279,8 +285,29 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                     newScopes[interviewScope.Key].SetParent(newScopes[Util.GetRosterStringKey(parent.GetRosterKey())]);
             }
 
-            return new StronglyTypedInterviewEvaluator(newScopes);
+            return new StronglyTypedInterviewEvaluator(newScopes, newSiblingRosters);
 
+        }
+
+        public void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        {
+            foreach (var interviewScopeKvp in this.interviewScopes)
+            {
+                if (interviewScopeKvp.Value is IValidatableRoster)
+                {
+                    var roster = interviewScopeKvp.Value as IValidatableRoster;
+                    var siblingsKey = Util.GetSiblingsKey(interviewScopeKvp.Value.GetRosterKey().Select(x => x.Id).ToArray());
+
+                    var siblingRosters = this.siblingRosters[siblingsKey].Select(x => this.interviewScopes[x]);
+
+                    roster.Validate(siblingRosters, questionsToBeValid, questionsToBeInvalid);
+                }
+
+                if (interviewScopeKvp.Value is QuestionnaireLevel)
+                {
+                    (interviewScopeKvp.Value as QuestionnaireLevel).Validate(questionsToBeValid, questionsToBeInvalid);
+                }
+            }
         }
     }
 }
