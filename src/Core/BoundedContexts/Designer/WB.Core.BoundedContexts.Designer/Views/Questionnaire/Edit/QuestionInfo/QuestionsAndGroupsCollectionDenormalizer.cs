@@ -8,6 +8,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Raven.Abstractions.Extensions;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -41,14 +42,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
     {
         private readonly IQuestionDetailsViewMapper questionDetailsViewMapper;
         private readonly IQuestionFactory questionFactory;
+        private IQuestionnaireDocumentUpgrader questionnaireUpgrader;
 
         public QuestionsAndGroupsCollectionDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
-            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionFactory questionFactory)
+            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionFactory questionFactory, 
+            IQuestionnaireDocumentUpgrader questionnaireUpgrader)
             : base(readsideRepositoryWriter)
         {
             this.questionDetailsViewMapper = questionDetailsViewMapper;
             this.questionFactory = questionFactory;
+            this.questionnaireUpgrader = questionnaireUpgrader;
         }
 
         public override Type[] UsesViews
@@ -369,13 +373,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         private QuestionsAndGroupsCollectionView CreateStateWithAllQuestions(QuestionnaireDocument questionnaire)
         {
-            questionnaire.ConnectChildrenWithParent();
-            var questions = questionnaire.GetAllQuestions<IQuestion>()
+            var convertedDocument = this.questionnaireUpgrader.TranslatePropagatePropertiesToRosterProperties(questionnaire);
+            convertedDocument.ConnectChildrenWithParent();
+            var questions = convertedDocument.GetAllQuestions<IQuestion>()
                 .Select(question => this.questionDetailsViewMapper.Map(question, question.GetParent().PublicKey))
                 .Where(q => q != null)
                 .ToList();
 
-            var groups = questionnaire.GetAllGroups()
+            var groups = convertedDocument.GetAllGroups()
                 .Select(g => new GroupAndRosterDetailsView
                 {
                     Id = g.PublicKey,
@@ -386,7 +391,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     RosterSizeQuestionId = g.RosterSizeQuestionId,
                     RosterSizeSourceType = g.RosterSizeSource,
                     RosterTitleQuestionId = g.RosterTitleQuestionId,
-                    ParentGroupId = g.GetParent().PublicKey == questionnaire.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
+                    ParentGroupId = g.GetParent().PublicKey == convertedDocument.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
                     EnablementCondition = g.ConditionExpression,
                     VariableName = g.VariableName
                 })
