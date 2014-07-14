@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Moq;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -24,7 +25,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
                             Responsible = new UserLight(new Guid(), responsibleUserName)
                         });
 
-            controller = CreateController(interviewDetailsFactory: interviewDetailsFactoryMock.Object);
+            var globalInfoProvider = Mock.Of<IGlobalInfoProvider>(_
+                => _.IsHeadquarter == true);
+
+            controller = CreateController(
+                interviewDetailsFactory: interviewDetailsFactoryMock.Object,
+                globalInfoProvider: globalInfoProvider);
         };
 
         Because of = () =>
