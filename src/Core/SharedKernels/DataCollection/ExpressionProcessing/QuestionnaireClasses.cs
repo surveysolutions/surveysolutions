@@ -7,8 +7,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     public interface IValidatable
     {
-        void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
-
         IValidatable CopyMembers();
 
         Identity[] GetRosterKey();
@@ -68,7 +66,26 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         protected void DisableAllDependentQuestions(Guid questionId)
         {
+            if (!IdOf.conditionalDependencies.ContainsKey(questionId) || !IdOf.conditionalDependencies[questionId].Any()) return;
 
+            var stack = new Queue<Guid>(IdOf.conditionalDependencies[questionId]);
+            while (stack.Any())
+            {
+                var id = stack.Dequeue();
+                var questionState = this.enablementStatus.FirstOrDefault(x => x.QuestId == id);
+                if (questionState != null)
+                {
+                    questionState.State = State.Disabled;
+                }
+
+                if (IdOf.conditionalDependencies.ContainsKey(id) && IdOf.conditionalDependencies[id].Any())
+                {
+                    foreach (var dependentQuestionId in IdOf.conditionalDependencies[id])
+                    {
+                        stack.Enqueue(dependentQuestionId);
+                    }
+                }
+            }
         }
 
         protected Action<T[]> Verifier(Func<T[], bool> isEnabled, Guid questionId, ConditionalState questionState)
@@ -146,10 +163,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public string id;
         public long? persons_count;
 
-        public void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-        {
-        }
-
         public IValidatable CopyMembers()
         {
             var level = new QuestionnaireLevel(this.rosterVector, this.rosterKey)
@@ -182,6 +195,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 return Enumerable.Empty<Action<QuestionnaireLevel[]>>();
             }
         }
+
+        public void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        {
+        }
     }
 
     public class HhMember : AbstractRosterLevel<HhMember>, IValidatable
@@ -212,17 +229,60 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public long? persons_count { get { return this.parent.persons_count; } }
 
         public string name { get; set; }
-        public string person_id { get; set; }
-        public decimal? marital_status { get; set; }
-        public decimal[][] married_with { get; set; }
-        public long? age { get; set; }
+
         public DateTime? date { get; set; }
+
         public decimal? sex { get; set; }
+
         public decimal? role { get; set; }
-        public decimal[] food { get; set; }
-        public decimal? has_job { get; set; }
-        public string job_title { get; set; }
-        public decimal[] best_job_owner { get; set; }
+
+        public string person_id
+        {
+            get { return person_id_state.State == State.Enabled ? this.personId : null; }
+            set { this.personId = value; }
+        }
+
+        public decimal? marital_status
+        {
+            get { return marital_status_state.State == State.Enabled ? this.maritalStatus : null; }
+            set { this.maritalStatus = value; }
+        }
+
+        public decimal[][] married_with
+        {
+            get { return married_with_state.State == State.Enabled? this.marriedWith : null; }
+            set { this.marriedWith = value; }
+        }
+
+        public long? age
+        {
+            get { return age_state.State == State.Enabled ? this.age1 : null; }
+            set { this.age1 = value; }
+        }
+
+        public decimal[] food
+        {
+            get { return food_state.State == State.Enabled ? this.food1 : null; }
+            set { this.food1 = value; }
+        }
+
+        public decimal? has_job
+        {
+            get { return has_job_state.State == State.Enabled ? this.hasJob : null; }
+            set { this.hasJob = value; }
+        }
+
+        public string job_title
+        {
+            get { return job_title_state.State == State.Enabled ? this.jobTitle : null; }
+            set { this.jobTitle = value; }
+        }
+
+        public decimal[] best_job_owner
+        {
+            get { return best_job_owner_state.State == State.Enabled ? this.bestJobOwner : null; }
+            set { this.bestJobOwner = value; }
+        }
 
         private ConditionalState age_state = new ConditionalState(IdOf.age);
         private ConditionalState married_with_state = new ConditionalState(IdOf.married_with);
@@ -232,6 +292,15 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         private ConditionalState food_state = new ConditionalState(IdOf.food);
         private ConditionalState person_id_state = new ConditionalState(IdOf.person_id);
         private ConditionalState marital_status_state = new ConditionalState(IdOf.marital_status);
+
+        private long? age1;
+        private decimal[][] marriedWith;
+        private decimal? hasJob;
+        private string jobTitle;
+        private decimal[] bestJobOwner;
+        private decimal[] food1;
+        private string personId;
+        private decimal? maritalStatus;
 
         protected override IEnumerable<Action<HhMember[]>> ConditionExpressions
         {
@@ -251,41 +320,49 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
+        //generated
         private bool age_IsEnabledIf(HhMember[] roster)
         {
             return name.ToLower().StartsWith("a");
         }
 
+        //generated
         private bool married_with_IsEnabledIf(HhMember[] roster)
         {
             return (age > 16) && (marital_status == 2 && persons_count > 2);
         }
 
+        //generated
         private bool person_id_IsEnabledIf(HhMember[] roster)
         {
             return (age > 16);
         }
 
+        //generated
         private bool marital_status_IsEnabledIf(HhMember[] roster)
         {
             return (age > 16);
         }
 
+        //generated
         private bool food_IsEnabledIf(HhMember[] roster)
         {
             return role == 2 && sex == 2;
         }
 
+        //generated
         private bool has_job_IsEnabledIf(HhMember[] roster)
         {
             return age > 16;
         }
 
+        //generated
         private bool job_title_IsEnabledIf(HhMember[] roster)
         {
             return has_job == 1;
         }
 
+        //generated
         private bool best_job_owner_IsEnabledIf(HhMember[] roster)
         {
             return has_job == 2;
@@ -335,11 +412,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             List<Identity> questionsToBeInvalid)
         {
             this.Validate(rosters.Cast<HhMember>(), questionsToBeValid, questionsToBeInvalid);
-        }
-
-        public void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-        {
-            this.Validate(Enumerable.Empty<HhMember>(), questionsToBeValid, questionsToBeInvalid);
         }
 
         public IValidatable CopyMembers()
@@ -461,10 +533,17 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             get { return this.parent.married_with; }
         }
 
-        public long times_per_week;
-        public decimal price_for_food;
+        public long times_per_week { get; set; }
+
+
+        public decimal? price_for_food
+        {
+            get { return price_for_food_state.State == State.Enabled ? this.priceForFood : null; }
+            set { this.priceForFood = value; }
+        }
 
         private ConditionalState price_for_food_state = new ConditionalState(IdOf.age);
+        private decimal? priceForFood;
 
         private bool price_for_food_IsEnabledIf(FoodConsumption[] foodConsumptions)
         {
@@ -479,16 +558,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             this.Validate(rosters.Cast<FoodConsumption>(), questionsToBeValid, questionsToBeInvalid);
         }
 
-        public void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-        {
-            this.Validate(Enumerable.Empty<HhMember>(), questionsToBeValid, questionsToBeInvalid);
-        }
-
-
         public IValidatable CopyMembers()
         {
-            //this.MemberwiseClone() as FoodConsumption;
-
             var level = new FoodConsumption(this.rosterVector, this.rosterKey)
             {
                 price_for_food = this.price_for_food,
@@ -555,7 +626,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public static readonly Guid groupId = Guid.Parse("039ed69e-5583-46af-b983-488568f20e1c");
 
-        private static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
+        public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
         {
             { IdOf.persons_count, new Guid[] { } },
             { IdOf.name, new Guid[] { } },

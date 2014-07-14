@@ -30,5 +30,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             return rosterScopeIds.Select(x => new Identity(x, rosterVector)).ToArray();
         }
+
+        public static string GetSiblingsKey(Guid[] rosterScopeIds)
+        {
+            return String.Join("$", rosterScopeIds);
+        }
     }
 }
