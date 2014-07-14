@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -54,10 +55,13 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(mandatoryQuestionToBeAnsweredItemId, 1);
+            interviewViewModel.SetAnswer(mandatoryQuestionToBeAnsweredItemId, answer);
 
-        private It should_answered_question_has_IsMandatoryAndEmpty_property_value_false = () =>
+        It should_answered_question_has_IsMandatoryAndEmpty_property_value_false = () =>
             interviewViewModel.FindQuestion(q => q.PublicKey == mandatoryQuestionToBeAnsweredItemId).SingleOrDefault().IsMandatoryAndEmpty.ShouldEqual(false);
+
+        It should_answered_question_has_fomatted_answer_string = () =>
+            interviewViewModel.FindQuestion(q => q.PublicKey == mandatoryQuestionToBeAnsweredItemId).SingleOrDefault().AnswerString.ShouldEqual(answer.ToString("##,###.############################", CultureInfo.CurrentCulture));
 
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
@@ -68,5 +72,6 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
 
         private static InterviewItemId mandatoryQuestionToBeAnsweredItemId;
         private static InterviewItemId notAnsweredMandatoryQuestionItemId;
+        private static decimal answer = (decimal)1236.36;
     }
 }
