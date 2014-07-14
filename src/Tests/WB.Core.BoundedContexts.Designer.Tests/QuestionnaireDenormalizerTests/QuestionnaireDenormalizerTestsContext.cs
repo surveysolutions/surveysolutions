@@ -390,5 +390,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 TargetIndex = targetIndex
             });
         }
+
+        protected static IPublishedEvent<StaticTextDeleted> CreateStaticTextDeletedEvent(Guid entityId)
+        {
+            return ToPublishedEvent(new StaticTextDeleted()
+            {
+                EntityId = entityId
+            });
+        }
     }
 }
