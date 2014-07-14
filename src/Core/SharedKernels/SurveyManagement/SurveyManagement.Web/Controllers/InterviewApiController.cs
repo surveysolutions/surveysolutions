@@ -183,7 +183,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 interviewSummaryForMapPointView.LastStatus = lastStatus.Status.ToLocalizeString();
 
                 var lastCompletedStatus =
-                    interviewSummaryView.CommentedStatusesHistory.Last(statusInfo => statusInfo.Status == InterviewStatus.Completed);
+                    interviewSummaryView.CommentedStatusesHistory.LastOrDefault(statusInfo => statusInfo.Status == InterviewStatus.Completed);
 
                 if (lastCompletedStatus != null)
                     interviewSummaryForMapPointView.LastCompletedDate =
