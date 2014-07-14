@@ -6,16 +6,14 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
 {
     [Serializable]
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "UpdateStaticText")]
-    public class UpdateStaticTextCommand : QuestionnaireCommand
+    public class UpdateStaticTextCommand : QuestionnaireEntityCommand
     {
         public UpdateStaticTextCommand(Guid questionnaireId, Guid entityId, string text, Guid responsibleId)
-            : base(responsibleId: responsibleId, questionnaireId: questionnaireId)
+            : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId)
         {
-            this.EntityId = entityId;
             this.Text = text;
         }
 
-        public Guid EntityId { get; set; }
         public string Text { get; set; }
     }
 }
