@@ -124,22 +124,22 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             var questionsToBeEnabledArray = this.enablementStatus
                 .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Question)
-                .Select(x => new Identity(x.ItemId, this.rosterVector))
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
                 .ToArray();
 
             var questionsToBeDisabledArray = this.enablementStatus
                 .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Question)
-                .Select(x => new Identity(x.ItemId, this.rosterVector))
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
                 .ToArray();
 
             var groupsToBeEnabledArray = this.enablementStatus
                 .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Group)
-                .Select(x => new Identity(x.ItemId, this.rosterVector))
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
                 .ToArray();
 
             var groupsToBeDisabledArray = this.enablementStatus
                 .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Group)
-                .Select(x => new Identity(x.ItemId, this.rosterVector));
+                .Select(x => new Identity(x.ItemId, this.RosterVector));
 
             questionsToBeEnabled.AddRange(questionsToBeEnabledArray);
             questionsToBeDisabled.AddRange(questionsToBeDisabledArray);
@@ -240,7 +240,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             validationExpressions.Add(new Identity(IdOf.age, this.RosterVector), age_IsValid);
             validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), food_IsValid);
-            validationExpressions.Add(new Identity(IdOf.role, this.rosterVector), role_IsValid);
+            validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), role_IsValid);
             
             enablementStatus.AddRange(new[]
             {
@@ -563,11 +563,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public long times_per_week { get; set; }
 
-        private bool times_per_week_validation()
+        private bool times_per_week_validation(FoodConsumption[] rosters)
         {
             return times_per_week > 0 && times_per_week < 7*5;
         }
-
 
         public decimal? price_for_food
         {
