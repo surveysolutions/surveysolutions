@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             return rosters =>
             {
-                if (questionState.State != State.Unknown) return;
+                if (questionState.State == State.Disabled) return;
                 questionState.State = this.RunConditionExpression(isEnabled, rosters);
                 if (questionState.State == State.Disabled)
                 {
@@ -123,25 +123,29 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 verifier(roters);
             }
 
-            questionsToBeEnabled.Union(
-                this.enablementStatus
-                    .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Question)
-                    .Select(x => new Identity(x.ItemId, this.rosterVector)));
+            var questionsToBeEnabledArray = this.enablementStatus
+                .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Question)
+                .Select(x => new Identity(x.ItemId, this.rosterVector))
+                .ToArray();
 
-            questionsToBeDisabled.Union(
-                this.enablementStatus
-                    .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Question)
-                    .Select(x => new Identity(x.ItemId, this.rosterVector)));
+            var questionsToBeDisabledArray = this.enablementStatus
+                .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Question)
+                .Select(x => new Identity(x.ItemId, this.rosterVector))
+                .ToArray();
 
-            groupsToBeEnabled.Union(
-               this.enablementStatus
-                   .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Group)
-                   .Select(x => new Identity(x.ItemId, this.rosterVector)));
+            var groupsToBeEnabledArray = this.enablementStatus
+                .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Group)
+                .Select(x => new Identity(x.ItemId, this.rosterVector))
+                .ToArray();
 
-            groupsToBeDisabled.Union(
-                this.enablementStatus
-                    .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Group)
-                    .Select(x => new Identity(x.ItemId, this.rosterVector)));
+            var groupsToBeDisabledArray = this.enablementStatus
+                .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Group)
+                .Select(x => new Identity(x.ItemId, this.rosterVector));
+
+            questionsToBeEnabled.AddRange(questionsToBeEnabledArray);
+            questionsToBeDisabled.AddRange(questionsToBeDisabledArray);
+            groupsToBeEnabled.AddRange(groupsToBeEnabledArray);
+            groupsToBeDisabled.AddRange(groupsToBeDisabledArray);
         }
     }
 
@@ -238,11 +242,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             validationExpressions.Add(new Identity(IdOf.food, this.rosterVector), food_IsValid);
             validationExpressions.Add(new Identity(IdOf.role, this.rosterVector), role_IsValid);
             
-
             enablementStatus.AddRange(new[]
             {
                 age_state, married_with_state, has_job_state, job_title_state, best_job_owner_state,
-                food_state, person_id_state, marital_status_state
+                food_state, person_id_state, marital_status_state, group_state
             });
         }
 
@@ -660,23 +663,24 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
         {
-            { IdOf.persons_count, new Guid[] { } },
-            { IdOf.name, new Guid[] { } },
-            { IdOf.age, new Guid[] { IdOf.name } },
-            { IdOf.groupId, new Guid[] { IdOf.age } },
-            { IdOf.person_id, new Guid[] { IdOf.groupId } },
-            { IdOf.marital_status, new Guid[] { IdOf.groupId } },
-            { IdOf.married_with, new Guid[] { IdOf.groupId, IdOf.marital_status, IdOf.persons_count } },
-            { IdOf.has_job, new Guid[] { IdOf.age} },
-            { IdOf.job_title, new Guid[] { IdOf.has_job} },
-            { IdOf.best_job_owner, new Guid[] { IdOf.has_job} },
-            
-            { IdOf.sex, new Guid[] { } },
-            { IdOf.role, new Guid[] { } },
-            { IdOf.food, new Guid[] { IdOf.role,  IdOf.sex} },
+            { id, new Guid[] { } },
+            { persons_count, new Guid[] { married_with } },
+            { name, new Guid[] { age } },
+            { age, new Guid[] { groupId, has_job } },
+            { groupId, new Guid[] { person_id, marital_status, marital_status } },
+            { person_id, new Guid[] { } },
+            { marital_status, new Guid[] { married_with } },
+            { married_with, new Guid[] { } },
+            { has_job, new Guid[] { job_title, best_job_owner } },
+            { job_title, new Guid[] { } },
+            { best_job_owner, new Guid[] { } },
 
-            { IdOf.times_per_week, new Guid[] { } },
-            { IdOf.price_for_food, new Guid[] { IdOf.times_per_week} },
+            { sex, new Guid[] { food } },
+            { role, new Guid[] { food } },
+            { food, new Guid[] { } },
+
+            { times_per_week, new Guid[] { price_for_food } },
+            { price_for_food, new Guid[] { } },
         };
 
         public static Dictionary<Guid, Guid[]> parentsMap = new Dictionary<Guid, Guid[]>
