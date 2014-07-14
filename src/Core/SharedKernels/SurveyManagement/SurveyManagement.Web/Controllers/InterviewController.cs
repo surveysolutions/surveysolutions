@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (!isAccessAllowed)
                 return HttpNotFound();
-            
+
             return
                 this.View(new InterviewModel()
                 {

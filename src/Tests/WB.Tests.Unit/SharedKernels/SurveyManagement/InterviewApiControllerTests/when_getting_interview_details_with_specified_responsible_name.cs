@@ -3,14 +3,13 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Moq;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Controllers;
-using WB.UI.Headquarters.Models;
 using It = Machine.Specifications.It;
 
-namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
 {
     internal class when_getting_interview_details_with_specified_responsible_name : InterviewApiControllerTestsContext
     {
@@ -26,7 +25,12 @@ namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
                             Responsible = new UserLight(new Guid(), responsibleUserName)
                         });
 
-            controller = CreateController(interviewDetailsFactory: interviewDetailsFactoryMock.Object);
+            var globalInfoProvider = Mock.Of<IGlobalInfoProvider>(_
+                => _.IsHeadquarter == true);
+
+            controller = CreateController(
+                interviewDetailsFactory: interviewDetailsFactoryMock.Object,
+                globalInfoProvider: globalInfoProvider);
         };
 
         Because of = () =>

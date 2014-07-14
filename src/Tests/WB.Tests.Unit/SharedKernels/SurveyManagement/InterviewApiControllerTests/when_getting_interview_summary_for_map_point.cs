@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -9,9 +10,9 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using It = Machine.Specifications.It;
 
-namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
 {
-    internal class when_getting_interview_summary_for_map_point_and_interview_summary_does_not_contains_history_of_statuses : InterviewApiControllerTestsContext
+    internal class when_getting_interview_summary_for_map_point : InterviewApiControllerTestsContext
     {
         private Establish context = () =>
         {
@@ -19,7 +20,12 @@ namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
             interviewSummaryViewFactoryMock.Setup(_ => _.Load(interviewId)).Returns(new InterviewSummary()
             {
                 ResponsibleName = interviewerName,
-                TeamLeadName = supervisorName
+                TeamLeadName = supervisorName,
+                CommentedStatusesHistory =
+                    new List<InterviewCommentedStatus>()
+                    {
+                        new InterviewCommentedStatus() {Status = lastStatus, Date = lastStatusDateTime}
+                    }
             });
 
             controller = CreateController(interviewSummaryViewFactory: interviewSummaryViewFactoryMock.Object);
@@ -38,11 +44,11 @@ namespace WB.UI.Headquarters.Tests.InterviewApiControllerTests
         It should_supervisor_name_be_equal_to_supervisorName = () =>
             viewModel.SupervisorName.ShouldEqual(supervisorName);
 
-        It should_last_status_be_null = () =>
-            viewModel.LastStatus.ShouldBeNull();
+        It should_last_status_be_equal_to_lastStatus = () =>
+            viewModel.LastStatus.ShouldEqual(lastStatus.ToLocalizeString());
 
-        It should_last_status_date_be_null = () =>
-            viewModel.LastStatusChangeDate.ShouldBeNull();
+        It should_last_status_date_be_equal_to_lastStatusDate = () =>
+            viewModel.LastStatusChangeDate.ShouldEqual(AnswerUtils.AnswerToString(lastStatusDateTime));
 
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;
