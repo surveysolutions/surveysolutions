@@ -21,18 +21,103 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         void Validate(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
     }
 
-    public abstract class AbstractRosterLevel : IValidatableRoster
+    public enum State
+    {
+        Unknown = 0,
+        Enabled = 1,
+        Disabled = 2
+    }
+
+    public class ConditionalState
+    {
+        public ConditionalState(Guid questionId)
+        {
+            this.QuestId = questionId;
+            this.State = State.Enabled;
+            PreviousState = State.Enabled;
+        }
+
+        public Guid QuestId { get; set; }
+        public State State { get; set; }
+        public State PreviousState { get; set; }
+    }
+    ;
+    public abstract class AbstractConditionalLevel<T>  where T : IValidatable
     {
         public decimal[] rosterVector;
+        protected List<ConditionalState> enablementStatus = new List<ConditionalState>();
 
+        protected abstract IEnumerable<Action<T[]>> ConditionExpressions { get; }
+
+        protected AbstractConditionalLevel(decimal[] rosterVector)
+        {
+            this.rosterVector = rosterVector;
+        }
+
+        private State RunConditionExpression(Func<T[], bool> expression, T[] rosters)
+        {
+            try
+            {
+                return expression(rosters) ? State.Enabled : State.Disabled;
+            }
+            catch
+            {
+                return State.Disabled;
+            }
+        }
+
+        protected void DisableAllDependentQuestions(Guid questionId)
+        {
+
+        }
+
+        protected Action<T[]> Verifier(Func<T[], bool> isEnabled, Guid questionId, ConditionalState questionState)
+        {
+            return rosters =>
+            {
+                if (questionState.State != State.Unknown) return;
+                questionState.State = this.RunConditionExpression(isEnabled, rosters);
+                if (questionState.State == State.Disabled)
+                {
+                    this.DisableAllDependentQuestions(questionId);
+                }
+            };
+        }
+
+        public void RunConditions(T[] roters, List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled)
+        {
+            foreach (var state in this.enablementStatus)
+            {
+                state.PreviousState = state.State;
+                state.State = State.Unknown;
+            }
+
+            foreach (Action<T[]> verifier in this.ConditionExpressions)
+            {
+                verifier(roters);
+            }
+
+            questionsToBeEnabled.Union(
+                this.enablementStatus
+                    .Where(x => x.State == State.Enabled && x.State != x.PreviousState)
+                    .Select(x => new Identity(x.QuestId, this.rosterVector)));
+
+            questionsToBeDisabled.Union(
+                this.enablementStatus
+                    .Where(x => x.State == State.Disabled && x.State != x.PreviousState)
+                    .Select(x => new Identity(x.QuestId, this.rosterVector)));
+        }
+    }
+
+    public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T>, IValidatableRoster where T : IValidatable
+    {
         public Identity[] rosterKey;
 
         protected Dictionary<Identity, Func<bool>> validationExpressions = new Dictionary<Identity, Func<bool>>();
-        protected Dictionary<Guid, bool?> enablementStatus = new Dictionary<Guid, bool?>();
 
         protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey)
+            : base(rosterVector)
         {
-            this.rosterVector = rosterVector;
             this.rosterKey = rosterKey;
         }
 
@@ -40,16 +125,22 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             List<Identity> questionsToBeInvalid);
     }
 
-    public class QuestionnaireLevel : IValidatable
+    public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IValidatable
     {
-        public decimal[] rosterVector;
+        protected Dictionary<Guid, bool?> enablementStatus = new Dictionary<Guid, bool?>();
 
         public Identity[] rosterKey;
 
+        private ConditionalState id_state = new ConditionalState(IdOf.id);
+        private ConditionalState persons_count_state = new ConditionalState(IdOf.persons_count);
+
         public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey)
+            : base(rosterVector)
         {
-            this.rosterVector = rosterVector;
             this.rosterKey = rosterKey;
+
+            enablementStatus.Add(IdOf.id, true);
+            enablementStatus.Add(IdOf.persons_count, true);
         }
 
         public string id;
@@ -83,9 +174,17 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             return null;
         }
+
+        protected override IEnumerable<Action<QuestionnaireLevel[]>> ConditionExpressions
+        {
+            get
+            {
+                return Enumerable.Empty<Action<QuestionnaireLevel[]>>();
+            }
+        }
     }
 
-    public class HhMember : AbstractRosterLevel, IValidatable
+    public class HhMember : AbstractRosterLevel<HhMember>, IValidatable
     {
         public HhMember(decimal[] rosterVector, Identity[] rosterKey, QuestionnaireLevel parent)
             : this(rosterVector, rosterKey)
@@ -98,6 +197,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             validationExpressions.Add(new Identity(IdOf.age, this.rosterVector), age_IsValid);
             validationExpressions.Add(new Identity(IdOf.food, this.rosterVector), food_IsValid);
+
+            enablementStatus.AddRange(new[]
+            {
+                age_state, married_with_state, has_job_state, job_title_state, best_job_owner_state,
+                food_state, person_id_state, marital_status_state
+            });
         }
 
         private QuestionnaireLevel parent;
@@ -119,6 +224,73 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public string job_title { get; set; }
         public decimal[] best_job_owner { get; set; }
 
+        private ConditionalState age_state = new ConditionalState(IdOf.age);
+        private ConditionalState married_with_state = new ConditionalState(IdOf.married_with);
+        private ConditionalState has_job_state = new ConditionalState(IdOf.has_job);
+        private ConditionalState job_title_state = new ConditionalState(IdOf.job_title);
+        private ConditionalState best_job_owner_state = new ConditionalState(IdOf.best_job_owner);
+        private ConditionalState food_state = new ConditionalState(IdOf.food);
+        private ConditionalState person_id_state = new ConditionalState(IdOf.person_id);
+        private ConditionalState marital_status_state = new ConditionalState(IdOf.marital_status);
+
+        protected override IEnumerable<Action<HhMember[]>> ConditionExpressions
+        {
+            get
+            {
+                return new[]
+                {
+                    Verifier(age_IsEnabledIf, age_state.QuestId, age_state),
+                    Verifier(person_id_IsEnabledIf, person_id_state.QuestId, person_id_state),
+                    Verifier(married_with_IsEnabledIf, married_with_state.QuestId, married_with_state),
+                    Verifier(marital_status_IsEnabledIf, marital_status_state.QuestId, marital_status_state),
+                    Verifier(food_IsEnabledIf, food_state.QuestId, food_state),
+                    Verifier(has_job_IsEnabledIf, has_job_state.QuestId, has_job_state),
+                    Verifier(job_title_IsEnabledIf, job_title_state.QuestId, job_title_state),
+                    Verifier(best_job_owner_IsEnabledIf, best_job_owner_state.QuestId, best_job_owner_state)
+                };
+            }
+        }
+
+        private bool age_IsEnabledIf(HhMember[] roster)
+        {
+            return name.ToLower().StartsWith("a");
+        }
+
+        private bool married_with_IsEnabledIf(HhMember[] roster)
+        {
+            return (age > 16) && (marital_status == 2 && persons_count > 2);
+        }
+
+        private bool person_id_IsEnabledIf(HhMember[] roster)
+        {
+            return (age > 16);
+        }
+
+        private bool marital_status_IsEnabledIf(HhMember[] roster)
+        {
+            return (age > 16);
+        }
+
+        private bool food_IsEnabledIf(HhMember[] roster)
+        {
+            return role == 2 && sex == 2;
+        }
+
+        private bool has_job_IsEnabledIf(HhMember[] roster)
+        {
+            return age > 16;
+        }
+
+        private bool job_title_IsEnabledIf(HhMember[] roster)
+        {
+            return has_job == 1;
+        }
+
+        private bool best_job_owner_IsEnabledIf(HhMember[] roster)
+        {
+            return has_job == 2;
+        }
+
         //generated
         private bool age_IsValid()
         {
@@ -131,6 +303,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             // children should not drink alcohol
             return food == null || (food.Contains(38) && role == 3 && age >= 21);
+        }
+
+        private bool role_IsValid(HhMember[] roster)
+        {
+            // children should not drink alcohol
+            return role == 1 && roster.Count(x => x.role == 1) == 1;
         }
 
 
@@ -201,7 +379,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         }
     }
 
-    public class FoodConsumption : AbstractRosterLevel, IValidatable
+    public class FoodConsumption : AbstractRosterLevel<FoodConsumption>, IValidatable
     {
         public FoodConsumption(decimal[] rosterVector, Identity[] rosterKey, HhMember parent)
             : this(rosterVector, rosterKey)
@@ -286,6 +464,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public long times_per_week;
         public decimal price_for_food;
 
+        private ConditionalState price_for_food_state = new ConditionalState(IdOf.age);
+
+        private bool price_for_food_IsEnabledIf(FoodConsumption[] foodConsumptions)
+        {
+            return times_per_week > 0;
+        }
 
         private void Validate(IEnumerable<FoodConsumption> roters, List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid) { }
 
@@ -329,6 +513,17 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             return this.parent;
         }
+
+        protected override IEnumerable<Action<FoodConsumption[]>> ConditionExpressions
+        {
+            get
+            {
+                return new[]
+                {
+                    Verifier(price_for_food_IsEnabledIf,price_for_food_state.QuestId,price_for_food_state)
+                };
+            }
+        }
     }
 
     public static class IdOf
@@ -358,6 +553,28 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public static readonly Guid foodConsumption = Guid.Parse("6df41d95-c785-4452-8303-bed3985d4c20");
         public static readonly Guid jobActivity = Guid.Parse("7556ddf0-457a-4a9b-a021-45ac3bad05a8");
 
+        public static readonly Guid groupId = Guid.Parse("039ed69e-5583-46af-b983-488568f20e1c");
+
+        private static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
+        {
+            { IdOf.persons_count, new Guid[] { } },
+            { IdOf.name, new Guid[] { } },
+            { IdOf.age, new Guid[] { IdOf.name } },
+            { IdOf.person_id, new Guid[] { IdOf.age } },
+            { IdOf.marital_status, new Guid[] { IdOf.age } },
+            { IdOf.married_with, new Guid[] { IdOf.age, IdOf.marital_status, IdOf.persons_count } },
+            { IdOf.has_job, new Guid[] { IdOf.age} },
+            { IdOf.job_title, new Guid[] { IdOf.has_job} },
+            { IdOf.best_job_owner, new Guid[] { IdOf.has_job} },
+            
+            { IdOf.sex, new Guid[] { } },
+            { IdOf.role, new Guid[] { } },
+            { IdOf.food, new Guid[] { IdOf.role,  IdOf.sex} },
+
+            { IdOf.times_per_week, new Guid[] { } },
+            { IdOf.price_for_food, new Guid[] { IdOf.times_per_week} },
+        };
+
         public static Dictionary<Guid, Guid[]> parentsMap = new Dictionary<Guid, Guid[]>
         {
             { id, new []{questionnaire} },
@@ -373,6 +590,9 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             { has_job, hhMemberScopeIds },
             { job_title, hhMemberScopeIds },
             { best_job_owner, hhMemberScopeIds },
+            { person_id, hhMemberScopeIds },
+            { marital_status, hhMemberScopeIds },
+            { married_with, hhMemberScopeIds },
         };
 
         public static Dictionary<Guid, Guid[]> rostersIdToScopeMap = new Dictionary<Guid, Guid[]>
