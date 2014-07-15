@@ -28,9 +28,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
         It should_not_questionnnaireInfoView_chapters_contains_chapterId = () =>
             viewState.Chapters.FirstOrDefault(chapter=>chapter.ItemId == groupId).ShouldBeNull();
 
-        It should_questionnnaireInfoView_GroupsCount_be_equal_to_2 = () =>
-            viewState.GroupsCount.ShouldEqual(2);
-
         private static string chapterId = "33333333333333333333333333333333";
         private static string groupId =   "22222222222222222222222222222222";
         

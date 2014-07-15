@@ -22,15 +22,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         IUpdateHandler<QuestionnaireInfoView, GroupCloned>,
         IUpdateHandler<QuestionnaireInfoView, GroupUpdated>,
         IUpdateHandler<QuestionnaireInfoView, GroupDeleted>,
-        IUpdateHandler<QuestionnaireInfoView, NewQuestionAdded>,
-        IUpdateHandler<QuestionnaireInfoView, QuestionCloned>,
-        IUpdateHandler<QuestionnaireInfoView, QuestionDeleted>,
-        IUpdateHandler<QuestionnaireInfoView, NumericQuestionAdded>,
-        IUpdateHandler<QuestionnaireInfoView, NumericQuestionCloned>,
-        IUpdateHandler<QuestionnaireInfoView, TextListQuestionAdded>,
-        IUpdateHandler<QuestionnaireInfoView, TextListQuestionCloned>,
-        IUpdateHandler<QuestionnaireInfoView, QRBarcodeQuestionAdded>,
-        IUpdateHandler<QuestionnaireInfoView, QRBarcodeQuestionCloned>,
         IUpdateHandler<QuestionnaireInfoView, QuestionnaireItemMoved>
 
     {
@@ -96,8 +87,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 CreateChapter(currentState: currentState, chapterId: groupId, chapterTitle: evnt.Payload.GroupText);
             }
 
-            currentState.GroupsCount += 1;
-
             return currentState;
         }
 
@@ -116,8 +105,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 CreateChapter(currentState: currentState, chapterId: groupId, chapterTitle: evnt.Payload.GroupText,
                     orderIndex: evnt.Payload.TargetIndex);
             }
-
-            currentState.GroupsCount += 1;
 
             return currentState;
         }
@@ -148,71 +135,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             {
                 currentState.Chapters.Remove(chapterView);
             }
-
-            currentState.GroupsCount -= 1;
-
-            return currentState;
-        }
-
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<NewQuestionAdded> evnt)
-        {
-            currentState.QuestionsCount += 1;
-
-            return currentState;
-        }
-
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QuestionCloned> evnt)
-        {
-            currentState.QuestionsCount += 1;
-
-            return currentState;
-        }
-
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            currentState.QuestionsCount += 1;
-
-            return currentState;
-        }
-
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<NumericQuestionCloned> evnt)
-        {
-            currentState.QuestionsCount += 1;
-
-            return currentState;
-        }
-
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<TextListQuestionAdded> evnt)
-        {
-            currentState.QuestionsCount += 1;
-
-            return currentState;
-        }
-
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<TextListQuestionCloned> evnt)
-        {
-            currentState.QuestionsCount += 1;
-
-            return currentState;
-        }
-
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QRBarcodeQuestionAdded> evnt)
-        {
-            currentState.QuestionsCount += 1;
-
-            return currentState;
-        }
-
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QRBarcodeQuestionCloned> evnt)
-        {
-            currentState.QuestionsCount += 1;
-
-            return currentState;
-        }
-
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QuestionDeleted> evnt)
-        {
-            currentState.QuestionsCount -= 1;
 
             return currentState;
         }
@@ -253,9 +175,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 QuestionnaireId = questionnaireId.FormatGuid(),
                 Title = questionnaireTitle,
                 Chapters = new List<ChapterInfoView>(),
-                GroupsCount = 0,
-                RostersCount = 0,
-                QuestionsCount = 0,
                 IsPublic = isPublic
             };
             return questionnaireInfo;
@@ -291,10 +210,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 CreateChapter(currentState: currentState, chapterId: chapter.PublicKey.FormatGuid(),
                     chapterTitle: chapter.Title);
             }
-
-            currentState.GroupsCount = sourceQuestionnaireOrGroup.Find<IGroup>(group => !group.IsRoster).Count();
-            currentState.QuestionsCount = sourceQuestionnaireOrGroup.Find<IQuestion>(question => true).Count();
-            currentState.RostersCount = sourceQuestionnaireOrGroup.Find<IGroup>(group => group.IsRoster).Count();
         }
     }
 }

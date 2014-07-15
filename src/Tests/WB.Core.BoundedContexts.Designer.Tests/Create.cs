@@ -331,6 +331,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             });
         }
 
+        public static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
+        {
+            var result = new QuestionnaireDocument();
+            var chapter = new Group("Chapter");
+            result.Children.Add(chapter);
+
+            foreach (var child in children)
+            {
+                chapter.Children.Add(child);
+            }
+
+            return result;
+        }
+
         private static Guid GetQuestionnaireItemId(string questionnaireItemId)
         {
             return string.IsNullOrEmpty(questionnaireItemId) ? Guid.NewGuid() : Guid.Parse(questionnaireItemId);
