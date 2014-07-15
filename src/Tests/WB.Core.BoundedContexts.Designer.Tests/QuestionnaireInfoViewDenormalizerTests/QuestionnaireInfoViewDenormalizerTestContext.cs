@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using It = Moq.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormalizerTests
 {
+    [Subject(typeof(QuestionnaireInfoViewDenormalizer))]
     internal class QuestionnaireInfoViewDenormalizerTestContext
     {
         protected static QuestionnaireInfoViewDenormalizer CreateDenormalizer(QuestionnaireInfoView view = null)
