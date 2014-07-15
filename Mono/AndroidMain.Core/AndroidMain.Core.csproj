@@ -169,6 +169,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IQuestion.cs">
       <Link>Entities\SubEntities\IQuestion.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IStaticText.cs">
+      <Link>Entities\SubEntities\IStaticText.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Option.cs">
       <Link>Entities\SubEntities\Option.cs</Link>
     </Compile>

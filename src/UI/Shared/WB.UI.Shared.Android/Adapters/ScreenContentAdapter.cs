@@ -61,6 +61,12 @@ namespace WB.UI.Shared.Android.Adapters
                 groupView.ScreenChanged += this.screenChangeEventHandler;
                 result = groupView;
             }
+            var staticText = questionnaireItemViewModel as StaticTextViewModel;
+            if (staticText != null)
+            {
+                result = new StaticTextView(this.context, staticText);
+
+            }
             return result;
         }
     }

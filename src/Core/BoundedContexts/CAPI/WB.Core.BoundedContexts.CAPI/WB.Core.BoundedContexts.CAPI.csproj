@@ -91,6 +91,7 @@
     <Compile Include="Views\InterviewDetails\IQuestionnaireItemViewModel.cs" />
     <Compile Include="Views\InterviewDetails\IQuestionnaireViewModel.cs" />
     <Compile Include="Views\InterviewDetails\InterviewStatistics.cs" />
+    <Compile Include="Views\InterviewDetails\StaticTextViewModel.cs" />
     <Compile Include="Views\InterviewDetails\TextListAnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\LinkedAnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\LinkedQuestionViewModel.cs" />
