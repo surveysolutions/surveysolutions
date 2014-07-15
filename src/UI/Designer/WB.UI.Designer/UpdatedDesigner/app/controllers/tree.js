@@ -373,31 +373,29 @@
 
             $rootScope.$on('questionUpdated', function (event, data) {
                 var question = questionnaireService.findItem($scope.items, data.itemId);
-
-                if (question == null)
-                    return;
-
-                question.title = data.title;
-                question.variable = data.variable;
-                question.type = data.type;
+                if (question != null) {
+                    question.title = data.title;
+                    question.variable = data.variable;
+                    question.type = data.type;
+                }
             });
 
             $rootScope.$on('groupUpdated', function (event, data) {
+                if ($scope.currentChapter.itemId == data.itemId) {
+                    $scope.currentChapter.title = data.title;
+                }
+
                 var group = questionnaireService.findItem($scope.items, data.itemId);
-
-                if (group == null)
-                    return;
-
-                group.title = data.title;
+                if (group != null) {
+                    group.title = data.title;
+                }
             });
 
             $rootScope.$on('rosterUpdated', function (event, data) {
                 var roster = questionnaireService.findItem($scope.items, data.itemId);
-
-                if (roster == null)
-                    return;
-
-                roster.title = data.title;
+                if (roster != null) {
+                    roster.title = data.title;
+                }
             });
         }
     ]);
