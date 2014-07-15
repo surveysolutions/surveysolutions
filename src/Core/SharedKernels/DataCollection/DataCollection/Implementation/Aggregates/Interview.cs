@@ -1070,34 +1070,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : "<<MISSING QUESTION>>";
         }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerQRBarcodeQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer,
-            Identity answeredQuestion, IQuestionnaire questionnaire)
-        {
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-              questionId, rosterVector, questionnaire);
-
-            var answerChanges = new List<AnswerChange>()
-            {
-                new AnswerChange(AnswerChangeType.QRBarcode, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            return new InterviewChanges(answerChanges, null, null,
-                null,
-                null, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
-        }
-
-        private void CheckQRBarcodeInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
-        {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
-            if (applyStrongChecks)
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-        }
-
-
         private static string GetQuestionVariableNameForException(Guid questionId, IQuestionnaire questionnaire)
         {
             return questionnaire.HasQuestion(questionId)
@@ -1122,45 +1094,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static Identity ToIdentity(InterviewItemId synchronizationIdentity)
         {
             return new Identity(synchronizationIdentity.Id, synchronizationIdentity.InterviewItemPropagationVector);
-        }
-
-        private static void PutToCorrespondingListAccordingToEnablementStateChange(
-            Identity entity, List<Identity> entitiesToBeEnabled, List<Identity> entitiesToBeDisabled, bool isNewStateEnabled,
-            bool isOldStateEnabled)
-        {
-            if (isNewStateEnabled && !isOldStateEnabled)
-            {
-                entitiesToBeEnabled.Add(entity);
-            }
-
-            if (!isNewStateEnabled && isOldStateEnabled)
-            {
-                entitiesToBeDisabled.Add(entity);
-            }
-        }
-
-        private static IEnumerable<KeyValuePair<string, Identity>> GetInstancesOfQuestionsWithSameAndUpperRosterLevelOrThrow(
-            IEnumerable<Guid> questionIds, decimal[] rosterVector, IQuestionnaire questionnare)
-        {
-            return questionIds.Select(
-                questionId => GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(questionId, rosterVector, questionnare));
-        }
-
-        private static KeyValuePair<string, Identity> GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId,
-            decimal[] rosterVector, IQuestionnaire questionnare)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-            int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId);
-
-            if (questionRosterLevel > vectorRosterLevel)
-                throw new InterviewException(string.Format(
-                    "Question {0} expected to have roster level not deeper than {1} but it is {2}.",
-                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel));
-
-            decimal[] questionRosterVector = ShrinkRosterVector(rosterVector, questionRosterLevel);
-
-            return new KeyValuePair<string, Identity>(questionnare.GetQuestionVariableName(questionId),
-                new Identity(questionId, questionRosterVector));
         }
 
         private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
@@ -1245,33 +1178,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 decimal[] groupRosterVector = ShrinkRosterVector(rosterVector, groupRosterLevel);
 
                 yield return new Identity(groupId, groupRosterVector);
-            }
-        }
-
-        private static IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
-            InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> groupIds, decimal[] rosterVector, IQuestionnaire questionnare,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-
-            foreach (Guid groupId in groupIds)
-            {
-                int groupRosterLevel = questionnare.GetRosterLevelForGroup(groupId);
-
-                if (groupRosterLevel < vectorRosterLevel)
-                    throw new InterviewException(string.Format(
-                        "Group {0} expected to have roster level not upper than {1} but it is {2}.",
-                        FormatGroupForException(groupId, questionnare), vectorRosterLevel, groupRosterLevel));
-
-                Guid[] rosterGroupsStartingFromTop = questionnare.GetRostersFromTopToSpecifiedGroup(groupId).ToArray();
-                IEnumerable<decimal[]> groupRosterVectors = ExtendRosterVector(state,
-                    rosterVector, groupRosterLevel, rosterGroupsStartingFromTop, getRosterInstanceIds);
-
-                foreach (decimal[] groupRosterVector in groupRosterVectors)
-                {
-                    yield return new Identity(groupId, groupRosterVector);
-                }
             }
         }
 
@@ -1475,24 +1381,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-
-        private void CheckTextListInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
-            InterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
-        {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
-
-            if (applyStrongChecks)
-            {
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-                ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
-                ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
-                var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
-                ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
-            }
-        }
-
         public void AnswerTextListQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
             Tuple<decimal, string>[] answers)
         {
@@ -1512,8 +1400,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-       
-
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
@@ -1525,74 +1411,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterVector, answerTime, latitude, longitude, accuracy, altitude, timestamp, answeredQuestion, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
-        }
-
-        private void CheckGpsCoordinatesInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
-            InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
-        {
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
-            if (applyStrongChecks)
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-        }
-
-        private InterviewChanges CalculateInterviewChangesOnAnswerQrBarcodeQuestion(Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer,
-            IQuestionnaire questionnaire)
-        {
-            var isQuestionMandatory = questionnaire.IsQuestionMandatory(questionId);
-            var questionIdentity = new Identity(questionId, rosterVector);
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
-                questionnaire);
-
-            var answerChanges = new List<AnswerChange>()
-            {
-                new AnswerChange(AnswerChangeType.QRBarcode, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            var answersDeclaredValid = new List<Identity>();
-            var answersDeclaredInvalid = new List<Identity>();
-
-            if (isQuestionMandatory && string.IsNullOrWhiteSpace(answer))
-            {
-                answersDeclaredInvalid.Add(questionIdentity);
-            }
-            else
-            {
-                answersDeclaredValid.Add(questionIdentity);
-            }
-
-            var validityChanges = new ValidityChanges(
-                answersDeclaredValid: answersDeclaredValid,
-                answersDeclaredInvalid: answersDeclaredInvalid);
-            return new InterviewChanges(answerChanges, null,
-                validityChanges,
-                null,
-                null,
-                rosterInstancesWithAffectedTitles,
-                answer);
-        }
-
-        private InterviewChanges CalculateInterviewChangesOnAnswerGeoLocationQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp, Identity answeredQuestion,
-            IQuestionnaire questionnaire)
-        {
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
-
-            var answerChanges = new List<AnswerChange>()
-            {
-                new AnswerChange( AnswerChangeType.GeoLocation, userId, questionId, rosterVector, answerTime, new GeoLocationPoint(latitude, longitude, accuracy, altitude, timestamp))
-            };
-
-            string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
-            return new InterviewChanges(answerChanges, null, new ValidityChanges(
-                    answersDeclaredValid: new List<Identity> { new Identity(questionId, rosterVector) },
-                    answersDeclaredInvalid: null),
-                null,
-                null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedPropagationVector)
@@ -2265,6 +2083,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        private void CheckTextListInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
+            InterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
+        {
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
+
+            if (applyStrongChecks)
+            {
+                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+                ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
+                ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
+                var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
+                ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
+            }
+        }
+
+        private void CheckGpsCoordinatesInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
+    InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+        {
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
+            if (applyStrongChecks)
+                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+        }
+
+        private void CheckQRBarcodeInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
+         Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+        {
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
+            if (applyStrongChecks)
+                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+        }
+
         #endregion
 
         #region Calculations
@@ -2784,6 +2639,81 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         rosterInstanceId => questionnaire.GetAnswerOptionTitle(questionId, rosterInstanceId));
 
             return rosterCalculationData;
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerQrBarcodeQuestion(Guid userId,
+    Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer,
+    IQuestionnaire questionnaire)
+        {
+            var isQuestionMandatory = questionnaire.IsQuestionMandatory(questionId);
+            var questionIdentity = new Identity(questionId, rosterVector);
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
+                questionnaire);
+
+            var answerChanges = new List<AnswerChange>()
+            {
+                new AnswerChange(AnswerChangeType.QRBarcode, userId, questionId, rosterVector, answerTime, answer)
+            };
+
+            var answersDeclaredValid = new List<Identity>();
+            var answersDeclaredInvalid = new List<Identity>();
+
+            if (isQuestionMandatory && string.IsNullOrWhiteSpace(answer))
+            {
+                answersDeclaredInvalid.Add(questionIdentity);
+            }
+            else
+            {
+                answersDeclaredValid.Add(questionIdentity);
+            }
+
+            var validityChanges = new ValidityChanges(
+                answersDeclaredValid: answersDeclaredValid,
+                answersDeclaredInvalid: answersDeclaredInvalid);
+            return new InterviewChanges(answerChanges, null,
+                validityChanges,
+                null,
+                null,
+                rosterInstancesWithAffectedTitles,
+                answer);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerGeoLocationQuestion(InterviewStateDependentOnAnswers state, Guid userId,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp, Identity answeredQuestion,
+            IQuestionnaire questionnaire)
+        {
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+
+            var answerChanges = new List<AnswerChange>()
+            {
+                new AnswerChange( AnswerChangeType.GeoLocation, userId, questionId, rosterVector, answerTime, new GeoLocationPoint(latitude, longitude, accuracy, altitude, timestamp))
+            };
+
+            string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
+            return new InterviewChanges(answerChanges, null, new ValidityChanges(
+                    answersDeclaredValid: new List<Identity> { new Identity(questionId, rosterVector) },
+                    answersDeclaredInvalid: null),
+                null,
+                null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerQRBarcodeQuestion(InterviewStateDependentOnAnswers state, Guid userId,
+           Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer,
+           Identity answeredQuestion, IQuestionnaire questionnaire)
+        {
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+              questionId, rosterVector, questionnaire);
+
+            var answerChanges = new List<AnswerChange>()
+            {
+                new AnswerChange(AnswerChangeType.QRBarcode, userId, questionId, rosterVector, answerTime, answer)
+            };
+
+            return new InterviewChanges(answerChanges, null, null,
+                null,
+                null, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
         }
 
         private static Dictionary<Guid, Dictionary<decimal, string>> CalculateFixedRosterData(IEnumerable<Guid> fixedRosterIds,
