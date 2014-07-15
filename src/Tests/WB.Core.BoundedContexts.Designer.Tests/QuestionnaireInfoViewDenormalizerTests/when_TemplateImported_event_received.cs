@@ -41,15 +41,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
         It should_questionnnaireInfoView_second_chapter_title_be_equal_chapter2Title = () =>
             viewState.Chapters[1].Title.ShouldEqual(chapter2Title);
 
-        It should_questionnnaireInfoView_GroupsCount_be_equal_3 = () =>
-            viewState.GroupsCount.ShouldEqual(3);
-
-        It should_questionnnaireInfoView_QuestionsCount_be_equal_1 = () =>
-            viewState.QuestionsCount.ShouldEqual(1);
-
-        It should_questionnnaireInfoView_RostersCount_be_equal_1 = () =>
-            viewState.RostersCount.ShouldEqual(1);
-
         private static string questionnaireId = "33333333333333333333333333333333";
         private static string questionnaireTitle = "questionnaire title";
         private static string chapter1Id = "22222222222222222222222222222222";

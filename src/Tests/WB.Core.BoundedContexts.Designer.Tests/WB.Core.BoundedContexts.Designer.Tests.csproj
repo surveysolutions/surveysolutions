@@ -192,6 +192,7 @@
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_chapter_moved.cs" />
+    <Compile Include="QuestionnaireInfoViewFactoryTests\when_loading_non_empty_questionnaire.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_question_by_id.cs" />
     <Compile Include="QuestionnaireTests\when_deleting_question_and_question_is_referenced_as_roster_title_question_in_roster_triggered_by_multy_option_question.cs" />
     <Compile Include="QuestionnaireTests\when_moving_numeric_question_with_title_which_contains_roster_title_as_substitution_reference_from_roster_to_group.cs" />
@@ -468,15 +469,6 @@
     <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_GroupCloned_event_received_and_new_group_inside_chapter.cs" />
     <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_chapter_moved_to_another_chapter.cs" />
     <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_group_moved_to_questionnaire.cs" />
-    <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_QuestionDeleted_event_received.cs" />
-    <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_QRBarcodeQuestionCloned_event_received.cs" />
-    <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_QRBarcodeQuestionAdded_event_received.cs" />
-    <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_TextListQuestionCloned_event_received.cs" />
-    <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_TextListQuestionAdded_event_received.cs" />
-    <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_NumericQuestionCloned_event_received.cs" />
-    <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_NumericQuestionAdded_event_received.cs" />
-    <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_QuestionCloned_event_received.cs" />
-    <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_NewQuestionAdded_event_received.cs" />
     <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_GroupDeleted_event_received_and_group_is_chapter.cs" />
     <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_NewGroupAdded_event_received_and_new_group_inside_chapter.cs" />
     <Compile Include="QuestionnaireInfoViewDenormalizerTests\when_GroupCloned_event_received_and_new_group_is_chapter.cs" />

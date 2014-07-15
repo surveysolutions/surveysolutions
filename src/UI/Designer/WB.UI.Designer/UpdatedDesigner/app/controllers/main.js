@@ -175,6 +175,14 @@
                     $scope.questionnaire.rostersCount++;
                 });
 
+                $rootScope.$on('chapterCloned', function () {
+                    getQuestionnaire();
+                });
+
+                $rootScope.$on('chapterDeleted', function () {
+                    getQuestionnaire();
+                });
+
                 $scope.showShareInfo = function () {
                     $modal.open({
                         templateUrl: 'app/views/share.html',
@@ -188,16 +196,20 @@
                         }
                     });
                 };
-                
-                questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (result) {
-                    $scope.questionnaire = result;
-                    if (!$state.params.chapterId && result.chapters.length > 0) {
-                        var defaultChapter = _.first(result.chapters);
-                        var itemId = defaultChapter.itemId;
-                        $scope.currentChapter = defaultChapter;
-                        $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
-                    }
-                });
+
+                var getQuestionnaire = function() {
+                    questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function(result) {
+                        $scope.questionnaire = result;
+                        if (!$state.params.chapterId && result.chapters.length > 0) {
+                            var defaultChapter = _.first(result.chapters);
+                            var itemId = defaultChapter.itemId;
+                            $scope.currentChapter = defaultChapter;
+                            $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
+                        }
+                    });
+                };
+
+                getQuestionnaire();
             }
         ]);
 }());
