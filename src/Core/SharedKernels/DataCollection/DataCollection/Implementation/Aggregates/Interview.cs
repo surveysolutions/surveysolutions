@@ -1268,7 +1268,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQrBarcodeQuestion(userId,
+            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQRBarcodeQuestion(this.interviewState, userId,
                 questionId, rosterVector, answerTime, answer, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
@@ -2101,7 +2101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckGpsCoordinatesInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
-    InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+            InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
@@ -2124,6 +2124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Calculations
 
+        // triggers roster
         private InterviewChanges CalculateInterviewChangesOnAnswerNumericIntegerQuestion(InterviewStateDependentOnAnswers state, Guid userId,
             Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
@@ -2241,39 +2242,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerTextQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
-        {
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
-
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-            expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
-
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
-
-            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
-
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    state,
-                    enablementChanges.GroupsToBeDisabled,
-                    enablementChanges.QuestionsToBeDisabled,
-                    questionnaire,
-                    GetRosterInstanceIds);
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
-
-            var interviewByAnswerChange = new List<AnswerChange>
-            {
-                new AnswerChange(AnswerChangeType.Text, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
-                null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answer);
-        }
-
         private InterviewChanges CalculateInterviewChangesOnAnswerTextListQuestion(Guid userId,
             Guid questionId, decimal[] rosterVector, DateTime answerTime, Tuple<decimal, string>[] answers,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
@@ -2342,96 +2310,142 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
+        // do not triggers roster
+        private InterviewChanges CalculateInterviewChangesOnAnswerTextQuestion(InterviewStateDependentOnAnswers state, Guid userId,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
+        {
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
+
+            return this.CalculateInterviewChangesOnAnswerQuestion(
+                state,
+                userId,
+                questionId, rosterVector, answer, answer, AnswerChangeType.Text,
+                answerTime,
+                questionnaire,
+                updateState);
+        }
+
         private InterviewChanges CalculateInterviewChangesOnAnswerDateTimeQuestion(InterviewStateDependentOnAnswers state, Guid userId,
             Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer, IQuestionnaire questionnaire)
         {
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-            expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer); ;
 
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
-
-            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
-
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
-                    enablementChanges.GroupsToBeDisabled, enablementChanges.QuestionsToBeDisabled, questionnaire, GetRosterInstanceIds);
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
-            
-            var interviewByAnswerChange = new List<AnswerChange>
-            {
-                new AnswerChange(AnswerChangeType.DateTime, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
-                null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
+            return this.CalculateInterviewChangesOnAnswerQuestion(
+                state,
+                userId,
+                questionId, rosterVector, answer, answerFormattedAsRosterTitle, AnswerChangeType.DateTime,
+                answerTime,
+                questionnaire,
+                updateState);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerNumericRealQuestion(InterviewStateDependentOnAnswers state, Guid userId,
             Guid questionId, decimal[] rosterVector,
             DateTime answerTime, decimal answer, IQuestionnaire questionnaire)
         {
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-            expressionProcessorState.UpdateDecimalAnswer(questionId, rosterVector, answer);
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateDecimalAnswer(questionId, rosterVector, answer); 
 
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
-
-            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
-         
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
-                    enablementChanges.GroupsToBeDisabled,
-                    enablementChanges.QuestionsToBeDisabled,
-                    questionnaire, GetRosterInstanceIds);
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
-
-            var interviewByAnswerChange = new List<AnswerChange>
-            {
-                new AnswerChange(AnswerChangeType.NumericReal, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
-                null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
+            return this.CalculateInterviewChangesOnAnswerQuestion(
+                state,
+                userId,
+                questionId, rosterVector, answer, answerFormattedAsRosterTitle, AnswerChangeType.NumericReal,
+                answerTime,
+                questionnaire,
+                updateState);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(InterviewStateDependentOnAnswers state, Guid userId,
             Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal selectedValue, IQuestionnaire questionnaire)
         {
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue, answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
+
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
+
+            return this.CalculateInterviewChangesOnAnswerQuestion(
+                state,
+                userId,
+                questionId, rosterVector, selectedValue, answerFormattedAsRosterTitle, AnswerChangeType.SingleOption,
+                answerTime,
+                questionnaire,
+                updateState);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerQRBarcodeQuestion(InterviewStateDependentOnAnswers state, 
+            Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
+        {
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateQrBarcodeAnswer(questionId, rosterVector, answer);
+
+            return this.CalculateInterviewChangesOnAnswerQuestion(
+                state,
+                userId,
+                questionId, rosterVector, answer, answer, AnswerChangeType.QRBarcode,
+                answerTime,
+                questionnaire,
+                updateState);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerGeoLocationQuestion(InterviewStateDependentOnAnswers state, Guid userId,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp, Identity answeredQuestion,
+            IQuestionnaire questionnaire)
+        {
+            string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
+
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateGeoLocationAnswer(questionId, rosterVector, latitude, longitude);
+
+            return this.CalculateInterviewChangesOnAnswerQuestion(
+                state,
+                userId,
+                questionId, rosterVector, new GeoLocationPoint(latitude, longitude, accuracy, altitude, timestamp), answerFormattedAsRosterTitle, AnswerChangeType.GeoLocation,
+                answerTime,
+                questionnaire,
+                updateState);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerQuestion(
+            InterviewStateDependentOnAnswers state, 
+            Guid userId,
+            Guid questionId, decimal[] rosterVector, object answer, string answerFormattedAsRosterTitle, AnswerChangeType answerChangeType, 
+            DateTime answerTime, 
+            IQuestionnaire questionnaire,
+            Action<IInterviewExpressionState> updateState)
+        {
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-            expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
+
+            updateState(expressionProcessorState);
 
             this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
 
-            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
-
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
-                    enablementChanges.GroupsToBeDisabled, enablementChanges.QuestionsToBeDisabled, questionnaire, GetRosterInstanceIds);
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling = this
+                .GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    state,
+                    groupsToBeDisabled,
+                    questionsToBeDisabled,
+                    questionnaire, 
+                    GetRosterInstanceIds);
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
-            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue, answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
-                new AnswerChange(AnswerChangeType.SingleOption, userId, questionId, rosterVector, answerTime, selectedValue)
+                new AnswerChange(answerChangeType, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
-                null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
+            return new InterviewChanges(
+                interviewByAnswerChange, 
+                new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled), 
+                new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+                null, 
+                answersForLinkedQuestionsToRemoveByDisabling, 
+                rosterInstancesWithAffectedTitles, 
+                answerFormattedAsRosterTitle);
         }
 
         private void CalculateChangesByFeaturedQuestion(InterviewChangeStructures changeStructures, Guid userId,
@@ -2497,7 +2511,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
                     case QuestionType.QRBarcode:
                         interviewChanges =
-                            this.CalculateInterviewChangesOnAnswerQRBarcodeQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (string)answer, answeredQuestion, questionnaire);
+                            this.CalculateInterviewChangesOnAnswerQRBarcodeQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (string)answer, questionnaire);
                         break;
                     case QuestionType.GpsCoordinates:
                         var geoAnswer = answer as GeoPosition;
@@ -2590,6 +2604,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+
         private RosterCalculationData CalculateRosterDataWithRosterTitlesFromTextListQuestions(InterviewStateDependentOnAnswers state,
             IQuestionnaire questionnare, decimal[] rosterVector, List<Guid> rosterIds,
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
@@ -2597,7 +2612,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds,
             Tuple<decimal, string>[] answers, Tuple<decimal, string>[] changedAnswers)
         {
-            RosterCalculationData rosterCalculationData = CalculateRosterData(state, questionnare,
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, questionnare,
                 rosterIds, rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer, getRosterInstanceIds);
 
             rosterCalculationData.TitlesForRosterInstancesToAdd = rosterCalculationData.RosterInstancesToAdd
@@ -2619,7 +2634,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return rosterCalculationData;
         }
 
-
         private RosterCalculationData CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(
             InterviewStateDependentOnAnswers state,
             Guid questionId, decimal[] rosterVector, List<Guid> rosterIds,
@@ -2639,81 +2653,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         rosterInstanceId => questionnaire.GetAnswerOptionTitle(questionId, rosterInstanceId));
 
             return rosterCalculationData;
-        }
-
-        private InterviewChanges CalculateInterviewChangesOnAnswerQrBarcodeQuestion(Guid userId,
-    Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer,
-    IQuestionnaire questionnaire)
-        {
-            var isQuestionMandatory = questionnaire.IsQuestionMandatory(questionId);
-            var questionIdentity = new Identity(questionId, rosterVector);
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
-                questionnaire);
-
-            var answerChanges = new List<AnswerChange>()
-            {
-                new AnswerChange(AnswerChangeType.QRBarcode, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            var answersDeclaredValid = new List<Identity>();
-            var answersDeclaredInvalid = new List<Identity>();
-
-            if (isQuestionMandatory && string.IsNullOrWhiteSpace(answer))
-            {
-                answersDeclaredInvalid.Add(questionIdentity);
-            }
-            else
-            {
-                answersDeclaredValid.Add(questionIdentity);
-            }
-
-            var validityChanges = new ValidityChanges(
-                answersDeclaredValid: answersDeclaredValid,
-                answersDeclaredInvalid: answersDeclaredInvalid);
-            return new InterviewChanges(answerChanges, null,
-                validityChanges,
-                null,
-                null,
-                rosterInstancesWithAffectedTitles,
-                answer);
-        }
-
-        private InterviewChanges CalculateInterviewChangesOnAnswerGeoLocationQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp, Identity answeredQuestion,
-            IQuestionnaire questionnaire)
-        {
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
-
-            var answerChanges = new List<AnswerChange>()
-            {
-                new AnswerChange( AnswerChangeType.GeoLocation, userId, questionId, rosterVector, answerTime, new GeoLocationPoint(latitude, longitude, accuracy, altitude, timestamp))
-            };
-
-            string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
-            return new InterviewChanges(answerChanges, null, new ValidityChanges(
-                    answersDeclaredValid: new List<Identity> { new Identity(questionId, rosterVector) },
-                    answersDeclaredInvalid: null),
-                null,
-                null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
-        }
-
-        private InterviewChanges CalculateInterviewChangesOnAnswerQRBarcodeQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-           Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer,
-           Identity answeredQuestion, IQuestionnaire questionnaire)
-        {
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-              questionId, rosterVector, questionnaire);
-
-            var answerChanges = new List<AnswerChange>()
-            {
-                new AnswerChange(AnswerChangeType.QRBarcode, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            return new InterviewChanges(answerChanges, null, null,
-                null,
-                null, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
         }
 
         private static Dictionary<Guid, Dictionary<decimal, string>> CalculateFixedRosterData(IEnumerable<Guid> fixedRosterIds,
