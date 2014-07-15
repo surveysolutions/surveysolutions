@@ -158,19 +158,19 @@
                     return commandCall("UpdateGroup", command);
                 };
 
-                commandService.updateRoster = function(questionnaireId, roster) {
+                commandService.updateRoster = function(questionnaireId, incomingRoster) {
                     var command = {
                         "questionnaireId": questionnaireId,
-                        "groupId": roster.itemId,
-                        "title": roster.title,
-                        "description": roster.description,
-                        "condition": roster.enablementCondition,
-                        "isRoster": true,
-                        "rosterSizeQuestionId": roster.rosterSizeQuestionId,
-                        "rosterSizeSource": roster.rosterSizeSourceType,
-                        "rosterFixedTitles": roster.rosterFixedTitles,
-                        "rosterTitleQuestionId": roster.rosterTitleQuestionId,
-                        "variableName": roster.variableName
+                        "groupId": incomingRoster.itemId,
+                        "title": incomingRoster.roster.title,
+                        "description": incomingRoster.roster.description,
+                        "condition": incomingRoster.roster.enablementCondition,
+                        "rosterSizeQuestionId": incomingRoster.roster.rosterSizeQuestionId,
+                        "rosterSizeSource": incomingRoster.roster.rosterSizeSourceType,
+                        "rosterFixedTitles": incomingRoster.roster.rosterFixedTitles,
+                        "rosterTitleQuestionId": incomingRoster.roster.rosterTitleQuestionId,
+                        "variableName": incomingRoster.roster.variableName,
+                        "isRoster": true
                     };
 
                     return commandCall("UpdateGroup", command);
