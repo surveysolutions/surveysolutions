@@ -85,18 +85,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.RemoveAnswers(Events.Interview.Dtos.Identity.ToEventIdentities(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize));
             }
 
-            this.ApplyEnablementChanges(new EnablementChanges(
-                rosterCalculationData.InitializedGroupsToBeDisabled,
-                rosterCalculationData.InitializedGroupsToBeEnabled,
-                rosterCalculationData.InitializedQuestionsToBeDisabled,
-                rosterCalculationData.InitializedQuestionsToBeEnabled));
-
-
-            if (rosterCalculationData.InitializedQuestionsToBeInvalid != null)
-            {
-                this.DeclareAnswersInvalid(Events.Interview.Dtos.Identity.ToEventIdentities(rosterCalculationData.InitializedQuestionsToBeInvalid));
-            }
-
             rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(rosterData => ApplyRosterData(rosterData));
         }
 

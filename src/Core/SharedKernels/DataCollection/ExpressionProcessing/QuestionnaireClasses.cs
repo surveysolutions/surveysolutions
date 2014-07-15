@@ -301,13 +301,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), food_IsValid);
             validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), role_IsValid);
             
-            /*enablementStatus.AddRange(new[]
-            {
-                age_state, married_with_state, has_job_state, job_title_state, best_job_owner_state,
-                food_state, person_id_state, marital_status_state, group_state
-            });
-*/
-
             enablementStates.Add(age_state.ItemId, age_state);
             enablementStates.Add(married_with_state.ItemId, married_with_state);
             enablementStates.Add(has_job_state.ItemId, has_job_state);
@@ -382,7 +375,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             set { this.bestJobOwner = value; }
         }
 
-        
         private ConditionalState age_state = new ConditionalState(IdOf.age);
         private ConditionalState married_with_state = new ConditionalState(IdOf.married_with);
         private ConditionalState has_job_state = new ConditionalState(IdOf.has_job);
@@ -392,7 +384,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         private ConditionalState group_state = new ConditionalState(IdOf.groupId, ItemType.Group);
         private ConditionalState person_id_state = new ConditionalState(IdOf.person_id);
         private ConditionalState marital_status_state = new ConditionalState(IdOf.marital_status);
-
 
         private long? age1;
         private decimal[][] marriedWith;

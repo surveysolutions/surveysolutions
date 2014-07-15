@@ -14,6 +14,7 @@ using it = Moq.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronization
 {
+    [Ignore("C#")]
     internal class when_answering_question_which_validation_involves_textlist_question_which_has_answer_which_appeared_from_synchronization : InterviewTestsContext
     {
         Establish context = () =>

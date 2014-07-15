@@ -19,6 +19,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_propagated_group_is_conditionally_disabled : InterviewTestsContext
     {
         Establish context = () =>

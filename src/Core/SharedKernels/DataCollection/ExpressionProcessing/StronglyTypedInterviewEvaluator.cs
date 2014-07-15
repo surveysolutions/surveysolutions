@@ -346,7 +346,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
 
             return new StronglyTypedInterviewEvaluator(newScopes, newSiblingRosters);
-
         }
 
         public void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled
