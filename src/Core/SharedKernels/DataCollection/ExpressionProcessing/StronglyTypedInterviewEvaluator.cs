@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.persons_count)
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.price_for_food)
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.date)
@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.id)
@@ -174,7 +174,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        private IValidatable GetRosterToUpdateAnswer(Guid questionId, decimal[] rosterVector)
+        private IValidatable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
         {
             if (!IdOf.parentsMap.ContainsKey(questionId))
                 return null;
@@ -186,13 +186,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
         }
 
         public void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.sex)
@@ -218,7 +218,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.food)
@@ -229,19 +229,19 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
         }
 
         public void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
         }
 
         public void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.best_job_owner)
@@ -252,7 +252,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] answer)
         {
-            var targetLevel = this.GetRosterToUpdateAnswer(questionId, rosterVector);
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
             if (questionId == IdOf.married_with)
@@ -264,35 +264,57 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
-            
+            foreach (var identity in invalidQuestions)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
+                if (targetLevel == null) return;
+
+                targetLevel.DeclareAnswerInvalid(identity.Id);
+            }
         }
 
         public void DeclareAnswersValid(IEnumerable<Identity> validQuestions)
         {
-            
+            foreach (var identity in validQuestions)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
+                if (targetLevel == null) return;
+
+                targetLevel.DeclareAnswerInvalid(identity.Id);
+            }
         }
 
 
         public void DisableGroups(IEnumerable<Identity> groupsToDisable)
         {
+            foreach (var identity in groupsToDisable)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
+                if (targetLevel == null) return;
 
-
-
+                targetLevel.DisableGroup(identity.Id);
+            }
         }
 
         public void EnableGroups(IEnumerable<Identity> groupsToEnable)
         {
-            
+            foreach (var identity in groupsToEnable)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
+                if (targetLevel == null) return;
+
+                targetLevel.EnableGroup(identity.Id);
+            }
         }
 
         public void DisableQuestions(IEnumerable<Identity> questionsToDisable)
         {
             foreach (var identity in questionsToDisable)
             {
-                var targetLevel = this.GetRosterToUpdateAnswer(identity.Id, identity.RosterVector);
+                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
                 if (targetLevel == null) return;
 
-                targetLevel.DisableQuestion();
+                targetLevel.DisableQuestion(identity.Id);
             }
         }
 
@@ -300,10 +322,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             foreach (var identity in questionsToEnable)
             {
-                var targetLevel = this.GetRosterToUpdateAnswer(identity.Id, identity.RosterVector);
+                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
                 if (targetLevel == null) return;
 
-                targetLevel.EnableQuestion();
+                targetLevel.EnableQuestion(identity.Id);
             }
         }
 

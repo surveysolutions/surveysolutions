@@ -18,6 +18,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         void DisableGroup(Guid groupId);
         void EnableGroup(Guid groupId);
+
+        void DeclareAnswerValid(Guid questionId);
+        void DeclareAnswerInvalid(Guid questionId);
+
     }
 
     public interface IValidatableRoster
@@ -61,9 +65,11 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
     {
         public decimal[] RosterVector { get; private set; }
 
-        //protected List<ConditionalState> enablementStatus = new List<ConditionalState>();
-
         protected Dictionary<Guid, ConditionalState> enablementStates = new Dictionary<Guid, ConditionalState>();
+
+        protected HashSet<Guid> ValidAnsweredQuestions = new HashSet<Guid>();
+        protected HashSet<Guid> InvalidAnsweredQuestions = new HashSet<Guid>();
+
 
         protected abstract IEnumerable<Action<T[]>> ConditionExpressions { get; }
 
@@ -165,6 +171,18 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             questionsToBeDisabled.AddRange(questionsToBeDisabledArray);
             groupsToBeEnabled.AddRange(groupsToBeEnabledArray);
             groupsToBeDisabled.AddRange(groupsToBeDisabledArray);
+        }
+
+        public void DeclareAnswerValid(Guid questionId)
+        {
+            ValidAnsweredQuestions.Add(questionId);
+            InvalidAnsweredQuestions.Remove(questionId);
+        }
+
+        public void DeclareAnswerInvalid(Guid questionId)
+        {
+            InvalidAnsweredQuestions.Add(questionId);
+            ValidAnsweredQuestions.Remove(questionId);
         }
 
 
@@ -504,6 +522,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
                 enablementStates = this.enablementStates.ToDictionary(item => item.Key, item => new ConditionalState(item.Value.ItemId, item.Value.Type, item.Value.State, item.Value.PreviousState)),
 
+                ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
+                InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
 
                 name = this.name,
                 age = this.age,
@@ -664,12 +684,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             var level = new FoodConsumption(this.RosterVector, this.RosterKey)
             {
-                //enablementStatus = this.enablementStatus.Select(state => new ConditionalState(state.ItemId, state.Type, state.State, state.PreviousState)).ToList(),
-
-                //
                 enablementStates = this.enablementStates.ToDictionary(item => item.Key, item => new ConditionalState(item.Value.ItemId, item.Value.Type, item.Value.State, item.Value.PreviousState)),
 
-
+                ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
+                InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
                 price_for_food = this.price_for_food,
                 times_per_week = this.times_per_week
             };
@@ -773,6 +791,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             { person_id, hhMemberScopeIds },
             { marital_status, hhMemberScopeIds },
             { married_with, hhMemberScopeIds },
+
+            //groups
+            { groupId, hhMemberScopeIds },
+            { hhMember, hhMemberScopeIds },
+            { foodConsumption, foodConsumptionIds },
+            
         };
 
         public static Dictionary<Guid, Guid[]> rostersIdToScopeMap = new Dictionary<Guid, Guid[]>
