@@ -17,6 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_reevaluating_interview_with_mandatory_question_inside_recently_enabled_group : InterviewTestsContext
     {
         Establish context = () =>
