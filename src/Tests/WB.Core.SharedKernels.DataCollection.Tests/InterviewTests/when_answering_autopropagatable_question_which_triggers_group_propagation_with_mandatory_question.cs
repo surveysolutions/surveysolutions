@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -17,6 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_answering_autopropagatable_question_which_triggers_group_propagation_with_mandatory_question : InterviewTestsContext
     {
         Establish context = () =>

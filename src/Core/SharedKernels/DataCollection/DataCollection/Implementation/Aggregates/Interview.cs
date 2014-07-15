@@ -1365,13 +1365,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.CheckTextQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => AreEqual(question, answeredQuestion)
-                    ? answer
-                    : GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
-
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerTextQuestion(this.interviewState, userId, questionId,
-                rosterVector, answerTime, answer, answeredQuestion, getAnswer, questionnaire);
+                rosterVector, answerTime, answer, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1384,13 +1379,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.CheckNumericRealQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion, this.interviewState);
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => AreEqual(question, answeredQuestion)
-                    ? answer
-                    : GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
-
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerNumericRealQuestion(this.interviewState, userId,
-                questionId, rosterVector, answerTime, answer, answeredQuestion, getAnswer, questionnaire);
+                questionId, rosterVector, answerTime, answer, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1424,8 +1414,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(this.interviewState, userId,
-                questionId, rosterVector, answerTime, answer,
-                answeredQuestion, getAnswer, questionnaire);
+                questionId, rosterVector, answerTime, answer, getAnswer, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1444,7 +1433,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(this.interviewState, userId,
-                questionId, rosterVector, answerTime, selectedValues, answeredQuestion, getAnswer, questionnaire);
+                questionId, rosterVector, answerTime, selectedValues, getAnswer, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1499,13 +1488,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => AreEqual(question, answeredQuestion)
-                    ? answer
-                    : GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
-
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerDateTimeQuestion(this.interviewState, userId,
-                questionId, rosterVector, answerTime, answer, answeredQuestion, getAnswer, questionnaire);
+                questionId, rosterVector, answerTime, answer, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1518,13 +1502,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
                 this.interviewState);
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => AreEqual(question, answeredQuestion)
-                    ? selectedValue
-                    : GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
-
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(this.interviewState, userId,
-                questionId, rosterVector, answerTime, selectedValue, answeredQuestion, getAnswer, questionnaire);
+                questionId, rosterVector, answerTime, selectedValue, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1560,64 +1539,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answers :
                 GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
-            InterviewChanges interviewChanges = CalculateInterviewChangesOnAnswerTextListQuestion(this.interviewState, userId, questionId,
-                rosterVector, answerTime, answers, answeredQuestion, getAnswer, questionnaire);
+            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerTextListQuestion(userId, questionId,
+                rosterVector, answerTime, answers, getAnswer, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerTextListQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, Tuple<decimal, string>[] answers, Identity answeredQuestion,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
-        {
-            var selectedValues = answers.Select(x => x.Item1).ToArray();
-            DistinctDecimalList rosterInstanceIds = new DistinctDecimalList(selectedValues.ToList());
-            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
-                selectedValue => selectedValue,
-                selectedValue => (int?)selectedValue);
-
-            List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
-
-            Func<Guid, decimal[], bool> isRoster = (groupId, groupOuterRosterVector)
-                => rosterIds.Contains(groupId)
-                    && AreEqualRosterVectors(groupOuterRosterVector, rosterVector);
-
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds =
-                (currentState, groupId, groupOuterRosterVector)
-                    => isRoster(groupId, groupOuterRosterVector)
-                        ? rosterInstanceIds
-                        : GetRosterInstanceIds(this.interviewState, groupId, groupOuterRosterVector);
-
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
-
-            Tuple<decimal, string>[] currentAnswer = this.interviewState.TextListAnswers.ContainsKey(questionKey)
-                ? this.interviewState.TextListAnswers[questionKey]
-                : new Tuple<decimal, string>[0];
-
-            Tuple<decimal, string>[] changedAnswers =
-                answers.Where(tuple => currentAnswer.Any(a => a.Item1 == tuple.Item1 && a.Item2 != tuple.Item2)).ToArray();
-
-            RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromTextListQuestions(
-                this.interviewState, questionnaire, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer,
-                getRosterInstanceIds,
-                answers, changedAnswers);
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
-                questionnaire);
-
-            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues,
-                answerOptionValue => answers.Single(x => x.Item1 == answerOptionValue).Item2);
-            var answerChanges = new List<AnswerChange>()
-            {
-                new AnswerChange(AnswerChangeType.TextList, userId, questionId, rosterVector, answerTime, answers)
-            };
-
-            return new InterviewChanges(answerChanges, null, new ValidityChanges(
-                answersDeclaredValid: new List<Identity> { new Identity(questionId, rosterVector) },
-                answersDeclaredInvalid: null),
-                rosterCalculationData,
-                null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
-        }
+       
 
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
@@ -2306,16 +2234,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyAnswersRemovanceEvents(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.AnswersToRemoveByDecreasedRosterSize, new IdentityComparer(), rosterDatas));
-
-            this.ApplyEnablementChangesEvents(
-                new EnablementChanges(
-                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedGroupsToBeDisabled, new IdentityComparer(), rosterDatas),
-                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedGroupsToBeEnabled, new IdentityComparer(), rosterDatas),
-                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedQuestionsToBeDisabled, new IdentityComparer(), rosterDatas),
-                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedQuestionsToBeEnabled, new IdentityComparer(), rosterDatas)));
-
-            this.ApplyValidityChangesEvents(new ValidityChanges(null,
-                this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(d => d.InitializedQuestionsToBeInvalid, new IdentityComparer(), rosterDatas)));
         }
 
         private ChangedRosterInstanceTitleDto[] CreateChangedRosterRowTitleDtoFromRosterData(params RosterCalculationData[] datas)
@@ -2509,70 +2427,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region Calculations
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerTextQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer,
-            Identity answeredQuestion, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
-        {
-
-
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-            expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
-
-            //Apply other changes on expressionProcessorState
-            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
-            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
-
-            var enablementChanges = new EnablementChanges(disabledGroupsC, enabledGroupsC, questionsToBeDisabledC, questionsToBeEnabledC);
-
-
-            /*EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
-                answeredQuestion, answer, questionnaire, GetRosterInstanceIds);*/
-
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
-                    enablementChanges.GroupsToBeDisabled, enablementChanges.QuestionsToBeDisabled, questionnaire, GetRosterInstanceIds);
-
-            Func<Identity, bool?> getNewQuestionState =
-                question =>
-                {
-                    if (enablementChanges.QuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
-                    if (enablementChanges.QuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
-                    return null;
-                };
-
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswerConcerningDisabling =
-                (currentState, question) => AreEqual(question, answeredQuestion)
-                    ? answer
-                    : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
-
-            /*List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
-                answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges,
-                out answersDeclaredValid, out answersDeclaredInvalid);*/
-
-
-            /*var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
-            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();*/
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
-
-            var interviewByAnswerChange = new List<AnswerChange>
-            {
-                new AnswerChange(AnswerChangeType.Text, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValidC, answersDeclaredInvalidC),
-                null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answer);
-        }
-
         private InterviewChanges CalculateInterviewChangesOnAnswerNumericIntegerQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer, Identity answeredQuestion,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
         {
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
+
             List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
             int rosterSize = rosterIds.Any() ? ToRosterSize(answer) : 0;
 
@@ -2588,134 +2449,46 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         ? rosterInstanceIds
                         : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
 
-            RosterCalculationData rosterCalculationData = CalculateRosterData(state, questionnaire,
-                rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer, getRosterInstanceIds);
-
-            EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
-                answeredQuestion, answer, questionnaire, getRosterInstanceIds);
-
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
-                    Enumerable.Concat(rosterCalculationData.InitializedGroupsToBeDisabled, enablementChanges.GroupsToBeDisabled),
-                    Enumerable.Concat(rosterCalculationData.InitializedQuestionsToBeDisabled, enablementChanges.QuestionsToBeDisabled),
-                    questionnaire, getRosterInstanceIds);
-
-            Func<Identity, bool?> getNewQuestionState =
-                question =>
-                {
-                    if (rosterCalculationData.InitializedQuestionsToBeDisabled.Any(q => AreEqual(q, question)) ||
-                        enablementChanges.QuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
-                    if (rosterCalculationData.InitializedQuestionsToBeEnabled.Any(q => AreEqual(q, question)) ||
-                        enablementChanges.QuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
-                    return null;
-                };
-
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswerConcerningDisabling = (currentState, question) =>
-                AreEqual(question, answeredQuestion)
-                    ? answer
-                    : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
-
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
-                answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges,
-                out answersDeclaredValid, out answersDeclaredInvalid);
+            RosterCalculationData rosterCalculationData = CalculateRosterData(state, questionnaire, rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer, getRosterInstanceIds);
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
+
+            //Update State
             expressionProcessorState.UpdateIntAnswer(questionId, rosterVector, answer);
+            rosterCalculationData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            rosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
-                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
-            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
-                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
 
-            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
-            //Apply other changes on expressionProcessorState
-            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
-            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
-            
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    state,
+                    enablementChanges.GroupsToBeDisabled,
+                    enablementChanges.QuestionsToBeDisabled,
+                    questionnaire, getRosterInstanceIds);
 
-            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
-            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
-
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(AnswerChangeType.NumericInteger, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
                 rosterCalculationData, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
-        }
-
-        private InterviewChanges CalculateInterviewChangesOnAnswerDateTimeQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer,
-            Identity answeredQuestion, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
-        {
-            EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
-                answeredQuestion, answer, questionnaire, GetRosterInstanceIds);
-
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
-                    enablementChanges.GroupsToBeDisabled, enablementChanges.QuestionsToBeDisabled, questionnaire, GetRosterInstanceIds);
-
-            Func<Identity, bool?> getNewQuestionState =
-                question =>
-                {
-                    if (enablementChanges.QuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
-                    if (enablementChanges.QuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
-                    return null;
-                };
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswerConcerningDisabling =
-                (currentState, question) =>
-                    AreEqual(question, answeredQuestion)
-                        ? answer
-                        : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
-
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
-                answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges,
-                out answersDeclaredValid, out answersDeclaredInvalid);
-
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-            expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
-
-            //Apply other changes on expressionProcessorState
-            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
-            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
-            
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
-
-            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
-            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
-
-
-            var interviewByAnswerChange = new List<AnswerChange>
-            {
-                new AnswerChange(AnswerChangeType.DateTime, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
-                null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(InterviewStateDependentOnAnswers state,
             Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
-            decimal[] selectedValues, Identity answeredQuestion, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
+            decimal[] selectedValues, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
             IQuestionnaire questionnaire)
         {
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
+
             List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId).ToList();
 
             var rosterInstanceIds = new DistinctDecimalList(selectedValues.ToList());
@@ -2736,61 +2509,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
 
             RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(state,
-                questionnaire,
                 questionId, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer, getRosterInstanceIds);
-
-            EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
-                answeredQuestion, selectedValues, questionnaire, getRosterInstanceIds);
-
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
-                    Enumerable.Concat(rosterCalculationData.InitializedGroupsToBeDisabled, enablementChanges.GroupsToBeDisabled),
-                    Enumerable.Concat(rosterCalculationData.InitializedQuestionsToBeDisabled, enablementChanges.QuestionsToBeDisabled),
-                    questionnaire, getRosterInstanceIds);
-
-            Func<Identity, bool?> getNewQuestionState =
-                question =>
-                {
-                    if (rosterCalculationData.InitializedQuestionsToBeDisabled.Any(q => AreEqual(q, question)) ||
-                        enablementChanges.QuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
-                    if (rosterCalculationData.InitializedQuestionsToBeEnabled.Any(q => AreEqual(q, question)) ||
-                        enablementChanges.QuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
-                    return null;
-                };
-
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswerConcerningDisabling = (currentState, question) =>
-                AreEqual(question, answeredQuestion)
-                    ? (selectedValues.Any() ? selectedValues : null)
-                    : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
-
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
-                answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges,
-                out answersDeclaredValid, out answersDeclaredInvalid);
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateMultiOptionAnswer(questionId, rosterVector, selectedValues);
+            rosterCalculationData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            rosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
+
+            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
 
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
-                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
-            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
-                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
-
-            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
+                    enablementChanges.GroupsToBeDisabled,
+                    enablementChanges.QuestionsToBeDisabled,
+                    questionnaire, getRosterInstanceIds);
 
             //Apply other changes on expressionProcessorState
-            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
-            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
-            
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
-
-            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
-            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
-
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues,
@@ -2801,130 +2539,203 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.MultipleOptions, userId, questionId, rosterVector, answerTime, selectedValues)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
                 rosterCalculationData,
                 answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerNumericRealQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector,
-            DateTime answerTime, decimal answer, Identity answeredQuestion,
+        private InterviewChanges CalculateInterviewChangesOnAnswerTextQuestion(InterviewStateDependentOnAnswers state, Guid userId,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
+        {
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
+            expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
+
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
+
+            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
+
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    state,
+                    enablementChanges.GroupsToBeDisabled,
+                    enablementChanges.QuestionsToBeDisabled,
+                    questionnaire,
+                    GetRosterInstanceIds);
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
+
+            var interviewByAnswerChange = new List<AnswerChange>
+            {
+                new AnswerChange(AnswerChangeType.Text, userId, questionId, rosterVector, answerTime, answer)
+            };
+
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+                null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answer);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerTextListQuestion(Guid userId,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, Tuple<decimal, string>[] answers,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
         {
-            EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
-                answeredQuestion, answer, questionnaire, GetRosterInstanceIds);
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
+            var selectedValues = answers.Select(x => x.Item1).ToArray();
+            var rosterInstanceIds = new DistinctDecimalList(selectedValues.ToList());
+            var rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
+                selectedValue => selectedValue,
+                selectedValue => (int?) selectedValue);
+
+            List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
+
+            Func<Guid, decimal[], bool> isRoster = (groupId, groupOuterRosterVector)
+                => rosterIds.Contains(groupId)
+                    && AreEqualRosterVectors(groupOuterRosterVector, rosterVector);
+
+            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds =
+                (currentState, groupId, groupOuterRosterVector)
+                    => isRoster(groupId, groupOuterRosterVector)
+                        ? rosterInstanceIds
+                        : GetRosterInstanceIds(this.interviewState, groupId, groupOuterRosterVector);
+
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
+
+            Tuple<decimal, string>[] currentAnswer = this.interviewState.TextListAnswers.ContainsKey(questionKey)
+                ? this.interviewState.TextListAnswers[questionKey]
+                : new Tuple<decimal, string>[0];
+
+            Tuple<decimal, string>[] changedAnswers =
+                answers.Where(tuple => currentAnswer.Any(a => a.Item1 == tuple.Item1 && a.Item2 != tuple.Item2)).ToArray();
+
+            RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromTextListQuestions(
+                this.interviewState, questionnaire, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer,
+                getRosterInstanceIds,
+                answers, changedAnswers);
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
+            expressionProcessorState.UpdateTextListAnswer(questionId, rosterVector, answers);
+            rosterCalculationData.RosterInstancesToAdd.ForEach(
+                r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            rosterCalculationData.RosterInstancesToRemove.ForEach(
+                r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid,
+                out answersDeclaredInvalid);
+
+            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
+                questionnaire);
+
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValues,
+                answerOptionValue => answers.Single(x => x.Item1 == answerOptionValue).Item2);
+            var answerChanges = new List<AnswerChange>()
+            {
+                new AnswerChange(AnswerChangeType.TextList, userId, questionId, rosterVector, answerTime, answers)
+            };
+
+            return new InterviewChanges(answerChanges, enablementChanges,
+                new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+                rosterCalculationData,
+                null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerDateTimeQuestion(InterviewStateDependentOnAnswers state, Guid userId,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer, IQuestionnaire questionnaire)
+        {
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
+            expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
+
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
+
+            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
+
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
+                    enablementChanges.GroupsToBeDisabled, enablementChanges.QuestionsToBeDisabled, questionnaire, GetRosterInstanceIds);
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
+                questionId, rosterVector, questionnaire);
+            
+            var interviewByAnswerChange = new List<AnswerChange>
+            {
+                new AnswerChange(AnswerChangeType.DateTime, userId, questionId, rosterVector, answerTime, answer)
+            };
+
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+                null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerNumericRealQuestion(InterviewStateDependentOnAnswers state, Guid userId,
+            Guid questionId, decimal[] rosterVector,
+            DateTime answerTime, decimal answer, IQuestionnaire questionnaire)
+        {
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
+            expressionProcessorState.UpdateDecimalAnswer(questionId, rosterVector, answer);
+
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
+
+            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
+         
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
                     enablementChanges.GroupsToBeDisabled,
                     enablementChanges.QuestionsToBeDisabled,
                     questionnaire, GetRosterInstanceIds);
 
-            Func<Identity, bool?> getNewQuestionState =
-                question =>
-                {
-                    if (enablementChanges.QuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
-                    if (enablementChanges.QuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
-                    return null;
-                };
-
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswerConcerningDisabling =
-                (currentState, question) =>
-                    AreEqual(question, answeredQuestion)
-                        ? answer
-                        : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
-
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
-                answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges,
-                out answersDeclaredValid, out answersDeclaredInvalid);
-
-
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-            expressionProcessorState.UpdateDecimalAnswer(questionId, rosterVector, answer);
-
-            //Apply other changes on expressionProcessorState
-            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
-            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
-            
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
-
-            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
-            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(AnswerChangeType.NumericReal, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
                 null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime,
-            decimal selectedValue, Identity answeredQuestion, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
-            IQuestionnaire questionnaire)
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal selectedValue, IQuestionnaire questionnaire)
         {
-            EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
-                answeredQuestion, selectedValue, questionnaire, GetRosterInstanceIds);
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
+            expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
+
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
+
+            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
                     enablementChanges.GroupsToBeDisabled, enablementChanges.QuestionsToBeDisabled, questionnaire, GetRosterInstanceIds);
 
-            Func<Identity, bool?> getNewQuestionState =
-                question =>
-                {
-                    if (enablementChanges.QuestionsToBeDisabled.Any(q => AreEqual(q, question))) return false;
-                    if (enablementChanges.QuestionsToBeEnabled.Any(q => AreEqual(q, question))) return true;
-                    return null;
-                };
-
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswerConcerningDisabling =
-                (currentState, question) =>
-                    AreEqual(question, answeredQuestion)
-                        ? selectedValue
-                        : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
-
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-
-            this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
-                answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
-                enablementChanges,
-                out answersDeclaredValid, out answersDeclaredInvalid);
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
-            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue,
-                answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
-
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-            expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
-
-            //Apply other changes on expressionProcessorState
-            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
-            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
-
-            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
-            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue, answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(AnswerChangeType.SingleOption, userId, questionId, rosterVector, answerTime, selectedValue)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
                 null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
-
 
         private void CalculateChangesByFeaturedQuestion(InterviewChangeStructures changeStructures, Guid userId,
             IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
@@ -2951,41 +2762,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.Text:
                         interviewChanges =
                             this.CalculateInterviewChangesOnAnswerTextQuestion(changeStructures.State, userId, questionId,
-                                currentQuestionRosterVector, answersTime, (string)answer, answeredQuestion, getAnswer, questionnaire);
+                                currentQuestionRosterVector, answersTime, (string)answer, questionnaire);
                         break;
 
                     case QuestionType.AutoPropagate:
                         interviewChanges =
                             this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(changeStructures.State, userId, questionId,
-                                currentQuestionRosterVector, answersTime, (int)answer, answeredQuestion, getAnswer, questionnaire);
+                                currentQuestionRosterVector, answersTime, (int)answer, getAnswer, questionnaire);
                         break;
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
                             interviewChanges =
                                 this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(changeStructures.State, userId, questionId,
-                                    currentQuestionRosterVector, answersTime, (int)answer, answeredQuestion, getAnswer, questionnaire);
+                                    currentQuestionRosterVector, answersTime, (int)answer, getAnswer, questionnaire);
                         else
                             interviewChanges =
                                 this.CalculateInterviewChangesOnAnswerNumericRealQuestion(changeStructures.State, userId, questionId,
-                                    currentQuestionRosterVector, answersTime, (decimal)answer, answeredQuestion, getAnswer, questionnaire);
+                                    currentQuestionRosterVector, answersTime, (decimal)answer, questionnaire);
                         break;
 
                     case QuestionType.DateTime:
                         interviewChanges =
                             this.CalculateInterviewChangesOnAnswerDateTimeQuestion(changeStructures.State, userId, questionId,
-                                currentQuestionRosterVector, answersTime, (DateTime)answer, answeredQuestion, getAnswer, questionnaire);
+                                currentQuestionRosterVector, answersTime, (DateTime)answer, questionnaire);
                         break;
 
                     case QuestionType.SingleOption:
                         interviewChanges =
                             this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(changeStructures.State, userId, questionId,
-                                currentQuestionRosterVector, answersTime, (decimal)answer, answeredQuestion, getAnswer, questionnaire);
+                                currentQuestionRosterVector, answersTime, (decimal)answer, questionnaire);
                         break;
 
                     case QuestionType.MultyOption:
                         interviewChanges =
                             this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(changeStructures.State, userId, questionId,
-                                currentQuestionRosterVector, answersTime, (decimal[])answer, answeredQuestion, getAnswer, questionnaire);
+                                currentQuestionRosterVector, answersTime, (decimal[])answer, getAnswer, questionnaire);
                         break;
                     case QuestionType.QRBarcode:
                         interviewChanges =
@@ -3000,7 +2811,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
                     case QuestionType.TextList:
                         interviewChanges =
-                            this.CalculateInterviewChangesOnAnswerTextListQuestion(changeStructures.State, userId, questionId, currentQuestionRosterVector, answersTime, (Tuple<decimal, string>[])answer, answeredQuestion, getAnswer, questionnaire);
+                            this.CalculateInterviewChangesOnAnswerTextListQuestion(userId, questionId, currentQuestionRosterVector, answersTime, (Tuple<decimal, string>[])answer, getAnswer, questionnaire);
                         break;
 
                     default:
@@ -3012,116 +2823,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 changeStructures.State.ApplyInterviewChanges(interviewChanges);
                 changeStructures.Changes.Add(interviewChanges);
             }
-        }
-
-        private EnablementChanges CalculateEnablementChanges(InterviewStateDependentOnAnswers state, Identity answeredQuestion,
-            object answer, IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
-        {
-            List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-
-            groupsToBeDisabled = new List<Identity>();
-            groupsToBeEnabled = new List<Identity>();
-
-            var collectedQuestionsToBeDisabled = new List<Identity>();
-            var collectedQuestionsToBeEnabled = new List<Identity>();
-
-            Func<InterviewStateDependentOnAnswers, Identity, bool> isQuestionDisabled = (currentState, question) =>
-            {
-                bool isQuestionToBeDisabled =
-                    collectedQuestionsToBeDisabled.Any(questionToBeDisabled => AreEqual(questionToBeDisabled, question));
-                bool isQuestionToBeEnabled =
-                    collectedQuestionsToBeEnabled.Any(questionToBeEnabled => AreEqual(questionToBeEnabled, question));
-
-                return isQuestionToBeDisabled || !isQuestionToBeEnabled && IsQuestionDisabled(state, question);
-            };
-
-            Func<InterviewStateDependentOnAnswers, Identity, bool> isGroupDisabled = (currentState, group) =>
-            {
-                bool isGroupToBeDisabled =
-                    groupsToBeDisabled.Any(groupToBeDisabled => AreEqual(groupToBeDisabled, group));
-                bool isQuestionToBeEnabled =
-                    groupsToBeEnabled.Any(groupToBeEnabled => AreEqual(groupToBeEnabled, group));
-
-                return isGroupToBeDisabled || !isQuestionToBeEnabled && IsQuestionDisabled(state, group);
-            };
-
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer = (currentState, question) =>
-                GetEnabledQuestionAnswerSupportedInExpressions(state, question, isQuestionDisabled, isGroupDisabled, questionnaire, questionBeingAnswered: answeredQuestion, answerBeingApplied: answer);
-
-            var processedQuestionKeys = new HashSet<string>
-            {
-                ConversionHelper.ConvertIdAndRosterVectorToString(answeredQuestion.Id, answeredQuestion.RosterVector)
-            };
-            var processsedGroupKeys = new HashSet<string> { };
-
-            var affectingQuestions = new Queue<Identity>(new[] { answeredQuestion });
-
-            while (affectingQuestions.Count > 0)
-            {
-                Identity affectingQuestion = affectingQuestions.Dequeue();
-
-                IEnumerable<Guid> dependentGroupIds =
-                    questionnaire.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(affectingQuestion.Id);
-                IEnumerable<Identity> dependentGroups = GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(state,
-                    dependentGroupIds, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
-
-                foreach (Identity dependentGroup in dependentGroups)
-                {
-                    if (processsedGroupKeys.Contains(ConversionHelper.ConvertIdentityToString(dependentGroup))) continue;
-
-                    bool isNewStateEnabled = this.ShouldGroupBeEnabledByCustomEnablementCondition(state, dependentGroup, questionnaire, getAnswer);
-                    bool isOldStateEnabled = !IsGroupDisabled(state, dependentGroup);
-                    PutToCorrespondingListAccordingToEnablementStateChange(dependentGroup, groupsToBeEnabled, groupsToBeDisabled,
-                        isNewStateEnabled: isNewStateEnabled,
-                        isOldStateEnabled: isOldStateEnabled);
-
-                    processsedGroupKeys.Add(ConversionHelper.ConvertIdentityToString(dependentGroup));
-
-                    if (isNewStateEnabled != isOldStateEnabled)
-                    {
-                        var underlyingQuestionIds =
-                            questionnaire.GetAllUnderlyingQuestions(dependentGroup.Id);
-
-                        IEnumerable<Identity> underlyingQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                            state, underlyingQuestionIds, dependentGroup.RosterVector, questionnaire, getRosterInstanceIds);
-
-                        foreach (var underlyingQuestion in underlyingQuestions)
-                        {
-                            affectingQuestions.Enqueue(underlyingQuestion);
-                        }
-                    }
-                }
-
-                IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(
-                   affectingQuestion.Id);
-                IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                    dependentQuestionIds, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
-
-                foreach (Identity dependentQuestion in dependentQuestions)
-                {
-                    if (processedQuestionKeys.Contains(ConversionHelper.ConvertIdentityToString(dependentQuestion))) continue;
-
-                    bool isNewStateEnabled = this.ShouldQuestionBeEnabledByCustomEnablementCondition(state, dependentQuestion, questionnaire, getAnswer);
-                    bool isOldStateEnabled = !IsQuestionDisabled(state, dependentQuestion);
-                    PutToCorrespondingListAccordingToEnablementStateChange(dependentQuestion,
-                        collectedQuestionsToBeEnabled, collectedQuestionsToBeDisabled,
-                        isNewStateEnabled: isNewStateEnabled,
-                        isOldStateEnabled: isOldStateEnabled);
-
-                    processedQuestionKeys.Add(ConversionHelper.ConvertIdAndRosterVectorToString(dependentQuestion.Id, dependentQuestion.RosterVector));
-
-                    if (isNewStateEnabled != isOldStateEnabled)
-                    {
-                        affectingQuestions.Enqueue(dependentQuestion);
-                    }
-                }
-            }
-
-            questionsToBeDisabled = collectedQuestionsToBeDisabled;
-            questionsToBeEnabled = collectedQuestionsToBeEnabled;
-
-            return new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
         }
 
         private List<RosterCalculationData> CalculateFixedRostersData(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire,
@@ -3223,7 +2924,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         private RosterCalculationData CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(
-            InterviewStateDependentOnAnswers state, IQuestionnaire questionnare,
+            InterviewStateDependentOnAnswers state,
             Guid questionId, decimal[] rosterVector, List<Guid> rosterIds,
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
@@ -3286,40 +2987,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
         {
             List<RosterIdentity> rosterInstancesToAdd, rosterInstancesToRemove, rosterInstancesToChange = new List<RosterIdentity>();
-            List<Identity> initializedGroupsToBeDisabled,
-                initializedGroupsToBeEnabled,
-                initializedQuestionsToBeDisabled,
-                initializedQuestionsToBeEnabled,
-                initializedQuestionsToBeInvalid;
+
             List<RosterCalculationData> rosterInstantiatesFromNestedLevels;
             this.CalculateChangesInRosterInstances(state, questionnare, rosterIds, nearestToOuterRosterVector,
                 rosterInstanceIdsWithSortIndexes,
                 getAnswer,
                 out rosterInstancesToAdd, out rosterInstancesToRemove, out rosterInstantiatesFromNestedLevels);
 
-            List<decimal> rosterInstanceIdsBeingAdded = rosterInstancesToAdd.Select(instance => instance.RosterInstanceId).ToList();
             List<decimal> rosterInstanceIdsBeingRemoved = rosterInstancesToRemove.Select(instance => instance.RosterInstanceId).ToList();
 
             List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterInstancesAreRemoved(state,
                 rosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire);
 
-            this.DetermineCustomEnablementStateOfGroupsInitializedByAddedRosterInstances(state,
-                rosterIds, rosterInstanceIdsBeingAdded, nearestToOuterRosterVector, questionnaire, getAnswer, getRosterInstanceIds,
-                out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
-            
-            this.DetermineCustomEnablementStateOfQuestionsInitializedByAddedRosterInstances(state,
-                rosterIds, rosterInstanceIdsBeingAdded, nearestToOuterRosterVector, questionnaire, getAnswer, getRosterInstanceIds,
-                out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
-            
-            DetermineValidityStateOfQuestionsInitializedByAddedRosterInstances(state,
-                rosterIds, rosterInstanceIdsBeingAdded, nearestToOuterRosterVector, questionnaire, initializedGroupsToBeDisabled,
-                initializedQuestionsToBeDisabled, getRosterInstanceIds, out initializedQuestionsToBeInvalid);
-
-
             return new RosterCalculationData(rosterInstancesToAdd, rosterInstancesToRemove, rosterInstancesToChange,
-                answersToRemoveByDecreasedRosterSize, initializedGroupsToBeDisabled, initializedGroupsToBeEnabled,
-                initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid,
-                rosterTitles, rosterInstantiatesFromNestedLevels);
+                answersToRemoveByDecreasedRosterSize, rosterTitles, rosterInstantiatesFromNestedLevels);
         }
 
         private static List<RosterCalculationData> CalculateRostersFromInterviewSynchronizationDto(InterviewSynchronizationDto interviewDto)
@@ -3434,8 +3115,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             return new RosterCalculationData(new List<RosterIdentity>(), listOfRosterInstanceIdsForRemove, new List<RosterIdentity>(),
-                answersToRemoveByDecreasedRosterSize, new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>(),
-                new List<Identity>(), new Dictionary<decimal, string>(),
+                answersToRemoveByDecreasedRosterSize, new Dictionary<decimal, string>(),
                 rosterInstantiatesFromNestedLevels);
         }
 
@@ -3452,7 +3132,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(rosterId => new RosterIdentity(rosterId, splittedRosterVector.Item1, splittedRosterVector.Item2))
                 .ToList();
         }
-
 
         #endregion
 
@@ -3926,42 +3605,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             questionId, questionType));
                 }
             }
-        }
-
-        private void PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
-            InterviewStateDependentOnAnswers state,
-            Identity answeredQuestion, IQuestionnaire questionnaire, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
-            Func<Identity, bool?> getNewQuestionStatus,
-            EnablementChanges enablementChanges,
-            out List<Identity> questionsToBeDeclaredValid, out List<Identity> questionsToBeDeclaredInvalid)
-        {
-            questionsToBeDeclaredValid = new List<Identity>();
-            questionsToBeDeclaredInvalid = new List<Identity>();
-
-            bool? answeredQuestionValidationResult = this.PerformValidationOfQuestion(state, answeredQuestion, questionnaire, getAnswer,
-                getNewQuestionStatus);
-            switch (answeredQuestionValidationResult)
-            {
-                case true:
-                    questionsToBeDeclaredValid.Add(answeredQuestion);
-                    break;
-                case false:
-                    questionsToBeDeclaredInvalid.Add(answeredQuestion);
-                    break;
-            }
-
-            List<Identity> affectedQuestionsDeclaredValid;
-            List<Identity> affectedQuestionsDeclaredInvalid;
-            this.PerformValidationOfAffectedQuestions(state, answeredQuestion, questionnaire, getAnswer,
-                GetRosterInstanceIds, getNewQuestionStatus,
-                enablementChanges,
-                out affectedQuestionsDeclaredValid, out affectedQuestionsDeclaredInvalid);
-
-            questionsToBeDeclaredValid.AddRange(affectedQuestionsDeclaredValid);
-            questionsToBeDeclaredInvalid.AddRange(affectedQuestionsDeclaredInvalid);
-
-            questionsToBeDeclaredValid = RemoveQuestionsAlreadyDeclaredValid(state, questionsToBeDeclaredValid);
-            questionsToBeDeclaredInvalid = RemoveQuestionsAlreadyDeclaredInvalid(state, questionsToBeDeclaredInvalid);
         }
 
         private static List<Identity> RemoveQuestionsAlreadyDeclaredValid(InterviewStateDependentOnAnswers state,

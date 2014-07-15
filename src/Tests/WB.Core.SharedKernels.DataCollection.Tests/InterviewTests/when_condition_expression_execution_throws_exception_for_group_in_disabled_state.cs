@@ -18,6 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_condition_expression_execution_throws_exception_for_group_in_disabled_state : InterviewTestsContext
     {
         Establish context = () =>

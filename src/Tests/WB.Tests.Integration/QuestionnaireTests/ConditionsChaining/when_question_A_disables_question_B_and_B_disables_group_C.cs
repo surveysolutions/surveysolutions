@@ -17,6 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.QuestionnaireTests.ConditionsChaining
 {
+    [Ignore("C#")]
     internal class when_question_A_disables_question_B_and_B_disables_group_C : InterviewTestsContext
     {
         Establish context = () =>

@@ -18,6 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_answering_top_level_question_which_enables_nested_roster : InterviewTestsContext
     {
         Establish context = () =>

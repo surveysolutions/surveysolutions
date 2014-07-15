@@ -18,6 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_validation_expression_execution_throw_exception_for_question_in_valid_state : InterviewTestsContext
     {
         Establish context = () =>
