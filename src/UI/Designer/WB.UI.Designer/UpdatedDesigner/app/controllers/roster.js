@@ -78,17 +78,7 @@
                 };
 
                 $scope.saveRoster = function() {
-                    $("#edit-roster-save-button").popover('destroy');
-                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function(result) {
-                        if (!result.IsSuccess) {
-                            $("#edit-roster-save-button").popover({
-                                content: result.Error,
-                                placement: top,
-                                animation: true
-                            }).popover('show');
-                            $log.error(result);
-                        }
-                    });
+                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster);
                 };
 
                 $scope.deleteRoster = function () {

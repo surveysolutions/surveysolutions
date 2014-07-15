@@ -4,8 +4,8 @@
     angular.module('designerApp')
         .controller('QuestionCtrl', [
             '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log',
-            function ($scope, $state, utilityService, questionnaireService, commandService, $log) {
-                var dataBind = function (result) {
+            function($scope, $state, utilityService, questionnaireService, commandService, $log) {
+                var dataBind = function(result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
 
@@ -46,12 +46,8 @@
                         });
                 };
 
-                $scope.saveQuestion = function() {
-                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function (result) {
-                        if (!result.IsSuccess) {
-                            $log.error(result.Error);
-                        }
-                    });
+                $scope.saveQuestion = function () {
+                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion);
                 };
 
                 $scope.setQuestionType = function(type) {
@@ -74,7 +70,7 @@
                     $scope.activeQuestion.options.splice(index, 1);
                 };
 
-                $scope.changeQuestionScope = function (scope) {
+                $scope.changeQuestionScope = function(scope) {
                     $scope.activeQuestion.questionScope = scope.text;
                     if ($scope.activeQuestion.questionScope == 'Headquarter') {
                         $scope.activeQuestion.enablementCondition = '';
