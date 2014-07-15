@@ -30,6 +30,7 @@
     "lodash": "~2.4.1",
     "angular-animate": "~1.2.18",
     "angular-ui-router": "~0.2.10",
-    "jquery-cookie": "~1.4.1"
+    "jquery-cookie": "~1.4.1",
+    "angular-block-ui": "~0.0.8"
   }
 }

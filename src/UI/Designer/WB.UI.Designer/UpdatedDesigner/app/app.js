@@ -14,7 +14,8 @@
         'ui.notify',
         'ui.router',
         'angular-loading-bar',
-        'cfp.hotkeys'
+        'cfp.hotkeys',
+        'blockUI'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -86,5 +87,8 @@
             });
     }]).config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('errorReportingInterceptor');
+    }])
+    .config(['blockUIConfigProvider', function(blockUiConfigProvider) {
+        blockUiConfigProvider.message('Please wait...');
     }]);
 }(jQuery));
