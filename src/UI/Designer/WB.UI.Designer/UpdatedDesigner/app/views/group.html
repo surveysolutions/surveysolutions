@@ -1,6 +1,6 @@
 ﻿<div class="form-holder">
     <div data-item-breadcrumbs data-crumbs="activeChapter.breadcrumbs"></div>
-    
+
     <form role="form">
         <div class="form-group">
             <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
@@ -18,11 +18,10 @@
         </div>
     </form>
 </div>
-
 <div class="form-buttons-holder">
     <div class="pull-left">
         <button id="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveChapter()">Save</button>
-        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()">Cancel</button>
+        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelGroup()">Cancel</button>
     </div>
     <div class="pull-right">
         <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteGroup(activeChapter.group)">Delete</button>
