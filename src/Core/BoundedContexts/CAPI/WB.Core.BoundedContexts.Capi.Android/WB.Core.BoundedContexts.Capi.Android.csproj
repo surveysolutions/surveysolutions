@@ -148,6 +148,9 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\SelectebleQuestionViewModel.cs">
       <Link>Views\InterviewDetails\SelectebleQuestionViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\StaticTextViewModel.cs">
+      <Link>Views\InterviewDetails\StaticTextViewModel.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\InterviewDetails\TextListAnswerViewModel.cs">
       <Link>Views\InterviewDetails\TextListAnswerViewModel.cs</Link>
     </Compile>
