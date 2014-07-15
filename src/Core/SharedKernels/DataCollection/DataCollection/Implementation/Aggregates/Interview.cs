@@ -2513,8 +2513,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer,
             Identity answeredQuestion, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
         {
-            EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
-                answeredQuestion, answer, questionnaire, GetRosterInstanceIds);
+
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
+            expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
+
+            //Apply other changes on expressionProcessorState
+            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
+            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
+
+            var enablementChanges = new EnablementChanges(disabledGroupsC, enabledGroupsC, questionsToBeDisabledC, questionsToBeEnabledC);
+
+
+            /*EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
+                answeredQuestion, answer, questionnaire, GetRosterInstanceIds);*/
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
@@ -2533,24 +2547,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? answer
                     : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
 
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            /*List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
                 answeredQuestion, questionnaire, getAnswerConcerningDisabling, getNewQuestionState,
                 enablementChanges,
-                out answersDeclaredValid, out answersDeclaredInvalid);
+                out answersDeclaredValid, out answersDeclaredInvalid);*/
 
 
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-            expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
-
-            //Apply other changes on expressionProcessorState
-            List<Identity> answersDeclaredValidC, answersDeclaredInvalidC;
-            List<Identity> questionsToBeEnabledC, questionsToBeDisabledC, enabledGroupsC, disabledGroupsC;
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out questionsToBeEnabledC, out questionsToBeDisabledC, out enabledGroupsC, out disabledGroupsC);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValidC, out answersDeclaredInvalidC);
-
-            var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
-            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();
+            /*var allAnswersDeclaredValid = answersDeclaredValid.Union(answersDeclaredValidC).ToList();
+            var allAnswersDeclaredInvalid = answersDeclaredInvalid.Union(answersDeclaredInvalidC).ToList();*/
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
                 questionId, rosterVector, questionnaire);
@@ -2560,7 +2565,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.Text, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(allAnswersDeclaredValid, allAnswersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValidC, answersDeclaredInvalidC),
                 null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answer);
         }
 
