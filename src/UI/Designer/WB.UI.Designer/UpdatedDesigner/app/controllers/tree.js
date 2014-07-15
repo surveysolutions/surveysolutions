@@ -370,5 +370,34 @@
                     });
             }
             $scope.refreshTree();
+
+            $rootScope.$on('questionUpdated', function (event, data) {
+                var question = questionnaireService.findItem($scope.items, data.itemId);
+
+                if (question == null)
+                    return;
+
+                question.title = data.title;
+                question.variable = data.variable;
+                question.type = data.type;
+            });
+
+            $rootScope.$on('groupUpdated', function (event, data) {
+                var group = questionnaireService.findItem($scope.items, data.itemId);
+
+                if (group == null)
+                    return;
+
+                group.title = data.title;
+            });
+
+            $rootScope.$on('rosterUpdated', function (event, data) {
+                var roster = questionnaireService.findItem($scope.items, data.itemId);
+
+                if (roster == null)
+                    return;
+
+                roster.title = data.title;
+            });
         }
     ]);

@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('GroupCtrl', [
-            '$scope', '$stateParams', 'questionnaireService', 'commandService', '$log',
-            function($scope, $stateParams, questionnaireService, commandService, $log) {
+            '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', '$log',
+            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, $log) {
 
                 var dataBind = function(result) {
                     $scope.activeChapter = result;
@@ -23,6 +23,10 @@
                 $scope.saveChapter = function() {
                     commandService.updateGroup($stateParams.questionnaireId, $scope.activeChapter.group).success(function(result) {
                         $scope.initialGroup = angular.copy($scope.activeChapter);
+                        $rootScope.$emit('groupUpdated', {
+                            itemId: $scope.activeChapter.group.itemId,
+                            title: $scope.activeChapter.group.title
+                        });
                     });
                 };
 

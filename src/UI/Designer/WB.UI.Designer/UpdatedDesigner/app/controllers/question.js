@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log',
-            function($scope, $state, utilityService, questionnaireService, commandService, $log) {
+            '$rootScope', '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log',
+            function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log) {
                 var dataBind = function(result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
@@ -46,9 +46,15 @@
                         });
                 };
 
-                $scope.saveQuestion = function () {
-                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function (result) {
+                $scope.saveQuestion = function() {
+                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function(result) {
                         $scope.initialQuestion = angular.copy($scope.activeQuestion);
+                        $rootScope.$emit('questionUpdated', {
+                            itemId: $scope.activeQuestion.itemId,
+                            title: $scope.activeQuestion.title,
+                            variable: $scope.activeQuestion.variable,
+                            type: $scope.activeQuestion.type
+                        });
                     });
                 };
 

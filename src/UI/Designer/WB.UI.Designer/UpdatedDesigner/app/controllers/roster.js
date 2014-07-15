@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', [
-            '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log', '$modal',
-            function($scope, $stateParams, questionnaireService, commandService, utilityService, $log, $modal) {
+            '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log', '$modal',
+            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, $log, $modal) {
 
                 $scope.rosterTypes = {
                     'Numeric-template.html': 'Answer to numeric question',
@@ -78,7 +78,12 @@
                 };
 
                 $scope.saveRoster = function() {
-                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster);
+                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function (result) {
+                        $rootScope.$emit('rosterUpdated', {
+                            itemId: $scope.activeRoster.itemId,
+                            title: $scope.activeRoster.title
+                        });
+                    });
                 };
 
                 $scope.deleteRoster = function () {
