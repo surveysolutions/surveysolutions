@@ -15,6 +15,7 @@ using it = Moq.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAndValidness
 {
+    [Ignore("C#")]
     internal class when_answering_integer_question_A_which_enables_B_which_makes_C_valid_and_B_was_disabled_and_answered_and_C_was_invalid_and_answered : InterviewTestsContext
     {
         Establish context = () =>

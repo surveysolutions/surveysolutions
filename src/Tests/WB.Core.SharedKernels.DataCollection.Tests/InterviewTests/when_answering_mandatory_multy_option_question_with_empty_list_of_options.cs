@@ -17,6 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_answering_mandatory_multy_option_question_with_empty_list_of_options : InterviewTestsContext
     {
         Establish context = () =>

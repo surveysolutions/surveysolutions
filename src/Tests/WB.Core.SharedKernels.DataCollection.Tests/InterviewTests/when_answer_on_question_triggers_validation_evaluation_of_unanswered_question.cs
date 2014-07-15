@@ -17,6 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_answer_on_question_triggers_validation_evaluation_of_unanswered_question : InterviewTestsContext
     {
         Establish context = () =>
