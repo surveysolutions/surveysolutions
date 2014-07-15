@@ -82,6 +82,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Id.tvErrorWarning = global::WB.UI.QuestionnaireTester.Resource.Id.tvErrorWarning;
 			global::WB.UI.Shared.Android.Resource.Id.tvITem = global::WB.UI.QuestionnaireTester.Resource.Id.tvITem;
 			global::WB.UI.Shared.Android.Resource.Id.tvMError = global::WB.UI.QuestionnaireTester.Resource.Id.tvMError;
+			global::WB.UI.Shared.Android.Resource.Id.tvText = global::WB.UI.QuestionnaireTester.Resource.Id.tvText;
 			global::WB.UI.Shared.Android.Resource.Id.tvTitle = global::WB.UI.QuestionnaireTester.Resource.Id.tvTitle;
 			global::WB.UI.Shared.Android.Resource.Id.vpContent = global::WB.UI.QuestionnaireTester.Resource.Id.vpContent;
 			global::WB.UI.Shared.Android.Resource.Layout.AbstractQuestionView = global::WB.UI.QuestionnaireTester.Resource.Layout.AbstractQuestionView;
@@ -89,6 +90,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::WB.UI.QuestionnaireTester.Resource.Layout.list_navigation_item;
 			global::WB.UI.Shared.Android.Resource.Layout.RosterQuestion = global::WB.UI.QuestionnaireTester.Resource.Layout.RosterQuestion;
 			global::WB.UI.Shared.Android.Resource.Layout.ScreenContentFragment = global::WB.UI.QuestionnaireTester.Resource.Layout.ScreenContentFragment;
+			global::WB.UI.Shared.Android.Resource.Layout.StaticTextView = global::WB.UI.QuestionnaireTester.Resource.Layout.StaticTextView;
 			global::WB.UI.Shared.Android.Resource.Layout.StatisticsContent = global::WB.UI.QuestionnaireTester.Resource.Layout.StatisticsContent;
 			global::WB.UI.Shared.Android.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscanneractivitylayout;
 			global::WB.UI.Shared.Android.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscannerfragmentlayout;
@@ -224,17 +226,17 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040002
 			public const int ScreenId = 2130968578;
 			
-			// aapt resource value: 0x7f04002e
-			public const int btnAnswered = 2130968622;
+			// aapt resource value: 0x7f04002f
+			public const int btnAnswered = 2130968623;
 			
-			// aapt resource value: 0x7f040032
-			public const int btnComplete = 2130968626;
+			// aapt resource value: 0x7f040033
+			public const int btnComplete = 2130968627;
 			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
 			
-			// aapt resource value: 0x7f040031
-			public const int btnInvalid = 2130968625;
+			// aapt resource value: 0x7f040032
+			public const int btnInvalid = 2130968626;
 			
 			// aapt resource value: 0x7f040027
 			public const int btnLogin = 2130968615;
@@ -254,11 +256,11 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04001d
 			public const int btnStart = 2130968605;
 			
-			// aapt resource value: 0x7f04002f
-			public const int btnUnanswered = 2130968623;
+			// aapt resource value: 0x7f040030
+			public const int btnUnanswered = 2130968624;
 			
-			// aapt resource value: 0x7f040035
-			public const int contentFrame = 2130968629;
+			// aapt resource value: 0x7f040036
+			public const int contentFrame = 2130968630;
 			
 			// aapt resource value: 0x7f04000f
 			public const int etComments = 2130968591;
@@ -296,8 +298,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04001c
 			public const int llNavigationHolder = 2130968604;
 			
-			// aapt resource value: 0x7f040033
-			public const int llQuestionnairie = 2130968627;
+			// aapt resource value: 0x7f040034
+			public const int llQuestionnairie = 2130968628;
 			
 			// aapt resource value: 0x7f040007
 			public const int llRoot = 2130968583;
@@ -329,8 +331,8 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f040021
 			public const int topView = 2130968609;
 			
-			// aapt resource value: 0x7f040034
-			public const int tvArrow = 2130968628;
+			// aapt resource value: 0x7f040035
+			public const int tvArrow = 2130968629;
 			
 			// aapt resource value: 0x7f04000d
 			public const int tvComments = 2130968589;
@@ -344,14 +346,17 @@ namespace WB.UI.QuestionnaireTester
 			// aapt resource value: 0x7f04000b
 			public const int tvError = 2130968587;
 			
-			// aapt resource value: 0x7f040030
-			public const int tvErrorWarning = 2130968624;
+			// aapt resource value: 0x7f040031
+			public const int tvErrorWarning = 2130968625;
 			
 			// aapt resource value: 0x7f04001f
 			public const int tvITem = 2130968607;
 			
 			// aapt resource value: 0x7f04000a
 			public const int tvMError = 2130968586;
+			
+			// aapt resource value: 0x7f04002e
+			public const int tvText = 2130968622;
 			
 			// aapt resource value: 0x7f04000c
 			public const int tvTitle = 2130968588;
@@ -409,16 +414,19 @@ namespace WB.UI.QuestionnaireTester
 			public const int SplashScreen = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int StatisticsContent = 2130903051;
+			public const int StaticTextView = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int template_list_item = 2130903052;
+			public const int StatisticsContent = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int zxingscanneractivitylayout = 2130903053;
+			public const int template_list_item = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int zxingscannerfragmentlayout = 2130903054;
+			public const int zxingscanneractivitylayout = 2130903054;
+			
+			// aapt resource value: 0x7f03000f
+			public const int zxingscannerfragmentlayout = 2130903055;
 			
 			static Layout()
 			{

@@ -624,9 +624,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Static text is empty.
         /// </summary>
-        internal static string WB0067_StaticTextIsEmpty {
+        internal static string WB0071_StaticTextIsEmpty {
             get {
-                return ResourceManager.GetString("WB0067_StaticTextIsEmpty", resourceCulture);
+                return ResourceManager.GetString("WB0071_StaticTextIsEmpty", resourceCulture);
             }
         }
     }
