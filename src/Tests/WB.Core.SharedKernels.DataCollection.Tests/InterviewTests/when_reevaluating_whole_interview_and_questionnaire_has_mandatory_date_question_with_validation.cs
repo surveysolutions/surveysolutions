@@ -14,6 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_reevaluating_whole_interview_and_questionnaire_has_mandatory_date_question_with_validation : InterviewTestsContext
     {
         Establish context = () =>
