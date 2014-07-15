@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_answering_qr_barcode_question_and_answer_is_specified : InterviewTestsContext
     {
         Establish context = () =>
