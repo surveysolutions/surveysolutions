@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('GroupCtrl', [
-            '$scope', '$stateParams', 'questionnaireService', 'commandService',
-            function($scope, $stateParams, questionnaireService, commandService) {
+            '$scope', '$stateParams', 'questionnaireService', 'commandService', '$log',
+            function($scope, $stateParams, questionnaireService, commandService, $log) {
 
                 $scope.loadGroup = function() {
                     questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
@@ -15,7 +15,7 @@
                     );
                 };
 
-                $scope.saveChapter = function() {
+                $scope.saveChapter = function () {
                     commandService.updateGroup($stateParams.questionnaireId, $scope.activeChapter.group);
                 };
 

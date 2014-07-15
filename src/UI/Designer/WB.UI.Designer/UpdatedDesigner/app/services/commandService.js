@@ -16,6 +16,7 @@
                         },
                         headers: {'Content-Type': 'application/json;'}
                     });
+                    
                 }
 
                 commandService.execute = function(type, command) {

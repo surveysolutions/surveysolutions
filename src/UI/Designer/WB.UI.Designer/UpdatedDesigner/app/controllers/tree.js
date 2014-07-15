@@ -19,11 +19,6 @@
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
-            $scope.chapterCounters = {
-                questions: 0,
-                groups: 0,
-                rosters: 0
-            }
 
             hotkeys.add({
                 combo: 'ctrl+f',
@@ -253,6 +248,7 @@
 
                         var indexOf = _.indexOf(parentItem.items, clonnedItem);
                         parentItem.items.splice(indexOf + 1, 0, cloneDeep);
+                        connectTree();
                         $rootScope.$emit('questionAdded');
                     }
                 });
@@ -268,7 +264,15 @@
                 commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function(result) {
                     if (result.IsSuccess) {
                         $scope.refreshTree();
-                        $rootScope.$emit('groupAdded');
+                        var publishAdd = function (added) {
+                            var children = added.items || [];
+                            $rootScope.$emit(getItemType(added) + 'Added');
+                            _.each(children, function (child) {
+                                publishAdd(child);
+                            });
+                        }
+
+                        publishAdd(clonnedItem);
                     }
                 });
             };

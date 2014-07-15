@@ -33,6 +33,7 @@
                     commandService.addChapter($state.params.questionnaireId, newChapter).success(function() {
                         $scope.questionnaire.chapters.push(newChapter);
                         $state.go('questionnaire.chapter.group', { chapterId: newChapter.itemId, itemId: newChapter.itemId });
+                        $rootScope.$emit('groupAdded');
                     });
                 };
 
@@ -47,6 +48,7 @@
                                 itemId: newId
                             };
                             $scope.questionnaire.chapters.splice(indexOf, 0, newChapter);
+                            $rootScope.$emit('chapterCloned');
                             $state.go('questionnaire.chapter.group', { chapterId: newId, itemId: newId });
                         }
                     });
@@ -75,6 +77,7 @@
                                         var index = $scope.questionnaire.chapters.indexOf(chapter);
                                         if (index > -1) {
                                             $scope.questionnaire.chapters.splice(index, 1);
+                                            $rootScope.$emit('chapterDeleted');
                                         }
                                     }
                                 });

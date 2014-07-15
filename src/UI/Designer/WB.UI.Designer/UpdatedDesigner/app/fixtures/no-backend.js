@@ -52,7 +52,13 @@
             );
 
             //Comands
-            $httpBackend.whenPOST('../command/execute').respond();
+            $httpBackend.whenPOST('../command/execute').respond(function(method, url, data, headers) {
+                    if (!angular.fromJson(data).type.indexOf('Update')) {
+                        return [200, { "Error": "Custom Validation Error From Api", "HasPermissions": true, "IsSuccess": false }, {}];
+                    }
+                    return [200, { "Error": "", "HasPermissions": true, "IsSuccess": true }, {}];
+                }
+            );
 
             //Views
             $httpBackend.whenGET(/views\/.*/).passThrough();
@@ -61,7 +67,7 @@
             $httpBackend.whenGET(/data\/.*/).passThrough();
 
             // Validation
-            $httpBackend.whenPOST('../account/findbyemail', {email: 'test@test.com'})
-                .respond({"isUserExist": false});
+            $httpBackend.whenPOST('../account/findbyemail', { email: 'test@test.com' })
+                .respond({ "isUserExist": false });
         });
 }());
