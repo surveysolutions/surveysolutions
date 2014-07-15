@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
@@ -20,7 +19,6 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.ExpressionProcessing;
 using Identity = WB.Core.SharedKernels.ExpressionProcessing.Identity;
-using IExpressionProcessor = WB.Core.SharedKernels.ExpressionProcessor.Services.IExpressionProcessor;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -607,16 +605,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IQuestionnaireRepository>(); }
         }
 
-        /// <remarks>
-        /// All operations with expressions are time-consuming.
-        /// So this processor may be used only in command handlers.
-        /// And should never be used in event handlers!!
-        /// </remarks>
-        private IExpressionProcessor ExpressionProcessor
-        {
-            get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
-        }
-
         #endregion
 
         #region .ctors
@@ -867,27 +855,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
 
             return state.AnsweredQuestions.Contains(questionKey);
-        }
-
-        private static object GetAnswerSupportedInExpressionsForEnabledOrNull(InterviewStateDependentOnAnswers state, Identity question,
-            Func<Identity, bool?> getNewQuestionState)
-        {
-            bool? newQuestionState = getNewQuestionState(question);
-
-            //no changes after dis/enable but already marked as disabled
-            if (!newQuestionState.HasValue && IsQuestionDisabled(state, question))
-                return null;
-            //new state of question is disabled
-            if (newQuestionState.HasValue && !newQuestionState.Value)
-            {
-                return null;
-            }
-
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
-
-            return state.AnswersSupportedInExpressions.ContainsKey(questionKey)
-                ? state.AnswersSupportedInExpressions[questionKey]
-                : null;
         }
 
         private static object GetEnabledQuestionAnswerSupportedInExpressions(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire)
@@ -1663,144 +1630,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void ReevaluateSynchronizedInterview()
         {
-            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
-            List<Identity> questionsToBeEnabled = new List<Identity>();
-            List<Identity> questionsToBeDisabled = new List<Identity>();
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
 
-            List<Identity> groupsToBeEnabled = new List<Identity>();
-            List<Identity> groupsToBeDisabled = new List<Identity>();
+            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
 
-            List<Identity> questionsDeclaredValid = new List<Identity>();
-            List<Identity> questionsDeclaredInvalid = new List<Identity>();
+            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getEnabledQuestionAnswerSupportedInExpressions = (state, questionId) =>
-                GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState,
-                    questionId,
-                    (currentState, q) => this.ShouldQuestionBeDisabledByCustomCondition(this.interviewState, q, questionnaire),
-                    (currentState, g) => this.ShouldGroupBeDisabledByCustomCondition(this.interviewState, g, questionnaire),
-                    questionnaire);
+            this.ApplyEnablementChangesEvents(enablementChanges);
 
-            foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions())
-            {
-                var availableRosterLevels = this.AvailableRosterLevelsForGroup(this.interviewState, questionnaire,
-                    groupWithNotEmptyCustomEnablementCondition);
-
-                foreach (var availableRosterLevel in availableRosterLevels)
-                {
-                    Identity groupIdAtInterview = new Identity(groupWithNotEmptyCustomEnablementCondition, availableRosterLevel);
-
-                    PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
-                        isNewStateEnabled:
-                            this.ShouldGroupBeEnabledByCustomEnablementCondition(this.interviewState, groupIdAtInterview, questionnaire,
-                                getEnabledQuestionAnswerSupportedInExpressions),
-                        isOldStateEnabled: !IsGroupDisabled(this.interviewState, groupIdAtInterview));
-                }
-            }
-
-            foreach (var questionWithNotEmptyEnablementCondition in questionnaire.GetAllQuestionsWithNotEmptyCustomEnablementConditions())
-            {
-                var availableRosterLevels = this.AvailableRosterLevelsForQuestion(this.interviewState, questionnaire,
-                    questionWithNotEmptyEnablementCondition);
-
-                foreach (var availableRosterLevel in availableRosterLevels)
-                {
-                    Identity questionIdAtInterview = new Identity(questionWithNotEmptyEnablementCondition, availableRosterLevel);
-
-                    PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled,
-                        questionsToBeDisabled,
-                        isNewStateEnabled:
-                            this.ShouldQuestionBeEnabledByCustomEnablementCondition(this.interviewState, questionIdAtInterview,
-                                questionnaire,
-                                getEnabledQuestionAnswerSupportedInExpressions),
-                        isOldStateEnabled: !IsQuestionDisabled(this.interviewState, questionIdAtInterview));
-                }
-            }
-
-            Func<Identity, bool> isQuestionDisabled =
-                (questionIdAtInterview) => IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire,
-                    (group) =>
-                        (groupsToBeDisabled.Any(q => AreEqual(q, group)) || IsGroupDisabled(this.interviewState, group)) &&
-                            !groupsToBeEnabled.Any(q => AreEqual(q, group)),
-                    (question) =>
-                        (questionsToBeDisabled.Any(q => AreEqual(q, question)) ||
-                            IsQuestionDisabled(this.interviewState, questionIdAtInterview)) &&
-                            !questionsToBeEnabled.Any(q => AreEqual(q, question)));
-
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (state, question) =>
-                    GetEnabledQuestionAnswerSupportedInExpressions(state,
-                        question,
-                        (currstate, currquestion) => !questionsToBeEnabled.Any(q => AreEqual(q, currquestion)) && IsQuestionDisabled(currstate, currquestion),
-                        (currstate, currgroup) => !groupsToBeEnabled.Any(q => AreEqual(q, currgroup)) && IsGroupDisabled(currstate, currgroup),
-                        questionnaire);
-
-            foreach (var questionWithNotEmptyValidationExpression in questionnaire.GetAllQuestionsWithNotEmptyValidationExpressions())
-            {
-                var availableRosterLevels = this.AvailableRosterLevelsForQuestion(this.interviewState, questionnaire,
-                    questionWithNotEmptyValidationExpression);
-
-                foreach (var availableRosterLevel in availableRosterLevels)
-                {
-                    Identity questionIdAtInterview = new Identity(questionWithNotEmptyValidationExpression, availableRosterLevel);
-
-                    if (isQuestionDisabled(questionIdAtInterview))
-                        continue;
-
-                    string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionIdAtInterview.Id, questionIdAtInterview.RosterVector);
-
-                    if (!this.interviewState.AnsweredQuestions.Contains(questionKey))
-                        continue;
-
-
-                    bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(this.interviewState,
-                        questionIdAtInterview, questionnaire,
-                        getAnswer, a => null);
-
-                    switch (dependentQuestionValidationResult)
-                    {
-                        case true:
-                            questionsDeclaredValid.Add(questionIdAtInterview);
-                            break;
-                        case false:
-                            questionsDeclaredInvalid.Add(questionIdAtInterview);
-                            break;
-                    }
-                }
-            }
-
-            Func<Identity, bool> wasQuestionValidationPerformed =
-                mandatoryQuestion =>
-                    questionsDeclaredInvalid.Any(x => AreEqual(x, mandatoryQuestion)) ||
-                        questionsDeclaredValid.Any(x => AreEqual(x, mandatoryQuestion));
-
-            IEnumerable<Identity> mandatoryQuestionInstances =
-                GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, questionnaire.GetAllMandatoryQuestions(),
-                    EmptyRosterVector,
-                    questionnaire, GetRosterInstanceIds);
-
-
-            foreach (Identity mandatoryQuestion in mandatoryQuestionInstances)
-            {
-                if (isQuestionDisabled(mandatoryQuestion) || wasQuestionValidationPerformed(mandatoryQuestion))
-                    continue;
-
-                string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(mandatoryQuestion.Id, mandatoryQuestion.RosterVector);
-
-                bool hasQuestionAnswer = this.interviewState.AnsweredQuestions.Contains(questionKey);
-
-                if (hasQuestionAnswer)
-                {
-                    questionsDeclaredValid.Add(mandatoryQuestion);
-                }
-                else
-                {
-                    questionsDeclaredInvalid.Add(mandatoryQuestion);
-                }
-            }
-            this.ApplyEnablementChangesEvents(new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled,
-                questionsToBeEnabled));
-            this.ApplyValidityChangesEvents(new ValidityChanges(questionsDeclaredValid, questionsDeclaredInvalid));
+            this.ApplyValidityChangesEvents(new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid));
 
             if (!this.HasInvalidAnswers())
             {
@@ -3423,32 +3265,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
-        private bool ShouldQuestionBeDisabledByCustomCondition(InterviewStateDependentOnAnswers state, Identity questionId, IQuestionnaire questionnaire)
-        {
-            var questionsInvolvedInConditions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionId.Id);
-            if (!questionsInvolvedInConditions.Any() || questionsInvolvedInConditions.Any(q => q == questionId.Id))
-                return IsQuestionDisabled(state, questionId);
-
-            return !this.ShouldQuestionBeEnabledByCustomEnablementCondition(state, questionId, questionnaire,
-                (currentState, questionInCondition) =>
-                    GetEnabledQuestionAnswerSupportedInExpressions(state,
-                        questionInCondition,
-                        (currState, q) => this.ShouldQuestionBeDisabledByCustomCondition(state, q, questionnaire),
-                        (currState, g) => this.ShouldGroupBeDisabledByCustomCondition(state, g, questionnaire),
-                        questionnaire));
-        }
-
-        private bool ShouldGroupBeDisabledByCustomCondition(InterviewStateDependentOnAnswers state, Identity groupId, IQuestionnaire questionnaire)
-        {
-            return !ShouldGroupBeEnabledByCustomEnablementCondition(state, groupId, questionnaire,
-                (currentState, questionInCondition) =>
-                    GetEnabledQuestionAnswerSupportedInExpressions(state,
-                        questionInCondition,
-                        (currState, q) => this.ShouldQuestionBeDisabledByCustomCondition(state, q, questionnaire),
-                        (currState, g) => this.ShouldGroupBeDisabledByCustomCondition(state, g, questionnaire),
-                        questionnaire));
-        }
-
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
             IQuestionnaire questionnaire = this.QuestionnaireRepository.GetHistoricalQuestionnaire(id, version);
@@ -3605,305 +3421,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             questionId, questionType));
                 }
             }
-        }
-
-        private static List<Identity> RemoveQuestionsAlreadyDeclaredValid(InterviewStateDependentOnAnswers state,
-            IEnumerable<Identity> questionsToBeDeclaredValid)
-        {
-            return questionsToBeDeclaredValid.Where(question => !IsQuestionAnsweredValid(state, question)).ToList();
-        }
-
-        private static List<Identity> RemoveQuestionsAlreadyDeclaredInvalid(InterviewStateDependentOnAnswers state,
-            IEnumerable<Identity> questionsToBeDeclaredInvalid)
-        {
-            return questionsToBeDeclaredInvalid.Where(question => !IsQuestionAnsweredInvalid(state, question)).ToList();
-        }
-
-        private void PerformValidationOfAffectedQuestions(InterviewStateDependentOnAnswers state,
-            Identity answeredQuestion, IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds,
-            Func<Identity, bool?> getNewQuestionStatus,
-            EnablementChanges enablementChanges,
-            out List<Identity> questionsDeclaredValid, out List<Identity> questionsDeclaredInvalid)
-        {
-            questionsDeclaredValid = new List<Identity>();
-            questionsDeclaredInvalid = new List<Identity>();
-
-            IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(answeredQuestion.Id);
-            IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                dependentQuestionIds, answeredQuestion.RosterVector, questionnaire, getRosterInstanceIds);
-
-            IEnumerable<Identity> mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions =
-                GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(state,
-                    questionnaire, enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled, getRosterInstanceIds);
-
-            IEnumerable<Identity> questionsWithCustomValidationDependentOnEnablementChanges =
-                GetQuestionsWithCustomValidationDependentOnEnablementChanges(state, questionnaire, enablementChanges, getRosterInstanceIds);
-
-            var questionsToBeValidated =
-                dependentQuestions
-                    .Concat(mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions)
-                    .Concat(questionsWithCustomValidationDependentOnEnablementChanges)
-                    .Distinct(new IdentityComparer())
-                    .ToList();
-
-            foreach (Identity questionToValidate in questionsToBeValidated)
-            {
-                bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(state, questionToValidate, questionnaire,
-                    getAnswer, getNewQuestionStatus);
-                switch (dependentQuestionValidationResult)
-                {
-                    case true:
-                        questionsDeclaredValid.Add(questionToValidate);
-                        break;
-                    case false:
-                        questionsDeclaredInvalid.Add(questionToValidate);
-                        break;
-                }
-            }
-        }
-
-        private static IEnumerable<Identity> GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(
-            InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire,
-            List<Identity> groupsToBeEnabled, List<Identity> questionsToBeEnabled,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
-        {
-            foreach (var question in questionsToBeEnabled)
-            {
-                if (questionnaire.IsQuestionMandatory(question.Id) || questionnaire.IsCustomValidationDefined(question.Id))
-                    yield return question;
-            }
-
-            foreach (var group in groupsToBeEnabled)
-            {
-                IEnumerable<Guid> affectedUnderlyingQuestionIds =
-                    questionnaire.GetUnderlyingMandatoryQuestions(group.Id)
-                        .Union(questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(group.Id));
-
-                IEnumerable<Identity> affectedUnderlyingQuestionInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                    state,
-                    affectedUnderlyingQuestionIds, group.RosterVector, questionnaire, getRosterInstanceIds);
-
-                foreach (var underlyingQuestionInstance in affectedUnderlyingQuestionInstances)
-                {
-                    yield return underlyingQuestionInstance;
-                }
-            }
-        }
-
-        private static IEnumerable<Identity> GetQuestionsWithCustomValidationDependentOnEnablementChanges(
-            InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire, EnablementChanges enablementChanges,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds)
-        {
-            IEnumerable<Identity> changedQuestions = Enumerable.Concat(enablementChanges.QuestionsToBeDisabled, enablementChanges.QuestionsToBeEnabled);
-            IEnumerable<Identity> changedGroups = Enumerable.Concat(enablementChanges.GroupsToBeDisabled, enablementChanges.GroupsToBeEnabled);
-
-            IEnumerable<Identity> underlyingQuestionsFromChangedGroups =
-                from changedGroup in changedGroups
-                let underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(changedGroup.Id)
-                let underlyingQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                    state, underlyingQuestionIds, changedGroup.RosterVector, questionnaire, getRosterInstanceIds)
-                from underlyingQuestion in underlyingQuestions
-                select underlyingQuestion;
-
-            IEnumerable<Identity> allChangedQuestions = Enumerable.Concat(changedQuestions, underlyingQuestionsFromChangedGroups);
-
-            IEnumerable<Identity> allChangedQuestionsWhichAreAnswered =
-                from changedQuestion in allChangedQuestions
-                let changedQuestionKey = ConversionHelper.ConvertIdAndRosterVectorToString(changedQuestion.Id, changedQuestion.RosterVector)
-                where state.AnsweredQuestions.Contains(changedQuestionKey)
-                select changedQuestion;
-
-            foreach (Identity changedQuestion in allChangedQuestionsWhichAreAnswered)
-            {
-                IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(changedQuestion.Id);
-
-                IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                    state, dependentQuestionIds, changedQuestion.RosterVector, questionnaire, getRosterInstanceIds);
-
-                foreach (Identity dependentQuestion in dependentQuestions)
-                {
-                    yield return dependentQuestion;
-                }
-            }
-        }
-
-        private bool? PerformValidationOfQuestion(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, Func<Identity, bool?> getNewQuestionState)
-        {
-            if (questionnaire.IsQuestionMandatory(question.Id))
-            {
-                if (getAnswer(state, question) == null)
-                    return false;
-            }
-
-            if (!questionnaire.IsCustomValidationDefined(question.Id))
-                return true;
-
-            if (getAnswer(state, question) == null)
-                return true;
-
-            bool? questionChangedState = getNewQuestionState(question);
-
-            //we treat newly disabled questions with validations as valid
-            if (questionChangedState == false)
-                return true;
-
-            if (questionChangedState == null && IsQuestionDisabled(state, question))
-                return true;
-
-            string validationExpression = questionnaire.GetCustomValidationExpression(question.Id);
-
-            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
-            IEnumerable<KeyValuePair<string, Identity>> involvedQuestions =
-                GetInstancesOfQuestionsWithSameAndUpperRosterLevelOrThrow(involvedQuestionIds, question.RosterVector, questionnaire);
-
-            return this.EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(state,
-                validationExpression, involvedQuestions, getAnswer, resultIfExecutionFailsWhenAnswersAreEnough: false,
-                thisIdentifierQuestionId: question.Id);
-        }
-
-        private void DetermineCustomEnablementStateOfGroupsInitializedByAddedRosterInstances(
-            InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingAdded, decimal[] nearestToOuterRosterVector,
-            IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds,
-            out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled)
-        {
-            groupsToBeDisabled = new List<Identity>();
-            groupsToBeEnabled = new List<Identity>();
-
-            if (rosterInstanceIdsBeingAdded.Count == 0)
-                return;
-
-            foreach (Guid rosterId in rosterIds)
-            {
-                int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
-
-                IEnumerable<Guid> affectedGroupIds =
-                    questionnaire.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(rosterId);
-
-                IEnumerable<Identity> affectedGroups = GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(state,
-                    affectedGroupIds, nearestToOuterRosterVector, questionnaire, getRosterInstanceIds)
-                    .Where(group =>
-                        group.RosterVector.Length > indexOfRosterInRosterVector &&
-                            rosterInstanceIdsBeingAdded.Contains(group.RosterVector[indexOfRosterInRosterVector]));
-
-                foreach (Identity group in affectedGroups)
-                {
-                    PutToCorrespondingListAccordingToEnablementStateChange(group, groupsToBeEnabled, groupsToBeDisabled,
-                        isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(state, group, questionnaire, getAnswer),
-                        isOldStateEnabled: true);
-                }
-            }
-        }
-
-        private void DetermineCustomEnablementStateOfQuestionsInitializedByAddedRosterInstances(
-            InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingAdded, decimal[] nearestToOuterRosterVector,
-            IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds,
-            out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
-        {
-            questionsToBeDisabled = new List<Identity>();
-            questionsToBeEnabled = new List<Identity>();
-
-            if (rosterInstanceIdsBeingAdded.Count == 0)
-                return;
-
-            foreach (Guid rosterId in rosterIds)
-            {
-                int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
-
-                IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(rosterId);
-
-                IEnumerable<Identity> affectedQuestions =
-                    GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                        affectedQuestionIds, nearestToOuterRosterVector, questionnaire, getRosterInstanceIds)
-                        .Where(question => rosterInstanceIdsBeingAdded.Contains(question.RosterVector[indexOfRosterInRosterVector]));
-
-                foreach (Identity question in affectedQuestions)
-                {
-                    PutToCorrespondingListAccordingToEnablementStateChange(question, questionsToBeEnabled, questionsToBeDisabled,
-                        isNewStateEnabled:
-                            this.ShouldQuestionBeEnabledByCustomEnablementCondition(state, question, questionnaire, getAnswer),
-                        isOldStateEnabled: true);
-                }
-            }
-        }
-
-        private static void DetermineValidityStateOfQuestionsInitializedByAddedRosterInstances(
-            InterviewStateDependentOnAnswers state,
-            List<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingAdded, decimal[] nearestToOuterRosterVector,
-            IQuestionnaire questionnaire,
-            List<Identity> groupsToBeDisabled, List<Identity> questionsToBeDisabled,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds,
-            out List<Identity> questionsToBeInvalid)
-        {
-            questionsToBeInvalid = new List<Identity>();
-
-            if (rosterInstanceIdsBeingAdded.Count == 0)
-                return;
-
-            foreach (Guid rosterId in rosterIds)
-            {
-                int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
-
-                IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingMandatoryQuestions(rosterId);
-
-                IEnumerable<Identity> affectedQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                    affectedQuestionIds, nearestToOuterRosterVector, questionnaire, getRosterInstanceIds)
-                    .Where(question
-                        => rosterInstanceIdsBeingAdded.Contains(question.RosterVector[indexOfRosterInRosterVector])
-                            &&
-                            !IsQuestionOrParentGroupDisabled(question, questionnaire,
-                                (questionId) => groupsToBeDisabled.Any(q => AreEqual(q, questionId)),
-                                (questionId) => questionsToBeDisabled.Any(q => AreEqual(q, questionId))));
-
-                questionsToBeInvalid.AddRange(affectedQuestions);
-            }
-        }
-
-        private bool ShouldGroupBeEnabledByCustomEnablementCondition(InterviewStateDependentOnAnswers state, Identity group,
-            IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer)
-        {
-            return this.ShouldBeEnabledByCustomEnablementCondition(state,
-                questionnaire.GetCustomEnablementConditionForGroup(group.Id),
-                group.RosterVector,
-                questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(group.Id),
-                questionnaire,
-                getAnswer);
-        }
-
-        private bool ShouldQuestionBeEnabledByCustomEnablementCondition(InterviewStateDependentOnAnswers state, Identity question,
-            IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer)
-        {
-            return this.ShouldBeEnabledByCustomEnablementCondition(state,
-                questionnaire.GetCustomEnablementConditionForQuestion(question.Id),
-                question.RosterVector,
-                questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(question.Id),
-                questionnaire,
-                getAnswer);
-        }
-
-        private bool ShouldBeEnabledByCustomEnablementCondition(InterviewStateDependentOnAnswers state, string enablementCondition,
-            decimal[] rosterVector,
-            IEnumerable<Guid> involvedQuestionIds, IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer)
-        {
-            const bool ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered = false;
-
-            IEnumerable<KeyValuePair<string, Identity>> involvedQuestions =
-                GetInstancesOfQuestionsWithSameAndUpperRosterLevelOrThrow(involvedQuestionIds, rosterVector, questionnaire);
-
-            return this.EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(state,
-                enablementCondition, involvedQuestions, getAnswer, resultIfExecutionFailsWhenAnswersAreEnough: true)
-                ?? ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered;
         }
 
         private List<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(InterviewStateDependentOnAnswers state,
@@ -4085,76 +3602,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .IndexOf(rosterId);
         }
 
-        private bool? EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(InterviewStateDependentOnAnswers state,
-            string expression,
-            IEnumerable<KeyValuePair<string, Identity>> involvedQuestions,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, bool? resultIfExecutionFailsWhenAnswersAreEnough,
-            Guid? thisIdentifierQuestionId = null)
-        {
-            Dictionary<Guid, object> involvedAnswers = involvedQuestions.ToDictionary(
-                involvedQuestion => involvedQuestion.Value.Id,
-                involvedQuestion => getAnswer(state, involvedQuestion.Value));
-
-            Dictionary<string, Guid> questionMappedOnVariableNames = involvedQuestions.ToDictionary(
-                involvedQuestion => involvedQuestion.Key,
-                involvedQuestion => involvedQuestion.Value.Id);
-
-            bool isSpecialThisIdentifierSupportedByExpression = thisIdentifierQuestionId.HasValue;
-
-            var mapIdentifierToQuestionId = isSpecialThisIdentifierSupportedByExpression
-                ? (Func<string, Guid>)
-                    (identifier =>
-                        GetQuestionIdByExpressionIdentifierIncludingThis(identifier, questionMappedOnVariableNames,
-                            thisIdentifierQuestionId.Value))
-                : (Func<string, Guid>)
-                    (identifier => GetQuestionIdByExpressionIdentifierExcludingThis(identifier, questionMappedOnVariableNames));
-
-            try
-            {
-                return this.ExpressionProcessor.EvaluateBooleanExpression(expression,
-                    getValueForIdentifier: identifier => involvedAnswers[mapIdentifierToQuestionId(identifier)]);
-            }
-            catch (Exception exception)
-            {
-                bool areAllInvolvedQuestionsAnswered = involvedAnswers.Values.All(answer => answer != null);
-
-                if (areAllInvolvedQuestionsAnswered)
-                {
-                    this.Logger.Warn(
-                        string.Format("Failed to evaluate boolean expression '{0}' which has all involved answers given.", expression),
-                        exception);
-                }
-                else
-                {
-                    this.Logger.Info(
-                        string.Format("Failed to evaluate boolean expression '{0}' which has some involved answers missing.", expression),
-                        exception);
-                }
-
-                return areAllInvolvedQuestionsAnswered
-                    ? resultIfExecutionFailsWhenAnswersAreEnough
-                    : null;
-            }
-        }
-
-        private static Guid GetQuestionIdByExpressionIdentifierIncludingThis(string identifier,
-            Dictionary<string, Guid> questionMappedOnVariableNames, Guid contextQuestionId)
-        {
-            if (identifier.ToLower() == "this")
-                return contextQuestionId;
-
-            return GetQuestionIdByExpressionIdentifierExcludingThis(identifier, questionMappedOnVariableNames);
-        }
-
-        private static Guid GetQuestionIdByExpressionIdentifierExcludingThis(string identifier,
-            Dictionary<string, Guid> questionMappedOnVariableNames)
-        {
-            Guid questionId;
-            if (Guid.TryParse(identifier, out questionId))
-                return questionId;
-            return questionMappedOnVariableNames[identifier];
-        }
-
         private static DistinctDecimalList GetRosterInstanceIds(InterviewStateDependentOnAnswers state, Guid groupId,
             decimal[] outerRosterVector)
         {
@@ -4165,53 +3612,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : new DistinctDecimalList();
         }
 
-        private IEnumerable<decimal[]> AvailableRosterLevelsForGroup(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire,
-            Guid groupdId)
-        {
-            int rosterGroupLevel = questionnaire.GetRosterLevelForGroup(groupdId);
-
-            Guid[] parentRosterGroupsStartingFromTop =
-                questionnaire.GetRostersFromTopToSpecifiedGroup(groupdId)
-                    .ToArray();
-
-            var availableRosterLevels = ExtendRosterVector(state, EmptyRosterVector, rosterGroupLevel,
-                parentRosterGroupsStartingFromTop, GetRosterInstanceIds);
-            return availableRosterLevels;
-        }
-
-        private IEnumerable<decimal[]> AvailableRosterLevelsForQuestion(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire,
-            Guid questionId)
-        {
-            int questionRosterLevel = questionnaire.GetRosterLevelForQuestion(questionId);
-
-            Guid[] parentRosterGroupsStartingFromTop =
-                questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId)
-                    .ToArray();
-
-            var availableRosterLevels = ExtendRosterVector(state, EmptyRosterVector, questionRosterLevel,
-                parentRosterGroupsStartingFromTop, GetRosterInstanceIds);
-
-            return availableRosterLevels;
-        }
-
-        private static bool IsQuestionAnsweredValid(InterviewStateDependentOnAnswers state, Identity question)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
-
-            return state.ValidAnsweredQuestions.Contains(questionKey);
-        }
-
-        private static bool IsQuestionAnsweredInvalid(InterviewStateDependentOnAnswers state, Identity question)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
-
-            return state.InvalidAnsweredQuestions.Contains(questionKey);
-        }
-
         private bool HasInvalidAnswers()
         {
             return this.interviewState.InvalidAnsweredQuestions.Any();
         }
-
     }
 }
