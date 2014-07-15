@@ -421,7 +421,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             var convertedDocument = this.questionnaireUpgrader.TranslatePropagatePropertiesToRosterProperties(questionnaire);
             convertedDocument.ConnectChildrenWithParent();
-            var questions = questionnaire.GetEntitiesByType<IQuestion>()
+            var questions = convertedDocument.GetEntitiesByType<IQuestion>()
                 .Select(question => this.questionDetailsViewMapper.Map(question, question.GetParent().PublicKey))
                 .Where(q => q != null)
                 .ToList();
@@ -444,7 +444,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 .ToList();
 
             var staticTexts =
-                questionnaire.GetEntitiesByType<IStaticText>().Select(staticText => new StaticTextDetailsView()
+                convertedDocument.GetEntitiesByType<IStaticText>().Select(staticText => new StaticTextDetailsView()
                 {
                     Id = staticText.PublicKey,
                     ParentGroupId = staticText.GetParent().PublicKey,
