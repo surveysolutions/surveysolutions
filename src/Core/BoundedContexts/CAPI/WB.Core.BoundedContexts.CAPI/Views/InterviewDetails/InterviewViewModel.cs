@@ -839,6 +839,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 var question = item as QuestionViewModel;
                 if (question != null && updateHash)
                     this.UpdateQuestionHash(question);
+
                 result.Add(item);
             }
             return result;
@@ -951,6 +952,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     new QuestionnaireNavigationPanelItem(
                         key, GetScreenViewModel);
             }
+
+            var staticText = item as IStaticText;
+            if (staticText != null)
+            {
+                return new StaticTextViewModel(publicKey: new InterviewItemId(staticText.PublicKey),
+                    text: staticText.Text);
+            }
+
             return null;
         }
 
