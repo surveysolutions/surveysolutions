@@ -541,7 +541,7 @@
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QuestionnaireItemMoved_event_and_moved_item_is_group.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QuestionnaireItemMoved_event_and_moved_item_is_question.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_RosterChanged_event.cs" />
-    <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TemplateImported_event.cs" />
+    <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TemplateImported_event_for_old_templates.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />

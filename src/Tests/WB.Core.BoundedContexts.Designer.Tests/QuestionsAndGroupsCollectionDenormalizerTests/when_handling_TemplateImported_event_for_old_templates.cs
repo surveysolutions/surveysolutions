@@ -10,12 +10,13 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDenormalizerTests
 {
-    internal class when_handling_TemplateImported_event : QuestionsAndGroupsCollectionDenormalizerTestContext
+    internal class when_handling_TemplateImported_event_for_old_templates : QuestionsAndGroupsCollectionDenormalizerTestContext
     {
         Establish context = () =>
         {
@@ -84,11 +85,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                 }
             };
 
-            evnt = CreateTemplateImportedEvent(questionnaire);
+            var oldImportedDocument = new QuestionnaireDocument();
+            evnt = CreateTemplateImportedEvent(oldImportedDocument);
+
+            var upgrader = new Mock<IQuestionnaireDocumentUpgrader>();
+            upgrader.Setup(x => x.TranslatePropagatePropertiesToRosterProperties(oldImportedDocument))
+                .Returns(questionnaire);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsFactoryMock.Object,
-                questionFactory: questionFactoryMock.Object);
+                questionFactory: questionFactoryMock.Object,
+                upgrader: upgrader.Object);
         };
 
         Because of = () =>

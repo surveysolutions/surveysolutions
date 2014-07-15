@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
     {
         private readonly IQuestionDetailsViewMapper questionDetailsViewMapper;
         private readonly IQuestionFactory questionFactory;
-        private IQuestionnaireDocumentUpgrader questionnaireUpgrader;
+        private readonly IQuestionnaireDocumentUpgrader questionnaireUpgrader;
 
         public QuestionsAndGroupsCollectionDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
