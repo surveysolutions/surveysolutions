@@ -221,7 +221,7 @@
 <div class="form-buttons-holder">
     <div class="pull-left">
         <button cid="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveQuestion()">Save</button>
-        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="resetQuestion()">Cancel</button>
+        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelQuestion()">Cancel</button>
     </div>
     <div class="pull-right">
         <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion(activeQuestion)">Delete</button>
@@ -229,12 +229,3 @@
         <ng-include src="'moveToChapterSnippet'" />
     </div>
 </div>
-
-<script lang="text/javascript">
-    /* this block is needed for prettyCheckable initialization, should be called after DOM update */
-    /*$(function() {
-        $.each($('input.wb-checkbox'), function(i, el) {
-            $(el).prettyCheckable();
-        });
-    });*/
-</script>

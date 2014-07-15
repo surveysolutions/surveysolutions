@@ -47,15 +47,18 @@
                 };
 
                 $scope.saveQuestion = function () {
-                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion);
+                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function (result) {
+                        $scope.initialQuestion = angular.copy($scope.activeQuestion);
+                    });
                 };
 
                 $scope.setQuestionType = function(type) {
                     $scope.activeQuestion.type = type;
                 };
 
-                $scope.resetQuestion = function() {
-                    dataBind($scope.initialQuestion);
+                $scope.cancelQuestion = function() {
+                    var temp = angular.copy($scope.initialQuestion);
+                    dataBind(temp);
                 };
 
                 $scope.addOption = function() {
