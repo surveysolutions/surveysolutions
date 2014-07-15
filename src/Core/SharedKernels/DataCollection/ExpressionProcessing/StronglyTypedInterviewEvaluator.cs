@@ -261,6 +261,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
+
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
             
@@ -271,9 +272,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             
         }
 
+
         public void DisableGroups(IEnumerable<Identity> groupsToDisable)
         {
-            
+
+
+
         }
 
         public void EnableGroups(IEnumerable<Identity> groupsToEnable)
@@ -283,12 +287,24 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void DisableQuestions(IEnumerable<Identity> questionsToDisable)
         {
-            
+            foreach (var identity in questionsToDisable)
+            {
+                var targetLevel = this.GetRosterToUpdateAnswer(identity.Id, identity.RosterVector);
+                if (targetLevel == null) return;
+
+                targetLevel.DisableQuestion();
+            }
         }
 
         public void EnableQuestions(IEnumerable<Identity> questionsToEnable)
         {
-            
+            foreach (var identity in questionsToEnable)
+            {
+                var targetLevel = this.GetRosterToUpdateAnswer(identity.Id, identity.RosterVector);
+                if (targetLevel == null) return;
+
+                targetLevel.EnableQuestion();
+            }
         }
 
         public IInterviewExpressionState Clone()
