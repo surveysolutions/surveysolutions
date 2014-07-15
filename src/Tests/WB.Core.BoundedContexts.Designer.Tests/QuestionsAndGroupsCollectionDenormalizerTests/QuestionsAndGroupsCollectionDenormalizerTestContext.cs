@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -10,16 +11,18 @@ using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
+using It = Moq.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDenormalizerTests
 {
+    [Subject(typeof(QuestionsAndGroupsCollectionDenormalizer))]
     internal class QuestionsAndGroupsCollectionDenormalizerTestContext
     {
         protected static QuestionsAndGroupsCollectionDenormalizer CreateQuestionnaireInfoDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter = null,
             IQuestionDetailsViewMapper questionDetailsViewMapper = null, 
-            IQuestionFactory questionFactory = null)
+            IQuestionFactory questionFactory = null,
+            IQuestionnaireDocumentUpgrader upgrader = null)
         {
             var upgraderMock = new Mock<IQuestionnaireDocumentUpgrader>();
             upgraderMock.Setup(x => x.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()))
@@ -28,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             return new QuestionsAndGroupsCollectionDenormalizer(readsideRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView>>(),
                 questionDetailsViewMapper ?? Mock.Of<IQuestionDetailsViewMapper>(),
                 questionFactory ?? Mock.Of<IQuestionFactory>(),
-                upgraderMock.Object);
+                upgrader ?? upgraderMock.Object);
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
