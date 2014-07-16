@@ -34,13 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneQrBarcodeQuestionHandlerTe
                 variableLabel: null, isMandatory: false, enablementCondition: null, instructions: null,
                     responsibleId: responsibleId, sourceQuestionId:sourceQuestionId, parentGroupId:chapterId, targetIndex: 1));
 
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        It should_throw_exception_with_message_containting__empty__variable__ = () =>
-             new[] { "empty", "variable" }.ShouldEachConformTo(
-                    keyword => exception.Message.ToLower().Contains(keyword));
-
+        It should_not_throw_exception = () => exception.ShouldBeNull();
         
         private static Questionnaire questionnaire;
         private static Exception exception;
