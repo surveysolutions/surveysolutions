@@ -46,13 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateTextQuestionHandlerTests
          
                     ));
 
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        It should_throw_exception_with_message_containting__empty__variable__ = () =>
-            new[] { "empty", "variable" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
+        It should_not_throw_exception = () => exception.ShouldBeNull();
 
         private static Questionnaire questionnaire;
         private static Exception exception;

@@ -95,18 +95,16 @@
 
                 $scope.addQuestion = function (parent) {
                     var newId = utilityService.guid();
-                    var variable = 'q' + newId.substring(0, 5);
                     var emptyQuestion = {
                         "itemId": newId,
                         "title": 'New Question',
-                        "variable": variable,
                         "type": 'Text',
                         "linkedVariables": [],
                         "brokenLinkedVariables": null,
                         getParentItem: function () { return parent; }
                     };
 
-                    commandService.addQuestion($state.params.questionnaireId, parent.itemId, newId, variable).success(function (result) {
+                    commandService.addQuestion($state.params.questionnaireId, parent.itemId, newId).success(function (result) {
                         if (result.IsSuccess) {
                             parent.items.push(emptyQuestion);
                             $state.go('questionnaire.chapter.question', { chapterId: $state.params.chapterId, itemId: newId });
