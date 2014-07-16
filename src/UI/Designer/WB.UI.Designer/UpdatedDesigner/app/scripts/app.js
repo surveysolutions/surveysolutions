@@ -88,7 +88,7 @@
                 url: "/static-text/{itemId}",
                 views: {
                     '': {
-                        templateUrl: 'app/views/static-text.html',
+                        templateUrl: 'views/static-text.html',
                         controller: 'StaticTextCtrl',
                         resolve: {
                             questionnaireId: ['$stateParams', function ($stateParams) {
