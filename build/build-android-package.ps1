@@ -139,7 +139,7 @@ $ErrorActionPreference = "Stop"
 if([string]::IsNullOrWhiteSpace($VersionName)){
 	$VersionName = (GetVersionString $CapiProject)
 }
-$VersionName = $VersionName + " (Build " + $VersionCode + ")"
+$VersionName = $VersionName + " (build " + $VersionCode + ")"
 
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
 BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }
