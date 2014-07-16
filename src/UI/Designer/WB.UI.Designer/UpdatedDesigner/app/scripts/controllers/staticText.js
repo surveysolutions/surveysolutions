@@ -1,50 +1,42 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     angular.module('designerApp')
         .controller('StaticTextCtrl', [
-            '$scope', '$stateParams', 'questionnaireId', 'questionnaireService', 'commandService', '$log',
-            function ($scope, $stateParams, questionaireId, questionnaireService, commandService, $log) {
+            '$rootScope', '$scope', '$state', 'questionnaireId', 'questionnaireService', 'commandService', '$log',
+            function ($rootScope, $scope, $state, questionaireId, questionnaireService, commandService, $log) {
 
                 var dataBind = function (result) {
                     $scope.activeStaticText = $scope.activeStaticText || {};
                     $scope.activeStaticText.breadcrumbs = result.breadcrumbs;
+                    $scope.activeStaticText.itemId = $state.params.itemId;
                     $scope.activeStaticText.text = result.text;
                 };
 
-                $scope.loadStaticText = function() {
-                    questionnaireService.getStaticTextDetailsById(questionaireId, $stateParams.itemId)
-                        .success(function(result) {
+                $scope.loadStaticText = function () {
+                    questionnaireService.getStaticTextDetailsById(questionaireId, $state.params.itemId)
+                        .success(function (result) {
                             $scope.initialStaticText = angular.copy(result);
                             dataBind(result);
                         });
                 };
 
-                $scope.saveStaticText = function() {
-                    commandService.sendStaticTextCommand(questionaireId, $scope.activeStaticText).success(function (result) {
-                        if (!result.IsSuccess) {
-                            $log.error(result.Error);
-                        }
+                $scope.saveStaticText = function () {
+                    commandService.updateStaticText(questionaireId, $scope.activeStaticText).success(function (result) {
+                        $scope.initialStaticText = angular.copy($scope.activeStaticText);
+                        $rootScope.$emit('staticTextUpdated', {
+                            itemId: $scope.activeStaticText.itemId,
+                            text: $scope.activeStaticText.text
+                        });
                     });
                 };
-            
-                $scope.moveToChapter = function(chapterId) {
-                    questionnaireService.moveStaticText($scope.activeStaticText.itemId, 0, chapterId, questionaireId);
-                    
-                    var removeFrom = $scope.activeStaticText.getParentItem() || $scope;
-                    removeFrom.items.splice(_.indexOf(removeFrom.items, $scope.activeStaticText), 1);
-                    $scope.resetSelection();
-                };
 
-                $scope.resetStaticText = function() {
-                    dataBind($scope.initialStaticText);
+                $scope.cancelStaticText = function () {
+                    var temp = angular.copy($scope.initialStaticText);
+                    dataBind(temp);
                 };
 
                 $scope.loadStaticText();
-
-                $scope.$watch('activeStaticText', function () {
-                    $scope.loadStaticText();
-                });
             }
         ]);
 }());

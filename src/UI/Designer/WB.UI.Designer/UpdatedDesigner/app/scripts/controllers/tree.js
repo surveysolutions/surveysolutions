@@ -451,6 +451,13 @@
                 }
             });
 
+            $rootScope.$on('staticTextUpdated', function (event, data) {
+                var staticText = questionnaireService.findItem($scope.items, data.itemId);
+                if (staticText != null) {
+                    staticText.text = data.text;
+                }
+            });
+
             $rootScope.$on('groupUpdated', function (event, data) {
                 if ($scope.currentChapter.itemId == data.itemId) {
                     $scope.currentChapter.title = data.title;
