@@ -20,8 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneStaticTextHandlerTests
         };
 
         Because of = () =>
-            questionnaire.CloneStaticText(entityId: targetEntityId, parentId: chapterId, text: text,
-                responsibleId: responsibleId, sourceEntityId: sourceEntityId, targetIndex: targetIndex);
+            questionnaire.CloneStaticText(entityId: targetEntityId, responsibleId: responsibleId, sourceEntityId: sourceEntityId);
 
         Cleanup stuff = () =>
         {
@@ -38,19 +37,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneStaticTextHandlerTests
         It should_raise_StaticTextCloned_event_with_SourceEntityId_specified = () =>
                     eventContext.GetSingleEvent<StaticTextCloned>().SourceEntityId.ShouldEqual(sourceEntityId);
 
-        It should_raise_StaticTextCloned_event_with_Text_specified = () =>
-            eventContext.GetSingleEvent<StaticTextCloned>().Text.ShouldEqual(text);
-
-        It should_raise_StaticTextCloned_event_with_TargetIndex_specified = () =>
-            eventContext.GetSingleEvent<StaticTextCloned>().TargetIndex.ShouldEqual(targetIndex);
-
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid sourceEntityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid targetEntityId = Guid.Parse("22222222222222222222222222222222");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static string text = "some text";
-        private static int targetIndex = 0;
     }
 }
