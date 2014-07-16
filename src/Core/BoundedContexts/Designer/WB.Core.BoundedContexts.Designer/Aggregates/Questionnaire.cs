@@ -1328,7 +1328,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
-            variableName = variableName.Trim();
+            variableName = Monads.Maybe(() => variableName.Trim());
             title = title.Trim();
             var parentGroup = this.GetGroupById(parentGroupId);
 
@@ -2658,8 +2658,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameRequired, "Variable name shouldn't be empty or contains white spaces");
+                return;
             }
 
             bool isTooLong = stataCaption.Length > 32;
