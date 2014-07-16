@@ -252,6 +252,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
                 var descendantQuestion = this.GetAllDescendantQuestions(currentState, group.Id);
                 descendantQuestion.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+
+                var descendantStaticTexts = this.GetAllDescendantStaticTexts(currentState, group.Id);
+                descendantStaticTexts.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
             }
             return currentState;
         }
@@ -283,6 +286,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var shouldBeDeletedQuestions = GetAllDescendantQuestions(currentState, evnt.Payload.GroupPublicKey);
             shouldBeDeletedQuestions.ForEach(x => currentState.Questions.Remove(x));
 
+            var shouldBeDeletedStaticTexts = GetAllDescendantStaticTexts(currentState, evnt.Payload.GroupPublicKey);
+            shouldBeDeletedStaticTexts.ForEach(x => currentState.StaticTexts.Remove(x));
+
+
             return currentState;
         }
 
@@ -305,8 +312,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
             var questions = this.GetAllDescendantQuestions(currentState, evnt.Payload.GroupId);
+            var staticTexts = this.GetAllDescendantStaticTexts(currentState, evnt.Payload.GroupId);
             groups.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
             questions.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+            staticTexts.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
 
             return currentState;
         }
@@ -330,8 +339,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
             var questions = this.GetAllDescendantQuestions(currentState, evnt.Payload.GroupId);
+            var staticTexts = this.GetAllDescendantStaticTexts(currentState, evnt.Payload.GroupId);
             groups.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
             questions.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+            staticTexts.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
 
             return currentState;
         }
@@ -358,6 +369,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionnaireDeleted> evnt)
         {
             return null;
+        }
+
+        private List<StaticTextDetailsView> GetAllDescendantStaticTexts(QuestionsAndGroupsCollectionView currentState, Guid groupId)
+        {
+            var descendantStaticTexts = new List<StaticTextDetailsView>();
+
+            currentState
+                .StaticTexts
+                .Where(x => x.ParentGroupsIds.Contains(groupId))
+                .ForEach(descendantStaticTexts.Add);
+
+            return descendantStaticTexts;
         }
 
         private List<QuestionDetailsView> GetAllDescendantQuestions(QuestionsAndGroupsCollectionView currentState, Guid groupId)
