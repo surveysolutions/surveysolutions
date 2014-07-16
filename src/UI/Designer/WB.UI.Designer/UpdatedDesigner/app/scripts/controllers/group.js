@@ -4,13 +4,14 @@
     angular.module('designerApp')
         .controller('GroupCtrl', [
             '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log',
-            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, $log) {
+            function($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, $log) {
 
-                var dataBind = function(result) {
+                var dataBind = function (result) {
                     $scope.activeChapter = result;
+                    $scope.activeChapter.isChapter = ($stateParams.itemId == $stateParams.chapterId);
                     $scope.activeChapter.group.itemId = $stateParams.itemId;
                     $scope.activeChapter.group.variableName = $stateParams.variableName;
-                }
+                };
 
                 $scope.loadGroup = function() {
                     questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
@@ -34,6 +35,16 @@
                 $scope.cancelGroup = function() {
                     var temp = angular.copy($scope.initialGroup);
                     dataBind(temp);
+                };
+
+                $scope.deleteItem = function () {
+                    if ($scope.activeChapter.isChapter) {
+                        $rootScope.$emit('deleteChapter', {
+                            chapter: $scope.activeChapter.group
+                        });
+                    } else {
+                        $scope.deleteGroup($scope.activeChapter.group);
+                    }
                 };
 
                 //$scope.moveToChapter = function(chapterId) {

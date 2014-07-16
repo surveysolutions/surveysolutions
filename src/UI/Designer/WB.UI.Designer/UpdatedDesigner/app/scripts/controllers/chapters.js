@@ -54,7 +54,7 @@
                     });
                 };
 
-                $scope.deleteChapter = function(chapter) {
+                $scope.deleteChapter = function (chapter) {
                     var itemIdToDelete = chapter.itemId || $state.params.itemId;
 
                     var modalInstance = $modal.open({
@@ -63,38 +63,52 @@
                         windowClass: 'confirm-window',
                         resolve:
                         {
-                            item: function() {
+                            item: function () {
                                 return chapter;
                             }
                         }
                     });
 
-                    modalInstance.result.then(function(confirmResult) {
+                    modalInstance.result.then(function (confirmResult) {
                         if (confirmResult === 'ok') {
                             commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                                .success(function(result) {
+                                .success(function (result) {
                                     if (result.IsSuccess) {
                                         var index = $scope.questionnaire.chapters.indexOf(chapter);
                                         if (index > -1) {
                                             $scope.questionnaire.chapters.splice(index, 1);
                                             $rootScope.$emit('chapterDeleted');
                                         }
+
+                                        questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (r) {
+                                            $scope.questionnaire = r;
+                                            if (r.chapters.length > 0) {
+                                                var defaultChapter = _.first(r.chapters);
+                                                var itemId = defaultChapter.itemId;
+                                                $scope.currentChapter = defaultChapter;
+                                                $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
+                                            }
+                                        });
                                     }
                                 });
                         }
                     });
-
                 };
+
 
                 $rootScope.$on('$stateChangeSuccess', function() {
                     $scope.foldback();
                 });
 
-                $rootScope.$on('groupUpdated', function (event, data) {
+                $rootScope.$on('groupUpdated', function(event, data) {
                     var chapter = questionnaireService.findItem($scope.questionnaire.chapters, data.itemId);
                     if (chapter != null) {
                         chapter.title = data.title;
                     }
+                });
+
+                $rootScope.$on('deleteChapter', function (event, data) {
+                    $scope.deleteChapter(data.chapter);
                 });
             }
         ]);

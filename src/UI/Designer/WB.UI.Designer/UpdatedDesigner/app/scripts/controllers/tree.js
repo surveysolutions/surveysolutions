@@ -332,10 +332,10 @@
                 commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function(result) {
                     if (result.IsSuccess) {
                         $scope.refreshTree();
-                        var publishAdd = function (added) {
+                        var publishAdd = function(added) {
                             var children = added.items || [];
                             $rootScope.$emit(getItemType(added) + 'Added');
-                            _.each(children, function (child) {
+                            _.each(children, function(child) {
                                 publishAdd(child);
                             });
                         }
@@ -442,7 +442,7 @@
             }
             $scope.refreshTree();
 
-            $rootScope.$on('questionUpdated', function (event, data) {
+            $rootScope.$on('questionUpdated', function(event, data) {
                 var question = questionnaireService.findItem($scope.items, data.itemId);
                 if (question != null) {
                     question.title = data.title;
@@ -458,7 +458,7 @@
                 }
             });
 
-            $rootScope.$on('groupUpdated', function (event, data) {
+            $rootScope.$on('groupUpdated', function(event, data) {
                 if ($scope.currentChapter.itemId == data.itemId) {
                     $scope.currentChapter.title = data.title;
                 }
@@ -469,7 +469,7 @@
                 }
             });
 
-            $rootScope.$on('rosterUpdated', function (event, data) {
+            $rootScope.$on('rosterUpdated', function(event, data) {
                 var roster = questionnaireService.findItem($scope.items, data.itemId);
                 if (roster != null) {
                     roster.title = data.title;
