@@ -122,6 +122,9 @@
     <Compile Include="Bindings\VisibilityBinding.cs" />
     <Compile Include="Controls\Breadcrumbs.cs" />
     <Compile Include="Controls\IScreenChanging.cs" />
+    <Compile Include="Controls\MaskedEditTextControl\MaskCharacter.cs" />
+    <Compile Include="Controls\MaskedEditTextControl\MaskedFormatter.cs" />
+    <Compile Include="Controls\MaskedEditTextControl\MaskedWatcher.cs" />
     <Compile Include="Controls\PartialRosterRowView.cs" />
     <Compile Include="Controls\PartOfRosterView.cs" />
     <Compile Include="Controls\QuestionnaireNavigationView.cs" />

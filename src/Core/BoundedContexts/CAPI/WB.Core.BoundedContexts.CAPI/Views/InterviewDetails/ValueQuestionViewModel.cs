@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         }
 
         public bool? IsInteger = null;
+        public string Mask = null;
         public int? CountOfDecimalPlaces = null;
 
         #region Overrides of QuestionViewModel
