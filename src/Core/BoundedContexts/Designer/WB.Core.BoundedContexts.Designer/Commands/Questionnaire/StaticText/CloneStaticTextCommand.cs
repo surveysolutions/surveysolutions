@@ -8,15 +8,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
     [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "CloneStaticText")]
     public class CloneStaticTextCommand : QuestionnaireEntityCloneCommand
     {
-        public CloneStaticTextCommand(Guid questionnaireId, Guid entityId, string text, Guid responsibleId,
-            Guid parentId, Guid sourceEntityId, int targetIndex)
+        public CloneStaticTextCommand(Guid questionnaireId, Guid entityId, Guid responsibleId, Guid sourceEntityId)
             : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId, parentId: parentId,
-                sourceEntityId: sourceEntityId, targetIndex: targetIndex)
+                responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId,
+                sourceEntityId: sourceEntityId)
         {
-            this.Text = text;
         }
-
-        public string Text { get; set; }
     }
 }
