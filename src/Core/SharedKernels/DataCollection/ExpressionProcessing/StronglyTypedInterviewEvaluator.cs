@@ -6,31 +6,24 @@ using System.Linq;
 
 namespace WB.Core.SharedKernels.ExpressionProcessing
 {
-    public class StronglyTypedInterviewEvaluator : IInterviewExpressionState 
+    public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState 
     {
-        public readonly Dictionary<string, IValidatable> interviewScopes = new Dictionary<string, IValidatable>();
-        public readonly Dictionary<string, List<string>> siblingRosters = new Dictionary<string, List<string>>();
-
         public StronglyTypedInterviewEvaluator()
         {
             var questionnaireLevelScope = new[] { IdOf.questionnaire };
-
             var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
-
             var questionnaireLevel = new QuestionnaireLevel(Util.EmptyRosterVector, questionnaireIdentityKey);
-
-            this.interviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
-
-            this.siblingRosters.Add("", new List<string>());
+            this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
+            this.SiblingRosters.Add("", new List<string>());
         }
 
         public StronglyTypedInterviewEvaluator(Dictionary<string, IValidatable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
         {
-            this.interviewScopes = interviewScopes;
-            this.siblingRosters = siblingRosters;
+            InterviewScopes = interviewScopes;
+            SiblingRosters = siblingRosters;
         }
 
-        public void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
+        public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {
             if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))
             {
@@ -38,14 +31,11 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
-
             Guid[] rosterScopeIds = IdOf.rostersIdToScopeMap[rosterId];
-
             var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
-
             string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
 
-            if (this.interviewScopes.ContainsKey(rosterStringKey))
+            if (this.InterviewScopes.ContainsKey(rosterStringKey))
             {
                 return;
             }
@@ -58,34 +48,34 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             var siblingsKey = Util.GetSiblingsKey(rosterScopeIds);
 
-            var parent = this.interviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
+            var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
 
             var wasRosterAdded = false;
             if (rosterId == IdOf.hhMember || rosterId == IdOf.jobActivity)
             {
                 var rosterLevel = new HhMember(rosterVector, rosterIdentityKey, parent as QuestionnaireLevel);
-                this.interviewScopes.Add(rosterStringKey, rosterLevel);
+                this.InterviewScopes.Add(rosterStringKey, rosterLevel);
                 wasRosterAdded = true;
             }
 
             if (rosterId == IdOf.foodConsumption)
             {
                 var rosterLevel = new FoodConsumption(rosterVector, rosterIdentityKey, parent as HhMember);
-                this.interviewScopes.Add(rosterStringKey, rosterLevel);
+                this.InterviewScopes.Add(rosterStringKey, rosterLevel);
                 wasRosterAdded = true;
             }
 
             if (wasRosterAdded)
             {
-                if (!this.siblingRosters.ContainsKey(siblingsKey))
+                if (!this.SiblingRosters.ContainsKey(siblingsKey))
                 {
-                    this.siblingRosters.Add(siblingsKey, new List<string>());
+                    this.SiblingRosters.Add(siblingsKey, new List<string>());
                 }
-                this.siblingRosters[siblingsKey].Add(rosterStringKey);
+                this.SiblingRosters[siblingsKey].Add(rosterStringKey);
             }
         }
 
-        public void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
+        public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))
             {
@@ -94,18 +84,18 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
             var rosterIdentityKey = Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
-            var dependentRosters = interviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
+            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
             foreach (var rosterKey in dependentRosters)
             {
-                this.interviewScopes.Remove(rosterKey);
-                foreach (var siblings in siblingRosters.Values)
+                this.InterviewScopes.Remove(rosterKey);
+                foreach (var siblings in this.SiblingRosters.Values)
                 {
                     siblings.Remove(rosterKey);
                 }
             }
         }
 
-        public void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer)
+        public override void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -126,7 +116,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        public override void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -137,7 +127,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)
+        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -148,7 +138,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        public override void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -173,24 +163,14 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 (targetLevel as HhMember).person_id = answer;
             }
         }
-
-        private IValidatable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
-        {
-            if (!IdOf.parentsMap.ContainsKey(questionId))
-                return null;
-
-            var rosterKey = Util.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
-            var rosterStringKey = Util.GetRosterStringKey(rosterKey);
-            return this.interviewScopes.ContainsKey(rosterStringKey) ? this.interviewScopes[rosterStringKey] : null;
-        }
-
-        public void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        
+        public override void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
         }
 
-        public void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -216,7 +196,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
+        public override void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -227,19 +207,19 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude)
+        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
         }
 
-        public void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
+        public override void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
         }
 
-        public void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
+        public override void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -250,7 +230,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] answer)
+        public override void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -261,84 +241,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-
-        public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
+        public override IInterviewExpressionState Clone()
         {
-            foreach (var identity in invalidQuestions)
-            {
-                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
-
-                targetLevel.DeclareAnswerInvalid(identity.Id);
-            }
-        }
-
-        public void DeclareAnswersValid(IEnumerable<Identity> validQuestions)
-        {
-            foreach (var identity in validQuestions)
-            {
-                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
-
-                targetLevel.DeclareAnswerInvalid(identity.Id);
-            }
-        }
-
-
-        public void DisableGroups(IEnumerable<Identity> groupsToDisable)
-        {
-            foreach (var identity in groupsToDisable)
-            {
-                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
-
-                targetLevel.DisableGroup(identity.Id);
-            }
-        }
-
-        public void EnableGroups(IEnumerable<Identity> groupsToEnable)
-        {
-            foreach (var identity in groupsToEnable)
-            {
-                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
-
-                targetLevel.EnableGroup(identity.Id);
-            }
-        }
-
-        public void DisableQuestions(IEnumerable<Identity> questionsToDisable)
-        {
-            foreach (var identity in questionsToDisable)
-            {
-                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
-
-                targetLevel.DisableQuestion(identity.Id);
-            }
-        }
-
-        public void EnableQuestions(IEnumerable<Identity> questionsToEnable)
-        {
-            foreach (var identity in questionsToEnable)
-            {
-                var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
-                if (targetLevel == null) return;
-
-                targetLevel.EnableQuestion(identity.Id);
-            }
-        }
-
-        public IInterviewExpressionState Clone()
-        {
-            var newScopes = this.interviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers());
-            var newSiblingRosters = this.siblingRosters
+            var newScopes = this.InterviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers());
+            var newSiblingRosters = this.SiblingRosters
                 .ToDictionary(
                     interviewScope => interviewScope.Key,
                     interviewScope => new List<string>(interviewScope.Value));
 
             //set parents
-            foreach (var interviewScope in this.interviewScopes)
+            foreach (var interviewScope in this.InterviewScopes)
             {
                 var parent = interviewScope.Value.GetParent();
                 if (parent != null)
@@ -348,10 +260,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             return new StronglyTypedInterviewEvaluator(newScopes, newSiblingRosters);
         }
 
-        public void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled
-            , List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled)
+        public override void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, 
+            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled)
         {
-            foreach (var interviewScopeKvp in this.interviewScopes)
+            foreach (var interviewScopeKvp in this.InterviewScopes)
             {
                 if (interviewScopeKvp.Value is IValidatableRoster)
                 {
@@ -359,7 +271,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
                     var siblingsKey = Util.GetSiblingsKey(interviewScopeKvp.Value.GetRosterKey().Select(x => x.Id).ToArray());
 
-                    var siblingRosters = this.siblingRosters[siblingsKey].Select(x => this.interviewScopes[x]);
+                    var siblingRosters = this.SiblingRosters[siblingsKey].Select(x => this.InterviewScopes[x]);
 
                     roster.RunConditions(siblingRosters, questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
                 }
@@ -371,16 +283,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        public void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        public override void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
         {
-            foreach (var interviewScopeKvp in this.interviewScopes)
+            foreach (var interviewScopeKvp in this.InterviewScopes)
             {
                 if (interviewScopeKvp.Value is IValidatableRoster)
                 {
                     var roster = interviewScopeKvp.Value as IValidatableRoster;
                     var siblingsKey = Util.GetSiblingsKey(interviewScopeKvp.Value.GetRosterKey().Select(x => x.Id).ToArray());
 
-                    var siblingRosters = this.siblingRosters[siblingsKey].Select(x => this.interviewScopes[x]);
+                    var siblingRosters = this.SiblingRosters[siblingsKey].Select(x => this.InterviewScopes[x]);
 
                     roster.Validate(siblingRosters, questionsToBeValid, questionsToBeInvalid);
                 }

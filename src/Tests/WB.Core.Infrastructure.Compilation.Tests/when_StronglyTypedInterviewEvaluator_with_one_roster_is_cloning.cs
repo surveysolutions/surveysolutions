@@ -21,11 +21,11 @@ namespace WB.Core.Infrastructure.Compilation.Tests
             copyResult = stronglyTypedInterviewEvaluator.Clone() as StronglyTypedInterviewEvaluator;
 
         It should_clone_value_of_top_roster = () =>
-            (copyResult.interviewScopes[GetRosterKey(new[] { IdOf.questionnaire }, emptyRosterVector)] as QuestionnaireLevel)
+            (copyResult.InterviewScopes[GetRosterKey(new[] { IdOf.questionnaire }, emptyRosterVector)] as QuestionnaireLevel)
             .persons_count.ShouldEqual(persons_count);
 
         It should_clone_answer_of_roster_question = () =>
-            (copyResult.interviewScopes[GetRosterKey(IdOf.rostersIdToScopeMap[IdOf.hhMember], firstLevelRosterVector)] as HhMember)
+            (copyResult.InterviewScopes[GetRosterKey(IdOf.rostersIdToScopeMap[IdOf.hhMember], firstLevelRosterVector)] as HhMember)
             .age.ShouldEqual(age);
 
 
