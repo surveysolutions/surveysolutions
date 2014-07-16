@@ -51,7 +51,11 @@ namespace Main.Core.Entities.SubEntities
 
         public IComposite Clone()
         {
-            throw new NotImplementedException();
+            var staticText = this.MemberwiseClone() as IStaticText;
+
+            staticText.SetParent(null);
+
+            return staticText;
         }
 
         public Guid PublicKey { get; private set; }

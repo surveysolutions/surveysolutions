@@ -2424,22 +2424,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void CloneStaticText(Guid entityId, Guid parentId, string text, Guid sourceEntityId, int targetIndex, Guid responsibleId)
+        public void CloneStaticText(Guid entityId, Guid sourceEntityId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
             this.ThrowDomainExceptionIfEntityDoesNotExists(sourceEntityId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
-            this.ThrowDomainExceptionIfGroupDoesNotExist(parentId);
-            this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
+
+            this.innerDocument.ConnectChildrenWithParent();
+
+            var staticText = this.innerDocument.Find<IStaticText>(sourceEntityId);
+            var parentOfStaticText = staticText.GetParent();
 
             this.ApplyEvent(new StaticTextCloned()
             {
                 EntityId = entityId,
-                ParentId = parentId,
+                ParentId = parentOfStaticText.PublicKey,
                 SourceEntityId = sourceEntityId,
-                TargetIndex = targetIndex,
-                Text = text,
+                TargetIndex = parentOfStaticText.Children.IndexOf(staticText) + 1,
+                Text = staticText.Text,
                 ResponsibleId = responsibleId
             });
         }

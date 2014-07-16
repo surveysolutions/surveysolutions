@@ -19,8 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneStaticTextHandlerTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.CloneStaticText(entityId: targetEntityId, parentId: chapterId, text: "text",
-                    responsibleId: responsibleId, sourceEntityId: notExistingEntityId, targetIndex: 0));
+                questionnaire.CloneStaticText(entityId: targetEntityId, responsibleId: responsibleId, sourceEntityId: notExistingEntityId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
