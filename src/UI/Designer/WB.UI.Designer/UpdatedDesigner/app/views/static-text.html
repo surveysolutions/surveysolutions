@@ -1,10 +1,10 @@
 ﻿<div class="form-holder">
-    <div data-item-breadcrumbs data-crumbs="activeChapter.breadcrumbs"></div>
+    <div data-item-breadcrumbs data-crumbs="activeStaticText.breadcrumbs"></div>
     
     <form role="form">
         <div class="form-group">
             <label for="edit-static-text" class="wb-label">Text <span>(<a>?</a>)</span></label><br>
-            <input id="edit-static-text" type="text" class="wb-input bg-white width-auto" ng-model="activeChapter.staticText.text">
+            <textarea id="edit-static-text" ng-model="activeStaticText.text" class="form-control ng-valid ng-dirty" rows="10"></textarea>
         </div>
     </form>
 </div>
@@ -12,10 +12,10 @@
 <div class="form-buttons-holder">
     <div class="pull-left">
         <button id="edit-static-text-save-button" class="btn btn-lg btn-primary" ng-click="saveStaticText()">Save</button>
-        <button id="edit-static-text-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()">Cancel</button>
+        <button id="edit-static-text-cancel-button" class="btn btn-lg btn-link" ng-click="cancelStaticText()">Cancel</button>
     </div>
     <div class="pull-right">
-        <button id="edit-static-text-delete-button" class="btn btn-lg btn-link" ng-click="deleteStaticText()">Delete</button>
+        <button id="edit-static-text-delete-button" class="btn btn-lg btn-link" ng-click="deleteStaticText(activeStaticText)">Delete</button>
         <button id="edit-static-text-clone-button" class="btn btn-lg btn-link" ng-click="cloneStaticText()">Clone</button>
         <ng-include src="'moveToChapterSnippet'" />
     </div>

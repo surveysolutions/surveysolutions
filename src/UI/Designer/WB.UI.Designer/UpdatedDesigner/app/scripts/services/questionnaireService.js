@@ -60,7 +60,7 @@
 
                 questionnaireService.moveStaticText = function (entityId, index, destGroupId, questionnaireId) {
                     return commandService.execute('MoveStaticText', {
-                        targetGroupId: destGroupId,
+                        targetEntityId: destGroupId,
                         targetIndex: index,
                         entityId: entityId,
                         questionnaireId: questionnaireId

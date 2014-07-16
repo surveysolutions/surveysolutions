@@ -72,7 +72,7 @@
                             <a ng-click="deleteStaticText(item.itemId)">Delete</a>
                         </li>
                         <li>
-                            <a>Clone</a>
+                            <a ng-click="cloneStaticText(item.itemId)">Clone</a>
                         </li>
                     </ul>
                 </div>
@@ -81,7 +81,7 @@
         
         <div class="section item"
              ng-class="{'selected' : item.itemId == currentItemId, 'highlighted': is_highlighted }"
-             ng-if="!isQuestion(item) && !item.isDeleted"
+             ng-if="isGroup(item) && !item.isDeleted"
              ui-sref-active="selected"
              ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
                                          'questionnaire.chapter.group({itemId: item.itemId})' }}">
@@ -113,7 +113,7 @@
             </div>
         </div>
 
-        <div class="buttons-item" ng-if="!isQuestion(item)" ng-class="{ hidden: collapsed }">
+        <div class="buttons-item" ng-if="isGroup(item)" ng-class="{ hidden: collapsed }">
             <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(item)" />
             <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
             <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />

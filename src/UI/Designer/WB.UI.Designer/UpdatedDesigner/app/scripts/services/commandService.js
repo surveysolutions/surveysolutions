@@ -31,6 +31,14 @@
                     });
                 };
 
+                commandService.cloneStaticText = function (questionnaireId, itemIdToClone, newId) {
+                    return commandCall('CloneStaticText', {
+                        sourceEntityId: itemIdToClone,
+                        entityId: newId,
+                        questionnaireId: questionnaireId
+                    });
+                };
+
                 commandService.cloneGroup = function (questionnaireId, groupIdToClone, targetIndex, newId) {
 
                     return commandCall('CloneGroup', {
@@ -144,7 +152,7 @@
                     var command = {
                         "questionnaireId": questionnaireId,
                         "entityId": staticText.itemId,
-                        "text": staticText.Text,
+                        "text": staticText.text,
                         "parentId": parentId
                     };
                     return commandCall("AddStaticText", command);

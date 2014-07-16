@@ -178,15 +178,16 @@
             };
 
             $scope.isGroup = function(item) {
-                return !item.hasOwnProperty('type');
+                return !($scope.isQuestion(item) || $scope.isStaticText(item));
             };
 
             $scope.isStaticText = function (item) {
                 return item.hasOwnProperty('text');
             };
-            
+
             $scope.showStartScreen = function() {
-                return _.isEmpty($scope.items);                
+                return _.isEmpty($scope.items);
+            };
 
             $scope.groupsTree = {
                 accept: function(sourceNodeScope, destNodesScope) {
@@ -248,23 +249,60 @@
                 }
             };
 
-            $scope.deleteStaticText = function (itemId) {
-                var itemIdToDelete = itemId || $state.params.itemId;
-                if (confirm("Are you sure want to delete static text?")) {
-                    commandService.deleteStaticText($state.params.questionnaireId, itemIdToDelete)
+            $scope.deleteStaticText = function (item) {
+                var itemIdToDelete = item.itemId || $state.params.itemId;
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'app/views/confirm.html',
+                    controller: 'confirmCtrl',
+                    windowClass: 'confirm-window',
+                    resolve:
+                    {
+                        item: function () {
+                            return item;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (confirmResult) {
+                    if (confirmResult === 'ok') {
+                        commandService.deleteStaticText($state.params.questionnaireId, itemIdToDelete)
                         .success(function (result) {
                             if (result.IsSuccess) {
                                 questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                 $scope.resetSelection();
+                                $rootScope.$emit('staticTextDeleted');
                             }
                         });
-                }
+                    }
+                });
+            };
+
+            $scope.cloneStaticText = function (staticTextId) {
+                var itemIdToClone = staticTextId || $state.params.itemId;
+                var newId = utilityService.guid();
+                commandService.cloneStaticText($state.params.questionnaireId, itemIdToClone, newId).success(function (result) {
+                    if (result.IsSuccess) {
+                        var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
+                        var parentItem = clonnedItem.getParentItem() || $scope;
+
+                        var cloneDeep = {
+                            itemId: newId,
+                            text: clonnedItem.text
+                        };
+
+                        var indexOf = _.indexOf(parentItem.items, clonnedItem);
+                        parentItem.items.splice(indexOf + 1, 0, cloneDeep);
+                        connectTree();
+                        $rootScope.$emit('staticTextCloned');
+                    }
+                });
             };
 
             $scope.cloneQuestion = function(questionId) {
                 var itemIdToClone = questionId || $state.params.itemId;
                 var newId = utilityService.guid();
-                commandService.cloneQuestion($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
+                commandService.cloneQuestion($state.params.questionnaireId, itemIdToClone, newId).success(function (result) {
                     if (result.IsSuccess) {
                         var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
                         var parentItem = clonnedItem.getParentItem() || $scope;
@@ -376,8 +414,11 @@
 
             $scope.moveToChapter = function(chapterId) {
                 var itemToMoveId = $state.params.itemId;
+                var itemToMove = questionnaireService.findItem($scope.items, itemToMoveId);
 
-                questionnaireService.moveQuestion(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function(result) {
+                var moveCommand = $scope.isStaticText(itemToMove) ? questionnaireService.moveStaticText : questionnaireService.moveQuestion;
+
+                moveCommand(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function (result) {
                     if (result.IsSuccess) {
                         questionnaireService.removeItemWithId($scope.items, itemToMoveId);
                         $scope.resetSelection();
