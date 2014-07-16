@@ -249,8 +249,10 @@
                 }
             };
 
-            $scope.deleteStaticText = function (item) {
-                var itemIdToDelete = item.itemId || $state.params.itemId;
+            $scope.deleteStaticText = function (staticTextId) {
+                var itemIdToDelete = staticTextId || $state.params.itemId;
+                
+                var item = questionnaireService.findItem($scope.items, staticTextId);
 
                 var modalInstance = $modal.open({
                     templateUrl: 'app/views/confirm.html',
@@ -259,7 +261,9 @@
                     resolve:
                     {
                         item: function () {
-                            return item;
+                            return {
+                                title : item.text.substring(0, 15) + (item.text.length > 15 ?  "..." : "")
+                            };
                         }
                     }
                 });
