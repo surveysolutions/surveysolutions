@@ -1161,11 +1161,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\README.md" />
-    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\LICENSE" />
-    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\package.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\README.md" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\package.json" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\bind-dictionary\README.md" />
@@ -1200,6 +1195,11 @@
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\package.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-hotkeys\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
