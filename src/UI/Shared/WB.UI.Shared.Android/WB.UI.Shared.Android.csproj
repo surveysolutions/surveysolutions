@@ -122,6 +122,8 @@
     <Compile Include="Bindings\VisibilityBinding.cs" />
     <Compile Include="Controls\Breadcrumbs.cs" />
     <Compile Include="Controls\IScreenChanging.cs" />
+    <Compile Include="Controls\MaskedEditTextControl\EmptyMaskFormatter.cs" />
+    <Compile Include="Controls\MaskedEditTextControl\IMaskedFormatter.cs" />
     <Compile Include="Controls\MaskedEditTextControl\MaskCharacter.cs" />
     <Compile Include="Controls\MaskedEditTextControl\MaskedFormatter.cs" />
     <Compile Include="Controls\MaskedEditTextControl\MaskedWatcher.cs" />

@@ -8,30 +8,37 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
 {
     public class MaskedWatcher : Java.Lang.Object, ITextWatcher
     {
-        private readonly MaskedFormatter mMaskFormatter;
+        private readonly IMaskedFormatter mMaskFormatter;
         private readonly EditText editor;
         public MaskedWatcher(String mask, EditText editor)
         {
             this.editor = editor;
-            mMaskFormatter = new MaskedFormatter(mask);
+            if (string.IsNullOrEmpty(mask))
+                mMaskFormatter = new EmptyMaskFormatter();
+            else
+                mMaskFormatter = new MaskedFormatter(mask);
         }
 
         public String Mask
         {
             get { return this.mMaskFormatter.Mask; }
-            set { this.mMaskFormatter.Mask = value; }
         }
 
-        public bool IsTextMaskMatched()
+        public bool IsTextMatchesToMask()
         {
             return mMaskFormatter.IsTextMaskMatched(editor.Text);
+        }
+
+        public string GetCleanText()
+        {
+            return mMaskFormatter.GetCleanText(editor.Text);
         }
 
         public void AfterTextChanged(IEditable s)
         {
             int cursorPosition = editor.SelectionEnd;
-            var filtered = mMaskFormatter.ValueToString(s, ref cursorPosition);
-            if (!string.Equals(s.ToString(), filtered))
+            var filtered = mMaskFormatter.ValueToString(editor.Text, ref cursorPosition);
+            if (!string.Equals(editor.Text, filtered))
             {
                 s.Replace(0, s.Length(), filtered);
                 if (cursorPosition <= s.Length())

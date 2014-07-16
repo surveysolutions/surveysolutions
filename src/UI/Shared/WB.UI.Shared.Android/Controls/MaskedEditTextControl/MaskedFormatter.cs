@@ -4,61 +4,47 @@ using System.Text;
 
 namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
 {
-    public class MaskedFormatter
+    public class MaskedFormatter : IMaskedFormatter
     {
 
         private const char DigitKey = '9';
         private const char LiteralKey = '\'';
         private const char UppercaseKey = 'U';
         private const char LowercaseKey = 'L';
-        private const char AlphaNumericKey = 'a';
-        private const char CharacterKey = '?';
+        private const char AlphaNumericKey = 'A';
+        private const char CharacterKey = 'a';
         private const char AnythingKey = '*';
         private const char HexKey = 'H';
 
-        private readonly MaskCharacter[] emptyMaskChars = new MaskCharacter[0];
+        private readonly String mask;
+        private MaskCharacter[] maskChars;
 
-        private String mMask;
-        private MaskCharacter[] mMaskChars;
-
-        public MaskedFormatter()
+        public MaskedFormatter(String mask, string validCharacters = null, string invalidCharacters = null, string placeholder = null, char placeholderCharacter = '_')
         {
-            mMaskChars = this.emptyMaskChars;
-            this.PlaceholderCharacter = '_';
-        }
-
-        public MaskedFormatter(String mask)
-            : this()
-        {
-            Mask = mask;
+            this.mask = mask;
+            this.PlaceholderCharacter = placeholderCharacter;
+            this.Placeholder = placeholder;
+            this.InvalidCharacters = invalidCharacters;
+            this.ValidCharacters = validCharacters;
+            this.UpdateInternalMask();
         }
 
         public string Mask
         {
-            get { return this.mMask; }
-            set
-            {
-                this.mMask = value;
-                this.UpdateInternalMask();
-            }
+            get { return this.mask; }
         }
 
-        public string ValidCharacters { get; set; }
+        public string ValidCharacters { get;private set; }
 
-        public string InvalidCharacters { get; set; }
+        public string InvalidCharacters { get; private set; }
 
-        public string Placeholder { get; set; }
+        public string Placeholder { get; private set; }
 
-        public char PlaceholderCharacter { get; set; }
+        public char PlaceholderCharacter { get; private set; }
 
-        public String ValueToString(Object value, ref int oldCurstorPosition)
+        public String ValueToString(string value, ref int oldCurstorPosition)
         {
-            var stringValue = (value == null) ? "" : value.ToString();
-
-            if (string.IsNullOrEmpty(Mask))
-            {
-                return stringValue;
-            }
+            var stringValue = value ?? "";
 
             var result = new StringBuilder();
 
@@ -66,9 +52,9 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
 
             bool newCursorPositionReceived = false;
 
-            stringValue = this.CleanUpLiterals(stringValue, this.mMaskChars, ref oldCurstorPosition);
+            stringValue = this.CleanUpLiterals(stringValue, ref oldCurstorPosition);
 
-            for (int i = 0; i < this.mMaskChars.Length; i++)
+            for (int i = 0; i < this.maskChars.Length; i++)
             {
                 if (index == oldCurstorPosition && !newCursorPositionReceived)
                 {
@@ -76,9 +62,9 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
                     newCursorPositionReceived = true;
                 }
 
-                if (!this.mMaskChars[i].Append(result, stringValue, ref index, this.Placeholder))
+                if (!this.maskChars[i].Append(result, stringValue, ref index, this.Placeholder))
                 {
-                    result.Append(this.mMaskChars[i][this.PlaceholderCharacter]);
+                    result.Append(this.maskChars[i][this.PlaceholderCharacter]);
                 }
             }
 
@@ -87,22 +73,23 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
 
         public bool IsTextMaskMatched(string text)
         {
-            if (string.IsNullOrEmpty(Mask))
-            {
-                return true;
-            }
-
             String stringValue = text ?? "";
             var result = new StringBuilder();
             int index = 0;
-            for (int i = 0; i < mMaskChars.Length; i++)
+            for (int i = 0; i < this.maskChars.Length; i++)
             {
-                if (!mMaskChars[i].Append(result, stringValue, ref index, Placeholder))
+                if (!this.maskChars[i].Append(result, stringValue, ref index, Placeholder))
                 {
                     return false;
                 }
             }
             return true;
+        }
+
+        public string GetCleanText(string text)
+        {
+            int i = 0;
+            return this.CleanUpLiterals(text, ref i);
         }
 
         private void UpdateInternalMask()
@@ -181,16 +168,15 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
             }
             if (fixedCharacters.Count == 0)
             {
-                mMaskChars = this.emptyMaskChars;
+                throw new ArgumentException("mask is empty");
             }
             else
             {
-                mMaskChars = fixedCharacters.ToArray();
+                this.maskChars = fixedCharacters.ToArray();
             }
         }
 
-        private string CleanUpLiterals(String value, MaskCharacter[] mask,
-            ref int oldCurstorPosition)
+        private string CleanUpLiterals(String value, ref int oldCurstorPosition)
         {
             if (string.IsNullOrEmpty(value))
                 return value;
@@ -198,7 +184,7 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
             var result=new StringBuilder();
             bool newCursorPositionReceived = false;
             int index = 0;
-            for (int i = 0; i < mask.Length; i++)
+            for (int i = 0; i < this.maskChars.Length; i++)
             {
                 if (index >= value.Length)
                     break;
@@ -209,17 +195,17 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
                     newCursorPositionReceived = true;
                 }
 
-                if (mask[i].IsLiteral())
+                if (this.maskChars[i].IsLiteral())
                 {
                     var character = value[index];
-                    if (character == mask[i][character])
+                    if (character == this.maskChars[i][character])
                     {
                         index++;
                     }
                 }
                 else
                 {
-                    while (!mask[i].IsValidCharacter(value[index]))
+                    while (!this.maskChars[i].IsValidCharacter(value[index]))
                     {
                         index++;
                         if (index >= value.Length)
