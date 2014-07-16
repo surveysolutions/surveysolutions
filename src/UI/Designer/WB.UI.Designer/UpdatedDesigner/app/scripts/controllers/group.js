@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('GroupCtrl', [
-            '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', '$log',
-            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, $log) {
+            '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log',
+            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, $log) {
 
                 var dataBind = function(result) {
                     $scope.activeChapter = result;
@@ -16,6 +16,7 @@
                     questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
                             dataBind(result);
                             $scope.initialGroup = angular.copy(result);
+                            utilityService.focus('focusGroup');
                         }
                     );
                 };
