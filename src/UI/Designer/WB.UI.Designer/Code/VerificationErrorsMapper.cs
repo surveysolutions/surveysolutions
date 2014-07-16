@@ -58,7 +58,8 @@ namespace WB.UI.Designer.Code
                     {
                         ItemId = reference.Id.FormatGuid(),
                         Type = group.IsRoster ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
-                        Title = group.Title
+                        Title = group.Title,
+                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
                     };
                 }
                 else
