@@ -30,7 +30,7 @@ namespace WB.UI.Designer.Controllers
             var httpCookie = new HttpCookie("questionnaireId", id.FormatGuid());
             Response.AppendCookie(httpCookie);
 
-            return Redirect("~/UpdatedDesigner");
+            return Redirect("~/UpdatedDesigner/app");
         }
     }
 }
