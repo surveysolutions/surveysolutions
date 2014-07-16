@@ -66,9 +66,9 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public HhMember(decimal[] rosterVector, Identity[] rosterKey)
             : base(rosterVector, rosterKey)
         {
-            validationExpressions.Add(new Identity(IdOf.age, this.RosterVector), age_IsValid);
-            validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), food_IsValid);
-            validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), role_IsValid);
+            validationExpressions.Add(new Identity(IdOf.age, this.RosterVector), new Func<HhMember[], bool>[] { age_IsValid });
+            validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), new Func<HhMember[], bool>[] { food_IsValid });
+            validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), new Func<HhMember[], bool>[] { role_IsValid, role2_IsValid });
 
             EnablementStates.Add(age_state.ItemId, age_state);
             EnablementStates.Add(married_with_state.ItemId, married_with_state);
@@ -79,7 +79,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             EnablementStates.Add(person_id_state.ItemId, person_id_state);
             EnablementStates.Add(marital_status_state.ItemId, marital_status_state);
             EnablementStates.Add(group_state.ItemId, group_state);
-
         }
 
         private QuestionnaireLevel parent;
@@ -171,6 +170,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 {
                     Verifier(age_IsEnabledIf, age_state.ItemId, age_state),
                     Verifier(group_IsEnabledIf, group_state.ItemId, group_state),
+                    Verifier(IsEnabledIfParentIs, person_id_state.ItemId, person_id_state),
+                    Verifier(IsEnabledIfParentIs, marital_status_state.ItemId, marital_status_state),
                     Verifier(married_with_IsEnabledIf, married_with_state.ItemId, married_with_state),
                     Verifier(food_IsEnabledIf, food_state.ItemId, food_state),
                     Verifier(has_job_IsEnabledIf, has_job_state.ItemId, has_job_state),
@@ -178,6 +179,11 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                     Verifier(best_job_owner_IsEnabledIf, best_job_owner_state.ItemId, best_job_owner_state)
                 };
             }
+        }
+
+        private bool IsEnabledIfParentIs(HhMember[] roster)
+        {
+            return true;
         }
 
         //generated
@@ -195,10 +201,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         //generated
         private bool married_with_IsEnabledIf(HhMember[] roster)
         {
-            return marital_status == 2 && persons_count > 2;
+            return marital_status == 2 && persons_count > 1;
         }
-
-
 
         //generated
         private bool food_IsEnabledIf(HhMember[] roster)
@@ -231,17 +235,28 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             return age >= 0 && age < 100;
         }
 
+        private bool married_with_IsValid(HhMember[] roster)
+        {
+            return true;
+        }
+
         //generated
         private bool food_IsValid(HhMember[] roster)
         {
             // children should not drink alcohol
-            return food == null || (food.Contains(38) && role == 3 && age >= 21);
+            return food==null || !(food.Contains(38) && role == 3 && age >= 21);
         }
 
         private bool role_IsValid(HhMember[] roster)
         {
             // children should not drink alcohol
-            return role == 1 && roster.Count(x => x.role == 1) == 1;
+            return (role == 1 && roster.Count(x => x.role == 1) == 1) || role !=1;
+        }
+
+        private bool role2_IsValid(HhMember[] roster)
+        {
+            // children should not drink alcohol
+            return (role == 3 && roster.Where(x => x.role < 3).Any(x => x.age < age + 10)) || role != 3;
         }
 
 
@@ -251,7 +266,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             {
                 try
                 {
-                    if (validationExpression.Value(roters))
+                    // do not validate disabled questions
+                    if (!this.EnablementStates.ContainsKey(validationExpression.Key.Id) ||
+                        this.EnablementStates[validationExpression.Key.Id].State != State.Enabled) continue;
+
+                    var isValid = validationExpression.Value.Aggregate(true, (current, validator) => current && validator(roters));
+
+                    if (isValid)
                         questionsToBeValid.Add(validationExpression.Key);
                     else
                         questionsToBeInvalid.Add(validationExpression.Key);
@@ -284,19 +305,19 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
 
                 name = this.name,
-                age = this.age,
                 date = this.date,
                 sex = this.sex,
                 role = this.role,
-                food = this.food,
-                has_job = this.has_job,
-                job_title = this.job_title,
-                best_job_owner = this.best_job_owner,
-                person_id = this.person_id,
-                marital_status = this.marital_status,
-                married_with = this.married_with
+                // should be taken from fileds, not properties
+                age = this.@__age,
+                food = this.food1,
+                has_job = this.hasJob,
+                job_title = this.jobTitle,
+                best_job_owner = this.bestJobOwner,
+                person_id = this.personId,
+                marital_status = this.maritalStatus,
+                married_with = this.marriedWith
             };
-
             foreach (var state in level.EnablementStates)
             {
                 var originalState = this.EnablementStates[state.Key];
@@ -329,7 +350,9 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public FoodConsumption(decimal[] rosterVector, Identity[] rosterKey)
             : base(rosterVector, rosterKey)
         {
-            validationExpressions.Add(new Identity(IdOf.times_per_week, this.RosterVector), times_per_week_validation);
+            validationExpressions.Add(new Identity(IdOf.times_per_week, this.RosterVector), new Func<FoodConsumption[], bool>[]{times_per_week_validation});
+
+            EnablementStates.Add(price_for_food_state.ItemId, price_for_food_state);
         }
 
         private HhMember parent;
@@ -414,7 +437,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             set { this.priceForFood = value; }
         }
 
-        private ConditionalState price_for_food_state = new ConditionalState(IdOf.age);
+        private ConditionalState price_for_food_state = new ConditionalState(IdOf.price_for_food);
         private decimal? priceForFood;
 
         private bool price_for_food_IsEnabledIf(FoodConsumption[] foodConsumptions)

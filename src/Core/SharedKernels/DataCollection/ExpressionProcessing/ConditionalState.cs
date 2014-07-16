@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
     {
         protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey) : base(rosterVector, rosterKey) {}
 
-        protected Dictionary<Identity, Func<T[], bool>> validationExpressions = new Dictionary<Identity, Func<T[], bool>>();
+        protected Dictionary<Identity, Func<T[], bool>[]> validationExpressions = new Dictionary<Identity, Func<T[], bool>[]>();
 
         public abstract void Validate(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid,
             List<Identity> questionsToBeInvalid);
