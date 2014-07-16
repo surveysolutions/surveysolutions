@@ -4,264 +4,33 @@ using System.Linq;
 
 namespace WB.Core.SharedKernels.ExpressionProcessing
 {
-    public interface IValidatable
-    {
-        IValidatable CopyMembers();
-
-        Identity[] GetRosterKey();
-        void SetParent(IValidatable parentLevel);
-        IValidatable GetParent();
-
-
-        void DisableQuestion(Guid questionId);
-        void EnableQuestion(Guid questionId);
-
-        void DisableGroup(Guid groupId);
-        void EnableGroup(Guid groupId);
-
-        void DeclareAnswerValid(Guid questionId);
-        void DeclareAnswerInvalid(Guid questionId);
-
-    }
-
-    public interface IValidatableRoster
-    {
-        void Validate(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
-        void RunConditions(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled,
-            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);
-    }
-
-    //could be replaces with bool?
-
-    public enum State
-    {
-        Unknown = 0,
-        Enabled = 1,
-        Disabled = 2
-    }
-    public enum ItemType
-    {
-        Question = 1,
-        Group = 10
-    }
-
-    public class ConditionalState
-    {
-        public ConditionalState(Guid itemId, ItemType type = ItemType.Question, State state = State.Enabled, State previousState = State.Enabled)
-        {
-            this.Type = type;
-            this.ItemId = itemId;
-            this.State = state;
-            this.PreviousState = previousState;
-        }
-
-        public Guid ItemId { get; set; }
-        public ItemType Type { get; set; }
-        public State State { get; set; }
-        public State PreviousState { get; set; }
-    }
-
-    public abstract class AbstractConditionalLevel<T> where T : IValidatable
-    {
-        public decimal[] RosterVector { get; private set; }
-
-        protected Dictionary<Guid, ConditionalState> enablementStates = new Dictionary<Guid, ConditionalState>();
-
-        protected HashSet<Guid> ValidAnsweredQuestions = new HashSet<Guid>();
-        protected HashSet<Guid> InvalidAnsweredQuestions = new HashSet<Guid>();
-
-
-        protected abstract IEnumerable<Action<T[]>> ConditionExpressions { get; }
-
-        protected AbstractConditionalLevel(decimal[] rosterVector)
-        {
-            this.RosterVector = rosterVector;
-        }
-
-        private State RunConditionExpression(Func<T[], bool> expression, T[] rosters)
-        {
-            try
-            {
-                return expression(rosters) ? State.Enabled : State.Disabled;
-            }
-            catch
-            {
-                return State.Disabled;
-            }
-        }
-
-        protected void DisableAllDependentQuestions(Guid itemId)
-        {
-            if (!IdOf.conditionalDependencies.ContainsKey(itemId) || !IdOf.conditionalDependencies[itemId].Any()) return;
-
-            var stack = new Queue<Guid>(IdOf.conditionalDependencies[itemId]);
-            while (stack.Any())
-            {
-                var id = stack.Dequeue();
-
-                //var questionState = this.enablementStatus.FirstOrDefault(x => x.ItemId == id);
-
-                if (this.enablementStates.ContainsKey(id))
-                {
-                    //delete
-                    //questionState.State = State.Disabled;
-
-                    this.enablementStates[id].State = State.Disabled;
-                }
-
-                if (IdOf.conditionalDependencies.ContainsKey(id) && IdOf.conditionalDependencies[id].Any())
-                {
-                    foreach (var dependentQuestionId in IdOf.conditionalDependencies[id])
-                    {
-                        stack.Enqueue(dependentQuestionId);
-                    }
-                }
-            }
-        }
-
-        protected Action<T[]> Verifier(Func<T[], bool> isEnabled, Guid questionId, ConditionalState questionState)
-        {
-            return rosters =>
-            {
-                if (questionState.State == State.Disabled)
-                    return;
-
-                questionState.State = this.RunConditionExpression(isEnabled, rosters);
-                if (questionState.State == State.Disabled)
-                {
-                    this.DisableAllDependentQuestions(questionId);
-                }
-            };
-        }
-
-        public void EvaluateConditions(T[] roters, List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled,
-            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled)
-        {
-            foreach (var state in this.enablementStates.Values)
-            {
-                state.PreviousState = state.State;
-                state.State = State.Unknown;
-            }
-
-            foreach (Action<T[]> verifier in this.ConditionExpressions)
-            {
-                verifier(roters);
-            }
-
-            var questionsToBeEnabledArray = this.enablementStates.Values
-                .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Question)
-                .Select(x => new Identity(x.ItemId, this.RosterVector))
-                .ToArray();
-
-            var questionsToBeDisabledArray = this.enablementStates.Values
-                .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Question)
-                .Select(x => new Identity(x.ItemId, this.RosterVector))
-                .ToArray();
-
-            var groupsToBeEnabledArray = this.enablementStates.Values
-                .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Group)
-                .Select(x => new Identity(x.ItemId, this.RosterVector))
-                .ToArray();
-
-            var groupsToBeDisabledArray = this.enablementStates.Values
-                .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Group)
-                .Select(x => new Identity(x.ItemId, this.RosterVector));
-
-            questionsToBeEnabled.AddRange(questionsToBeEnabledArray);
-            questionsToBeDisabled.AddRange(questionsToBeDisabledArray);
-            groupsToBeEnabled.AddRange(groupsToBeEnabledArray);
-            groupsToBeDisabled.AddRange(groupsToBeDisabledArray);
-        }
-
-        public void DeclareAnswerValid(Guid questionId)
-        {
-            ValidAnsweredQuestions.Add(questionId);
-            InvalidAnsweredQuestions.Remove(questionId);
-        }
-
-        public void DeclareAnswerInvalid(Guid questionId)
-        {
-            InvalidAnsweredQuestions.Add(questionId);
-            ValidAnsweredQuestions.Remove(questionId);
-        }
-
-
-        public void DisableQuestion(Guid questionId)
-        {
-            if (enablementStates.ContainsKey(questionId))
-                enablementStates[questionId].State = State.Disabled;
-        }
-
-        public void EnableQuestion(Guid questionId)
-        {
-            if (enablementStates.ContainsKey(questionId))
-                enablementStates[questionId].State = State.Enabled;
-        }
-
-        public void DisableGroup(Guid groupId)
-        {
-            if (enablementStates.ContainsKey(groupId))
-                enablementStates[groupId].State = State.Disabled;
-        }
-
-        public void EnableGroup(Guid groupId)
-        {
-            if (enablementStates.ContainsKey(groupId))
-                enablementStates[groupId].State = State.Enabled;
-        }
-    }
-
-    public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T>, IValidatableRoster where T : IValidatable
-    {
-        public Identity[] RosterKey { get; private set; }
-
-        protected Dictionary<Identity, Func<T[], bool>> validationExpressions = new Dictionary<Identity, Func<T[], bool>>();
-
-        protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey)
-            : base(rosterVector)
-        {
-            this.RosterKey = rosterKey;
-        }
-
-        public abstract void Validate(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid,
-            List<Identity> questionsToBeInvalid);
-
-        public abstract void RunConditions(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeEnabled,
-            List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);
-    }
-
-
     //foloving should be generated
 
     public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IValidatable
     {
-        public Identity[] RosterKey { get; private set; }
+        public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey) : base(rosterVector, rosterKey){}
 
-        public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey)
-            : base(rosterVector)
-        {
-            this.RosterKey = rosterKey;
-        }
-
+        //properties
         public string id { get; set; }
         public long? persons_count { get; set; }
+        //
 
         public IValidatable CopyMembers()
         {
             var level = new QuestionnaireLevel(this.RosterVector, this.RosterKey)
             {
-                enablementStates = this.enablementStates.ToDictionary(item => item.Key, item => new ConditionalState(item.Value.ItemId, item.Value.Type, item.Value.State, item.Value.PreviousState)),
-
                 id = this.id,
                 persons_count = this.persons_count
             };
 
-            return level;
-        }
+            foreach (var conditionalState in level.EnablementStates)
+            {
+                var oldState = this.EnablementStates[conditionalState.Key];
+                conditionalState.Value.State = oldState.State;
+                conditionalState.Value.PreviousState = oldState.PreviousState;
+            }
 
-        public Identity[] GetRosterKey()
-        {
-            return this.RosterKey;
+            return level;
         }
 
         public void SetParent(IValidatable parentLevel) { }
@@ -285,7 +54,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 groupsToBeDisabled);
         }
     }
-
+    
     public class HhMember : AbstractRosterLevel<HhMember>, IValidatable
     {
         public HhMember(decimal[] rosterVector, Identity[] rosterKey, QuestionnaireLevel parent)
@@ -301,15 +70,15 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), food_IsValid);
             validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), role_IsValid);
 
-            enablementStates.Add(age_state.ItemId, age_state);
-            enablementStates.Add(married_with_state.ItemId, married_with_state);
-            enablementStates.Add(has_job_state.ItemId, has_job_state);
-            enablementStates.Add(job_title_state.ItemId, job_title_state);
-            enablementStates.Add(best_job_owner_state.ItemId, best_job_owner_state);
-            enablementStates.Add(food_state.ItemId, food_state);
-            enablementStates.Add(person_id_state.ItemId, person_id_state);
-            enablementStates.Add(marital_status_state.ItemId, marital_status_state);
-            enablementStates.Add(group_state.ItemId, group_state);
+            EnablementStates.Add(age_state.ItemId, age_state);
+            EnablementStates.Add(married_with_state.ItemId, married_with_state);
+            EnablementStates.Add(has_job_state.ItemId, has_job_state);
+            EnablementStates.Add(job_title_state.ItemId, job_title_state);
+            EnablementStates.Add(best_job_owner_state.ItemId, best_job_owner_state);
+            EnablementStates.Add(food_state.ItemId, food_state);
+            EnablementStates.Add(person_id_state.ItemId, person_id_state);
+            EnablementStates.Add(marital_status_state.ItemId, marital_status_state);
+            EnablementStates.Add(group_state.ItemId, group_state);
 
         }
 
@@ -347,8 +116,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public long? age
         {
-            get { return age_state.State == State.Enabled ? this.age1 : null; }
-            set { this.age1 = value; }
+            get { return age_state.State == State.Enabled ? this.@__age : null; }
+            set { this.@__age = value; }
         }
 
         public decimal[] food
@@ -385,7 +154,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         private ConditionalState person_id_state = new ConditionalState(IdOf.person_id);
         private ConditionalState marital_status_state = new ConditionalState(IdOf.marital_status);
 
-        private long? age1;
+        private long? @__age;
         private decimal[][] marriedWith;
         private decimal? hasJob;
         private string jobTitle;
@@ -528,21 +297,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 married_with = this.married_with
             };
 
-            foreach (var state in level.enablementStates)
+            foreach (var state in level.EnablementStates)
             {
-                var originalState = this.enablementStates[state.Key];
+                var originalState = this.EnablementStates[state.Key];
                 state.Value.PreviousState = originalState.PreviousState;
                 state.Value.State = originalState.State;
             }
 
             return level;
         }
-
-        public Identity[] GetRosterKey()
-        {
-            return this.RosterKey;
-        }
-
+        
         public void SetParent(IValidatable parentLevel)
         {
             this.parent = parentLevel as QuestionnaireLevel;
@@ -679,20 +443,22 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             var level = new FoodConsumption(this.RosterVector, this.RosterKey)
             {
-                enablementStates = this.enablementStates.ToDictionary(item => item.Key, item => new ConditionalState(item.Value.ItemId, item.Value.Type, item.Value.State, item.Value.PreviousState)),
-
                 ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
+
+
                 price_for_food = this.price_for_food,
                 times_per_week = this.times_per_week
             };
 
-            return level;
-        }
+            foreach (var state in level.EnablementStates)
+            {
+                var originalState = this.EnablementStates[state.Key];
+                state.Value.PreviousState = originalState.PreviousState;
+                state.Value.State = originalState.State;
+            }
 
-        public Identity[] GetRosterKey()
-        {
-            return this.RosterKey;
+            return level;
         }
 
         public void SetParent(IValidatable parentLevel)

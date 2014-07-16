@@ -10,7 +10,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             questionsToBeValid = new List<Identity>();
             questionsToBeInvalid = new List<Identity>();
 
-
             interviewExpressionState.ProcessValidationExpressions(questionsToBeValid, questionsToBeInvalid);
         }
 
@@ -22,7 +21,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             enabledGroups = new List<Identity>();
             disabledGroups = new List<Identity>();
-
             questionsToBeEnabled = new List<Identity>();
             questionsToBeDisabled = new List<Identity>();
 
