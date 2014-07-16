@@ -349,7 +349,7 @@
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
                 var modalInstance = $modal.open({
-                    templateUrl: 'app/views/confirm.html',
+                    templateUrl: 'views/confirm.html',
                     controller: 'confirmCtrl',
                     windowClass: 'confirm-window',
                     resolve:
@@ -378,7 +378,7 @@
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
                 var modalInstance = $modal.open({
-                    templateUrl: 'app/views/confirm.html',
+                    templateUrl: 'views/confirm.html',
                     controller: 'confirmCtrl',
                     windowClass: 'confirm-window',
                     resolve:

@@ -200,7 +200,7 @@
 
                 $scope.showShareInfo = function () {
                     $modal.open({
-                        templateUrl: 'app/views/share.html',
+                        templateUrl: 'views/share.html',
                         controller: 'shareCtrl',
                         windowClass: 'share-window',
                         resolve:

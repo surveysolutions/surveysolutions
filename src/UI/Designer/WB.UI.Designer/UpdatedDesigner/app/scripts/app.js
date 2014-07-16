@@ -26,13 +26,13 @@
         $stateProvider
             .state('questionnaire', {
                 url: "/{questionnaireId}",
-                templateUrl: "app/views/main.html",
+                templateUrl: "views/main.html",
                 controller: 'MainCtrl'
             }).state('questionnaire.chapter', {
                 url: "/chapter/{chapterId}",
                 views: {
                     '': {
-                        templateUrl: "app/views/tree.html",
+                        templateUrl: "views/tree.html",
                         controller: 'TreeCtrl',
                         resolve: {
                             questionnaireId: ['$stateParams', function($stateParams) {
@@ -49,7 +49,7 @@
                 url: "/question/{itemId}",
                 views: {
                     '': {
-                        templateUrl: 'app/views/question.html',
+                        templateUrl: 'views/question.html',
                         controller: 'QuestionCtrl',
                         resolve: {
                             questionnaireId: ['$stateParams', function ($stateParams) {
@@ -62,7 +62,7 @@
                 url: "/group/{itemId}",
                 views: {
                     '': {
-                        templateUrl: 'app/views/group.html',
+                        templateUrl: 'views/group.html',
                         controller: 'GroupCtrl',
                         resolve: {
                             questionnaireId: ['$stateParams', function ($stateParams) {
@@ -75,7 +75,7 @@
                 url: "/roster/{itemId}",
                 views: {
                     '': {
-                        templateUrl: 'app/views/roster.html',
+                        templateUrl: 'views/roster.html',
                         controller: 'RosterCtrl',
                         resolve: {
                             questionnaireId: ['$stateParams', function ($stateParams) {
@@ -98,7 +98,8 @@
                     }
                 }
             });
-    }]).config(['$httpProvider', function ($httpProvider) {
+    }])
+    .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('errorReportingInterceptor');
     }])
     .config(['blockUIConfigProvider', function(blockUiConfigProvider) {

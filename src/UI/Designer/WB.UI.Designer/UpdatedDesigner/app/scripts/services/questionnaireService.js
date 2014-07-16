@@ -5,7 +5,7 @@
             '$http', 'commandService', 'utilityService',
             function($http, commandService, string) {
 
-                var urlBase = '../api/questionnaire';
+                var urlBase = '../../api/questionnaire';
                 var questionnaireService = {};
 
                 questionnaireService.getQuestionnaireById = function(questionnaireId) {

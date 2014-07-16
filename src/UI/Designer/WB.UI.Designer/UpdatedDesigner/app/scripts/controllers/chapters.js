@@ -58,7 +58,7 @@
                     var itemIdToDelete = chapter.itemId || $state.params.itemId;
 
                     var modalInstance = $modal.open({
-                        templateUrl: 'app/views/confirm.html',
+                        templateUrl: 'views/confirm.html',
                         controller: 'confirmCtrl',
                         windowClass: 'confirm-window',
                         resolve:

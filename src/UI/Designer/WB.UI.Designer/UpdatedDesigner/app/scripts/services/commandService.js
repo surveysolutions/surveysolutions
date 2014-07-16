@@ -3,7 +3,7 @@
         .factory('commandService', [
             '$http', function($http) {
 
-                var urlBase = '../command/execute';
+                var urlBase = '../../command/execute';
                 var commandService = {};
 
                 function commandCall(type, command) {

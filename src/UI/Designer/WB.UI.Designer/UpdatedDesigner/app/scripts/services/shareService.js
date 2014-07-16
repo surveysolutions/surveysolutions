@@ -5,7 +5,7 @@
             var shareService = {};
 
             shareService.findUserByEmail = function(email) {
-                var baseUrl = '../account/findbyemail';
+                var baseUrl = '../../account/findbyemail';
                 return $http.post(baseUrl, { email: email });
             };
 
