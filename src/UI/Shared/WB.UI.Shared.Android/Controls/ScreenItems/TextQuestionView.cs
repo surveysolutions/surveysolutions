@@ -28,6 +28,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             get { return this.Model as ValueQuestionViewModel; }
         }
         protected MaskedWatcher maskedWatcher;
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -60,14 +61,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             {
                 return;
             }
-            if (!maskedWatcher.IsTextMaskMatched())
+            if (!maskedWatcher.IsTextMatchesToMask())
             {
-                this.etAnswer.Text = this.Model.AnswerString;
+                PutAnswerStoredInModelToUI();
                 if (!this.IsCommentsEditorFocused)
                     this.HideKeyboard(this.etAnswer);
                 return;
             }
-            var newAnswer = this.etAnswer.Text.Trim();
+            var newAnswer = maskedWatcher.GetCleanText();
 
             if (newAnswer != this.Model.AnswerString)
             {
