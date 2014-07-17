@@ -104,5 +104,6 @@
     }])
     .config(['blockUIConfigProvider', function(blockUiConfigProvider) {
         blockUiConfigProvider.message('Please wait...');
+        blockUiConfigProvider.autoBlock(false);
     }]);
 }(jQuery));

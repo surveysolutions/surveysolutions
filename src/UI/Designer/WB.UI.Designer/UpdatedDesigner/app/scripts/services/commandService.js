@@ -1,12 +1,15 @@
 ﻿(function() {
     angular.module('designerApp')
         .factory('commandService', [
-            '$http', function($http) {
+            '$http', 'blockUI',
+            function ($http, blockUI) {
 
                 var urlBase = '../../command/execute';
                 var commandService = {};
 
                 function commandCall(type, command) {
+                    blockUI.start();
+
                     return $http({
                         method: 'POST',
                         url: urlBase,
@@ -15,8 +18,9 @@
                             "command": JSON.stringify(command)
                         },
                         headers: {'Content-Type': 'application/json;'}
+                    }).success(function() {
+                         blockUI.stop();
                     });
-                    
                 }
 
                 commandService.execute = function(type, command) {
