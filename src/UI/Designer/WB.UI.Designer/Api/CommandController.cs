@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Web.Mvc;
+using System.Web.Http;
+using System.Web.Routing;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.GenericSubdomains.Logging;
@@ -8,13 +9,17 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.CommandDeserialization;
 
-
-namespace WB.UI.Designer.Controllers
+namespace WB.UI.Designer.Api
 {
-    [CustomAuthorize]
-    [Obsolete("API controller should be used instead")]
-    public class CommandController : Controller
+    [Authorize]
+    public class CommandController : ApiController
     {
+        public struct CommandExecutionModel
+        {
+            public string Type { get; set; }
+            public string Command { get; set; }
+        }
+
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly ILogger logger;
@@ -28,13 +33,12 @@ namespace WB.UI.Designer.Controllers
             this.commandDeserializer = commandDeserializer;
         }
 
-        [HttpPost]
-        public JsonResult Execute(string type, string command)
+        public JsonQuestionnaireResult Post(CommandExecutionModel model)
         {
             var returnValue = new JsonQuestionnaireResult();
             try
             {
-                var concreteCommand = this.commandDeserializer.Deserialize(type, command);
+                var concreteCommand = this.commandDeserializer.Deserialize(model.Type, model.Command);
                 this.commandPreprocessor.PrepareDeserializedCommandForExecution(concreteCommand);
                 this.commandService.Execute(concreteCommand);
             }
@@ -43,7 +47,7 @@ namespace WB.UI.Designer.Controllers
                 var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
-                    this.logger.Error(string.Format("Error on command of type ({0}) handling ", type), e);
+                    this.logger.Error(string.Format("Error on command of type ({0}) handling ", model.Type), e);
                     throw;
                 }
                 else
@@ -54,7 +58,7 @@ namespace WB.UI.Designer.Controllers
                 }
             }
 
-            return this.Json(returnValue);
+            return returnValue;
         }
     }
 }

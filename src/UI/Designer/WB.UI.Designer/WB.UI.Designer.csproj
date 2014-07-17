@@ -217,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
+    <Compile Include="Api\CommandController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -229,6 +230,8 @@
     <Compile Include="Code\AccountRepositoryFactory.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
+    <Compile Include="Code\ICommandPreprocessor.cs" />
+    <Compile Include="Code\Implementation\CommandPreprocessor.cs" />
     <Compile Include="Code\MessageHandlers\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\MessageHandlers\HttpsVerifier.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
