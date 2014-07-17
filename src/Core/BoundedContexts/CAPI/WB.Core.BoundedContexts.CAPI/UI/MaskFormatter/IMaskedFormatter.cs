@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
+namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
 {
     public interface IMaskedFormatter {
         string Mask { get; }

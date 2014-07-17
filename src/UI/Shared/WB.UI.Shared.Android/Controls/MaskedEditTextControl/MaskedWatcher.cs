@@ -2,6 +2,7 @@ using System;
 using Android.Text;
 using Android.Widget;
 using Java.Lang;
+using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 using String = System.String;
 
 namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
@@ -41,8 +42,7 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
             if (!string.Equals(editor.Text, filtered))
             {
                 s.Replace(0, s.Length(), filtered);
-                if (cursorPosition <= s.Length())
-                    editor.SetSelection(cursorPosition);
+                editor.SetSelection(cursorPosition);
             }
         }
 
