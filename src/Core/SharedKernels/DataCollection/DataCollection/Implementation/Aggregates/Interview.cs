@@ -1333,25 +1333,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedPropagationVectors.Length, questionnaire);
 
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
             string answerFormattedAsRosterTitle = string.Join(", ",
                 answeredLinkedQuestions.Select(q => GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, q, questionnaire)));
 
-            this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime,
-                     selectedPropagationVectors));
 
-            bool questionIsMandatoryAndLinkedAndNotAnswered = questionnaire.IsQuestionMandatory(questionId) && !answeredLinkedQuestions.Any();
-            if (questionIsMandatoryAndLinkedAndNotAnswered)
-            {
-                this.ApplySingleAnswerDeclaredInvalidEvent(questionId, rosterVector);
-            }
-            else
-            {
-                this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
-            }
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateLinkedMultiOptionAnswer(questionId, rosterVector, selectedPropagationVectors); ;
 
-            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
+            this.ApplyInterviewChanges(this.CalculateInterviewChangesOnAnswerQuestion(
+                this.interviewState,
+                userId,
+                questionId, rosterVector, selectedPropagationVectors, answerFormattedAsRosterTitle, AnswerChangeType.MultipleOptionsLinked,
+                answerTime,
+                questionnaire,
+                updateState));
+
+            //this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime,
+            //         selectedPropagationVectors));
+
+            //bool questionIsMandatoryAndLinkedAndNotAnswered = questionnaire.IsQuestionMandatory(questionId) && !answeredLinkedQuestions.Any();
+            //if (questionIsMandatoryAndLinkedAndNotAnswered)
+            //{
+            //    this.ApplySingleAnswerDeclaredInvalidEvent(questionId, rosterVector);
+            //}
+            //else
+            //{
+            //    this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
+            //}
+
+            //this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer)
