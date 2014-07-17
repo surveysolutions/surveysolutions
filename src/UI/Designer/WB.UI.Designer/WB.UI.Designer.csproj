@@ -1192,7 +1192,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-router\CHANGELOG.md" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-router\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-router\README.md" />
-    <Content Include="UpdatedDesigner\app\partials\chapter.detail.html" />
     <Content Include="UpdatedDesigner\vendor\jquery-cookie\.bower.json" />
     <Content Include="UpdatedDesigner\data\questionnaire\empty.json" />
     <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
