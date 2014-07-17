@@ -73,6 +73,11 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public Identity[] RosterKey { get; private set; }
 
         protected Dictionary<Guid, ConditionalState> EnablementStates {get; private set; }
+        
+        public decimal[] me
+        {
+            get { return this.RosterVector; }
+        }
 
         protected HashSet<Guid> ValidAnsweredQuestions = new HashSet<Guid>();
         protected HashSet<Guid> InvalidAnsweredQuestions = new HashSet<Guid>();
@@ -230,6 +235,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
     public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T>/*, IValidatableRoster*/ where T : IValidatable
     {
         protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances) : base(rosterVector, rosterKey, getInstances) { }
+        
+        public decimal index
+        {
+            get { return this.RosterVector.Last(); }
+        }
+
 
         protected Dictionary<Identity, Func<bool>[]> validationExpressions = new Dictionary<Identity, Func< bool>[]>();
         
