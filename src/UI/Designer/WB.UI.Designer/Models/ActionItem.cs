@@ -9,7 +9,6 @@
             CanPreview = false;
             CanExport = false;
             CanSynchronize = false;
-            ShowUpdatedEditForm = false;
         }
 
         public virtual bool CanDelete { get; set; }
@@ -23,8 +22,6 @@
         public virtual bool CanSynchronize { get; set; }
 
         public bool CanExportToPdf { get; set; }
-
-        public bool ShowUpdatedEditForm { get; set; }
 
         public virtual bool CanCopy
         {

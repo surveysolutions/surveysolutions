@@ -23,10 +23,6 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Open(Guid id)
         {
-            if (!AppSettings.Instance.IsNewDesignerEditPageEnabled)
-            {
-                return HttpNotFound();
-            }
             var httpCookie = new HttpCookie("questionnaireId", id.FormatGuid());
             Response.AppendCookie(httpCookie);
 

@@ -78,7 +78,7 @@ namespace WB.UI.Designer.App_Start
                 new RavenWriteSideInfrastructureModule(ravenSettings, AppSettings.Instance.UseStreamingForAllEvents),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
-                new DesignerBoundedContextModule(AppSettings.Instance.IsNewDesignerEditPageEnabled),
+                new DesignerBoundedContextModule(),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 new QuestionnaireUpgraderModule(),

@@ -387,7 +387,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
-    <None Include="parameters.xml" />
+    <None Include="parameters.xml">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -732,6 +734,8 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils-ieshiv.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-vs-repeat\src\angular-vs-repeat.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-vs-repeat\src\angular-vs-repeat.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular\angular-csp.css" />
     <Content Include="UpdatedDesigner\vendor\angular\angular.js" />
@@ -1203,6 +1207,9 @@
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-vs-repeat\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-vs-repeat\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-vs-repeat\LICENSE" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
