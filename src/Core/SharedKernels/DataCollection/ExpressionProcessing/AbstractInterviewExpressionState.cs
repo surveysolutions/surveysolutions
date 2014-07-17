@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 var targetLevel = this.GetRosterByIdAndVector(identity.Id, identity.RosterVector);
                 if (targetLevel == null) return;
 
-                targetLevel.DeclareAnswerInvalid(identity.Id);
+                targetLevel.DeclareAnswerValid(identity.Id);
             }
         }
 

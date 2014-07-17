@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.StronglyTypedInterviewEvalu
 
         It should_declare_valid_age_question = () =>
             eventContext.GetEvent<AnswersDeclaredValid>().Questions.Select(q => q.Id)
-                .ShouldContainOnly(IdOf.age, IdOf.name, IdOf.role);
+                .ShouldContainOnly(IdOf.age);
 
         private static EventContext eventContext;
         private static Interview interview;
