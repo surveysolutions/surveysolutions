@@ -55,7 +55,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.StronglyTypedInterviewEvalu
                 new Identity(IdOf.job_title, rosterVector),
                 new Identity(IdOf.best_job_owner, rosterVector),
             }));
-
+            interview.Apply(new AnswersDeclaredValid(new Identity[]
+            {
+                new Identity(IdOf.name, rosterVector),
+                new Identity(IdOf.role, rosterVector),
+            }));
             interview.Apply(new GroupsDisabled(new Identity[]
             {
                 new Identity(IdOf.groupId, rosterVector),
@@ -94,7 +98,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.StronglyTypedInterviewEvalu
 
         It should_declare_valid_age_question = () =>
             eventContext.GetEvent<AnswersDeclaredValid>().Questions.Select(q => q.Id)
-                .ShouldContainOnly(IdOf.age);
+                .ShouldContainOnly(IdOf.age, IdOf.name, IdOf.role);
 
         private static EventContext eventContext;
         private static Interview interview;
