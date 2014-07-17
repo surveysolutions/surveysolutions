@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('ChaptersCtrl', [
-            '$rootScope', '$scope', '$state', 'commandService', 'utilityService', '$log', '$modal', 'questionnaireService',
-            function($rootScope, $scope, $state, commandService, math, $log, $modal, questionnaireService) {
+            '$rootScope', '$scope', '$state', 'commandService', 'utilityService', '$log', 'confirmService', 'questionnaireService',
+            function($rootScope, $scope, $state, commandService, math, $log, confirmService, questionnaireService) {
 
                 $scope.chapters = [];
 
@@ -57,17 +57,7 @@
                 $scope.deleteChapter = function (chapter) {
                     var itemIdToDelete = chapter.itemId || $state.params.itemId;
 
-                    var modalInstance = $modal.open({
-                        templateUrl: 'views/confirm.html',
-                        controller: 'confirmCtrl',
-                        windowClass: 'confirm-window',
-                        resolve:
-                        {
-                            item: function () {
-                                return chapter;
-                            }
-                        }
-                    });
+                    var modalInstance = confirmService.open(chapter);
 
                     modalInstance.result.then(function (confirmResult) {
                         if (confirmResult === 'ok') {

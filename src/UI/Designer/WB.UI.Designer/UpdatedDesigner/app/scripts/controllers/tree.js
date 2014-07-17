@@ -1,7 +1,7 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl', [
-        '$rootScope', '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$log', '$modal',
-        function($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $log, $modal) {
+        '$rootScope', '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'confirmService', 'hotkeys', '$log',
+        function($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, $log) {
             'use strict';
             var me = this;
 
@@ -181,7 +181,7 @@
                 return !($scope.isQuestion(item) || $scope.isStaticText(item));
             };
 
-            $scope.isStaticText = function (item) {
+            $scope.isStaticText = function(item) {
                 return item.hasOwnProperty('text');
             };
 
@@ -249,43 +249,33 @@
                 }
             };
 
-            $scope.deleteStaticText = function (staticTextId) {
+            $scope.deleteStaticText = function(staticTextId) {
                 var itemIdToDelete = staticTextId || $state.params.itemId;
-                
+
                 var item = questionnaireService.findItem($scope.items, staticTextId);
 
-                var modalInstance = $modal.open({
-                    templateUrl: 'views/confirm.html',
-                    controller: 'confirmCtrl',
-                    windowClass: 'confirm-window',
-                    resolve:
-                    {
-                        item: function () {
-                            return {
-                                title : item.text.substring(0, 15) + (item.text.length > 15 ?  "..." : "")
-                            };
-                        }
-                    }
+                var modalInstance = confirmService.open({
+                    title: item.text.substring(0, 15) + (item.text.length > 15 ? "..." : "")
                 });
 
-                modalInstance.result.then(function (confirmResult) {
+                modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
                         commandService.deleteStaticText($state.params.questionnaireId, itemIdToDelete)
-                        .success(function (result) {
-                            if (result.IsSuccess) {
-                                questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
-                                $scope.resetSelection();
-                                $rootScope.$emit('staticTextDeleted');
-                            }
-                        });
+                            .success(function(result) {
+                                if (result.IsSuccess) {
+                                    questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                                    $scope.resetSelection();
+                                    $rootScope.$emit('staticTextDeleted');
+                                }
+                            });
                     }
                 });
             };
 
-            $scope.cloneStaticText = function (staticTextId) {
+            $scope.cloneStaticText = function(staticTextId) {
                 var itemIdToClone = staticTextId || $state.params.itemId;
                 var newId = utilityService.guid();
-                commandService.cloneStaticText($state.params.questionnaireId, itemIdToClone, newId).success(function (result) {
+                commandService.cloneStaticText($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
                     if (result.IsSuccess) {
                         var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
                         var parentItem = clonnedItem.getParentItem() || $scope;
@@ -306,7 +296,7 @@
             $scope.cloneQuestion = function(questionId) {
                 var itemIdToClone = questionId || $state.params.itemId;
                 var newId = utilityService.guid();
-                commandService.cloneQuestion($state.params.questionnaireId, itemIdToClone, newId).success(function (result) {
+                commandService.cloneQuestion($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
                     if (result.IsSuccess) {
                         var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
                         var parentItem = clonnedItem.getParentItem() || $scope;
@@ -352,17 +342,7 @@
             $scope.deleteQuestion = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
-                var modalInstance = $modal.open({
-                    templateUrl: 'views/confirm.html',
-                    controller: 'confirmCtrl',
-                    windowClass: 'confirm-window',
-                    resolve:
-                    {
-                        item: function() {
-                            return item;
-                        }
-                    }
-                });
+                var modalInstance = confirmService.open(item);
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
@@ -381,17 +361,7 @@
             $scope.deleteGroup = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
-                var modalInstance = $modal.open({
-                    templateUrl: 'views/confirm.html',
-                    controller: 'confirmCtrl',
-                    windowClass: 'confirm-window',
-                    resolve:
-                    {
-                        item: function() {
-                            return item;
-                        }
-                    }
-                });
+                var modalInstance = confirmService.open(item);
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
@@ -422,7 +392,7 @@
 
                 var moveCommand = $scope.isStaticText(itemToMove) ? questionnaireService.moveStaticText : questionnaireService.moveQuestion;
 
-                moveCommand(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function (result) {
+                moveCommand(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function(result) {
                     if (result.IsSuccess) {
                         questionnaireService.removeItemWithId($scope.items, itemToMoveId);
                         $scope.resetSelection();
@@ -455,7 +425,7 @@
                 }
             });
 
-            $rootScope.$on('staticTextUpdated', function (event, data) {
+            $rootScope.$on('staticTextUpdated', function(event, data) {
                 var staticText = questionnaireService.findItem($scope.items, data.itemId);
                 if (staticText != null) {
                     staticText.text = data.text;

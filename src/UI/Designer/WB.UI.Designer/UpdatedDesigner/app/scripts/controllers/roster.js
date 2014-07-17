@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', [
-            '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log', '$modal',
-            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, $log, $modal) {
+            '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', 'confirmService', '$log',
+            function($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, confirmService, $log) {
 
                 $scope.rosterTypes = {
                     'Numeric-template.html': 'Answer to numeric question',
@@ -23,7 +23,7 @@
                     $scope.getRosterTemplate();
                 };
 
-                $scope.getSelected = function (collection, id) {
+                $scope.getSelected = function(collection, id) {
                     var current = _.find(collection, { 'id': id });
                     if (!_.isUndefined(current)) {
                         return current.title;
@@ -48,7 +48,7 @@
 
                 $scope.updateRosterType = function(i) {
                     $scope.activeRoster.rosterTemplate = (_.invert($scope.rosterTypes))[i];
-                    
+
                     if ($scope.activeRoster.rosterTemplate === 'FixedTitles-template.html') {
                         $scope.activeRoster.roster.rosterSizeSourceType = 'FixedTitles';
                         $scope.activeRoster.roster.rosterSizeQuestionId = null;
@@ -67,7 +67,7 @@
                 };
 
                 $scope.saveRoster = function() {
-                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function (result) {
+                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function(result) {
                         $scope.initialRoster = angular.copy($scope.activeRoster);
 
                         $rootScope.$emit('rosterUpdated', {
@@ -77,22 +77,12 @@
                     });
                 };
 
-                $scope.deleteRoster = function () {
-                    var modalInstance = $modal.open({
-                        templateUrl: 'views/confirm.html',
-                        controller: 'confirmCtrl',
-                        windowClass: 'confirm-window',
-                        resolve:
-                        {
-                            item: function () {
-                                return $scope.activeRoster;
-                            }
-                        }
-                    });
+                $scope.deleteRoster = function() {
+                    var modalInstance = confirmService.open($scope.activeRoster.roster);
 
-                    modalInstance.result.then(function (confirmResult) {
+                    modalInstance.result.then(function(confirmResult) {
                         if (confirmResult === 'ok') {
-                            commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function (result) {
+                            commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
                                 if (result.IsSuccess) {
                                     var itemIdToDelete = $stateParams.itemId;
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
@@ -103,7 +93,7 @@
                     });
                 };
 
-                $scope.cancelRoster = function () {
+                $scope.cancelRoster = function() {
                     var temp = angular.copy($scope.initialRoster);
                     dataBind(temp);
                 };
