@@ -258,14 +258,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 try
                 {
                     // do not validate disabled questions
-                    if (this.EnablementStates.ContainsKey(validationExpression.Key.Id) &&
-                        this.EnablementStates[validationExpression.Key.Id].State != State.Enabled) continue;
+                    Guid questionId = validationExpression.Key.Id;
+                    if (this.EnablementStates.ContainsKey(questionId) &&
+                        this.EnablementStates[questionId].State != State.Enabled) continue;
 
                     var isValid = validationExpression.Value.Aggregate(true, (current, validator) => current && validator());
 
-                    if (isValid)
+                    if (isValid && !ValidAnsweredQuestions.Contains(questionId))
                         questionsToBeValid.Add(validationExpression.Key);
-                    else
+
+                    if (!isValid && !InvalidAnsweredQuestions.Contains(questionId))
                         questionsToBeInvalid.Add(validationExpression.Key);
                 }
                 catch (Exception)
