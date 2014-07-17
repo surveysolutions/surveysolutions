@@ -28,14 +28,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
     }
 
-    /*public interface IValidatableRoster
-    {
-        /*void CalculateValidationChanges(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);#1#
-        
-        /*void CalculateConditionChanges(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled,
-            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);#1#
-    }*/
-
     //could be replaces with bool?
 
     public enum State
@@ -115,13 +107,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             {
                 var id = stack.Dequeue();
 
-                //var questionState = this.enablementStatus.FirstOrDefault(x => x.ItemId == id);
-
                 if (this.EnablementStates.ContainsKey(id))
                 {
-                    //delete
-                    //questionState.State = State.Disabled;
-
                     this.EnablementStates[id].State = State.Disabled;
                 }
 
@@ -230,9 +217,29 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             return this.RosterKey;
         }
+
+        protected bool IsEnabledIfParentIs()
+        {
+            return true;
+        }
+
+        protected bool IsEmptyAnswer(string answer)
+        {
+            return string.IsNullOrWhiteSpace(answer);
+        }
+
+        protected bool IsEmptyAnswer<TY>(TY? answer) where TY : struct
+        {
+            return answer.HasValue;
+        }
+
+        protected bool IsEmptyAnswer<TY>(TY[] answer) where TY : struct
+        {
+            return answer!=null && answer.Length > 0;
+        }
     }
 
-    public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T>/*, IValidatableRoster*/ where T : IValidatable
+    public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T> where T : IValidatable
     {
         protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances) : base(rosterVector, rosterKey, getInstances) { }
         
@@ -243,6 +250,31 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
 
         protected Dictionary<Identity, Func<bool>[]> validationExpressions = new Dictionary<Identity, Func< bool>[]>();
+
+        protected void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        {
+            foreach (var validationExpression in validationExpressions)
+            {
+                try
+                {
+                    // do not validate disabled questions
+                    if (this.EnablementStates.ContainsKey(validationExpression.Key.Id) &&
+                        this.EnablementStates[validationExpression.Key.Id].State != State.Enabled) continue;
+
+                    var isValid = validationExpression.Value.Aggregate(true, (current, validator) => current && validator());
+
+                    if (isValid)
+                        questionsToBeValid.Add(validationExpression.Key);
+                    else
+                        questionsToBeInvalid.Add(validationExpression.Key);
+                }
+                catch (Exception)
+                {
+                    // failed to execute are treated as valid
+                    questionsToBeValid.Add(validationExpression.Key);
+                }
+            }
+        }
         
     }
 

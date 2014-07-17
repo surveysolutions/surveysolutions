@@ -86,6 +86,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances)
             : base(rosterVector, rosterKey, getInstances)
         {
+
+            validationExpressions.Add(new Identity(IdOf.name, this.RosterVector), new Func<bool>[] { name_IsMandatory });
             validationExpressions.Add(new Identity(IdOf.age, this.RosterVector), new Func<bool>[] { age_IsValid });
             validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), new Func<bool>[] { food_IsValid });
             validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), new Func<bool>[] { role_IsValid, role2_IsValid });
@@ -212,57 +214,43 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        private bool IsEnabledIfParentIs()
-        {
-            return true;
-        }
-
-        //generated
         private bool age_IsEnabledIf()
         {
             return name.ToLower().StartsWith("a");
         }
-
-        //generated
+        
         private bool group_IsEnabledIf()
         {
             return (age > 16);
         }
 
-        //generated
         private bool married_with_IsEnabledIf()
         {
             return marital_status == 2 && persons_count > 1;
         }
 
-        //generated
         private bool food_IsEnabledIf()
         {
             return role == 2 && sex == 2;
         }
 
-        //generated
         private bool has_job_IsEnabledIf()
         {
             return age > 16;
         }
 
-        //generated
         private bool job_title_IsEnabledIf()
         {
             return has_job == 1;
         }
 
-        //generated
         private bool best_job_owner_IsEnabledIf()
         {
             return has_job == 2;
         }
 
-        //generated
         private bool age_IsValid()
         {
-            // person should not be too young and too old
             return age >= 0 && age < 100;
         }
 
@@ -271,10 +259,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             return !married_with.Any(x => x.SequenceEqual(me));
         }
 
-        //generated
+        private bool name_IsMandatory()
+        {
+            return !IsEmptyAnswer(name);
+        }
+
         private bool food_IsValid()
         {
-            // children should not drink alcohol
             return food == null || !(food.Contains(38) && role == 3 && age >= 21);
         }
 
@@ -288,32 +279,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             // children should not drink alcohol
             return (role == 3 && hhMembers.Where(x => x.role < 3).Any(x => x.age < age + 10)) || role != 3;
-        }
-
-
-        private void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-        {
-            foreach (var validationExpression in validationExpressions)
-            {
-                try
-                {
-                    // do not validate disabled questions
-                    if (!this.EnablementStates.ContainsKey(validationExpression.Key.Id) ||
-                        this.EnablementStates[validationExpression.Key.Id].State != State.Enabled) continue;
-
-                    var isValid = validationExpression.Value.Aggregate(true, (current, validator) => current && validator());
-
-                    if (isValid)
-                        questionsToBeValid.Add(validationExpression.Key);
-                    else
-                        questionsToBeInvalid.Add(validationExpression.Key);
-                }
-                catch (Exception)
-                {
-                    // failed to execute are treated as valid
-                    questionsToBeValid.Add(validationExpression.Key);
-                }
-            }
         }
         
         public IValidatable CopyMembers()

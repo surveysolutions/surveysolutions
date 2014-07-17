@@ -68,6 +68,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.StronglyTypedInterviewEvalu
             eventContext.GetEvent<GroupsDisabled>().Groups.Select(q => q.Id)
                 .ShouldContainOnly(IdOf.groupId);
 
+        It should_declare_answers_as_invalid = () =>
+            eventContext.GetEvent<AnswersDeclaredInvalid>().Questions.Select(q => q.Id)
+                .ShouldContainOnly(IdOf.name);
+
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;

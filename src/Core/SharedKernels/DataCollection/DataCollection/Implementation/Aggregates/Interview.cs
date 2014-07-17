@@ -338,7 +338,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.expressionProcessorStatePrototype.DeclareAnswersInvalid(new[] { new Identity(@event.QuestionId, @event.PropagationVector) });
         }
 
-        private void Apply(AnswersDeclaredValid @event)
+        internal void Apply(AnswersDeclaredValid @event)
         {
             this.interviewState.DeclareAnswersValid(@event.Questions);
             this.expressionProcessorStatePrototype.DeclareAnswersValid(@event.Questions.ToIdentities());
