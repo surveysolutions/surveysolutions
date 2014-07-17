@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace WB.Core.SharedKernels.ExpressionProcessing
 {
@@ -69,6 +70,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             validationExpressions.Add(new Identity(IdOf.age, this.RosterVector), new Func<HhMember[], bool>[] { age_IsValid });
             validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), new Func<HhMember[], bool>[] { food_IsValid });
             validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), new Func<HhMember[], bool>[] { role_IsValid, role2_IsValid });
+            validationExpressions.Add(new Identity(IdOf.married_with, this.RosterVector), new Func<HhMember[], bool>[] { married_with_IsValid });
 
             EnablementStates.Add(age_state.ItemId, age_state);
             EnablementStates.Add(married_with_state.ItemId, married_with_state);
@@ -87,6 +89,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public long? persons_count { get { return this.parent.persons_count; } }
 
+        
         public string name { get; set; }
 
         public DateTime? date { get; set; }
@@ -237,7 +240,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         private bool married_with_IsValid(HhMember[] roster)
         {
-            return true;
+            return !married_with.Any(x => x.SequenceEqual(me));
         }
 
         //generated
