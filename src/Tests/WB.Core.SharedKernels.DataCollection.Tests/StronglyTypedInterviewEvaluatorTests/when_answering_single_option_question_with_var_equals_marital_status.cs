@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.StronglyTypedInterviewEvalu
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;
-        private static Guid questionId = IdOf.age;
+        private static Guid questionId = IdOf.marital_status;
         private static decimal answer;
         private static decimal[] emptyRosterVector = new decimal[0];
         private static decimal[] firstVector = new decimal[] { 0.0m };
