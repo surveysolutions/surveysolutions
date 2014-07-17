@@ -10,14 +10,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Designer</title>
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="../content/vendor.css.css">
-    <link rel="stylesheet" href="../content/markup.css.css">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
     <link href="../vendor/angular-ui-tree/dist/angular-ui-tree.min.css" rel="stylesheet" />
     <link href="../vendor/angular-loading-bar/build/loading-bar.css" rel="stylesheet" />
     <link href="../vendor/angular-hotkeys/build/hotkeys.css" rel="stylesheet" />
     <link href="../vendor/pines-notify/pnotify.core.css" rel="stylesheet" />
     <link href="../vendor/pines-notify/pnotify.buttons.css" rel="stylesheet" />
     <link href="../vendor/angular-block-ui/angular-block-ui.css" rel="stylesheet" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="../content/vendor.css.css">
+    <link rel="stylesheet" href="../content/markup.css.css">
+    <!-- endbuild -->
 </head>
     <body ng-app="designerApp">
         <!--[if lt IE 9]>
@@ -27,11 +34,15 @@
         <div id="designer-editor" class="container" ui-view >
         </div>
 
+        <!-- build:js(.) scripts/oldieshim.js -->
         <!--[if lt IE 9]>
             <script src="../vendor/es5-shim/es5-shim.js"></script>
             <script src="../vendor/json3/lib/json3.min.js"></script>
         <![endif]-->
+        <!-- endbuild -->
 
+        <!-- build:js(.) scripts/vendor.js -->
+        <!-- bower:js -->
         <script src="../vendor/jquery/dist/jquery.js"></script>
         <script src="../vendor/jquery-cookie/jquery.cookie.js"></script>
         <script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
@@ -49,7 +60,6 @@
         <script src="../vendor/angular-ui-utils/ui-utils.js"></script>
         <script src="../vendor/angular-ui-tree/dist/angular-ui-tree.js"></script>
         <script src="../vendor/angular-hotkeys/build/hotkeys.js"></script>
-        <!--<script src="../vendor/prettycheckable/dist/prettyCheckable.min.js"></script>-->
         <script src="../vendor/angular-loading-bar/build/loading-bar.js"></script>
         <script src="../vendor/angular-block-ui/angular-block-ui.js"></script>
         <script src="../vendor/angular-pines-notify/src/pnotify.js"></script>
@@ -57,7 +67,10 @@
         <script src="../vendor/jquery-mousewheel/jquery.mousewheel.js"></script>
         <script src="../vendor/pines-notify/pnotify.core.js"></script>
         <script src="../vendor/pines-notify/pnotify.buttons.js"></script>
+        <!-- endbower -->
+        <!-- endbuild -->
 
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/components/contextMenu.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/fixtures/no-backend.js"></script>
@@ -80,6 +93,6 @@
         <script src="scripts/directives/directives.js"></script>
         <script src="scripts/directives/animations.js"></script>
         <script src="scripts/directives/itemBreadcrumbs.js"></script>
-
+        <!-- endbuild -->
     </body>
 </html>
