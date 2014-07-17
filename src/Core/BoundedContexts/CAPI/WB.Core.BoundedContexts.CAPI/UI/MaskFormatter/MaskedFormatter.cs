@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
+namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
 {
     public class MaskedFormatter : IMaskedFormatter
     {
-
         private const char DigitKey = '9';
         private const char LiteralKey = '\'';
         private const char UppercaseKey = 'U';
@@ -45,29 +45,45 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
         public String ValueToString(string value, ref int oldCurstorPosition)
         {
             var stringValue = value ?? "";
-
             var result = new StringBuilder();
 
             int index = 0;
-
-            bool newCursorPositionReceived = false;
-
-            stringValue = this.CleanUpLiterals(stringValue, ref oldCurstorPosition);
-
+            var resAndStatuses = new KeyValuePair<bool, bool>[this.maskChars.Length];
             for (int i = 0; i < this.maskChars.Length; i++)
             {
-                if (index == oldCurstorPosition && !newCursorPositionReceived)
-                {
-                    oldCurstorPosition = i;
-                    newCursorPositionReceived = true;
-                }
-
-                if (!this.maskChars[i].Append(result, stringValue, ref index, this.Placeholder))
+                var isCharAppended = this.maskChars[i].Append(result, stringValue, ref index, this.Placeholder);
+                if (!isCharAppended)
                 {
                     result.Append(this.maskChars[i][this.PlaceholderCharacter]);
                 }
+                resAndStatuses[i] = new KeyValuePair<bool, bool>(isCharAppended, this.maskChars[i].IsLiteral());
             }
 
+            for (int i = resAndStatuses.Length-1; i >=0; i--)
+            {
+                if (resAndStatuses[i].Key)
+                {
+                    if (!resAndStatuses[i].Value)
+                    {
+                        oldCurstorPosition = i + 1;
+                        break;
+                    }
+                    var previousChar = i - 1;
+                    while (resAndStatuses[previousChar].Key && resAndStatuses[previousChar].Value && i > 0)
+                    {
+                        previousChar--;
+                    }
+
+                    if (resAndStatuses[previousChar].Key)
+                    {
+                        if (resAndStatuses[previousChar].Value)
+                            oldCurstorPosition = previousChar + 1;
+                        else
+                            oldCurstorPosition = i + 1;
+                        break;
+                    }
+                }
+            }
             return result.ToString();
         }
 
@@ -78,7 +94,7 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
             int index = 0;
             for (int i = 0; i < this.maskChars.Length; i++)
             {
-                if (!this.maskChars[i].Append(result, stringValue, ref index, Placeholder))
+                if (!this.maskChars[i].Append(result, stringValue, ref index, this.Placeholder))
                 {
                     return false;
                 }
@@ -97,7 +113,7 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
             var fixedCharacters = new List<MaskCharacter>();
             var temp = fixedCharacters;
 
-            String mask = Mask;
+            String mask = this.Mask;
             if (mask != null)
             {
                 for (int counter = 0, maxCounter = mask.Length; counter < maxCounter; counter++)
@@ -182,18 +198,12 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
                 return value;
 
             var result=new StringBuilder();
-            bool newCursorPositionReceived = false;
             int index = 0;
+            bool isCursorPositionSet = false;
             for (int i = 0; i < this.maskChars.Length; i++)
             {
                 if (index >= value.Length)
                     break;
-                
-                if (index == oldCurstorPosition && !newCursorPositionReceived)
-                {
-                    oldCurstorPosition = result.Length;
-                    newCursorPositionReceived = true;
-                }
 
                 if (this.maskChars[i].IsLiteral())
                 {
@@ -209,9 +219,24 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
                     {
                         index++;
                         if (index >= value.Length)
+                        {
+                            if (!isCursorPositionSet)
+                            {
+                                oldCurstorPosition = result.Length;
+                            }
                             return result.ToString();
+                        }
                     }
+
                     result.Append(value[index]);
+
+
+                    if (i + 1 == oldCurstorPosition && !isCursorPositionSet)
+                    {
+                        oldCurstorPosition = result.Length;
+                        isCursorPositionSet = true;
+                    }
+
                     index++;
                 }
             }
