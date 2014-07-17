@@ -20,6 +20,8 @@
                         headers: {'Content-Type': 'application/json;'}
                     }).success(function() {
                          blockUI.stop();
+                    }).error(function() {
+                        blockUI.stop();
                     });
                 }
 
