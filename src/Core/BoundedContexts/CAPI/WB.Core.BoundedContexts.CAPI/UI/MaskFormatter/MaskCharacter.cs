@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
+namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
 {
     internal class MaskCharacter
     {
@@ -19,20 +19,20 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
 
         public virtual bool IsValidCharacter(char character)
         {
-            if (IsLiteral())
+            if (this.IsLiteral())
             {
                 return this[character] == character;
             }
 
             character = this[character];
 
-            String filter = ValidCharacters;
+            String filter = this.ValidCharacters;
             if (filter != null && filter.IndexOf(character) == -1)
             {
                 return false;
             }
 
-            filter = InvalidCharacters;
+            filter = this.InvalidCharacters;
             if (filter != null && filter.IndexOf(character) != -1)
             {
                 return false;
@@ -60,7 +60,7 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
                 return false;
             }
 
-            if (IsLiteral())
+            if (this.IsLiteral())
             {
                 buffer.Append(this[character]);
 
@@ -68,6 +68,7 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
                 {
                     index = index + 1;
                 }
+              
             }
             else if (index >= formatting.Length)
             {
@@ -77,18 +78,19 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
                 }
                 else
                 {
-                    buffer.Append(PlaceholderCharacter);
+                    buffer.Append(this.PlaceholderCharacter);
                 }
 
                 index = index + 1;
             }
-            else if (IsValidCharacter(character))
+            else if (this.IsValidCharacter(character))
             {
                 buffer.Append(this[character]);
                 index = index + 1;
             }
             else
             {
+                index = index + 1;
                 return false;
             }
 
