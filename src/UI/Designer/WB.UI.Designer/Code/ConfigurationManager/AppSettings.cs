@@ -89,10 +89,5 @@ namespace WB.UI.Designer
         {
             get { return ConfigurationManager.AppSettings.GetString("SupportEmail"); }
         }
-
-        public bool IsNewDesignerEditPageEnabled
-        {
-            get { return ConfigurationManager.AppSettings.GetBool("IsNewDesignerEditPageEnabled", false); }
-        }
     }
 }

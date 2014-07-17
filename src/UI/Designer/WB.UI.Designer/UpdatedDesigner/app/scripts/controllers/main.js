@@ -16,6 +16,8 @@
                     rostersCount: 0
                 };
 
+                $scope.questionnaireId = $state.params.questionnaireId;
+
                 $scope.verify = function () {
                     verificationService.verify($state.params.questionnaireId).success(function (result) {
                         $scope.verificationStatus.errors = result.errors;

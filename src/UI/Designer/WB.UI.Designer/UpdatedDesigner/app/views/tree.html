@@ -22,7 +22,7 @@
     </div>
 
     <script type="text/ng-template" id="tree_item_renderer.html">
-        <div ng-if="isQuestion(item) && !item.isDeleted"
+        <div ng-if="isQuestion(item)"
              class="question item"
              ui-sref-active="selected">
 
@@ -80,8 +80,7 @@
         </div>
         
         <div class="section item"
-             ng-class="{'selected' : item.itemId == currentItemId, 'highlighted': is_highlighted }"
-             ng-if="isGroup(item) && !item.isDeleted"
+             ng-if="isGroup(item)"
              ui-sref-active="selected"
              ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
                                          'questionnaire.chapter.group({itemId: item.itemId})' }}">
