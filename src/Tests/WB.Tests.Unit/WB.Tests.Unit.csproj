@@ -110,7 +110,6 @@
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value.cs" />
-    <Compile Include="Applications\Designer\CommandDeserializerTests\CommandControllerTests.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__DeleteQuestion__with_questionnaire_id_and_question_id.cs" />

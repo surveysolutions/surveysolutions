@@ -4,7 +4,7 @@
             '$http', 'blockUI',
             function ($http, blockUI) {
 
-                var urlBase = '../../command/execute';
+                var urlBase = '../../api/command';
                 var commandService = {};
 
                 function commandCall(type, command) {
@@ -17,7 +17,7 @@
                             "type": type,
                             "command": JSON.stringify(command)
                         },
-                        headers: {'Content-Type': 'application/json;'}
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
                     }).success(function() {
                          blockUI.stop();
                     }).error(function() {
