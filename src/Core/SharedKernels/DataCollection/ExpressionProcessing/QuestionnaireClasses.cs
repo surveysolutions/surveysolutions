@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             validationExpressions.Add(new Identity(IdOf.age, this.RosterVector), new Func<bool>[] { age_IsValid });
             validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), new Func<bool>[] { food_IsValid });
             validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), new Func<bool>[] { role_IsValid, role2_IsValid });
-            validationExpressions.Add(new Identity(IdOf.married_with, this.RosterVector), new Func<HhMember[], bool>[] { married_with_IsValid });
+            validationExpressions.Add(new Identity(IdOf.married_with, this.RosterVector), new Func<bool>[] { married_with_IsValid });
 
             EnablementStates.Add(age_state.ItemId, age_state);
             EnablementStates.Add(married_with_state.ItemId, married_with_state);
