@@ -431,6 +431,7 @@
     <Content Include="UpdatedDesigner\app\scripts\directives\directives.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\itemBreadcrumbs.js" />
     <Content Include="UpdatedDesigner\app\scripts\fixtures\no-backend.js" />
+    <Content Include="UpdatedDesigner\app\scripts\services\authorizationinterceptor.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\commandService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\confirmService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\errorReportingService.js" />
@@ -627,6 +628,7 @@
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\test.html" />
+    <Content Include="UpdatedDesigner\test\spec\services\authorizationinterceptor.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.css" />
