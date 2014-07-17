@@ -16,7 +16,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
-            throw new NotSupportedException("Clone for static text does not work");
+            return new StaticTextViewModel(publicKey: new InterviewItemId(this.PublicKey.Id, propagationVector),
+                text: this.Text);
         }
 
     }
