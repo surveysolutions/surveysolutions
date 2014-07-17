@@ -101,6 +101,7 @@
     }])
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('errorReportingInterceptor');
+        $httpProvider.interceptors.push('authorizationInterceptor');
     }])
     .config(['blockUIConfigProvider', function(blockUiConfigProvider) {
         blockUiConfigProvider.message('Please wait...');
