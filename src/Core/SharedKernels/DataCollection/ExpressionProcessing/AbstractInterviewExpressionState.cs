@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.SharedKernels.ExpressionProcessing
 {
@@ -8,10 +9,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public Dictionary<string, IValidatable> InterviewScopes = new Dictionary<string, IValidatable>();
         public Dictionary<string, List<string>> SiblingRosters = new Dictionary<string, List<string>>();
 
-
         public abstract void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
         public abstract void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
-
 
         public abstract void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer);
         public abstract void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer);
@@ -24,6 +23,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public abstract void UpdateTextListAnswer(Guid questionId, decimal[] propagationVector, Tuple<decimal, string>[] answers);
         public abstract void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[] selectedPropagationVector);
         public abstract void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[][] selectedPropagationVectors);
+
+        public abstract IInterviewExpressionState Clone();
 
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
@@ -90,14 +91,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 targetLevel.EnableQuestion(identity.Id);
             }
         }
-
         
-        public abstract void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
-        public abstract void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);
-        
-        public abstract IInterviewExpressionState Clone();
-
-
         protected IValidatable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
         {
             if (!IdOf.parentsMap.ContainsKey(questionId))
@@ -106,6 +100,35 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             var rosterKey = Util.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
             var rosterStringKey = Util.GetRosterStringKey(rosterKey);
             return this.InterviewScopes.ContainsKey(rosterStringKey) ? this.InterviewScopes[rosterStringKey] : null;
+        }
+
+        public void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        {
+            foreach (var interviewScopeKvp in this.InterviewScopes)
+            {
+                interviewScopeKvp.Value.CalculateValidationChanges(questionsToBeValid, questionsToBeInvalid);
+            }
+        }
+
+        public void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, 
+            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled)
+        {
+            foreach (var interviewScopeKvp in this.InterviewScopes)
+            {
+                interviewScopeKvp.Value.CalculateConditionChanges(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
+            }
+        }
+
+        public IEnumerable<IValidatable> GetRosterInstances(Identity[] rostrerKey)
+        {
+            var siblingsKey = Util.GetSiblingsKey(rostrerKey.Select(x => x.Id).ToArray());
+
+            var siblingRosters = this.SiblingRosters.ContainsKey(siblingsKey) ?
+                this.SiblingRosters[siblingsKey].Select(x => this.InterviewScopes[x])
+                : null;
+
+            return siblingRosters;
+
         }
 
     }

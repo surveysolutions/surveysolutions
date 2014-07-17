@@ -12,9 +12,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             var questionnaireLevelScope = new[] { IdOf.questionnaire };
             var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
-            var questionnaireLevel = new QuestionnaireLevel(Util.EmptyRosterVector, questionnaireIdentityKey);
+            var questionnaireLevel = new QuestionnaireLevel(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances);
             this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
-            this.SiblingRosters.Add("", new List<string>());
+            
+            //this.SiblingRosters.Add("", new List<string>());
         }
 
         public StronglyTypedInterviewEvaluator(Dictionary<string, IValidatable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
@@ -46,33 +47,35 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 ? Util.GetRosterKey(new[] { IdOf.questionnaire }, new decimal[0])
                 : Util.GetRosterKey(rosterScopeIds.Shrink(), parentRosterVector);
 
-            var siblingsKey = Util.GetSiblingsKey(rosterScopeIds);
-
             var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
 
-            var wasRosterAdded = false;
             if (rosterId == IdOf.hhMember || rosterId == IdOf.jobActivity)
             {
-                var rosterLevel = new HhMember(rosterVector, rosterIdentityKey, parent as QuestionnaireLevel);
+                var parentHolder = parent as QuestionnaireLevel;
+                var rosterLevel = new HhMember_type(rosterVector, rosterIdentityKey, parentHolder, this.GetRosterInstances);
                 this.InterviewScopes.Add(rosterStringKey, rosterLevel);
-                wasRosterAdded = true;
+                this.SetSiblings(rosterScopeIds, rosterStringKey);
             }
 
             if (rosterId == IdOf.foodConsumption)
             {
-                var rosterLevel = new FoodConsumption(rosterVector, rosterIdentityKey, parent as HhMember);
+                var parentHolder = parent as HhMember_type;
+                var rosterLevel = new FoodConsumption_type(rosterVector, rosterIdentityKey, parentHolder, this.GetRosterInstances);
                 this.InterviewScopes.Add(rosterStringKey, rosterLevel);
-                wasRosterAdded = true;
+                this.SetSiblings(rosterScopeIds, rosterStringKey);
             }
 
-            if (wasRosterAdded)
+        }
+
+        private void SetSiblings(Guid[] rosterScopeIds, string rosterStringKey)
+        {
+            var siblingsKey = Util.GetSiblingsKey(rosterScopeIds);
+
+            if (!this.SiblingRosters.ContainsKey(siblingsKey))
             {
-                if (!this.SiblingRosters.ContainsKey(siblingsKey))
-                {
-                    this.SiblingRosters.Add(siblingsKey, new List<string>());
-                }
-                this.SiblingRosters[siblingsKey].Add(rosterStringKey);
+                this.SiblingRosters.Add(siblingsKey, new List<string>());
             }
+            this.SiblingRosters[siblingsKey].Add(rosterStringKey);
         }
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
@@ -84,7 +87,9 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
             var rosterIdentityKey = Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
+            
             var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
+            
             foreach (var rosterKey in dependentRosters)
             {
                 this.InterviewScopes.Remove(rosterKey);
@@ -107,12 +112,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             if (questionId == IdOf.age)
             {
-                (targetLevel as HhMember).age = answer;
+                (targetLevel as HhMember_type).age = answer;
             }
 
             if (questionId == IdOf.times_per_week)
             {
-                (targetLevel as FoodConsumption).times_per_week = answer;
+                (targetLevel as FoodConsumption_type).times_per_week = answer;
             }
         }
 
@@ -123,7 +128,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             if (questionId == IdOf.price_for_food)
             {
-                (targetLevel as FoodConsumption).price_for_food = answer;
+                (targetLevel as FoodConsumption_type).price_for_food = answer;
             }
         }
 
@@ -134,7 +139,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             if (questionId == IdOf.date)
             {
-                (targetLevel as HhMember).date = answer;
+                (targetLevel as HhMember_type).date = answer;
             }
         }
 
@@ -150,17 +155,17 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             if (questionId == IdOf.name)
             {
-                (targetLevel as HhMember).name = answer;
+                (targetLevel as HhMember_type).name = answer;
             }
 
             if (questionId == IdOf.job_title)
             {
-                (targetLevel as HhMember).job_title = answer;
+                (targetLevel as HhMember_type).job_title = answer;
             }
 
             if (questionId == IdOf.person_id)
             {
-                (targetLevel as HhMember).person_id = answer;
+                (targetLevel as HhMember_type).person_id = answer;
             }
         }
         
@@ -177,22 +182,22 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             if (questionId == IdOf.sex)
             {
-                (targetLevel as HhMember).sex = answer;
+                (targetLevel as HhMember_type).sex = answer;
             }
 
             if (questionId == IdOf.role)
             {
-                (targetLevel as HhMember).role = answer;
+                (targetLevel as HhMember_type).role = answer;
             }
 
             if (questionId == IdOf.has_job)
             {
-                (targetLevel as HhMember).has_job = answer;
+                (targetLevel as HhMember_type).has_job = answer;
             }
 
             if (questionId == IdOf.marital_status)
             {
-                (targetLevel as HhMember).marital_status = answer;
+                (targetLevel as HhMember_type).marital_status = answer;
             }
         }
 
@@ -203,7 +208,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             if (questionId == IdOf.food)
             {
-                (targetLevel as HhMember).food = answer;
+                (targetLevel as HhMember_type).food = answer;
             }
         }
 
@@ -226,7 +231,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             if (questionId == IdOf.best_job_owner)
             {
-                (targetLevel as HhMember).best_job_owner = selectedPropagationVector;
+                (targetLevel as HhMember_type).best_job_owner = selectedPropagationVector;
             }
         }
 
@@ -237,7 +242,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             if (questionId == IdOf.married_with)
             {
-                (targetLevel as HhMember).married_with = answer;
+                (targetLevel as HhMember_type).married_with = answer;
             }
         }
 
@@ -258,50 +263,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
 
             return new StronglyTypedInterviewEvaluator(newScopes, newSiblingRosters);
-        }
-
-        public override void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, 
-            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled)
-        {
-            foreach (var interviewScopeKvp in this.InterviewScopes)
-            {
-                if (interviewScopeKvp.Value is IValidatableRoster)
-                {
-                    var roster = interviewScopeKvp.Value as IValidatableRoster;
-
-                    var siblingsKey = Util.GetSiblingsKey(interviewScopeKvp.Value.GetRosterKey().Select(x => x.Id).ToArray());
-
-                    var siblingRosters = this.SiblingRosters[siblingsKey].Select(x => this.InterviewScopes[x]);
-
-                    roster.RunConditions(siblingRosters, questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
-                }
-
-                else if (interviewScopeKvp.Value is QuestionnaireLevel)
-                {
-                    (interviewScopeKvp.Value as QuestionnaireLevel).RunConditions(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
-                }
-            }
-        }
-
-        public override void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-        {
-            foreach (var interviewScopeKvp in this.InterviewScopes)
-            {
-                if (interviewScopeKvp.Value is IValidatableRoster)
-                {
-                    var roster = interviewScopeKvp.Value as IValidatableRoster;
-                    var siblingsKey = Util.GetSiblingsKey(interviewScopeKvp.Value.GetRosterKey().Select(x => x.Id).ToArray());
-
-                    var siblingRosters = this.SiblingRosters[siblingsKey].Select(x => this.InterviewScopes[x]);
-
-                    roster.Validate(siblingRosters, questionsToBeValid, questionsToBeInvalid);
-                }
-
-                if (interviewScopeKvp.Value is QuestionnaireLevel)
-                {
-                    (interviewScopeKvp.Value as QuestionnaireLevel).Validate(questionsToBeValid, questionsToBeInvalid);
-                }
-            }
         }
     }
 }

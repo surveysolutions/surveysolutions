@@ -28,7 +28,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
         void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
 
-
         void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
         void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);
 
