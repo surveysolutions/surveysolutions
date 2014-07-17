@@ -12,6 +12,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         void SetParent(IValidatable parentLevel);
         IValidatable GetParent();
 
+        void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
+
+        void CalculateConditionChanges(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled,
+            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);
 
         void DisableQuestion(Guid questionId);
         void EnableQuestion(Guid questionId);
@@ -24,13 +28,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
     }
 
-    public interface IValidatableRoster
+    /*public interface IValidatableRoster
     {
-        void Validate(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
+        /*void CalculateValidationChanges(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);#1#
         
-        void RunConditions(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled,
-            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);
-    }
+        /*void CalculateConditionChanges(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled,
+            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);#1#
+    }*/
 
     //could be replaces with bool?
 
@@ -40,6 +44,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         Enabled = 1,
         Disabled = 2
     }
+
     public enum ItemType
     {
         Question = 1,
@@ -67,25 +72,28 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public decimal[] RosterVector { get; private set; }
         public Identity[] RosterKey { get; private set; }
 
-        protected Dictionary<Guid, ConditionalState> EnablementStates = new Dictionary<Guid, ConditionalState>();
+        protected Dictionary<Guid, ConditionalState> EnablementStates {get; private set; }
 
         protected HashSet<Guid> ValidAnsweredQuestions = new HashSet<Guid>();
         protected HashSet<Guid> InvalidAnsweredQuestions = new HashSet<Guid>();
 
+        protected Func<Identity[], IEnumerable<IValidatable>> GetInstances { get; private set;}
 
-        protected abstract IEnumerable<Action<T[]>> ConditionExpressions { get; }
+        protected abstract IEnumerable<Action> ConditionExpressions { get; }
 
-        protected AbstractConditionalLevel(decimal[] rosterVector, Identity[] rosterKey)
+        protected AbstractConditionalLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances)
         {
+            this.GetInstances = getInstances;
             this.RosterVector = rosterVector;
             this.RosterKey = rosterKey;
+            this.EnablementStates = new Dictionary<Guid, ConditionalState>();
         }
 
-        private State RunConditionExpression(Func<T[], bool> expression, T[] rosters)
+        private State RunConditionExpression(Func<bool> expression)
         {
             try
             {
-                return expression(rosters) ? State.Enabled : State.Disabled;
+                return expression() ? State.Enabled : State.Disabled;
             }
             catch
             {
@@ -122,14 +130,15 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        protected Action<T[]> Verifier(Func<T[], bool> isEnabled, Guid questionId, ConditionalState questionState)
+        protected Action Verifier(Func<bool> isEnabled, Guid questionId, ConditionalState questionState)
         {
-            return rosters =>
+            return () =>
             {
                 if (questionState.State == State.Disabled)
                     return;
 
-                questionState.State = this.RunConditionExpression(isEnabled, rosters);
+                questionState.State = this.RunConditionExpression(isEnabled);
+
                 if (questionState.State == State.Disabled)
                 {
                     this.DisableAllDependentQuestions(questionId);
@@ -137,7 +146,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             };
         }
 
-        public void EvaluateConditions(T[] roters, List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled,
+        public void EvaluateConditions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled,
             List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled)
         {
             foreach (var state in this.EnablementStates.Values)
@@ -146,9 +155,9 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 state.State = State.Unknown;
             }
 
-            foreach (Action<T[]> verifier in this.ConditionExpressions)
+            foreach (Action verifier in this.ConditionExpressions)
             {
-                verifier(roters);
+                verifier();
             }
 
             var questionsToBeEnabledArray = this.EnablementStates.Values
@@ -188,7 +197,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             ValidAnsweredQuestions.Remove(questionId);
         }
 
-
         public void DisableQuestion(Guid questionId)
         {
             if (EnablementStates.ContainsKey(questionId))
@@ -219,17 +227,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         }
     }
 
-    public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T>, IValidatableRoster where T : IValidatable
+    public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T>/*, IValidatableRoster*/ where T : IValidatable
     {
-        protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey) : base(rosterVector, rosterKey) {}
+        protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances) : base(rosterVector, rosterKey, getInstances) { }
 
-        protected Dictionary<Identity, Func<T[], bool>[]> validationExpressions = new Dictionary<Identity, Func<T[], bool>[]>();
-
-        public abstract void Validate(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeValid,
-            List<Identity> questionsToBeInvalid);
-
-        public abstract void RunConditions(IEnumerable<IValidatable> rosters, List<Identity> questionsToBeEnabled,
-            List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);
+        protected Dictionary<Identity, Func<bool>[]> validationExpressions = new Dictionary<Identity, Func< bool>[]>();
+        
     }
 
 }
