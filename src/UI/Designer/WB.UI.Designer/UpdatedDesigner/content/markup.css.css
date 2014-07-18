@@ -247,6 +247,14 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
   width: 378px;
   position: relative;
   padding-left: 40px;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 1px;
+  line-height: 20px;
+  text-transform: none;
 }
 ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
   left: 7px;
