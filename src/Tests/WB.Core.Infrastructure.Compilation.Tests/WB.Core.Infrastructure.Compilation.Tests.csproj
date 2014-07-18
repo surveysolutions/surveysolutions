@@ -45,7 +45,18 @@
     <Reference Include="Machine.Specifications.Should">
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.20.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -60,15 +71,24 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="InterviewCompilerTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="InterviewCompilerTests\when_loading_assembly_from_file.cs" />
     <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="when_StronglyTypedInterviewEvaluator_with_one_roster_is_cloning.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
+      <Name>Main.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Compilation\WB.Core.Infrastructure.Compilation.csproj">
       <Project>{13b91730-958c-4c6f-bb83-4d1ba7930cf2}</Project>
       <Name>WB.Core.Infrastructure.Compilation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\ExpressionProcessing\WB.Core.SharedKernels.ExpressionProcessing.csproj">
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>

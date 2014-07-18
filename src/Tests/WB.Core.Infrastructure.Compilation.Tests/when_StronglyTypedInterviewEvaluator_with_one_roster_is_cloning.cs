@@ -12,20 +12,20 @@ namespace WB.Core.Infrastructure.Compilation.Tests
         {
             stronglyTypedInterviewEvaluator = new StronglyTypedInterviewEvaluator();
 
-            stronglyTypedInterviewEvaluator.UpdateIntAnswer(IdOf.persons_count, emptyRosterVector, persons_count);
-            stronglyTypedInterviewEvaluator.AddRoster(IdOf.hhMember, emptyRosterVector, 1, null);
-            stronglyTypedInterviewEvaluator.UpdateIntAnswer(IdOf.age, firstLevelRosterVector, age);
+            stronglyTypedInterviewEvaluator.UpdateIntAnswer(StronglyTypedInterviewEvaluator.IdOf.persons_count, emptyRosterVector, persons_count);
+            stronglyTypedInterviewEvaluator.AddRoster(StronglyTypedInterviewEvaluator.IdOf.hhMember, emptyRosterVector, 1, null);
+            stronglyTypedInterviewEvaluator.UpdateIntAnswer(StronglyTypedInterviewEvaluator.IdOf.age, firstLevelRosterVector, age);
         };
 
         Because of = () =>
             copyResult = stronglyTypedInterviewEvaluator.Clone() as StronglyTypedInterviewEvaluator;
 
         It should_clone_value_of_top_roster = () =>
-            (copyResult.InterviewScopes[GetRosterKey(new[] { IdOf.questionnaire }, emptyRosterVector)] as QuestionnaireLevel)
+            (copyResult.InterviewScopes[GetRosterKey(new[] { StronglyTypedInterviewEvaluator.IdOf.questionnaire }, emptyRosterVector)] as StronglyTypedInterviewEvaluator.QuestionnaireLevel)
             .persons_count.ShouldEqual(persons_count);
 
         It should_clone_answer_of_roster_question = () =>
-            (copyResult.InterviewScopes[GetRosterKey(IdOf.rostersIdToScopeMap[IdOf.hhMember], firstLevelRosterVector)] as HhMember_type)
+            (copyResult.InterviewScopes[GetRosterKey(StronglyTypedInterviewEvaluator.IdOf.rostersIdToScopeMap[StronglyTypedInterviewEvaluator.IdOf.hhMember], firstLevelRosterVector)] as StronglyTypedInterviewEvaluator.HhMember_type)
             .age.ShouldEqual(age);
 
 

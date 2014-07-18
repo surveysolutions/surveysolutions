@@ -1,29 +1,28 @@
-﻿using System.Text;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Documents;
+using Microsoft.CodeAnalysis.Emit;
 
 namespace WB.Core.Infrastructure.Compilation
 {
     public class InterviewEvaluatorGenerator : IEvaluatorGenerator {
 
-        public string GenerateEvaluator(QuestionnaireDocument questionnaire)
+        public InterviewEvaluatorGenerator(IDynamicCompiler interviewCompiler = null, ICodeGenerator codeGenerator = null)
         {
-            StringBuilder builder = new StringBuilder();
-
-            foreach (var question in questionnaire.GetAllQuestions<IQuestion>())
-            {
-                builder.AppendLine(GenerateQuestion(question));
-            }
-
-            return string.Format(template, builder.ToString());
+            this.interviewCompiler = interviewCompiler ?? new RoslynInterviewCompiler();
+            this.codeGenerator = codeGenerator ?? new CodeGenerator();
         }
 
-        private string GenerateQuestion(IQuestion question)
-        {
-            // dummy
-            return string.Format("int {0};", question.StataExportCaption);
-        }
+        private IDynamicCompiler interviewCompiler;
+        private ICodeGenerator codeGenerator;
 
-        private string template = "public class InterviewEvaluator : IInterviewEvaluator{ {0} }";
+        public EmitResult GenerateEvaluator(QuestionnaireDocument questionnaire, out string generatedAssembly)
+        {
+
+            this.codeGenerator = new CodeGenerator();
+            this.interviewCompiler = new RoslynInterviewCompiler();
+
+            string genertedEvaluator = this.codeGenerator.Generate(questionnaire);
+
+            return this.interviewCompiler.GenerateAssemblyAsString(questionnaire.PublicKey, genertedEvaluator, new string[] { }, out generatedAssembly);
+        }
     }
 }

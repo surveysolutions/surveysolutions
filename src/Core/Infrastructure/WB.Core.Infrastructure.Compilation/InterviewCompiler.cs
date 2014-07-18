@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -13,12 +12,12 @@ namespace WB.Core.Infrastructure.Compilation
     {
         private const string ProfileToBuild = "Profile24";
 
-        private readonly string portableAttribute;
+        //private readonly string portableAttribute;
         private readonly string portableAssembliesPath;
 
-        private readonly string[] usingItems = new[] { "System.Runtime.Versioning", "WB.Core.SharedKernels.ExpressionProcessing" };
+        //private readonly string[] usingItems = new[] { "System.Runtime.Versioning", "WB.Core.SharedKernels.ExpressionProcessing" };
 
-        private readonly string[] defaultReferencedPortableAssemblies = new[] { "System.Core.dll", "mscorlib.dll" };
+        private readonly string[] defaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll" };
 
 
         public RoslynInterviewCompiler()
@@ -29,35 +28,14 @@ namespace WB.Core.Infrastructure.Compilation
                     ProfileToBuild);
         }
 
-        public EmitResult GenerateAssemblyAsString(Guid templateId, string classCode, string[] aditionalNamespaces,
-            string[] referencedPortableAssemblies, out string generatedAssembly)
+        public EmitResult GenerateAssemblyAsString(Guid templateId, string classCode, string[] referencedPortableAssemblies, out string generatedAssembly)
         {
-            generatedAssembly = string.Empty;
+            var tree = SyntaxFactory.ParseSyntaxTree(classCode);
 
-            var builder = new StringBuilder();
-
-            builder.AppendLine(classCode);
-
-            var tree = SyntaxFactory.ParseSyntaxTree(builder.ToString());
-
-            var metadataFileReference = new List<MetadataFileReference>();
-
-            foreach (var defaultReferencedPortableAssembly in this.defaultReferencedPortableAssemblies)
-            {
-                metadataFileReference.Add(
-                    new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly)));
-            }
-
-
-            foreach (var defaultReferencedPortableAssembly in referencedPortableAssemblies)
-            {
-                metadataFileReference.Add(
-                    new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly)));
-            }
-
+            var metadataFileReference = this.defaultReferencedPortableAssemblies.Select(defaultReferencedPortableAssembly => new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly))).ToList();
+            metadataFileReference.AddRange(referencedPortableAssemblies.Select(defaultReferencedPortableAssembly => new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly))));
             metadataFileReference.Add(new MetadataFileReference(typeof (IInterviewEvaluator).Assembly.Location));
-
-
+            
             var compilation = CSharpCompilation.Create(
                 String.Format("rules-{0}.dll", templateId),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
@@ -65,6 +43,7 @@ namespace WB.Core.Infrastructure.Compilation
                 references: metadataFileReference);
 
             EmitResult compileResult;
+            generatedAssembly = string.Empty;
 
             using (var stream = new MemoryStream())
             {

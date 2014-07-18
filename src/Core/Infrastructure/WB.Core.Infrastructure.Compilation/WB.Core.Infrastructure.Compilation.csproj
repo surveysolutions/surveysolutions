@@ -65,11 +65,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewExpressionStateTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Templates\InterviewExpressionStateTemplateExt.cs" />
     <Compile Include="Templates\RosterTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>RosterTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Templates\RosterTemplateExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
