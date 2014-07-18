@@ -5,7 +5,7 @@
                 var verificationService = {};
 
                 verificationService.verify = function(questionnaireId) {
-                    return $http.get('../api/questionnaire/verify/' + questionnaireId);
+                    return $http.get('../../api/questionnaire/verify/' + questionnaireId);
                 };
 
                 return verificationService;
