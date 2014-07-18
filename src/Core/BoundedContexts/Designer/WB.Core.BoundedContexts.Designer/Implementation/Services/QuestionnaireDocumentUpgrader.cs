@@ -112,6 +112,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     question.Mandatory,
                     question.Capital,
                     question.Instructions,
+                    null,
                     triggers: new List<Guid>(),
                     maxValue: maxValue,
                     answers: null,

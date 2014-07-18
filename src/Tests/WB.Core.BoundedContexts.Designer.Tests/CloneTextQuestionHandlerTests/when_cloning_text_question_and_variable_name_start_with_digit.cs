@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneTextQuestionHandlerTests
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                     mask: null,
                     parentGroupId: parentGroupId,
                     sourceQuestionId: sourceQuestionId,
                     targetIndex: targetIndex,
