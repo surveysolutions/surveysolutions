@@ -986,11 +986,17 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
         {
+            var textQuestion = question as TextQuestion;
+            string mask = null;
+            if (textQuestion != null)
+            {
+                mask = textQuestion.Mask;
+            }
             return new ValueQuestionViewModel(
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType,
                 null,
-                true, question.Instructions, null,
+                true, question.Instructions,mask, null,
                 true, question.Mandatory,
                 question.ValidationMessage,
                 question.StataExportCaption,
