@@ -1316,26 +1316,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            
+            this.CheckLinkedMultiOptionQuestionInvariants(questionId, rosterVector, selectedPropagationVectors, questionnaire, answeredQuestion);
 
             Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
-            var answeredLinkedQuestions =
-                selectedPropagationVectors.Select(selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector));
-            foreach (var answeredLinkedQuestion in answeredLinkedQuestions)
-            {
-                this.ThrowIfRosterVectorIsIncorrect(this.interviewState, linkedQuestionId, answeredLinkedQuestion.RosterVector,
-                    questionnaire);
-                ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredLinkedQuestion, questionnaire);
-                this.ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion, questionnaire);
-            }
-            ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedPropagationVectors.Length, questionnaire);
-
-            string answerFormattedAsRosterTitle = string.Join(", ",
-                answeredLinkedQuestions.Select(q => GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, q, questionnaire)));
-
+            var answeredLinkedQuestions = selectedPropagationVectors.Select(selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector));
+           
+            string answerFormattedAsRosterTitle = string.Join(", ", answeredLinkedQuestions.Select(q => GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, q, questionnaire)));
 
             Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateLinkedMultiOptionAnswer(questionId, rosterVector, selectedPropagationVectors); ;
 
@@ -1346,21 +1333,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answerTime,
                 questionnaire,
                 updateState));
-
-            //this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime,
-            //         selectedPropagationVectors));
-
-            //bool questionIsMandatoryAndLinkedAndNotAnswered = questionnaire.IsQuestionMandatory(questionId) && !answeredLinkedQuestions.Any();
-            //if (questionIsMandatoryAndLinkedAndNotAnswered)
-            //{
-            //    this.ApplySingleAnswerDeclaredInvalidEvent(questionId, rosterVector);
-            //}
-            //else
-            //{
-            //    this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
-            //}
-
-            //this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer)
@@ -1427,30 +1399,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
-
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            
+            this.CheckLinkedSingleOptionQuestionInvariants(questionId, rosterVector, selectedPropagationVector, questionnaire, answeredQuestion);
 
             Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
             var answeredLinkedQuestion = new Identity(linkedQuestionId, selectedPropagationVector);
 
-            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, linkedQuestionId, selectedPropagationVector, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredLinkedQuestion, questionnaire);
-            this.ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion, questionnaire);
-
-
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
-                questionId, rosterVector, questionnaire);
             string answerFormattedAsRosterTitle = GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, answeredLinkedQuestion, questionnaire);
 
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, selectedPropagationVector); ;
 
-            this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(userId, questionId, rosterVector, answerTime, selectedPropagationVector));
-
-            this.ApplySingleAnswerDeclaredValidEvent(questionId, rosterVector);
-
-            this.ApplyRosterRowsTitleChangedEvents(rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
+            this.ApplyInterviewChanges(this.CalculateInterviewChangesOnAnswerQuestion(
+                this.interviewState,
+                userId,
+                questionId, rosterVector, selectedPropagationVector, answerFormattedAsRosterTitle, AnswerChangeType.SingleOptionLinked,
+                answerTime,
+                questionnaire,
+                updateState));
         }
 
         #endregion
@@ -2010,19 +1975,57 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region CheckInvariants
 
+        private void CheckLinkedMultiOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal[][] selectedPropagationVectors, IQuestionnaire questionnaire,
+    Identity answeredQuestion)
+        {
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
+            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+
+            Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
+            var answeredLinkedQuestions =
+                selectedPropagationVectors.Select(selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector));
+
+            foreach (var answeredLinkedQuestion in answeredLinkedQuestions)
+            {
+                ThrowIfRosterVectorIsIncorrect(this.interviewState, linkedQuestionId, answeredLinkedQuestion.RosterVector, questionnaire);
+                ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredLinkedQuestion, questionnaire);
+                ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion, questionnaire);
+            }
+            ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedPropagationVectors.Length, questionnaire);
+        }
+
+        private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector, IQuestionnaire questionnaire,
+    Identity answeredQuestion)
+        {
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
+            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+
+            Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
+            var answeredLinkedQuestion = new Identity(linkedQuestionId, selectedPropagationVector);
+
+            ThrowIfRosterVectorIsIncorrect(this.interviewState, linkedQuestionId, selectedPropagationVector, questionnaire);
+            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredLinkedQuestion, questionnaire);
+            ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion, questionnaire);
+        }
+
         private void CheckNumericRealQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal answer,
            IQuestionnaire questionnaire,
            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
-            this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
+            ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
+            ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             if (applyStrongChecks)
             {
                 ThrowIfNumericAnswerExceedsMaxValue(questionId, answer, questionnaire);
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-                this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
+                ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
             }
         }
 
@@ -2138,9 +2141,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
         {
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
-
             List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
             int rosterSize = rosterIds.Any() ? ToRosterSize(answer) : 0;
 
@@ -2157,6 +2157,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
 
             RosterCalculationData rosterCalculationData = CalculateRosterData(state, questionnaire, rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer, getRosterInstanceIds);
+
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
 
