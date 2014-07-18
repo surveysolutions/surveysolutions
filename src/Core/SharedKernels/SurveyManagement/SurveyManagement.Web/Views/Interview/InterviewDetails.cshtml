@@ -261,8 +261,8 @@
                 @if (((Model.InterviewStatus == InterviewStatus.Completed || Model.InterviewStatus == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
                     || (Model.InterviewStatus == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
                 {
-                <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
-                <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
+                    <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
+                    <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
                 }
                 <a href="#/all" class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'all' }">all</a>
                 <a href="#/flaged" class="btn btn-default  btn-xs" data-bind="css: { 'btn-primary': filter() == 'flaged' }">
@@ -299,7 +299,17 @@
                 <h2 data-bind="html: title" class="heading"></h2>
                 <div class="questions">
                     <table class="table table-bordered table-hover">
-                        <tbody data-bind="foreach: questions">
+                        <tbody data-bind="foreach: entities">
+                            <!-- ko if: $root.isStaticText($data) -->
+                            <tr data-bind="visible : isVisible">
+                                <td colspan="3" class="static-text">
+                                    <div class="cell-content">
+                                        <span data-bind="html: staticText"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- /ko -->
+                            <!-- ko ifnot: $root.isStaticText($data) -->
                             <tr data-bind="visible : isVisible,css: {success: isSelected, danger : isInvalid && isEnabled, mandatory : isMandatory, 'text-muted' : isEnabled == false}">
                                 <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
                                     <div class="cell-content" data-bind="css: {featured : isFeatured}">
@@ -337,6 +347,7 @@
                                     </div>
                                 </td>
                             </tr>
+                            <!-- /ko -->
                         </tbody>
                     </table>
                 </div>

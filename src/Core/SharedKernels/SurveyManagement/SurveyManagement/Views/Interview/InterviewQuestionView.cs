@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Interview;
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
     [DebuggerDisplay("{Title} ({Id})")]
-    public class InterviewQuestionView
+    public class InterviewQuestionView : InterviewEntityView
     {
         public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion,
             Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution, bool isParentGroupDisabled)
@@ -131,8 +131,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public QuestionScope Scope { get; set; }
 
         public bool IsAnswered { get; set; }
-
-        public Guid Id { get; set; }
 
         public string Title { get; set; }
 
