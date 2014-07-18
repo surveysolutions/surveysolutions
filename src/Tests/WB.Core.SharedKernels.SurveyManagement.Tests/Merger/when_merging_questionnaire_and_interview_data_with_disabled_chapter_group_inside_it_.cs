@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
             mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
 
         It should_question_be_disabled = () =>
-            mergeResult.Groups.FirstOrDefault(g => g.Id == nestedGroupId).Questions[0].IsEnabled.ShouldEqual(false);
+            ((InterviewQuestionView)mergeResult.Groups.FirstOrDefault(g => g.Id == nestedGroupId).Entities[0]).IsEnabled.ShouldEqual(false);
 
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;

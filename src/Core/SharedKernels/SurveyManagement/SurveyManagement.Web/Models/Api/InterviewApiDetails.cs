@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
                 foreach (var interviewGroupView in interview.Groups)
                 {
                     if (interviewGroupView.RosterVector.Length == 0)
-                        AddQuestionsToRoster(this.Questions, interviewGroupView.Questions);
+                        AddQuestionsToRoster(this.Questions, interviewGroupView.Entities.OfType<InterviewQuestionView>());
                     else
                     {
                         var key = CreateLeveKeyFromPropagationVector(interviewGroupView.RosterVector);
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
                             rosters.Add(key, item);
                         }
 
-                        AddQuestionsToRoster(item.Questions, interviewGroupView.Questions);
+                        AddQuestionsToRoster(item.Questions, interviewGroupView.Entities.OfType<InterviewQuestionView>());
                     }
                 }
 
