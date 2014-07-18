@@ -62,6 +62,14 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 this.InterviewScopes.Add(rosterStringKey, rosterLevel);
                 this.SetSiblings(rosterScopeIds, rosterStringKey);
             }
+
+            if (rosterId == IdOf.fixedId)
+            {
+                var parentHolder = parent as QuestionnaireLevel;
+                var rosterLevel = new Education_type(rosterVector, rosterIdentityKey, parentHolder, this.GetRosterInstances);
+                this.InterviewScopes.Add(rosterStringKey, rosterLevel);
+                this.SetSiblings(rosterScopeIds, rosterStringKey);
+            }
         }
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
@@ -184,6 +192,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             if (questionId == IdOf.marital_status)
             {
                 (targetLevel as HhMember_type).marital_status = answer;
+            }
+
+            if (questionId == IdOf.edu_visit)
+            {
+                (targetLevel as QuestionnaireLevel).edu_visit = answer;
+            }
+
+            if (questionId == IdOf.edu)
+            {
+                (targetLevel as Education_type).edu = answer;
             }
         }
 
