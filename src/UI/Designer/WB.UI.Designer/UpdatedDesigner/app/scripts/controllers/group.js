@@ -35,6 +35,7 @@
                 $scope.cancelGroup = function() {
                     var temp = angular.copy($scope.initialGroup);
                     dataBind(temp);
+                    $scope.groupform.$setPristine();
                 };
 
                 $scope.deleteItem = function () {

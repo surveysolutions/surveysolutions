@@ -31,6 +31,7 @@
     "angular-ui-router": "~0.2.10",
     "jquery-cookie": "~1.4.1",
     "angular-block-ui": "~0.0.8",
-    "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.0"
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.0",
+    "angular-unsavedChanges": "~0.1.1"
   }
 }

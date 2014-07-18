@@ -96,6 +96,7 @@
                 $scope.cancelRoster = function() {
                     var temp = angular.copy($scope.initialRoster);
                     dataBind(temp);
+                    $scope.editRosterForm.$setPristine();
                 };
 
                 $scope.loadRoster();

@@ -66,6 +66,7 @@
                 $scope.cancelQuestion = function() {
                     var temp = angular.copy($scope.initialQuestion);
                     dataBind(temp);
+                    $scope.questionForm.$setPristine();
                 };
 
                 $scope.addOption = function() {
