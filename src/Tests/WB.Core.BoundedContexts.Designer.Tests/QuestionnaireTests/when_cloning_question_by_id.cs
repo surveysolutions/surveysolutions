@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             );
         
         // If we extend QuestionCloned be sure to add check in the validation above and increase counter here
-        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(25);
+        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(26);
 
         static Questionnaire questionnaire;
         static Guid questionId = Guid.Parse("11111111111111111111111111111111");

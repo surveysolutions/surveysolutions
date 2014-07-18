@@ -67,6 +67,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 return listQuestionView;
             }
 
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+                var textQuestionView = ((TextDetailsView)questionView);
+                textQuestionView.Mask = textQuestion.Mask;
+                return textQuestionView;
+            }
+
             return questionView;
         }
 

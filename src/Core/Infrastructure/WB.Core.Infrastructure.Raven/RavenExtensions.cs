@@ -64,7 +64,8 @@ namespace WB.Core.Infrastructure.Raven
             using (var session = documentStore.OpenSession())
             {
                 var databaseDocument = session.Load<DatabaseDocument>("Raven/Databases/" + databaseName);
-
+                if(databaseDocument==null)
+                    return;
                 var databaseDocumentSettings = databaseDocument.Settings;
                 var activeBundles = databaseDocumentSettings.ContainsKey(Constants.ActiveBundles) ? databaseDocumentSettings[Constants.ActiveBundles] : null;
                 if (string.IsNullOrEmpty(activeBundles))

@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
         public bool IsInteger { get; set; }
+        public string Mask { get; set; }
         public int? MaxValue { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
         public int? MaxAnswerCount { get; set; }
