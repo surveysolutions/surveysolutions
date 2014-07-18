@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     // ReSharper disable InconsistentNaming
 
-    public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IValidatable
+    /*public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IValidatable
     {
         public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances)
             : base(rosterVector, rosterKey, getInstances)
@@ -716,5 +716,5 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             { foodConsumption, foodConsumptionIds },
             { jobActivity, hhMemberScopeIds }
         };
-    }
+    }*/
 }

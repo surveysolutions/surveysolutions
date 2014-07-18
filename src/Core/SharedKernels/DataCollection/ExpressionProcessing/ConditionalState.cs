@@ -75,15 +75,19 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         protected HashSet<Guid> InvalidAnsweredQuestions = new HashSet<Guid>();
 
         protected Func<Identity[], IEnumerable<IValidatable>> GetInstances { get; private set;}
+        protected Dictionary<Guid, Guid[]> ConditionalDependencies { get; private set; }
+
 
         protected abstract IEnumerable<Action> ConditionExpressions { get; }
 
-        protected AbstractConditionalLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances)
+        protected AbstractConditionalLevel(decimal[] rosterVector, Identity[] rosterKey,
+            Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
         {
             this.GetInstances = getInstances;
             this.RosterVector = rosterVector;
             this.RosterKey = rosterKey;
             this.EnablementStates = new Dictionary<Guid, ConditionalState>();
+            this.ConditionalDependencies = conditionalDependencies;
         }
 
         private State RunConditionExpression(Func<bool> expression)
@@ -98,11 +102,11 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
-        protected void DisableAllDependentQuestions(Guid itemId)
+        protected void DisableAllDependentQuestions(Guid itemId, Dictionary<Guid, Guid[]> conditionalDependencies)
         {
-            if (!IdOf.conditionalDependencies.ContainsKey(itemId) || !IdOf.conditionalDependencies[itemId].Any()) return;
+            if (!conditionalDependencies.ContainsKey(itemId) || !conditionalDependencies[itemId].Any()) return;
 
-            var stack = new Queue<Guid>(IdOf.conditionalDependencies[itemId]);
+            var stack = new Queue<Guid>(conditionalDependencies[itemId]);
             while (stack.Any())
             {
                 var id = stack.Dequeue();
@@ -112,9 +116,9 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                     this.EnablementStates[id].State = State.Disabled;
                 }
 
-                if (IdOf.conditionalDependencies.ContainsKey(id) && IdOf.conditionalDependencies[id].Any())
+                if (conditionalDependencies.ContainsKey(id) && conditionalDependencies[id].Any())
                 {
-                    foreach (var dependentQuestionId in IdOf.conditionalDependencies[id])
+                    foreach (var dependentQuestionId in conditionalDependencies[id])
                     {
                         stack.Enqueue(dependentQuestionId);
                     }
@@ -133,7 +137,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
                 if (questionState.State == State.Disabled)
                 {
-                    this.DisableAllDependentQuestions(questionId);
+                    this.DisableAllDependentQuestions(questionId, ConditionalDependencies);
                 }
             };
         }
@@ -247,7 +251,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
     public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T> where T : IValidatable
     {
-        protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances) : base(rosterVector, rosterKey, getInstances) { }
+        protected AbstractRosterLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies) 
+            : base(rosterVector, rosterKey, getInstances, conditionalDependencies) { }
         
         public decimal index
         {

@@ -28,6 +28,140 @@ namespace WB.Core.Infrastructure.Compilation.Templates
         /// </summary>
         public virtual string TransformText()
         {
+            this.Write("\r\n\r\npublic class HhMember_type : AbstractRosterLevel<HhMember_type>, IValidatable" +
+                    "\r\n        {\r\n            public HhMember_type(decimal[] rosterVector, Identity[]" +
+                    " rosterKey, QuestionnaireLevel parent, Func<Identity[], IEnumerable<IValidatable" +
+                    ">> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)\r\n            " +
+                    "    : this(rosterVector, rosterKey, getInstances, conditionalDependencies)\r\n    " +
+                    "        {\r\n                this.@__parent = parent;\r\n            }\r\n\r\n          " +
+                    "  public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identi" +
+                    "ty[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditio" +
+                    "nalDependencies)\r\n                : base(rosterVector, rosterKey, getInstances, " +
+                    "conditionalDependencies)\r\n            {\r\n                validationExpressions.A" +
+                    "dd(new Identity(IdOf.name, this.RosterVector), new Func<bool>[] { name_IsMandato" +
+                    "ry });\r\n                validationExpressions.Add(new Identity(IdOf.age, this.Ro" +
+                    "sterVector), new Func<bool>[] { age_IsValid });\r\n                validationExpre" +
+                    "ssions.Add(new Identity(IdOf.food, this.RosterVector), new Func<bool>[] { food_I" +
+                    "sValid });\r\n                validationExpressions.Add(new Identity(IdOf.role, th" +
+                    "is.RosterVector), new Func<bool>[] { role_IsValid, role2_IsValid });\r\n          " +
+                    "      validationExpressions.Add(new Identity(IdOf.married_with, this.RosterVecto" +
+                    "r), new Func<bool>[] { married_with_IsValid });\r\n\r\n                EnablementSta" +
+                    "tes.Add(age_state.ItemId, age_state);\r\n                EnablementStates.Add(marr" +
+                    "ied_with_state.ItemId, married_with_state);\r\n                EnablementStates.Ad" +
+                    "d(has_job_state.ItemId, has_job_state);\r\n                EnablementStates.Add(jo" +
+                    "b_title_state.ItemId, job_title_state);\r\n                EnablementStates.Add(be" +
+                    "st_job_owner_state.ItemId, best_job_owner_state);\r\n                EnablementSta" +
+                    "tes.Add(food_state.ItemId, food_state);\r\n                EnablementStates.Add(pe" +
+                    "rson_id_state.ItemId, person_id_state);\r\n                EnablementStates.Add(ma" +
+                    "rital_status_state.ItemId, marital_status_state);\r\n                EnablementSta" +
+                    "tes.Add(group_state.ItemId, group_state);\r\n            }\r\n\r\n            private " +
+                    "QuestionnaireLevel @__parent;\r\n\r\n            public HhMember_type[] hhMembers\r\n " +
+                    "           {\r\n                get\r\n                {\r\n                    var ro" +
+                    "sters = this.GetInstances(this.RosterKey);\r\n                    return rosters =" +
+                    "= null ? new HhMember_type[0] : rosters.Select(x => x as HhMember_type).ToArray(" +
+                    ");\r\n                }\r\n            }\r\n\r\n            public FoodConsumption_type[" +
+                    "] foods\r\n            {\r\n                get\r\n                {\r\n                " +
+                    "    var rosters = this.GetInstances(this.RosterKey);\r\n                    return" +
+                    " rosters == null ? new FoodConsumption_type[0] : rosters.Select(x => x as FoodCo" +
+                    "nsumption_type).ToArray();\r\n                }\r\n            }\r\n\r\n            publ" +
+                    "ic string id { get { return this.@__parent.id; } }\r\n\r\n            public long? p" +
+                    "ersons_count { get { return this.@__parent.persons_count; } }\r\n\r\n            pub" +
+                    "lic decimal? edu_visit { get { return this.@__parent.edu_visit; } }\r\n\r\n\r\n       " +
+                    "     public string name { get; set; }\r\n\r\n            public DateTime? date { get" +
+                    "; set; }\r\n\r\n            public decimal? sex { get; set; }\r\n\r\n            public " +
+                    "decimal? role { get; set; }\r\n\r\n            public string person_id\r\n            " +
+                    "{\r\n                get { return person_id_state.State == State.Enabled ? this.@_" +
+                    "_personId : null; }\r\n                set { this.@__personId = value; }\r\n        " +
+                    "    }\r\n\r\n            public decimal? marital_status\r\n            {\r\n            " +
+                    "    get { return marital_status_state.State == State.Enabled ? this.@__maritalSt" +
+                    "atus : null; }\r\n                set { this.@__maritalStatus = value; }\r\n        " +
+                    "    }\r\n\r\n            public decimal[][] married_with\r\n            {\r\n           " +
+                    "     get { return married_with_state.State == State.Enabled ? this.@__marriedWit" +
+                    "h : null; }\r\n                set { this.@__marriedWith = value; }\r\n            }" +
+                    "\r\n\r\n            public long? age\r\n            {\r\n                get { return ag" +
+                    "e_state.State == State.Enabled ? this.@__age : null; }\r\n                set { th" +
+                    "is.@__age = value; }\r\n            }\r\n\r\n            public decimal[] food\r\n      " +
+                    "      {\r\n                get { return food_state.State == State.Enabled ? this.@" +
+                    "__food : null; }\r\n                set { this.@__food = value; }\r\n            }\r\n" +
+                    "\r\n            public decimal? has_job\r\n            {\r\n                get { retu" +
+                    "rn has_job_state.State == State.Enabled ? this.@__hasJob : null; }\r\n            " +
+                    "    set { this.@__hasJob = value; }\r\n            }\r\n\r\n            public string " +
+                    "job_title\r\n            {\r\n                get { return job_title_state.State == " +
+                    "State.Enabled ? this.@__jobTitle : null; }\r\n                set { this.@__jobTit" +
+                    "le = value; }\r\n            }\r\n\r\n            public decimal[] best_job_owner\r\n   " +
+                    "         {\r\n                get { return best_job_owner_state.State == State.Ena" +
+                    "bled ? this.@__bestJobOwner : null; }\r\n                set { this.@__bestJobOwne" +
+                    "r = value; }\r\n            }\r\n\r\n            private ConditionalState age_state = " +
+                    "new ConditionalState(IdOf.age);\r\n            private ConditionalState married_wi" +
+                    "th_state = new ConditionalState(IdOf.married_with);\r\n            private Conditi" +
+                    "onalState has_job_state = new ConditionalState(IdOf.has_job);\r\n            priva" +
+                    "te ConditionalState job_title_state = new ConditionalState(IdOf.job_title);\r\n   " +
+                    "         private ConditionalState best_job_owner_state = new ConditionalState(Id" +
+                    "Of.best_job_owner);\r\n            private ConditionalState food_state = new Condi" +
+                    "tionalState(IdOf.food);\r\n            private ConditionalState group_state = new " +
+                    "ConditionalState(IdOf.groupId, ItemType.Group);\r\n            private Conditional" +
+                    "State person_id_state = new ConditionalState(IdOf.person_id);\r\n            priva" +
+                    "te ConditionalState marital_status_state = new ConditionalState(IdOf.marital_sta" +
+                    "tus);\r\n\r\n            private long? @__age;\r\n            private decimal[][] @__m" +
+                    "arriedWith;\r\n            private decimal? @__hasJob;\r\n            private string" +
+                    " @__jobTitle;\r\n            private decimal[] @__bestJobOwner;\r\n            priva" +
+                    "te decimal[] @__food;\r\n            private string @__personId;\r\n            priv" +
+                    "ate decimal? @__maritalStatus;\r\n\r\n            protected override IEnumerable<Act" +
+                    "ion> ConditionExpressions\r\n            {\r\n                get\r\n                {" +
+                    "\r\n                    return new[]\r\n                {\r\n                    Verif" +
+                    "ier(age_IsEnabledIf, age_state.ItemId, age_state),\r\n                    Verifier" +
+                    "(group_IsEnabledIf, group_state.ItemId, group_state),\r\n                    Verif" +
+                    "ier(IsEnabledIfParentIs, person_id_state.ItemId, person_id_state),\r\n            " +
+                    "        Verifier(IsEnabledIfParentIs, marital_status_state.ItemId, marital_statu" +
+                    "s_state),\r\n                    Verifier(married_with_IsEnabledIf, married_with_s" +
+                    "tate.ItemId, married_with_state),\r\n                    Verifier(food_IsEnabledIf" +
+                    ", food_state.ItemId, food_state),\r\n                    Verifier(has_job_IsEnable" +
+                    "dIf, has_job_state.ItemId, has_job_state),\r\n                    Verifier(job_tit" +
+                    "le_IsEnabledIf, job_title_state.ItemId, job_title_state),\r\n                    V" +
+                    "erifier(best_job_owner_IsEnabledIf, best_job_owner_state.ItemId, best_job_owner_" +
+                    "state)\r\n                };\r\n                }\r\n            }\r\n\r\n            priv" +
+                    "ate bool age_IsEnabledIf()\r\n            {\r\n                return name.ToLower()" +
+                    ".StartsWith(\"a\");\r\n            }\r\n\r\n            private bool group_IsEnabledIf()" +
+                    "\r\n            {\r\n                return (age > 16);\r\n            }\r\n\r\n          " +
+                    "  private bool married_with_IsEnabledIf()\r\n            {\r\n                return" +
+                    " marital_status == 2 && persons_count > 1;\r\n            }\r\n\r\n            private" +
+                    " bool food_IsEnabledIf()\r\n            {\r\n                return role == 2 && sex" +
+                    " == 2;\r\n            }\r\n\r\n            private bool has_job_IsEnabledIf()\r\n       " +
+                    "     {\r\n                return age > 16;\r\n            }\r\n\r\n            private b" +
+                    "ool job_title_IsEnabledIf()\r\n            {\r\n                return has_job == 1;" +
+                    "\r\n            }\r\n\r\n            private bool best_job_owner_IsEnabledIf()\r\n      " +
+                    "      {\r\n                return has_job == 2;\r\n            }\r\n\r\n            priv" +
+                    "ate bool age_IsValid()\r\n            {\r\n                return age >= 0 && age < " +
+                    "100;\r\n            }\r\n\r\n            private bool married_with_IsValid()\r\n        " +
+                    "    {\r\n                return !married_with.Any(x => x.SequenceEqual(me));\r\n    " +
+                    "        }\r\n\r\n            private bool name_IsMandatory()\r\n            {\r\n       " +
+                    "         return !IsEmptyAnswer(name);\r\n            }\r\n\r\n            private bool" +
+                    " food_IsValid()\r\n            {\r\n                return food == null || !(food.Co" +
+                    "ntains(38) && role == 3 && age >= 21);\r\n            }\r\n\r\n            private boo" +
+                    "l role_IsValid()\r\n            {\r\n                // children should not drink al" +
+                    "cohol\r\n                return (role == 1 && hhMembers.Count(x => x.role == 1) ==" +
+                    " 1) || role != 1;\r\n            }\r\n\r\n            private bool role2_IsValid()\r\n  " +
+                    "          {\r\n                // children should not drink alcohol\r\n             " +
+                    "   return (role == 3 && hhMembers.Where(x => x.role < 3).Any(x => x.age < age + " +
+                    "10)) || role != 3;\r\n            }\r\n\r\n            public IValidatable CopyMembers" +
+                    "()\r\n            {\r\n                var level = new HhMember_type(this.RosterVect" +
+                    "or, this.RosterKey, this.GetInstances, ConditionalDependencies)\r\n               " +
+                    " {\r\n                    ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAns" +
+                    "weredQuestions),\r\n                    InvalidAnsweredQuestions = new HashSet<Gui" +
+                    "d>(this.InvalidAnsweredQuestions),\r\n\r\n                    name = this.name,\r\n   " +
+                    "                 date = this.date,\r\n                    sex = this.sex,\r\n       " +
+                    "             role = this.role,\r\n                    // should be taken from file" +
+                    "ds, not properties\r\n                    age = this.@__age,\r\n                    " +
+                    "food = this.@__food,\r\n                    has_job = this.@__hasJob,\r\n           " +
+                    "         job_title = this.@__jobTitle,\r\n                    best_job_owner = thi" +
+                    "s.@__bestJobOwner,\r\n                    person_id = this.@__personId,\r\n         " +
+                    "           marital_status = this.@__maritalStatus,\r\n                    married_" +
+                    "with = this.@__marriedWith\r\n                };\r\n                foreach (var sta" +
+                    "te in level.EnablementStates)\r\n                {\r\n                    var origin" +
+                    "alState = this.EnablementStates[state.Key];\r\n                    state.Value.Pre" +
+                    "viousState = originalState.PreviousState;\r\n                    state.Value.State" +
+                    " = originalState.State;\r\n                }\r\n\r\n                return level;\r\n   " +
+                    "         }");
             return this.GenerationEnvironment.ToString();
         }
     }
