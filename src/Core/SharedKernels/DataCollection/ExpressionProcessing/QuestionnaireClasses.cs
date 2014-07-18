@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace WB.Core.SharedKernels.ExpressionProcessing
 {
@@ -12,7 +11,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances)
             : base(rosterVector, rosterKey, getInstances)
         {
-            EnablementStates.Add(id_state.ItemId, id_state);   
+            EnablementStates.Add(id_state.ItemId, id_state);
+            //EnablementStates.Add(persons_count_state.ItemId, persons_count_state);
         }
 
         private string @__id;
@@ -33,12 +33,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         
         public IValidatable CopyMembers()
         {
-            var level = new QuestionnaireLevel(this.RosterVector, this.RosterKey, this.GetInstances)
-            {
-                id = this.@__id,
-                persons_count = this.@__persons_count
-            };
-
+            var level = new QuestionnaireLevel(this.RosterVector, this.RosterKey, this.GetInstances);
+            
             foreach (var conditionalState in level.EnablementStates)
             {
                 var oldState = this.EnablementStates[conditionalState.Key];
@@ -46,10 +42,30 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 conditionalState.Value.PreviousState = oldState.PreviousState;
             }
 
+            ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions);
+            InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions);
+
+            level.id = this.@__id;
+            level.persons_count = this.@__persons_count;
+
             return level;
         }
 
-        public void SetParent(IValidatable parentLevel) { }
+
+        /*public HhMember_type[] hhMembers
+        {
+            get
+            {
+                var key = this.RosterKey;
+                var rosters = this.GetInstances(key);
+                return rosters == null ? new HhMember_type[0] : rosters.Select(x => x as HhMember_type).ToArray();
+            }
+        }*/
+
+        public void SetParent(IValidatable parentLevel)
+        {
+            
+        }
 
         public IValidatable GetParent()
         {
@@ -60,12 +76,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             
         }
-
-        public void CalculateConditionChanges(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled,
-            List<Identity> groupsToBeDisabled)
-        {
-            this.EvaluateConditions(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
-        }
+        
 
         protected override IEnumerable<Action> ConditionExpressions
         {
@@ -130,20 +141,20 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public string person_id
         {
-            get { return person_id_state.State == State.Enabled ? this.personId : null; }
-            set { this.personId = value; }
+            get { return person_id_state.State == State.Enabled ? this.@__personId : null; }
+            set { this.@__personId = value; }
         }
 
         public decimal? marital_status
         {
-            get { return marital_status_state.State == State.Enabled ? this.maritalStatus : null; }
-            set { this.maritalStatus = value; }
+            get { return marital_status_state.State == State.Enabled ? this.@__maritalStatus : null; }
+            set { this.@__maritalStatus = value; }
         }
 
         public decimal[][] married_with
         {
-            get { return married_with_state.State == State.Enabled ? this.marriedWith : null; }
-            set { this.marriedWith = value; }
+            get { return married_with_state.State == State.Enabled ? this.@__marriedWith : null; }
+            set { this.@__marriedWith = value; }
         }
 
         public long? age
@@ -154,26 +165,26 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public decimal[] food
         {
-            get { return food_state.State == State.Enabled ? this.food1 : null; }
-            set { this.food1 = value; }
+            get { return food_state.State == State.Enabled ? this.@__food : null; }
+            set { this.@__food = value; }
         }
 
         public decimal? has_job
         {
-            get { return has_job_state.State == State.Enabled ? this.hasJob : null; }
-            set { this.hasJob = value; }
+            get { return has_job_state.State == State.Enabled ? this.@__hasJob : null; }
+            set { this.@__hasJob = value; }
         }
 
         public string job_title
         {
-            get { return job_title_state.State == State.Enabled ? this.jobTitle : null; }
-            set { this.jobTitle = value; }
+            get { return job_title_state.State == State.Enabled ? this.@__jobTitle : null; }
+            set { this.@__jobTitle = value; }
         }
 
         public decimal[] best_job_owner
         {
-            get { return best_job_owner_state.State == State.Enabled ? this.bestJobOwner : null; }
-            set { this.bestJobOwner = value; }
+            get { return best_job_owner_state.State == State.Enabled ? this.@__bestJobOwner : null; }
+            set { this.@__bestJobOwner = value; }
         }
 
         private ConditionalState age_state = new ConditionalState(IdOf.age);
@@ -187,13 +198,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         private ConditionalState marital_status_state = new ConditionalState(IdOf.marital_status);
 
         private long? @__age;
-        private decimal[][] marriedWith;
-        private decimal? hasJob;
-        private string jobTitle;
-        private decimal[] bestJobOwner;
-        private decimal[] food1;
-        private string personId;
-        private decimal? maritalStatus;
+        private decimal[][] @__marriedWith;
+        private decimal? @__hasJob;
+        private string @__jobTitle;
+        private decimal[] @__bestJobOwner;
+        private decimal[] @__food;
+        private string @__personId;
+        private decimal? @__maritalStatus;
 
         protected override IEnumerable<Action> ConditionExpressions
         {
@@ -294,13 +305,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 role = this.role,
                 // should be taken from fileds, not properties
                 age = this.@__age,
-                food = this.food1,
-                has_job = this.hasJob,
-                job_title = this.jobTitle,
-                best_job_owner = this.bestJobOwner,
-                person_id = this.personId,
-                marital_status = this.maritalStatus,
-                married_with = this.marriedWith
+                food = this.@__food,
+                has_job = this.@__hasJob,
+                job_title = this.@__jobTitle,
+                best_job_owner = this.@__bestJobOwner,
+                person_id = this.@__personId,
+                marital_status = this.@__maritalStatus,
+                married_with = this.@__marriedWith
             };
             foreach (var state in level.EnablementStates)
             {
@@ -325,12 +336,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
         {
             this.Validate(questionsToBeValid, questionsToBeInvalid);
-        }
-
-        public void CalculateConditionChanges(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled,
-            List<Identity> groupsToBeDisabled)
-        {
-            this.EvaluateConditions(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
         }
     }
 
@@ -455,22 +460,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             return times_per_week > 0;
         }
-
-        private void Validate( List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-        {
-
-        }
-
-
+        
         public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
         {
             this.Validate(questionsToBeValid, questionsToBeInvalid);
-        }
-
-        public void CalculateConditionChanges(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled,
-            List<Identity> groupsToBeDisabled)
-        {
-            this.EvaluateConditions(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
         }
 
         public IValidatable CopyMembers()

@@ -9,11 +9,11 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
 
         Establish context = () =>
         {
-            compiler = new InterviewCompiler();
+            compiler = new RoslynInterviewCompiler();
         };
 
         private Because of = () =>
-            emitResult = compiler.GenerateAssemblyAsString(id, testClassToCompile, new string[] { "System.Collections.Generic", "System.Linq" }, 
+            emitResult = compiler.GenerateAssemblyAsString(id, testClassToCompile, new string[] {  }, 
                 new string[0], out resultAssembly);
 
 
@@ -29,7 +29,11 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
         private static EmitResult emitResult;
 
         public static string testClassToCompile =
-            @"public class InterviewEvaluator : IInterviewEvaluator
+            @"using System;
+                using System.Collections.Generic;
+                using System.Linq;
+                using WB.Core.SharedKernels.ExpressionProcessing;
+                public class InterviewEvaluator : IInterviewEvaluator
             {
                 public static object Evaluate()
                 {
