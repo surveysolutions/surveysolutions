@@ -1,9 +1,10 @@
 ﻿using Main.Core.Documents;
+using Microsoft.CodeAnalysis.Emit;
 
 namespace WB.Core.Infrastructure.Compilation
 {
     interface IEvaluatorGenerator
     {
-        string GenerateEvaluator(QuestionnaireDocument questionnaire);
+        EmitResult GenerateEvaluator(QuestionnaireDocument questionnaire, out string generatedAssembly);
     }
 }

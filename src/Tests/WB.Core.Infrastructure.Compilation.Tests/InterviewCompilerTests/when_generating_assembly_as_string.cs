@@ -13,8 +13,7 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
         };
 
         private Because of = () =>
-            emitResult = compiler.GenerateAssemblyAsString(id, testClassToCompile, new string[] {  }, 
-                new string[0], out resultAssembly);
+            emitResult = compiler.GenerateAssemblyAsString(id, testClassToCompile, new string[0], out resultAssembly);
 
 
         private It should_result_succeded = () =>

@@ -1,9 +1,9 @@
-﻿using System.CodeDom.Compiler;
+﻿using Main.Core.Documents;
 
 namespace WB.Core.Infrastructure.Compilation
 {
-    interface ICodeGenerator
+    public interface ICodeGenerator
     {
-        string Generate();
+        string Generate(QuestionnaireDocument questionnaire);
     }
 }

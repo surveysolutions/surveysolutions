@@ -24,8 +24,11 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public abstract void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[] selectedPropagationVector);
         public abstract void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[][] selectedPropagationVectors);
 
+        public abstract Dictionary<Guid, Guid[]> GetParentsMap();
+
         public abstract IInterviewExpressionState Clone();
 
+        
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
             foreach (var identity in invalidQuestions)
@@ -91,13 +94,15 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 targetLevel.EnableQuestion(identity.Id);
             }
         }
+
         
         protected IValidatable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
         {
-            if (!IdOf.parentsMap.ContainsKey(questionId))
+            var parentsMap = GetParentsMap();
+            if (!parentsMap.ContainsKey(questionId))
                 return null;
 
-            var rosterKey = Util.GetRosterKey(IdOf.parentsMap[questionId], rosterVector);
+            var rosterKey = Util.GetRosterKey(parentsMap[questionId], rosterVector);
             var rosterStringKey = Util.GetRosterStringKey(rosterKey);
             return this.InterviewScopes.ContainsKey(rosterStringKey) ? this.InterviewScopes[rosterStringKey] : null;
         }
@@ -119,6 +124,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
+        
         public IEnumerable<IValidatable> GetRosterInstances(Identity[] rostrerKey)
         {
             var siblingsKey = Util.GetSiblingsKey(rostrerKey.Select(x => x.Id).ToArray());
