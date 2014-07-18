@@ -237,6 +237,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             return answer!=null && answer.Length > 0;
         }
+
+        public void CalculateConditionChanges(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled,
+            List<Identity> groupsToBeDisabled)
+        {
+            this.EvaluateConditions(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
+        }
     }
 
     public abstract class AbstractRosterLevel<T> : AbstractConditionalLevel<T> where T : IValidatable
@@ -247,7 +253,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             get { return this.RosterVector.Last(); }
         }
-
 
         protected Dictionary<Identity, Func<bool>[]> validationExpressions = new Dictionary<Identity, Func< bool>[]>();
 
