@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                     mask: null,
                     responsibleId: responsibleId));
 
         It should_not_throw_exception = () => exception.ShouldBeNull();

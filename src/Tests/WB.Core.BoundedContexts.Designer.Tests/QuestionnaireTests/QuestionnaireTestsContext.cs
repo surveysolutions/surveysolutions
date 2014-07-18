@@ -154,10 +154,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: groupId, responsibleId: responsibleId);
 
             questionnaire.AddTextQuestion(Guid.NewGuid(), groupId, "Title", "text", null, false, false,
-                                         QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId);
+                                         QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId, mask:null);
 
             questionnaire.AddTextQuestion(secondQuestionId, groupId, "Title","name", null , false, false,
-                                         QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId);
+                                         QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId, mask: null);
 
             return questionnaire;
         }
@@ -293,7 +293,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 condition, 
                 validation, 
                 "", 
-                "", 
+                "", null,
                 responsible);
         }
 

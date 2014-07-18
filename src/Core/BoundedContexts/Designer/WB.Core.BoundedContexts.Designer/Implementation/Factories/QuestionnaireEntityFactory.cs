@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.Mandatory,
                 data.Capital,
                 data.Instructions,
+                data.Mask,
                 data.Triggers,
                 data.MaxValue,
                 data.LinkedToQuestionId,
@@ -129,6 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool mandatory,
             bool capital,
             string instructions,
+            string mask,
             IEnumerable<Guid> triggers,
             int? maxValue,
             Guid? linkedToQuestionId,
@@ -174,7 +176,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             {
                 listQuestion.MaxAnswerCount = masAnswerCount;
             }
-
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+                textQuestion.Mask = mask;
+            }
         }
     }
 }

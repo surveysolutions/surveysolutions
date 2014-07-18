@@ -21,6 +21,7 @@ namespace Main.Core.Entities
             bool mandatory,
             bool capital,
             string instructions,
+            string mask,
             List<Guid> triggers,
             int? maxValue,
             Answer[] answers,
@@ -55,7 +56,7 @@ namespace Main.Core.Entities
 
             this.AreAnswersOrdered = areAnswersOrdered;
             this.MaxAllowedAnswers = maxAllowedAnswers;
-
+            this.Mask = mask;
             this.MaxAnswerCount = maxAnswerCount;
         }
 
@@ -73,6 +74,7 @@ namespace Main.Core.Entities
         public readonly bool Mandatory;
         public readonly bool Capital;
         public readonly string Instructions;
+        public readonly string Mask;
         public readonly List<Guid> Triggers;
         public readonly int? MaxValue;
         public readonly Answer[] Answers;

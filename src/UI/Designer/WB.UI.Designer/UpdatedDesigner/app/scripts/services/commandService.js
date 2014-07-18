@@ -63,6 +63,7 @@
                         type: question.type,
                         variableName: question.variable,
                         variableLabel: question.variableLabel,
+                        mask: question.mask,
                         isPreFilled: question.questionScope == 'Headquarter',
                         isMandatory: question.isMandatory,
                         scope: question.questionScope,

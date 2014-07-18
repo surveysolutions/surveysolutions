@@ -43,8 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateTextQuestionHandlerTests
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                     mask: null,
                     responsibleId: responsibleId
-         
                     ));
 
         It should_throw_QuestionnaireException = () =>

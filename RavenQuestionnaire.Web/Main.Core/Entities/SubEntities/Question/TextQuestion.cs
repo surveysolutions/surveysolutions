@@ -33,5 +33,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
+
+        public string Mask { get; set; }
     }
 }

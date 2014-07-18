@@ -204,6 +204,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         e.Capital,
                         e.Instructions,
+                        e.Mask,
                         e.Triggers,
                         DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
                         e.Answers,
@@ -248,6 +249,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         e.Capital,
                         e.Instructions,
+                        null,
                         e.Triggers,
                         DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue,
                             actualMaxValue: e.MaxAllowedValue),
@@ -291,6 +293,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         false,
                         e.Instructions,
+                        null,
                         new List<Guid>(),
                         null,
                         null,
@@ -329,6 +332,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         e.Capital,
                         e.Instructions,
+                        e.Mask,
                         e.Triggers,
                         DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
                         e.Answers,
@@ -370,6 +374,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         e.Capital,
                         e.Instructions,
+                        null,
                         e.Triggers,
                         DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue,
                             actualMaxValue: e.MaxAllowedValue),
@@ -414,6 +419,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         false,
                         e.Instructions,
+                        null,
                         new List<Guid>(),
                         null,
                         null,
@@ -463,6 +469,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         e.Capital,
                         e.Instructions,
+                        e.Mask,
                         e.Triggers,
                         DetermineActualMaxValueForGenericQuestion(e.QuestionType, legacyMaxValue: e.MaxValue),
                         e.Answers,
@@ -501,6 +508,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         e.Capital,
                         e.Instructions,
+                        null,
                         e.Triggers,
                         DetermineActualMaxValueForNumericQuestion(e.IsAutopropagating, legacyMaxValue: e.MaxValue,
                             actualMaxValue: e.MaxAllowedValue),
@@ -539,6 +547,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mandatory,
                         false,
                         e.Instructions,
+                        null,
                         new List<Guid>(),
                         null,
                         null,
@@ -599,6 +608,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsMandatory,
                         false,
                         e.Instructions,
+                        null,
                         new List<Guid>(),
                         null,
                         null,
@@ -637,6 +647,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsMandatory,
                         false,
                         e.Instructions,
+                        null,
                         new List<Guid>(),
                         null,
                         null,
@@ -674,6 +685,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.IsMandatory,
                         false,
                         e.Instructions,
+                        null,
                         new List<Guid>(),
                         null,
                         null,
@@ -1067,7 +1079,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     this.ApplyTextQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
                         variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title, isMandatory: isMandatory,
                         enablementCondition: enablementCondition, responsibleId: responsibleId,
-                        sourceQuestionId: sourceItemId, instructions: instructions, isPreFilled: textQuestion.Featured,
+                        sourceQuestionId: sourceItemId, instructions: instructions,mask:textQuestion.Mask, isPreFilled: textQuestion.Featured,
                         scope: textQuestion.QuestionScope, validationExpression: textQuestion.ValidationExpression,
                         validationMessage: textQuestion.ValidationMessage);
                     continue;
@@ -1494,6 +1506,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string validationExpression,
             string validationMessage,
             string instructions,
+            string mask,
             Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
@@ -1519,6 +1532,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
+                Mask = mask,
                 ResponsibleId = responsibleId
             });
         }
@@ -1534,6 +1548,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string validationExpression,
             string validationMessage,
             string instructions,
+            string mask,
             Guid responsibleId)
         {
             this.PrepareGeneralProperties(ref title, ref variableName);
@@ -1560,7 +1575,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
-                ResponsibleId = responsibleId
+                ResponsibleId = responsibleId,
+                Mask = mask
             });
         }
 
@@ -1575,6 +1591,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string validationExpression,
             string validationMessage,
             string instructions,
+            string mask,
             Guid parentGroupId,
             Guid sourceQuestionId,
             int targetIndex,
@@ -1590,7 +1607,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyTextQuestionClonedEvent(questionId: questionId, title: title, variableName: variableName, variableLabel: variableLabel,
                 isMandatory: isMandatory, isPreFilled: isPreFilled, scope: scope,
                 enablementCondition: enablementCondition, validationExpression: validationExpression,
-                validationMessage: validationMessage, instructions: instructions, parentGroupId: parentGroupId,
+                validationMessage: validationMessage, instructions: instructions, mask: mask, parentGroupId: parentGroupId,
                 sourceQuestionId: sourceQuestionId, targetIndex: targetIndex, responsibleId: responsibleId);
         }
 
@@ -3963,7 +3980,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ApplyTextQuestionClonedEvent(Guid questionId, string title, string variableName,string variableLabel, bool isMandatory,
             bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression,
-            string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex,
+            string validationMessage, string instructions,string mask, Guid parentGroupId, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId)
         {
             this.ApplyEvent(new QuestionCloned
@@ -3984,6 +4001,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
+                Mask = mask
             });
         }
 
