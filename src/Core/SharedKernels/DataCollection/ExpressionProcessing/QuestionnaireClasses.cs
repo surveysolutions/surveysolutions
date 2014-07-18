@@ -82,7 +82,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
             get { return Enumerable.Empty<Action>(); }
         }
-
     }
     
     //roster first level
@@ -361,7 +360,6 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         public HhMember_type[] hhMembers
         {
             get { return @__parent.hhMembers; }
-
         }
 
         public FoodConsumption_type[] foodConsumption
@@ -547,7 +545,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             { persons_count, new Guid[] { married_with } },
             { name, new Guid[] { age } },
             { age, new Guid[] { groupId, has_job } },
-            { groupId, new Guid[] { person_id, marital_status, marital_status } },
+            { groupId, new Guid[] { person_id, marital_status, married_with } },
             { person_id, new Guid[] { } },
             { marital_status, new Guid[] { married_with } },
             { married_with, new Guid[] { } },
