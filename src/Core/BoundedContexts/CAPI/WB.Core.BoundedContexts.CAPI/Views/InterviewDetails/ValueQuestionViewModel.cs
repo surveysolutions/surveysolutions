@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     {
         public ValueQuestionViewModel(InterviewItemId publicKey, ValueVector<Guid> questionRosterScope, string text,
             QuestionType questionType, object answer, bool enabled,
-            string instructions, string comments, bool valid, bool mandatory,
+            string instructions, string mask, string comments, bool valid, bool mandatory,
             string validationMessage, string variable, IEnumerable<string> substitutionReference, bool? isInteger, int? countOfDecimalPlaces)
             : base(
                 publicKey, questionRosterScope, text, questionType, enabled, instructions, comments, valid, mandatory, answer,
@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             this.IsInteger = isInteger;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;
+            this.Mask = mask;
         }
 
         public bool? IsInteger = null;
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             return new ValueQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector), this.QuestionRosterScope,
                 this.SourceText, this.QuestionType, this.AnswerObject,
-                this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
+                this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,this.Mask,
                 this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
                 this.Mandatory, this.ValidationMessage, this.Variable, this.SubstitutionReferences, this.IsInteger,
                 this.CountOfDecimalPlaces);
