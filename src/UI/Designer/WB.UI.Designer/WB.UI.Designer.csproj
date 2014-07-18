@@ -740,6 +740,17 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils-ieshiv.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\demo\app.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\demo\index.html" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\demo\page1.html" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\demo\page2.html" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\dist\unsavedChanges.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\dist\unsavedChanges.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\Gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\karma-unit.conf.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\protractor.conf.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\protractor_travis.conf.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\src\unsavedChanges.js" />
     <Content Include="UpdatedDesigner\vendor\angular\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular\angular-csp.css" />
     <Content Include="UpdatedDesigner\vendor\angular\angular.js" />
@@ -1210,6 +1221,12 @@
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\changelog.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\package.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\readme.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\travis_test.sh" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
