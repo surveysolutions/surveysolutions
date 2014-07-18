@@ -252,7 +252,7 @@
             $scope.deleteStaticText = function(staticTextId) {
                 var itemIdToDelete = staticTextId || $state.params.itemId;
 
-                var item = questionnaireService.findItem($scope.items, staticTextId);
+                var item = questionnaireService.findItem($scope.items, itemIdToDelete);
 
                 var modalInstance = confirmService.open({
                     title: item.text.substring(0, 15) + (item.text.length > 15 ? "..." : "")
