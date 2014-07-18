@@ -11,8 +11,8 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
     {
         private Establish context = () =>
         {
-            compiler = new InterviewCompiler();
-            emitResult = compiler.GenerateAssemblyAsString(id, testClass, new string[] { "System.Collections.Generic", "System.Linq" },
+            compiler = new RoslynInterviewCompiler();
+            emitResult = compiler.GenerateAssemblyAsString(id, testClass, new string[] { },
                 new string[] { }, out resultAssembly);
 
             filePath = Path.GetTempFileName();
@@ -50,7 +50,11 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
         private static string filePath;
 
         public static string testClass =
-            @"public class InterviewEvaluator : IInterviewEvaluator
+            @"using System;
+            using System.Collections.Generic;
+            using System.Linq;
+            using WB.Core.SharedKernels.ExpressionProcessing;
+            public class InterviewEvaluator : IInterviewEvaluator
             {
                 public static object Evaluate()
                 {

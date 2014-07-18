@@ -131,5 +131,15 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         }
 
+        protected void SetSiblings(Guid[] rosterScopeIds, string rosterStringKey)
+        {
+            var siblingsKey = Util.GetSiblingsKey(rosterScopeIds);
+
+            if (!this.SiblingRosters.ContainsKey(siblingsKey))
+            {
+                this.SiblingRosters.Add(siblingsKey, new List<string>());
+            }
+            this.SiblingRosters[siblingsKey].Add(rosterStringKey);
+        }
     }
 }
