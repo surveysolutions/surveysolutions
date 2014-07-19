@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
         private static MaskedFormatter maskedFormatter;
         private static string result;
         private static string mask = "a*-999-a999";
-        private static string value = "w2-123-5___";
+        private static string value = "w2-123-5____";
         private static int cursorPosition = 8;
     }
 }
