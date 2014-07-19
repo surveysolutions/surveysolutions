@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             this.mask = mask;
             this.PlaceholderCharacter = placeholderCharacter;
             this.Placeholder = placeholder;
-            this.InvalidCharacters = invalidCharacters;
+            this.InvalidCharacters = invalidCharacters??placeholderCharacter.ToString();
             this.ValidCharacters = validCharacters;
             this.UpdateInternalMask();
         }
@@ -48,42 +48,46 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             var result = new StringBuilder();
 
             int index = 0;
-            var resAndStatuses = new KeyValuePair<bool, bool>[this.maskChars.Length];
+            int newCursorPosition = oldCurstorPosition;
+            int lastSuccessfulIndex = 0;
+            bool isLiteralAppearedAfterCursor = false;
+            bool isAddedCharSuccessful = false;
             for (int i = 0; i < this.maskChars.Length; i++)
             {
+                var oldIndex = index;
                 var isCharAppended = this.maskChars[i].Append(result, stringValue, ref index, this.Placeholder);
                 if (!isCharAppended)
                 {
                     result.Append(this.maskChars[i][this.PlaceholderCharacter]);
                 }
-                resAndStatuses[i] = new KeyValuePair<bool, bool>(isCharAppended, this.maskChars[i].IsLiteral());
-            }
-
-            for (int i = resAndStatuses.Length-1; i >=0; i--)
-            {
-                if (resAndStatuses[i].Key)
+                else
                 {
-                    if (!resAndStatuses[i].Value)
+                    if (oldIndex == oldCurstorPosition - 1)
                     {
-                        oldCurstorPosition = i + 1;
-                        break;
+                        isAddedCharSuccessful = true;
                     }
-                    var previousChar = i - 1;
-                    while (resAndStatuses[previousChar].Key && resAndStatuses[previousChar].Value && i > 0)
+                    if (oldIndex > oldCurstorPosition && !isLiteralAppearedAfterCursor)
                     {
-                        previousChar--;
+                        if (maskChars[i].IsLiteral())
+                            isLiteralAppearedAfterCursor = true;
                     }
-
-                    if (resAndStatuses[previousChar].Key)
-                    {
-                        if (resAndStatuses[previousChar].Value)
-                            oldCurstorPosition = previousChar + 1;
-                        else
-                            oldCurstorPosition = i + 1;
-                        break;
-                    }
+                    if(!isLiteralAppearedAfterCursor)
+                        lastSuccessfulIndex = oldIndex;
                 }
             }
+
+            if (oldCurstorPosition > this.maskChars.Length)
+                newCursorPosition = this.maskChars.Length;
+
+            if (value.Length > maskChars.Length ||value.Length==1)
+            {
+                if (!isAddedCharSuccessful)
+                    newCursorPosition = oldCurstorPosition - 1;
+                else
+                    newCursorPosition = lastSuccessfulIndex + 1;
+            }
+
+            oldCurstorPosition = newCursorPosition;
             return result.ToString();
         }
 
@@ -241,6 +245,22 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                 }
             }
             return result.ToString();
+        }
+
+        class LiteralPosition
+        {
+            public LiteralPosition(int maskedPositions, int originalPositions, bool isAppended, bool isLiteral)
+            {
+                this.MaskedPositions = maskedPositions;
+                this.OriginalPositions = originalPositions;
+                this.IsAppended = isAppended;
+                this.IsLiteral = isLiteral;
+            }
+
+            public int MaskedPositions { get; private set; }
+            public int OriginalPositions { get; private set; }
+            public bool IsAppended { get; private set; }
+            public bool IsLiteral { get; private set; }
         }
     }
 }

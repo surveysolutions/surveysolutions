@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 
 namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 {
-    [Ignore("not implemented yet")]
     [Subject(typeof(MaskedFormatter))]
     internal class when_symbol_located_befoure_literal_symbol_is_deleted
     {
