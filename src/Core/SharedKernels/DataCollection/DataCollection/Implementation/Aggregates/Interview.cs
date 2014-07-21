@@ -710,6 +710,92 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
+        public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions,
+            DateTime answersTime)
+            : base(id)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
+
+            var interviewChangeStructures = new InterviewChangeStructures();
+
+            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, EmptyRosterVector, interviewChangeStructures.State);
+            var newAnswers =
+                answersToFeaturedQuestions.ToDictionary(
+                    answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, EmptyRosterVector),
+                    answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
+
+            foreach (var newAnswer in answersToFeaturedQuestions)
+            {
+                string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
+
+                interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
+                interviewChangeStructures.State.AnsweredQuestions.Add(key);
+            }
+
+            InitInterview(questionnaire, interviewChangeStructures);
+            this.CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
+                answersTime, newAnswers);
+            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
+
+            var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
+                interviewChangeStructures.Changes,
+                fixedRosterCalculationDatas);
+
+            //apply events
+            this.ApplyEvent(new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version));
+            
+            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
+            this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
+            this.ApplyInterviewChanges(enablementAndValidityChanges);
+        }
+
+        public Interview(Guid id, Guid userId, Guid questionnaireId, long? questionnaireVersion, DateTime answersTime, Guid supervisorId)
+            : base(id)
+        {
+            IQuestionnaire questionnaire = questionnaireVersion.HasValue
+                ? this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
+                : this.GetQuestionnaireOrThrow(questionnaireId);
+
+            InterviewChangeStructures interviewChangeStructures = new InterviewChangeStructures();
+
+            InitInterview(questionnaire, interviewChangeStructures);
+
+            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
+
+            var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
+                interviewChangeStructures.Changes,
+                fixedRosterCalculationDatas);
+
+            //apply events
+            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
+
+            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
+            this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
+            this.ApplyInterviewChanges(enablementAndValidityChanges);
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+
+            this.ApplyEvent(new InterviewerAssigned(userId, userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+        }
+
+        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
+            InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid)
+            : base(id)
+        {
+            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true, null));
+            this.ApplyValidationEvent(isValid);
+        }
+
+        public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus,
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
+            : base(id)
+        {
+            this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
+        }
+
         private InterviewChanges UpdateExpressionStateWithAnswersAndGetChanges(IEnumerable<InterviewChanges> interviewChangesItems,
             IEnumerable<RosterCalculationData> rosterDatas)
         {
@@ -806,82 +892,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null,
                 null);
             return enablementAndValidityChanges;
-        }
-
-        public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions,
-            DateTime answersTime)
-            : base(id)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
-
-            var interviewChangeStructures = new InterviewChangeStructures();
-
-            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, EmptyRosterVector, interviewChangeStructures.State);
-            var newAnswers =
-                answersToFeaturedQuestions.ToDictionary(
-                    answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, EmptyRosterVector),
-                    answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
-
-            foreach (var newAnswer in answersToFeaturedQuestions)
-            {
-                string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
-
-                interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
-                interviewChangeStructures.State.AnsweredQuestions.Add(key);
-            }
-
-            InitInterview(questionnaire, interviewChangeStructures);
-            this.CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
-                answersTime, newAnswers);
-            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
-
-            //apply events
-            this.ApplyEvent(new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version));
-
-            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
-            this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
-        }
-
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long? questionnaireVersion, DateTime answersTime, Guid supervisorId)
-            : base(id)
-        {
-            IQuestionnaire questionnaire = questionnaireVersion.HasValue
-                ? this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
-                : this.GetQuestionnaireOrThrow(questionnaireId);
-
-            InterviewChangeStructures interviewChangeStructures = new InterviewChangeStructures();
-
-            InitInterview(questionnaire, interviewChangeStructures);
-
-            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
-
-            //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaire.Version));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
-
-            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
-            this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-
-            this.ApplyEvent(new InterviewerAssigned(userId, userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
-        }
-
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
-            InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid)
-            : base(id)
-        {
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true, null));
-            this.ApplyValidationEvent(isValid);
-        }
-
-        public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
-            : base(id)
-        {
-            this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
 
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
