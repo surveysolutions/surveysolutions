@@ -72,15 +72,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             if (newGroup == null) throw new ArgumentNullException("newGroup");
 
-            if (parentId.HasValue)
+            if (!parentId.HasValue || parentId.Value == this.PublicId)
+            {
+                this.AddChild(newGroup);
+            }
+            else
             {
                 var pdfGroupView = this.GetGroup(parentId.Value);
                 if (pdfGroupView != null)
                     pdfGroupView.AddChild(newGroup);
-            }
-            else
-            {
-                this.AddChild(newGroup);
             }
         }
 
@@ -93,9 +93,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 throw new ArgumentNullException("groupPublicKey", string.Format("Item {0} can't be created outside group", newEntity.PublicId));
             }
 
-            var group = this.GetGroup(groupPublicKey.Value);
-            if (group!= null)
-                group.AddChild(newEntity);
+            if (groupPublicKey.Value == this.PublicId)
+            {
+                this.AddChild(newEntity);
+            }
+            else
+            {
+                var group = this.GetGroup(groupPublicKey.Value);
+                if (group != null)
+                    group.AddChild(newEntity);
+            }
         }
 
         public T GetEntityById<T>(Guid publicKey) where T: PdfEntityView
