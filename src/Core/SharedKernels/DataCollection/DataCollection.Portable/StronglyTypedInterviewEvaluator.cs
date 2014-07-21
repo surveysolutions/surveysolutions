@@ -4,7 +4,7 @@ using System.Linq;
 
 // ReSharper disable InconsistentNaming
 
-namespace WB.Core.SharedKernels.ExpressionProcessing
+namespace WB.Core.SharedKernels.DataCollection
 {
     public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState 
     {
@@ -18,8 +18,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public StronglyTypedInterviewEvaluator(Dictionary<string, IValidatable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
         {
-            InterviewScopes = interviewScopes;
-            SiblingRosters = siblingRosters;
+            this.InterviewScopes = interviewScopes;
+            this.SiblingRosters = siblingRosters;
         }
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
@@ -281,8 +281,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
-                EnablementStates.Add(id_state.ItemId, id_state);
-                EnablementStates.Add(edu_visit_state.ItemId, edu_visit_state);
+                this.EnablementStates.Add(this.id_state.ItemId, this.id_state);
+                this.EnablementStates.Add(this.edu_visit_state.ItemId, this.edu_visit_state);
                 //EnablementStates.Add(persons_count_state.ItemId, persons_count_state);
             }
 
@@ -290,24 +290,24 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             private readonly ConditionalState id_state = new ConditionalState(IdOf.id);
             public string id
             {
-                get { return id_state.State == State.Enabled ? @__id : String.Empty; }
-                set { @__id = value; }
+                get { return this.id_state.State == State.Enabled ? this.__id : String.Empty; }
+                set { this.__id = value; }
             }
 
             private long? @__persons_count;
             private readonly ConditionalState persons_count_state = new ConditionalState(IdOf.persons_count);
             public long? persons_count
             {
-                get { return persons_count_state.State == State.Enabled ? @__persons_count : null; }
-                set { @__persons_count = value; }
+                get { return this.persons_count_state.State == State.Enabled ? this.__persons_count : null; }
+                set { this.__persons_count = value; }
             }
 
             private decimal? @__edu_visit;
             private readonly ConditionalState edu_visit_state = new ConditionalState(IdOf.edu_visit);
             public decimal? edu_visit
             {
-                get { return edu_visit_state.State == State.Enabled ? @__edu_visit : null; }
-                set { @__edu_visit = value; }
+                get { return this.edu_visit_state.State == State.Enabled ? this.__edu_visit : null; }
+                set { this.__edu_visit = value; }
             }
 
             public IValidatable CopyMembers()
@@ -321,8 +321,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                     conditionalState.Value.PreviousState = oldState.PreviousState;
                 }
 
-                ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions);
-                InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions);
+                this.ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions);
+                this.InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions);
 
                 level.id = this.@__id;
                 level.persons_count = this.@__persons_count;
@@ -352,7 +352,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             {
                 get
                 {
-                    return new[] { Verifier(edu_visit_IsEnabled, edu_visit_state.ItemId, edu_visit_state) };
+                    return new[] { this.Verifier(this.edu_visit_IsEnabled, this.edu_visit_state.ItemId, this.edu_visit_state) };
                 }
             }
 
@@ -387,21 +387,21 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
-                validationExpressions.Add(new Identity(IdOf.name, this.RosterVector), new Func<bool>[] { name_IsMandatory });
-                validationExpressions.Add(new Identity(IdOf.age, this.RosterVector), new Func<bool>[] { age_IsValid });
-                validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), new Func<bool>[] { food_IsValid });
-                validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), new Func<bool>[] { role_IsValid, role2_IsValid });
-                validationExpressions.Add(new Identity(IdOf.married_with, this.RosterVector), new Func<bool>[] { married_with_IsValid });
+                this.validationExpressions.Add(new Identity(IdOf.name, this.RosterVector), new Func<bool>[] { this.name_IsMandatory });
+                this.validationExpressions.Add(new Identity(IdOf.age, this.RosterVector), new Func<bool>[] { this.age_IsValid });
+                this.validationExpressions.Add(new Identity(IdOf.food, this.RosterVector), new Func<bool>[] { this.food_IsValid });
+                this.validationExpressions.Add(new Identity(IdOf.role, this.RosterVector), new Func<bool>[] { this.role_IsValid, this.role2_IsValid });
+                this.validationExpressions.Add(new Identity(IdOf.married_with, this.RosterVector), new Func<bool>[] { this.married_with_IsValid });
 
-                EnablementStates.Add(age_state.ItemId, age_state);
-                EnablementStates.Add(married_with_state.ItemId, married_with_state);
-                EnablementStates.Add(has_job_state.ItemId, has_job_state);
-                EnablementStates.Add(job_title_state.ItemId, job_title_state);
-                EnablementStates.Add(best_job_owner_state.ItemId, best_job_owner_state);
-                EnablementStates.Add(food_state.ItemId, food_state);
-                EnablementStates.Add(person_id_state.ItemId, person_id_state);
-                EnablementStates.Add(marital_status_state.ItemId, marital_status_state);
-                EnablementStates.Add(group_state.ItemId, group_state);
+                this.EnablementStates.Add(this.age_state.ItemId, this.age_state);
+                this.EnablementStates.Add(this.married_with_state.ItemId, this.married_with_state);
+                this.EnablementStates.Add(this.has_job_state.ItemId, this.has_job_state);
+                this.EnablementStates.Add(this.job_title_state.ItemId, this.job_title_state);
+                this.EnablementStates.Add(this.best_job_owner_state.ItemId, this.best_job_owner_state);
+                this.EnablementStates.Add(this.food_state.ItemId, this.food_state);
+                this.EnablementStates.Add(this.person_id_state.ItemId, this.person_id_state);
+                this.EnablementStates.Add(this.marital_status_state.ItemId, this.marital_status_state);
+                this.EnablementStates.Add(this.group_state.ItemId, this.group_state);
             }
 
             private QuestionnaireLevel @__parent;
@@ -441,49 +441,49 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             public string person_id
             {
-                get { return person_id_state.State == State.Enabled ? this.@__personId : null; }
+                get { return this.person_id_state.State == State.Enabled ? this.@__personId : null; }
                 set { this.@__personId = value; }
             }
 
             public decimal? marital_status
             {
-                get { return marital_status_state.State == State.Enabled ? this.@__maritalStatus : null; }
+                get { return this.marital_status_state.State == State.Enabled ? this.@__maritalStatus : null; }
                 set { this.@__maritalStatus = value; }
             }
 
             public decimal[][] married_with
             {
-                get { return married_with_state.State == State.Enabled ? this.@__marriedWith : null; }
+                get { return this.married_with_state.State == State.Enabled ? this.@__marriedWith : null; }
                 set { this.@__marriedWith = value; }
             }
 
             public long? age
             {
-                get { return age_state.State == State.Enabled ? this.@__age : null; }
+                get { return this.age_state.State == State.Enabled ? this.@__age : null; }
                 set { this.@__age = value; }
             }
 
             public decimal[] food
             {
-                get { return food_state.State == State.Enabled ? this.@__food : null; }
+                get { return this.food_state.State == State.Enabled ? this.@__food : null; }
                 set { this.@__food = value; }
             }
 
             public decimal? has_job
             {
-                get { return has_job_state.State == State.Enabled ? this.@__hasJob : null; }
+                get { return this.has_job_state.State == State.Enabled ? this.@__hasJob : null; }
                 set { this.@__hasJob = value; }
             }
 
             public string job_title
             {
-                get { return job_title_state.State == State.Enabled ? this.@__jobTitle : null; }
+                get { return this.job_title_state.State == State.Enabled ? this.@__jobTitle : null; }
                 set { this.@__jobTitle = value; }
             }
 
             public decimal[] best_job_owner
             {
-                get { return best_job_owner_state.State == State.Enabled ? this.@__bestJobOwner : null; }
+                get { return this.best_job_owner_state.State == State.Enabled ? this.@__bestJobOwner : null; }
                 set { this.@__bestJobOwner = value; }
             }
 
@@ -512,89 +512,89 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 {
                     return new[]
                 {
-                    Verifier(age_IsEnabledIf, age_state.ItemId, age_state),
-                    Verifier(group_IsEnabledIf, group_state.ItemId, group_state),
-                    Verifier(IsEnabledIfParentIs, person_id_state.ItemId, person_id_state),
-                    Verifier(IsEnabledIfParentIs, marital_status_state.ItemId, marital_status_state),
-                    Verifier(married_with_IsEnabledIf, married_with_state.ItemId, married_with_state),
-                    Verifier(food_IsEnabledIf, food_state.ItemId, food_state),
-                    Verifier(has_job_IsEnabledIf, has_job_state.ItemId, has_job_state),
-                    Verifier(job_title_IsEnabledIf, job_title_state.ItemId, job_title_state),
-                    Verifier(best_job_owner_IsEnabledIf, best_job_owner_state.ItemId, best_job_owner_state)
+                    this.Verifier(this.age_IsEnabledIf, this.age_state.ItemId, this.age_state),
+                    this.Verifier(this.group_IsEnabledIf, this.group_state.ItemId, this.group_state),
+                    this.Verifier(this.IsEnabledIfParentIs, this.person_id_state.ItemId, this.person_id_state),
+                    this.Verifier(this.IsEnabledIfParentIs, this.marital_status_state.ItemId, this.marital_status_state),
+                    this.Verifier(this.married_with_IsEnabledIf, this.married_with_state.ItemId, this.married_with_state),
+                    this.Verifier(this.food_IsEnabledIf, this.food_state.ItemId, this.food_state),
+                    this.Verifier(this.has_job_IsEnabledIf, this.has_job_state.ItemId, this.has_job_state),
+                    this.Verifier(this.job_title_IsEnabledIf, this.job_title_state.ItemId, this.job_title_state),
+                    this.Verifier(this.best_job_owner_IsEnabledIf, this.best_job_owner_state.ItemId, this.best_job_owner_state)
                 };
                 }
             }
 
             private bool age_IsEnabledIf()
             {
-                return name.ToLower().StartsWith("a");
+                return this.name.ToLower().StartsWith("a");
             }
 
             private bool group_IsEnabledIf()
             {
-                return (age > 16);
+                return (this.age > 16);
             }
 
             private bool married_with_IsEnabledIf()
             {
-                return marital_status == 2 && persons_count > 1;
+                return this.marital_status == 2 && this.persons_count > 1;
             }
 
             private bool food_IsEnabledIf()
             {
-                return role == 2 && sex == 2;
+                return this.role == 2 && this.sex == 2;
             }
 
             private bool has_job_IsEnabledIf()
             {
-                return age > 16;
+                return this.age > 16;
             }
 
             private bool job_title_IsEnabledIf()
             {
-                return has_job == 1;
+                return this.has_job == 1;
             }
 
             private bool best_job_owner_IsEnabledIf()
             {
-                return has_job == 2;
+                return this.has_job == 2;
             }
 
             private bool age_IsValid()
             {
-                return age >= 0 && age < 100;
+                return this.age >= 0 && this.age < 100;
             }
 
             private bool married_with_IsValid()
             {
-                return !married_with.Any(x => x.SequenceEqual(me));
+                return !this.married_with.Any(x => x.SequenceEqual(this.me));
             }
 
             private bool name_IsMandatory()
             {
-                return !IsEmptyAnswer(name);
+                return !this.IsEmptyAnswer(this.name);
             }
 
             private bool food_IsValid()
             {
-                return food == null || !(food.Contains(38) && role == 3 && age >= 21);
+                return this.food == null || !(this.food.Contains(38) && this.role == 3 && this.age >= 21);
             }
 
             private bool role_IsValid()
             {
                 // children should not drink alcohol
-                return (role == 1 && hhMembers.Count(x => x.role == 1) == 1) || role != 1;
+                return (this.role == 1 && this.hhMembers.Count(x => x.role == 1) == 1) || this.role != 1;
             }
 
             private bool role2_IsValid()
             {
                 // children should not drink alcohol
-                return (role == 3 && hhMembers.Where(x => x.role < 3).Any(x => x.age < age + 10)) || role != 3;
+                return (this.role == 3 && this.hhMembers.Where(x => x.role < 3).Any(x => x.age < this.age + 10)) || this.role != 3;
             }
 
             public IValidatable CopyMembers()
             {
-                var level = new HhMember_type(this.RosterVector, this.RosterKey, this.GetInstances, ConditionalDependencies)
+                var level = new HhMember_type(this.RosterVector, this.RosterKey, this.GetInstances, this.ConditionalDependencies)
                 {
                     ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                     InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -651,16 +651,16 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
-                validationExpressions.Add(new Identity(IdOf.times_per_week, this.RosterVector), new Func<bool>[] { times_per_week_validation });
+                this.validationExpressions.Add(new Identity(IdOf.times_per_week, this.RosterVector), new Func<bool>[] { this.times_per_week_validation });
 
-                EnablementStates.Add(price_for_food_state.ItemId, price_for_food_state);
+                this.EnablementStates.Add(this.price_for_food_state.ItemId, this.price_for_food_state);
             }
 
             private HhMember_type @__parent;
 
             public HhMember_type[] hhMembers
             {
-                get { return @__parent.hhMembers; }
+                get { return this.__parent.hhMembers; }
             }
 
             public FoodConsumption_type[] foodConsumption
@@ -742,12 +742,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             private bool times_per_week_validation()
             {
-                return times_per_week > 0 && times_per_week < 7 * 5;
+                return this.times_per_week > 0 && this.times_per_week < 7 * 5;
             }
 
             public decimal? price_for_food
             {
-                get { return price_for_food_state.State == State.Enabled ? this.priceForFood : null; }
+                get { return this.price_for_food_state.State == State.Enabled ? this.priceForFood : null; }
                 set { this.priceForFood = value; }
             }
 
@@ -756,7 +756,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             private bool price_for_food_IsEnabledIf()
             {
-                return times_per_week > 0;
+                return this.times_per_week > 0;
             }
 
             public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
@@ -766,7 +766,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             public IValidatable CopyMembers()
             {
-                var level = new FoodConsumption_type(this.RosterVector, this.RosterKey, this.GetInstances, ConditionalDependencies)
+                var level = new FoodConsumption_type(this.RosterVector, this.RosterKey, this.GetInstances, this.ConditionalDependencies)
                 {
                     ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                     InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -802,7 +802,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                 {
                     return new[]
                 {
-                    Verifier(price_for_food_IsEnabledIf,price_for_food_state.ItemId, price_for_food_state)
+                    this.Verifier(this.price_for_food_IsEnabledIf,this.price_for_food_state.ItemId, this.price_for_food_state)
                 };
                 }
             }

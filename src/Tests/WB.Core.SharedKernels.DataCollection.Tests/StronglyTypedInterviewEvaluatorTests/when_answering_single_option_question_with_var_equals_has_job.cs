@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Tests.InterviewTests;
-using WB.Core.SharedKernels.ExpressionProcessing;
 using Identity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
 using It = Machine.Specifications.It;
 
@@ -45,41 +44,41 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.StronglyTypedInterviewEvalu
                 new AddedRosterInstance(StronglyTypedInterviewEvaluator.IdOf.hhMember, emptyRosterVector, 0.0m, sortIndex: null), 
                 new AddedRosterInstance(StronglyTypedInterviewEvaluator.IdOf.jobActivity, emptyRosterVector, 0.0m, sortIndex: null)
             }));
-            interview.Apply(new QuestionsDisabled(new Identity[]
+            interview.Apply(new QuestionsDisabled(new Events.Interview.Dtos.Identity[]
             {
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.person_id, rosterVector),
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.marital_status, rosterVector),
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.married_with, rosterVector),
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.food, rosterVector),
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.has_job, rosterVector),
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.job_title, rosterVector),
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.best_job_owner, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.person_id, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.marital_status, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.married_with, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.food, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.has_job, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.job_title, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.best_job_owner, rosterVector),
             }));
 
-            interview.Apply(new GroupsDisabled(new Identity[]
+            interview.Apply(new GroupsDisabled(new Events.Interview.Dtos.Identity[]
             {
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.groupId, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.groupId, rosterVector),
             }));
             interview.Apply(new TextQuestionAnswered(userId, StronglyTypedInterviewEvaluator.IdOf.name, rosterVector, DateTime.Now, "aaa"));
-            interview.Apply(new QuestionsEnabled(new Identity[]
+            interview.Apply(new QuestionsEnabled(new Events.Interview.Dtos.Identity[]
             {
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
             }));
-            interview.Apply(new AnswersDeclaredInvalid(new Identity[]
+            interview.Apply(new AnswersDeclaredInvalid(new Events.Interview.Dtos.Identity[]
             {
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
             }));
             interview.Apply(new NumericIntegerQuestionAnswered(userId, StronglyTypedInterviewEvaluator.IdOf.age, rosterVector, DateTime.Now, 20));
-            interview.Apply(new GroupsEnabled(new Identity[]
+            interview.Apply(new GroupsEnabled(new Events.Interview.Dtos.Identity[]
             {
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.groupId, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.groupId, rosterVector),
             }));
-            interview.Apply(new QuestionsEnabled(new Identity[]
+            interview.Apply(new QuestionsEnabled(new Events.Interview.Dtos.Identity[]
             {
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.has_job, rosterVector),
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.person_id, rosterVector),
-                new Identity(StronglyTypedInterviewEvaluator.IdOf.marital_status, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.has_job, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.person_id, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.marital_status, rosterVector),
             }));
             eventContext = new EventContext();
         };

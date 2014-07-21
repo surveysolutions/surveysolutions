@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace WB.Core.SharedKernels.ExpressionProcessing
+namespace WB.Core.SharedKernels.DataCollection
 {
     public class ExpressionProcessor : IExpressionProcessor
     {

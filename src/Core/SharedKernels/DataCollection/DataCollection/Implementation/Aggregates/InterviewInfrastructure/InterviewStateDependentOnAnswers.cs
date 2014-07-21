@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.ExpressionProcessing;
-using Identity = WB.Core.SharedKernels.ExpressionProcessing.Identity;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {

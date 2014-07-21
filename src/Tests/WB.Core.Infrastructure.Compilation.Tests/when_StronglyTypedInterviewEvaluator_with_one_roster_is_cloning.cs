@@ -1,8 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection;
 
-//should be moved to common test project or deleted after dynamic generation
-using WB.Core.SharedKernels.ExpressionProcessing;
 
 namespace WB.Core.Infrastructure.Compilation.Tests
 {

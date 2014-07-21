@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
 
-            var expressionProcessor = Mock.Of<IExpressionProcessor>();
+            var expressionProcessor = Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             Mock.Get(expressionProcessor)
                 .Setup(_ => _.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()))
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
                     textListAnswerProvidedToExpressionProcessor = getValueForIdentifier(textlistVariableName);
                 });
 
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
 
             Tuple<decimal, string>[] textListAnswer = new[] { Tuple.Create((decimal) 1, "one"), Tuple.Create((decimal) 2, "two") };
 

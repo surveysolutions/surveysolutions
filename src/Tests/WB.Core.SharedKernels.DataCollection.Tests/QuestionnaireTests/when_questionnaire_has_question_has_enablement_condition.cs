@@ -10,8 +10,6 @@ using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
@@ -35,13 +33,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                     ConditionExpression = "some expression"
                 }
             });
-
-            var expressionProcessor = new Mock<IExpressionProcessor>();
-            expressionProcessor.Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>())).Returns(new [] { referencedInConditionQuestionsVariableName });
-
-            Mock.Get(ServiceLocator.Current)
-             .Setup(locator => locator.GetInstance<IExpressionProcessor>())
-             .Returns(expressionProcessor.Object);
 
             eventContext = new EventContext();
         };

@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
                         && _.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(groupGCId) == new[] { questionCId }
                 );
 
-            expressionProcessor = Mock.Of<IExpressionProcessor>
+            expressionProcessor = Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>
                 (_
                     => _.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()) == true
                         && _.EvaluateBooleanExpression(questionBEnablementCondition, Moq.It.IsAny<Func<string, object>>()) == false
@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire));
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new NumericIntegerQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, 42));
@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
         static Interview interview;
         static Guid userId;
         static decimal[] emptyRosterVector;
-        static IExpressionProcessor expressionProcessor;
+        static SharedKernels.ExpressionProcessor.Services.IExpressionProcessor expressionProcessor;
         static string questionBEnablementCondition;
         static Func<string, object> funcSuppliedWhenEvaluatingGroupGCEnablementCondition;
         static string questionBVariableName;

@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
-using WB.Core.SharedKernels.ExpressionProcessing;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.Infrastructure.Compilation
 {

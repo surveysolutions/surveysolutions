@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Utils;
@@ -23,22 +22,22 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
             return string.Format("{0}<{1}>", this.Id.FormatGuid(), string.Join("-", this.RosterVector));
         }
 
-        public static Identity ToEventIdentity(ExpressionProcessing.Identity identity)
+        public static Identity ToEventIdentity(DataCollection.Identity identity)
         {
             return new Identity(identity.Id, identity.RosterVector);
         }
 
-        public static IEnumerable<Identity> ToEventIdentities(IEnumerable<ExpressionProcessing.Identity> identities)
+        public static IEnumerable<Identity> ToEventIdentities(IEnumerable<DataCollection.Identity> identities)
         {
             return identities.Select(ToEventIdentity).ToArray();
         }
 
-        public static ExpressionProcessing.Identity ToIdentity(Identity identity)
+        public static DataCollection.Identity ToIdentity(Identity identity)
         {
-            return new ExpressionProcessing.Identity(identity.Id, identity.RosterVector);
+            return new DataCollection.Identity(identity.Id, identity.RosterVector);
         }
 
-        public static IEnumerable<ExpressionProcessing.Identity> ToIdentities(IEnumerable<Identity> identities)
+        public static IEnumerable<DataCollection.Identity> ToIdentities(IEnumerable<Identity> identities)
         {
             return identities.Select(ToIdentity).ToArray();
         }
@@ -46,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 
     public static class IdentityExtentions
     {
-        public static IEnumerable<ExpressionProcessing.Identity> ToIdentities(this IEnumerable<Identity> identities)
+        public static IEnumerable<DataCollection.Identity> ToIdentities(this IEnumerable<Identity> identities)
         {
             return Identity.ToIdentities(identities);
         }

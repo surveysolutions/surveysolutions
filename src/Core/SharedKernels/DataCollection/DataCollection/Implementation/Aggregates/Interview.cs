@@ -17,8 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.ExpressionProcessing;
-using Identity = WB.Core.SharedKernels.ExpressionProcessing.Identity;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -40,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private readonly InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
         private IInterviewExpressionState expressionProcessorStatePrototype = new StronglyTypedInterviewEvaluator();
-        private ExpressionProcessing.ExpressionProcessor expressionSharpProcessor = new ExpressionProcessing.ExpressionProcessor();
+        private ExpressionProcessor expressionSharpProcessor = new ExpressionProcessor();
 
         private void Apply(InterviewCreated @event)
         {
@@ -620,8 +618,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var interviewChangeStructures = new InterviewChangeStructures();
 
-            InitInterview(questionnaire, interviewChangeStructures);
-
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
             foreach (var fixedRosterCalculationData in fixedRosterCalculationDatas)
@@ -689,8 +685,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
             }
 
-            InitInterview(questionnaire, interviewChangeStructures);
-
             this.CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
                 answersTime, newAnswers);
 
@@ -732,7 +726,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
             }
 
-            InitInterview(questionnaire, interviewChangeStructures);
             this.CalculateChangesByFeaturedQuestion(interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
                 answersTime, newAnswers);
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
@@ -757,8 +750,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : this.GetQuestionnaireOrThrow(questionnaireId);
 
             InterviewChangeStructures interviewChangeStructures = new InterviewChangeStructures();
-
-            InitInterview(questionnaire, interviewChangeStructures);
 
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
@@ -903,23 +894,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         #region StaticMethods
-
-        private static void InitInterview(IQuestionnaire questionnaire, InterviewChangeStructures interviewState)
-        {
-            List<Identity> initiallyDisabledGroups = GetGroupsToBeDisabledInJustCreatedInterview(questionnaire);
-            List<Identity> initiallyDisabledQuestions = GetQuestionsToBeDisabledInJustCreatedInterview(questionnaire);
-            List<Identity> initiallyInvalidQuestions = GetQuestionsToBeInvalidInJustCreatedInterview(questionnaire, initiallyDisabledGroups,
-                initiallyDisabledQuestions);
-
-            var enablementChanges = new EnablementChanges(initiallyDisabledGroups, null, initiallyDisabledQuestions, null);
-            var validityChanges = new ValidityChanges(null, initiallyInvalidQuestions);
-
-            var interviewChanges = new InterviewChanges(null, enablementChanges, validityChanges, null, null, null, null);
-
-            interviewState.State.ApplyInterviewChanges(interviewChanges);
-
-            interviewState.Changes.Add(interviewChanges);
-        }
 
         private static Dictionary<string, DistinctDecimalList> BuildRosterInstanceIdsFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
         {
@@ -1297,25 +1271,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 yield return new Identity(groupId, groupRosterVector);
             }
-        }
-
-        private static List<Identity> GetGroupsToBeDisabledInJustCreatedInterview(IQuestionnaire questionnaire)
-        {
-            return questionnaire
-                .GetAllGroupsWithNotEmptyCustomEnablementConditions()
-                .Where(groupId => !questionnaire.IsRosterGroup(groupId))
-                .Where(groupId => !IsGroupUnderRosterGroup(questionnaire, groupId))
-                .Select(groupId => new Identity(groupId, EmptyRosterVector))
-                .ToList();
-        }
-
-        private static List<Identity> GetQuestionsToBeDisabledInJustCreatedInterview(IQuestionnaire questionnaire)
-        {
-            return questionnaire
-                .GetAllQuestionsWithNotEmptyCustomEnablementConditions()
-                .Where(questionId => !IsQuestionUnderRosterGroup(questionnaire, questionId))
-                .Select(questionId => new Identity(questionId, EmptyRosterVector))
-                .ToList();
         }
 
         private static List<Identity> GetQuestionsToBeInvalidInJustCreatedInterview(IQuestionnaire questionnaire,

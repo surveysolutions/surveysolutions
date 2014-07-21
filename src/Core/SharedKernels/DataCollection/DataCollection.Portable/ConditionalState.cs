@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.SharedKernels.ExpressionProcessing
+namespace WB.Core.SharedKernels.DataCollection
 {
     public interface IValidatable
     {
@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
                 if (questionState.State == State.Disabled)
                 {
-                    this.DisableAllDependentQuestions(questionId, ConditionalDependencies);
+                    this.DisableAllDependentQuestions(questionId, this.ConditionalDependencies);
                 }
             };
         }
@@ -183,38 +183,38 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public void DeclareAnswerValid(Guid questionId)
         {
-            ValidAnsweredQuestions.Add(questionId);
-            InvalidAnsweredQuestions.Remove(questionId);
+            this.ValidAnsweredQuestions.Add(questionId);
+            this.InvalidAnsweredQuestions.Remove(questionId);
         }
 
         public void DeclareAnswerInvalid(Guid questionId)
         {
-            InvalidAnsweredQuestions.Add(questionId);
-            ValidAnsweredQuestions.Remove(questionId);
+            this.InvalidAnsweredQuestions.Add(questionId);
+            this.ValidAnsweredQuestions.Remove(questionId);
         }
 
         public void DisableQuestion(Guid questionId)
         {
-            if (EnablementStates.ContainsKey(questionId))
-                EnablementStates[questionId].State = State.Disabled;
+            if (this.EnablementStates.ContainsKey(questionId))
+                this.EnablementStates[questionId].State = State.Disabled;
         }
 
         public void EnableQuestion(Guid questionId)
         {
-            if (EnablementStates.ContainsKey(questionId))
-                EnablementStates[questionId].State = State.Enabled;
+            if (this.EnablementStates.ContainsKey(questionId))
+                this.EnablementStates[questionId].State = State.Enabled;
         }
 
         public void DisableGroup(Guid groupId)
         {
-            if (EnablementStates.ContainsKey(groupId))
-                EnablementStates[groupId].State = State.Disabled;
+            if (this.EnablementStates.ContainsKey(groupId))
+                this.EnablementStates[groupId].State = State.Disabled;
         }
 
         public void EnableGroup(Guid groupId)
         {
-            if (EnablementStates.ContainsKey(groupId))
-                EnablementStates[groupId].State = State.Enabled;
+            if (this.EnablementStates.ContainsKey(groupId))
+                this.EnablementStates[groupId].State = State.Enabled;
         }
 
         public Identity[] GetRosterKey()
@@ -263,7 +263,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         protected void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
         {
-            foreach (var validationExpression in validationExpressions)
+            foreach (var validationExpression in this.validationExpressions)
             {
                 try
                 {
@@ -274,10 +274,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
                     var isValid = validationExpression.Value.Aggregate(true, (current, validator) => current && validator());
 
-                    if (isValid && !ValidAnsweredQuestions.Contains(questionId))
+                    if (isValid && !this.ValidAnsweredQuestions.Contains(questionId))
                         questionsToBeValid.Add(validationExpression.Key);
 
-                    if (!isValid && !InvalidAnsweredQuestions.Contains(questionId))
+                    if (!isValid && !this.InvalidAnsweredQuestions.Contains(questionId))
                         questionsToBeInvalid.Add(validationExpression.Key);
                 }
                 catch (Exception)
