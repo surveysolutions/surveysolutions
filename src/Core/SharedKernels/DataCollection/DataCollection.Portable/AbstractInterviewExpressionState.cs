@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.SharedKernels.ExpressionProcessing
+namespace WB.Core.SharedKernels.DataCollection
 {
     public abstract class AbstractInterviewExpressionState : IInterviewExpressionState
     {
@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         
         protected IValidatable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
         {
-            var parentsMap = GetParentsMap();
+            var parentsMap = this.GetParentsMap();
             if (!parentsMap.ContainsKey(questionId))
                 return null;
 

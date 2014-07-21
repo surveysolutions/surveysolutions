@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.ExpressionProcessing;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots
 {

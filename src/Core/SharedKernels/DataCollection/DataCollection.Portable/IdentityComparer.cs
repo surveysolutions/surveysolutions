@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.SharedKernels.ExpressionProcessing
+namespace WB.Core.SharedKernels.DataCollection
 {
     public class IdentityComparer : IEqualityComparer<Identity>
     {

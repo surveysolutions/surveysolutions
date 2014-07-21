@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.GetQuestionVariableName(answeringQuestionId) == "var name"
                                                         );
 
-            var expressionProcessor = new Mock<IExpressionProcessor>();
+            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionnaire);
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(questionnaireRepository);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+                .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
                 .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);

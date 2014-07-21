@@ -31,7 +31,7 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
             @"using System;
                 using System.Collections.Generic;
                 using System.Linq;
-                using WB.Core.SharedKernels.ExpressionProcessing;
+                using WB.Core.SharedKernels.DataCollection;
                 public class InterviewEvaluator : IInterviewEvaluator
             {
                 public static object Evaluate()

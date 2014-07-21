@@ -280,7 +280,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Comp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Compilation.Tests", "Tests\WB.Core.Infrastructure.Compilation.Tests\WB.Core.Infrastructure.Compilation.Tests.csproj", "{C12C5A23-6C28-4CDE-9EB0-6E20CD7D0E46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.ExpressionProcessing", "Core\SharedKernels\DataCollection\ExpressionProcessing\WB.Core.SharedKernels.ExpressionProcessing.csproj", "{553B4FC2-5FC7-4256-B14D-82758D64A3BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataCollection.Portable", "Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj", "{553B4FC2-5FC7-4256-B14D-82758D64A3BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

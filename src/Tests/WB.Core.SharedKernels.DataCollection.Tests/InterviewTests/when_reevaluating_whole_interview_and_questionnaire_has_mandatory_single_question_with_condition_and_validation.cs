@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             );
 
             var expressionProcessor =
-                Mock.Of<IExpressionProcessor>(
+                Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(
                     x =>
                         x.EvaluateBooleanExpression(validationExpression, Moq.It.IsAny<Func<string, object>>()) == true &&
                         x.EvaluateBooleanExpression(enablementCondition, Moq.It.IsAny<Func<string, object>>()) == true &&
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
 
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new SingleOptionQuestionAnswered(userId: userId, questionId: singleQuestion1Id,

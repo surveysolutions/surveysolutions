@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { unansweredMandatoryWithValidationQuestionId }
                                                         && _.GetAllMandatoryQuestions() == new Guid[] { unansweredMandatoryWithValidationQuestionId });
 
-            var expressionProcessor = new Mock<IExpressionProcessor>();
+            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             //setup expression processor throw exception
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(questionnaireRepository);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+                .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
                 .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
