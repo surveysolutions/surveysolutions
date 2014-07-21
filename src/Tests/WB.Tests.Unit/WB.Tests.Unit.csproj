@@ -130,6 +130,10 @@
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\PdfQuestionnaireViewTestsContext.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_entity_and_root_id_is_used_as_parent_group_id.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_group_specifying_root_id_as_parent.cs" />
+    <Compile Include="Create.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\InterviewApiControllerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
@@ -149,7 +153,6 @@
   <ItemGroup>
     <Folder Include="Applications\Headquarters\" />
     <Folder Include="Applications\Supervisor\" />
-    <Folder Include="BoundedContexts\Designer\" />
     <Folder Include="BoundedContexts\Headquarters\" />
     <Folder Include="BoundedContexts\Supervisor\" />
     <Folder Include="GenericSubdomains\Logging\" />
