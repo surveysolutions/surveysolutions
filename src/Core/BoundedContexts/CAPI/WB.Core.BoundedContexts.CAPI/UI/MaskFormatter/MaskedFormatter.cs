@@ -72,14 +72,14 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                             isLiteralAppearedAfterCursor = true;
                     }
                     if(!isLiteralAppearedAfterCursor)
-                        lastSuccessfulIndex = oldIndex;
+                        lastSuccessfulIndex = i;
                 }
             }
 
             if (oldCurstorPosition > this.maskChars.Length)
                 newCursorPosition = this.maskChars.Length;
 
-            if (value.Length > maskChars.Length ||value.Length==1)
+            if (value.Length > maskChars.Length || value.Length == 1)
             {
                 if (!isAddedCharSuccessful)
                     newCursorPosition = oldCurstorPosition - 1;
@@ -245,22 +245,6 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                 }
             }
             return result.ToString();
-        }
-
-        class LiteralPosition
-        {
-            public LiteralPosition(int maskedPositions, int originalPositions, bool isAppended, bool isLiteral)
-            {
-                this.MaskedPositions = maskedPositions;
-                this.OriginalPositions = originalPositions;
-                this.IsAppended = isAppended;
-                this.IsLiteral = isLiteral;
-            }
-
-            public int MaskedPositions { get; private set; }
-            public int OriginalPositions { get; private set; }
-            public bool IsAppended { get; private set; }
-            public bool IsLiteral { get; private set; }
         }
     }
 }
