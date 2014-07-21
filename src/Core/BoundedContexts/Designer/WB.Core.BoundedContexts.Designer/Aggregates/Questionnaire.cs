@@ -1348,7 +1348,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void CloneQuestion(Guid questionId,
-            Guid parentGroupId, string title, QuestionType type, string variableName, string variableLabel,
+            Guid parentGroupId, string title, QuestionType type, string variableName, string variableLabel, string mask,
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid sourceQuestionId, int targetIndex, Guid responsibleId,
@@ -1398,12 +1398,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = linkedToQuestionId,
 
                 AreAnswersOrdered = areAnswersOrdered,
-                MaxAllowedAnswers = maxAllowedAnswers
+                MaxAllowedAnswers = maxAllowedAnswers,
+                Mask = mask
             });
         }
 
         public void NewAddQuestion(Guid questionId,
-            Guid parentGroupId, string title, QuestionType type, string variableName, string variableLabel,
+            Guid parentGroupId, string title, QuestionType type, string variableName, string variableLabel, string mask,
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered,
@@ -1445,12 +1446,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
                 AreAnswersOrdered = areAnswersOrdered,
-                MaxAllowedAnswers = maxAllowedAnswers
+                MaxAllowedAnswers = maxAllowedAnswers,
+                Mask = mask
             });
         }
 
         public void NewUpdateQuestion(Guid questionId,
-            string title, QuestionType type, string variableName, string variableLabel,
+            string title, QuestionType type, string variableName, string variableLabel, string mask,
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId,
@@ -1493,7 +1495,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
                 AreAnswersOrdered = areAnswersOrdered,
-                MaxAllowedAnswers = maxAllowedAnswers
+                MaxAllowedAnswers = maxAllowedAnswers,
+                Mask = mask
             });
         }
 
