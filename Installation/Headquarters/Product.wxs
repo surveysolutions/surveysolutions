@@ -12,12 +12,14 @@
              Compressed="yes"
              InstallScope="perMachine" />
    <!-- <?include Conditions.wxi ?> -->
-
+    <?include Variables.wxi ?>
+    
 		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" />
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
  
 		<Feature Id="ProductFeature" Title="SetupHeadquarters" Level="1">
-      <ComponentGroupRef Id="WB.UI.Headquarters_Project" />
+      <ComponentGroupRef Id="files" />
+      <ComponentGroupRef Id="ravendb" />
       <ComponentGroupRef Id="IssConfiguration" />
       <ComponentGroupRef Id="Web.configModification" />
     </Feature>
@@ -28,7 +30,9 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="INETPUB" Name="Inetpub">
         <Directory Id="COMPANYFOLDER" Name="!(loc.CompanyName)" ComponentGuidGenerationSeed="CF2FA519-6E38-44D4-A009-E6397878AEA2">
-          <Directory Id="INSTALLFOLDER" Name="!(loc.ProductName)" />
+          <Directory Id="INSTALLFOLDER" Name="!(loc.ProductName)">
+            <Directory Id="DBFOLDER" Name="!(loc.DBFolderName)" />
+          </Directory>
         </Directory>
       </Directory>
     </Directory>

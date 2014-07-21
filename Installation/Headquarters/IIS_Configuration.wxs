@@ -10,22 +10,43 @@
                         ManagedPipelineMode="Integrated"
                         ManagedRuntimeVersion="v4.0" />
       </Component>
+      <Component Id="DBAppPool" Guid="" KeyPath="yes">
+        <iis:WebAppPool Id="DBAppPool"
+                        Name="DBAppPool"
+                        Identity="applicationPoolIdentity"
+                        ManagedPipelineMode="Integrated"
+                        ManagedRuntimeVersion="v4.0" />
+      </Component>
       <Component Id="InstallWebsite" Guid="" KeyPath="yes">
         <iis:WebSite Id="HeadquartersSite"
-                     Description='[SITE_NAME]'
+                     Description='[SITENAME]'
                      Directory='INSTALLFOLDER'
                      AutoStart='yes'
                      StartOnInstall='yes'>
           <iis:WebAddress Id="AllUnassigned"
-                          Header="[SITE_HOST]"
-                          Port="[SITE_PORT]" />
-          <iis:WebApplication Id="Application" Name="[SITE_NAME]" WebAppPool="HeadquartersAppPool"></iis:WebApplication>
+                          Header="[SITEHOST]"
+                          Port="[SITEPORT]" />
+          <iis:WebApplication Id="Application" Name="[SITENAME]" WebAppPool="HeadquartersAppPool"></iis:WebApplication>
         </iis:WebSite>
       </Component>
+      <Component Id="InstallDBWebsite" Guid="" KeyPath="yes">
+        <iis:WebSite Id="DBSite"
+                     Description='[SITENAME]_DB'
+                     Directory='DBFOLDER'
+                     AutoStart='yes'
+                     StartOnInstall='yes'>
+          <iis:WebAddress Id="DBAllUnassigned"
+                          Port="[DBPORT]" />
+          <iis:WebApplication Id="DBApplication" Name="[SITENAME]_DB" WebAppPool="DBAppPool"></iis:WebApplication>
+        </iis:WebSite>
+      </Component>
+
     </DirectoryRef>
     <ComponentGroup Id="IssConfiguration">
       <ComponentRef Id="InstallWebsite" />
       <ComponentRef Id="AppPool" />
+      <ComponentRef Id="InstallDBWebsite" />
+      <ComponentRef Id="DBAppPool" />
     </ComponentGroup>
 	</Fragment>
 </Wix>

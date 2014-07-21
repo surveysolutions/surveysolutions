@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
-  <Property Id="SITE_NAME" Value="Headquarters"/>
-  <Property Id="SITE_HOST" Value=""/>
-  <Property Id="SITE_PORT" Value="80"/>
-  <Property Id="DATABASE_EVENTS" Value="dddddddEvents"/>
+  <Property Id="SITENAME" Value="Headquarters" Secure="yes" />
+  <Property Id="SITEHOST" Secure="yes" />
+  <Property Id="SITEPORT" Value="80" Secure="yes" />
+  <Property Id="DBPORT" Value="8080" Secure="yes" />
+  <Property Id="HYBRID" Value="true" Secure="yes" />
 </Include>

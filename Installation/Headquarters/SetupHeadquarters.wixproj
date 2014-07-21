@@ -20,13 +20,21 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SourcePath>..\..\src\UI\Headquarters\WB.UI.Headquarters\obj\$(Configuration)\Package\PackageTmp</SourcePath>
+    <RavenDBPath>x:\sandbox\deploy\ravendb</RavenDBPath>
+    <DefineConstants>SourceDir=$(SourcePath);RavenDBDir=$(RavenDBPath)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="files.wxs" />
     <Compile Include="IIS_Configuration.wxs" />
+    <Compile Include="ravendb.wxs" />
     <Compile Include="UI.wxs" />
     <Compile Include="Product.wxs" />
-    <Compile Include="UI_SiteParams.wxs" />
-    <Compile Include="WB.UI.Headquarters.wxs" />
+    <Compile Include="UI_HybridMode.wxs" />
+    <Compile Include="UI_SiteParams.wxs">
+      <Link>
+      </Link>
+    </Compile>
     <Compile Include="Web.config.wxs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,24 +62,13 @@
       <Name>WixIIsExtension</Name>
     </WixExtension>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj">
-      <Name>WB.UI.Headquarters</Name>
-      <Project>{d3efcc0c-4a50-484d-a9ff-252dc7916ecd}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>
-      </RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-      <WebProject>True</WebProject>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <Target Name="RemoveDirectories">
+    <RemoveDir Directories="$(SourcePath)\configuration" />
+  </Target>
   <Target Name="BeforeBuild">
-    <MSBuild Projects="%(ProjectReference.FullPath)" Targets="Package" Properties="Configuration=$(Configuration);Platform=AnyCPU" Condition="'%(ProjectReference.WebProject)'=='True'" />
-    <ItemGroup>
-      <LinkerBindInputPaths Include="%(ProjectReference.RootDir)%(ProjectReference.Directory)obj\$(Configuration)\Package\PackageTmp\" />
-    </ItemGroup>
-    <HeatDirectory OutputFile="%(ProjectReference.Filename).wxs" Directory="%(ProjectReference.RootDir)%(ProjectReference.Directory)obj\$(Configuration)\Package\PackageTmp\" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="%(ProjectReference.Filename)_Project" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" Condition="'%(ProjectReference.WebProject)'=='True'" />
+    <RemoveDir Directories="$(SourcePath)\configuration" />
+    <HeatDirectory OutputFile="$(ProjectDir)files.wxs" Directory="$(SourcePath)" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="files" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.SourceDir" />
+    <HeatDirectory OutputFile="$(ProjectDir)ravendb.wxs" Directory="$(RavenDBPath)" DirectoryRefId="DBFOLDER" ComponentGroupName="ravendb" AutogenerateGuids="true" SuppressCom="true" SuppressFragments="false" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.RavenDBDir" />
   </Target>
 </Project>
