@@ -1,7 +1,7 @@
 ﻿<div class="form-holder">
     <div data-item-breadcrumbs data-crumbs="activeRoster.breadcrumbs"></div>
 
-    <form role="form" name="editRosterForm">
+    <form role="form" name="editRosterForm" unsaved-warning-form>
         <label for="edit-group-title" class="wb-label">Roster Type <span>(<a>?</a>)</span></label><br>
         <div class="form-group span-12">
             <div class="btn-group" dropdown>
@@ -44,8 +44,8 @@
 
 <div class="form-buttons-holder">
     <div class="pull-left">
-        <button id="edit-roster-save-button" class="btn btn-lg btn-primary" ng-click="saveRoster()">Save</button>
-        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelRoster()">Cancel</button>
+        <button id="edit-roster-save-button" class="btn btn-lg btn-primary" ng-click="saveRoster()" unsaved-warning-clear>Save</button>
+        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelRoster()" unsaved-warning-clear>Cancel</button>
     </div>
     <div class="pull-right">
         <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteRoster()">Delete</button>
