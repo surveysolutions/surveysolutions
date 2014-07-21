@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\Services\ItemsInChapterLimit.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Properties\VerificationMessages.Designer.cs">
       <DependentUpon>VerificationMessages.resx</DependentUpon>
