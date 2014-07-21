@@ -547,6 +547,7 @@
                 title: question.title(),
                 variableName: question.alias(),
                 variableLabel: question.variableLabel(),
+                mask: question.mask(),
                 isMandatory: question.isMandatory(),
                 enablementCondition: question.condition(),
                 instructions: question.instruction()
@@ -559,6 +560,7 @@
             delete command.type;
             delete command.alias;
             delete command.variableLabel;
+            delete command.mask;
             delete command.scope;
             delete command.validationExpression;
             delete command.validationMessage;
@@ -605,6 +607,7 @@
                 case "DateTime":
                 case "GpsCoordinates":
                 case "Text":
+                    command.mask = question.mask();
                     break;
                 case "TextList":
                     command.maxAnswerCount = question.maxAnswerCount();
