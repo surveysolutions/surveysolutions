@@ -364,6 +364,20 @@ namespace Main.Core.Documents
             return result;
         }
 
+        public IComposite GetChapterOfItemById(Guid itemId)
+        {
+            IComposite item = this.GetItemOrLogWarning(itemId);
+            IComposite parent = item.GetParent();
+
+            while (!(parent is IQuestionnaireDocument) && parent != null)
+            {
+                item = parent;
+                parent = parent.GetParent();
+            }
+
+            return item;
+        }
+
         internal IEnumerable<IQuestion> GetAllQuestions()
         {
             var treeStack = new Stack<IComposite>();

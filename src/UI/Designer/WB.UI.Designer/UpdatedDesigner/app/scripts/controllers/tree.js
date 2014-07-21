@@ -390,7 +390,16 @@
                 var itemToMoveId = $state.params.itemId;
                 var itemToMove = questionnaireService.findItem($scope.items, itemToMoveId);
 
-                var moveCommand = $scope.isStaticText(itemToMove) ? questionnaireService.moveStaticText : questionnaireService.moveQuestion;
+
+                var moveCommand;
+                if ($scope.isStaticText(itemToMove)) {
+                    moveCommand = questionnaireService.moveStaticText;
+                }
+                if ($scope.isGroup(itemToMove)) {
+                    moveCommand = questionnaireService.moveGroup;
+                } else {
+                    moveCommand = questionnaireService.moveQuestion;
+                }
 
                 moveCommand(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function(result) {
                     if (result.IsSuccess) {

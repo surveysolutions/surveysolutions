@@ -378,8 +378,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests
 
         public static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
+            return CreateQuestionnaireDocumentWithOneChapter(null, children);
+        }
+
+        public static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+        {
             var result = new QuestionnaireDocument();
-            var chapter = new Group("Chapter");
+            var chapter = new Group("Chapter") {PublicKey = chapterId.GetValueOrDefault()};
+            
             result.Children.Add(chapter);
 
             foreach (var child in children)
@@ -394,7 +400,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests
         {
             return string.IsNullOrEmpty(questionnaireItemId) ? Guid.NewGuid() : Guid.Parse(questionnaireItemId);
         }
-
 
         private static Guid? GetQuestionnaireItemParentId(string questionnaireItemParentId)
         {

@@ -210,6 +210,7 @@
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_edit_view_and_static_text_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view.cs" />
+    <Compile Include="QuestionnaireTests\GetChapterOfTests\when_finding_group_that_exists_in_questionnaire.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
