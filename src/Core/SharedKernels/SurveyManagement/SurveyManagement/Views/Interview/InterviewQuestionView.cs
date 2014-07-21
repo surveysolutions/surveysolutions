@@ -87,6 +87,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 }
             }
 
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+                this.Settings = new
+                {
+                    Mask = textQuestion.Mask
+                };
+            }
+
             bool shouldBeValidByConvention = !this.IsEnabled;
 
             this.IsValid = shouldBeValidByConvention || answeredQuestion.Valid;

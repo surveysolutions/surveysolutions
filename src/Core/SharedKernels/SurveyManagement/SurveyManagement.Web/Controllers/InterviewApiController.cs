@@ -287,7 +287,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     questionModel = new QRBarcodeQuestionModel() {answer = answerAsString};
                     break;
                 case QuestionType.Text:
-                    questionModel = new TextQuestionModel() {answer = answerAsString};
+                    questionModel = new TextQuestionModel()
+                    {
+                        answer = answerAsString,
+                        mask = questionDto.Settings == null
+                            ? null
+                            : questionDto.Settings.GetType().GetProperty("Mask").GetValue(questionDto.Settings, null)
+                    };
                     break;
                 case QuestionType.MultyOption:
                     var answersAsDecimalArray = hasAnswer && !isLinked
@@ -527,6 +533,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class TextQuestionModel : QuestionModel
     {
         public string answer { set; get; }
+        public string mask { set; get; }
     }
     public class NumericQuestionModel : TextQuestionModel
     {

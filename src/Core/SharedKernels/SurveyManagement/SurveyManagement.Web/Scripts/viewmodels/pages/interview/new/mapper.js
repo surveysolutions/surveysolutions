@@ -9,6 +9,7 @@
             item.variable(dto.StataExportCaption);
             item.instructions(dto.Instructions);
             item.selectedOption(dto.Answer);
+            
             if (!Supervisor.Framework.Objects.isNull(dto.Answers)) {
                 item.options($.map(dto.Answers, function (dtoOption) {
                     var o = option.fromDto(dtoOption);
@@ -50,8 +51,14 @@
             case "DateTime":
                 item.selectedOption(new Date());
                 item.selectedOption.extend({ required: true, date: true });
-            case "Text":
-                item.selectedOption.extend({ required: true });
+                case "Text":
+                    item.settings(dto.Settings);
+                    var isTextSettingsEmpty = _.isEmpty(dto.Settings);
+                    if (!isTextSettingsEmpty) {
+                        if(!_.isEmpty(dto.Settings.Mask))
+                            item.mask(dto.Settings.Mask);
+                    }
+                    item.selectedOption.extend({ required: true });
             }
             return item;
         }
