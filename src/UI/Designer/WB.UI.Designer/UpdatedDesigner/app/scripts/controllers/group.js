@@ -11,6 +11,7 @@
                     $scope.activeGroup.isChapter = ($stateParams.itemId == $stateParams.chapterId);
                     $scope.activeGroup.group.itemId = $stateParams.itemId;
                     $scope.activeGroup.group.variableName = $stateParams.variableName;
+                    $scope.groupForm.$setPristine();
                 };
 
                 $scope.loadGroup = function() {
@@ -29,13 +30,13 @@
                             itemId: $scope.activeGroup.group.itemId,
                             title: $scope.activeGroup.group.title
                         });
+                        $scope.groupForm.$setPristine();
                     });
                 };
 
                 $scope.cancelGroup = function() {
                     var temp = angular.copy($scope.initialGroup);
                     dataBind(temp);
-                    $scope.groupform.$setPristine();
                 };
 
                 $scope.deleteItem = function() {

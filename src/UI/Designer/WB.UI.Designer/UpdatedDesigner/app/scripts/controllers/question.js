@@ -37,6 +37,7 @@
                     } else {
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
+                    $scope.questionForm.$setPristine();
                 };
 
                 $scope.loadQuestion = function() {
@@ -56,6 +57,7 @@
                             variable: $scope.activeQuestion.variable,
                             type: $scope.activeQuestion.type
                         });
+                        $scope.questionForm.$setPristine();
                     });
                 };
 

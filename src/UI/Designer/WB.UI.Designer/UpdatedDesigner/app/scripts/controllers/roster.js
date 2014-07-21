@@ -21,6 +21,7 @@
                     $scope.activeRoster.multiOption = utilityService.union(_.toArray(result.notLinkedMultiOptionQuestions));
 
                     $scope.getRosterTemplate();
+                    $scope.editRosterForm.$setPristine();
                 };
 
                 $scope.getSelected = function(collection, id) {
@@ -74,6 +75,7 @@
                             itemId: $scope.activeRoster.itemId,
                             title: $scope.activeRoster.roster.title
                         });
+                        $scope.editRosterForm.$setPristine();
                     });
                 };
 
@@ -96,7 +98,6 @@
                 $scope.cancelRoster = function() {
                     var temp = angular.copy($scope.initialRoster);
                     dataBind(temp);
-                    $scope.editRosterForm.$setPristine();
                 };
 
                 $scope.loadRoster();
