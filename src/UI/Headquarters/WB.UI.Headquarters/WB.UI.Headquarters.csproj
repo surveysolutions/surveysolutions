@@ -303,6 +303,7 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
+    <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />
     <Compile Include="API\SyncController.cs" />

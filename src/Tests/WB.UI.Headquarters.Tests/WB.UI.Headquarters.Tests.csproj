@@ -122,6 +122,8 @@
     <Compile Include="DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
     <Compile Include="DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
+    <Compile Include="FilterTests\MaintenanceFilterTests\MaintenanceFilterTestsContext.cs" />
+    <Compile Include="FilterTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
     <Compile Include="FilterTests\InstallationAttributeTests\InstallationAttributeTestsContext.cs" />
     <Compile Include="FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_does_not_exists_and_not_install_controller.cs" />
     <Compile Include="FilterTests\InstallationAttributeTests\when_action_executing_and_hq_user_exists_and_install_controller.cs" />

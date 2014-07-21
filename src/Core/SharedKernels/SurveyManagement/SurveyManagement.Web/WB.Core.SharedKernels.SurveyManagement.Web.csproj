@@ -148,6 +148,7 @@
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewerController.cs" />
+    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
@@ -373,6 +374,7 @@
     <EmbeddedResource Include="Views\Shared\SupervisorMainMenu.cshtml" />
     <EmbeddedResource Include="Views\Shared\_AdminLayout.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
+    <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

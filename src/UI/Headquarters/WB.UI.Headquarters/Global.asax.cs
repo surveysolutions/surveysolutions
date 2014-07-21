@@ -36,6 +36,7 @@ namespace WB.UI.Headquarters
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new MaintenanceFilter());
             filters.Add(new SupervisorFunctionsEnabledAttribute());
             filters.Add(new InstallationAttribute());
         }

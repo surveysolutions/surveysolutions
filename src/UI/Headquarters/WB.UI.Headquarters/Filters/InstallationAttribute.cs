@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 
@@ -19,6 +20,7 @@ namespace WB.UI.Headquarters.Filters
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (filterContext.Controller is ControlPanelController) return;
+            if (filterContext.Controller is MaintenanceController) return;
 
             var isInstallController = filterContext.Controller is InstallController;
             var isHQUserExists = identityManager.GetUsersInRole(UserRoles.Headquarter.ToString()).Any();
