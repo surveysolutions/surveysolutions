@@ -629,5 +629,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0071_StaticTextIsEmpty", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter should not contain more than 500 child items..
+        /// </summary>
+        internal static string WB0072_ChapterItemsLimit {
+            get {
+                return ResourceManager.GetString("WB0072_ChapterItemsLimit", resourceCulture);
+            }
+        }
     }
 }
