@@ -91,6 +91,7 @@
     <Compile Include="UI\MaskedFormatterTests\when_invalid_symbol_added_in_the_end.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_invalid_symbol_added_in_the_middle.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_only_one_invalid_symbol_added.cs" />
+    <Compile Include="UI\MaskedFormatterTests\when_single_valid_symbol_is_added.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_symbol_added_at_position_befoure_it_became_valid.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_symbol_added_in_the_end_of_full_mask.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_symbol_added_in_the_middle.cs" />
