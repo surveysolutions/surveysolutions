@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.SharedKernels.ExpressionProcessing
+namespace WB.Core.SharedKernels.DataCollection
 {
     public static class Util
     {

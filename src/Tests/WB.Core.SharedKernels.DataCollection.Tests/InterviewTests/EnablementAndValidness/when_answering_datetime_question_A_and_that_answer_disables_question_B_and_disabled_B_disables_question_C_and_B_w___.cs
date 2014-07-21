@@ -52,22 +52,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
                 && _.GetQuestionVariableName(questionBId) == questionBVariableName
             );
 
-            expressionProcessor = Mock.Of<IExpressionProcessor>
-            (_
-                => _.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()) == true
-                && _.EvaluateBooleanExpression(questionBEnablementCondition, it.IsAny<Func<string, object>>()) == false
-            );
-
-            Mock.Get(expressionProcessor)
-                .Setup(_ => _.EvaluateBooleanExpression(questionCEnablementCondition, it.IsAny<Func<string, object>>()))
-                .Callback<string, Func<string, object>>((expression, getValueForIdentifier) =>
-                    funcSuppliedWhenEvaluatingQuestionCEnablementCondition = getValueForIdentifier)
-                .Returns(false);
-
-
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire));
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new DateTimeQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, new DateTime(2012, 1, 1)));
@@ -102,7 +89,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
         private static Interview interview;
         private static Guid userId;
         private static decimal[] emptyRosterVector;
-        private static IExpressionProcessor expressionProcessor;
+        private static SharedKernels.ExpressionProcessor.Services.IExpressionProcessor expressionProcessor;
         private static string questionCEnablementCondition;
         private static Func<string, object> funcSuppliedWhenEvaluatingQuestionCEnablementCondition;
         private static string questionBVariableName;

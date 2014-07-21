@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 
-namespace WB.Core.SharedKernels.ExpressionProcessing
+namespace WB.Core.SharedKernels.DataCollection
 {
     /// <summary>
     /// Full identity of group or question: id and roster vector.

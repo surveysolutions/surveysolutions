@@ -633,9 +633,9 @@
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\ExpressionProcessing\WB.Core.SharedKernels.ExpressionProcessing.csproj">
+    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
       <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
-      <Name>WB.Core.SharedKernels.ExpressionProcessing</Name>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
@@ -648,10 +648,6 @@
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
-      <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification.Android\WB.Core.SharedKernels.QuestionnaireVerification.Android.csproj">
       <Project>{2f566dd5-1692-4890-9ff7-bcb21b8c372b}</Project>

@@ -5,16 +5,10 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs.Domain;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
+
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
@@ -74,16 +68,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         #endregion
-
-        #region Dependencies
-
-        private static IExpressionProcessor ExpressionProcessor
-        {
-            get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
-        }
-
-        #endregion
-
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion)
         {
@@ -892,13 +876,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private static IEnumerable<Guid> GetQuestionsInvolvedInExpression(Dictionary<Guid, IQuestion> questions, Guid contextQuestionId,
             string expression)
         {
-            if (!IsExpressionDefined(expression))
-                return Enumerable.Empty<Guid>();
-
-            IEnumerable<string> identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(expression);
-
-            return DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(questions,
-                identifiersUsedInExpression, contextQuestionId, expression);
+            return Enumerable.Empty<Guid>();
         }
 
         private static IQuestion GetQuestionOrThrow(Dictionary<Guid, IQuestion> questions, Guid questionId)

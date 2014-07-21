@@ -130,7 +130,6 @@
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerComment.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ConversionHelper.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChangeStructures.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\DistinctDecimalList.cs" />
@@ -287,17 +286,13 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
-      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ExpressionProcessing\WB.Core.SharedKernels.ExpressionProcessing.csproj">
-      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
-      <Name>WB.Core.SharedKernels.ExpressionProcessing</Name>
+    <ProjectReference Include="..\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +300,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ValueObjects\Questionnaire\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
