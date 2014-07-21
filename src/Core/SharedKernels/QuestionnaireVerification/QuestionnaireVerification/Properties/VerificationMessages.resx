@@ -306,4 +306,7 @@
   <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
     <value>Static text is empty</value>
   </data>
+  <data name="WB0072_ChapterItemsLimit" xml:space="preserve">
+    <value>Chapter should not contain more than 500 child items.</value>
+  </data>
 </root>
