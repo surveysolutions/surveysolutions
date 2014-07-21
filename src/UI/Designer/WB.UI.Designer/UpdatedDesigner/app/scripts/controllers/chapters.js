@@ -70,10 +70,10 @@
                                             $rootScope.$emit('chapterDeleted');
                                         }
 
-                                        questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (r) {
-                                            $scope.questionnaire = r;
-                                            if (r.chapters.length > 0) {
-                                                var defaultChapter = _.first(r.chapters);
+                                        questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (questionnaire) {
+                                            $scope.questionnaire = questionnaire;
+                                            if (questionnaire.chapters.length > 0) {
+                                                var defaultChapter = _.first(questionnaire.chapters);
                                                 var itemId = defaultChapter.itemId;
                                                 $scope.currentChapter = defaultChapter;
                                                 $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });

@@ -1,30 +1,30 @@
 ﻿<div class="form-holder">
-    <div data-item-breadcrumbs data-crumbs="activeChapter.breadcrumbs"></div>
+    <div data-item-breadcrumbs data-crumbs="activeGroup.breadcrumbs"></div>
     <form role="form" name="groupForm">
         <div class="form-group">
             <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeChapter.group.title" focus-on="focusGroup">
+            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeGroup.group.title" focus-on="focusGroup">
         </div>
 
         <div class="form-group">
             <label for="edit-group-description" class="wb-label">Description <span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeChapter.group.description">
+            <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeGroup.group.description">
         </div>
 
         <div class="form-group">
             <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeChapter.group.enablementCondition">
+            <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeGroup.group.enablementCondition">
         </div>
     </form>
 </div>
 <div class="form-buttons-holder">
     <div class="pull-left">
-        <button id="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveChapter()">Save</button>
+        <button id="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveGroup()">Save</button>
         <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelGroup()">Cancel</button>
     </div>
     <div class="pull-right">
         <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteItem()">Delete</button>
         <button id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneGroup()">Clone</button>
-        <ng-include src="'moveToChapterSnippet'" ng-if="!activeChapter.isChapter" />
+        <ng-include src="'moveToChapterSnippet'" ng-if="!activeGroup.isChapter" />
     </div>
 </div>

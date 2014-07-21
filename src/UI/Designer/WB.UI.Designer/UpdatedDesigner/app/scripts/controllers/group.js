@@ -6,11 +6,11 @@
             '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log',
             function($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, $log) {
 
-                var dataBind = function (result) {
-                    $scope.activeChapter = result;
-                    $scope.activeChapter.isChapter = ($stateParams.itemId == $stateParams.chapterId);
-                    $scope.activeChapter.group.itemId = $stateParams.itemId;
-                    $scope.activeChapter.group.variableName = $stateParams.variableName;
+                var dataBind = function(result) {
+                    $scope.activeGroup = result;
+                    $scope.activeGroup.isChapter = ($stateParams.itemId == $stateParams.chapterId);
+                    $scope.activeGroup.group.itemId = $stateParams.itemId;
+                    $scope.activeGroup.group.variableName = $stateParams.variableName;
                 };
 
                 $scope.loadGroup = function() {
@@ -22,12 +22,12 @@
                     );
                 };
 
-                $scope.saveChapter = function() {
-                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeChapter.group).success(function(result) {
-                        $scope.initialGroup = angular.copy($scope.activeChapter);
+                $scope.saveGroup = function () {
+                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeGroup.group).success(function(result) {
+                        $scope.initialGroup = angular.copy($scope.activeGroup);
                         $rootScope.$emit('groupUpdated', {
-                            itemId: $scope.activeChapter.group.itemId,
-                            title: $scope.activeChapter.group.title
+                            itemId: $scope.activeGroup.group.itemId,
+                            title: $scope.activeGroup.group.title
                         });
                     });
                 };
@@ -38,22 +38,15 @@
                     $scope.groupform.$setPristine();
                 };
 
-                $scope.deleteItem = function () {
-                    if ($scope.activeChapter.isChapter) {
+                $scope.deleteItem = function() {
+                    if ($scope.activeGroup.isChapter) {
                         $rootScope.$emit('deleteChapter', {
-                            chapter: $scope.activeChapter.group
+                            chapter: $scope.activeGroup.group
                         });
                     } else {
-                        $scope.deleteGroup($scope.activeChapter.group);
+                        $scope.deleteGroup($scope.activeGroup.group);
                     }
                 };
-
-                //$scope.moveToChapter = function(chapterId) {
-                //    questionnaireService.moveGroup($scope.activeChapter.itemId, 0, chapterId, $stateParams.questionnaireId);
-                //    var removeFrom = $scope.activeChapter.getParentItem() || $scope;
-                //    removeFrom.items.splice(_.indexOf(removeFrom.items, $scope.activeChapter), 1);
-                //    $scope.resetSelection();
-                //};
 
                 $scope.loadGroup();
             }
