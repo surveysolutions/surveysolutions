@@ -147,7 +147,6 @@
 
                 for (var i = 0; i < mapPoints.length; i++) {
                     var mapPoint = mapPoints[i];
-                    var interviewId = mapPoint.InterviewId;
                     var mapPointAnswers = mapPoint.Answers.split('|');
 
                     for (var j = 0; j < mapPointAnswers.length; j++) {
@@ -155,14 +154,15 @@
                         var marker = new google.maps.Marker({
                             position: new google.maps.LatLng(points[0] * 1, points[1] * 1)
                         });
+                        marker.interviewId = mapPoint.InterviewId;
                         
                         google.maps.event.addListener(marker, 'click', function () {
                             var marker = this;
-                            self.SendRequest(self.interiewSummaryUrl, { InterviewId: interviewId }, function (data) {
+                            self.SendRequest(self.interiewSummaryUrl, { InterviewId: marker.interviewId }, function (data) {
                                 if (data == undefined || data == null)
                                     return;
 
-                                data["InterviewId"] = interviewId;
+                                data["InterviewId"] = marker.interviewId;
 
                                 var tooltipTemplateElement = document.createElement("div");
                                 $(tooltipTemplateElement).append($("#interview-tooltip-template").html());
@@ -201,6 +201,7 @@
         delete self.markers[key];
 
         self.markersSetsInfo.remove(markerSet);
+        self.interviewDetailsTooltip.close();
     };
 
     self.clearAllMarkers = function() {
@@ -214,6 +215,7 @@
         self.markers = {};
         self.mapClusterer.clearMarkers();
         self.markersSetsInfo.removeAll();
+        self.interviewDetailsTooltip.close();
     };
     $('body').addClass('map-report');
 };
