@@ -444,6 +444,7 @@
     <Content Include="Views\ControlPanel\Headquarters.cshtml" />
     <Content Include="Views\ControlPanel\Settings.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
+    <Content Include="Views\Shared\AdminMenu.cshtml" />
     <None Include="WB.UI.Supervisor.wpp.targets" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
