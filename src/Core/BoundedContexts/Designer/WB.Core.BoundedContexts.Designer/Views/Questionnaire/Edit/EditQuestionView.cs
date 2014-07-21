@@ -33,6 +33,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? MaxAnswerCount { get; set; }
     }
 
+    public class TextSettings
+    {
+        public string Mask { get; set; }
+    }
+
     public class EditQuestionView : ICompositeView
     {
         public EditQuestionView(IQuestion doc, Guid? parentId)
@@ -92,7 +97,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     MaxAnswerCount = listQuestion.MaxAnswerCount
                 };
             }
-
+            var textQuestion = doc as TextQuestion;
+            if (textQuestion != null)
+            {
+                this.Settings = new TextSettings
+                {
+                    Mask = textQuestion.Mask
+                };
+            }
         }
 
         public Guid Id { get; set; }

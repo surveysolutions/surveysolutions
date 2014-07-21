@@ -102,6 +102,7 @@
 
                 question.alias.valueHasMutated();
                 question.variableLabel.valueHasMutated();
+                question.mask.valueHasMutated();
                 question.qtype.valueHasMutated();
                 question.selectedLinkTo.valueHasMutated();
                 question.answerOptions.valueHasMutated();

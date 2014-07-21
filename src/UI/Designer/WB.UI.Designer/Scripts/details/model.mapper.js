@@ -82,6 +82,7 @@
 
                     item.alias(dto.Alias);
                     item.variableLabel(dto.VariableLabel);
+                   
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
 
@@ -104,6 +105,8 @@
                         item.areAnswersOrdered(_.isBoolean(dto.Settings.AreAnswersOrdered) ? settings.AreAnswersOrdered : false);
                         item.maxAllowedAnswers(_.isNumber(dto.Settings.MaxAllowedAnswers) ? settings.MaxAllowedAnswers : null);
                         item.maxAnswerCount(_.isNumber(dto.Settings.MaxAnswerCount) ? settings.MaxAnswerCount : null);
+
+                        item.mask(_.isEmpty(settings.Mask) ? null : settings.Mask);
                     }
                     item.isNew(false);
                     item.dirtyFlag().reset();
