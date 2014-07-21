@@ -59,7 +59,14 @@ ko.validation.rules['digit'] = {
     },
     message: 'Please enter a digit'
 };
-
+ko.bindingHandlers.maskFormatter = {
+    init: function (element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        if (!value)
+            return;
+        $(element).mask(value);
+    }
+};
 ko.bindingHandlers.numericformatter = {
     init: function (element, valueAccessor) {
         ko.utils.registerEventHandler(element, 'keyup', function () {

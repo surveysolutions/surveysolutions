@@ -96,6 +96,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/Math.uuid.js",
                     "~/Scripts/viewmodels/pages/interview/custom.js",
                     "~/Scripts/lodash.underscore.js",
+                    "~/Scripts/jquery.maskedinput.js"
                 }
             },
             {
