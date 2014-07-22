@@ -626,7 +626,9 @@
     <Content Include="UpdatedDesigner\content\lib\controls\wb-breadcrumbs.css.css" />
     <Content Include="UpdatedDesigner\content\lib\i\breadcrumb-slash.png" />
     <Content Include="UpdatedDesigner\content\lib\i\btn-dropdown-blue.png" />
-    <Content Include="UpdatedDesigner\content\markup.css.css" />
+    <Content Include="UpdatedDesigner\content\markup.css.css">
+      <DependentUpon>markup.css.less</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\app\views\main.html" />
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
@@ -1134,7 +1136,9 @@
     <Content Include="UpdatedDesigner\content\lib\wb-fontstyles.css.less" />
     <Content Include="UpdatedDesigner\content\lib\wb-mixins.css.less" />
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.less" />
-    <Content Include="UpdatedDesigner\content\markup.css.css.map" />
+    <Content Include="UpdatedDesigner\content\markup.css.css.map">
+      <DependentUpon>markup.css.less</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\markup.css.less" />
     <Content Include="UpdatedDesigner\content\wb-init.css.less" />
     <Content Include="UpdatedDesigner\.bowerrc" />
