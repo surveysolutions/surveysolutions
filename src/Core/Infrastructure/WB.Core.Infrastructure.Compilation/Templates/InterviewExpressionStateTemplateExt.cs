@@ -4,11 +4,11 @@ namespace WB.Core.Infrastructure.Compilation.Templates
 {
     public partial class InterviewExpressionStateTemplate
     {
-        protected QuestionnaireDocument questionnaireDocument;
-
-        public InterviewExpressionStateTemplate(QuestionnaireDocument questionnaire)
+        protected QuestionnaireExecutorTemplateModel questionnaireTemplateStructure { private set; get; }
+    
+        public InterviewExpressionStateTemplate(QuestionnaireExecutorTemplateModel questionnaire)
         {
-            this.questionnaireDocument = questionnaire;
+            this.questionnaireTemplateStructure = questionnaire;
         }
     }
 }
