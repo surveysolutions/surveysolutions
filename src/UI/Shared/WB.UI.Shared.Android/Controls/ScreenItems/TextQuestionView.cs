@@ -68,7 +68,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                     this.HideKeyboard(this.etAnswer);
                 return;
             }
-            var newAnswer = maskedWatcher.GetCleanText();
+            var newAnswer = etAnswer.Text.Trim();
 
             if (newAnswer != this.Model.AnswerString)
             {

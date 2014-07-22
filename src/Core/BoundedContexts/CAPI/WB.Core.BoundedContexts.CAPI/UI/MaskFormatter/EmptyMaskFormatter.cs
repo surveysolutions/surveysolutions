@@ -16,10 +16,5 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
         {
             return true;
         }
-
-        public string GetCleanText(string text)
-        {
-            return text.Trim();
-        }
     }
 }
