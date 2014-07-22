@@ -19,7 +19,7 @@
     };
     self.getQuestionnaire = function(questionnaireViewItem) {
 
-        var request = { questionnaireId: questionnaireViewItem.Id() };
+        var request = { questionnaireId: questionnaireViewItem.Id(), allowCensusMode: $('#allowCensusMode').is(':checked') };
 
         self.SendCommand(request, function (data) {
             if ((data.ImportError || "") != "") {

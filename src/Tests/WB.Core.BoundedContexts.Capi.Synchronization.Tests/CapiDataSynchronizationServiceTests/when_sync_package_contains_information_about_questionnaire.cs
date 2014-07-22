@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
                 PublicKey = Guid.NewGuid()
             };
 
-            var questionnaireMetadata = new QuestionnaireMetadata(1);
+            var questionnaireMetadata = new QuestionnaireMetadata(1, true);
 
             syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", Id = Guid.NewGuid() };
 

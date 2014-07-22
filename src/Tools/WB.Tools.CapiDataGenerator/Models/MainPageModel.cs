@@ -528,7 +528,7 @@ namespace CapiDataGenerator
         private void ImportTemplate(IQuestionnaireDocument template)
         {
             this.Log("import template");
-            this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template));
+            this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template, true));
 
             //incorrect. should be saved on denormalizer
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, 1, template as QuestionnaireDocument);
