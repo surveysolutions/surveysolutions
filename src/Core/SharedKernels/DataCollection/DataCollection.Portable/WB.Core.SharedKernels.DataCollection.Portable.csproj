@@ -48,7 +48,6 @@
     <Compile Include="IInterviewEvaluator.cs" />
     <Compile Include="IInterviewExpressionState.cs" />
     <Compile Include="InterviewEvaluatorPrototype.cs" />
-    <Compile Include="InterviewExpressionMate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireClasses.cs" />
     <Compile Include="StronglyTypedInterviewEvaluator.cs" />
