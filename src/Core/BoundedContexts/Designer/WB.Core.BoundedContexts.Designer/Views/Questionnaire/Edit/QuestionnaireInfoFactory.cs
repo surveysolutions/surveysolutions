@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private readonly IReadSideRepositoryReader<QuestionsAndGroupsCollectionView> questionDetailsReader;
 
-        private readonly SelectOption[] questionScopeOptions = new SelectOption[]
+        private static readonly SelectOption[] QuestionScopeOptions =
         {
             new SelectOption
             {
@@ -29,17 +29,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             },
             new SelectOption
             {
-                Value ="Supervisor",
-                Text ="Supervisor"
+                Value = "Supervisor",
+                Text = "Supervisor"
             },
             new SelectOption
             {
-                Value = "Headquarter",
-                Text = "Headquarters"
-            }
+                Value = "Prefilled",
+                Text = "Prefilled"
+            },
         };
 
-        private readonly SelectOption[] questionTypeOptopns = new SelectOption[]
+        private static readonly SelectOption[] QuestionTypeOptopns =
         {
             new SelectOption
             {
@@ -165,8 +165,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.Options = result.Options ?? new CategoricalOption[0];
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
             result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire);
-            result.QuestionTypeOptions = this.questionTypeOptopns;
-            result.QuestionScopeOptions = this.questionScopeOptions;
+            result.QuestionTypeOptions = QuestionTypeOptopns;
+            result.QuestionScopeOptions = QuestionScopeOptions;
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
