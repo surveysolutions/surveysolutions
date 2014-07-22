@@ -146,7 +146,7 @@
                         "isRoster": true,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "FixedTitles",
-                        "rosterFixedTitles": ["111"], // todo: temp solution
+                        "rosterFixedTitles": ["Title"],
                         "rosterTitleQuestionId": null,
                         "parentGroupId": parentGroupId,
                         "variableName": group.variableName
