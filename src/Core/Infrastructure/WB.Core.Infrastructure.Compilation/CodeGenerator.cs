@@ -7,7 +7,9 @@ namespace WB.Core.Infrastructure.Compilation
 
         public string Generate(QuestionnaireDocument questionnaire)
         {
-            var template = new InterviewExpressionStateTemplate(questionnaire);
+            var questionnaireTemplateStructure = new QuestionnaireExecutorTemplateModel(questionnaire);
+
+            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
 
             string result = template.TransformText();
 

@@ -6,6 +6,7 @@
 
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 
+<#@ include file="RosterTemplate.tt" #>
 
 using System;
 using System.Collections.Generic;
@@ -900,12 +901,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
         {
 
 
-        <#foreach (var q in questionnaireDocument.GetAllQuestions<AbstractQuestion>()) 
+        <#foreach (var q in questionnaireTemplateStructure.Questions) 
         {#>
-        public static readonly Guid <#= q.StataExportCaption#> = <#= q.PublicKey #>;
+        public static readonly Guid <#= q.VariableName#> = <#= q.Id #>;
         <# }#>
 
-            public static readonly Guid questionnaire = <#= questionnaireDocument.PublicKey #>; //Guid.Parse("72897e3f-3dc8-4115-81e0-8a9c1cadec2d");
+            public static readonly Guid questionnaire = <#= questionnaireTemplateStructure.Id #>; //Guid.Parse("72897e3f-3dc8-4115-81e0-8a9c1cadec2d");
             
             //rosters
             public static readonly Guid hhMember = Guid.Parse("69b02bcf-0ed1-4b5a-80bb-bd465ab096da");
@@ -922,31 +923,31 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             //somehow should be generated
             public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
-        {
-            { id, new Guid[] { } },
-            { persons_count, new Guid[] { married_with } },
-            { edu_visit, new Guid[] { fixedId } },
+            {
+                { id, new Guid[] { } },
+                { persons_count, new Guid[] { married_with } },
+                { edu_visit, new Guid[] { fixedId } },
 
-            { name, new Guid[] { age } },
-            { age, new Guid[] { groupId, has_job } },
-            { groupId, new Guid[] { person_id, marital_status, married_with } },
+                { name, new Guid[] { age } },
+                { age, new Guid[] { groupId, has_job } },
+                { groupId, new Guid[] { person_id, marital_status, married_with } },
             
-            { person_id, new Guid[] { } },
-            { marital_status, new Guid[] { married_with } },
-            { married_with, new Guid[] { } },
-            { has_job, new Guid[] { job_title, best_job_owner } },
-            { job_title, new Guid[] { } },
-            { best_job_owner, new Guid[] { } },
+                { person_id, new Guid[] { } },
+                { marital_status, new Guid[] { married_with } },
+                { married_with, new Guid[] { } },
+                { has_job, new Guid[] { job_title, best_job_owner } },
+                { job_title, new Guid[] { } },
+                { best_job_owner, new Guid[] { } },
 
-            { sex, new Guid[] { food } },
-            { role, new Guid[] { food, edu_visit } },
-            { food, new Guid[] { } },
+                { sex, new Guid[] { food } },
+                { role, new Guid[] { food, edu_visit } },
+                { food, new Guid[] { } },
 
-            { times_per_week, new Guid[] { price_for_food } },
-            { price_for_food, new Guid[] { } },
+                { times_per_week, new Guid[] { price_for_food } },
+                { price_for_food, new Guid[] { } },
 
-            { fixedId, new Guid[] { edu } },
-        };
+                { fixedId, new Guid[] { edu } },
+            };
 
             public static Dictionary<Guid, Guid[]> parentsMap = new Dictionary<Guid, Guid[]>
         {
