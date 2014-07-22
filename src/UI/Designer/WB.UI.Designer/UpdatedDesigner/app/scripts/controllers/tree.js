@@ -431,6 +431,7 @@
                     question.title = data.title;
                     question.variable = data.variable;
                     question.type = data.type;
+                    question.linkedToQuestionId = data.linkedToQuestionId;
                 }
             });
 

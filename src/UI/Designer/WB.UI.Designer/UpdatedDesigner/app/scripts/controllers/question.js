@@ -17,11 +17,12 @@
                     $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
                     $scope.activeQuestion.title = result.title;
                     $scope.activeQuestion.isMandatory = result.isMandatory;
-                    $scope.activeQuestion.enablementCondition = result.enablementCondition;
+                    $scope.activeQuestion.enablementConditilon = result.enablementCondition;
                     $scope.activeQuestion.validationExpression = result.validationExpression;
                     $scope.activeQuestion.validationMessage = result.validationMessage;
                     $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
                     $scope.activeQuestion.instructions = result.instructions;
+
                     var options = result.options || [];
                     _.each(options, function(option) {
                         option.id = utilityService.guid();
@@ -33,6 +34,14 @@
                     $scope.activeQuestion.countOfDecimalPlaces = result.countOfDecimalPlaces;
 
                     $scope.activeQuestion.questionScope = result.isPreFilled ? 'Prefilled' : result.questionScope;
+
+
+                    $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
+                    if (result.linkedToQuestionId) {
+                        $scope.activeQuestion.isLinked = true;
+                        $scope.setLinkSource(result.linkedToQuestionId);
+                    }
+                    
 
                     $scope.questionForm.$setPristine();
                 };
@@ -52,7 +61,8 @@
                             itemId: $scope.activeQuestion.itemId,
                             title: $scope.activeQuestion.title,
                             variable: $scope.activeQuestion.variable,
-                            type: $scope.activeQuestion.type
+                            type: $scope.activeQuestion.type,
+                            linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
                         });
                         $scope.questionForm.$setPristine();
                     });
@@ -85,6 +95,11 @@
                     if ($scope.activeQuestion.questionScope == 'Headquarter') {
                         $scope.activeQuestion.enablementCondition = '';
                     }
+                };
+
+                $scope.setLinkSource = function(itemId) {
+                    $scope.activeQuestion.linkedToQuestionId = itemId;
+                    $scope.activeQuestion.linkedToTitle = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId }).title;
                 };
 
                 $scope.loadQuestion();

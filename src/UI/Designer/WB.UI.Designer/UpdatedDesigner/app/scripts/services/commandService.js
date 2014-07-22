@@ -79,6 +79,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.options = question.options;
+                        command.linkedToQuestionId = question.linkedToQuestionId;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;
