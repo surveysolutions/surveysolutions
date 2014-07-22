@@ -202,13 +202,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             switch (question.Type)
             {
                 case QuestionType.MultyOption:
+                    var multiOptionDetailsView = question as MultiOptionDetailsView;
+                    var newEditQuestionView = ObjectMapperManager.DefaultInstance
+                                                                 .GetMapper<MultiOptionDetailsView, NewEditQuestionView>()
+                                                                 .Map(multiOptionDetailsView);
+                    newEditQuestionView.LinkedToQuestionId = Monads.Maybe(() => multiOptionDetailsView.LinkedToQuestionId.FormatGuid());
                     return
-                        ObjectMapperManager.DefaultInstance.GetMapper<MultiOptionDetailsView, NewEditQuestionView>()
-                            .Map(question as MultiOptionDetailsView);
+                        newEditQuestionView;
                 case QuestionType.SingleOption:
+                    var singleOptionDetailsView = question as SingleOptionDetailsView;
+                    var editQuestionView = ObjectMapperManager.DefaultInstance
+                                                              .GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
+                                                              .Map(singleOptionDetailsView);
+                    editQuestionView.LinkedToQuestionId = Monads.Maybe(() => singleOptionDetailsView.LinkedToQuestionId.FormatGuid());
                     return
-                        ObjectMapperManager.DefaultInstance.GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
-                            .Map(question as SingleOptionDetailsView);
+                        editQuestionView;
                 case QuestionType.Text:
                     return
                         ObjectMapperManager.DefaultInstance.GetMapper<TextDetailsView, NewEditQuestionView>()
@@ -235,7 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return null;
         }
 
-        private Dictionary<string, QuestionBrief[]> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private List<LinkedQuestionSource> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
         {
             var questions = questionsCollection
                 .Questions
@@ -248,11 +256,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q)
                 }).ToArray();
 
-            return questions.GroupBy(x => x.Breadcrumbs).ToDictionary(g => g.Key, g => g.Select(x => new QuestionBrief
+
+            var sourcesOfLinkedQuestionBriefs = questions.GroupBy(x => x.Breadcrumbs);
+            var result = new List<LinkedQuestionSource>();
+
+            foreach (var brief in sourcesOfLinkedQuestionBriefs)
             {
-                Id = x.Id,
-                Title = x.Title
-            }).ToArray());
+                var linkedQuestionSource = new LinkedQuestionSource {
+                    Title = brief.Key, 
+                    IsSectionPlaceHolder = true
+                };
+
+                result.Add(linkedQuestionSource);
+                result.AddRange(brief.Select(question => new LinkedQuestionSource
+                {
+                    Title = question.Title, 
+                    Id = question.Id.FormatGuid(), 
+                    IsSectionPlaceHolder = false
+                }));
+            }
+
+            return result;
         }
 
         private Dictionary<string, QuestionBrief[]> GetNumericIntegerQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
