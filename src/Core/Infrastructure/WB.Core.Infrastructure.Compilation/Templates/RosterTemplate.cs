@@ -191,7 +191,7 @@ foreach (var q in RosterTemplateModel.Questions)
         ");
             
             #line 68 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-foreach (var q in RosterTemplateModel.Questions) 
+foreach (var question in RosterTemplateModel.Questions) 
         {
             
             #line default
@@ -199,56 +199,56 @@ foreach (var q in RosterTemplateModel.Questions)
             this.Write("\r\n            //generate according question type\r\n            private long? @__");
             
             #line 72 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write(";\r\n\r\n            public long? ");
             
             #line 74 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("\r\n                {\r\n                    get { return ");
             
             #line 76 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("_state.State == State.Enabled ? this.@__");
             
             #line 76 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write(" : null; }\r\n                    set { this.@__");
             
             #line 77 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write(" = value; }\r\n                }\r\n\r\n            private ConditionalState ");
             
             #line 80 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("_state = new ConditionalState(");
             
             #line 80 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.Id));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.Id));
             
             #line default
             #line hidden
             this.Write(");\r\n\r\n            ");
             
             #line 82 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-if(!string.IsNullOrWhiteSpace(q.Conditions))
+if(!string.IsNullOrWhiteSpace(question.Conditions))
             {
             
             #line default
@@ -256,14 +256,14 @@ if(!string.IsNullOrWhiteSpace(q.Conditions))
             this.Write("        \r\n                private bool ");
             
             #line 84 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("_IsEnabledIf()\r\n                {\r\n                    return ");
             
             #line 86 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.Conditions));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.Conditions));
             
             #line default
             #line hidden
@@ -277,7 +277,7 @@ if(!string.IsNullOrWhiteSpace(q.Conditions))
             this.Write("\r\n            ");
             
             #line 91 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-if(!string.IsNullOrWhiteSpace(q.Validations))
+if(!string.IsNullOrWhiteSpace(question.Validations))
             {
             
             #line default
@@ -285,14 +285,14 @@ if(!string.IsNullOrWhiteSpace(q.Validations))
             this.Write("        \r\n                private bool ");
             
             #line 93 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("_IsValidIf()\r\n                {\r\n                    return ");
             
             #line 95 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.Validations));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.Validations));
             
             #line default
             #line hidden
@@ -313,14 +313,14 @@ if(!string.IsNullOrWhiteSpace(q.Validations))
             this.Write("\r\n                \r\n        //reference to self roster\r\n        public ");
             
             #line 105 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
             
             #line default
             #line hidden
             this.Write("_type[] ");
             
             #line 105 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
             
             #line default
             #line hidden
@@ -329,14 +329,14 @@ if(!string.IsNullOrWhiteSpace(q.Validations))
                     " ? new ");
             
             #line 110 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
             
             #line default
             #line hidden
             this.Write("_type[0] : rosters.Select(x => x as ");
             
             #line 110 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
             
             #line default
             #line hidden
