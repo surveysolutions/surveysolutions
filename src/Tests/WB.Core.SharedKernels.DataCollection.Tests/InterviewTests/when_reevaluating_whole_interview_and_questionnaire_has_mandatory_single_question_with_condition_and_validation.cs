@@ -32,9 +32,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.GetAnswerOptionsAsValues(singleQuestion2Id) == new decimal[] { 1, 2, 3 }
                 && _.GetAllMandatoryQuestions() == new[] { singleQuestion1Id, singleQuestion2Id }
                 && _.IsCustomValidationDefined(singleQuestion2Id) == true
-                && _.GetAllQuestionsWithNotEmptyValidationExpressions() == new[] { singleQuestion2Id }
+                //&& _.GetAllQuestionsWithNotEmptyValidationExpressions() == new[] { singleQuestion2Id }
                 && _.GetCustomValidationExpression(singleQuestion2Id) == validationExpression
-                && _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new[] { singleQuestion2Id }
+                //&& _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new[] { singleQuestion2Id }
                 && _.GetCustomEnablementConditionForQuestion(singleQuestion2Id) == enablementCondition
                 && _.IsQuestionMandatory(singleQuestion1Id) == true
                 && _.IsQuestionMandatory(singleQuestion2Id) == true
