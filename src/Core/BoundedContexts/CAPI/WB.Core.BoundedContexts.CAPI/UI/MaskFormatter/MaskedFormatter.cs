@@ -51,12 +51,11 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             int newCursorPosition = oldCurstorPosition;
             int lastSuccessfulIndex = 0;
             bool isLiteralAppearedAfterCursor = false;
-            bool isAddedCharSuccessful = false;
+            bool isAddedLastCharSuccessful = false;
             for (int i = 0; i < this.maskChars.Length; i++)
             {
                 var oldIndex = index;
-                var isCharAppended = this.maskChars[i].Append(result, stringValue, ref index, this.Placeholder);
-                if (!isCharAppended)
+                if (!this.maskChars[i].Append(result, stringValue, ref index, this.Placeholder))
                 {
                     result.Append(this.maskChars[i][this.PlaceholderCharacter]);
                 }
@@ -64,14 +63,14 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                 {
                     if (oldIndex == oldCurstorPosition - 1)
                     {
-                        isAddedCharSuccessful = true;
+                        isAddedLastCharSuccessful = true;
                     }
                     if (oldIndex > oldCurstorPosition && !isLiteralAppearedAfterCursor)
                     {
                         if (maskChars[i].IsLiteral())
                             isLiteralAppearedAfterCursor = true;
                     }
-                    if(!isLiteralAppearedAfterCursor)
+                    if (!isLiteralAppearedAfterCursor)
                         lastSuccessfulIndex = i;
                 }
             }
@@ -79,12 +78,12 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             if (oldCurstorPosition > this.maskChars.Length)
                 newCursorPosition = this.maskChars.Length;
 
-            if (value.Length > maskChars.Length || value.Length == 1)
+            if (stringValue.Length > maskChars.Length || stringValue.Length == 1)
             {
-                if (!isAddedCharSuccessful)
-                    newCursorPosition = oldCurstorPosition - 1;
-                else
+                if (isAddedLastCharSuccessful)
                     newCursorPosition = lastSuccessfulIndex + 1;
+                else
+                    newCursorPosition = oldCurstorPosition - 1;
             }
 
             oldCurstorPosition = newCursorPosition;
@@ -104,12 +103,6 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                 }
             }
             return true;
-        }
-
-        public string GetCleanText(string text)
-        {
-            int i = 0;
-            return this.CleanUpLiterals(text, ref i);
         }
 
         private void UpdateInternalMask()
@@ -194,57 +187,6 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             {
                 this.maskChars = fixedCharacters.ToArray();
             }
-        }
-
-        private string CleanUpLiterals(String value, ref int oldCurstorPosition)
-        {
-            if (string.IsNullOrEmpty(value))
-                return value;
-
-            var result=new StringBuilder();
-            int index = 0;
-            bool isCursorPositionSet = false;
-            for (int i = 0; i < this.maskChars.Length; i++)
-            {
-                if (index >= value.Length)
-                    break;
-
-                if (this.maskChars[i].IsLiteral())
-                {
-                    var character = value[index];
-                    if (character == this.maskChars[i][character])
-                    {
-                        index++;
-                    }
-                }
-                else
-                {
-                    while (!this.maskChars[i].IsValidCharacter(value[index]))
-                    {
-                        index++;
-                        if (index >= value.Length)
-                        {
-                            if (!isCursorPositionSet)
-                            {
-                                oldCurstorPosition = result.Length;
-                            }
-                            return result.ToString();
-                        }
-                    }
-
-                    result.Append(value[index]);
-
-
-                    if (i + 1 == oldCurstorPosition && !isCursorPositionSet)
-                    {
-                        oldCurstorPosition = result.Length;
-                        isCursorPositionSet = true;
-                    }
-
-                    index++;
-                }
-            }
-            return result.ToString();
         }
     }
 }

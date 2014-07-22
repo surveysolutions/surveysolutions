@@ -30,11 +30,6 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
             return mMaskFormatter.IsTextMaskMatched(editor.Text);
         }
 
-        public string GetCleanText()
-        {
-            return mMaskFormatter.GetCleanText(editor.Text);
-        }
-
         public void AfterTextChanged(IEditable s)
         {
             int cursorPosition = editor.SelectionEnd;
