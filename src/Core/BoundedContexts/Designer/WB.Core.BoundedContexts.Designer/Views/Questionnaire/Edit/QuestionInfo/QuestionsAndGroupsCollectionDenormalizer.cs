@@ -522,7 +522,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 return null;
             }
 
-            var questionDetailsView = this.questionDetailsViewMapper.Map(question, parentGroupId);
+            QuestionDetailsView questionDetailsView = this.questionDetailsViewMapper.Map(question, parentGroupId);
             currentState.Questions.Add(questionDetailsView);
             UpdateBreadcrumbs(currentState, questionDetailsView, questionDetailsView.ParentGroupId);
             return currentState;
