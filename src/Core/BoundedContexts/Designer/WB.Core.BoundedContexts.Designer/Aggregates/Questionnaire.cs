@@ -2668,7 +2668,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
 
-            this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
         }
 
         private void ThrowIfChapterHasMoreThanAllowedLimit(Guid itemId)
