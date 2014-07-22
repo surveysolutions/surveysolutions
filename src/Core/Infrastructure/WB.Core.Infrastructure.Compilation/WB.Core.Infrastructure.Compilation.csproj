@@ -60,7 +60,7 @@
     <Compile Include="InterviewCompiler.cs" />
     <Compile Include="InterviewEvaluatorGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestionnaireTemplateStructure.cs" />
+    <Compile Include="QuestionnaireExecutorTemplateModel.cs" />
     <Compile Include="Templates\InterviewExpressionStateTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -90,9 +90,9 @@
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+    <ProjectReference Include="..\..\SharedKernels\DataCollection\ExpressionProcessing\WB.Core.SharedKernels.ExpressionProcessing.csproj">
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
+      <Name>WB.Core.SharedKernels.ExpressionProcessing</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
