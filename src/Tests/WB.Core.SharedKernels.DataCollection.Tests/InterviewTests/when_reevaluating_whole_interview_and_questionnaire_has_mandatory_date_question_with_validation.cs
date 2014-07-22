@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.GetQuestionType(dateQuestionId) == QuestionType.DateTime
                 && _.GetAllMandatoryQuestions() == new[] { dateQuestionId }
                 && _.IsCustomValidationDefined(dateQuestionId) == true
-                && _.GetAllQuestionsWithNotEmptyValidationExpressions() == new[] { dateQuestionId }
+                //&& _.GetAllQuestionsWithNotEmptyValidationExpressions() == new[] { dateQuestionId }
                 && _.GetCustomValidationExpression(dateQuestionId) == validationExpression
             );
             
