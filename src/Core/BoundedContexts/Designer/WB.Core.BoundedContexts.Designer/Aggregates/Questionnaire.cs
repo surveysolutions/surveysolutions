@@ -1313,7 +1313,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument.ConnectChildrenWithParent();
             IComposite parentGroup = question.GetParent();
-            this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            this.ThrowIfChapterHasMoreThanAllowedLimit(question.PublicKey);
 
             var asMultioptions = question as IMultyOptionsQuestion;
 
@@ -2639,7 +2639,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, false, parentGroup);
 
-            this.innerDocument.GetChapterOfItemById(questionId);
+            if (parentGroupId.HasValue)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
+            }
         }
 
         private void ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(string condition,
