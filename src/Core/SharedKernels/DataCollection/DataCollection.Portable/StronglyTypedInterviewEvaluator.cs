@@ -321,8 +321,8 @@ namespace WB.Core.SharedKernels.DataCollection
                     conditionalState.Value.PreviousState = oldState.PreviousState;
                 }
 
-                this.ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions);
-                this.InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions);
+                ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
+
 
                 level.id = this.@__id;
                 level.persons_count = this.@__persons_count;
@@ -430,7 +430,6 @@ namespace WB.Core.SharedKernels.DataCollection
 
             public decimal? edu_visit { get { return this.@__parent.edu_visit; } }
 
-
             public string name { get; set; }
 
             public DateTime? date { get; set; }
@@ -493,9 +492,10 @@ namespace WB.Core.SharedKernels.DataCollection
             private ConditionalState job_title_state = new ConditionalState(IdOf.job_title);
             private ConditionalState best_job_owner_state = new ConditionalState(IdOf.best_job_owner);
             private ConditionalState food_state = new ConditionalState(IdOf.food);
-            private ConditionalState group_state = new ConditionalState(IdOf.groupId, ItemType.Group);
             private ConditionalState person_id_state = new ConditionalState(IdOf.person_id);
             private ConditionalState marital_status_state = new ConditionalState(IdOf.marital_status);
+
+            private ConditionalState group_state = new ConditionalState(IdOf.groupId, ItemType.Group);
 
             private long? @__age;
             private decimal[][] @__marriedWith;

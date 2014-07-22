@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.DataCollection
         protected HashSet<Guid> InvalidAnsweredQuestions = new HashSet<Guid>();
 
         protected Func<Identity[], IEnumerable<IValidatable>> GetInstances { get; private set;}
-        protected Dictionary<Guid, Guid[]> ConditionalDependencies { get; private set; }
+        protected Dictionary<Guid, Guid[]> ConditionalDependencies { get; set; }
 
 
         protected abstract IEnumerable<Action> ConditionExpressions { get; }

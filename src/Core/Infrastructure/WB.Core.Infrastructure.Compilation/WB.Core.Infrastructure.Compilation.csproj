@@ -60,6 +60,7 @@
     <Compile Include="InterviewCompiler.cs" />
     <Compile Include="InterviewEvaluatorGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireTemplateStructure.cs" />
     <Compile Include="Templates\InterviewExpressionStateTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
