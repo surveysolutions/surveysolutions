@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
         private const char HexKey = 'H';
 
         private readonly String mask;
-        private MaskCharacter[] maskChars;
+        internal MaskCharacter[] maskChars;
 
         public MaskedFormatter(String mask, string validCharacters = null, string invalidCharacters = null, string placeholder = null, char placeholderCharacter = '_')
         {
