@@ -43,20 +43,20 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
                         && _.GetQuestionType(Moq.It.Is(abcQuestionId)) == QuestionType.Numeric
                         && _.IsQuestionInteger(Moq.It.Is(abcQuestionId)) == true
 
-                        && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { questionBId }
+                        //&& _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { questionBId }
 
-                        && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new[] { groupGCId }
+                        //&& _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new[] { groupGCId }
 
                         && _.GetAllUnderlyingQuestions(groupGCId) == new[] { questionCId }
 
                         && _.GetCustomEnablementConditionForGroup(groupGCId) == groupGCEnablementCondition
                         && _.GetCustomEnablementConditionForQuestion(questionBId) == questionBEnablementCondition
-                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGCId) == new[] { questionBId }
+                       // && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGCId) == new[] { questionBId }
 
                         && _.GetQuestionVariableName(questionAId) == questionAVariableName
                         && _.GetQuestionVariableName(questionBId) == questionBVariableName
 
-                        && _.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(groupGCId) == new[] { questionCId }
+                        //&& _.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(groupGCId) == new[] { questionCId }
                 );
 
             expressionProcessor = Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>

@@ -31,11 +31,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                                                        _.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { unansweredMandatoryWithValidationQuestionId }
-                                                        && _.HasQuestion(unansweredMandatoryWithValidationQuestionId) == true
+                                                        /*_.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { unansweredMandatoryWithValidationQuestionId }
+                                                        &&*/ _.HasQuestion(unansweredMandatoryWithValidationQuestionId) == true
                                                         && _.GetQuestionType(unansweredMandatoryWithValidationQuestionId) == QuestionType.Text
                                                         && _.IsCustomValidationDefined(unansweredMandatoryWithValidationQuestionId) == true
-                                                        && _.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { unansweredMandatoryWithValidationQuestionId }
+                                                        //&& _.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { unansweredMandatoryWithValidationQuestionId }
                                                         && _.GetAllMandatoryQuestions() == new Guid[] { unansweredMandatoryWithValidationQuestionId });
 
             var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();

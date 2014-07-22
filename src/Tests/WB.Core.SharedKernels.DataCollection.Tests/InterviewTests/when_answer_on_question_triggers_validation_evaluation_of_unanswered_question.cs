@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     && _.GetQuestionType(dependentOnAnsweredQuestionId) == QuestionType.Numeric
                     && _.IsQuestionInteger(dependentOnAnsweredQuestionId) == true
 
-                    && _.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(answeredQuestionId) == new Guid[] { dependentOnAnsweredQuestionId }
+                    //&& _.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(answeredQuestionId) == new Guid[] { dependentOnAnsweredQuestionId }
                     && _.IsCustomValidationDefined(dependentOnAnsweredQuestionId) == true);
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

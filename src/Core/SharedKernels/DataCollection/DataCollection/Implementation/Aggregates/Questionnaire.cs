@@ -230,24 +230,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return ((IQuestionnaire) this.plainQuestionnaire).IsCustomValidationDefined(questionId);
         }
 
-        public IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsInvolvedInCustomValidation(questionId);
-        }
-
         public string GetCustomValidationExpression(Guid questionId)
         {
             return ((IQuestionnaire) this.plainQuestionnaire).GetCustomValidationExpression(questionId);
-        }
-
-        public IEnumerable<Guid> GetAllQuestionsWithNotEmptyValidationExpressions()
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAllQuestionsWithNotEmptyValidationExpressions();
-        }
-
-        public IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questionId);
         }
 
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
@@ -263,26 +248,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public string GetCustomEnablementConditionForGroup(Guid groupId)
         {
             return ((IQuestionnaire) this.plainQuestionnaire).GetCustomEnablementConditionForGroup(groupId);
-        }
-
-        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupId);
-        }
-
-        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionId);
-        }
-
-        public IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionId);
-        }
-
-        public IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionId);
         }
 
         public bool ShouldQuestionSpecifyRosterSize(Guid questionId)
@@ -335,16 +300,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return ((IQuestionnaire) this.plainQuestionnaire).GetAllMandatoryQuestions();
         }
 
-        public IEnumerable<Guid> GetAllQuestionsWithNotEmptyCustomEnablementConditions()
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAllQuestionsWithNotEmptyCustomEnablementConditions();
-        }
-
-        public IEnumerable<Guid> GetAllGroupsWithNotEmptyCustomEnablementConditions()
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAllGroupsWithNotEmptyCustomEnablementConditions();
-        }
-
         public bool IsRosterGroup(Guid groupId)
         {
             return ((IQuestionnaire) this.plainQuestionnaire).IsRosterGroup(groupId);
@@ -353,26 +308,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
         {
             return ((IQuestionnaire) this.plainQuestionnaire).GetAllUnderlyingQuestions(groupId);
-        }
-
-        public IEnumerable<Guid> GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId)
-        {
-            return ((IQuestionnaire)this.plainQuestionnaire).GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(groupId);
-        }
-
-        public IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(groupId);
-        }
-
-        public IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(groupId);
-        }
-
-        public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetUnderlyingMandatoryQuestions(groupId);
         }
 
         public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)

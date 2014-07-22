@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.HasGroup(fixedRosterGroupId) == true
                                                         && _.GetRosterLevelForGroup(fixedRosterGroupId) == 2
                                                         && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                                                        && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
+                                                        //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
                                                         && _.GetRostersFromTopToSpecifiedGroup(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
                                                         && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { "t1"}
                                                         && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new[] { rosterGroupId }

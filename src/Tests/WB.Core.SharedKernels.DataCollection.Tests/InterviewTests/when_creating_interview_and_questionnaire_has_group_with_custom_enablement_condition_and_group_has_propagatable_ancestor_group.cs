@@ -28,8 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             Guid parentPropagatableGroupId = Guid.Parse("22220000AAAAAAAAAAAAAAAAAAAAAAAA");
 
             var questionaire = Mock.Of<IQuestionnaire>(_
-                => _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
-                && _.GetRostersFromTopToSpecifiedGroup(groupId) == new[] { parentPropagatableGroupId });
+                => /*_.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
+                &&*/ _.GetRostersFromTopToSpecifiedGroup(groupId) == new[] { parentPropagatableGroupId });
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire);

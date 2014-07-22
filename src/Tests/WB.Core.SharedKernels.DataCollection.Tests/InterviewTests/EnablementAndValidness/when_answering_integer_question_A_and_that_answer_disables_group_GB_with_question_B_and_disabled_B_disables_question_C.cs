@@ -42,22 +42,22 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
                     => _.HasQuestion(Moq.It.Is(abcQuestionId)) == true
                         && _.GetQuestionType(Moq.It.Is(abcQuestionId)) == QuestionType.Numeric
                         && _.IsQuestionInteger(Moq.It.Is(abcQuestionId)) == true
-                        && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { questionBId }
-                        && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new[] { questionCId }
+                        //&& _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { questionBId }
+                        //&& _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new[] { questionCId }
 
-                        && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { groupGBId }
+                       // && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { groupGBId }
                         && _.GetAllUnderlyingQuestions(groupGBId) == new[] { questionBId }
 
                         && _.GetCustomEnablementConditionForGroup(groupGBId) == groupGBEnablementCondition
                         && _.GetCustomEnablementConditionForQuestion(questionCId) == questionCEnablementCondition
-                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGBId) == new[] { questionAId }
-                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionCId) == new[] { questionBId }
+                        //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGBId) == new[] { questionAId }
+                        //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionCId) == new[] { questionBId }
 
                         && _.GetQuestionVariableName(questionAId) == questionAVariableName
                         && _.GetQuestionVariableName(questionBId) == questionBVariableName
 
                         && _.GetAllParentGroupsForQuestion(questionBId) == new[] { groupGBId }
-                        && _.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(groupGBId) == new[] { questionBId }
+                        //&& _.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(groupGBId) == new[] { questionBId }
                 ); 
 
             expressionProcessor = Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>

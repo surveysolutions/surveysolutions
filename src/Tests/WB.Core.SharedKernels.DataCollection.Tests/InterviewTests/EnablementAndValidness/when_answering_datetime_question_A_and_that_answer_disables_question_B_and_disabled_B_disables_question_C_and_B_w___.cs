@@ -41,12 +41,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
             (_
                 => _.HasQuestion(it.Is(abcQuestionId)) == true
                 && _.GetQuestionType(it.Is(abcQuestionId)) == QuestionType.DateTime
-                && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new [] { questionBId }
-                && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new [] { questionCId }
+                //&& _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new [] { questionBId }
+                //&& _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new [] { questionCId }
                 && _.GetCustomEnablementConditionForQuestion(questionBId) == questionBEnablementCondition
                 && _.GetCustomEnablementConditionForQuestion(questionCId) == questionCEnablementCondition
-                && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionBId) == new [] { questionAId }
-                && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionCId) == new[] { questionBId }
+                //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionBId) == new [] { questionAId }
+                //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionCId) == new[] { questionBId }
 
                 && _.GetQuestionVariableName(questionAId) == questionAVariableName
                 && _.GetQuestionVariableName(questionBId) == questionBVariableName

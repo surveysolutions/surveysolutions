@@ -42,17 +42,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                    && _.HasGroup(disabledPropagatedGroupId) == true
                    && _.GetRosterLevelForGroup(propagatedGroupId) == 1
                    && _.GetRosterLevelForGroup(disabledPropagatedGroupId) == 1
-                   && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
+                   //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
                    && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new Guid[] { propagatedGroupId }
                    && _.GetRostersFromTopToSpecifiedGroup(disabledPropagatedGroupId) == new Guid[] { disabledPropagatedGroupId }
 
-                   && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new[] { disabledPropagatedGroupId }
-                   && _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new[] { mandatoryQuestionId }
+                   //&& _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new[] { disabledPropagatedGroupId }
+                  // && _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new[] { mandatoryQuestionId }
 
 
                    && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
                    && _.GetRostersFromTopToSpecifiedQuestion(mandatoryQuestionId) == new Guid[] { disabledPropagatedGroupId }
-                   && _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new Guid[] { mandatoryQuestionId }
+                   //&& _.GetUnderlyingMandatoryQuestions(disabledPropagatedGroupId) == new Guid[] { mandatoryQuestionId }
 
                    
                    && _.IsQuestionMandatory(mandatoryQuestionId) == true
