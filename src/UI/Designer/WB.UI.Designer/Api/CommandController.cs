@@ -35,7 +35,6 @@ namespace WB.UI.Designer.Api
 
         public JsonQuestionnaireResult Post(CommandExecutionModel model)
         {
-            var returnValue = new JsonQuestionnaireResult();
             try
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(model.Type, model.Command);
@@ -52,13 +51,16 @@ namespace WB.UI.Designer.Api
                 }
                 else
                 {
-                    returnValue.IsSuccess = false;
-                    returnValue.HasPermissions = domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit;
-                    returnValue.Error = domainEx.Message;
+                    return new JsonQuestionnaireResult
+                    {
+                        IsSuccess = false,
+                        HasPermissions = domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit,
+                        Error = domainEx.Message
+                    };
                 }
             }
 
-            return returnValue;
+            return new JsonQuestionnaireResult { IsSuccess = true };
         }
     }
 }

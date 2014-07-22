@@ -32,11 +32,8 @@
                     $scope.activeQuestion.maxValue = result.maxValue;
                     $scope.activeQuestion.countOfDecimalPlaces = result.countOfDecimalPlaces;
 
-                    if (result.isPreFilled) {
-                        $scope.activeQuestion.questionScope = 'Headquarter';
-                    } else {
-                        $scope.activeQuestion.questionScope = 'Interviewer';
-                    }
+                    $scope.activeQuestion.questionScope = result.isPreFilled ? 'Prefilled' : result.questionScope;
+
                     $scope.questionForm.$setPristine();
                 };
 
