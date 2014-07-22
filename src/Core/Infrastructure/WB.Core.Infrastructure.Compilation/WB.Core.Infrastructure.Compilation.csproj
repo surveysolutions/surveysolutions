@@ -90,7 +90,7 @@
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SharedKernels\DataCollection\ExpressionProcessing\WB.Core.SharedKernels.ExpressionProcessing.csproj">
+    <ProjectReference Include="..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessing</Name>
     </ProjectReference>
