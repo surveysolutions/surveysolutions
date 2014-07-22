@@ -106,7 +106,6 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_multi_answers_question_with_1_option.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_multi_answers_question_with_nullable_options.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_nullable_options.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_chapter_that_has_more_than_500_child_items_in_chapter.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_circular_references.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_1_option.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_empty_static_text.cs" />
