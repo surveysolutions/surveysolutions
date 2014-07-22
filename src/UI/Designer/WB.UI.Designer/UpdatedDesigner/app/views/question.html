@@ -164,28 +164,6 @@
                 <label for="cb-is-ordered"><span></span>Ordered</label>
             </div>
         </div>
-        <!-- <div class="checkbox">
-            <div class="checkbox">
-                <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
-                <label for="cb-is-linked"><span></span>Is linked</label>
-            </div>
-        </div>
-        <div ng-repeat="option in activeQuestion.options">
-            <div class="form-group">
-                <div class="col-xs-4">
-                    <input type="text" ng-model="option.value" class="form-control">
-                </div>
-                <div class="col-xs-7">
-                    <input type="text" ng-model="option.title" class="form-control">
-                </div>
-                <div class="col-xs-1">
-                    <a href ng:click="removeOption($index)" class="btn">X</a>
-                </div>
-            </div>
-        </div>
-        <p>
-            <input type="submit" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
-        </p>-->
     </script>
     <script type="text/ng-template" id="Numeric-template.html">
         <div class="checkbox">
@@ -225,8 +203,8 @@
 </div>
 <div class="form-buttons-holder">
     <div class="pull-left">
-        <button id="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveQuestion()" unsaved-warning-clear>Save</button>
-        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelQuestion()" unsaved-warning-clear>Cancel</button>
+        <button id="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveQuestion()">Save</button>
+        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelQuestion()">Cancel</button>
     </div>
     <div class="pull-right">
         <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion(activeQuestion)">Delete</button>
