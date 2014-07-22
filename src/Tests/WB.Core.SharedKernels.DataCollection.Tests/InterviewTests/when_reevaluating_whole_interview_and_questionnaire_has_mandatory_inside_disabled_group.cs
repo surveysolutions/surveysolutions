@@ -29,8 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             conditionallyDisabledGroupId = Guid.Parse("22222222222222222222222222222222");
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                                                        _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyDisabledGroupId }
-                                                        && _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { conditionallyDisabledGroupId }
+                                                       /* _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyDisabledGroupId }
+                                                        && */_.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { conditionallyDisabledGroupId }
                                                         && _.GetAllMandatoryQuestions() == new Guid[] { mandatoryQuestionId });
 
             var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();

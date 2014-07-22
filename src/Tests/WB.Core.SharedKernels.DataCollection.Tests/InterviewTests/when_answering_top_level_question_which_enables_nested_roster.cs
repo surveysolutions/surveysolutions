@@ -29,9 +29,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             answeringQuestionId = Guid.Parse("11111111111111111111111111111111");
             var parentRosterId =  Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var questionnaire = Mock.Of<IQuestionnaire>(_
-                => _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { nestedRosterId }
-                    && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new[] { nestedRosterId }
-                    && _.HasQuestion(answeringQuestionId) == true
+                => _.HasQuestion(answeringQuestionId) == true
+                    //&& _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { nestedRosterId }
+                    //&& _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new[] { nestedRosterId }
                     && _.GetQuestionType(answeringQuestionId) == QuestionType.Numeric
                     && _.GetRosterLevelForGroup(nestedRosterId) == 2
                     && _.GetRostersFromTopToSpecifiedGroup(nestedRosterId) == new[] { parentRosterId, nestedRosterId }

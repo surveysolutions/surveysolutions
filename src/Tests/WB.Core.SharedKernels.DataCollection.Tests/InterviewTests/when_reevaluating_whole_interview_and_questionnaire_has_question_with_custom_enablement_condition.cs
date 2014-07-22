@@ -29,8 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             conditionallyEnabledQuestionId = Guid.Parse("33333333333333333333333333333333");
 
 
-            var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                                                        _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyEnabledQuestionId });
+            var questionaire = Mock.Of<IQuestionnaire>(_ => true
+                                                        /*_.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyEnabledQuestionId }*/);
 
             var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 

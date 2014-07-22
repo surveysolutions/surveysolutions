@@ -43,8 +43,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     && _.GetRosterLevelForGroup(nestedRosterGroupId) == 2
                     && _.GetRosterLevelForGroup(parentRosterGroupId) == 1
 
-                    && _.GetUnderlyingMandatoryQuestions(parentRosterGroupId) == new[] { questionFromRosterId, questionFromNestedRosterId }
-                    && _.GetUnderlyingMandatoryQuestions(nestedRosterGroupId) == new[] { questionFromNestedRosterId }
+                    //&& _.GetUnderlyingMandatoryQuestions(parentRosterGroupId) == new[] { questionFromRosterId, questionFromNestedRosterId }
+                    //&& _.GetUnderlyingMandatoryQuestions(nestedRosterGroupId) == new[] { questionFromNestedRosterId }
                     && _.GetRosterLevelForQuestion(questionFromRosterId) == 1
                     && _.GetRosterLevelForQuestion(questionFromNestedRosterId) == 2
                     && _.GetRostersFromTopToSpecifiedQuestion(questionFromRosterId) == new[] { parentRosterGroupId }

@@ -31,12 +31,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             conditionallyRecentlyEnabledQuestionId = Guid.Parse("43333333333333333333333333333333");
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyDependentGroupId }
-                    &&_.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(conditionallyDependentGroupId) == new[] { conditionallyRecentlyEnabledQuestionId }
-                    && _.GetCustomEnablementConditionForGroup(conditionallyDependentGroupId) == string.Format("[q1]==2")
+                  _.GetCustomEnablementConditionForGroup(conditionallyDependentGroupId) == string.Format("[q1]==2")
+                    //&& _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyDependentGroupId }
+                    //&&_.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(conditionallyDependentGroupId) == new[] { conditionallyRecentlyEnabledQuestionId }
+                  
                     && _.GetCustomEnablementConditionForQuestion(conditionallyRecentlyEnabledQuestionId) == "2==2"
                     && _.GetQuestionVariableName(conditionallyRecentlyEnabledQuestionId) == "q1"
-                    && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(conditionallyRecentlyEnabledQuestionId) == new[] { questionId }
+                    //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(conditionallyRecentlyEnabledQuestionId) == new[] { questionId }
                     && _.GetQuestionVariableName(questionId) == "q2");
 
             var expressionProcessor = new WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services.ExpressionProcessor();

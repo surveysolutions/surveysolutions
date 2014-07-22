@@ -27,8 +27,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             Guid groupId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
 
             var questionaire = Mock.Of<IQuestionnaire>(_
-                => _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
-                && _.IsRosterGroup(groupId) == true);
+                => /*_.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
+                &&*/ _.IsRosterGroup(groupId) == true);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire);
