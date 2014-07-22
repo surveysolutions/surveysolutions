@@ -1,0 +1,104 @@
+﻿{
+   "id":"7b4c2374-32d8-a622-f07a-c752d0ad7f1f",
+   "parentGroupsIds":[
+      "bd2a7dcc-79ce-4d1f-8504-37e18e666526"
+   ],
+   "rosterScopeIds":[
+
+   ],
+   "parentGroupId":"bd2a7dcc-79ce-4d1f-8504-37e18e666526",
+   "enablementCondition":null,
+   "isPreFilled":false,
+   "instructions":"",
+   "isMandatory":false,
+   "questionScope":"Interviewer",
+   "variableName":"linked1",
+   "variableLabel":null,
+   "title":"New Question 1",
+   "validationExpression":"",
+   "validationMessage":"",
+   "type":"SingleOption",
+   "linkedToQuestionId":"2063dc52ce22b13e3e819cb63c6bcb9d",
+   "options":[
+
+   ],
+   "areAnswersOrdered":false,
+   "maxAllowedAnswers":null,
+   "isInteger":false,
+   "mask":null,
+   "maxValue":null,
+   "countOfDecimalPlaces":null,
+   "maxAnswerCount":null,
+   "sourceOfLinkedQuestions":[
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"Chapter 1 / Questions about age / Family members"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"ee5c1a668d1c42f84f504ffc48990746",
+         "title":"Num in roster"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2063dc52ce22b13e3e819cb63c6bcb9d",
+         "title":"num in roster 1"
+      }
+   ],
+   "questionTypeOptions":[
+      {
+         "value":"SingleOption",
+         "text":"Categorical: one answer"
+      },
+      {
+         "value":"MultyOption",
+         "text":"Categorical: multiple answers"
+      },
+      {
+         "value":"Numeric",
+         "text":"Numeric"
+      },
+      {
+         "value":"DateTime",
+         "text":"Date"
+      },
+      {
+         "value":"Text",
+         "text":"Text"
+      },
+      {
+         "value":"GpsCoordinates",
+         "text":"Geo Location"
+      },
+      {
+         "value":"TextList",
+         "text":"List"
+      },
+      {
+         "value":"QRBarcode",
+         "text":"QR Barcode"
+      }
+   ],
+   "questionScopeOptions":[
+      {
+         "value":"Interviewer",
+         "text":"Interviewer"
+      },
+      {
+         "value":"Supervisor",
+         "text":"Supervisor"
+      },
+      {
+         "value":"Headquarter",
+         "text":"Headquarters"
+      }
+   ],
+   "breadcrumbs":[
+      {
+         "id":"bd2a7dcc79ce4d1f850437e18e666526",
+         "title":"Chapter 1",
+         "isRoster":false
+      }
+   ]
+}

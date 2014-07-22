@@ -36,6 +36,9 @@
             $httpBackend.whenGET('../../api/questionnaire/editQuestion/7c97b1925b0244b782ed6741a5035fae?questionId=d6c5faeed9fe43338b76e7a3ef184f5a').respond(
                 $resource('./../data/editQuestion/d6c5faeed9fe43338b76e7a3ef184f5a.json').get()
             );
+            $httpBackend.whenGET('../../api/questionnaire/editQuestion/7c97b1925b0244b782ed6741a5035fae?questionId=746c323e5bf49176f1594a4719327ea8').respond(
+                $resource('./../data/editQuestion/746c323e5bf49176f1594a4719327ea8.json').get()
+            );
 
             //Empty Questionnaire
             $httpBackend.whenGET('../../api/questionnaire/get/C772F0868D6E4B46B2EB281382F280AB').respond(

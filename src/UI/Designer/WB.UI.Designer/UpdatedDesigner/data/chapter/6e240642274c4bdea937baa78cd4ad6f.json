@@ -43,6 +43,17 @@
             "groupsCount": 0,
             "rostersCount": 0
       },
+       {  
+         "itemId":"746c323e5bf49176f1594a4719327ea8",
+         "title":"Linked question",
+         "variable":"linked",
+         "linkedToQuestionId":"ee5c1a668d1c42f84f504ffc48990746",
+         "type":"SingleOption",
+         "linkedVariables":[  
+
+         ],
+         "brokenLinkedVariables":null
+      },
       {
             "itemId": "a6aa60ac221c441e9215ad3882c81204",
             "title": "numeric roster",
