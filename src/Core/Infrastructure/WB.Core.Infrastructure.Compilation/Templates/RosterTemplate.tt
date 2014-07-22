@@ -20,14 +20,14 @@ public class <#=RosterTemplateModel.VariableName#>_type : AbstractRosterLevel<<#
                     {#>
 
                     //EnablementStates.Add(age_state.ItemId, age_state);
-                    EnablementStates.Add(<#= q.VariableName#>.ItemId, <#= q.VariableName#>_state);        
+                    EnablementStates.Add(<#=q.VariableName#>.ItemId, <#=q.VariableName#>_state);        
 
                     <#if(!string.IsNullOrWhiteSpace(q.Validations))
                     {#>        
                         //generate mandatory
                         //validationExpressions.Add(new Identity(IdOf.name, this.RosterVector), new Func<bool>[] { name_IsMandatory });
                     
-                        validationExpressions.Add(new Identity(<#= q.Id#>, this.RosterVector), new Func<bool>[] { <#= q.VariableName#>_IsEnabledIf });              
+                        validationExpressions.Add(new Identity(<#=q.Id#>, this.RosterVector), new Func<bool>[] { <#=q.VariableName#>_IsEnabledIf });              
         
                     <# }#>
 
@@ -47,7 +47,7 @@ public class <#=RosterTemplateModel.VariableName#>_type : AbstractRosterLevel<<#
                 <#foreach (var q in RosterTemplateModel.Questions) 
                     {#>
         
-                        <#= q.VariableName#> = this.@__<#= q.VariableName#>,
+                        <#=q.VariableName#> = this.@__<#=q.VariableName#>,
         
                 <#}#>
         
@@ -65,34 +65,34 @@ public class <#=RosterTemplateModel.VariableName#>_type : AbstractRosterLevel<<#
                 return level;
             }
 
-        <#foreach (var q in RosterTemplateModel.Questions) 
+        <#foreach (var question in RosterTemplateModel.Questions) 
         {#>
 
             //generate according question type
-            private long? @__<#= q.VariableName#>;
+            private long? @__<#=question.VariableName#>;
 
-            public long? <#= q.VariableName#>
+            public long? <#=question.VariableName#>
                 {
-                    get { return <#= q.VariableName#>_state.State == State.Enabled ? this.@__<#= q.VariableName#> : null; }
-                    set { this.@__<#= q.VariableName#> = value; }
+                    get { return <#=question.VariableName#>_state.State == State.Enabled ? this.@__<#=question.VariableName#> : null; }
+                    set { this.@__<#=question.VariableName#> = value; }
                 }
 
-            private ConditionalState <#= q.VariableName#>_state = new ConditionalState(<#= q.Id#>);
+            private ConditionalState <#= question.VariableName#>_state = new ConditionalState(<#=question.Id#>);
 
-            <#if(!string.IsNullOrWhiteSpace(q.Conditions))
+            <#if(!string.IsNullOrWhiteSpace(question.Conditions))
             {#>        
-                private bool <#= q.VariableName#>_IsEnabledIf()
+                private bool <#=question.VariableName#>_IsEnabledIf()
                 {
-                    return <#= q.Conditions#>;
+                    return <#=question.Conditions#>;
                 }       
         
             <# }#>
 
-            <#if(!string.IsNullOrWhiteSpace(q.Validations))
+            <#if(!string.IsNullOrWhiteSpace(question.Validations))
             {#>        
-                private bool <#= q.VariableName#>_IsValidIf()
+                private bool <#=question.VariableName#>_IsValidIf()
                 {
-                    return <#= q.Validations#>;
+                    return <#=question.Validations#>;
                 }       
         
             <# }#>
@@ -102,12 +102,12 @@ public class <#=RosterTemplateModel.VariableName#>_type : AbstractRosterLevel<<#
 
                 
         //reference to self roster
-        public <#= q.VariableName#>_type[] <#= q.VariableName#>
+        public <#=RosterTemplateModel.VariableName#>_type[] <#=RosterTemplateModel.VariableName#>
         {
             get
                 {
                     var rosters = this.GetInstances(this.RosterKey);
-                    return rosters == null ? new <#= q.VariableName#>_type[0] : rosters.Select(x => x as <#= q.VariableName#>_type).ToArray();
+                    return rosters == null ? new <#=RosterTemplateModel.VariableName#>_type[0] : rosters.Select(x => x as <#=RosterTemplateModel.VariableName#>_type).ToArray();
                 }
             }
 
