@@ -23,6 +23,11 @@ namespace WB.UI.Designer.Controllers
             get { return this.serviceLocator.GetInstance<IReadSideAdministrationService>(); }
         }
 
+        public ActionResult Index()
+        {
+            return this.View();
+        }
+
         public ActionResult NConfig()
         {
             return this.View();
