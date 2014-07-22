@@ -7,9 +7,9 @@
             function($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, confirmService, $log) {
 
                 $scope.rosterTypes = {
+                    'FixedTitles-template.html': 'Fixed Titles',
                     'Numeric-template.html': 'Answer to numeric question',
                     'List-template.html': 'Answer to list question',
-                    'FixedTitles-template.html': 'Fixed Titles',
                     'MultiOption-template.html': 'Multi Option'
                 };
 

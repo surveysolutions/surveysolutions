@@ -85,6 +85,16 @@
             </ul>
         </div>
     </div>
+</script>
+
+<script type="text/ng-template" id="FixedTitles-template.html">
+    <div class="form-group">
+        <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <span>(<a>?</a>)</span></label>
+        <textarea id="edit-fixed-roster-title" class="form-control" rows="5" cols="100" split-array ng-model="activeRoster.roster.rosterFixedTitles"></textarea>
+    </div>
+</script>
+
+<script type="text/ng-template" id="MultiOption-template.html">
     <div class="form-group">
         <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
         <div class="btn-group width100" dropdown>
@@ -100,12 +110,5 @@
                 </li>
             </ul>
         </div>
-    </div>
-</script>
-
-<script type="text/ng-template" id="FixedTitles-template.html">
-    <div class="form-group">
-        <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <span>(<a>?</a>)</span></label>
-        <textarea id="edit-fixed-roster-title" class="form-control" rows="5" cols="100" split-array ng-model="activeRoster.roster.rosterFixedTitles"></textarea>
     </div>
 </script>
