@@ -16,6 +16,7 @@
         <thead>
             <tr>
                 <th>Title</th>
+                <th>Census mode</th>
                 <th class="col-xs-4 col-sm-5 col-md-4 col-lg-3"></th>
                 <th class="col-sm-1">Export Data</th>
             </tr>
@@ -28,7 +29,9 @@
                         @Html.DisplayFor(modelItem => item.Title)
                         <small> <small>(ver. @item.Version)</small></small>
                     </td>
+                    <td><input type="checkbox" disabled="disabled" checked="@item.AllowCensusMode"/></td>
                     <td class="buttons">
+                        
                         <a href="@Url.Action("BatchUpload", "HQ", new { id = item.QuestionnaireId, version= item.Version })" class="btn btn-primary"><i class="icon-white"></i>Batch upload</a>
                         <a href="@Url.Action("TakeNew", "HQ", new { id = item.QuestionnaireId })" class="btn btn-primary">
                             <i class="glyphicon glyphicon-plus-sign"></i> New Interview

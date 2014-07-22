@@ -12,10 +12,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 
         public Guid Id { get; private set; }
         public long Version { get; private set; }
+        public bool AllowCensusMode { get; private set; }
 
-        public RegisterPlainQuestionnaire(Guid questionnaireId, long version)
+        public RegisterPlainQuestionnaire(Guid questionnaireId, long version, bool allowCensusMode)
             : base(questionnaireId)
         {
+            this.AllowCensusMode = allowCensusMode;
             this.QuestionnaireId = questionnaireId;
             this.Id = questionnaireId;
             this.Version = version;
