@@ -31,8 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                                                        _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId }
-                                                        && _.GetAllMandatoryQuestions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId });
+                                                        /*_.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId }
+                                                        &&*/ _.GetAllMandatoryQuestions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId });
 
             var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 

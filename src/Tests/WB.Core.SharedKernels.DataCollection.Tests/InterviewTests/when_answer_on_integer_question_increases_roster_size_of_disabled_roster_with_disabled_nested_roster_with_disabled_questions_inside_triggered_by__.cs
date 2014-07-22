@@ -45,15 +45,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     && _.HasGroup(nestedRosterGroupId) == true
                     && _.GetRosterLevelForGroup(nestedRosterGroupId) == 2
                     && _.GetRosterLevelForGroup(parentRosterGroupId) == 1
-                    &&
-                    _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(parentRosterGroupId) ==
-                        new[] { parentRosterGroupId, nestedRosterGroupId }
-                    &&
-                    _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(nestedRosterGroupId) ==
-                        new[] { nestedRosterGroupId }
+                    //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(parentRosterGroupId) == new[] { parentRosterGroupId, nestedRosterGroupId }
+                    //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(nestedRosterGroupId) == new[] { nestedRosterGroupId }
 
-                   && _.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(parentRosterGroupId) == new[] { questionFromRosterId, questionFromNestedRosterId }
-                   && _.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(nestedRosterGroupId) == new[] { questionFromNestedRosterId }
+                   //&& _.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(parentRosterGroupId) == new[] { questionFromRosterId, questionFromNestedRosterId }
+                   //&& _.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(nestedRosterGroupId) == new[] { questionFromNestedRosterId }
                    && _.GetRosterLevelForQuestion(questionFromRosterId)==1
                    && _.GetRosterLevelForQuestion(questionFromNestedRosterId) == 2
                    && _.GetRostersFromTopToSpecifiedQuestion(questionFromRosterId)==new[] { parentRosterGroupId}

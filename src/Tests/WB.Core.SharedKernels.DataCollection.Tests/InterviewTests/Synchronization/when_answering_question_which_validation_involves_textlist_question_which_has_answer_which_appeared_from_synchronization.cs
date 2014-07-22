@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
                 && _.HasQuestion(answeredQuestion) == true
                 && _.GetQuestionType(answeredQuestion) == QuestionType.Text
                 && _.IsCustomValidationDefined(answeredQuestion) == true
-                && _.GetQuestionsInvolvedInCustomValidation(answeredQuestion) == new[] { textListQuestion, answeredQuestion }
+               // && _.GetQuestionsInvolvedInCustomValidation(answeredQuestion) == new[] { textListQuestion, answeredQuestion }
 
                 && _.GetQuestionVariableName(answeredQuestion) == answeredQuestiontVariableName
                 && _.GetQuestionVariableName(textListQuestion) == textlistVariableName

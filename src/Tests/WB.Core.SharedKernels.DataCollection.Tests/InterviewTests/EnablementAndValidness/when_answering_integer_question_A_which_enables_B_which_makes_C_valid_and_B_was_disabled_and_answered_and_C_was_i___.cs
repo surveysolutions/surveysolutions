@@ -30,11 +30,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
                 && _.GetQuestionType(it.Is(abcQuestionId)) == QuestionType.Numeric
                 && _.IsQuestionInteger(it.Is(abcQuestionId)) == true
 
-                && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { questionBId }
-                && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionBId) == new[] { questionAId }
+               // && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { questionBId }
+               // && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionBId) == new[] { questionAId }
 
-                && _.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questionBId) == new[] { questionCId }
-                && _.GetQuestionsInvolvedInCustomValidation(questionCId) == new[] { questionBId }
+                //&& _.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questionBId) == new[] { questionCId }
+                //&& _.GetQuestionsInvolvedInCustomValidation(questionCId) == new[] { questionBId }
 
                 && _.GetQuestionVariableName(questionAId) == "a"
                 && _.GetQuestionVariableName(questionBId) == "b"

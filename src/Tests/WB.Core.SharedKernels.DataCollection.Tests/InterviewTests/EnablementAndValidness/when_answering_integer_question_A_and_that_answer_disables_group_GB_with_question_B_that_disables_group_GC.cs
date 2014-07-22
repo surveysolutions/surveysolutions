@@ -41,15 +41,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
                     => _.HasQuestion(Moq.It.Is(abQuestionId)) == true
                         && _.GetQuestionType(Moq.It.Is(abQuestionId)) == QuestionType.Numeric
                         && _.IsQuestionInteger(Moq.It.Is(abQuestionId)) == true
-                        && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { groupGBId }
-                        && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new[] { groupGCId }
+                        //&& _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { groupGBId }
+                        //&& _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new[] { groupGCId }
 
                         && _.GetAllUnderlyingQuestions(groupGBId) == new[] { questionBId }
 
                         && _.GetCustomEnablementConditionForGroup(groupGBId) == groupGBEnablementCondition
                         && _.GetCustomEnablementConditionForGroup(groupGCId) == groupGCEnablementCondition
-                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGBId) == new[] { questionAId }
-                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGCId) == new[] { questionBId }
+                        //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGBId) == new[] { questionAId }
+                        //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGCId) == new[] { questionBId }
 
                         && _.GetQuestionVariableName(questionAId) == questionAVariableName
                         && _.GetQuestionVariableName(questionBId) == questionBVariableName

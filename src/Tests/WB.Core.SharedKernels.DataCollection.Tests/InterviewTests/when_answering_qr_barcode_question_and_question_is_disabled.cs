@@ -20,8 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>
                 (_
                     => _.HasQuestion(questionId) == true &&
-                        _.GetQuestionType(questionId) == QuestionType.QRBarcode &&
-                        _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { questionId } 
+                        _.GetQuestionType(questionId) == QuestionType.QRBarcode
+                // && _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { questionId } 
                 );
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(

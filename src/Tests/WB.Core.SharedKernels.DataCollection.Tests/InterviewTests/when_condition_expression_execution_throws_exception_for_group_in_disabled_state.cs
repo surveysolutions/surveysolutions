@@ -32,11 +32,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var questionaire = Mock.Of<IQuestionnaire>(_=>
                                                         _.HasGroup(conditionallyDisabledGroupId) == true
-                                                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(conditionallyDisabledGroupId) == new [] { answeringQuestionId }
+                                                        //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(conditionallyDisabledGroupId) == new [] { answeringQuestionId }
 
                                                         && _.HasQuestion(answeringQuestionId) == true
                                                         && _.GetQuestionType(answeringQuestionId) == QuestionType.Numeric
-                                                        && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new Guid[] { conditionallyDisabledGroupId }
+                                                        //&& _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new Guid[] { conditionallyDisabledGroupId }
 
                                                         && _.GetQuestionVariableName(answeringQuestionId) == "var name"
                                                         );

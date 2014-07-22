@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                                                         && _.HasGroup(propagatedGroupId) == true
                                                         && _.GetRosterLevelForGroup(propagatedGroupId)==1
-                                                        && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
+                                                        //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
                                                         && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new Guid[] { propagatedGroupId });
 
             var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();

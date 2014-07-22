@@ -36,9 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     && _.HasGroup(nestedRosterGroupId) == true
                     && _.GetRosterLevelForGroup(nestedRosterGroupId) == 2
                     && _.GetRosterLevelForGroup(parentRosterGroupId) == 1
-                    &&
-                    _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(nestedRosterGroupId) ==
-                        new[] { parentRosterGroupId, nestedRosterGroupId }
+                    //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(nestedRosterGroupId) == new[] { parentRosterGroupId, nestedRosterGroupId }
                     && _.GetRostersFromTopToSpecifiedGroup(nestedRosterGroupId) == new[] { parentRosterGroupId, nestedRosterGroupId }
                     && _.GetRostersFromTopToSpecifiedGroup(parentRosterGroupId) == new[] { parentRosterGroupId }
                     && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]

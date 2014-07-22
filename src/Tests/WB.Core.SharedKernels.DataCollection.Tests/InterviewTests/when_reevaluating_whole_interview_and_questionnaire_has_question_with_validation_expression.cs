@@ -31,8 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                                                        _.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { conditionallyInvalidQuestionId }
-                                                        && _.HasQuestion(conditionallyInvalidQuestionId)==true
+                                                        /*_.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { conditionallyInvalidQuestionId }
+                                                        && */_.HasQuestion(conditionallyInvalidQuestionId)==true
                                                         && _.GetQuestionType(conditionallyInvalidQuestionId)==QuestionType.Text
                                                         && _.IsCustomValidationDefined(conditionallyInvalidQuestionId) == true);
 

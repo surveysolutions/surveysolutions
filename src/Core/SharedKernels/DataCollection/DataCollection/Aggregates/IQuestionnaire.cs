@@ -39,27 +39,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsCustomValidationDefined(Guid questionId);
 
-        IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId);
-
         string GetCustomValidationExpression(Guid questionId);
-
-        IEnumerable<Guid> GetAllQuestionsWithNotEmptyValidationExpressions();
-
-        IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId);
 
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
 
         string GetCustomEnablementConditionForQuestion(Guid questionId);
 
         string GetCustomEnablementConditionForGroup(Guid groupId);
-
-        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId);
-
-        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId);
-
-        IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
-
-        IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
 
         bool ShouldQuestionSpecifyRosterSize(Guid questionId);
 
@@ -81,21 +67,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllMandatoryQuestions();
 
-        IEnumerable<Guid> GetAllQuestionsWithNotEmptyCustomEnablementConditions();
-
-        IEnumerable<Guid> GetAllGroupsWithNotEmptyCustomEnablementConditions();
-
         bool IsRosterGroup(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
-
-        IEnumerable<Guid> GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId);
-
-        IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId);
-
-        IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(Guid groupId);
-        
-        IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId);
 
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
         
@@ -112,6 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
 
         IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
+
         Guid? GetRosterSizeQuestion(Guid rosterId);
     }
 }

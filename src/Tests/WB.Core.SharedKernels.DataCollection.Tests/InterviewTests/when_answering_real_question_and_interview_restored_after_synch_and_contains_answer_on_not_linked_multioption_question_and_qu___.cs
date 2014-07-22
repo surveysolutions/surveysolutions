@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                 && _.HasQuestion(answeredQuestionId) == true
                 && _.GetQuestionType(answeredQuestionId) == QuestionType.Numeric
-                && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeredQuestionId) == new[] { multyOptionAnsweredQuestionId }
+               // && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeredQuestionId) == new[] { multyOptionAnsweredQuestionId }
             ));
 
             questionnaireMock
