@@ -19,13 +19,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public QuestionnaireExecutorTemplateModel(QuestionnaireDocument questionnaireDocument)
         {
+            var dependencies = this.BuildDependencyTree(questionnaireDocument);
+
             this.Id = questionnaireDocument.PublicKey;
 
             this.Questions =
                 questionnaireDocument.GetAllQuestions<AbstractQuestion>()
                     .Select(
                         qestion =>
-                            new QuestionTemplateModel()
+                            new QuestionTemplateModel
                             {
                                 Id = qestion.PublicKey,
                                 VariableName = qestion.StataExportCaption,
@@ -50,6 +52,44 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 RosterGeneratedTypeName = roster.PublicKey.ToString() + "_type"
                             })
                     .ToList();
+        }
+
+        private Dictionary<Guid, List<Guid>> BuildDependencyTree(QuestionnaireDocument questionnaireDocument)
+        {
+            Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument
+                .GetAllGroups()
+                .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
+
+            questionnaireDocument
+                .GetAllQuestions<IQuestion>()
+                .ToDictionary(group => @group.PublicKey, group => new List<Guid>())
+                .ToList()
+                .ForEach(x => dependencies.Add(x.Key, x.Value));
+
+            Dictionary<Guid, List<Guid>> invertedDependencies = questionnaireDocument.GetAllGroups()
+                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
+                .ToDictionary(x => x.PublicKey,
+                    x => this.GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, questionnaireDocument));
+
+            questionnaireDocument.GetAllQuestions<IQuestion>()
+                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
+                .ToDictionary(x => x.PublicKey,
+                    x => this.GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, questionnaireDocument))
+                .ToList()
+                .ForEach(x => invertedDependencies.Add(x.Key, x.Value));
+
+            foreach (KeyValuePair<Guid, List<Guid>> dependency in invertedDependencies)
+            {
+                dependency.Value.ForEach(x => dependencies[x].Add(dependency.Key));
+            }
+
+            return dependencies;
+        }
+
+        private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression, QuestionnaireDocument questionnaireDocument)
+        {
+
+            return new List<Guid>();
         }
 
         private string GenerateQuestionTypeName(AbstractQuestion question)
