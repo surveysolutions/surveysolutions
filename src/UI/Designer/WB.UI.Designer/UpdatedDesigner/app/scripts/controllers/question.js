@@ -37,11 +37,7 @@
 
 
                     $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
-                    if (result.linkedToQuestionId) {
-                        $scope.activeQuestion.isLinked = true;
-                        $scope.setLinkSource(result.linkedToQuestionId);
-                    }
-                    
+                    $scope.setLinkSource(result.linkedToQuestionId);
 
                     $scope.questionForm.$setPristine();
                 };
@@ -97,9 +93,18 @@
                     }
                 };
 
-                $scope.setLinkSource = function(itemId) {
-                    $scope.activeQuestion.linkedToQuestionId = itemId;
-                    $scope.activeQuestion.linkedToTitle = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId }).title;
+                $scope.$watch('activeQuestion.isLinked', function(newValue) {
+                    if (!newValue && $scope.activeQuestion) {
+                        $scope.activeQuestion.linkedToQuestionId = null;
+                    }
+                });
+
+                $scope.setLinkSource = function (itemId) {
+                    $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
+                    if (itemId) {
+                        $scope.activeQuestion.linkedToQuestionId = itemId;
+                        $scope.activeQuestion.linkedToTitle = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId }).title;
+                    }
                 };
 
                 $scope.loadQuestion();
