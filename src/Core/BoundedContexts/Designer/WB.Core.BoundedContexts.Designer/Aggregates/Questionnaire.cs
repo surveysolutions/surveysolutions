@@ -1039,136 +1039,138 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var itemTargetIndex = sourceGroup.Children.IndexOf(questionnaireItem);
 
                 var @group = questionnaireItem as IGroup;
+                var staticText = questionnaireItem as IStaticText;
+                var question = questionnaireItem as IQuestion;
+
                 if (@group != null)
                 {
                     this.FillGroup(groupId: itemId, parentGroupId: groupId, responsibleId: responsibleId,
                         sourceGroup: @group, targetIndex: itemTargetIndex);
-                    continue;
                 }
-
-                var question = questionnaireItem as IQuestion;
-                if (question == null) continue;
-
-
-                var variableName = string.Empty;
-                var variableLabel = string.Empty;
-                var title = question.QuestionText;
-                var isMandatory = question.Mandatory;
-                var enablementCondition = question.ConditionExpression;
-                var instructions = question.Instructions;
-
-                var numericQuestion = question as INumericQuestion;
-                if (numericQuestion != null)
+                else if (staticText != null)
                 {
-                    this.ApplyNumericQuestionCloneEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel:variableLabel, parentGroupId: groupId, title: title,
-                        isMandatory: isMandatory, isPreFilled: numericQuestion.Featured,
-                        scope: numericQuestion.QuestionScope, enablementCondition: enablementCondition,
-                        validationExpression: numericQuestion.ValidationExpression,
-                        validationMessage: numericQuestion.ValidationMessage, instructions: instructions,
-                        sourceQuestionId: sourceItemId, responsibleId: responsibleId,
-                        maxValue: numericQuestion.MaxValue, isInteger: numericQuestion.IsInteger,
-                        countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces);
-                    continue;
+                    this.ApplyEvent(new StaticTextCloned
+                    {
+                        EntityId = itemId,
+                        ParentId = groupId,
+                        SourceEntityId = sourceItemId,
+                        ResponsibleId = responsibleId,
+                        TargetIndex = itemTargetIndex,
+                        Text = staticText.Text,
+                    });
                 }
-
-                var textListQuestion = question as ITextListQuestion;
-                if (textListQuestion != null)
+                else if (question != null)
                 {
-                    this.ApplyTextListQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title,
-                        isMandatory: isMandatory, enablementCondition: enablementCondition,
-                        instructions: instructions,
-                        sourceQuestionId: sourceItemId, responsibleId: responsibleId,
-                        maxAnswerCount: textListQuestion.MaxAnswerCount);
-                    continue;
-                }
+                    var variableName = string.Empty;
+                    var variableLabel = string.Empty;
+                    var title = question.QuestionText;
+                    var isMandatory = question.Mandatory;
+                    var enablementCondition = question.ConditionExpression;
+                    var instructions = question.Instructions;
 
-                var qrBarcodeQuestion = question as IQRBarcodeQuestion;
-                if (qrBarcodeQuestion != null)
-                {
-                    this.ApplyQRBarcodeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title,
-                        isMandatory: isMandatory, enablementCondition: enablementCondition,
-                        instructions: instructions,
-                        sourceQuestionId: sourceItemId, responsibleId: responsibleId);
-                    continue;
-                }
+                    var numericQuestion = question as INumericQuestion;
+                    var textListQuestion = question as ITextListQuestion;
+                    var qrBarcodeQuestion = question as IQRBarcodeQuestion;
+                    var textQuestion = question as TextQuestion;
+                    var geoLocationQuestion = question as GpsCoordinateQuestion;
+                    var dateTitmeQuestion = question as DateTimeQuestion;
+                    var categoricalMultiQuestion = question as MultyOptionsQuestion;
+                    var categoricalSingleQuestion = question as SingleQuestion;
 
-                var textQuestion = question as TextQuestion;
-                if (textQuestion != null)
-                {
-                    this.ApplyTextQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, responsibleId: responsibleId,
-                        sourceQuestionId: sourceItemId, instructions: instructions,mask:textQuestion.Mask, isPreFilled: textQuestion.Featured,
-                        scope: textQuestion.QuestionScope, validationExpression: textQuestion.ValidationExpression,
-                        validationMessage: textQuestion.ValidationMessage);
-                    continue;
-                }
-
-                var geoLocationQuestion = question as GpsCoordinateQuestion;
-                if (geoLocationQuestion != null)
-                {
-                    this.ApplyGeoLocationQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, instructions: instructions,
-                        parentGroupId: groupId, sourceQuestionId: sourceItemId,
-                        responsibleId: responsibleId);
-                    continue;
-                }
-
-                var dateTitmeQuestion = question as DateTimeQuestion;
-                if (dateTitmeQuestion != null)
-                {
-                    this.ApplyDateTimeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, instructions: instructions,
-                        parentGroupId: groupId, sourceQuestionId: sourceItemId,
-                        responsibleId: responsibleId, scope: dateTitmeQuestion.QuestionScope,
-                        isPreFilled: dateTitmeQuestion.Featured,
-                        validationExpression: dateTitmeQuestion.ValidationExpression,
-                        validationMessage: dateTitmeQuestion.ValidationMessage);
-                    continue;
-                }
-
-                var categoricalMultiQuestion = question as MultyOptionsQuestion;
-                if (categoricalMultiQuestion != null)
-                {
-                    this.ApplyCategoricalMultiAnswersQuestionClonedEvent(questionId: itemId,
-                        targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, parentGroupId: groupId,
-                        sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
-                        scope: categoricalMultiQuestion.QuestionScope,
-                        validationExpression: categoricalMultiQuestion.ValidationExpression,
-                        validationMessage: categoricalMultiQuestion.ValidationMessage,
-                        linkedToQuestionId: categoricalMultiQuestion.LinkedToQuestionId,
-                        areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
-                        maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
-                        options:
-                            categoricalMultiQuestion.Answers.Select(
-                                answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
-                                .ToArray());
-                    continue;
-                }
-
-                var categoricalSingleQuestion = question as SingleQuestion;
-                if (categoricalSingleQuestion != null)
-                {
-                    this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: itemId,
-                        targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, parentGroupId: groupId,
-                        sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
-                        scope: categoricalSingleQuestion.QuestionScope,
-                        validationExpression: categoricalSingleQuestion.ValidationExpression,
-                        validationMessage: categoricalSingleQuestion.ValidationMessage,
-                        linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
-                        isPreFilled: categoricalSingleQuestion.Featured,
-                        options:
-                            categoricalSingleQuestion.Answers.Select(
-                                answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
-                                .ToArray());
-                    continue;
+                    if (numericQuestion != null)
+                    {
+                        this.ApplyNumericQuestionCloneEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title,
+                            isMandatory: isMandatory, isPreFilled: numericQuestion.Featured,
+                            scope: numericQuestion.QuestionScope, enablementCondition: enablementCondition,
+                            validationExpression: numericQuestion.ValidationExpression,
+                            validationMessage: numericQuestion.ValidationMessage, instructions: instructions,
+                            sourceQuestionId: sourceItemId, responsibleId: responsibleId,
+                            maxValue: numericQuestion.MaxValue, isInteger: numericQuestion.IsInteger,
+                            countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces);
+                    }
+                    else if (textListQuestion != null)
+                    {
+                        this.ApplyTextListQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title,
+                            isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            instructions: instructions,
+                            sourceQuestionId: sourceItemId, responsibleId: responsibleId,
+                            maxAnswerCount: textListQuestion.MaxAnswerCount);
+                    }
+                    else if (qrBarcodeQuestion != null)
+                    {
+                        this.ApplyQRBarcodeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title,
+                            isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            instructions: instructions,
+                            sourceQuestionId: sourceItemId, responsibleId: responsibleId);
+                    }
+                    else if (textQuestion != null)
+                    {
+                        this.ApplyTextQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title,
+                            isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, responsibleId: responsibleId,
+                            sourceQuestionId: sourceItemId, instructions: instructions, mask: textQuestion.Mask,
+                            isPreFilled: textQuestion.Featured,
+                            scope: textQuestion.QuestionScope, validationExpression: textQuestion.ValidationExpression,
+                            validationMessage: textQuestion.ValidationMessage);
+                    }
+                    else if (geoLocationQuestion != null)
+                    {
+                        this.ApplyGeoLocationQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, instructions: instructions,
+                            parentGroupId: groupId, sourceQuestionId: sourceItemId,
+                            responsibleId: responsibleId);
+                    }
+                    else if (dateTitmeQuestion != null)
+                    {
+                        this.ApplyDateTimeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, instructions: instructions,
+                            parentGroupId: groupId, sourceQuestionId: sourceItemId,
+                            responsibleId: responsibleId, scope: dateTitmeQuestion.QuestionScope,
+                            isPreFilled: dateTitmeQuestion.Featured,
+                            validationExpression: dateTitmeQuestion.ValidationExpression,
+                            validationMessage: dateTitmeQuestion.ValidationMessage);
+                    }
+                    else if (categoricalMultiQuestion != null)
+                    {
+                        this.ApplyCategoricalMultiAnswersQuestionClonedEvent(questionId: itemId,
+                            targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel, title: title,
+                            isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, parentGroupId: groupId,
+                            sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
+                            scope: categoricalMultiQuestion.QuestionScope,
+                            validationExpression: categoricalMultiQuestion.ValidationExpression,
+                            validationMessage: categoricalMultiQuestion.ValidationMessage,
+                            linkedToQuestionId: categoricalMultiQuestion.LinkedToQuestionId,
+                            areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
+                            maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
+                            options:
+                                categoricalMultiQuestion.Answers.Select(
+                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
+                                    .ToArray());
+                    }
+                    else if (categoricalSingleQuestion != null)
+                    {
+                        this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: itemId,
+                            targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel, title: title,
+                            isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, parentGroupId: groupId,
+                            sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
+                            scope: categoricalSingleQuestion.QuestionScope,
+                            validationExpression: categoricalSingleQuestion.ValidationExpression,
+                            validationMessage: categoricalSingleQuestion.ValidationMessage,
+                            linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
+                            isPreFilled: categoricalSingleQuestion.Featured,
+                            options:
+                                categoricalSingleQuestion.Answers.Select(
+                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
+                                    .ToArray());
+                    }
                 }
             }
         }
