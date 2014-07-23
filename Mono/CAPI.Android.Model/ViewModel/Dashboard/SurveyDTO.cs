@@ -20,7 +20,25 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         public string SurveyTitle { get; private set; }
         public string QuestionnaireId { get; private set; }
-        public long QuestionnaireVersion { get; private set; }
+
+        public long QuestionnaireVersion
+        {
+            get
+            {
+                if (questionnaireVersion == 0)
+                {
+                    return TemplateMaxVersion;
+                }
+                return questionnaireVersion;
+            }
+            private set
+            {
+                questionnaireVersion = value;
+            }
+        }
+
+        private long questionnaireVersion;
         public bool AllowCensusMode { get; private set; }
+        public long TemplateMaxVersion { get; private set; }
     }
 }
