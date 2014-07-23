@@ -28,48 +28,84 @@ namespace WB.Core.Infrastructure.Compilation.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\npublic class ");
+            this.Write("\r\n\r\n        public class ");
             
-            #line 7 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
-            
-            #line default
-            #line hidden
-            this.Write("_type : AbstractRosterLevel<");
-            
-            #line 7 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
+            #line 8 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.RosterGeneratedTypeName));
             
             #line default
             #line hidden
-            this.Write("_type>, IValidatable\r\n        {\r\n            public ");
+            this.Write(" : AbstractRosterLevel<");
             
-            #line 9 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
+            #line 8 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.RosterGeneratedTypeName));
             
             #line default
             #line hidden
-            this.Write(@"_type(decimal[] rosterVector, Identity[] rosterKey, QuestionnaireLevel parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+            this.Write(">, IValidatable\r\n        {\r\n            public ");
+            
+            #line 10 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.RosterGeneratedTypeName));
+            
+            #line default
+            #line hidden
+            this.Write("(decimal[] rosterVector, Identity[] rosterKey, ");
+            
+            #line 10 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.GetParent().GetTypeName()));
+            
+            #line default
+            #line hidden
+            this.Write(@" parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : this(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
-                this.@__parent = parent;
+                this.@__parent = parent; 
             }
 
             public ");
             
-            #line 15 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
+            #line 16 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.RosterGeneratedTypeName));
             
             #line default
             #line hidden
-            this.Write(@"_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+            this.Write(@"(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
                 
                 ");
             
-            #line 19 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-foreach (var q in RosterTemplateModel.Questions) 
+            #line 20 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+foreach (var @group in Model.Groups) 
+                {
+            
+            #line default
+            #line hidden
+            this.Write("\r\n                    EnablementStates.Add(");
+            
+            #line 23 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedGroupStateName));
+            
+            #line default
+            #line hidden
+            this.Write(".ItemId, ");
+            
+            #line 23 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedGroupStateName));
+            
+            #line default
+            #line hidden
+            this.Write(");\r\n                ");
+            
+            #line 24 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+ }
+            
+            #line default
+            #line hidden
+            this.Write("\r\n                ");
+            
+            #line 26 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+foreach (var q in Model.Questions) 
                     {
             
             #line default
@@ -77,98 +113,169 @@ foreach (var q in RosterTemplateModel.Questions)
             this.Write("\r\n                    //EnablementStates.Add(age_state.ItemId, age_state);\r\n     " +
                     "               EnablementStates.Add(");
             
-            #line 23 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            #line 30 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedQuestionStateName));
             
             #line default
             #line hidden
             this.Write(".ItemId, ");
             
-            #line 23 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            #line 30 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedQuestionStateName));
             
             #line default
             #line hidden
-            this.Write("_state);        \r\n\r\n                    ");
+            this.Write(");        \r\n\r\n                    ");
             
-            #line 25 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 32 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
 if(!string.IsNullOrWhiteSpace(q.Validations))
                     {
             
             #line default
             #line hidden
             this.Write(@"        
-                        //generate mandatory
+                        //TODO: generate mandatory
                         //validationExpressions.Add(new Identity(IdOf.name, this.RosterVector), new Func<bool>[] { name_IsMandatory });
                     
                         validationExpressions.Add(new Identity(");
             
-            #line 30 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 37 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.Id));
             
             #line default
             #line hidden
             this.Write(", this.RosterVector), new Func<bool>[] { ");
             
-            #line 30 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 37 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
             
             #line default
             #line hidden
             this.Write("_IsEnabledIf });              \r\n        \r\n                    ");
             
-            #line 32 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 39 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n                ");
             
-            #line 34 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 41 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("            }\r\n\r\n            //TODO: dynamicly generate reference to the parent a" +
-                    "nd it\'s questions\r\n            private QuestionnaireLevel @__parent;\r\n\r\n        " +
-                    "    public IValidatable CopyMembers()\r\n            {\r\n                var level " +
-                    "= new ");
+                    "nd it\'s questions\r\n            private ");
             
-            #line 42 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
+            #line 45 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.GetParent().GetTypeName()));
             
             #line default
             #line hidden
-            this.Write(@"_type(this.RosterVector, this.RosterKey, this.GetInstances, ConditionalDependencies)
+            this.Write(" @__parent;\r\n\r\n            ");
+            
+            #line 47 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+foreach (var parentQuestion in Model.GetParent().GetQuestions()) 
+            {
+            
+            #line default
+            #line hidden
+            this.Write("                public ");
+            
+            #line 49 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(parentQuestion.GeneratedQuestionTypeName));
+            
+            #line default
+            #line hidden
+            this.Write(" ");
+            
+            #line 49 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(parentQuestion.VariableName));
+            
+            #line default
+            #line hidden
+            this.Write(" { get { return this.@__parent.");
+            
+            #line 49 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(parentQuestion.VariableName));
+            
+            #line default
+            #line hidden
+            this.Write("; } }                                        \r\n            ");
+            
+            #line 50 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+}
+            
+            #line default
+            #line hidden
+            this.Write("\r\n            ");
+            
+            #line 52 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+foreach (var q in Model.Questions) 
+              {
+            
+            #line default
+            #line hidden
+            this.Write("        \r\n                        ");
+            
+            #line 55 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            
+            #line default
+            #line hidden
+            this.Write(" = this.");
+            
+            #line 55 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedQuestionMemberName));
+            
+            #line default
+            #line hidden
+            this.Write(",\r\n        \r\n            ");
+            
+            #line 57 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+}
+            
+            #line default
+            #line hidden
+            this.Write("\r\n            public IValidatable CopyMembers()\r\n            {\r\n                v" +
+                    "ar level = new ");
+            
+            #line 61 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.RosterGeneratedTypeName));
+            
+            #line default
+            #line hidden
+            this.Write(@"(this.RosterVector, this.RosterKey, this.GetInstances, ConditionalDependencies)
                 {
                     ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                     InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
 
                 ");
             
-            #line 47 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-foreach (var q in RosterTemplateModel.Questions) 
-                    {
+            #line 66 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+foreach (var q in Model.Questions) 
+                  {
             
             #line default
             #line hidden
             this.Write("        \r\n                        ");
             
-            #line 50 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 68 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
             
             #line default
             #line hidden
-            this.Write(" = this.@__");
+            this.Write(" = this.");
             
-            #line 50 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            #line 68 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedQuestionMemberName));
             
             #line default
             #line hidden
             this.Write(",\r\n        \r\n                ");
             
-            #line 52 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 70 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
 }
             
             #line default
@@ -190,93 +297,107 @@ foreach (var q in RosterTemplateModel.Questions)
 
         ");
             
-            #line 68 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-foreach (var question in RosterTemplateModel.Questions) 
+            #line 85 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+foreach (var question in Model.Questions) 
         {
             
             #line default
             #line hidden
-            this.Write("\r\n            //generate according question type\r\n            private long? @__");
+            this.Write("            \r\n            private ");
             
-            #line 72 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
+            #line 87 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedQuestionTypeName));
             
             #line default
             #line hidden
-            this.Write(";\r\n\r\n            public long? ");
+            this.Write(" ");
             
-            #line 74 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 87 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedQuestionMemberName));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n\r\n            public ");
+            
+            #line 89 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedQuestionTypeName));
+            
+            #line default
+            #line hidden
+            this.Write(" ");
+            
+            #line 89 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("\r\n                {\r\n                    get { return ");
             
-            #line 76 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
+            #line 91 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedQuestionStateName));
             
             #line default
             #line hidden
-            this.Write("_state.State == State.Enabled ? this.@__");
+            this.Write(".State == State.Enabled ? this.");
             
-            #line 76 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
+            #line 91 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedQuestionMemberName));
             
             #line default
             #line hidden
-            this.Write(" : null; }\r\n                    set { this.@__");
+            this.Write(" : null; }\r\n                    set { this.");
             
-            #line 77 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
+            #line 92 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedQuestionMemberName));
             
             #line default
             #line hidden
             this.Write(" = value; }\r\n                }\r\n\r\n            private ConditionalState ");
             
-            #line 80 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
+            #line 95 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedQuestionStateName));
             
             #line default
             #line hidden
-            this.Write("_state = new ConditionalState(");
+            this.Write(" = new ConditionalState(");
             
-            #line 80 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 95 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Id));
             
             #line default
             #line hidden
             this.Write(");\r\n\r\n            ");
             
-            #line 82 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 97 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
 if(!string.IsNullOrWhiteSpace(question.Conditions))
-            {
+              {
             
             #line default
             #line hidden
             this.Write("        \r\n                private bool ");
             
-            #line 84 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 99 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("_IsEnabledIf()\r\n                {\r\n                    return ");
             
-            #line 86 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 101 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Conditions));
             
             #line default
             #line hidden
             this.Write(";\r\n                }       \r\n        \r\n            ");
             
-            #line 89 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 104 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n            ");
             
-            #line 91 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 106 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
 if(!string.IsNullOrWhiteSpace(question.Validations))
             {
             
@@ -284,43 +405,72 @@ if(!string.IsNullOrWhiteSpace(question.Validations))
             #line hidden
             this.Write("        \r\n                private bool ");
             
-            #line 93 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 108 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
             
             #line default
             #line hidden
             this.Write("_IsValidIf()\r\n                {\r\n                    return ");
             
-            #line 95 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 110 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Validations));
             
             #line default
             #line hidden
             this.Write(";\r\n                }       \r\n        \r\n            ");
             
-            #line 98 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 113 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
  }
             
             #line default
             #line hidden
-            this.Write("\r\n\r\n        ");
+            this.Write("       ");
             
-            #line 101 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 114 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
  }
             
             #line default
             #line hidden
-            this.Write("\r\n                \r\n        //reference to self roster\r\n        public ");
+            this.Write("           \r\n        ");
             
-            #line 105 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
+            #line 116 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+foreach (var @group in Model.Groups) 
+        {
             
             #line default
             #line hidden
-            this.Write("_type[] ");
+            this.Write("            private ConditionalState ");
             
-            #line 105 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
+            #line 118 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedGroupStateName));
+            
+            #line default
+            #line hidden
+            this.Write(" = new ConditionalState(");
+            
+            #line 118 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(@group.Id));
+            
+            #line default
+            #line hidden
+            this.Write(", ItemType.Group);\r\n        ");
+            
+            #line 119 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+ }
+            
+            #line default
+            #line hidden
+            this.Write("     \r\n        //reference to self roster\r\n        public ");
+            
+            #line 122 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.RosterGeneratedTypeName));
+            
+            #line default
+            #line hidden
+            this.Write("[] ");
+            
+            #line 122 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.VariableName));
             
             #line default
             #line hidden
@@ -328,83 +478,107 @@ if(!string.IsNullOrWhiteSpace(question.Validations))
                     "= this.GetInstances(this.RosterKey);\r\n                    return rosters == null" +
                     " ? new ");
             
-            #line 110 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
+            #line 127 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.RosterGeneratedTypeName));
             
             #line default
             #line hidden
-            this.Write("_type[0] : rosters.Select(x => x as ");
-            
-            #line 110 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RosterTemplateModel.VariableName));
-            
-            #line default
-            #line hidden
-            this.Write(@"_type).ToArray();
-                }
-            }
-
-
-            protected override IEnumerable<Action> ConditionExpressions
-            {
-                get
-                {
-                    return new[]
-                {
-
-                        ");
-            
-            #line 122 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-foreach (var q in RosterTemplateModel.Questions) 
-                    {
-            
-            #line default
-            #line hidden
-            this.Write("\r\n                    ");
-            
-            #line 125 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-if(!string.IsNullOrWhiteSpace(q.Conditions))
-                    {
-            
-            #line default
-            #line hidden
-            this.Write("        \r\n                        Verifier(");
+            this.Write("[0] : rosters.Select(x => x as ");
             
             #line 127 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.RosterGeneratedTypeName));
+            
+            #line default
+            #line hidden
+            this.Write(").ToArray();\r\n                }\r\n            }\r\n\r\n            protected override " +
+                    "IEnumerable<Action> ConditionExpressions\r\n            {\r\n                get\r\n  " +
+                    "              {\r\n                    return new[]\r\n                {\r\n          " +
+                    "          ");
+            
+            #line 137 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+foreach (var q in Model.Questions) 
+                      {
+            
+            #line default
+            #line hidden
+            this.Write("\r\n                        ");
+            
+            #line 140 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+if(!string.IsNullOrWhiteSpace(q.Conditions))
+                        {
+            
+            #line default
+            #line hidden
+            this.Write("        \r\n                            Verifier(");
+            
+            #line 142 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
             
             #line default
             #line hidden
             this.Write("_IsEnabledIf, ");
             
-            #line 127 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            #line 142 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedQuestionStateName));
             
             #line default
             #line hidden
-            this.Write("_state.ItemId, ");
+            this.Write(".ItemId, ");
             
-            #line 127 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            #line 142 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedQuestionStateName));
             
             #line default
             #line hidden
-            this.Write("_state),\r\n                        \r\n                    ");
+            this.Write("),                        \r\n                        ");
             
-            #line 129 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 143 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
  }
             
             #line default
             #line hidden
-            this.Write("\r\n                ");
+            this.Write("                    ");
             
-            #line 131 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            #line 144 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+}
+            
+            #line default
+            #line hidden
+            this.Write(@"                };
+            }
+
+            public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+            {
+                this.Validate(questionsToBeValid, questionsToBeInvalid);
+            }
+
+            //TODO: fix for questionnaire level
+            public void SetParent(IValidatable parentLevel)            
+            {
+            ");
+            
+            #line 156 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+if(Model.GetParent() != null)
+            {
+            
+            #line default
+            #line hidden
+            this.Write("                    this.@__parent = parentLevel as ");
+            
+            #line 158 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.GetParent().GetTypeName()));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n            ");
+            
+            #line 159 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\RosterTemplate.tt"
  }
             
             #line default
             #line hidden
-            this.Write("                    //Verifier(age_IsEnabledIf, age_state.ItemId, age_state),\r\n  " +
-                    "                  \r\n                };\r\n                }\r\n            }\r\n}");
+            this.Write("            }\r\n\r\n            public IValidatable GetParent()\r\n            {\r\n    " +
+                    "            return this.@__parent;\r\n            }\r\n      }\r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }
