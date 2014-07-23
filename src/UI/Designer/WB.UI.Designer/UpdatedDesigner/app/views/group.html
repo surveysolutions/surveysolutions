@@ -24,7 +24,7 @@
     </div>
     <div class="pull-right">
         <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteItem()">Delete</button>
-        <button id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneGroup()">Clone</button>
+        <button id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="activeGroup.isChapter ? cloneChapter() : cloneGroup()">Clone</button>
         <ng-include src="'moveToChapterSnippet'" ng-if="!activeGroup.isChapter" />
     </div>
 </div>
