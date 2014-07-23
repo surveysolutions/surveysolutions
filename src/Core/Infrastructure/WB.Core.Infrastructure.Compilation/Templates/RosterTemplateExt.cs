@@ -2,12 +2,11 @@
 {
     public partial class RosterTemplate
     {
-        protected RosterTemplateModel RosterTemplateModel { set; get; }
-    
+        protected RosterTemplateModel Model { private set; get; }
+
         public RosterTemplate(RosterTemplateModel model)
         {
-            this.RosterTemplateModel = model;
-
+            this.Model = model;
         }
     }
 }
