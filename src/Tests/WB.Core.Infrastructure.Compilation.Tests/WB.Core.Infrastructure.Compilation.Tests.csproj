@@ -71,7 +71,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="InterviewCompilerTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="InterviewCompilerTests\when_loading_assembly_from_file.cs" />
     <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

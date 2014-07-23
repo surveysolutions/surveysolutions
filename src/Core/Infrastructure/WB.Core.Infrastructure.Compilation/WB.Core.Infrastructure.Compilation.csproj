@@ -53,37 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeGenerator.cs" />
-    <Compile Include="ICodeGenerator.cs" />
     <Compile Include="IDynamicCompiler.cs" />
-    <Compile Include="IEvaluatorGenerator.cs" />
     <Compile Include="InterviewCompiler.cs" />
-    <Compile Include="InterviewEvaluatorGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestionnaireExecutorTemplateModel.cs" />
-    <Compile Include="Templates\InterviewExpressionStateTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewExpressionStateTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\InterviewExpressionStateTemplateExt.cs" />
-    <Compile Include="Templates\RosterTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RosterTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\RosterTemplateExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Templates\InterviewExpressionStateTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>InterviewExpressionStateTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\RosterTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>RosterTemplate.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">

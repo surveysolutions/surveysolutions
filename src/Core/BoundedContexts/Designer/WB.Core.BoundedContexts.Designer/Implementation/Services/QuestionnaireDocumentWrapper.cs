@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Services;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    internal class PlainQuestionnaire : IQuestionnaire
+    internal class QuestionnaireDocumentWrapper : IQuestionnaireWrapper
     {
         #region State
-
         private readonly QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-        private readonly Func<long> getVersion;
 
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<Guid, IGroup> groupCache = null;
@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+
 
         internal QuestionnaireDocument QuestionnaireDocument
         {
@@ -57,31 +58,62 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         #endregion
 
-        public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion)
+        public QuestionnaireDocumentWrapper(QuestionnaireDocument document)
         {
-            InitializeQuestionnaireDocument(document);
+            document.ConnectChildrenWithParent();
+
+            var groups = document
+                .Find<IGroup>(_ => true)
+                .ToDictionary(
+                    @group => @group.PublicKey,
+                    @group => @group);
+
+            var questions = document
+                .Find<IQuestion>(_ => true)
+                .ToDictionary(
+                    question => question.PublicKey,
+                    question => question);
+
+            var questionWarmingUpMethods = new Action<Guid>[]
+            {
+                questionId =>
+                {
+                    IQuestion question = GetQuestionOrThrow(questions, questionId);
+                    question.QuestionIdsInvolvedInCustomValidationOfQuestion =
+                        GetQuestionsInvolvedInExpression(questions, question.PublicKey, question.ValidationExpression).ToList();
+                },
+
+                questionId => SetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questions, questionId),
+                questionId => SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questions, questionId),
+                questionId => SetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, questionId),
+                questionId => SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, groups, questionId)
+            };
+
+            foreach (IGroup @group in groups.Values)
+            {
+                try
+                {
+                    SetQuestionsInvolvedInCustomEnablementConditionOfGroup(questions, groups, @group.PublicKey);
+                }
+                catch { }
+            }
+
+            foreach (Action<Guid> method in questionWarmingUpMethods)
+            {
+                foreach (IQuestion question in questions.Values)
+                {
+
+                    try
+                    {
+                        method.Invoke(question.PublicKey);
+                    }
+                    catch { }
+                }
+            }
+
+            document.IsCacheWarmed = true;
 
             this.innerDocument = document;
-            this.getVersion = getVersion;
-        }
-
-        public PlainQuestionnaire(QuestionnaireDocument document, long version)
-            : this(document, () => version) {}
-
-        public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion,
-            Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache)
-            : this(document, getVersion)
-        {
-            this.groupCache = groupCache;
-            this.questionCache = questionCache;
-        }
-
-
-        public long Version { get { return this.getVersion(); } }
-
-        public void InitializeQuestionnaireDocument()
-        {
-            InitializeQuestionnaireDocument(this.innerDocument);
         }
 
         public IQuestion GetQuestionByStataCaption(string stataCaption)
@@ -167,7 +199,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     "Cannot return maximum for selected answers for question with id '{0}' because it's type {1} does not support that parameter.",
                     questionId, question.QuestionType));
 
-            return ((IMultyOptionsQuestion) question).MaxAllowedAnswers;
+            return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
         }
 
         public bool IsCustomValidationDefined(Guid questionId)
@@ -417,11 +449,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId)
         {
             var roster = this.GetGroupOrThrow(rosterId);
-            
+
             var nestedRosters = new List<Guid>();
             var nestedGroups = new Queue<IGroup>(roster.Children.OfType<IGroup>());
 
-            while (nestedGroups.Count>0)
+            while (nestedGroups.Count > 0)
             {
                 var currentGroup = nestedGroups.Dequeue();
                 if (IsRosterGroup(currentGroup))
@@ -510,7 +542,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            var parentGroup = (IGroup) question.GetParent();
+            var parentGroup = (IGroup)question.GetParent();
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
@@ -527,7 +559,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             while (group != document)
             {
                 parentGroups.Add(group);
-                group = (IGroup) group.GetParent();
+                group = (IGroup)group.GetParent();
             }
 
             return parentGroups;
@@ -622,65 +654,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 question.PublicKey);
         }
 
-        private static void InitializeQuestionnaireDocument(QuestionnaireDocument source)
-        {
-            source.ConnectChildrenWithParent();
-
-            if (source.IsCacheWarmed)
-                return;
-
-            var groups = source
-                .Find<IGroup>(_ => true)
-                .ToDictionary(
-                    @group => @group.PublicKey,
-                    @group => @group);
-
-            var questions = source
-                .Find<IQuestion>(_ => true)
-                .ToDictionary(
-                    question => question.PublicKey,
-                    question => question);
-
-            var questionWarmingUpMethods = new Action<Guid>[]
-            {
-                questionId =>
-                {
-                    IQuestion question = GetQuestionOrThrow(questions, questionId);
-                    question.QuestionIdsInvolvedInCustomValidationOfQuestion =
-                        GetQuestionsInvolvedInExpression(questions, question.PublicKey, question.ValidationExpression).ToList();
-                },
-
-                questionId => SetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questions, questionId),
-                questionId => SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questions, questionId),
-                questionId => SetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, questionId),
-                questionId => SetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questions, groups, questionId)
-            };
-
-            foreach (IGroup @group in groups.Values)
-            {
-                try
-                {
-                    SetQuestionsInvolvedInCustomEnablementConditionOfGroup(questions, groups, @group.PublicKey);
-                }
-                catch { }
-            }
-
-            foreach (Action<Guid> method in questionWarmingUpMethods)
-            {
-                foreach (IQuestion question in questions.Values)
-                {
-
-                    try
-                    {
-                        method.Invoke(question.PublicKey);
-                    }
-                    catch { }
-                }
-            }
-
-            source.IsCacheWarmed = true;
-        }
-
         #region warmup caches
 
         private static void SetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
@@ -698,7 +671,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 GetQuestionsInvolvedInExpression(questions, group.PublicKey, group.ConditionExpression).ToList();
         }
 
-        private static void SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
+        private static void SetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Dictionary<Guid, IQuestion> questions,
+            Guid questionId)
         {
             var targetQuestion = GetQuestion(questions, questionId);
             targetQuestion.QuestionsWhichCustomValidationDependsOnQuestion = Enumerable.ToList(
@@ -808,6 +782,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         #endregion
-
     }
 }
