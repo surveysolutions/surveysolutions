@@ -137,6 +137,8 @@
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_it_at_top_level.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_ordered_multy_option_linked_and_manual_questions.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_roster_with_2_rows_and_linked_question_out_of_roster.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_roster_with_static_text.cs" />
+    <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_static_text.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_roster_with_question_which_has_rostertitle_in_substitution.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_synchronized_data_contains_textlist_roster_with_question_which_has_rostertitle_in_substitution.cs" />
     <Compile Include="Views\InterviewViewModelTests\when_updating_roster_title.cs" />
