@@ -676,6 +676,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithDuplicateVariableName(QuestionnaireDocument questionnaire)
         {
             var questionsDuplicates = questionnaire.Find<IQuestion>(q => true)
+                .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
                 .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
                 .SelectMany(group => group.Skip(1));
 
