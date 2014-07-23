@@ -8,7 +8,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     {
         public DashboardSurveyItem(string id, string questionnaireId, long questionnaireVersion, string surveyTitle, IEnumerable<DashboardQuestionnaireItem> items, bool allowCensusMode)
         {
-            this.AllowCensusMode = string.IsNullOrEmpty(questionnaireId) || allowCensusMode;
+            this.AllowCensusMode = !string.IsNullOrEmpty(questionnaireId) && allowCensusMode;
             this.QuestionnaireId = string.IsNullOrEmpty(questionnaireId) ? Guid.Parse(id) : Guid.Parse(questionnaireId);
             this.SurveyTitle = surveyTitle;
             this.cachedItems = items.ToList();
