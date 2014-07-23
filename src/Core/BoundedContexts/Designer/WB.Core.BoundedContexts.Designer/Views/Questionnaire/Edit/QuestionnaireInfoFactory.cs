@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             },
         };
 
-        private static readonly SelectOption[] QuestionTypeOptopns =
+        private static readonly SelectOption[] QuestionTypeOptions =
         {
             new SelectOption
             {
@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.Options = result.Options ?? new CategoricalOption[0];
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
             result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire);
-            result.QuestionTypeOptions = QuestionTypeOptopns;
+            result.QuestionTypeOptions = QuestionTypeOptions;
             result.QuestionScopeOptions = QuestionScopeOptions;
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
