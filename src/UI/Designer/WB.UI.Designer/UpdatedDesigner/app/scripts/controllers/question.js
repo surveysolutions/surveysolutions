@@ -17,7 +17,7 @@
                     $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
                     $scope.activeQuestion.title = result.title;
                     $scope.activeQuestion.isMandatory = result.isMandatory;
-                    $scope.activeQuestion.enablementConditilon = result.enablementCondition;
+                    $scope.activeQuestion.enablementCondition = result.enablementCondition;
                     $scope.activeQuestion.validationExpression = result.validationExpression;
                     $scope.activeQuestion.validationMessage = result.validationMessage;
                     $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
