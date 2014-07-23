@@ -1,6 +1,6 @@
 ﻿using Main.Core.Documents;
 
-namespace WB.Core.Infrastructure.Compilation
+namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface ICodeGenerator
     {

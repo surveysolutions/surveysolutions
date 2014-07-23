@@ -9,7 +9,7 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
 
         Establish context = () =>
         {
-            compiler = new RoslynInterviewCompiler();
+            compiler = new RoslynCompiler();
         };
 
         private Because of = () =>

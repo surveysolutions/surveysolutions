@@ -5,7 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 
-namespace WB.Core.Infrastructure.Compilation
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     public class QuestionnaireExecutorTemplateModel
     {
@@ -33,7 +33,7 @@ namespace WB.Core.Infrastructure.Compilation
                                 Validations = qestion.ValidationExpression,
                                 QuestionType = qestion.QuestionType,
 
-                                GeneratedQuestionTypeName = GenerateQuestionTypeName(qestion),
+                                GeneratedQuestionTypeName = this.GenerateQuestionTypeName(qestion),
                                 GeneratedQuestionMemberName = "@__" + qestion.StataExportCaption,
                                 GeneratedQuestionStateName = qestion.StataExportCaption + "_state"
                             }).ToList();
@@ -50,7 +50,6 @@ namespace WB.Core.Infrastructure.Compilation
                                 RosterGeneratedTypeName = roster.PublicKey.ToString() + "_type"
                             })
                     .ToList();
-
         }
 
         private string GenerateQuestionTypeName(AbstractQuestion question)
@@ -90,61 +89,9 @@ namespace WB.Core.Infrastructure.Compilation
                 default:
                     throw new ArgumentException("Unknown question type.");
             }
-
         }
     }
 
-
-    public class QuestionTemplateModel
-    {
-        public Guid Id { set; get; }
-        public string VariableName { set; get; }
-        public string Conditions { set; get; }
-        public string Validations { set; get; }
-
-        public QuestionType QuestionType { set; get; }
-
-        public string GeneratedQuestionTypeName { set; get; }
-        public string GeneratedQuestionMemberName { set; get; }
-        public string GeneratedQuestionStateName { set; get; }
-    }
-
-    public class GroupTemplateModel
-    {
-        public Guid Id { set; get; }
-        public string VariableName { set; get; }
-        public string Conditions { set; get; }
-
-        public string GeneratedGroupStateName { set; get; }
-    }
-
-    public class RosterTemplateModel : IParent
-    {
-        public Guid Id { set; get; }
-        public string VariableName { set; get; }
-        public string Conditions { set; get; }
-        public string RosterGeneratedTypeName { set; get; }
-
-        public List<QuestionTemplateModel> Questions { private set; get; }
-        public List<GroupTemplateModel> Groups { private set; get; }
-
-        public IParent ParentRoster { set; get; }
-
-        public IParent GetParent()
-        {
-            return ParentRoster;
-        }
-
-        public string GetTypeName()
-        {
-            return RosterGeneratedTypeName;
-        }
-
-        public IEnumerable<QuestionTemplateModel> GetQuestions()
-        {
-            return Questions;
-        }
-    }
 
     public interface IParent
     {

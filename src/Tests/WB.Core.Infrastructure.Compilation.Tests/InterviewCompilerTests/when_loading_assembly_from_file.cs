@@ -11,7 +11,7 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
     {
         private Establish context = () =>
         {
-            compiler = new RoslynInterviewCompiler();
+            compiler = new RoslynCompiler();
             emitResult = compiler.GenerateAssemblyAsString(id, testClass, new string[] { }, out resultAssembly);
 
             filePath = Path.GetTempFileName();
