@@ -6,29 +6,31 @@
             '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log',
             function($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, $log) {
 
-                var dataBind = function(result) {
-                    $scope.activeGroup = result;
+                var dataBind = function(group) {
+                    $scope.activeGroup = group;
                     $scope.activeGroup.isChapter = ($stateParams.itemId == $stateParams.chapterId);
-                    $scope.activeGroup.group.itemId = $stateParams.itemId;
-                    $scope.activeGroup.group.variableName = $stateParams.variableName;
+                    $scope.activeGroup.itemId = $stateParams.itemId;
+                    $scope.activeGroup.variableName = $stateParams.variableName;
+
                     $scope.groupForm.$setPristine();
                 };
 
                 $scope.loadGroup = function() {
                     questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
-                            dataBind(result);
-                            $scope.initialGroup = angular.copy(result);
+                            dataBind(result.group);
+                            $scope.activeGroup.breadcrumbs = result.breadcrumbs;
+                            $scope.initialGroup = angular.copy($scope.activeGroup);
                             utilityService.focus('focusGroup');
                         }
                     );
                 };
 
-                $scope.saveGroup = function () {
-                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeGroup.group).success(function(result) {
+                $scope.saveGroup = function() {
+                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeGroup).success(function(result) {
                         $scope.initialGroup = angular.copy($scope.activeGroup);
                         $rootScope.$emit('groupUpdated', {
-                            itemId: $scope.activeGroup.group.itemId,
-                            title: $scope.activeGroup.group.title
+                            itemId: $scope.activeGroup.itemId,
+                            title: $scope.activeGroup.title
                         });
                         $scope.groupForm.$setPristine();
                     });
@@ -42,10 +44,10 @@
                 $scope.deleteItem = function() {
                     if ($scope.activeGroup.isChapter) {
                         $rootScope.$emit('deleteChapter', {
-                            chapter: $scope.activeGroup.group
+                            chapter: $scope.activeGroup
                         });
                     } else {
-                        $scope.deleteGroup($scope.activeGroup.group);
+                        $scope.deleteGroup($scope.activeGroup);
                     }
                 };
 
