@@ -17,8 +17,9 @@
                     $scope.activeRoster = result;
                     $scope.activeRoster.itemId = $stateParams.itemId;
 
-                    $scope.activeRoster.numerics = utilityService.union(_.toArray(result.numericIntegerQuestions));
                     $scope.activeRoster.lists = utilityService.union(_.toArray(result.textListsQuestions));
+                    $scope.activeRoster.numerics = utilityService.union(_.toArray(result.numericIntegerQuestions));
+                    $scope.activeRoster.titles = utilityService.union(_.toArray(result.numericIntegerTitles));
                     $scope.activeRoster.multiOption = utilityService.union(_.toArray(result.notLinkedMultiOptionQuestions));
 
                     $scope.getRosterTemplate();

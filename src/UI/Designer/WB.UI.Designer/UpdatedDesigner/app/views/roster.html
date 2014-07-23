@@ -85,6 +85,20 @@
             </ul>
         </div>
     </div>
+    <div class="form-group">
+        <label for="edit-roster-numeric-source" class="wb-label">Titles of rows: <span>(<a>?</a>)</span></label><br>
+        <div class="btn-group width100" dropdown>
+            <button id="questionSelectBtn" class="btn dropdown-toggle" type="button">
+                <span class="edit-roster">{{ getSelected(activeRoster.titles, activeRoster.roster.rosterTitleQuestionId) }}</span>
+                <span class="dropdown-arrow"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
+                <li role="presentation" ng-repeat="title in activeRoster.titles">
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.roster.rosterTitleQuestionId = title.id">{{ title.title }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </script>
 
 <script type="text/ng-template" id="FixedTitles-template.html">
