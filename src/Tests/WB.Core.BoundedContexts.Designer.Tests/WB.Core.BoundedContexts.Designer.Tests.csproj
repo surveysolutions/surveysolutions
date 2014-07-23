@@ -134,6 +134,7 @@
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_contains_invalid_characters.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_contains_keyword.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_is_empty.cs" />
+    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_is_null.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_is_too_long.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_not_unique.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_start_with_digit.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_contains_invalid_characters.cs" />
     <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_contains_keyword.cs" />
     <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_is_empty.cs" />
+    <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_is_null.cs" />
     <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_is_too_long.cs" />
     <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_not_unique.cs" />
     <Compile Include="AddGpsCoordinatesQuestionHandlerTests\when_adding_gps_coordinates_question_and_variable_name_start_with_digit.cs" />
@@ -164,6 +166,7 @@
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_contains_invalid_characters.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_contains_keyword.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_is_empty.cs" />
+    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_is_null.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_is_too_long.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_not_unique.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_variable_name_start_with_digit.cs" />
@@ -183,7 +186,10 @@
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_in_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="AddNumericQuestionHandlerTests\when_adding_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_variable_name_is_null.cs" />
+    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_is_null.cs" />
     <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_parent_does_not_exists.cs" />
+    <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_is_null.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextDeleted_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received_and_entity_does_not_exists.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextCloned_event_received_and_parent_of_entity_does_not_exists.cs" />
@@ -191,10 +197,16 @@
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextAdded_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextCloned_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received.cs" />
+    <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_variable_name_is_null.cs" />
+    <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_is_null.cs" />
+    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_is_null.cs" />
+    <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_variable_name_is_null.cs" />
+    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_variable_name_is_null.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_all_parameters_specified.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_entity_with_same_id_already_exists.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_user_dont_have_permissions.cs" />
+    <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_is_null.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_all_parameters_specified.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_target_entity_does_not_exists.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_entity_does_not_exists.cs" />
@@ -219,6 +231,11 @@
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_all_parameters_specified.cs" />
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_user_dont_have_permissions.cs" />
+    <Compile Include="UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_text_contains_only_whitespaces.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_text_is_empty.cs" />
@@ -861,6 +878,7 @@
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_contains_invalid_characters.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_contains_keyword.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_is_empty.cs" />
+    <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_is_too_long.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_not_unique.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_start_with_digit.cs" />
