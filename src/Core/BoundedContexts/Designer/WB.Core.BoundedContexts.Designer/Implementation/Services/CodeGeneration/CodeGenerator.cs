@@ -1,7 +1,8 @@
 ﻿using Main.Core.Documents;
-using WB.Core.Infrastructure.Compilation.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
+using WB.Core.BoundedContexts.Designer.Services;
 
-namespace WB.Core.Infrastructure.Compilation
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     public class CodeGenerator : ICodeGenerator {
 

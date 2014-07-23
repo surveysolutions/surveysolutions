@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace WB.Core.Infrastructure.Compilation.Templates
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates
 {
     using System.Linq;
     using System.Text;
@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure.Compilation.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\InterviewExpressionStateTemplate.tt"
+    #line 1 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
     public partial class InterviewExpressionStateTemplate : InterviewExpressionStateTemplateBase
     {
@@ -221,7 +221,7 @@ namespace WB.Core.Infrastructure.Compilation.Templates
                     " null ? new Education_type[0] : rosters.Select(x => x as Education_type).ToArray" +
                     "();\r\n                }\r\n            }\r\n        }\r\n\r\n         ");
             
-            #line 386 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\InterviewExpressionStateTemplate.tt"
+            #line 386 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
 foreach (var roster in QuestionnaireTemplateStructure.Rosters) 
            {                
                 RosterTemplate template = new RosterTemplate(roster);
@@ -234,7 +234,7 @@ foreach (var roster in QuestionnaireTemplateStructure.Rosters)
             #line hidden
             this.Write("\r\n\r\n        public static class IdOf\r\n        {\r\n\r\n        ");
             
-            #line 398 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\InterviewExpressionStateTemplate.tt"
+            #line 398 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
 foreach (var q in QuestionnaireTemplateStructure.Questions) 
         {
             
@@ -242,28 +242,28 @@ foreach (var q in QuestionnaireTemplateStructure.Questions)
             #line hidden
             this.Write("            public static readonly Guid ");
             
-            #line 400 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\InterviewExpressionStateTemplate.tt"
+            #line 400 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 400 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\InterviewExpressionStateTemplate.tt"
+            #line 400 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.Id));
             
             #line default
             #line hidden
             this.Write(";\r\n        ");
             
-            #line 401 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\InterviewExpressionStateTemplate.tt"
+            #line 401 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("\r\n            public static readonly Guid questionnaire = ");
             
-            #line 403 "C:\Work\WB\Dev\src\Core\Infrastructure\WB.Core.Infrastructure.Compilation\Templates\InterviewExpressionStateTemplate.tt"
+            #line 403 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.Id));
             
             #line default

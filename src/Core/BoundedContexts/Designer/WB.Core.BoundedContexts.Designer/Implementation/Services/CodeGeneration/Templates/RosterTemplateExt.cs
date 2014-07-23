@@ -1,4 +1,4 @@
-﻿namespace WB.Core.Infrastructure.Compilation.Templates
+﻿namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates
 {
     public partial class RosterTemplate
     {

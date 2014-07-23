@@ -46,6 +46,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4052301-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -62,8 +65,14 @@
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\..\..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>..\..\..\packages\Microsoft.Bcl.Metadata.1.0.11-alpha\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -187,6 +196,7 @@
     <Compile Include="ChapterInfoViewDenormalizerTests\when_GroupBecameARoster_event_received.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_variable_name_roster_title.cs" />
+    <Compile Include="CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_new_questionnaire.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
@@ -850,6 +860,10 @@
     <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Compilation\WB.Core.Infrastructure.Compilation.csproj">
+      <Project>{13B91730-958C-4C6F-BB83-4D1BA7930CF2}</Project>
+      <Name>WB.Core.Infrastructure.Compilation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>

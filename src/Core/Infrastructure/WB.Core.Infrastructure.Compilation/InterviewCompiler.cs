@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.Infrastructure.Compilation
 {
-    public class RoslynInterviewCompiler : IDynamicCompiler
+    public class RoslynCompiler : IDynamicCompiler
     {
         private const string ProfileToBuild = "Profile24";
 
@@ -20,7 +20,7 @@ namespace WB.Core.Infrastructure.Compilation
         private readonly string[] defaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll" };
 
 
-        public RoslynInterviewCompiler()
+        public RoslynCompiler()
         {
             //should be resolve outside
             this.portableAssembliesPath =
