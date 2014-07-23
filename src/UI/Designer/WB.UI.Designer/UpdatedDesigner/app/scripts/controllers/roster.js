@@ -10,7 +10,7 @@
                     'FixedTitles-template.html': 'Fixed Titles',
                     'Numeric-template.html': 'Answer to numeric question',
                     'List-template.html': 'Answer to list question',
-                    'MultiOption-template.html': 'Multi Option'
+                    'MultiOption-template.html': 'Answer to Multi Option'
                 };
 
                 var dataBind = function(result) {
