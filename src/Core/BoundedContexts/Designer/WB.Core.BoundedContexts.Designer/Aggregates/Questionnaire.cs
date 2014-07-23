@@ -907,7 +907,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles,
             Guid? rosterTitleQuestionId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
@@ -1177,7 +1177,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
             RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -1354,11 +1354,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions, Option[] options, Guid sourceQuestionId, int targetIndex, Guid responsibleId,
             Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-
-            variableName = variableName.Trim();
-            title = title.Trim();
 
             var parentGroup = this.GetGroupById(parentGroupId);
 
@@ -1410,11 +1409,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
-            variableName = Monads.Maybe(() => variableName.Trim());
-            title = title.Trim();
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId);
@@ -1451,19 +1450,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void NewUpdateQuestion(Guid questionId,
+        public void UpdateQuestion(Guid questionId,
             string title, QuestionType type, string variableName, string variableLabel, string mask,
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId,
             bool areAnswersOrdered, int? maxAllowedAnswers)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-
-            variableName = variableName.Trim();
-            title = title.Trim();
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -1558,7 +1556,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string mask,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1600,7 +1598,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string mask,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -1646,7 +1644,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int targetIndex,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1674,7 +1672,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1707,7 +1705,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -1742,7 +1740,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int targetIndex,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1772,7 +1770,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1812,7 +1810,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -1856,7 +1854,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int targetIndex,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1892,7 +1890,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1939,7 +1937,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
@@ -1990,7 +1988,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -2028,7 +2026,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? linkedToQuestionId,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -2072,7 +2070,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Option[] options,
             Guid? linkedToQuestionId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
@@ -2121,7 +2119,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Option[] options,
             Guid? linkedToQuestionId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -2159,9 +2157,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isInteger, 
             int? countOfDecimalPlaces)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            variableName = variableName.Trim();
-            title = title.Trim();
 
             var parentGroup = this.GetGroupById(parentGroupId);
 
@@ -2211,10 +2209,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isInteger, 
             int? countOfDecimalPlaces)
         {
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+            PrepareGeneralProperties(ref title, ref variableName);
 
-            variableName = variableName.Trim();
-            title = title.Trim();
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             var parentGroup = this.GetGroupById(parentGroupId);
 
@@ -2248,11 +2245,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isInteger,
             int? countOfDecimalPlaces)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-
-            variableName = variableName.Trim();
-            title = title.Trim();
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -2290,13 +2286,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddTextListQuestion(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             var isPrefilled = false;
             var validationExpression = string.Empty;
 
-            variableName = variableName.Trim();
-            title = title.Trim();
             var parentGroup = this.GetGroupById(parentGroupId);
 
 
@@ -2327,14 +2323,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId, int? maxAnswerCount)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             var isPrefilled = false;
             var validationExpression = string.Empty;
             var validationMessage = string.Empty;
 
-            variableName = variableName.Trim();
-            title = title.Trim();
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled,
@@ -2353,6 +2349,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
@@ -2360,9 +2358,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var validationExpression = string.Empty;
             var validationMessage = string.Empty;
 
-
-            variableName = variableName.Trim();
-            title = title.Trim();
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName,
@@ -2395,7 +2390,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddQRBarcodeQuestion(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
@@ -2418,7 +2413,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
@@ -2443,7 +2438,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
@@ -3625,7 +3620,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Utilities
 
-        private void PrepareGeneralProperties(ref string title, ref string variableName)
+        private static void PrepareGeneralProperties(ref string title, ref string variableName)
         {
             if (variableName != null)
                 variableName = variableName.Trim();
