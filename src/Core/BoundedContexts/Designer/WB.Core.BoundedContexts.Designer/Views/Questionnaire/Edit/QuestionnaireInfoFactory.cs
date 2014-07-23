@@ -145,6 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 },
                 NotLinkedMultiOptionQuestions = this.GetNotLinkedMultiOptionQuestionBriefs(questionnaire),
                 NumericIntegerQuestions = this.GetNumericIntegerQuestionBriefs(questionnaire),
+                NumericIntegerTitles = this.GetNumericIntegerTitles(questionnaire, roster),
                 TextListsQuestions = this.GetTextListsQuestionBriefs(questionnaire),
                 Breadcrumbs = this.GetBreadcrumbs(questionnaire, roster)
             };
@@ -277,6 +278,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }
 
             return result;
+        }
+
+        private Dictionary<string, QuestionBrief[]> GetNumericIntegerTitles(QuestionsAndGroupsCollectionView questionsCollection, GroupAndRosterDetailsView roster)
+        {
+            var questions = questionsCollection
+                .Questions
+                .Where(q => q.ParentGroupId == roster.Id)
+                .Select(q => new
+                {
+                    Id = q.Id,
+                    Title = q.Title,
+                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q)
+                }).ToArray();
+
+            return questions.GroupBy(x => x.Breadcrumbs).ToDictionary(g => g.Key, g => g.Select(x => new QuestionBrief
+            {
+                Id = x.Id,
+                Title = x.Title
+            }).ToArray());
         }
 
         private Dictionary<string, QuestionBrief[]> GetNumericIntegerQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
