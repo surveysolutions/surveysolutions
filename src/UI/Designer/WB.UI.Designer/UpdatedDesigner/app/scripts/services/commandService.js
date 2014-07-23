@@ -56,6 +56,8 @@
                 };
 
                 commandService.sendUpdateQuestionCommand = function(questionnaireId, question) {
+                    var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
+
                     var command = {
                         questionnaireId: questionnaireId,
                         questionId: question.itemId,
@@ -64,9 +66,9 @@
                         variableName: question.variable,
                         variableLabel: question.variableLabel,
                         mask: question.mask,
-                        isPreFilled: question.questionScope == 'Prefilled',
+                        isPreFilled: isPrefilledScopeSelected,
                         isMandatory: question.isMandatory,
-                        scope: question.questionScope == 'Prefilled' ? 'Interviewer' : question.questionScope,
+                        scope: isPrefilledScopeSelected ? 'Interviewer' : question.questionScope,
                         enablementCondition: question.enablementCondition,
                         validationExpression: question.validationExpression,
                         validationMessage: question.validationMessage,
