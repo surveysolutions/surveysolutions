@@ -322,7 +322,6 @@
                 var parentItem = clonnedItem.getParentItem() || $scope;
                 var indexOf = _.indexOf(parentItem.items, clonnedItem);
                 var newId = utilityService.guid();
-
                 commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function(result) {
                     if (result.IsSuccess) {
                         $scope.refreshTree();
