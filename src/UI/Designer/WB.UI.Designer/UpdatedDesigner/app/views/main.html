@@ -47,6 +47,7 @@
 
 <section id="main" class="row" >
     <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
+        <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
         <div class="ul-holder" ng-mouseleave="foldback()">
             <ul class="chapters" ui-tree-nodes ng-model="questionnaire.chapters">
                 <li class="chapter-panel-item"
