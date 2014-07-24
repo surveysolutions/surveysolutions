@@ -17,6 +17,7 @@
 
             $scope.editChapter = function (chapter) {
                 $state.go('questionnaire.chapter.group', { chapterId: chapter.itemId, itemId: chapter.itemId });
+                $scope.foldback();
             };
 
             $scope.isCurrentChapter = function(chapter) {
