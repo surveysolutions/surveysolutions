@@ -474,6 +474,33 @@ textarea {
   text-align: left;
   border-top: none;
 }
+.alert {
+  border: none;
+  margin-bottom: 0;
+}
+.alert-warning,
+.alert-info,
+.alert-success,
+.alert-danger {
+  background-color: #ffffff;
+  color: #000000;
+  border-top: 8px solid transparent;
+}
+.alert-warning {
+  border-top-color: #faebcc;
+}
+.alert-info {
+  border-top-color: #bce8f1;
+}
+.alert-success {
+  border-top-color: #d6e9c6;
+}
+.alert-danger {
+  border-top-color: #ebccd1;
+}
+.ui-pnotify .ui-pnotify-shadow {
+  box-shadow: 0 0 30px #323232;
+}
 .bootstrap-select:not([class*="span"]):not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
   width: 100%;
   margin-top: 3px;
