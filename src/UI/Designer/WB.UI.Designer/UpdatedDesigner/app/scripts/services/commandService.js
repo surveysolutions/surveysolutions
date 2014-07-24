@@ -187,19 +187,33 @@
                 };
 
                 commandService.updateRoster = function(questionnaireId, incomingRoster) {
+
                     var command = {
                         "questionnaireId": questionnaireId,
                         "groupId": incomingRoster.itemId,
-                        "title": incomingRoster.roster.title,
-                        "description": incomingRoster.roster.description,
-                        "condition": incomingRoster.roster.enablementCondition,
-                        "rosterSizeQuestionId": incomingRoster.roster.rosterSizeQuestionId,
-                        "rosterSizeSource": incomingRoster.roster.rosterSizeSourceType,
-                        "rosterFixedTitles": incomingRoster.roster.rosterFixedTitles,
-                        "rosterTitleQuestionId": incomingRoster.roster.rosterTitleQuestionId,
-                        "variableName": incomingRoster.roster.variableName,
+                        "title": incomingRoster.title,
+                        "description": incomingRoster.description,
+                        "condition": incomingRoster.enablementCondition,
+                        "variableName": incomingRoster.variableName,
                         "isRoster": true
                     };
+
+                    switch (incomingRoster.type) {
+                    case "Fixed":
+                        command.rosterSizeSource = "FixedTitles";
+                        command.rosterFixedTitles = incomingRoster.rosterFixedTitles;
+                        break;
+                    case "Numeric":
+                        command.rosterSizeQuestionId = incomingRoster.rosterSizeNumericQuestionId;
+                        command.rosterTitleQuestionId = incomingRoster.rosterTitleQuestionId;
+                        break;
+                    case "List":
+                        command.rosterSizeQuestionId = incomingRoster.rosterSizeListQuestionId;
+                        break;
+                    case "Multi":
+                        command.rosterSizeQuestionId = incomingRoster.rosterSizeMultiQuestionId;
+                        break;
+                    }
 
                     return commandCall("UpdateGroup", command);
                 };

@@ -5,13 +5,13 @@
         <label for="edit-group-title" class="wb-label">Roster Type <span>(<a>?</a>)</span></label><br>
         <div class="form-group span-12">
             <div class="btn-group" dropdown>
-                <button id="rosterTypeBtn" class="btn dropdown-toggle" type="button">
-                    {{rosterTypes[activeRoster.rosterTemplate]}}
+                <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control" type="button">
+                    {{activeRoster.getTitleForRosterType()}}
                     <span class="dropdown-arrow"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="rosterTypeBtn">
-                    <li role="presentation" ng-repeat="type in rosterTypes">
-                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="updateRosterType(type)">{{ type }}</a>
+                    <li role="presentation" ng-repeat="type in activeRoster.rosterTypeOptions">
+                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="updateRosterType(type.value)">{{type.text}}</a>
                     </li>
                 </ul>
             </div>
@@ -19,29 +19,25 @@
 
         <div class="form-group">
             <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
-            <!--<input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.title">-->
-            <input id="edit-group-title" type="text" class="form-control bg-white width-auto" ng-model="activeRoster.roster.title">
+            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.title">
         </div>
 
         <div class="form-group">
             <label for="edit-group-variableName" class="wb-label">Variable name <span>(<a>?</a>)</span></label><br>
-            <!--<input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.variableName">-->
-            <input id="edit-group-variableName" type="text" class="form-control bg-white width-auto" ng-model="activeRoster.roster.variableName">
+            <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.variableName">
         </div>
 
-        <div ng-include="activeRoster.rosterTemplate" ng-if="activeRoster.roster.rosterSizeSourceType != undefined">
+        <div ng-include="activeRoster.type + '-template.html'" ng-if="activeRoster.type != undefined">
         </div>
 
         <div class="form-group">
             <label for="edit-group-description" class="wb-label">Description <span>(<a>?</a>)</span></label><br>
-            <!--<input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.description">-->
-            <input id="edit-group-description" type="text" class="form-control bg-white width-auto" ng-model="activeRoster.roster.description">
+            <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.description">
         </div>
 
         <div class="form-group">
             <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
-            <!--<input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.enablementCondition">-->
-            <input id="edit-group-condition" type="text" class="form-control bg-white width-auto" ng-model="activeRoster.roster.enablementCondition">
+            <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.enablementCondition">
         </div>
     </form>
 </div>
@@ -54,6 +50,7 @@
     <div class="pull-right">
         <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteRoster()">Delete</button>
         <button id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneGroup()">Clone</button>
+        <ng-include src="'moveToChapterSnippet'" />
     </div>
 </div>
 
@@ -62,12 +59,12 @@
         <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
         <div class="btn-group width100" dropdown>
             <button id="edit-roster-numeric-source" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.lists, activeRoster.roster.rosterSizeQuestionId) }}</span>
+                <span class="edit-roster">{{ getSelected(activeRoster.lists, activeRoster.rosterSizeListQuestionId) }}</span>
                 <span class="dropdown-arrow"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
                 <li role="presentation" ng-repeat="list in activeRoster.lists">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.roster.rosterSizeQuestionId = list.id">{{ list.title }}</a>
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterSizeListQuestionId = list.id">{{ list.title }}</a>
                 </li>
             </ul>
         </div>
@@ -79,12 +76,12 @@
         <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
         <div class="btn-group width100" dropdown>
             <button id="questionSelectBtn" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.numerics, activeRoster.roster.rosterSizeQuestionId) }}</span>
+                <span class="edit-roster">{{ getSelected(activeRoster.numerics, activeRoster.rosterSizeNumericQuestionId) }}</span>
                 <span class="dropdown-arrow"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
                 <li role="presentation" ng-repeat="numeric in activeRoster.numerics">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.roster.rosterSizeQuestionId = numeric.id">{{ numeric.title }}</a>
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterSizeNumericQuestionId = numeric.id">{{ numeric.title }}</a>
                 </li>
             </ul>
         </div>
@@ -93,36 +90,36 @@
         <label for="edit-roster-numeric-source" class="wb-label">Titles of rows: <span>(<a>?</a>)</span></label><br>
         <div class="btn-group width100" dropdown>
             <button id="questionSelectBtn" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.titles, activeRoster.roster.rosterTitleQuestionId) }}</span>
+                <span class="edit-roster">{{ getSelected(activeRoster.titles, activeRoster.rosterTitleQuestionId) }}</span>
                 <span class="dropdown-arrow"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
                 <li role="presentation" ng-repeat="title in activeRoster.titles">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.roster.rosterTitleQuestionId = title.id">{{ title.title }}</a>
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterTitleQuestionId = title.id">{{ title.title }}</a>
                 </li>
             </ul>
         </div>
     </div>
 </script>
 
-<script type="text/ng-template" id="FixedTitles-template.html">
+<script type="text/ng-template" id="Fixed-template.html">
     <div class="form-group">
         <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <span>(<a>?</a>)</span></label>
-        <textarea id="edit-fixed-roster-title" class="form-control" rows="5" cols="100" split-array ng-model="activeRoster.roster.rosterFixedTitles"></textarea>
+        <textarea id="edit-fixed-roster-title" class="form-control" rows="5" cols="100" split-array ng-model="activeRoster.rosterFixedTitles"></textarea>
     </div>
 </script>
 
-<script type="text/ng-template" id="MultiOption-template.html">
+<script type="text/ng-template" id="Multi-template.html">
     <div class="form-group">
         <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
         <div class="btn-group width100" dropdown>
             <button id="questionSelectBtn" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.multiOption, activeRoster.roster.rosterTitleQuestionId) }}</span>
+                <span class="edit-roster">{{ getSelected(activeRoster.multiOption, activeRoster.rosterSizeMultiQuestionId) }}</span>
                 <span class="dropdown-arrow"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
                 <li role="presentation" ng-repeat="multiOption in activeRoster.multiOption">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.roster.rosterTitleQuestionId = multiOption.id">
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterSizeMultiQuestionId = multiOption.id">
                         {{ multiOption.title }}
                     </a>
                 </li>

@@ -4,26 +4,21 @@
     angular.module('designerApp')
         .controller('RosterCtrl', [
             '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', 'confirmService', '$log',
-            function($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, confirmService, $log) {
+            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, confirmService, $log) {
                 $scope.currentChapterId = $stateParams.chapterId;
-
-                $scope.rosterTypes = {
-                    'FixedTitles-template.html': 'Fixed Titles',
-                    'Numeric-template.html': 'Answer to numeric question',
-                    'List-template.html': 'Answer to list question',
-                    'MultiOption-template.html': 'Answer to Multi Option'
-                };
 
                 var dataBind = function(result) {
                     $scope.activeRoster = result;
-                    $scope.activeRoster.itemId = $stateParams.itemId;
 
                     $scope.activeRoster.lists = utilityService.union(_.toArray(result.textListsQuestions));
                     $scope.activeRoster.numerics = utilityService.union(_.toArray(result.numericIntegerQuestions));
                     $scope.activeRoster.titles = utilityService.union(_.toArray(result.numericIntegerTitles));
                     $scope.activeRoster.multiOption = utilityService.union(_.toArray(result.notLinkedMultiOptionQuestions));
 
-                    $scope.getRosterTemplate();
+                    $scope.activeRoster.getTitleForRosterType = function () {
+                        return _.find($scope.activeRoster.rosterTypeOptions, { 'value': $scope.activeRoster.type }).text;
+                    };
+
                     $scope.editRosterForm.$setPristine();
                 };
 
@@ -35,31 +30,9 @@
                     return '';
                 };
 
-                $scope.getRosterTemplate = function() {
-                    if ($scope.activeRoster !== undefined && $scope.activeRoster.roster.rosterSizeSourceType !== undefined) {
-                        if ($scope.activeRoster.roster.rosterSizeSourceType === 'FixedTitles') {
-                            $scope.activeRoster.rosterTemplate = 'FixedTitles-template.html';
-                        }
-                        if ($scope.activeRoster.roster.rosterSizeSourceType === 'Question') {
-                            if ($scope.activeRoster.roster.rosterTitleQuestionId === null) {
-                                $scope.activeRoster.rosterTemplate = 'List-template.html';
-                            } else {
-                                $scope.activeRoster.rosterTemplate = 'Numeric-template.html';
-                            }
-                        }
-                    }
-                };
-
-                $scope.updateRosterType = function(i) {
-                    $scope.activeRoster.rosterTemplate = (_.invert($scope.rosterTypes))[i];
-
-                    if ($scope.activeRoster.rosterTemplate === 'FixedTitles-template.html') {
-                        $scope.activeRoster.roster.rosterSizeSourceType = 'FixedTitles';
-                        $scope.activeRoster.roster.rosterSizeQuestionId = null;
-                    } else {
-                        $scope.activeRoster.roster.rosterSizeSourceType = 'Question';
-                        $scope.activeRoster.roster.rosterFixedTitles = null;
-                    }
+                
+                $scope.updateRosterType = function (type) {
+                    $scope.activeRoster.type = type;
                 };
 
                 $scope.loadRoster = function() {
@@ -71,19 +44,19 @@
                 };
 
                 $scope.saveRoster = function() {
-                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function(result) {
+                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function() {
                         $scope.initialRoster = angular.copy($scope.activeRoster);
 
                         $rootScope.$emit('rosterUpdated', {
                             itemId: $scope.activeRoster.itemId,
-                            title: $scope.activeRoster.roster.title
+                            title: $scope.activeRoster.title
                         });
                         $scope.editRosterForm.$setPristine();
                     });
                 };
 
                 $scope.deleteRoster = function() {
-                    var modalInstance = confirmService.open($scope.activeRoster.roster);
+                    var modalInstance = confirmService.open($scope.activeRoster);
 
                     modalInstance.result.then(function(confirmResult) {
                         if (confirmResult === 'ok') {
