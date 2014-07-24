@@ -1,4 +1,4 @@
-﻿/**
+/**
  * WorldBank Designer
  * file: markup.css.less
  * description: LESS main import script
@@ -85,6 +85,12 @@ html,
 body {
   height: 100%;
   overflow: hidden;
+}
+@media screen and (max-width: 1279px) {
+  html,
+  body {
+    overflow-x: auto;
+  }
 }
 /**
  * WorldBank Designer
@@ -908,6 +914,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 #designer-editor.container {
   width: 100%;
+  min-width: 1280px;
   height: 100%;
   padding: 0 15px;
 }
@@ -1918,4 +1925,3 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog .form-group .invite-button {
   line-height: 0px;
 }
-/*# sourceMappingURL=markup.css.css.map */
