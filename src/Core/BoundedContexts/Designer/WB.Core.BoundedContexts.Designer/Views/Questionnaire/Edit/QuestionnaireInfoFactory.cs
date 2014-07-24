@@ -295,7 +295,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 {
                     Id = q.Id,
                     Title = q.Title,
-                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q)
+                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q),
+                    Type = q.Type
                 }).ToArray();
 
 
@@ -314,7 +315,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 {
                     Title = question.Title, 
                     Id = question.Id.FormatGuid(), 
-                    IsSectionPlaceHolder = false
+                    IsSectionPlaceHolder = false,
+                    Breadcrumbs = brief.Key,
+                    Type = question.Type.ToString().ToLower()
                 }));
             }
 
