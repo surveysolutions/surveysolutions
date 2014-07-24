@@ -113,10 +113,10 @@
         </div>
 
         <div class="buttons-item" ng-if="isGroup(item)" ng-class="{ hidden: collapsed }">
-            <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(item)" />
             <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
             <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
             <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(item)" />
+            <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(item)" />
         </div>
     </script>
 
@@ -126,10 +126,10 @@
             <div ng-repeat="item in items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
             </div>
             <div class="buttons-item">
-                <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
+                <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(currentChapter)" />
             </div>
         </div>
 
