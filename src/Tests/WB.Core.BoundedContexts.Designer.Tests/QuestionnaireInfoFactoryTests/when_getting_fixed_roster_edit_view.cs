@@ -4,12 +4,13 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
 {
-    internal class when_getting_roster_edit_view : QuestionnaireInfoFactoryTestContext
+    internal class when_getting_fixed_roster_edit_view : QuestionnaireInfoFactoryTestContext
     {
         Establish context = () =>
         {
@@ -28,29 +29,35 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         It should_return_not_null_view = () =>
             result.ShouldNotBeNull();
 
-        It should_return_group_with_Id_equals_groupId = () =>
-            result.Roster.Id.ShouldEqual(rosterId);
+        It should_return_roster_with_ItemId_equals_groupId = () =>
+            result.ItemId.ShouldEqual(rosterId.FormatGuid());
 
-        It should_return_group_with_Title_equals_g3_title = () =>
-            result.Roster.Title.ShouldEqual(GetGroup(rosterId).Title);
+        It should_return_roster_with_Title_equals_g3_title = () =>
+            result.Title.ShouldEqual(GetGroup(rosterId).Title);
 
-        It should_return_group_with_EnablementCondition_equals_g3_enablementCondition = () =>
-            result.Roster.EnablementCondition.ShouldEqual(GetGroup(rosterId).EnablementCondition);
+        It should_return_roster_with_EnablementCondition_equals_g3_enablementCondition = () =>
+            result.EnablementCondition.ShouldEqual(GetGroup(rosterId).EnablementCondition);
 
-        It should_return_group_with_Description_equals_g3_description = () =>
-            result.Roster.Description.ShouldEqual(GetGroup(rosterId).Description);
+        It should_return_roster_with_Description_equals_g3_description = () =>
+            result.Description.ShouldEqual(GetGroup(rosterId).Description);
 
-        It should_return_group_with_RosterFixedTitles_equals_g3_RosterFixedTitles = () =>
-            result.Roster.RosterFixedTitles.ShouldEqual(GetGroup(rosterId).RosterFixedTitles);
+        It should_return_roster_with_RosterFixedTitles_equals_g3_RosterFixedTitles = () =>
+            result.RosterFixedTitles.ShouldEqual(GetGroup(rosterId).RosterFixedTitles);
 
-        It should_return_group_with_RosterSizeQuestionId_equals_g3_RosterSizeQuestionId = () =>
-            result.Roster.RosterSizeQuestionId.ShouldEqual(GetGroup(rosterId).RosterSizeQuestionId);
+        It should_return_roster_with_RosterSizeMultiQuestionId_be_null = () =>
+            result.RosterSizeMultiQuestionId.ShouldBeNull();
 
-        It should_return_group_with_RosterSizeSourceType_equals_g3_RosterSizeSourceType = () =>
-            result.Roster.RosterSizeSourceType.ShouldEqual(GetGroup(rosterId).RosterSizeSourceType);
+        It should_return_roster_with_RosterSizeListQuestionId_be_null = () =>
+            result.RosterSizeListQuestionId.ShouldBeNull();
 
-        It should_return_group_with_RosterTitleQuestionId_equals_g3_RosterTitleQuestionId = () =>
-            result.Roster.RosterTitleQuestionId.ShouldEqual(GetGroup(rosterId).RosterTitleQuestionId);
+        It should_return_roster_with_RosterSizeNumericQuestionId_be_null = () =>
+            result.RosterSizeNumericQuestionId.ShouldBeNull();
+
+        It should_return_roster_with_Type_equals_to_Fixed = () =>
+            result.Type.ShouldEqual(RosterType.Fixed);
+
+        It should_return_roster_with_RosterTitleQuestionId_equals_g3_RosterTitleQuestionId = () =>
+            result.RosterTitleQuestionId.ShouldEqual(GetGroup(rosterId).RosterTitleQuestionId);
 
         It should_return_grouped_list_of_multi_questions_with_one_pair = () =>
             result.NotLinkedMultiOptionQuestions.Count.ShouldEqual(1);
