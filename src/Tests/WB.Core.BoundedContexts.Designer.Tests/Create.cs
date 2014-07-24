@@ -128,9 +128,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests
         }
 
         public static IPublishedEvent<QuestionnaireUpdated> QuestionnaireUpdatedEvent(string questionnaireId,
-            string questionnaireTitle)
+            string questionnaireTitle,
+            bool isPublic = false)
         {
-            return ToPublishedEvent(new QuestionnaireUpdated() {Title = questionnaireTitle}, new Guid(questionnaireId));
+            return ToPublishedEvent(new QuestionnaireUpdated() {Title = questionnaireTitle, IsPublic = isPublic}, new Guid(questionnaireId));
         }
 
         public static IPublishedEvent<TextListQuestionAdded> TextListQuestionAddedEvent(string questionId = null,
