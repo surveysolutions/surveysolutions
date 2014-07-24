@@ -387,6 +387,14 @@ textarea {
 .popover {
   max-width: inherit;
 }
+#verification-modal {
+  right: 50%;
+}
+#verification-modal .modal-dialog {
+  width: 90%;
+  margin-left: 8%;
+  margin-right: 2%;
+}
 .modal {
   overflow-y: inherit;
 }
