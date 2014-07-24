@@ -92,8 +92,11 @@
                     ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
 
             <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
-            <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
+            <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"> </a>
             <div class="qname-block">
+
+                <span ng-if="item.isRoster" ng-bind-html="item.variable | highlight:search.searchText"></span>
+
                 <div class="btn-group dropdown">
                     <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
                     <ul class="dropdown-menu">

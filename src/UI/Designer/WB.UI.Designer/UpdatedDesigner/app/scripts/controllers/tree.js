@@ -456,6 +456,7 @@
                 var roster = questionnaireService.findItem($scope.items, data.itemId);
                 if (roster != null) {
                     roster.title = data.title;
+                    roster.variable = data.variable;
                 }
             });
         }

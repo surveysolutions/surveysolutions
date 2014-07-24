@@ -9,7 +9,7 @@
 
                 var dataBind = function(result) {
                     $scope.activeRoster = result;
-
+                    $scope.activeRoster.variable = result.roster.variableName;
                     $scope.activeRoster.lists = utilityService.union(_.toArray(result.textListsQuestions));
                     $scope.activeRoster.numerics = utilityService.union(_.toArray(result.numericIntegerQuestions));
                     $scope.activeRoster.titles = utilityService.union(_.toArray(result.numericIntegerTitles));
@@ -49,6 +49,7 @@
 
                         $rootScope.$emit('rosterUpdated', {
                             itemId: $scope.activeRoster.itemId,
+                            variable: $scope.activeRoster.variableName,
                             title: $scope.activeRoster.title
                         });
                         $scope.editRosterForm.$setPristine();
