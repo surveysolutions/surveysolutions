@@ -64,10 +64,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         It should_return_grouped_list_of_multi_questions_with_values_titles_contains_only_q2Id = () =>
             result.NotLinkedMultiOptionQuestions["Group 1"].Select(x => x.Title).ShouldContainOnly(GetQuestion(q2Id).Title);
 
+        It should_return_grouped_list_of_integer_titles_with_one_pair = () =>
+            result.NumericIntegerTitles.Count.ShouldEqual(1);
+
+        It should_return_grouped_list_of_integer_titles_with_two_pairs_and_key_equals__textListGroupKey = () =>
+            result.NumericIntegerTitles.Keys.ShouldContainOnly(textListGroupKey);
+
+        It should_return_integer_questions_in_group_with_key__Group_1__with_ids_contains_only_q4Id = () =>
+            result.NumericIntegerTitles[textListGroupKey].Select(x => x.Id).ShouldContainOnly(q4Id);
+
         It should_return_grouped_list_of_integer_questions_with_two_pair = () =>
             result.NumericIntegerQuestions.Count.ShouldEqual(2);
 
-        It should_return_grouped_list_of_integer_questions_with_two_pairs_and_key_equals__group_1__group_2__ = () =>
+        It should_return_grouped_list_of_integer_questions_with_two_pairs_and_key_equals__group_1__group_2 = () =>
             result.NumericIntegerQuestions.Keys.ShouldContainOnly("Group 1", "Group 2");
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_ids_contains_only_q1Id = () =>
