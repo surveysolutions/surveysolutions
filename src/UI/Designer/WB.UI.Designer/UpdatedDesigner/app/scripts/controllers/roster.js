@@ -9,7 +9,7 @@
 
                 var dataBind = function(result) {
                     $scope.activeRoster = result;
-                    $scope.activeRoster.variable = result.roster.variableName;
+                    $scope.activeRoster.variable = result.variableName;
                     $scope.activeRoster.lists = utilityService.union(_.toArray(result.textListsQuestions));
                     $scope.activeRoster.numerics = utilityService.union(_.toArray(result.numericIntegerQuestions));
                     $scope.activeRoster.titles = utilityService.union(_.toArray(result.numericIntegerTitles));
