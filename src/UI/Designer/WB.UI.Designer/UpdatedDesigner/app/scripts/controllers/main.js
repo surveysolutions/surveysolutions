@@ -221,6 +221,8 @@
                             $scope.currentChapter = defaultChapter;
                             $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
                         }
+
+                        $rootScope.$emit('questionnaireLoaded');
                     });
                 };
 
