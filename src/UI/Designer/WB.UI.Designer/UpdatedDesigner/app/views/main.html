@@ -53,7 +53,7 @@
                 <li class="chapter-panel-item"
                     ng-repeat="chapter in questionnaire.chapters"
                     ui-tree-node
-                    ui-sref-active="current">
+                    ng-class="{ current: isCurrentChapter(chapter) }">
                     <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
                         <div class="inner">
                             <a class="handler" ui-tree-handle></a>

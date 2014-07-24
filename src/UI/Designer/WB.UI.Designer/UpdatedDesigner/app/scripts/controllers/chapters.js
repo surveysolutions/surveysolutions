@@ -19,6 +19,10 @@
                 $state.go('questionnaire.chapter.group', { chapterId: chapter.itemId, itemId: chapter.itemId });
             };
 
+            $scope.isCurrentChapter = function(chapter) {
+                return chapter.itemId === $state.params.chapterId;
+            };
+
             $scope.addNewChapter = function () {
                 var newId = math.guid();
 

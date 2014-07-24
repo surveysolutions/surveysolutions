@@ -166,7 +166,6 @@
                     });
                 };
 
-
                 $rootScope.$on('groupDeleted', function() {
                     $scope.questionnaire.groupsCount--;
                 });
