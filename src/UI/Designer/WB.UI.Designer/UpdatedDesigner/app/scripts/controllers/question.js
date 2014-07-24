@@ -12,7 +12,7 @@
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
 
                     $scope.activeQuestion.itemId = $state.params.itemId;
-                    $scope.activeQuestion.type = result.type;
+                    
                     $scope.activeQuestion.variable = result.variableName;
                     $scope.activeQuestion.variableLabel = result.variableLabel;
                     $scope.activeQuestion.mask = result.mask;
@@ -39,6 +39,7 @@
 
 
                     $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
+                    $scope.setQuestionType(result.type);
                     $scope.setLinkSource(result.linkedToQuestionId);
 
                     $scope.questionForm.$setPristine();
@@ -68,6 +69,7 @@
 
                 $scope.setQuestionType = function(type) {
                     $scope.activeQuestion.type = type;
+                    $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, {value:type}).text;
                 };
 
                 $scope.cancelQuestion = function() {
