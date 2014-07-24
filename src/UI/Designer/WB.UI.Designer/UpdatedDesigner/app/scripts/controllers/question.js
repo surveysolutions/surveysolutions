@@ -5,7 +5,9 @@
         .controller('QuestionCtrl', [
             '$rootScope', '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log',
             function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log) {
-                var dataBind = function(result) {
+                $scope.currentChapterId = $state.params.chapterId;
+
+                var dataBind = function (result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
 

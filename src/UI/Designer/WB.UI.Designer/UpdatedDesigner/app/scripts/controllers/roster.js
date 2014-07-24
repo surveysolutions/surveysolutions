@@ -5,6 +5,7 @@
         .controller('RosterCtrl', [
             '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', 'confirmService', '$log',
             function($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, confirmService, $log) {
+                $scope.currentChapterId = $stateParams.chapterId;
 
                 $scope.rosterTypes = {
                     'FixedTitles-template.html': 'Fixed Titles',

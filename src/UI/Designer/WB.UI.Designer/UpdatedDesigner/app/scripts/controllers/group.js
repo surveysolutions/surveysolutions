@@ -5,6 +5,7 @@
         .controller('GroupCtrl', [
             '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', '$log',
             function($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, $log) {
+                $scope.currentChapterId = $stateParams.chapterId;
 
                 var dataBind = function(group) {
                     $scope.activeGroup = group;
