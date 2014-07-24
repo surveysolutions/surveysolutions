@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string chapter1StaticTextId = null, string chapter1StaticText = null,
             bool? isPublic = null)
         {
-            return ToPublishedEvent(new QuestionnaireCloned()
+            var result = ToPublishedEvent(new QuestionnaireCloned()
             {
                 QuestionnaireDocument =
                     CreateQuestionnaireDocument(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle,
@@ -86,6 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                         chapter1StaticTextId: chapter1StaticTextId, chapter1StaticText: chapter1StaticText,
                         isPublic: isPublic ?? false)
             }, new Guid(questionnaireId));
+            return result;
         }
 
         public static IPublishedEvent<TemplateImported> TemplateImportedEvent(string questionnaireId,
