@@ -108,6 +108,12 @@ body {
   font-weight: 300;
   src: local('Roboto Light'), local('Roboto-Light'), url(../fonts/Roboto300.woff) format('woff');
 }
+@font-face {
+  font-family: 'Open Sans Light';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(../fonts/OpenSans300.woff) format('woff');
+}
 /**
  * WorldBank Designer
  * file: wb-fontstyles.css.less
@@ -422,7 +428,7 @@ textarea {
   border-top: 8px solid #d7e4ee;
 }
 .modal .modal-dialog .modal-header h1 {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans Light', sans-serif;
 }
 .modal .modal-dialog .modal-header button.close {
   position: absolute;
@@ -455,7 +461,7 @@ textarea {
   border-top: 8px solid #d7e4ee;
 }
 .modal-title {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans Light', sans-serif;
   font-size: 36px;
 }
 .modal-body {
