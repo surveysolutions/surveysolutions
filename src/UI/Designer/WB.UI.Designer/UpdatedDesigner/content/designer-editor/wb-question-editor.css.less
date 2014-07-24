@@ -2,12 +2,101 @@ input#edit-question-title, input#edit-group-title {
   .edit-question-title-fontstyle();
 }
 
+.dropdown-icon {
+    width: 25px;
+    height:19px;
+    display:inline-block;
+    background: transparent center center no-repeat;
+    vertical-align: middle;
+}
+
+.icon-multyoption  {
+  background-image: url(../i/icon-cat-multianswer-sm.png);
+}
+.icon-singleoption  {
+  background-image: url(../i/icon-cat-singleanswer-sm.png);
+}
+.icon-qrbarcode {
+  background-image: url(../i/icon-cat-multimedia-sm.png);
+}
+.icon-datetime {
+  background-image: url(../i/icon-cat-datetime-sm.png);
+}
+.icon-gpscoordinates {
+  background-image: url(../i/icon-cat-geoloc-sm.png);
+}
+.icon-textlist {
+  background-image: url(../i/icon-cat-textarea-sm.png);
+}
+.icon-text {
+  background-image: url(../i/icon-cat-textedit-sm.png);
+}
+.icon-numeric  {
+  background-image: url(../i/icon-cat-intedit-sm.png);
+}
+
+
 .question-editor .singleOption, .question-editor .multyOption {
-  background-color: #f1f2f3;
+  background-color: @questionnarie-question-specific-block-color;
   margin-top: -20px;
-  padding: 0 15px;
+  padding: 0 15px 10px;
   border-radius: 4px;
 
+  #sourceOfLinkedQuestion{
+      label{
+          font-weight:normal;
+          display: block;
+      }
+      .btn-group{
+          width:100%;
+          .btn.dropdown-toggle{
+              width:100%;
+              border: none;
+          }
+          .selected-item{
+              .path{
+                  color:@questionnarie-question-placeholder-color;
+                  display: block;
+                  text-transform: uppercase;
+                  font-size: 10px;
+              }
+              .chosen-item{
+              color: @questionnarie-question-editor-color;
+              line-height: 20px;
+              }
+          }
+          .dropdown-arrow{
+              top: 14px;
+          }
+      }
+
+      .dropdown-menu{
+          width: 100%;
+          //margin-top: -37px;
+          font-family: Arial;
+
+          li a{
+              padding-top: 1px;
+              padding-bottom: 1px;
+              color: @questionnarie-question-editor-color;
+          }
+          .dropdown-header{
+              text-transform: uppercase;
+              font-size: 10px;
+              margin-top: 15px;
+              line-height:12px;
+
+              &:first-child
+                  {
+                  margin-top:0;
+              }
+          }
+      }
+
+      .select-placeholder{
+          color: @questionnarie-question-placeholder-color;
+      }
+  }
   .table-holder {
     display: table;
     width: 100%;

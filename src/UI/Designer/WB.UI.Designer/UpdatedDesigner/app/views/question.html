@@ -131,26 +131,32 @@
     </script>
 
     <script type="text/ng-template" id="linkTemplate.html">
-        <label for="linkedQuestionSource">Bind to question from roster group</label>
-        <div class="btn-group dropup form-control" dropdown>
-            <button class="btn dropdown-toggle" id="linkedQuestionSource" type="button">
-                {{activeQuestion.linkedToTitle}}
-                <span class="dropdown-arrow"></span>
-            </button>
+        <div id="sourceOfLinkedQuestion">
+            <label for="linkedQuestionSource">Bind to question from roster group</label>
+            <div class="btn-group" dropdown>
+                <button class="btn dropdown-toggle" id="linkedQuestionSource" type="button">
+                    <span class="select-placeholder" ng-if="(activeQuestion.linkedToQuestion.title || '') == ''">Select question</span>
+                    <span class="selected-item" ng-if="(activeQuestion.linkedToQuestion.title || '') !== ''">
+                        <span class="path">{{activeQuestion.linkedToQuestion.breadcrumbs}}</span>
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToQuestion.type"></i>{{activeQuestion.linkedToQuestion.title}}</span>
+                    </span>
+                    <span class="dropdown-arrow"></span>
+                </button>
 
-            <ul class="dropdown-menu" role="menu">
-                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedQuestions">
-                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+                <ul class="dropdown-menu" role="menu">
+                    <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedQuestions">
+                        <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
 
-                    <a ng-if="!breadCrumb.isSectionPlaceHolder"
-                       ng-click="setLinkSource(breadCrumb.id)"
-                       role="menuitem"
-                       tabindex="-1"
-                       href="javascript:void(0);">
-                        {{breadCrumb.title}}
-                    </a>
-                </li>
-            </ul>
+                        <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                           ng-click="setLinkSource(breadCrumb.id)"
+                           role="menuitem"
+                           tabindex="-1"
+                           href="javascript:void(0);">
+                            <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </script>
 

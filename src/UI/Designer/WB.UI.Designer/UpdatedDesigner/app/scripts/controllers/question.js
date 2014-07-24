@@ -107,7 +107,7 @@
                     $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
                     if (itemId) {
                         $scope.activeQuestion.linkedToQuestionId = itemId;
-                        $scope.activeQuestion.linkedToTitle = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId }).title;
+                        $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
                     }
                 };
 
