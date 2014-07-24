@@ -219,6 +219,8 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_multi_roster_edit_view.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_numeric_roster_edit_view.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_edit_view_and_static_text_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view.cs" />
@@ -525,7 +527,7 @@
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_question_edit_view.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_question_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_question_edit_view_and_question_is_absent.cs" />
-    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_roster_edit_view.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_roster_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_roster_edit_view_and_roster_is_absent.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\QuestionsAndGroupsCollectionDenormalizerTestContext.cs" />
