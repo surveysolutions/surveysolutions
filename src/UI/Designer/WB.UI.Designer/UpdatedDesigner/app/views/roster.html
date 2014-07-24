@@ -19,12 +19,14 @@
 
         <div class="form-group">
             <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.title">
+            <!--<input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.title">-->
+            <input id="edit-group-title" type="text" class="form-control bg-white width-auto" ng-model="activeRoster.roster.title">
         </div>
 
         <div class="form-group">
             <label for="edit-group-variableName" class="wb-label">Variable name <span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.variableName">
+            <!--<input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.variableName">-->
+            <input id="edit-group-variableName" type="text" class="form-control bg-white width-auto" ng-model="activeRoster.roster.variableName">
         </div>
 
         <div ng-include="activeRoster.rosterTemplate" ng-if="activeRoster.roster.rosterSizeSourceType != undefined">
@@ -32,12 +34,14 @@
 
         <div class="form-group">
             <label for="edit-group-description" class="wb-label">Description <span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.description">
+            <!--<input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.description">-->
+            <input id="edit-group-description" type="text" class="form-control bg-white width-auto" ng-model="activeRoster.roster.description">
         </div>
 
         <div class="form-group">
             <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.enablementCondition">
+            <!--<input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.enablementCondition">-->
+            <input id="edit-group-condition" type="text" class="form-control bg-white width-auto" ng-model="activeRoster.roster.enablementCondition">
         </div>
     </form>
 </div>
