@@ -84,6 +84,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }
         };
 
+        private static readonly SelectOption[] RosterTypeOptions =
+        {
+            new SelectOption() {Value = RosterType.Fixed.ToString(), Text = Properties.Roster.RosterType_Fixed},
+            new SelectOption() {Value = RosterType.List.ToString(), Text = Properties.Roster.RosterType_List},
+            new SelectOption() {Value = RosterType.Multi.ToString(), Text = Properties.Roster.RosterType_Multi},
+            new SelectOption() {Value = RosterType.Numeric.ToString(), Text = Properties.Roster.RosterType_Numeric}
+        };
+
         public QuestionnaireInfoFactory(IReadSideRepositoryReader<QuestionsAndGroupsCollectionView> questionDetailsReader)
         {
             this.questionDetailsReader = questionDetailsReader;
@@ -129,20 +137,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var roster = questionnaire.Groups.FirstOrDefault(x => x.Id == rosterId);
             if (roster == null)
                 return null;
+
+            RosterType rosterType = this.getRosterType(questionnaire: questionnaire,
+                rosterSizeSourceType: roster.RosterSizeSourceType, rosterSizeQuestionId: roster.RosterSizeQuestionId);
+
             var result = new NewEditRosterView
             {
-                Roster = new RosterDetailsView
-                {
-                    Id = roster.Id,
-                    Title = roster.Title,
-                    EnablementCondition = roster.EnablementCondition,
-                    Description = roster.Description,
-                    RosterFixedTitles = roster.RosterFixedTitles,
-                    RosterSizeQuestionId = roster.RosterSizeQuestionId,
-                    RosterSizeSourceType = roster.RosterSizeSourceType,
-                    RosterTitleQuestionId = roster.RosterTitleQuestionId,
-                    VariableName = roster.VariableName
-                },
+                ItemId = roster.Id.FormatGuid(),
+                Title = roster.Title,
+                EnablementCondition = roster.EnablementCondition,
+                Description = roster.Description,
+                VariableName = roster.VariableName,
+
+                Type = rosterType,
+                RosterSizeListQuestionId = rosterType == RosterType.List ? roster.RosterSizeQuestionId : null,
+                RosterSizeNumericQuestionId=rosterType == RosterType.Numeric ? roster.RosterSizeQuestionId : null,
+                RosterSizeMultiQuestionId = rosterType == RosterType.Multi ? roster.RosterSizeQuestionId : null,
+                RosterTitleQuestionId = roster.RosterTitleQuestionId,
+                RosterFixedTitles = roster.RosterFixedTitles,
+                RosterTypeOptions = RosterTypeOptions,
+
                 NotLinkedMultiOptionQuestions = this.GetNotLinkedMultiOptionQuestionBriefs(questionnaire),
                 NumericIntegerQuestions = this.GetNumericIntegerQuestionBriefs(questionnaire),
                 NumericIntegerTitles = this.GetNumericIntegerTitles(questionnaire, roster),
@@ -151,6 +165,33 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             };
 
             return result;
+        }
+
+        private RosterType getRosterType(QuestionsAndGroupsCollectionView questionnaire,
+            RosterSizeSourceType rosterSizeSourceType, Guid? rosterSizeQuestionId)
+        {
+            if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
+                return RosterType.Fixed;
+            if (rosterSizeQuestionId.HasValue)
+            {
+                var rosterSizeQuestion =
+                    questionnaire.Questions.Find(question => question.Id == rosterSizeQuestionId.Value);
+
+                if (rosterSizeQuestion != null)
+                {
+                    switch (rosterSizeQuestion.Type)
+                    {
+                        case QuestionType.MultyOption:
+                            return RosterType.Multi;
+                        case QuestionType.Numeric:
+                            return RosterType.Numeric;
+                        case QuestionType.TextList:
+                            return RosterType.List;
+                    }
+                }
+            }
+
+            return RosterType.Fixed;
         }
 
         public NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId)
