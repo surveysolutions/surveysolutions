@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             this.AddGroup(questionnaire: currentState,
                 parentGroupId: GetNullAsParentForChapterOrParentGroupIdForGroup(evnt.Payload.ParentGroupPublicKey, currentState.ItemId),
                 groupId: evnt.Payload.PublicKey.FormatGuid(),
-                groupTitle: evnt.Payload.GroupText);
+                groupTitle: evnt.Payload.GroupText, variableName:evnt.Payload.VariableName);
 
 
             return currentState;
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             this.AddGroup(questionnaire: currentState,
                 parentGroupId: GetNullAsParentForChapterOrParentGroupIdForGroup(evnt.Payload.ParentGroupPublicKey, currentState.ItemId),
                 groupId: evnt.Payload.PublicKey.FormatGuid(),
-                groupTitle: evnt.Payload.GroupText,
+                groupTitle: evnt.Payload.GroupText, variableName: evnt.Payload.VariableName, 
                 orderIndex: evnt.Payload.TargetIndex);
 
             return currentState;
@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 groupId: evnt.Payload.GroupPublicKey.FormatGuid());
 
             groupView.Title = evnt.Payload.GroupText;
-
+            groupView.Variable = evnt.Payload.VariableName;
             return currentState;
         }
 
@@ -364,7 +364,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                groupId: evnt.Payload.GroupId.FormatGuid());
 
             groupView.IsRoster = true;
-
+            
             return currentState;
         }
 
@@ -535,7 +535,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             staticTextInfoView.Text = text;
         }
 
-        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, bool isRoster = false, int? orderIndex = null)
+        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle,string variableName, bool isRoster = false, int? orderIndex = null)
         {
             var parentGroup = string.IsNullOrEmpty(parentGroupId)
                 ? questionnaire
@@ -548,6 +548,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             {
                 ItemId = groupId,
                 Title = groupTitle,
+                Variable = variableName,
                 IsRoster = isRoster,
                 Items = new List<IQuestionnaireItem>(),
                 GroupsCount = 0,
@@ -576,6 +577,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                                   groupId: group.PublicKey.FormatGuid(),
                                   parentGroupId: group.GetParent().PublicKey.FormatGuid(),
                                   groupTitle: group.Title,
+                    variableName:group.VariableName,
                                   isRoster: group.IsRoster);
                     this.AddQuestionnaireItem(currentState: currentState, sourceQuestionnaireOrGroup: @group);
                 }

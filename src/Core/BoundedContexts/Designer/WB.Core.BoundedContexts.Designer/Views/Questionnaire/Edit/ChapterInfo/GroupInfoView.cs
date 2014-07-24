@@ -12,5 +12,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public int QuestionsCount { get; set; }
         public int GroupsCount { get; set; }
         public int RostersCount { get; set; }
+        public string Variable { get; set; }
     }
 }
