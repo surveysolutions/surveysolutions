@@ -81,6 +81,7 @@
         
         <div class="section item"
              ng-if="isGroup(item)"
+             ng-class="{ 'highlighted': is_highlighted }"
              ui-sref-active="selected"
              ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
                                          'questionnaire.chapter.group({itemId: item.itemId})' }}">
