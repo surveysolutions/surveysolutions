@@ -57,16 +57,14 @@ namespace WB.Core.SharedKernels.DataCollection
 
             if (rosterId == IdOf.foodConsumption)
             {
-                var parentHolder = parent as HhMember_type;
-                var rosterLevel = new FoodConsumption_type(rosterVector, rosterIdentityKey, parentHolder, this.GetRosterInstances, IdOf.conditionalDependencies);
+                var rosterLevel = new FoodConsumption_type(rosterVector, rosterIdentityKey, parent, this.GetRosterInstances, IdOf.conditionalDependencies);
                 this.InterviewScopes.Add(rosterStringKey, rosterLevel);
                 this.SetSiblings(rosterScopeIds, rosterStringKey);
             }
 
             if (rosterId == IdOf.fixedId)
             {
-                var parentHolder = parent as QuestionnaireLevel;
-                var rosterLevel = new Education_type(rosterVector, rosterIdentityKey, parentHolder, this.GetRosterInstances, IdOf.conditionalDependencies);
+                var rosterLevel = new Education_type(rosterVector, rosterIdentityKey, parent, this.GetRosterInstances, IdOf.conditionalDependencies);
                 this.InterviewScopes.Add(rosterStringKey, rosterLevel);
                 this.SetSiblings(rosterScopeIds, rosterStringKey);
             }
@@ -275,7 +273,6 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
 
-
         public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IValidatable
         {
             public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
@@ -378,10 +375,10 @@ namespace WB.Core.SharedKernels.DataCollection
         //roster first level
         public class HhMember_type : AbstractRosterLevel<HhMember_type>, IValidatable
         {
-            public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, QuestionnaireLevel parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+            public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, IValidatable parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : this(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
-                this.@__parent = parent;
+                this.@__parent = parent as QuestionnaireLevel;
             }
 
             public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
@@ -642,10 +639,10 @@ namespace WB.Core.SharedKernels.DataCollection
         //roster second level
         public class FoodConsumption_type : AbstractRosterLevel<FoodConsumption_type>, IValidatable
         {
-            public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, HhMember_type parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+            public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, IValidatable parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : this(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
-                this.@__parent = parent;
+                this.@__parent = parent as HhMember_type;
             }
 
             public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
@@ -810,10 +807,10 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public class Education_type : AbstractRosterLevel<Education_type>, IValidatable
         {
-            public Education_type(decimal[] rosterVector, Identity[] rosterKey, QuestionnaireLevel parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+            public Education_type(decimal[] rosterVector, Identity[] rosterKey, IValidatable parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : this(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
-                this.@__parent = parent;
+                this.@__parent = parent as QuestionnaireLevel;
             }
 
             public Education_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)

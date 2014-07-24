@@ -19,10 +19,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
             expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+
+            questionnaireDocument = new QuestionnaireDocument() { PublicKey = id};
         };
 
         private Because of = () =>
-            emitResult = expressionProcessorGenerator.GenerateProcessor(new QuestionnaireDocument(), out resultAssembly);
+            emitResult = expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
 
 
         private It should_result_succeded = () =>
@@ -37,6 +39,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
         private static EmitResult emitResult;
+
+        private static QuestionnaireDocument questionnaireDocument;
 
         private static IExpressionProcessorGenerator expressionProcessorGenerator;
     }

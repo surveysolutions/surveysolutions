@@ -196,6 +196,13 @@
     <Compile Include="Implementation\Factories\IQuestionFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerator.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireLevelTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireLevelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplateExt.cs" />
     <Compile Include="Implementation\Services\ExpressionReplacer.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RosterTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\GroupTemplateModel.cs" />
@@ -414,6 +421,10 @@
     <None Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>InterviewExpressionStateTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplate.cs</LastGenOutput>
     </None>
     <None Include="Implementation\Services\CodeGeneration\Templates\RosterTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

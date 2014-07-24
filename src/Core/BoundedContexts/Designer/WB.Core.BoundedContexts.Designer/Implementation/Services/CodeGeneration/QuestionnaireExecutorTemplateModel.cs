@@ -12,14 +12,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Guid Id { private set; get; }
 
         public List<QuestionTemplateModel> Questions { private set; get; }
+
         public List<RosterTemplateModel> Rosters { private set; get; }
         public List<GroupTemplateModel> Groups { private set; get; }
+
         public Dictionary<Guid, Guid[]> ParentsMap { private set; get; }
-        public Dictionary<Guid, Guid[]> ConditionalDependencies { private set; get; }
+        public Dictionary<Guid, Guid[]> RostersIdToScopeMap { private set; get; }
+        
+        public Dictionary<Guid, List<Guid>> ConditionalDependencies { private set; get; }
+
+        public QuestionnaireLevelTemplateModel QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel();
 
         public QuestionnaireExecutorTemplateModel(QuestionnaireDocument questionnaireDocument)
         {
-            var dependencies = this.BuildDependencyTree(questionnaireDocument);
+            ConditionalDependencies = this.BuildDependencyTree(questionnaireDocument);
 
             this.Id = questionnaireDocument.PublicKey;
 
@@ -52,6 +58,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 RosterGeneratedTypeName = roster.PublicKey.ToString() + "_type"
                             })
                     .ToList();
+
+            this.Groups =
+                questionnaireDocument.Find<IGroup>(x => x.IsRoster != true)
+                    .Select(
+                        group =>
+                            new GroupTemplateModel()
+                            {
+                                Id = group.PublicKey,
+                                Conditions = group.ConditionExpression,
+                                VariableName =  "@" + group.PublicKey.ToString(), //generating variable name by publicKey
+                                GeneratedGroupStateName = group.PublicKey.ToString() + "_state"
+                            })
+                    .ToList();
+
+
         }
 
         private Dictionary<Guid, List<Guid>> BuildDependencyTree(QuestionnaireDocument questionnaireDocument)
@@ -88,7 +109,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression, QuestionnaireDocument questionnaireDocument)
         {
-
             return new List<Guid>();
         }
 
