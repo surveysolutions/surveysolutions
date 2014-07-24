@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+    #line 1 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
     public partial class InterviewExpressionStateTemplate : InterviewExpressionStateTemplateBase
     {
@@ -30,290 +30,359 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public virtual string TransformText()
         {
             this.Write("\r\n");
-            this.Write("\r\n\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\n\r\n\r\n// " +
-                    "ReSharper disable InconsistentNaming\r\n\r\nnamespace WB.Core.SharedKernels.Expressi" +
-                    "onProcessing\r\n{\r\n    public class InterviewExpressionState : AbstractInterviewEx" +
-                    "pressionState \r\n    {\r\n        public InterviewExpressionState() \r\n        {\r\n  " +
-                    "          var questionnaireLevelScope = new[] { IdOf.questionnaire };\r\n         " +
-                    "   var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Uti" +
-                    "l.EmptyRosterVector);\r\n            var questionnaireLevel = new QuestionnaireLev" +
-                    "el(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, Id" +
-                    "Of.conditionalDependencies);\r\n            this.InterviewScopes.Add(Util.GetRoste" +
-                    "rStringKey(questionnaireIdentityKey), questionnaireLevel);\r\n        }\r\n\r\n       " +
-                    " public InterviewExpressionState(Dictionary<string, IValidatable> interviewScope" +
-                    "s, Dictionary<string, List<string>> siblingRosters)\r\n        {\r\n            Inte" +
-                    "rviewScopes = interviewScopes;\r\n            SiblingRosters = siblingRosters;\r\n  " +
-                    "      }\r\n\r\n        public override void AddRoster(Guid rosterId, decimal[] outer" +
-                    "RosterVector, decimal rosterInstanceId, int? sortIndex)\r\n        {\r\n            " +
-                    "if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))\r\n            {\r\n           " +
-                    "     return;\r\n            }\r\n\r\n            decimal[] rosterVector = Util.GetRost" +
-                    "erVector(outerRosterVector, rosterInstanceId);\r\n            Guid[] rosterScopeId" +
-                    "s = IdOf.rostersIdToScopeMap[rosterId];\r\n            var rosterIdentityKey = Uti" +
-                    "l.GetRosterKey(rosterScopeIds, rosterVector);\r\n            string rosterStringKe" +
-                    "y = Util.GetRosterStringKey(rosterIdentityKey);\r\n\r\n            if (this.Intervie" +
-                    "wScopes.ContainsKey(rosterStringKey))\r\n            {\r\n                return;\r\n " +
-                    "           }\r\n\r\n            decimal[] parentRosterVector = outerRosterVector;\r\n\r" +
-                    "\n            var rosterParentIdentityKey = parentRosterVector.Length == 0\r\n     " +
-                    "           ? Util.GetRosterKey(new[] { IdOf.questionnaire }, new decimal[0])\r\n  " +
-                    "              : Util.GetRosterKey(rosterScopeIds.Shrink(), parentRosterVector);\r" +
-                    "\n\r\n            var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterP" +
-                    "arentIdentityKey)];\r\n\r\n            if (rosterId == IdOf.hhMember || rosterId == " +
-                    "IdOf.jobActivity)\r\n            {\r\n                var parentHolder = parent as Q" +
-                    "uestionnaireLevel;\r\n                var rosterLevel = new HhMember_type(rosterVe" +
-                    "ctor, rosterIdentityKey, parentHolder, this.GetRosterInstances, IdOf.conditional" +
-                    "Dependencies);\r\n                this.InterviewScopes.Add(rosterStringKey, roster" +
-                    "Level);\r\n                this.SetSiblings(rosterScopeIds, rosterStringKey);\r\n   " +
-                    "         }\r\n\r\n            if (rosterId == IdOf.foodConsumption)\r\n            {\r\n" +
-                    "                var parentHolder = parent as HhMember_type;\r\n                var" +
-                    " rosterLevel = new FoodConsumption_type(rosterVector, rosterIdentityKey, parentH" +
-                    "older, this.GetRosterInstances, IdOf.conditionalDependencies);\r\n                " +
-                    "this.InterviewScopes.Add(rosterStringKey, rosterLevel);\r\n                this.Se" +
-                    "tSiblings(rosterScopeIds, rosterStringKey);\r\n            }\r\n\r\n            if (ro" +
-                    "sterId == IdOf.fixedId)\r\n            {\r\n                var parentHolder = paren" +
-                    "t as QuestionnaireLevel;\r\n                var rosterLevel = new Education_type(r" +
-                    "osterVector, rosterIdentityKey, parentHolder, this.GetRosterInstances, IdOf.cond" +
-                    "itionalDependencies);\r\n                this.InterviewScopes.Add(rosterStringKey," +
-                    " rosterLevel);\r\n                this.SetSiblings(rosterScopeIds, rosterStringKey" +
-                    ");\r\n            }\r\n        }\r\n\r\n        public override void RemoveRoster(Guid r" +
-                    "osterId, decimal[] outerRosterVector, decimal rosterInstanceId)\r\n        {\r\n    " +
-                    "        if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))\r\n            {\r\n   " +
-                    "             return;\r\n            }\r\n\r\n            decimal[] rosterVector = Util" +
-                    ".GetRosterVector(outerRosterVector, rosterInstanceId);\r\n            var rosterId" +
-                    "entityKey = Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);" +
-                    "\r\n            \r\n            var dependentRosters = this.InterviewScopes.Keys.Whe" +
-                    "re(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();\r\n" +
-                    "            \r\n            foreach (var rosterKey in dependentRosters)\r\n         " +
-                    "   {\r\n                this.InterviewScopes.Remove(rosterKey);\r\n                f" +
-                    "oreach (var siblings in this.SiblingRosters.Values)\r\n                {\r\n        " +
-                    "            siblings.Remove(rosterKey);\r\n                }\r\n            }\r\n     " +
-                    "   }\r\n\r\n        public override void UpdateIntAnswer(Guid questionId, decimal[] " +
-                    "rosterVector, long answer)\r\n        {\r\n            var targetLevel = this.GetRos" +
-                    "terByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel == null" +
-                    ") return;\r\n\r\n            if (questionId == IdOf.persons_count)\r\n            {\r\n " +
-                    "               (targetLevel as QuestionnaireLevel).persons_count = answer;\r\n    " +
-                    "        }\r\n\r\n            if (questionId == IdOf.age)\r\n            {\r\n           " +
-                    "     (targetLevel as HhMember_type).age = answer;\r\n            }\r\n\r\n            " +
-                    "if (questionId == IdOf.times_per_week)\r\n            {\r\n                (targetLe" +
-                    "vel as FoodConsumption_type).times_per_week = answer;\r\n            }\r\n        }\r" +
-                    "\n\r\n        public override void UpdateDecimalAnswer(Guid questionId, decimal[] r" +
-                    "osterVector, decimal answer)\r\n        {\r\n            var targetLevel = this.GetR" +
-                    "osterByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel == nu" +
-                    "ll) return;\r\n\r\n            if (questionId == IdOf.price_for_food)\r\n            {" +
-                    "\r\n                (targetLevel as FoodConsumption_type).price_for_food = answer;" +
-                    "\r\n            }\r\n        }\r\n\r\n        public override void UpdateDateAnswer(Guid" +
-                    " questionId, decimal[] rosterVector, DateTime answer)\r\n        {\r\n            va" +
-                    "r targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n        " +
-                    "    if (targetLevel == null) return;\r\n\r\n            if (questionId == IdOf.date)" +
-                    "\r\n            {\r\n                (targetLevel as HhMember_type).date = answer;\r\n" +
-                    "            }\r\n        }\r\n\r\n        public override void UpdateTextAnswer(Guid q" +
-                    "uestionId, decimal[] rosterVector, string answer)\r\n        {\r\n            var ta" +
-                    "rgetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            " +
-                    "if (targetLevel == null) return;\r\n\r\n            if (questionId == IdOf.id)\r\n    " +
-                    "        {\r\n                (targetLevel as QuestionnaireLevel).id = answer;\r\n   " +
-                    "         }\r\n\r\n            if (questionId == IdOf.name)\r\n            {\r\n         " +
-                    "       (targetLevel as HhMember_type).name = answer;\r\n            }\r\n\r\n         " +
-                    "   if (questionId == IdOf.job_title)\r\n            {\r\n                (targetLeve" +
-                    "l as HhMember_type).job_title = answer;\r\n            }\r\n\r\n            if (questi" +
-                    "onId == IdOf.person_id)\r\n            {\r\n                (targetLevel as HhMember" +
-                    "_type).person_id = answer;\r\n            }\r\n        }\r\n        \r\n        public o" +
-                    "verride void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, stri" +
-                    "ng answer)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVector" +
-                    "(questionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n     " +
-                    "   }\r\n\r\n        public override void UpdateSingleOptionAnswer(Guid questionId, d" +
-                    "ecimal[] rosterVector, decimal answer)\r\n        {\r\n            var targetLevel =" +
-                    " this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetL" +
-                    "evel == null) return;\r\n\r\n            if (questionId == IdOf.sex)\r\n            {\r" +
-                    "\n                (targetLevel as HhMember_type).sex = answer;\r\n            }\r\n\r\n" +
-                    "            if (questionId == IdOf.role)\r\n            {\r\n                (target" +
-                    "Level as HhMember_type).role = answer;\r\n            }\r\n\r\n            if (questio" +
-                    "nId == IdOf.has_job)\r\n            {\r\n                (targetLevel as HhMember_ty" +
-                    "pe).has_job = answer;\r\n            }\r\n\r\n            if (questionId == IdOf.marit" +
-                    "al_status)\r\n            {\r\n                (targetLevel as HhMember_type).marita" +
-                    "l_status = answer;\r\n            }\r\n\r\n            if (questionId == IdOf.edu_visi" +
-                    "t)\r\n            {\r\n                (targetLevel as QuestionnaireLevel).edu_visit" +
-                    " = answer;\r\n            }\r\n\r\n            if (questionId == IdOf.edu)\r\n          " +
-                    "  {\r\n                (targetLevel as Education_type).edu = answer;\r\n            " +
-                    "}\r\n        }\r\n\r\n        public override void UpdateMultiOptionAnswer(Guid questi" +
-                    "onId, decimal[] rosterVector, decimal[] answer)\r\n        {\r\n            var targ" +
-                    "etLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if" +
-                    " (targetLevel == null) return;\r\n\r\n            if (questionId == IdOf.food)\r\n    " +
-                    "        {\r\n                (targetLevel as HhMember_type).food = answer;\r\n      " +
-                    "      }\r\n        }\r\n\r\n        public override void UpdateGeoLocationAnswer(Guid " +
-                    "questionId, decimal[] rosterVector, double latitude, double longitude)\r\n        " +
-                    "{\r\n            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterV" +
-                    "ector);\r\n            if (targetLevel == null) return;\r\n        }\r\n\r\n        publ" +
-                    "ic override void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, T" +
-                    "uple<decimal, string>[] answers)\r\n        {\r\n            var targetLevel = this." +
-                    "GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel =" +
-                    "= null) return;\r\n        }\r\n\r\n        public override void UpdateLinkedSingleOpt" +
-                    "ionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagation" +
-                    "Vector)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVector(qu" +
-                    "estionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n\r\n      " +
-                    "      if (questionId == IdOf.best_job_owner)\r\n            {\r\n                (ta" +
-                    "rgetLevel as HhMember_type).best_job_owner = selectedPropagationVector;\r\n       " +
-                    "     }\r\n        }\r\n\r\n        public override void UpdateLinkedMultiOptionAnswer(" +
-                    "Guid questionId, decimal[] rosterVector, decimal[][] answer)\r\n        {\r\n       " +
-                    "     var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n " +
-                    "           if (targetLevel == null) return;\r\n\r\n            if (questionId == IdO" +
-                    "f.married_with)\r\n            {\r\n                (targetLevel as HhMember_type).m" +
-                    "arried_with = answer;\r\n            }\r\n        }\r\n\r\n        public override Dicti" +
-                    "onary<Guid, Guid[]> GetParentsMap()\r\n        {\r\n            return IdOf.parentsM" +
-                    "ap;\r\n        }\r\n\r\n        public override IInterviewExpressionState Clone()\r\n   " +
-                    "     {\r\n            var newScopes = this.InterviewScopes.ToDictionary(interviewS" +
-                    "cope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers()" +
-                    ");\r\n            var newSiblingRosters = this.SiblingRosters\r\n                .To" +
-                    "Dictionary(\r\n                    interviewScope => interviewScope.Key,\r\n        " +
-                    "            interviewScope => new List<string>(interviewScope.Value));\r\n\r\n      " +
-                    "      //set parents\r\n            foreach (var interviewScope in this.InterviewSc" +
-                    "opes)\r\n            {\r\n                var parent = interviewScope.Value.GetParen" +
-                    "t();\r\n                if (parent != null)\r\n                    newScopes[intervi" +
-                    "ewScope.Key].SetParent(newScopes[Util.GetRosterStringKey(parent.GetRosterKey())]" +
-                    ");\r\n            }\r\n\r\n            return new StronglyTypedInterviewEvaluator(newS" +
-                    "copes, newSiblingRosters);\r\n        }\r\n\r\n        public class QuestionnaireLevel" +
-                    " : AbstractConditionalLevel<QuestionnaireLevel>, IValidatable\r\n        {\r\n      " +
-                    "      public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey, Fu" +
-                    "nc<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]>" +
-                    " conditionalDependencies)\r\n                : base(rosterVector, rosterKey, getIn" +
-                    "stances, conditionalDependencies)\r\n            {\r\n                EnablementStat" +
-                    "es.Add(id_state.ItemId, id_state);\r\n                EnablementStates.Add(edu_vis" +
-                    "it_state.ItemId, edu_visit_state);\r\n                //EnablementStates.Add(perso" +
-                    "ns_count_state.ItemId, persons_count_state);\r\n            }\r\n\r\n            priva" +
-                    "te string @__id;\r\n            private readonly ConditionalState id_state = new C" +
-                    "onditionalState(IdOf.id);\r\n            public string id\r\n            {\r\n        " +
-                    "        get { return id_state.State == State.Enabled ? @__id : String.Empty; }\r\n" +
-                    "                set { @__id = value; }\r\n            }\r\n\r\n            private lon" +
-                    "g? @__persons_count;\r\n            private readonly ConditionalState persons_coun" +
-                    "t_state = new ConditionalState(IdOf.persons_count);\r\n            public long? pe" +
-                    "rsons_count\r\n            {\r\n                get { return persons_count_state.Sta" +
-                    "te == State.Enabled ? @__persons_count : null; }\r\n                set { @__perso" +
-                    "ns_count = value; }\r\n            }\r\n\r\n            private decimal? @__edu_visit;" +
-                    "\r\n            private readonly ConditionalState edu_visit_state = new Conditiona" +
-                    "lState(IdOf.edu_visit);\r\n            public decimal? edu_visit\r\n            {\r\n " +
-                    "               get { return edu_visit_state.State == State.Enabled ? @__edu_visi" +
-                    "t : null; }\r\n                set { @__edu_visit = value; }\r\n            }\r\n\r\n   " +
-                    "         public IValidatable CopyMembers()\r\n            {\r\n                var l" +
-                    "evel = new QuestionnaireLevel(this.RosterVector, this.RosterKey, this.GetInstanc" +
-                    "es, this.ConditionalDependencies);\r\n\r\n                foreach (var conditionalSt" +
-                    "ate in level.EnablementStates)\r\n                {\r\n                    var oldSt" +
-                    "ate = this.EnablementStates[conditionalState.Key];\r\n                    conditio" +
-                    "nalState.Value.State = oldState.State;\r\n                    conditionalState.Val" +
-                    "ue.PreviousState = oldState.PreviousState;\r\n                }\r\n\r\n               " +
-                    " ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions);\r\n     " +
-                    "           InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQues" +
-                    "tions);\r\n\r\n                level.id = this.@__id;\r\n                level.persons" +
-                    "_count = this.@__persons_count;\r\n\r\n                return level;\r\n            }\r" +
-                    "\n\r\n            private bool edu_visit_IsEnabled()\r\n            {\r\n              " +
-                    "  return true;\r\n            }\r\n\r\n            public void SetParent(IValidatable " +
-                    "parentLevel)\r\n            {\r\n            }\r\n\r\n            public IValidatable Ge" +
-                    "tParent()\r\n            {\r\n                return null;\r\n            }\r\n\r\n       " +
-                    "     public void CalculateValidationChanges(List<Identity> questionsToBeValid, L" +
-                    "ist<Identity> questionsToBeInvalid)\r\n            {\r\n            }\r\n\r\n           " +
-                    " protected override IEnumerable<Action> ConditionExpressions\r\n            {\r\n   " +
-                    "             get\r\n                {\r\n                    return new[] { Verifier" +
-                    "(edu_visit_IsEnabled, edu_visit_state.ItemId, edu_visit_state) };\r\n             " +
-                    "   }\r\n            }\r\n\r\n            public HhMember_type[] hhMembers\r\n           " +
-                    " {\r\n                get\r\n                {\r\n                    var rosters = th" +
-                    "is.GetInstances(this.RosterKey);\r\n                    return rosters == null ? n" +
-                    "ew HhMember_type[0] : rosters.Select(x => x as HhMember_type).ToArray();\r\n      " +
-                    "          }\r\n            }\r\n\r\n            public Education_type[] educations\r\n  " +
-                    "          {\r\n                get\r\n                {\r\n                    var ros" +
-                    "ters = this.GetInstances(this.RosterKey);\r\n                    return rosters ==" +
-                    " null ? new Education_type[0] : rosters.Select(x => x as Education_type).ToArray" +
-                    "();\r\n                }\r\n            }\r\n        }\r\n\r\n         ");
+            this.Write(@"
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+// ReSharper disable InconsistentNaming
+
+namespace WB.Core.SharedKernels.ExpressionProcessing
+{
+    public class InterviewExpressionState : AbstractInterviewExpressionState 
+    {
+
+        public InterviewExpressionState() 
+        {
+            var questionnaireLevelScope = new[] { IdOf.questionnaire };
+            var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
+            var questionnaireLevel = new ");
             
-            #line 386 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 25 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.QuestionnaireLevelModel.GetTypeName()));
+            
+            #line default
+            #line hidden
+            this.Write("(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf." +
+                    "conditionalDependencies);\r\n            this.InterviewScopes.Add(Util.GetRosterSt" +
+                    "ringKey(questionnaireIdentityKey), questionnaireLevel);\r\n        }\r\n\r\n        pu" +
+                    "blic InterviewExpressionState(Dictionary<string, IValidatable> interviewScopes, " +
+                    "Dictionary<string, List<string>> siblingRosters)\r\n        {\r\n            Intervi" +
+                    "ewScopes = interviewScopes;\r\n            SiblingRosters = siblingRosters;\r\n     " +
+                    "   }\r\n\r\n        public override void AddRoster(Guid rosterId, decimal[] outerRos" +
+                    "terVector, decimal rosterInstanceId, int? sortIndex)\r\n        {\r\n            if " +
+                    "(!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))\r\n            {\r\n              " +
+                    "  return;\r\n            }\r\n\r\n            decimal[] rosterVector = Util.GetRosterV" +
+                    "ector(outerRosterVector, rosterInstanceId);\r\n            Guid[] rosterScopeIds =" +
+                    " IdOf.rostersIdToScopeMap[rosterId];\r\n            var rosterIdentityKey = Util.G" +
+                    "etRosterKey(rosterScopeIds, rosterVector);\r\n            string rosterStringKey =" +
+                    " Util.GetRosterStringKey(rosterIdentityKey);\r\n\r\n            if (this.InterviewSc" +
+                    "opes.ContainsKey(rosterStringKey))\r\n            {\r\n                return;\r\n    " +
+                    "        }\r\n\r\n            decimal[] parentRosterVector = outerRosterVector;\r\n\r\n  " +
+                    "          var rosterParentIdentityKey = parentRosterVector.Length == 0\r\n        " +
+                    "        ? Util.GetRosterKey(new[] { IdOf.questionnaire }, new decimal[0])\r\n     " +
+                    "           : Util.GetRosterKey(rosterScopeIds.Shrink(), parentRosterVector);\r\n\r\n" +
+                    "            var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterPare" +
+                    "ntIdentityKey)];\r\n\r\n            if (rosterId == IdOf.hhMember || rosterId == IdO" +
+                    "f.jobActivity)\r\n            {\r\n                var parentHolder = parent as Ques" +
+                    "tionnaireLevel;\r\n                var rosterLevel = new HhMember_type(rosterVecto" +
+                    "r, rosterIdentityKey, parentHolder, this.GetRosterInstances, IdOf.conditionalDep" +
+                    "endencies);\r\n                this.InterviewScopes.Add(rosterStringKey, rosterLev" +
+                    "el);\r\n                this.SetSiblings(rosterScopeIds, rosterStringKey);\r\n      " +
+                    "      }\r\n\r\n            if (rosterId == IdOf.foodConsumption)\r\n            {\r\n   " +
+                    "             var parentHolder = parent as HhMember_type;\r\n                var ro" +
+                    "sterLevel = new FoodConsumption_type(rosterVector, rosterIdentityKey, parentHold" +
+                    "er, this.GetRosterInstances, IdOf.conditionalDependencies);\r\n                thi" +
+                    "s.InterviewScopes.Add(rosterStringKey, rosterLevel);\r\n                this.SetSi" +
+                    "blings(rosterScopeIds, rosterStringKey);\r\n            }\r\n\r\n            if (roste" +
+                    "rId == IdOf.fixedId)\r\n            {\r\n                var parentHolder = parent a" +
+                    "s QuestionnaireLevel;\r\n                var rosterLevel = new Education_type(rost" +
+                    "erVector, rosterIdentityKey, parentHolder, this.GetRosterInstances, IdOf.conditi" +
+                    "onalDependencies);\r\n                this.InterviewScopes.Add(rosterStringKey, ro" +
+                    "sterLevel);\r\n                this.SetSiblings(rosterScopeIds, rosterStringKey);\r" +
+                    "\n            }\r\n        }\r\n\r\n        public override void RemoveRoster(Guid rost" +
+                    "erId, decimal[] outerRosterVector, decimal rosterInstanceId)\r\n        {\r\n       " +
+                    "     if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))\r\n            {\r\n      " +
+                    "          return;\r\n            }\r\n\r\n            decimal[] rosterVector = Util.Ge" +
+                    "tRosterVector(outerRosterVector, rosterInstanceId);\r\n            var rosterIdent" +
+                    "ityKey = Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);\r\n " +
+                    "           \r\n            var dependentRosters = this.InterviewScopes.Keys.Where(" +
+                    "x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();\r\n   " +
+                    "         \r\n            foreach (var rosterKey in dependentRosters)\r\n            " +
+                    "{\r\n                this.InterviewScopes.Remove(rosterKey);\r\n                fore" +
+                    "ach (var siblings in this.SiblingRosters.Values)\r\n                {\r\n           " +
+                    "         siblings.Remove(rosterKey);\r\n                }\r\n            }\r\n        " +
+                    "}\r\n\r\n        public override void UpdateIntAnswer(Guid questionId, decimal[] ros" +
+                    "terVector, long answer)\r\n        {\r\n            var targetLevel = this.GetRoster" +
+                    "ByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel == null) r" +
+                    "eturn;\r\n\r\n            if (questionId == IdOf.persons_count)\r\n            {\r\n    " +
+                    "            (targetLevel as QuestionnaireLevel).persons_count = answer;\r\n       " +
+                    "     }\r\n\r\n            if (questionId == IdOf.age)\r\n            {\r\n              " +
+                    "  (targetLevel as HhMember_type).age = answer;\r\n            }\r\n\r\n            if " +
+                    "(questionId == IdOf.times_per_week)\r\n            {\r\n                (targetLevel" +
+                    " as FoodConsumption_type).times_per_week = answer;\r\n            }\r\n        }\r\n\r\n" +
+                    "        public override void UpdateDecimalAnswer(Guid questionId, decimal[] rost" +
+                    "erVector, decimal answer)\r\n        {\r\n            var targetLevel = this.GetRost" +
+                    "erByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel == null)" +
+                    " return;\r\n\r\n            if (questionId == IdOf.price_for_food)\r\n            {\r\n " +
+                    "               (targetLevel as FoodConsumption_type).price_for_food = answer;\r\n " +
+                    "           }\r\n        }\r\n\r\n        public override void UpdateDateAnswer(Guid qu" +
+                    "estionId, decimal[] rosterVector, DateTime answer)\r\n        {\r\n            var t" +
+                    "argetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n           " +
+                    " if (targetLevel == null) return;\r\n\r\n            if (questionId == IdOf.date)\r\n " +
+                    "           {\r\n                (targetLevel as HhMember_type).date = answer;\r\n   " +
+                    "         }\r\n        }\r\n\r\n        public override void UpdateTextAnswer(Guid ques" +
+                    "tionId, decimal[] rosterVector, string answer)\r\n        {\r\n            var targe" +
+                    "tLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if " +
+                    "(targetLevel == null) return;\r\n\r\n            if (questionId == IdOf.id)\r\n       " +
+                    "     {\r\n                (targetLevel as QuestionnaireLevel).id = answer;\r\n      " +
+                    "      }\r\n\r\n            if (questionId == IdOf.name)\r\n            {\r\n            " +
+                    "    (targetLevel as HhMember_type).name = answer;\r\n            }\r\n\r\n            " +
+                    "if (questionId == IdOf.job_title)\r\n            {\r\n                (targetLevel a" +
+                    "s HhMember_type).job_title = answer;\r\n            }\r\n\r\n            if (questionI" +
+                    "d == IdOf.person_id)\r\n            {\r\n                (targetLevel as HhMember_ty" +
+                    "pe).person_id = answer;\r\n            }\r\n        }\r\n        \r\n        public over" +
+                    "ride void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string " +
+                    "answer)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVector(qu" +
+                    "estionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n        " +
+                    "}\r\n\r\n        public override void UpdateSingleOptionAnswer(Guid questionId, deci" +
+                    "mal[] rosterVector, decimal answer)\r\n        {\r\n            var targetLevel = th" +
+                    "is.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetLeve" +
+                    "l == null) return;\r\n\r\n            if (questionId == IdOf.sex)\r\n            {\r\n  " +
+                    "              (targetLevel as HhMember_type).sex = answer;\r\n            }\r\n\r\n   " +
+                    "         if (questionId == IdOf.role)\r\n            {\r\n                (targetLev" +
+                    "el as HhMember_type).role = answer;\r\n            }\r\n\r\n            if (questionId" +
+                    " == IdOf.has_job)\r\n            {\r\n                (targetLevel as HhMember_type)" +
+                    ".has_job = answer;\r\n            }\r\n\r\n            if (questionId == IdOf.marital_" +
+                    "status)\r\n            {\r\n                (targetLevel as HhMember_type).marital_s" +
+                    "tatus = answer;\r\n            }\r\n\r\n            if (questionId == IdOf.edu_visit)\r" +
+                    "\n            {\r\n                (targetLevel as QuestionnaireLevel).edu_visit = " +
+                    "answer;\r\n            }\r\n\r\n            if (questionId == IdOf.edu)\r\n            {" +
+                    "\r\n                (targetLevel as Education_type).edu = answer;\r\n            }\r\n" +
+                    "        }\r\n\r\n        public override void UpdateMultiOptionAnswer(Guid questionI" +
+                    "d, decimal[] rosterVector, decimal[] answer)\r\n        {\r\n            var targetL" +
+                    "evel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (t" +
+                    "argetLevel == null) return;\r\n\r\n            if (questionId == IdOf.food)\r\n       " +
+                    "     {\r\n                (targetLevel as HhMember_type).food = answer;\r\n         " +
+                    "   }\r\n        }\r\n\r\n        public override void UpdateGeoLocationAnswer(Guid que" +
+                    "stionId, decimal[] rosterVector, double latitude, double longitude)\r\n        {\r\n" +
+                    "            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVect" +
+                    "or);\r\n            if (targetLevel == null) return;\r\n        }\r\n\r\n        public " +
+                    "override void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tupl" +
+                    "e<decimal, string>[] answers)\r\n        {\r\n            var targetLevel = this.Get" +
+                    "RosterByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel == n" +
+                    "ull) return;\r\n        }\r\n\r\n        public override void UpdateLinkedSingleOption" +
+                    "Answer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVec" +
+                    "tor)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVector(quest" +
+                    "ionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n\r\n         " +
+                    "   if (questionId == IdOf.best_job_owner)\r\n            {\r\n                (targe" +
+                    "tLevel as HhMember_type).best_job_owner = selectedPropagationVector;\r\n          " +
+                    "  }\r\n        }\r\n\r\n        public override void UpdateLinkedMultiOptionAnswer(Gui" +
+                    "d questionId, decimal[] rosterVector, decimal[][] answer)\r\n        {\r\n          " +
+                    "  var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n    " +
+                    "        if (targetLevel == null) return;\r\n\r\n            if (questionId == IdOf.m" +
+                    "arried_with)\r\n            {\r\n                (targetLevel as HhMember_type).marr" +
+                    "ied_with = answer;\r\n            }\r\n        }\r\n\r\n\r\n        ////\r\n\r\n\r\n        publ" +
+                    "ic override Dictionary<Guid, Guid[]> GetParentsMap()\r\n        {\r\n            ret" +
+                    "urn IdOf.parentsMap;\r\n        }\r\n\r\n        public override IInterviewExpressionS" +
+                    "tate Clone()\r\n        {\r\n            var newScopes = this.InterviewScopes.ToDict" +
+                    "ionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Va" +
+                    "lue.CopyMembers());\r\n            var newSiblingRosters = this.SiblingRosters\r\n  " +
+                    "              .ToDictionary(\r\n                    interviewScope => interviewSco" +
+                    "pe.Key,\r\n                    interviewScope => new List<string>(interviewScope.V" +
+                    "alue));\r\n\r\n            //set parents\r\n            foreach (var interviewScope in" +
+                    " this.InterviewScopes)\r\n            {\r\n                var parent = interviewSco" +
+                    "pe.Value.GetParent();\r\n                if (parent != null)\r\n                    " +
+                    "newScopes[interviewScope.Key].SetParent(newScopes[Util.GetRosterStringKey(parent" +
+                    ".GetRosterKey())]);\r\n            }\r\n\r\n            return new InterviewExpression" +
+                    "State(newScopes, newSiblingRosters);\r\n        }\r\n\r\n        //generate Questionna" +
+                    "ireLevel\r\n        ");
+            
+            #line 292 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+           
+                QuestionnaireLevelTemplate questionnairetemplate = new QuestionnaireLevelTemplate(QuestionnaireTemplateStructure.QuestionnaireLevelModel);
+                this.Write(questionnairetemplate .TransformText());                           
+         
+            
+            #line default
+            #line hidden
+            this.Write("\r\n        //generating all rosters\r\n         ");
+            
+            #line 298 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
 foreach (var roster in QuestionnaireTemplateStructure.Rosters) 
-           {                
+           {
                 RosterTemplate template = new RosterTemplate(roster);
-                this.Write(template.TransformText());
-                
+                this.Write(template.TransformText());                
            }
          
             
             #line default
             #line hidden
-            this.Write("\r\n\r\n        public static class IdOf\r\n        {\r\n\r\n        ");
+            this.Write("\r\n\r\n        public static class IdOf\r\n        {\r\n            public static readon" +
+                    "ly Guid questionnaire = ");
             
-            #line 398 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-foreach (var q in QuestionnaireTemplateStructure.Questions) 
-        {
+            #line 308 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.Id));
             
             #line default
             #line hidden
-            this.Write("            public static readonly Guid ");
+            this.Write("; //Guid.Parse(\"72897e3f-3dc8-4115-81e0-8a9c1cadec2d\");\r\n\r\n            //question" +
+                    "s\r\n            ");
             
-            #line 400 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 311 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+foreach (var q in QuestionnaireTemplateStructure.Questions) 
+            {
+            
+            #line default
+            #line hidden
+            this.Write("              public static readonly Guid ");
+            
+            #line 313 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 400 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 313 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.Id));
             
             #line default
             #line hidden
-            this.Write(";\r\n        ");
+            this.Write(";\r\n            ");
             
-            #line 401 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 314 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
  }
             
             #line default
             #line hidden
-            this.Write("\r\n            public static readonly Guid questionnaire = ");
+            this.Write("           \r\n            \r\n            //rosters\r\n            ");
             
-            #line 403 "C:\Projects\MIS\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.Id));
+            #line 317 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+foreach (var r in QuestionnaireTemplateStructure.Rosters) 
+            {
             
             #line default
             #line hidden
-            this.Write("; //Guid.Parse(\"72897e3f-3dc8-4115-81e0-8a9c1cadec2d\");\r\n            \r\n          " +
-                    "  //rosters\r\n            public static readonly Guid hhMember = Guid.Parse(\"69b0" +
-                    "2bcf-0ed1-4b5a-80bb-bd465ab096da\");\r\n            public static readonly Guid foo" +
-                    "dConsumption = Guid.Parse(\"6df41d95-c785-4452-8303-bed3985d4c20\");\r\n            " +
-                    "public static readonly Guid jobActivity = Guid.Parse(\"7556ddf0-457a-4a9b-a021-45" +
-                    "ac3bad05a8\");\r\n\r\n            public static readonly Guid groupId = Guid.Parse(\"0" +
-                    "39ed69e-5583-46af-b983-488568f20e1c\");\r\n            public static readonly Guid " +
-                    "fixedId = Guid.Parse(\"a7b0d842-0355-4eab-a943-968c9c013d97\");\r\n\r\n\r\n            p" +
-                    "ublic static readonly Guid[] eduScopeIds = new[] { fixedId };\r\n            publi" +
-                    "c static readonly Guid[] hhMemberScopeIds = new[] { persons_count };\r\n          " +
-                    "  public static readonly Guid[] foodConsumptionIds = new[] { persons_count, food" +
-                    " };\r\n\r\n            //somehow should be generated\r\n            public static Dict" +
-                    "ionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()\r\n " +
-                    "           {\r\n                { id, new Guid[] { } },\r\n                { persons" +
-                    "_count, new Guid[] { married_with } },\r\n                { edu_visit, new Guid[] " +
-                    "{ fixedId } },\r\n\r\n                { name, new Guid[] { age } },\r\n               " +
-                    " { age, new Guid[] { groupId, has_job } },\r\n                { groupId, new Guid[" +
-                    "] { person_id, marital_status, married_with } },\r\n            \r\n                " +
-                    "{ person_id, new Guid[] { } },\r\n                { marital_status, new Guid[] { m" +
-                    "arried_with } },\r\n                { married_with, new Guid[] { } },\r\n           " +
-                    "     { has_job, new Guid[] { job_title, best_job_owner } },\r\n                { j" +
-                    "ob_title, new Guid[] { } },\r\n                { best_job_owner, new Guid[] { } }," +
-                    "\r\n\r\n                { sex, new Guid[] { food } },\r\n                { role, new G" +
-                    "uid[] { food, edu_visit } },\r\n                { food, new Guid[] { } },\r\n\r\n     " +
-                    "           { times_per_week, new Guid[] { price_for_food } },\r\n                {" +
-                    " price_for_food, new Guid[] { } },\r\n\r\n                { fixedId, new Guid[] { ed" +
-                    "u } },\r\n            };\r\n\r\n            public static Dictionary<Guid, Guid[]> par" +
-                    "entsMap = new Dictionary<Guid, Guid[]>\r\n        {\r\n            { id, new []{ques" +
-                    "tionnaire} },\r\n            { persons_count, new []{questionnaire}},\r\n           " +
-                    " { edu_visit, new []{questionnaire} },\r\n            { name, hhMemberScopeIds },\r" +
-                    "\n            { age, hhMemberScopeIds },\r\n            { date, hhMemberScopeIds }," +
-                    "\r\n            { sex, hhMemberScopeIds },\r\n            { role, hhMemberScopeIds }" +
-                    ",\r\n            { food, hhMemberScopeIds },\r\n            { times_per_week, foodCo" +
-                    "nsumptionIds },\r\n            { price_for_food, foodConsumptionIds },\r\n          " +
-                    "  { has_job, hhMemberScopeIds },\r\n            { job_title, hhMemberScopeIds },\r\n" +
-                    "            { best_job_owner, hhMemberScopeIds },\r\n            { person_id, hhMe" +
-                    "mberScopeIds },\r\n            { marital_status, hhMemberScopeIds },\r\n            " +
-                    "{ married_with, hhMemberScopeIds },\r\n            { edu, eduScopeIds },\r\n\r\n      " +
-                    "      //groups\r\n            { groupId, hhMemberScopeIds },\r\n            { fixedI" +
-                    "d, eduScopeIds },\r\n            { hhMember, hhMemberScopeIds },\r\n            { fo" +
-                    "odConsumption, foodConsumptionIds },\r\n            \r\n        };\r\n\r\n            pu" +
-                    "blic static Dictionary<Guid, Guid[]> rostersIdToScopeMap = new Dictionary<Guid, " +
-                    "Guid[]>\r\n        {\r\n            { fixedId, eduScopeIds },\r\n            { hhMembe" +
-                    "r, hhMemberScopeIds },\r\n            { foodConsumption, foodConsumptionIds },\r\n  " +
-                    "          { jobActivity, hhMemberScopeIds }\r\n        };\r\n        }\r\n    }\r\n}\r\n\r\n" +
-                    "// ReSharper restore InconsistentNaming");
+            this.Write("              public static readonly Guid ");
+            
+            #line 319 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(r.VariableName));
+            
+            #line default
+            #line hidden
+            this.Write(" = ");
+            
+            #line 319 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(r.Id));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n            ");
+            
+            #line 320 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+ }
+            
+            #line default
+            #line hidden
+            this.Write("\r\n            //public static readonly Guid hhMember = Guid.Parse(\"69b02bcf-0ed1-" +
+                    "4b5a-80bb-bd465ab096da\");\r\n            \r\n            //generate groups Ids\r\n    " +
+                    "        ");
+            
+            #line 325 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+foreach (var g in QuestionnaireTemplateStructure.Groups) 
+            {
+            
+            #line default
+            #line hidden
+            this.Write("              public static readonly Guid ");
+            
+            #line 327 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(g.VariableName));
+            
+            #line default
+            #line hidden
+            this.Write(" = ");
+            
+            #line 327 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(g.Id));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n            ");
+            
+            #line 328 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+ }
+            
+            #line default
+            #line hidden
+            this.Write(@"            //public static readonly Guid groupId = Guid.Parse(""039ed69e-5583-46af-b983-488568f20e1c"");
+            
+            //TODO: generate scopes
+            public static readonly Guid[] eduScopeIds = new[] { fixedId };
+            public static readonly Guid[] hhMemberScopeIds = new[] { persons_count };
+            public static readonly Guid[] foodConsumptionIds = new[] { persons_count, food };
+
+            
+            public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
+            {
+            ");
+            
+            #line 339 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies) 
+            {
+            
+            #line default
+            #line hidden
+            this.Write("              { ");
+            
+            #line 341 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.Key));
+            
+            #line default
+            #line hidden
+            this.Write(", new Guid[]{\r\n              ");
+            
+            #line 342 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+foreach (var d in dependency.Value)
+                    {
+            
+            #line default
+            #line hidden
+            this.Write("                    ");
+            
+            #line 344 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(d));
+            
+            #line default
+            #line hidden
+            this.Write(",\r\n                    ");
+            
+            #line 345 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+ }
+            
+            #line default
+            #line hidden
+            this.Write("              }}\r\n            ");
+            
+            #line 347 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+ }
+            
+            #line default
+            #line hidden
+            this.Write("\r\n                //{ id, new Guid[] { } },\r\n                //{ persons_count, n" +
+                    "ew Guid[] { married_with } },\r\n                //{ edu_visit, new Guid[] { fixed" +
+                    "Id } },\r\n\r\n            };\r\n\r\n            public static Dictionary<Guid, Guid[]> " +
+                    "parentsMap = new Dictionary<Guid, Guid[]>\r\n            {\r\n            { id, new " +
+                    "[]{questionnaire} },\r\n            { persons_count, new []{questionnaire}},\r\n    " +
+                    "        { edu_visit, new []{questionnaire} },\r\n            { name, hhMemberScope" +
+                    "Ids },\r\n            { age, hhMemberScopeIds },\r\n            { date, hhMemberScop" +
+                    "eIds },\r\n            { sex, hhMemberScopeIds },\r\n            { role, hhMemberSco" +
+                    "peIds },\r\n            { food, hhMemberScopeIds },\r\n            { times_per_week," +
+                    " foodConsumptionIds },\r\n            { price_for_food, foodConsumptionIds },\r\n   " +
+                    "         { has_job, hhMemberScopeIds },\r\n            { job_title, hhMemberScopeI" +
+                    "ds },\r\n            { best_job_owner, hhMemberScopeIds },\r\n            { person_i" +
+                    "d, hhMemberScopeIds },\r\n            { marital_status, hhMemberScopeIds },\r\n     " +
+                    "       { married_with, hhMemberScopeIds },\r\n            { edu, eduScopeIds },\r\n\r" +
+                    "\n            //groups\r\n            { groupId, hhMemberScopeIds },\r\n            {" +
+                    " fixedId, eduScopeIds },\r\n            { hhMember, hhMemberScopeIds },\r\n         " +
+                    "   { foodConsumption, foodConsumptionIds },\r\n            \r\n        };\r\n\r\n       " +
+                    "     public static Dictionary<Guid, Guid[]> rostersIdToScopeMap = new Dictionary" +
+                    "<Guid, Guid[]>\r\n        {\r\n            { fixedId, eduScopeIds },\r\n            { " +
+                    "hhMember, hhMemberScopeIds },\r\n            { foodConsumption, foodConsumptionIds" +
+                    " },\r\n            { jobActivity, hhMemberScopeIds }\r\n        };\r\n        }\r\n    }" +
+                    "\r\n}\r\n\r\n// ReSharper restore InconsistentNaming");
             return this.GenerationEnvironment.ToString();
         }
     }

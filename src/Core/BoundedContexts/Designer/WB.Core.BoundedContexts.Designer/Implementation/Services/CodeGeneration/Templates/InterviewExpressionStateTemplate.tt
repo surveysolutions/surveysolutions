@@ -11,18 +11,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
 // ReSharper disable InconsistentNaming
 
 namespace WB.Core.SharedKernels.ExpressionProcessing
 {
     public class InterviewExpressionState : AbstractInterviewExpressionState 
     {
+
         public InterviewExpressionState() 
         {
             var questionnaireLevelScope = new[] { IdOf.questionnaire };
             var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
-            var questionnaireLevel = new QuestionnaireLevel(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies);
+            var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GetTypeName()#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies);
             this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
         }
 
@@ -260,6 +260,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             }
         }
 
+
+        ////
+
+
         public override Dictionary<Guid, Guid[]> GetParentsMap()
         {
             return IdOf.parentsMap;
@@ -281,170 +285,75 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
                     newScopes[interviewScope.Key].SetParent(newScopes[Util.GetRosterStringKey(parent.GetRosterKey())]);
             }
 
-            return new StronglyTypedInterviewEvaluator(newScopes, newSiblingRosters);
+            return new InterviewExpressionState(newScopes, newSiblingRosters);
         }
 
-        public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IValidatable
-        {
-            public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
-                : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
-            {
-                EnablementStates.Add(id_state.ItemId, id_state);
-                EnablementStates.Add(edu_visit_state.ItemId, edu_visit_state);
-                //EnablementStates.Add(persons_count_state.ItemId, persons_count_state);
-            }
+        //generate QuestionnaireLevel
+        <#           
+                QuestionnaireLevelTemplate questionnairetemplate = new QuestionnaireLevelTemplate(QuestionnaireTemplateStructure.QuestionnaireLevelModel);
+                this.Write(questionnairetemplate .TransformText());                           
+         #>
 
-            private string @__id;
-            private readonly ConditionalState id_state = new ConditionalState(IdOf.id);
-            public string id
-            {
-                get { return id_state.State == State.Enabled ? @__id : String.Empty; }
-                set { @__id = value; }
-            }
-
-            private long? @__persons_count;
-            private readonly ConditionalState persons_count_state = new ConditionalState(IdOf.persons_count);
-            public long? persons_count
-            {
-                get { return persons_count_state.State == State.Enabled ? @__persons_count : null; }
-                set { @__persons_count = value; }
-            }
-
-            private decimal? @__edu_visit;
-            private readonly ConditionalState edu_visit_state = new ConditionalState(IdOf.edu_visit);
-            public decimal? edu_visit
-            {
-                get { return edu_visit_state.State == State.Enabled ? @__edu_visit : null; }
-                set { @__edu_visit = value; }
-            }
-
-            public IValidatable CopyMembers()
-            {
-                var level = new QuestionnaireLevel(this.RosterVector, this.RosterKey, this.GetInstances, this.ConditionalDependencies);
-
-                foreach (var conditionalState in level.EnablementStates)
-                {
-                    var oldState = this.EnablementStates[conditionalState.Key];
-                    conditionalState.Value.State = oldState.State;
-                    conditionalState.Value.PreviousState = oldState.PreviousState;
-                }
-
-                ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions);
-                InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions);
-
-                level.id = this.@__id;
-                level.persons_count = this.@__persons_count;
-
-                return level;
-            }
-
-            private bool edu_visit_IsEnabled()
-            {
-                return true;
-            }
-
-            public void SetParent(IValidatable parentLevel)
-            {
-            }
-
-            public IValidatable GetParent()
-            {
-                return null;
-            }
-
-            public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-            {
-            }
-
-            protected override IEnumerable<Action> ConditionExpressions
-            {
-                get
-                {
-                    return new[] { Verifier(edu_visit_IsEnabled, edu_visit_state.ItemId, edu_visit_state) };
-                }
-            }
-
-            public HhMember_type[] hhMembers
-            {
-                get
-                {
-                    var rosters = this.GetInstances(this.RosterKey);
-                    return rosters == null ? new HhMember_type[0] : rosters.Select(x => x as HhMember_type).ToArray();
-                }
-            }
-
-            public Education_type[] educations
-            {
-                get
-                {
-                    var rosters = this.GetInstances(this.RosterKey);
-                    return rosters == null ? new Education_type[0] : rosters.Select(x => x as Education_type).ToArray();
-                }
-            }
-        }
-
+        //generating all rosters
          <#foreach (var roster in QuestionnaireTemplateStructure.Rosters) 
-           {                
+           {
                 RosterTemplate template = new RosterTemplate(roster);
-                this.Write(template.TransformText());
-                
+                this.Write(template.TransformText());                
            }
          #>
 
 
         public static class IdOf
         {
-
-        <#foreach (var q in QuestionnaireTemplateStructure.Questions) 
-        {#>
-            public static readonly Guid <#= q.VariableName#> = <#= q.Id #>;
-        <# }#>
-
             public static readonly Guid questionnaire = <#= QuestionnaireTemplateStructure.Id #>; //Guid.Parse("72897e3f-3dc8-4115-81e0-8a9c1cadec2d");
+
+            //questions
+            <#foreach (var q in QuestionnaireTemplateStructure.Questions) 
+            {#>
+              public static readonly Guid <#= q.VariableName#> = <#= q.Id #>;
+            <# }#>           
             
             //rosters
-            public static readonly Guid hhMember = Guid.Parse("69b02bcf-0ed1-4b5a-80bb-bd465ab096da");
-            public static readonly Guid foodConsumption = Guid.Parse("6df41d95-c785-4452-8303-bed3985d4c20");
-            public static readonly Guid jobActivity = Guid.Parse("7556ddf0-457a-4a9b-a021-45ac3bad05a8");
+            <#foreach (var r in QuestionnaireTemplateStructure.Rosters) 
+            {#>
+              public static readonly Guid <#= r.VariableName#> = <#= r.Id #>;
+            <# }#>
 
-            public static readonly Guid groupId = Guid.Parse("039ed69e-5583-46af-b983-488568f20e1c");
-            public static readonly Guid fixedId = Guid.Parse("a7b0d842-0355-4eab-a943-968c9c013d97");
-
-
+            //public static readonly Guid hhMember = Guid.Parse("69b02bcf-0ed1-4b5a-80bb-bd465ab096da");
+            
+            //generate groups Ids
+            <#foreach (var g in QuestionnaireTemplateStructure.Groups) 
+            {#>
+              public static readonly Guid <#= g.VariableName#> = <#= g.Id #>;
+            <# }#>
+            //public static readonly Guid groupId = Guid.Parse("039ed69e-5583-46af-b983-488568f20e1c");
+            
+            //TODO: generate scopes
             public static readonly Guid[] eduScopeIds = new[] { fixedId };
             public static readonly Guid[] hhMemberScopeIds = new[] { persons_count };
             public static readonly Guid[] foodConsumptionIds = new[] { persons_count, food };
 
-            //somehow should be generated
+            
             public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
             {
-                { id, new Guid[] { } },
-                { persons_count, new Guid[] { married_with } },
-                { edu_visit, new Guid[] { fixedId } },
+            <#foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies) 
+            {#>
+              { <#= dependency.Key #>, new Guid[]{
+              <#foreach (var d in dependency.Value)
+                    {#>
+                    <#= d #>,
+                    <# }#>
+              }}
+            <# }#>
 
-                { name, new Guid[] { age } },
-                { age, new Guid[] { groupId, has_job } },
-                { groupId, new Guid[] { person_id, marital_status, married_with } },
-            
-                { person_id, new Guid[] { } },
-                { marital_status, new Guid[] { married_with } },
-                { married_with, new Guid[] { } },
-                { has_job, new Guid[] { job_title, best_job_owner } },
-                { job_title, new Guid[] { } },
-                { best_job_owner, new Guid[] { } },
+                //{ id, new Guid[] { } },
+                //{ persons_count, new Guid[] { married_with } },
+                //{ edu_visit, new Guid[] { fixedId } },
 
-                { sex, new Guid[] { food } },
-                { role, new Guid[] { food, edu_visit } },
-                { food, new Guid[] { } },
-
-                { times_per_week, new Guid[] { price_for_food } },
-                { price_for_food, new Guid[] { } },
-
-                { fixedId, new Guid[] { edu } },
             };
 
             public static Dictionary<Guid, Guid[]> parentsMap = new Dictionary<Guid, Guid[]>
-        {
+            {
             { id, new []{questionnaire} },
             { persons_count, new []{questionnaire}},
             { edu_visit, new []{questionnaire} },
