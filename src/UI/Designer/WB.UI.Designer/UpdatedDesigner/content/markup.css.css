@@ -945,6 +945,38 @@ input#edit-group-title {
   padding-left: 10px;
   width: 100%;
 }
+.roster-type-specific-block {
+  background: #f1f2f3;
+  margin-top: -2px;
+  padding: 8px;
+  border-radius: 0 0 4px 4px;
+}
+.roster-type-specific-block:before,
+.roster-type-specific-block:after {
+  content: " ";
+  display: table;
+}
+.roster-type-specific-block:after {
+  clear: both;
+}
+.roster-type-specific-block:before,
+.roster-type-specific-block:after {
+  content: " ";
+  display: table;
+}
+.roster-type-specific-block:after {
+  clear: both;
+}
+#roster-editor #rosterTypeBtn {
+  border-color: #dbdfe2;
+}
+#roster-editor .input-variable-name:before {
+  top: 35px;
+}
+#roster-editor .input-variable-name > input {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
 .ui-match {
   background-color: #FFCC00;
   border-top: solid 1px #FAD540;
