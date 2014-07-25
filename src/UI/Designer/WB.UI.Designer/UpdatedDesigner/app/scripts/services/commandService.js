@@ -56,7 +56,6 @@
                 };
 
                 commandService.sendUpdateQuestionCommand = function(questionnaireId, question) {
-                    var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
 
                     var command = {
                         questionnaireId: questionnaireId,
@@ -66,14 +65,20 @@
                         variableName: question.variable,
                         variableLabel: question.variableLabel,
                         mask: question.mask,
-                        isPreFilled: isPrefilledScopeSelected,
                         isMandatory: question.isMandatory,
-                        scope: isPrefilledScopeSelected ? 'Interviewer' : question.questionScope,
                         enablementCondition: question.enablementCondition,
                         validationExpression: question.validationExpression,
                         validationMessage: question.validationMessage,
                         instructions: question.instructions
                     };
+
+                    var doesQuestionSupportScopes = question.type != 'TextList' && question.type != 'QRBarcode';
+
+                    if (doesQuestionSupportScopes) {
+                        var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
+                        command.isPreFilled = isPrefilledScopeSelected;
+                        command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
+                    }
 
                     switch (question.type) {
                     case "SingleOption":

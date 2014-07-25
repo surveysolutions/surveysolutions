@@ -78,7 +78,7 @@
                    class="form-control">
         </div>
 
-        <div class="form-group">
+        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
             <label for="Question-scope">Question scope</label><br>
             <div class="btn-group dropup" dropdown>
                 <button class="btn dropdown-toggle" id="Question-scope" type="button">
