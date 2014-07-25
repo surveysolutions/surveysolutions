@@ -434,12 +434,14 @@
     <Content Include="UpdatedDesigner\app\scripts\decorators\exceptionhandlerdecorator.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\animations.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\directives.js" />
+    <Content Include="UpdatedDesigner\app\scripts\directives\help.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\itemBreadcrumbs.js" />
     <Content Include="UpdatedDesigner\app\scripts\fixtures\no-backend.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\authorizationinterceptor.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\commandService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\confirmService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\errorReportingService.js" />
+    <Content Include="UpdatedDesigner\app\scripts\services\helpMessages.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\questionnaireService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\shareService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\utilityService.js" />
