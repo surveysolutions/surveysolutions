@@ -1,5 +1,5 @@
 ﻿<div class="form-holder">
-    <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>  
+    <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>
 
     <form role="form" unsaved-warning-form name="questionForm">
         <div class="row">
@@ -51,7 +51,7 @@
 
         <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
             <div class="form-group col-xs-11">
-                <label for="edit-question-instructions">Instruction (<a href="#">?</a>)</label>
+                <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
                 <textarea id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions" class="form-control"></textarea>
             </div>
 
@@ -61,19 +61,19 @@
         </div>
 
         <div class="form-group" ng-hide="activeQuestion.questionScope == 'Headquarter'">
-            <label for="edit-question-enablement-condition">Condition expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
+            <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /> <a href="javascript:void(0);">Script reference</a></label>
             <input id="edit-question-enablement-condition" type="text" ng-model="activeQuestion.enablementCondition"
                    class="form-control">
         </div>
 
         <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
-            <label for="edit-question-validation-expression">Validation expression (<a href="#">?</a>) <a href="#">Script reference</a></label>
+            <label for="edit-question-validation-expression">Validation expression <help key="validationExpression" /> <a href="javascript:void(0);">Script reference</a></label>
             <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression"
                    class="form-control">
         </div>
 
         <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
-            <label for="edit-question-validation-message">Validation message (<a href="#">?</a>)</label>
+            <label for="edit-question-validation-message">Validation message <help key="validationMessage" /></label>
             <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage"
                    class="form-control">
         </div>
@@ -220,7 +220,7 @@
     </script>
     <script type="text/ng-template" id="Text-template.html">
         <div class="form-group">
-            <label for="edit-mask">Mask(<a href="#">?</a>)</label>
+            <label for="edit-mask">Mask <help key="mask" /></label>
             <input id="edit-mask" type="text" ng-model="activeQuestion.mask" class="form-control" placeholder="Mask">
         </div>
     
