@@ -67,51 +67,95 @@
 </div>
 
 <script type="text/ng-template" id="List-template.html">
-    <div class="form-group span-12">
-        <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <help key="sourceQuestion" /></label><br>
-        <div class="btn-group width100" dropdown>
-            <button id="edit-roster-numeric-source" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.lists, activeRoster.rosterSizeListQuestionId) }}</span>
+    
+    <div class="dropdown-with-breadcrumbs-and-icons">
+        <label>Source question (answer generates number of rows): </label>
+        <div class="btn-group" dropdown>
+            <button class="btn dropdown-toggle" type="button">
+                <span class="select-placeholder" ng-if="selectedListQuestion == null">Select question</span>
+                <span class="selected-item" ng-if="selectedListQuestion !== null">
+                    <span class="path">{{selectedListQuestion.breadcrumbs}}</span>
+                    <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedListQuestion.type"></i>{{selectedListQuestion.title}}</span>
+                </span>
                 <span class="dropdown-arrow"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
-                <li role="presentation" ng-repeat="list in activeRoster.lists">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterSizeListQuestionId = list.id">{{ list.title }}</a>
+
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.lists">
+                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                    <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                       ng-click="selectListQuestion(breadCrumb.id)"
+                       role="menuitem"
+                       tabindex="-1"
+                       href="javascript:void(0);">
+                        <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                    </a>
                 </li>
             </ul>
         </div>
     </div>
+
 </script>
 
 <script type="text/ng-template" id="Numeric-template.html">
-    <div class="form-group">
-        <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <help key="sourceQuestion" /></label><br>
-        <div class="btn-group width100" dropdown>
-            <button id="questionSelectBtn" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.numerics, activeRoster.rosterSizeNumericQuestionId) }}</span>
+    
+    <div class="dropdown-with-breadcrumbs-and-icons">
+        <label>Source question (answer generates number of rows):</label>
+        <div class="btn-group" dropdown>
+            <button class="btn dropdown-toggle" type="button">
+                <span class="select-placeholder" ng-if="selectedNumericQuestion == null">Select question</span>
+                <span class="selected-item" ng-if="selectedNumericQuestion !== null">
+                    <span class="path">{{selectedNumericQuestion.breadcrumbs}}</span>
+                    <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedNumericQuestion.type"></i>{{selectedNumericQuestion.title}}</span>
+                </span>
                 <span class="dropdown-arrow"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
-                <li role="presentation" ng-repeat="numeric in activeRoster.numerics">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterSizeNumericQuestionId = numeric.id">{{ numeric.title }}</a>
+
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.numerics">
+                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                    <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                       ng-click="selectNumericQuestion(breadCrumb.id)"
+                       role="menuitem"
+                       tabindex="-1"
+                       href="javascript:void(0);">
+                        <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                    </a>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="form-group">
-        <label for="edit-roster-numeric-source" class="wb-label">Titles of rows: <help key="titleQuestion" /></label><br>
-        <div class="btn-group width100" dropdown>
-            <button id="questionSelectBtn" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.titles, activeRoster.rosterTitleQuestionId) }}</span>
+    
+    <div class="dropdown-with-breadcrumbs-and-icons">
+        <label>Titles of rows:</label>
+        <div class="btn-group" dropdown>
+            <button class="btn dropdown-toggle" type="button">
+                <span class="select-placeholder" ng-if="selectedTitleQuestion == null">Select question</span>
+                <span class="selected-item" ng-if="selectedTitleQuestion !== null">
+                    <span class="path">{{selectedTitleQuestion.breadcrumbs}}</span>
+                    <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedTitleQuestion.type"></i>{{selectedTitleQuestion.title}}</span>
+                </span>
                 <span class="dropdown-arrow"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
-                <li role="presentation" ng-repeat="title in activeRoster.titles">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterTitleQuestionId = title.id">{{ title.title }}</a>
+
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.titles">
+                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                    <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                       ng-click="selectTitleQuestion(breadCrumb.id)"
+                       role="menuitem"
+                       tabindex="-1"
+                       href="javascript:void(0);">
+                        <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                    </a>
                 </li>
             </ul>
         </div>
     </div>
+
 </script>
 
 <script type="text/ng-template" id="Fixed-template.html">
@@ -122,20 +166,33 @@
 </script>
 
 <script type="text/ng-template" id="Multi-template.html">
-    <div class="form-group">
-        <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <help key="sourceQuestion" /></label><br>
-        <div class="btn-group width100" dropdown>
-            <button id="questionSelectBtn" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.multiOption, activeRoster.rosterSizeMultiQuestionId) }}</span>
+    
+    <div class="dropdown-with-breadcrumbs-and-icons">
+        <label>Source question (answer generates number of rows): </label>
+        <div class="btn-group" dropdown>
+            <button class="btn dropdown-toggle" type="button">
+                <span class="select-placeholder" ng-if="selectedMultiQuestion == null">Select question</span>
+                <span class="selected-item" ng-if="selectedMultiQuestion !== null">
+                    <span class="path">{{selectedMultiQuestion.breadcrumbs}}</span>
+                    <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedMultiQuestion.type"></i>{{selectedMultiQuestion.title}}</span>
+                </span>
                 <span class="dropdown-arrow"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
-                <li role="presentation" ng-repeat="multiOption in activeRoster.multiOption">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.rosterSizeMultiQuestionId = multiOption.id">
-                        {{ multiOption.title }}
+
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.multiOption">
+                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                    <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                       ng-click="selectMultiQuestion(breadCrumb.id)"
+                       role="menuitem"
+                       tabindex="-1"
+                       href="javascript:void(0);">
+                        <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
                     </a>
                 </li>
             </ul>
         </div>
     </div>
+
 </script>

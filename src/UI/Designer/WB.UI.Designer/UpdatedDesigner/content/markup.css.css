@@ -734,63 +734,56 @@ input#edit-group-title {
 .icon-numeric {
   background-image: url(i/icon-cat-intedit-sm.png);
 }
-.question-editor .singleOption,
-.question-editor .multyOption {
-  background-color: #f1f2f3;
-  margin-top: -20px;
-  padding: 0 15px 10px;
-  border-radius: 4px;
-}
-.question-editor .singleOption #sourceOfLinkedQuestion label,
-.question-editor .multyOption #sourceOfLinkedQuestion label {
+#roster-editor .dropdown-with-breadcrumbs-and-icons label,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons label {
   font-weight: normal;
   display: block;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .btn-group,
-.question-editor .multyOption #sourceOfLinkedQuestion .btn-group {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group {
   width: 100%;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .btn-group .btn.dropdown-toggle,
-.question-editor .multyOption #sourceOfLinkedQuestion .btn-group .btn.dropdown-toggle {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .btn.dropdown-toggle,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .btn.dropdown-toggle {
   width: 100%;
   border: none;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .btn-group .selected-item,
-.question-editor .multyOption #sourceOfLinkedQuestion .btn-group .selected-item {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-item,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item {
   white-space: normal;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .btn-group .selected-item .path,
-.question-editor .multyOption #sourceOfLinkedQuestion .btn-group .selected-item .path {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .path,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .path {
   color: #c8ccd0;
   display: block;
   text-transform: uppercase;
   font-size: 10px;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .btn-group .selected-item .chosen-item,
-.question-editor .multyOption #sourceOfLinkedQuestion .btn-group .selected-item .chosen-item {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .chosen-item,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .chosen-item {
   color: #555555;
   line-height: 20px;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .btn-group .dropdown-arrow,
-.question-editor .multyOption #sourceOfLinkedQuestion .btn-group .dropdown-arrow {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow {
   top: 14px;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu,
-.question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu {
   width: 100%;
   overflow-y: auto;
   max-height: 500px;
   font-family: Arial, Helvetica, sans-serif;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu li a,
-.question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu li a {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a {
   font-family: Arial, Helvetica, sans-serif;
   padding-top: 1px;
   padding-bottom: 1px;
   color: #555555;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu li a:after,
-.question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu li a:after {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after {
   display: block;
   position: absolute;
   height: 100%;
@@ -804,24 +797,31 @@ input#edit-group-title {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#e6ffffff', GradientType=1);
   z-index: 1010;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu li a:hover,
-.question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu li a:hover {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover {
   color: #2a81cb;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu .dropdown-header,
-.question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu .dropdown-header {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header {
   text-transform: uppercase;
   font-size: 10px;
   margin-top: 15px;
   line-height: 12px;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu .dropdown-header:first-child,
-.question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu .dropdown-header:first-child {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header:first-child,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header:first-child {
   margin-top: 0;
 }
-.question-editor .singleOption #sourceOfLinkedQuestion .select-placeholder,
-.question-editor .multyOption #sourceOfLinkedQuestion .select-placeholder {
+#roster-editor .dropdown-with-breadcrumbs-and-icons .select-placeholder,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .select-placeholder {
   color: #c8ccd0;
+}
+.question-editor .singleOption,
+.question-editor .multyOption {
+  background-color: #f1f2f3;
+  margin-top: -20px;
+  padding: 0 15px 10px;
+  border-radius: 4px;
 }
 .question-editor .singleOption .table-holder,
 .question-editor .multyOption .table-holder {
