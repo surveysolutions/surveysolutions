@@ -20,23 +20,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private readonly IReadSideRepositoryReader<QuestionsAndGroupsCollectionView> questionDetailsReader;
 
-        private static readonly SelectOption[] QuestionScopeOptions =
+        private static readonly SelectOption InterviewerQuestionScope = new SelectOption { Value = "Interviewer", Text = "Interviewer" };
+        private static readonly SelectOption SupervisorQuestionScope = new SelectOption { Value = "Supervisor", Text = "Supervisor" };
+        private static readonly SelectOption PrefilledQuestionScope = new SelectOption { Value = "Prefilled", Text = "Prefilled" };
+
+        private static readonly SelectOption[] AllQuestionScopeOptions =
         {
-            new SelectOption
-            {
-                Value = "Interviewer",
-                Text = "Interviewer"
-            },
-            new SelectOption
-            {
-                Value = "Supervisor",
-                Text = "Supervisor"
-            },
-            new SelectOption
-            {
-                Value = "Prefilled",
-                Text = "Prefilled"
-            },
+            InterviewerQuestionScope,
+            SupervisorQuestionScope,
+            PrefilledQuestionScope,
+        };
+
+        private static readonly SelectOption[] NotPrefilledQuestionScopeOptions =
+        {
+            InterviewerQuestionScope,
+            SupervisorQuestionScope,
         };
 
         private static readonly SelectOption[] QuestionTypeOptions =
@@ -208,7 +206,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
             result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire);
             result.QuestionTypeOptions = QuestionTypeOptions;
-            result.QuestionScopeOptions = QuestionScopeOptions;
+            result.AllQuestionScopeOptions = AllQuestionScopeOptions;
+            result.NotPrefilledQuestionScopeOptions = NotPrefilledQuestionScopeOptions;
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 

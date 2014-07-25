@@ -76,20 +76,23 @@
           "text":"QR Barcode"
       }
    ],
-   "questionScopeOptions":[
-      {
-          "value":"Interviewer",
-          "text":"Interviewer"
-      },
-      {
-          "value":"Supervisor",
-          "text":"Supervisor"
-      },
-      {
-          "value":"Headquarter",
-          "text":"Headquarters"
-      }
-   ],
+    "allQuestionScopeOptions": [{
+        "value": "Interviewer",
+        "text": "Interviewer"
+    }, {
+        "value": "Supervisor",
+        "text": "Supervisor"
+    }, {
+        "value": "Prefilled",
+        "text": "Prefilled"
+    }],
+    "notPrefilledQuestionScopeOptions": [{
+        "value": "Interviewer",
+        "text": "Interviewer"
+    }, {
+        "value": "Supervisor",
+        "text": "Supervisor"
+    }],
    "breadcrumbs":[
       {
           "id":"7b06830085024e199f7094c24a65b62b",

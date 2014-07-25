@@ -40,7 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public List<LinkedQuestionSource> SourceOfLinkedQuestions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
-        public QuestionnaireInfoFactory.SelectOption[] QuestionScopeOptions { get; set; }
+        public QuestionnaireInfoFactory.SelectOption[] AllQuestionScopeOptions { get; set; }
+        public QuestionnaireInfoFactory.SelectOption[] NotPrefilledQuestionScopeOptions { get; set; }
         public Breadcrumb[] Breadcrumbs { get; set; }
     }
 }

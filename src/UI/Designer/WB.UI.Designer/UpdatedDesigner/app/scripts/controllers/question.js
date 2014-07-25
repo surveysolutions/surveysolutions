@@ -22,7 +22,8 @@
                     $scope.activeQuestion.enablementCondition = result.enablementCondition;
                     $scope.activeQuestion.validationExpression = result.validationExpression;
                     $scope.activeQuestion.validationMessage = result.validationMessage;
-                    $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
+                    $scope.activeQuestion.allQuestionScopeOptions = result.allQuestionScopeOptions;
+                    $scope.activeQuestion.notPrefilledQuestionScopeOptions = result.notPrefilledQuestionScopeOptions;
                     $scope.activeQuestion.instructions = result.instructions;
 
                     var options = result.options || [];
@@ -69,7 +70,10 @@
 
                 $scope.setQuestionType = function(type) {
                     $scope.activeQuestion.type = type;
-                    $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, {value:type}).text;
+                    $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
+                    if (type == 'GpsCoordinates' && $scope.activeQuestion.questionScope == 'Prefilled') {
+                        $scope.activeQuestion.questionScope = 'Interviewer';
+                    }
                 };
 
                 $scope.cancelQuestion = function() {
@@ -92,7 +96,7 @@
 
                 $scope.changeQuestionScope = function(scope) {
                     $scope.activeQuestion.questionScope = scope.text;
-                    if ($scope.activeQuestion.questionScope == 'Headquarter') {
+                    if ($scope.activeQuestion.questionScope == 'Prefilled') {
                         $scope.activeQuestion.enablementCondition = '';
                     }
                 };
