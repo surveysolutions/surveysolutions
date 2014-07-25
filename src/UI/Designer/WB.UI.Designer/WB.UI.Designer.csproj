@@ -480,7 +480,9 @@
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\app\index.html" />
-    <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css" />
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css">
+      <DependentUpon>wb-question-list.css.less</DependentUpon>
+    </Content>
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\body.css" />
     <Content Include="Content\bootstrap-mvc-validation.css" />
