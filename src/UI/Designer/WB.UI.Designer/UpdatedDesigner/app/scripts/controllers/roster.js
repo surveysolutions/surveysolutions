@@ -6,14 +6,23 @@
             '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'utilityService', 'confirmService', '$log',
             function ($rootScope, $scope, $stateParams, questionnaireService, commandService, utilityService, confirmService, $log) {
                 $scope.currentChapterId = $stateParams.chapterId;
+                $scope.selectedNumericQuestion = null;
+                $scope.selectedMultiQuestion = null;
+                $scope.selectedListQuestion = null;
+                $scope.selectedTitleQuestion = null;
 
                 var dataBind = function(result) {
                     $scope.activeRoster = result;
                     $scope.activeRoster.variable = result.variableName;
-                    $scope.activeRoster.lists = utilityService.union(_.toArray(result.textListsQuestions));
-                    $scope.activeRoster.numerics = utilityService.union(_.toArray(result.numericIntegerQuestions));
-                    $scope.activeRoster.titles = utilityService.union(_.toArray(result.numericIntegerTitles));
-                    $scope.activeRoster.multiOption = utilityService.union(_.toArray(result.notLinkedMultiOptionQuestions));
+                    $scope.activeRoster.lists = result.textListsQuestions;
+                    $scope.activeRoster.numerics = result.numericIntegerQuestions;
+                    $scope.activeRoster.titles = result.numericIntegerTitles;
+                    $scope.activeRoster.multiOption = result.notLinkedMultiOptionQuestions;
+
+                    $scope.selectedNumericQuestion = getSelected($scope.activeRoster.numerics, $scope.activeRoster.rosterSizeNumericQuestionId);
+                    $scope.selectedListQuestion = getSelected($scope.activeRoster.lists, $scope.activeRoster.rosterSizeListQuestionId);
+                    $scope.selectedMultiQuestion = getSelected($scope.activeRoster.multiOption, $scope.activeRoster.rosterSizeMultiQuestionId);
+                    $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId);
 
                     $scope.activeRoster.getTitleForRosterType = function () {
                         return _.find($scope.activeRoster.rosterTypeOptions, { 'value': $scope.activeRoster.type }).text;
@@ -22,15 +31,37 @@
                     $scope.editRosterForm.$setPristine();
                 };
 
-                $scope.getSelected = function(collection, id) {
+                var getSelected = function (collection, id) {
+                    if (_.isNull(id)) return null;
+
                     var current = _.find(collection, { 'id': id });
                     if (!_.isUndefined(current)) {
-                        return current.title;
+                        return current;
                     }
-                    return '';
+                    return null;
                 };
 
-                
+                $scope.selectNumericQuestion = function(numericId) {
+                    $scope.activeRoster.rosterSizeNumericQuestionId = numericId;
+                    $scope.selectedNumericQuestion = getSelected($scope.activeRoster.numerics, $scope.activeRoster.rosterSizeNumericQuestionId);
+                }
+
+                $scope.selectListQuestion = function (listId) {
+                    $scope.activeRoster.rosterSizeListQuestionId = listId;
+                    $scope.selectedListQuestion = getSelected($scope.activeRoster.lists, $scope.activeRoster.rosterSizeListQuestionId);
+                }
+
+                $scope.selectMultiQuestion = function (multiId) {
+                    $scope.activeRoster.rosterSizeMultiQuestionId = multiId;
+                    $scope.selectedMultiQuestion = getSelected($scope.activeRoster.multiOption, $scope.activeRoster.rosterSizeMultiQuestionId);
+                }
+
+                $scope.selectTitleQuestion = function (titleQuestionId) {
+                    $scope.activeRoster.rosterTitleQuestionId = titleQuestionId;
+                    $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId);
+                }
+
+
                 $scope.updateRosterType = function (type) {
                     $scope.activeRoster.type = type;
                 };

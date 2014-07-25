@@ -35,14 +35,8 @@ input#edit-question-title, input#edit-group-title {
   background-image: url(../i/icon-cat-intedit-sm.png);
 }
 
-
-.question-editor .singleOption, .question-editor .multyOption {
-  background-color: @questionnarie-question-specific-block-color;
-  margin-top: -20px;
-  padding: 0 15px 10px;
-  border-radius: 4px;
-
-  #sourceOfLinkedQuestion{
+#roster-editor .dropdown-with-breadcrumbs-and-icons,
+#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons{
       label{
           font-weight:normal;
           display: block;
@@ -121,7 +115,15 @@ input#edit-question-title, input#edit-group-title {
           color: @questionnarie-question-placeholder-color;
       }
   }
-  .table-holder {
+  
+.question-editor .singleOption, .question-editor .multyOption {
+  background-color: @questionnarie-question-specific-block-color;
+  margin-top: -20px;
+  padding: 0 15px 10px;
+  border-radius: 4px;
+
+
+.table-holder {
     display: table;
     width: 100%;
 

@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
                 Type = rosterType,
                 RosterSizeListQuestionId = rosterType == RosterType.List ? roster.RosterSizeQuestionId : null,
-                RosterSizeNumericQuestionId=rosterType == RosterType.Numeric ? roster.RosterSizeQuestionId : null,
+                RosterSizeNumericQuestionId = rosterType == RosterType.Numeric ? roster.RosterSizeQuestionId : null,
                 RosterSizeMultiQuestionId = rosterType == RosterType.Multi ? roster.RosterSizeQuestionId : null,
                 RosterTitleQuestionId = roster.RosterTitleQuestionId,
                 RosterFixedTitles = roster.RosterFixedTitles,
@@ -202,7 +202,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             QuestionDetailsView question = questionnaire.Questions.FirstOrDefault(x => x.Id == questionId);
             if (question == null)
                 return null;
-            
+
             NewEditQuestionView result = MapQuestionFields(question);
             result.Options = result.Options ?? new CategoricalOption[0];
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
@@ -227,7 +227,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var result = ObjectMapperManager.DefaultInstance.GetMapper<StaticTextDetailsView, NewEditStaticTextView>()
                             .Map(staticTextDetailsView);
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, staticTextDetailsView);
-            
+
             return result;
         }
 
@@ -285,119 +285,86 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return null;
         }
 
-        private List<LinkedQuestionSource> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
         {
-            var questions = questionsCollection
-                .Questions
-                .Where(q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView || q is GeoLocationDetailsView)
+            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
+                x => x.Where(q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView || q is GeoLocationDetailsView)
                 .Where(q => q.RosterScopeIds.Length > 0)
-                .Select(q => new
-                {
-                    Id = q.Id,
-                    Title = q.Title,
-                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q),
-                    Type = q.Type
-                }).ToArray();
+                .ToList();
 
-
-            var sourcesOfLinkedQuestionBriefs = questions.GroupBy(x => x.Breadcrumbs);
-            var result = new List<LinkedQuestionSource>();
-
-            foreach (var brief in sourcesOfLinkedQuestionBriefs)
-            {
-                var linkedQuestionSource = new LinkedQuestionSource {
-                    Title = brief.Key, 
-                    IsSectionPlaceHolder = true
-                };
-
-                result.Add(linkedQuestionSource);
-                result.AddRange(brief.Select(question => new LinkedQuestionSource
-                {
-                    Title = question.Title, 
-                    Id = question.Id.FormatGuid(), 
-                    IsSectionPlaceHolder = false,
-                    Breadcrumbs = brief.Key,
-                    Type = question.Type.ToString().ToLower()
-                }));
-            }
+            var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
 
             return result;
         }
 
-        private Dictionary<string, QuestionBrief[]> GetNumericIntegerTitles(QuestionsAndGroupsCollectionView questionsCollection, GroupAndRosterDetailsView roster)
+        private List<DropdownQuestionView> GetNumericIntegerTitles(QuestionsAndGroupsCollectionView questionsCollection,
+            GroupAndRosterDetailsView roster)
         {
-            var questions = questionsCollection
-                .Questions
-                .Where(q => q.ParentGroupId == roster.Id)
-                .Select(q => new
-                {
-                    Id = q.Id,
-                    Title = q.Title,
-                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q)
-                }).ToArray();
+            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
+                q => q.Where(x => x.ParentGroupId == roster.Id).ToList();
 
-            return questions.GroupBy(x => x.Breadcrumbs).ToDictionary(g => g.Key, g => g.Select(x => new QuestionBrief
-            {
-                Id = x.Id,
-                Title = x.Title
-            }).ToArray());
+            return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }
 
-        private Dictionary<string, QuestionBrief[]> GetNumericIntegerQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private List<DropdownQuestionView> GetNumericIntegerQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
         {
-            var questions = questionsCollection
-                .Questions.OfType<NumericDetailsView>()
-                .Where(q => q.IsInteger)
-                .Select(q => new
-                {
-                    Id = q.Id,
-                    Title = q.Title,
-                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q)
-                }).ToArray();
+            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
+                q => q.OfType<NumericDetailsView>().Where(x => x.IsInteger).Cast<QuestionDetailsView>().ToList();
 
-            return questions.GroupBy(x => x.Breadcrumbs).ToDictionary(g => g.Key, g => g.Select(x => new QuestionBrief
-            {
-                Id = x.Id,
-                Title = x.Title
-            }).ToArray());
+            return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }
 
-        private Dictionary<string, QuestionBrief[]> GetNotLinkedMultiOptionQuestionBriefs(
+        private List<DropdownQuestionView> GetNotLinkedMultiOptionQuestionBriefs(
             QuestionsAndGroupsCollectionView questionsCollection)
         {
-            var questions = questionsCollection
-                .Questions.OfType<MultiOptionDetailsView>()
-                .Where(q => q.LinkedToQuestionId == null)
-                .Select(q => new
-                {
-                    Id = q.Id,
-                    Title = q.Title,
-                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q)
-                }).ToArray();
+            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
+                q => q.OfType<MultiOptionDetailsView>().Where(x => x.LinkedToQuestionId == null).Cast<QuestionDetailsView>().ToList();
 
-            return questions.GroupBy(x => x.Breadcrumbs).ToDictionary(g => g.Key, g => g.Select(x => new QuestionBrief
-            {
-                Id = x.Id,
-                Title = x.Title
-            }).ToArray());
+            return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }
 
-        private Dictionary<string, QuestionBrief[]> GetTextListsQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private List<DropdownQuestionView> GetTextListsQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
         {
-            var questions = questionsCollection
-                .Questions.OfType<TextListDetailsView>()
-                .Select(q => new
+            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
+                q => q.OfType<TextListDetailsView>().Cast<QuestionDetailsView>().ToList();
+
+            return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
+        }
+
+        private List<DropdownQuestionView> PrepareGroupedQuestionsListForDropdown(QuestionsAndGroupsCollectionView questionsCollection, Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter)
+        {
+            var questions = questionFilter(questionsCollection.Questions)
+                .Select(q => new DropdownQuestionView
                 {
-                    Id = q.Id,
+                    Id = q.Id.FormatGuid(),
                     Title = q.Title,
-                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q)
+                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q),
+                    Type = q.Type.ToString().ToLower()
                 }).ToArray();
 
-            return questions.GroupBy(x => x.Breadcrumbs).ToDictionary(g => g.Key, g => g.Select(x => new QuestionBrief
+
+            var groupedQuestionsList = questions.GroupBy(x => x.Breadcrumbs);
+            var result = new List<DropdownQuestionView>();
+
+            foreach (var brief in groupedQuestionsList)
             {
-                Id = x.Id,
-                Title = x.Title
-            }).ToArray());
+                var sectionPlaceholder = new DropdownQuestionView
+                {
+                    Title = brief.Key,
+                    IsSectionPlaceHolder = true
+                };
+
+                result.Add(sectionPlaceholder);
+                result.AddRange(brief.Select(question => new DropdownQuestionView
+                {
+                    Title = question.Title,
+                    Id = question.Id,
+                    IsSectionPlaceHolder = false,
+                    Breadcrumbs = brief.Key,
+                    Type = question.Type
+                }));
+            }
+            return result;
         }
 
         private Breadcrumb[] GetBreadcrumbs(QuestionsAndGroupsCollectionView entitiesCollection, DescendantItemView entity)
