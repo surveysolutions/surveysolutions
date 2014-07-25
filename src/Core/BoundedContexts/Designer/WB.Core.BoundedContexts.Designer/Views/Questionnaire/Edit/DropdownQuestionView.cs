@@ -1,6 +1,6 @@
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
-    public struct LinkedQuestionSource
+    public struct DropdownQuestionView
     {
         public bool IsSectionPlaceHolder;
         public string Id;
