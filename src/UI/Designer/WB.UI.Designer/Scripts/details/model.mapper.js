@@ -2,8 +2,8 @@
     ['model', 'config'],
     function (model, config) {
         var getType = function (intType) {
-            return intType === 1 ? "QuestionView" : "GroupView";
-        },
+                return intType === 1 ? "QuestionView" : intType === 20 ? "StaticTextView" : "GroupView";
+            },
             // public mapping methods
             error = {
                 getDtoId: function (dto) { return dto.Code; },
@@ -55,6 +55,17 @@
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     item.commit();
+                    return item;
+                }
+            },
+            staticText = {
+                getDtoId: function (dto) { return dto.Id; },
+                fromDto: function (dto, item) {
+                    item = item || new model.StaticText();
+                    item.id(this.getDtoId(dto));
+                    item.title(dto.Title);
+                    item.parent(dto.ParentId);
+
                     return item;
                 }
             },
@@ -119,6 +130,7 @@
         return {
             questionnaire: questionnaire,
             question: question,
+            staticText: staticText,
             group: group,
             error: error
         };

@@ -188,6 +188,8 @@
                      var items =_.map(this.childrenID(), function (item) {
                         if (item.type === "GroupView")
                             return dc().groups.getLocalById(item.id);
+                        else if (item.type === "StaticTextView")
+                            return dc().staticTexts.getLocalById(item.id);
                         return dc().questions.getLocalById(item.id);
                      });
                      this.children(items);
@@ -215,19 +217,23 @@
                     item.rosterFixedTitles(this.rosterFixedTitles());
                     item.rosterTitleQuestion(this.rosterTitleQuestion());
 
-                    item.childrenID(_.map(this.childrenID(), function (child) {
-                        var clonedItem;
+                    item.childrenID(_.filter(_.map(this.childrenID(), function (child) {
+                        var clonedItem = null;
                         
                         if (child.type === "GroupView") {
                             clonedItem = dc().groups.getLocalById(child.id).clone();
                             dc().groups.add(clonedItem);
-                        } else {
+                        } else if (child.type === "QuestionView") {
                             clonedItem = dc().questions.getLocalById(child.id).clone();
                             dc().questions.add(clonedItem);
                         }
+
+                        if (_.isNull(clonedItem))
+                            return null;
+
                         clonedItem.parent(item);
                         return { type: clonedItem.type(), id: clonedItem.id() };
-                    }));
+                    })), function(item) { return !_.isNull(item); });
 
                     if (this.isClone() && this.isNew()) {
                         item.cloneSource(this.cloneSource());
