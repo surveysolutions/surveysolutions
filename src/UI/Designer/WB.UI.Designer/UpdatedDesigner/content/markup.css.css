@@ -755,6 +755,10 @@ input#edit-group-title {
   width: 100%;
   border: none;
 }
+.question-editor .singleOption #sourceOfLinkedQuestion .btn-group .selected-item,
+.question-editor .multyOption #sourceOfLinkedQuestion .btn-group .selected-item {
+  white-space: normal;
+}
 .question-editor .singleOption #sourceOfLinkedQuestion .btn-group .selected-item .path,
 .question-editor .multyOption #sourceOfLinkedQuestion .btn-group .selected-item .path {
   color: #c8ccd0;
@@ -774,13 +778,35 @@ input#edit-group-title {
 .question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu,
 .question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu {
   width: 100%;
-  font-family: Arial;
+  overflow-y: auto;
+  max-height: 500px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu li a,
 .question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu li a {
+  font-family: Arial, Helvetica, sans-serif;
   padding-top: 1px;
   padding-bottom: 1px;
   color: #555555;
+}
+.question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu li a:after,
+.question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu li a:after {
+  display: block;
+  position: absolute;
+  height: 100%;
+  content: '';
+  width: 50px;
+  top: 0;
+  right: 0;
+  background-image: -webkit-linear-gradient(left, color-stop(rgba(255, 255, 255, 0) 0%), color-stop(rgba(255, 255, 255, 0.9) 100%));
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#e6ffffff', GradientType=1);
+  z-index: 1010;
+}
+.question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu li a:hover,
+.question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu li a:hover {
+  color: #2a81cb;
 }
 .question-editor .singleOption #sourceOfLinkedQuestion .dropdown-menu .dropdown-header,
 .question-editor .multyOption #sourceOfLinkedQuestion .dropdown-menu .dropdown-header {

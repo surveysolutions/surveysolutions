@@ -54,6 +54,7 @@ input#edit-question-title, input#edit-group-title {
               border: none;
           }
           .selected-item{
+              white-space: normal;
               .path{
                   color:@questionnarie-question-placeholder-color;
                   display: block;
@@ -72,14 +73,37 @@ input#edit-question-title, input#edit-group-title {
 
       .dropdown-menu{
           width: 100%;
+          overflow-y: auto;
+          max-height: 500px;
+          
           //margin-top: -37px;
-          font-family: Arial;
+          .arial-font();
+         
 
           li a{
+              .arial-font();
               padding-top: 1px;
               padding-bottom: 1px;
               color: @questionnarie-question-editor-color;
+
+              &:after{
+                    @w: 50px;
+                    display: block;
+                    position: absolute;
+                    height: 100%;
+                    content: '';
+                    width: @w;
+                    top: 0;
+                    right: 0;
+                    #gradient > .horizontal(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9)); 
+                    z-index: 1010;
+              }
+              &:hover{
+                  color:@common-blue-color;
+              }
           }
+
+
           .dropdown-header{
               text-transform: uppercase;
               font-size: 10px;
