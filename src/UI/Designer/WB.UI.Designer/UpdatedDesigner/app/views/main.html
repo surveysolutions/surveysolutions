@@ -10,12 +10,14 @@
             </ul>
         </div>
         <div class="header-menu">
-            This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong><span ng-repeat="q in questionnaire.sharedPersons"><span ng-if="$first">, shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
-                                                                                                                                                  </span>
-                                                                                                   <span ng-if="!$first && $last">
-                                                                                                       and <a href="javascript:void(0);" ng-click="showShareInfo()">{{$index}} other</a>
-                                                                                                   </span>
-                                                                                               </span>
+            This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong><span ng-repeat="q in getPersonsSharedWith(questionnaire)">
+    <span ng-if="$first">
+        , shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
+    </span>
+    <span ng-if="!$first && $last">
+        and <a href="javascript:void(0);" ng-click="showShareInfo()">{{$index}} other</a>
+    </span>
+</span>
             <div class="buttons">
                 <button class="btn" ng-click="showShareInfo()">SHARE</button>
                 <a class="btn" ng-href="../../questionnaire/edit/{{questionnaireId}}">Old designer</a>
@@ -45,7 +47,7 @@
     <div class="right"></div>
 </section>
 
-<section id="main" class="row" >
+<section id="main" class="row">
     <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
         <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
         <div class="ul-holder" ng-mouseleave="foldback()">

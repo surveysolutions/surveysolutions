@@ -197,7 +197,12 @@
                 $rootScope.$on('chapterDeleted', function () {
                     getQuestionnaire();
                 });
+                $scope.getPersonsSharedWith = function (questionnaire) {
+                    if (!questionnaire)
+                        return [];
 
+                    return _.without(questionnaire.sharedPersons, _.findWhere(questionnaire.sharedPersons, { isOwner: true }));
+                }
                 $scope.showShareInfo = function () {
                     $modal.open({
                         templateUrl: 'views/share.html',
