@@ -2909,7 +2909,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameSpecialCharacters,
-                    "Valid variable name should contains only letters, digits and underscore character");
+                    "Valid variable name should contain only letters, digits and underscore character");
             }
 
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
