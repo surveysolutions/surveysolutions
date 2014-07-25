@@ -13,7 +13,6 @@
                     $scope.activeGroup.itemId = $stateParams.itemId;
                     $scope.activeGroup.variableName = $stateParams.variableName;
 
-
                     $scope.activeGroup.isFirstChapter = false;
                     if ($scope.activeGroup.isChapter) {
                         if ($scope.questionnaire && $scope.questionnaire.chapters && $scope.questionnaire.chapters.length)
@@ -34,15 +33,17 @@
                     );
                 };
 
-                $scope.saveGroup = function() {
-                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeGroup).success(function(result) {
-                        $scope.initialGroup = angular.copy($scope.activeGroup);
-                        $rootScope.$emit('groupUpdated', {
-                            itemId: $scope.activeGroup.itemId,
-                            title: $scope.activeGroup.title
+                $scope.saveGroup = function () {
+                    if ($scope.groupForm.$valid) {
+                        commandService.updateGroup($stateParams.questionnaireId, $scope.activeGroup).success(function(result) {
+                            $scope.initialGroup = angular.copy($scope.activeGroup);
+                            $rootScope.$emit('groupUpdated', {
+                                itemId: $scope.activeGroup.itemId,
+                                title: $scope.activeGroup.title
+                            });
+                            $scope.groupForm.$setPristine();
                         });
-                        $scope.groupForm.$setPristine();
-                    });
+                    }
                 };
 
                 $scope.cancelGroup = function() {

@@ -43,17 +43,19 @@
                     );
                 };
 
-                $scope.saveRoster = function() {
-                    commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function() {
-                        $scope.initialRoster = angular.copy($scope.activeRoster);
+                $scope.saveRoster = function () {
+                    if ($scope.editRosterForm.$valid) {
+                        commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function() {
+                            $scope.initialRoster = angular.copy($scope.activeRoster);
 
-                        $rootScope.$emit('rosterUpdated', {
-                            itemId: $scope.activeRoster.itemId,
-                            variable: $scope.activeRoster.variableName,
-                            title: $scope.activeRoster.title
+                            $rootScope.$emit('rosterUpdated', {
+                                itemId: $scope.activeRoster.itemId,
+                                variable: $scope.activeRoster.variableName,
+                                title: $scope.activeRoster.title
+                            });
+                            $scope.editRosterForm.$setPristine();
                         });
-                        $scope.editRosterForm.$setPristine();
-                    });
+                    }
                 };
 
                 $scope.deleteRoster = function() {

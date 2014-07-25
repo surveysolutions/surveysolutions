@@ -433,6 +433,7 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\verification.js" />
     <Content Include="UpdatedDesigner\app\scripts\decorators\exceptionhandlerdecorator.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\animations.js" />
+    <Content Include="UpdatedDesigner\app\scripts\directives\denyThisKeyword.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\directives.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\help.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\itemBreadcrumbs.js" />
@@ -643,7 +644,6 @@
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\test.html" />
-    <Content Include="UpdatedDesigner\test\spec\services\authorizationinterceptor.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.css" />
@@ -1243,6 +1243,9 @@
     <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\travis_test.sh" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\Shared\Layout.admin.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.min.js.map">
+      <DependentUpon>ui-utils.min.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -54,18 +54,20 @@
                         });
                 };
 
-                $scope.saveQuestion = function() {
-                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function(result) {
-                        $scope.initialQuestion = angular.copy($scope.activeQuestion);
-                        $rootScope.$emit('questionUpdated', {
-                            itemId: $scope.activeQuestion.itemId,
-                            title: $scope.activeQuestion.title,
-                            variable: $scope.activeQuestion.variable,
-                            type: $scope.activeQuestion.type,
-                            linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
+                $scope.saveQuestion = function () {
+                    if ($scope.questionForm.$valid) {
+                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function(result) {
+                            $scope.initialQuestion = angular.copy($scope.activeQuestion);
+                            $rootScope.$emit('questionUpdated', {
+                                itemId: $scope.activeQuestion.itemId,
+                                title: $scope.activeQuestion.title,
+                                variable: $scope.activeQuestion.variable,
+                                type: $scope.activeQuestion.type,
+                                linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
+                            });
+                            $scope.questionForm.$setPristine();
                         });
-                        $scope.questionForm.$setPristine();
-                    });
+                    }
                 };
 
                 $scope.setQuestionType = function(type) {
