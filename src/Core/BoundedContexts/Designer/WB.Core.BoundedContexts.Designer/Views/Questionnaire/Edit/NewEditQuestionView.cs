@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         //public QuestionDetailsView Question { get; set; }
         public NewEditQuestionView()
         {
-            this.SourceOfLinkedQuestions = new List<LinkedQuestionSource>();
+            this.SourceOfLinkedQuestions = new List<DropdownQuestionView>();
         }
 
         public Guid Id { get; set; }
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? CountOfDecimalPlaces { get; set; }
         public int? MaxAnswerCount { get; set; }
 
-        public List<LinkedQuestionSource> SourceOfLinkedQuestions { get; set; }
+        public List<DropdownQuestionView> SourceOfLinkedQuestions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] QuestionScopeOptions { get; set; }
         public Breadcrumb[] Breadcrumbs { get; set; }
