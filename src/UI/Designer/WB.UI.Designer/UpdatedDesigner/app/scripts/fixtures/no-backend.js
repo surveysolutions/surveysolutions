@@ -17,9 +17,14 @@
                 $resource('./../data/chapter/b33dc986d65048a8a11b4578bae23515.json').get()
             );
             
-            $httpBackend.whenGET('../../api/questionnaire/chapter/883f24bcf1484e73aada2b5023cfa5bf?chapterId=883f24bcf1484e73aada2b5023cfa5bf').respond(
+            $httpBackend.whenGET('../../api/questionnaire/chapter/dc89d22b9e78480da5756806d2466637?chapterId=883f24bcf1484e73aada2b5023cfa5bf').respond(
                  $resource('./../data/chapter/883f24bcf1484e73aada2b5023cfa5bf.json').get()
              );
+
+            $httpBackend.whenGET('../../api/questionnaire/editGroup/dc89d22b9e78480da5756806d2466637?groupId=b33dc986d65048a8a11b4578bae23515').respond(
+                 $resource('./../data/editGroup/ddfaab0f37394a679f088add19325cfe.json').get()
+             );
+            //
 
             //Default Questionnaire
             $httpBackend.whenGET('../../api/questionnaire/get/7c97b1925b0244b782ed6741a5035fae').respond(
