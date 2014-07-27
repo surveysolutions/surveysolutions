@@ -481,6 +481,8 @@
     <Content Include="UpdatedDesigner\content\vendor.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-editor.css.less" />
     <Content Include="UpdatedDesigner\data\editQuestion\746c323e5bf49176f1594a4719327ea8.json" />
+    <Content Include="UpdatedDesigner\data\chapter\b33dc986d65048a8a11b4578bae23515.json" />
+    <Content Include="UpdatedDesigner\data\chapter\883f24bcf1484e73aada2b5023cfa5bf.json" />
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\app\index.html" />
@@ -1247,6 +1249,7 @@
     <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.min.js.map">
       <DependentUpon>ui-utils.min.js</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\data\questionnaire\dc89d22b9e78480da5756806d2466637.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

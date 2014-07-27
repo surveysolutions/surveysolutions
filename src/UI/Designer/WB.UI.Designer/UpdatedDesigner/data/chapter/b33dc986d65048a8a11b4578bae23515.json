@@ -1,0 +1,232 @@
+﻿{
+   "itemId":"b33dc986d65048a8a11b4578bae23515",
+   "title":"SECTION A-1",
+   "isRoster":false,
+   "items":[
+      {
+         "itemId":"6e8e9b1fec9c4d14adcf08311af713dd",
+         "title":"HOUSEHOLD IDENTIFICATION ЛЛ123457",
+         "isRoster":false,
+         "items":[
+            {
+               "itemId":"2c43b7e76fa142b6b7a4acd13761ebdc",
+               "title":"REGION",
+               "variable":"region",
+               "linkedToQuestionId":null,
+               "type":"Numeric",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"ae65487b5d6d4bde95c4e521086a7335",
+               "title":"WARD",
+               "variable":"ward",
+               "linkedToQuestionId":null,
+               "type":"Numeric",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"e2c71b36f81f40c090b890d5740aa9d8",
+               "title":"ROSTER ID OF TRACKING TARGET FROM NPS YEAR 2",
+               "variable":"rosterid_track_Y2",
+               "linkedToQuestionId":null,
+               "type":"Numeric",
+               "linkedVariables":[
+                  "11deac03-558c-47d8-b395-f8b661257168"
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"a6737ecd0039421689c9850f9223371b",
+               "title":"VILLAGE/ENUMERATION AREA",
+               "variable":"village_ea",
+               "linkedToQuestionId":null,
+               "type":"Numeric",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"b404d897520f417a95e0c53b5e5a9f4d",
+               "title":"KITONGOJI OR MTAA NAME 123",
+               "variable":"mtaa_name",
+               "linkedToQuestionId":null,
+               "type":"Text",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"7ab77fdd0e1c423fb09e1518e541edf6",
+               "title":"HOUSEHOLD ID (FROM LIST) 1",
+               "variable":"hh_id",
+               "linkedToQuestionId":null,
+               "type":"Numeric",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"da25792fd44c415cb7f2e688eaa4634a",
+               "title":"NAME OF HOUSEHOLD HEAD",
+               "variable":"head_name",
+               "linkedToQuestionId":null,
+               "type":"Text",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"46b8eb4b6c274ba49d71ed56edc9428f",
+               "title":"NAME OF HOUSEHOLD HEAD FROM NPS YEAR 2",
+               "variable":"head_name_Y2",
+               "linkedToQuestionId":null,
+               "type":"Text",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"d4701673e05447e78eb06422a1df8dc6",
+               "title":"FULL HOUSEHOLD IDENTIFICATION FROM NPS YEAR 2",
+               "variable":"full_hh_id_Y2",
+               "linkedToQuestionId":null,
+               "type":"Numeric",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"c079c72b9c9d49ed9a9db5433cabf859",
+               "title":"IS THIS HOUSEHOLD",
+               "variable":"hh_split",
+               "linkedToQuestionId":null,
+               "type":"SingleOption",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"11deac03558c47d8b395f8b661257168",
+               "title":"LOCATION OF HOUSEHOLD",
+               "variable":"location",
+               "linkedToQuestionId":null,
+               "type":"SingleOption",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"b192f74340ee4dc192cdf0e1903a22a1",
+               "title":"NAME OF TRACKING TARGET FROM NPS YEAR 2",
+               "variable":"name_track_Y2",
+               "linkedToQuestionId":null,
+               "type":"Text",
+               "linkedVariables":[
+                  "11deac03-558c-47d8-b395-f8b661257168"
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"4247b86173924840ad124f668aee039e",
+               "title":"LOWEST ROSTER ID NUMBER",
+               "variable":"lowest_roster_id",
+               "linkedToQuestionId":null,
+               "type":"Numeric",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"368998f1fa1749d2a75199f0e5da3fab",
+               "title":"DISTRIC",
+               "variable":"distric",
+               "linkedToQuestionId":null,
+               "type":"Numeric",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"3a9fb940134149039bdb63b32317ada3",
+               "title":"DESCRIPTION OF LOCATION OF HOUSEHOLD",
+               "variable":"desc_location",
+               "linkedToQuestionId":null,
+               "type":"Text",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            }
+         ],
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0,
+         "variable":null
+      },
+      {
+         "itemId":"260d31b77ab749d881d9ba7cd604a82f",
+         "title":"A-2: SURVEY STAFF DETAILS",
+         "isRoster":false,
+         "items":[
+            {
+               "itemId":"4458a98bb9b046efb77bf19273e7079f",
+               "title":"TIME INTERVIEW START",
+               "variable":"time_start",
+               "linkedToQuestionId":null,
+               "type":"Text",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"f9bb237487df4c01a5f5a72e5f889f79",
+               "title":"OBSERVATIONS ON THE INTERVIEW",
+               "variable":"observations",
+               "linkedToQuestionId":null,
+               "type":"Text",
+               "linkedVariables":[
+
+               ],
+               "brokenLinkedVariables":null
+            },
+            {
+               "itemId":"be11ed5f7efd8b0c26f495396475acf0",
+               "title":"New roster 1",
+               "isRoster":true,
+               "items":[
+
+               ],
+               "questionsCount":0,
+               "groupsCount":0,
+               "rostersCount":0,
+               "variable":null
+            }
+         ],
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0,
+         "variable":null
+      }
+   ],
+   "questionsCount":0,
+   "groupsCount":0,
+   "rostersCount":0,
+   "variable":null
+}

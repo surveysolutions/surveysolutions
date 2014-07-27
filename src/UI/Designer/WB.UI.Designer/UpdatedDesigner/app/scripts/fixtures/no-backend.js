@@ -1,13 +1,26 @@
-﻿(function() {
+﻿(function () {
     if (!(document.URL.indexOf('nobackend') > 0)) {
         return;
     }
 
     angular.module('designerApp')
-        .config(function($provide) {
+        .config(function ($provide) {
             $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
         })
-        .run(function($httpBackend, $resource) {
+        .run(function ($httpBackend, $resource) {
+            //Big questionnaire
+            $httpBackend.whenGET('../../api/questionnaire/get/dc89d22b9e78480da5756806d2466637').respond(
+                $resource('./../data/questionnaire/dc89d22b9e78480da5756806d2466637.json').get()
+            );
+
+            $httpBackend.whenGET('../../api/questionnaire/chapter/dc89d22b9e78480da5756806d2466637?chapterId=b33dc986d65048a8a11b4578bae23515').respond(
+                $resource('./../data/chapter/b33dc986d65048a8a11b4578bae23515.json').get()
+            );
+            
+            $httpBackend.whenGET('../../api/questionnaire/chapter/883f24bcf1484e73aada2b5023cfa5bf?chapterId=883f24bcf1484e73aada2b5023cfa5bf').respond(
+                 $resource('./../data/chapter/883f24bcf1484e73aada2b5023cfa5bf.json').get()
+             );
+
             //Default Questionnaire
             $httpBackend.whenGET('../../api/questionnaire/get/7c97b1925b0244b782ed6741a5035fae').respond(
                 $resource('./../data/questionnaire/7c97b1925b0244b782ed6741a5035fae.json').get()
@@ -55,12 +68,12 @@
             );
 
             //Comands
-            $httpBackend.whenPOST('../../command/execute').respond(function(method, url, data, headers) {
-                    if (!angular.fromJson(data).type.indexOf('Update')) {
-                        return [200, { "Error": "Custom Validation Error From Api", "HasPermissions": true, "IsSuccess": false }, {}];
-                    }
-                    return [200, { "Error": "", "HasPermissions": true, "IsSuccess": true }, {}];
+            $httpBackend.whenPOST('../../command/execute').respond(function (method, url, data, headers) {
+                if (!angular.fromJson(data).type.indexOf('Update')) {
+                    return [200, { "Error": "Custom Validation Error From Api", "HasPermissions": true, "IsSuccess": false }, {}];
                 }
+                return [200, { "Error": "", "HasPermissions": true, "IsSuccess": true }, {}];
+            }
             );
 
             //Views

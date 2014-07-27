@@ -1,0 +1,125 @@
+﻿{
+   "questionnaireId":"dc89d22b9e78480da5756806d2466637",
+   "title":"Tanzania NPS 2013/2014 Household Questionnaire",
+   "isPublic":false,
+   "chapters":[
+      {
+         "itemId":"b33dc986d65048a8a11b4578bae23515",
+         "title":"SECTION A-1",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"a8925a7ba39c4eacb05a8e28f0a140ae",
+         "title":"MEMBERS INFORMATION",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"768fd66535654a8bb77addfb2a2d2060",
+         "title":"SECTION I: HOUSING, WATER AND SANITATION",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"883f24bcf1484e73aada2b5023cfa5bf",
+         "title":"SECTION J: CONSUMPTION OF FOOD OVER PAST ONE WEEK",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"cc98ee4571994367a3a52191db77e530",
+         "title":"SECTION K: NON-FOOD EXPENDITURES – Past one week & one month",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"2bc3457072934d77882d6ba8e5436e56",
+         "title":"SECTION L: NON-FOOD EXPENDITURES – Past twelve months",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"be1dec3e9d8244d0b6b40a08e2831285",
+         "title":"SECTION M: HOUSEHOLD ASSETS",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"217a70d2f40243cb8daaf9289ab57cfd",
+         "title":"SECTION N: FAMILY/HOUSEHOLD NON-FARM ENTERPRISES",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"ad71bb792e23452ea98b988c6f0e139e",
+         "title":"SECTION O: ASSISTANCE AND GROUPS",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"57a78aeac6154561b1af2d04dd443f75",
+         "title":"SECTION P: CREDIT",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"fc7c1e142ab64e0c939a453524d1ca4b",
+         "title":"SECTION Q: FINANCE",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"29520e8c7f5942ad895bcf4ad41b219e",
+         "title":"SECTION R: RECENT SHOCKS TO HOUSEHOLD WELFARE",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"faef27da1ee64a40bbaa9c00ffea57e5",
+         "title":"SECTION S: DEATHS IN HOUSEHOLD",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"c169e30a3fe448629d8448bd8dfb5faa",
+         "title":"SECTION U-1: HOUSEHOLD RECONTACT INFORMATION",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"b04b929a0e7a49e98a315a938faa6551",
+         "title":"SECTION U-2: FILTER QUESTIONS",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      },
+      {
+         "itemId":"c1acc8e1bac749f3b5108bfc169a1de0",
+         "title":"SECTION V: ANTHROPOMETRY",
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0
+      }
+   ],
+   "sharedPersons":[
+
+   ],
+   "questionsCount":1435,
+   "groupsCount":166,
+   "rostersCount":16
+}
