@@ -78,7 +78,7 @@ angular.module('unsavedChanges', ['lazyModel'])
                 // log function that accepts any number of arguments
                 // @see http://stackoverflow.com/a/7942355/1738217
                 log: function() {
-                    if (console.log && logEnabled && arguments.length) {
+                    if (console && console.log && logEnabled && arguments.length) {
                         var newarr = [].slice.call(arguments);
                         if (typeof console.log === 'object') {
                             log.apply.call(console.log, console, newarr);
