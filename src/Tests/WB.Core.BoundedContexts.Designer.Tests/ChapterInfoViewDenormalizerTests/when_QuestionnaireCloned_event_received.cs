@@ -101,15 +101,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         It should_groupInfoView_second_chapter_first_item_type_be_equal_to_text_question_type = () =>
             ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).Type.ShouldEqual(QuestionType.Text);
 
-        It should_groupInfoView_second_chapter_first_item_LinkedVariables_not_be_null = () =>
-            ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).LinkedVariables.ShouldNotBeNull();
-
-        It should_groupInfoView_second_chapter_first_item_LinkedVariables_contains_1_variable = () =>
-            ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).LinkedVariables.Count().ShouldEqual(1);
-
-        It should_groupInfoView_second_chapter_first_item_LinkedVariables_first_variable_be_equal_to_variableUsedInChapter2Question = () =>
-            ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).LinkedVariables.FirstOrDefault(lv=> lv == variableUsedInChapter2Question).ShouldNotBeNull();
-
         private static string questionnaireId = "33333333333333333333333333333333";
         private static string chapter1Id = "22222222222222222222222222222222";
         private static string chapter2Id = "11111111111111111111111111111111";
