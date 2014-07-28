@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     var geoAnswer = question.Answer as GeoPosition;
                     if (geoAnswer != null)
                     {
-                        this.expressionProcessorStatePrototype.UpdateGeoLocationAnswer(question.Id, questionPropagationVector, geoAnswer.Latitude, geoAnswer.Longitude);
+                        this.expressionProcessorStatePrototype.UpdateGeoLocationAnswer(question.Id, questionPropagationVector, geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy);
                     }
                     if (question.Answer is DateTime)
                     {
@@ -274,7 +274,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.PropagationVector, @event.Latitude, @event.Longitude);
+            expressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.PropagationVector, @event.Latitude, @event.Longitude, @event.Accuracy);
         }
 
         internal void Apply(TextListQuestionAnswered @event)
@@ -827,9 +827,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 expressionProcessorState.UpdateTextListAnswer(answerChange.QuestionId, answerChange.RosterVector, (Tuple<decimal, string>[])answerChange.Answer);
                                 break;
                             case AnswerChangeType.GeoLocation:
+                            {
+                                var answer = answerChange.Answer as GeoLocationPoint;
                                 expressionProcessorState.UpdateGeoLocationAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                                    (answerChange.Answer as GeoLocationPoint).Latitude,
-                                    (answerChange.Answer as GeoLocationPoint).Longitude);
+                                    answer.Latitude,
+                                    answer.Longitude,
+                                    answer.Accuracy);
+                            }
+                                
                                 break;
                             case AnswerChangeType.QRBarcode:
                                 expressionProcessorState.UpdateQrBarcodeAnswer(answerChange.QuestionId, answerChange.RosterVector, (string)answerChange.Answer);
@@ -2465,7 +2470,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
 
-            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateGeoLocationAnswer(questionId, rosterVector, latitude, longitude);
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => 
+                expressionProcessorState.UpdateGeoLocationAnswer(questionId, rosterVector, latitude, longitude, accuracy);
 
             return this.CalculateInterviewChangesOnAnswerQuestion(
                 state,

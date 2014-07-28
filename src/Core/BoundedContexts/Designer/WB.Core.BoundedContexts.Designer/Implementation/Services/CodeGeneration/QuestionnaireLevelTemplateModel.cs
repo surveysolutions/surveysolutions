@@ -3,16 +3,25 @@ using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    public class QuestionnaireLevelTemplateModel : IParent {
-        
-        public List<QuestionTemplateModel> Questions { private set; get; }
-        public List<GroupTemplateModel> Groups { private set; get; }
+    public class QuestionnaireLevelTemplateModel : IRosterScope
+    {
 
-        public string GeneratedTypeName {
-            get { return "QuestionnaireLevel"; }
+        public QuestionnaireLevelTemplateModel()
+        {
+            this.Questions = new List<QuestionTemplateModel>();
+            this.Groups = new List<GroupTemplateModel>();
+            this.Rosters = new List<RosterTemplateModel>();
         }
 
-        public IParent GetParent()
+        public List<QuestionTemplateModel> Questions { set; get; }
+        public List<GroupTemplateModel> Groups {  set; get; }
+        public List<RosterTemplateModel> Rosters { set; get; }
+
+        public string GeneratedTypeName {
+            get { return "QuestionnaireTopLevel"; }
+        }
+
+        public IRosterScope GetParentScope()
         {
             return null;
         }
@@ -24,7 +33,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public IEnumerable<QuestionTemplateModel> GetQuestions()
         {
-            return Questions;
+            return this.Questions;
+        }
+
+        public IEnumerable<RosterTemplateModel> GetRosters()
+        {
+            return this.Rosters;
         }
     }
 }

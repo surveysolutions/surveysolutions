@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public abstract void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer);
         public abstract void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer);
         public abstract void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer);
-        public abstract void UpdateGeoLocationAnswer(Guid questionId, decimal[] propagationVector, double latitude, double longitude);
+        public abstract void UpdateGeoLocationAnswer(Guid questionId, decimal[] propagationVector, double latitude, double longitude, double accuracy);
         public abstract void UpdateTextListAnswer(Guid questionId, decimal[] propagationVector, Tuple<decimal, string>[] answers);
         public abstract void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[] selectedPropagationVector);
         public abstract void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[][] selectedPropagationVectors);
