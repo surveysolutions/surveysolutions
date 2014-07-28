@@ -126,7 +126,7 @@
             </div>
         </div>
 
-        <div class="buttons-item" ng-if="isGroup(item)" ng-class="{ hidden: collapsed }">
+        <div class="buttons-item" ng-if="item.itemType === 'Group'" ng-class="{ hidden: collapsed }">
             <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
             <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
             <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(item)" />
