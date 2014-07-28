@@ -87,6 +87,9 @@
     <Compile Include="InterviewViewModelDenormalizerTests\InterviewViewModelDenormalizerTestsContext.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\when_handle_QRBarcodeQuestionAnswered_event.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireBrowseItemDenormalizerTests\QuestionnaireBrowseItemDenormalizerTestContext.cs" />
+    <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_PlainQuestionnaireRegistered_event_arrived.cs" />
+    <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_TemplateImported_event_arrived.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_checking_invalid_text_on_mask_matching.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_checking_valid_text_on_mask_matching.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_creating_mask_formatter_with_variety_of_symbols.cs" />
