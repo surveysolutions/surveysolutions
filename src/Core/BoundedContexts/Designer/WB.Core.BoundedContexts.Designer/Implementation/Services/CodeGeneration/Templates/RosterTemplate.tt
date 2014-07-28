@@ -4,164 +4,165 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 
+    private class <#=Model.RosterGeneratedTypeName#> : AbstractRosterLevel<<#=this.Model.RosterGeneratedTypeName#>>, IValidatable
+    {
 
-        public class <#=Model.RosterGeneratedTypeName#> : AbstractRosterLevel<<#=this.Model.RosterGeneratedTypeName#>>, IValidatable
-        {
-            public <#=Model.RosterGeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, <#=this.Model.GetParent().GetTypeName()#> parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
-                : this(rosterVector, rosterKey, getInstances, conditionalDependencies)
-            {
-                this.@__parent = parent; 
-            }
+    public <#=Model.RosterGeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, <#=this.Model.GetParentScope().GetTypeName()#> parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+        : this(rosterVector, rosterKey, getInstances, conditionalDependencies)
+    {
+        this.@__parent = parent; 
+    }
 
-            public <#=Model.RosterGeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
-                : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
-            {
+    public <#=Model.RosterGeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+        : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
+    {
                 
-                <#foreach (var @group in Model.Groups) 
-                {#>
+    <#foreach (var @group in Model.Groups) 
+      {#>
+        EnablementStates.Add(<#=@group.GeneratedGroupStateName#>.ItemId, <#= @group.GeneratedGroupStateName#>);
+    <# }#>
 
-                    EnablementStates.Add(<#=@group.GeneratedGroupStateName#>.ItemId, <#= @group.GeneratedGroupStateName#>);
-                <# }#>
-
-                <#foreach (var q in Model.Questions) 
+    <#foreach (var q in Model.Questions) 
                     {#>
-
-                    //EnablementStates.Add(age_state.ItemId, age_state);
-                    EnablementStates.Add(<#=q.GeneratedQuestionStateName#>.ItemId, <#=q.GeneratedQuestionStateName#>);        
-
-                    <#if(!string.IsNullOrWhiteSpace(q.Validations))
-                    {#>        
-                        //TODO: generate mandatory
-                        //validationExpressions.Add(new Identity(IdOf.name, this.RosterVector), new Func<bool>[] { name_IsMandatory });
+        //EnablementStates.Add(age_state.ItemId, age_state);
+        EnablementStates.Add(<#=q.GeneratedQuestionStateName#>.ItemId, <#=q.GeneratedQuestionStateName#>);        
+    <#if(!string.IsNullOrWhiteSpace(q.Validations))
+      {#>        
+        //TODO: generate mandatory
+        //validationExpressions.Add(new Identity(IdOf.name, this.RosterVector), new Func<bool>[] { name_IsMandatory });
                     
-                        validationExpressions.Add(new Identity(<#=q.Id#>, this.RosterVector), new Func<bool>[] { <#=q.VariableName#>_IsEnabledIf });              
-        
-                    <# }#>
+        validationExpressions.Add(new Identity(<#=q.Id#>, this.RosterVector), new Func<bool>[] { <#=q.VariableName#>_IsEnabledIf });                      
+    <# }#>
+        AddUpdaterToMap(IdOf.<#= q.GeneratedIdName#>, (<#=q.GeneratedQuestionTypeName#> val) => {<#=q.GeneratedQuestionMemberName#>  = val; });
+    <# }#>
+    <#foreach (var @roster in Model.Rosters) 
+    {#>    
+        RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.RosterGeneratedTypeName#>(rosterVector, identities, this, this.GetInstances, this.ConditionalDependencies));
+    <# }#>
+    }
+            
+    private <#= Model.GetParentScope().GetTypeName()#> @__parent;
 
-                <# }#>
-            }
+    <#foreach (var parentQuestion in Model.GetParentScope().GetQuestions()) 
+    {#>
+    public <#=parentQuestion.GeneratedQuestionTypeName#> <#=parentQuestion.VariableName#> { get { return this.@__parent.<#=parentQuestion.VariableName#>; } }                                        
+    <#}#>
 
-            //TODO: dynamicly generate reference to the parent and it's questions
-            private <#= Model.GetParent().GetTypeName()#> @__parent;
+    <#foreach (var parentRoster in Model.GetParentScope().GetRosters()) 
+    {#>
+    public <#=parentRoster.RosterGeneratedTypeName#>[] <#=parentRoster.VariableName#> { get { return this.@__parent.<#=parentRoster.VariableName#>; } }                                        
+    <#}#>
+    
+    <#foreach (var q in Model.Questions) 
+    {#>      
+    <#=q.VariableName#> = this.<#=q.GeneratedQuestionMemberName#>,        
+    <#}#>
 
-            <#foreach (var parentQuestion in Model.GetParent().GetQuestions()) 
-            {#>
-                public <#=parentQuestion.GeneratedQuestionTypeName#> <#=parentQuestion.VariableName#> { get { return this.@__parent.<#=parentQuestion.VariableName#>; } }                                        
-            <#}#>
+    public IValidatable CopyMembers()
+    {
+        var level = new <#=Model.RosterGeneratedTypeName#>(this.RosterVector, this.RosterKey, this.GetInstances, ConditionalDependencies)
+        {
+            ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
+            InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
 
             <#foreach (var q in Model.Questions) 
-              {#>
-        
-                        <#=q.VariableName#> = this.<#=q.GeneratedQuestionMemberName#>,
-        
-            <#}#>
-
-            public IValidatable CopyMembers()
-            {
-                var level = new <#=Model.RosterGeneratedTypeName#>(this.RosterVector, this.RosterKey, this.GetInstances, ConditionalDependencies)
-                {
-                    ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
-                    InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
-
-                <#foreach (var q in Model.Questions) 
                   {#>        
-                        <#=q.VariableName#> = this.<#=q.GeneratedQuestionMemberName#>,
-        
-                <#}#>        
-                };
+            <#=q.VariableName#> = this.<#=q.GeneratedQuestionMemberName#>,        
+            <#}#>        
+        };
 
-                ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
+        ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
 
-                foreach (var state in level.EnablementStates)
-                {
-                    var originalState = this.EnablementStates[state.Key];
-                    state.Value.PreviousState = originalState.PreviousState;
-                    state.Value.State = originalState.State;
-                }
-
-                return level;
-            }
-
-        <#foreach (var question in Model.Questions) 
-        {#>            
-            private <#=question.GeneratedQuestionTypeName#> <#=question.GeneratedQuestionMemberName#>;
-
-            public <#=question.GeneratedQuestionTypeName#> <#=question.VariableName#>
-                {
-                    get { return <#=question.GeneratedQuestionStateName#>.State == State.Enabled ? this.<#=question.GeneratedQuestionMemberName#> : null; }
-                    set { this.<#=question.GeneratedQuestionMemberName#> = value; }
-                }
-
-            private ConditionalState <#= question.GeneratedQuestionStateName#> = new ConditionalState(<#=question.Id#>);
-
-            <#if(!string.IsNullOrWhiteSpace(question.Conditions))
-              {#>        
-                private bool <#=question.VariableName#>_IsEnabledIf()
-                {
-                    return <#=question.Conditions#>;
-                }       
-        
-            <# }#>
-
-            <#if(!string.IsNullOrWhiteSpace(question.Validations))
-            {#>        
-                private bool <#=question.VariableName#>_IsValidIf()
-                {
-                    return <#=question.Validations#>;
-                }       
-        
-            <# }#>
-        <# }#>
-           
-        <#foreach (var @group in Model.Groups) 
-        {#>
-            private ConditionalState <#= @group.GeneratedGroupStateName#> = new ConditionalState(<#=@group.Id#>, ItemType.Group);
-        <# }#>
-     
-        //reference to self roster
-        public <#=Model.RosterGeneratedTypeName#>[] <#=Model.VariableName#>
+        foreach (var state in level.EnablementStates)
         {
-            get
-                {
-                    var rosters = this.GetInstances(this.RosterKey);
-                    return rosters == null ? new <#=Model.RosterGeneratedTypeName#>[0] : rosters.Select(x => x as <#=Model.RosterGeneratedTypeName#>).ToArray();
-                }
-            }
+            var originalState = this.EnablementStates[state.Key];
+            state.Value.PreviousState = originalState.PreviousState;
+            state.Value.State = originalState.State;
+        }
+         
+        return level;
+    }
 
-            protected override IEnumerable<Action> ConditionExpressions
+    <#foreach (var question in Model.Questions) 
+    {#>            
+    private <#=question.GeneratedQuestionTypeName#> <#=question.GeneratedQuestionMemberName#>;
+
+    public <#=question.GeneratedQuestionTypeName#> <#=question.VariableName#>
+    {
+        get { return <#=question.GeneratedQuestionStateName#>.State == State.Enabled ? this.<#=question.GeneratedQuestionMemberName#> : null; }
+        private set { this.<#=question.GeneratedQuestionMemberName#> = value; }
+    }
+
+    private ConditionalState <#= question.GeneratedQuestionStateName#> = new ConditionalState(<#=question.Id#>);
+
+    <#if(!string.IsNullOrWhiteSpace(question.Conditions))
+              {#>        
+    private bool <#=question.VariableName#>_IsEnabledIf()
+    {
+        return <#=question.Conditions#>;
+    }      
+    <# }#>
+
+    <#if(!string.IsNullOrWhiteSpace(question.Validations))
+    {#>        
+    private bool <#=question.VariableName#>_IsValidIf()
+    {
+        return <#=question.Validations#>;
+    }  
+    <# }#>
+
+    <# }#>
+           
+    <#foreach (var @group in Model.Groups) 
+    {#>
+    private ConditionalState <#= @group.GeneratedGroupStateName#> = new ConditionalState(<#=@group.Id#>, ItemType.Group);
+    <# }#>
+
+
+
+    <#foreach (var @roster in Model.Rosters) 
+    {#>
+    public <#=@roster.RosterGeneratedTypeName#>[] <#=@roster.VariableName#>
+    {
+        get 
+        {
+            var rosters = this.GetInstances(this.RosterKey);
+            return rosters == null ? new <#=@roster.RosterGeneratedTypeName#>[0] : rosters.Select(x => x as <#=@roster.RosterGeneratedTypeName#>).ToArray();
+        }
+    }
+    <# }#>
+    protected override IEnumerable<Action> ConditionExpressions
+    {
+        get
+        {
+            return new List<Action>
             {
-                get
-                {
-                    return new[]
-                {
-                    <#foreach (var q in Model.Questions) 
-                      {#>
-
-                        <#if(!string.IsNullOrWhiteSpace(q.Conditions))
-                        {#>        
-                            Verifier(<#= q.VariableName#>_IsEnabledIf, <#= q.GeneratedQuestionStateName#>.ItemId, <#= q.GeneratedQuestionStateName#>),                        
-                        <# }#>
-                    <#}#>
-                };
-            }
-
-            public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
-            {
-                this.Validate(questionsToBeValid, questionsToBeInvalid);
-            }
-
-            //TODO: fix for questionnaire level
-            public void SetParent(IValidatable parentLevel)            
-            {
-            <#if(Model.GetParent() != null)
+            <#foreach (var q in Model.Questions) 
             {#>
-                    this.@__parent = parentLevel as <#= Model.GetParent().GetTypeName()#>;
+            <#if(!string.IsNullOrWhiteSpace(q.Conditions))
+            {#>
+                Verifier(<#= q.VariableName#>_IsEnabledIf, <#= q.GeneratedQuestionStateName#>.ItemId, <#= q.GeneratedQuestionStateName#>),                        
             <# }#>
-            }
+            <#}#>
+            };
+         }
+    }
 
-            public IValidatable GetParent()
-            {
-                return this.@__parent;
-            }
-      }
+    public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+    {
+        this.Validate(questionsToBeValid, questionsToBeInvalid);
+    }
+             
+    public void SetParent(IValidatable parentLevel)            
+    {
+    <#if(Model.GetParentScope() != null)
+    {#>
+        this.@__parent = parentLevel as <#= Model.GetParentScope().GetTypeName()#>;
+    <# }#>
+    }
+
+     public IValidatable GetParent()
+     {
+        return this.@__parent;
+     }
 }

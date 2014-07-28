@@ -214,7 +214,7 @@ namespace WB.Core.SharedKernels.DataCollection
             }
         }
 
-        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude)
+        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude, double accuracy)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -281,6 +281,8 @@ namespace WB.Core.SharedKernels.DataCollection
                 this.EnablementStates.Add(this.id_state.ItemId, this.id_state);
                 this.EnablementStates.Add(this.edu_visit_state.ItemId, this.edu_visit_state);
                 //EnablementStates.Add(persons_count_state.ItemId, persons_count_state);
+
+                QuestionStringUpdateMap.Add(IdOf.id, (s) => {@__id = s; });
             }
 
             private string @__id;
@@ -399,6 +401,10 @@ namespace WB.Core.SharedKernels.DataCollection
                 this.EnablementStates.Add(this.person_id_state.ItemId, this.person_id_state);
                 this.EnablementStates.Add(this.marital_status_state.ItemId, this.marital_status_state);
                 this.EnablementStates.Add(this.group_state.ItemId, this.group_state);
+
+
+                this.QuestionLongUpdateMap.Add(IdOf.age, l => { @__age = l; });
+
             }
 
             private QuestionnaireLevel @__parent;
@@ -634,6 +640,7 @@ namespace WB.Core.SharedKernels.DataCollection
             {
                 this.Validate(questionsToBeValid, questionsToBeInvalid);
             }
+
         }
 
         //roster second level
@@ -761,6 +768,8 @@ namespace WB.Core.SharedKernels.DataCollection
                 this.Validate(questionsToBeValid, questionsToBeInvalid);
             }
 
+            
+
             public IValidatable CopyMembers()
             {
                 var level = new FoodConsumption_type(this.RosterVector, this.RosterKey, this.GetInstances, this.ConditionalDependencies)
@@ -881,6 +890,7 @@ namespace WB.Core.SharedKernels.DataCollection
             {
                 this.Validate(questionsToBeValid, questionsToBeInvalid);
             }
+            
         }
 
         public static class IdOf
@@ -916,33 +926,33 @@ namespace WB.Core.SharedKernels.DataCollection
             public static readonly Guid[] hhMemberScopeIds = new[] { persons_count };
             public static readonly Guid[] foodConsumptionIds = new[] { persons_count, food };
 
-            //somehow should be generated
-            public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
-        {
-            { id, new Guid[] { } },
-            { persons_count, new Guid[] { married_with } },
-            { edu_visit, new Guid[] { fixedId } },
-
-            { name, new Guid[] { age } },
-            { age, new Guid[] { groupId, has_job } },
-            { groupId, new Guid[] { person_id, marital_status, married_with } },
             
-            { person_id, new Guid[] { } },
-            { marital_status, new Guid[] { married_with } },
-            { married_with, new Guid[] { } },
-            { has_job, new Guid[] { job_title, best_job_owner } },
-            { job_title, new Guid[] { } },
-            { best_job_owner, new Guid[] { } },
+            public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
+            {
+                { id, new Guid[] { } },
+                { persons_count, new Guid[] { married_with } },
+                { edu_visit, new Guid[] { fixedId } },
 
-            { sex, new Guid[] { food } },
-            { role, new Guid[] { food, edu_visit } },
-            { food, new Guid[] { } },
+                { name, new Guid[] { age } },
+                { age, new Guid[] { groupId, has_job } },
+                { groupId, new Guid[] { person_id, marital_status, married_with } },
+            
+                { person_id, new Guid[] { } },
+                { marital_status, new Guid[] { married_with } },
+                { married_with, new Guid[] { } },
+                { has_job, new Guid[] { job_title, best_job_owner } },
+                { job_title, new Guid[] { } },
+                { best_job_owner, new Guid[] { } },
 
-            { times_per_week, new Guid[] { price_for_food } },
-            { price_for_food, new Guid[] { } },
+                { sex, new Guid[] { food } },
+                { role, new Guid[] { food, edu_visit } },
+                { food, new Guid[] { } },
 
-            { fixedId, new Guid[] { edu } },
-        };
+                { times_per_week, new Guid[] { price_for_food } },
+                { price_for_food, new Guid[] { } },
+
+                { fixedId, new Guid[] { edu } },
+            };
 
             public static Dictionary<Guid, Guid[]> parentsMap = new Dictionary<Guid, Guid[]>
         {

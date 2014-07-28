@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -11,68 +13,134 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public Guid Id { private set; get; }
 
-        public List<QuestionTemplateModel> Questions { private set; get; }
-
-        public List<RosterTemplateModel> Rosters { private set; get; }
-        public List<GroupTemplateModel> Groups { private set; get; }
+        public List<QuestionTemplateModel> AllQuestions { private set; get; }
+        public List<RosterTemplateModel> AllRosters { private set; get; }
+        public List<GroupTemplateModel> AllGroups { private set; get; }
 
         public Dictionary<Guid, Guid[]> ParentsMap { private set; get; }
         public Dictionary<Guid, Guid[]> RostersIdToScopeMap { private set; get; }
-        
         public Dictionary<Guid, List<Guid>> ConditionalDependencies { private set; get; }
+        public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { private set; get; }
 
-        public QuestionnaireLevelTemplateModel QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel();
+        private QuestionnaireDocument questionnaireDoc; 
 
         public QuestionnaireExecutorTemplateModel(QuestionnaireDocument questionnaireDocument)
         {
-            ConditionalDependencies = this.BuildDependencyTree(questionnaireDocument);
+            AllQuestions = new List<QuestionTemplateModel>();
+            AllGroups = new List<GroupTemplateModel>();
+            AllRosters = new List<RosterTemplateModel>();
+
+            this.QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel();
+            this.questionnaireDoc = questionnaireDocument;
 
             this.Id = questionnaireDocument.PublicKey;
+            this.ConditionalDependencies = this.BuildDependencyTree(questionnaireDocument);
 
-            this.Questions =
-                questionnaireDocument.GetAllQuestions<AbstractQuestion>()
-                    .Select(
-                        qestion =>
-                            new QuestionTemplateModel
+
+            this.BuildStructures();
+            
+        }
+
+        private void BuildStructures()
+        {
+            Queue<Tuple<IGroup, IRosterScope>> rostersToProcess = new Queue<Tuple<IGroup, IRosterScope>>();
+            rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(questionnaireDoc, this.QuestionnaireLevelModel));
+            
+            while (rostersToProcess.Count != 0)
+            {
+                var rosterScope = rostersToProcess.Dequeue();
+                var currentScope = rosterScope.Item2;
+
+                var childrenOfCurrentRoster = new Queue<IComposite>();
+
+                foreach (var childGroup in rosterScope.Item1.Children)
+                {
+                    childrenOfCurrentRoster.Enqueue(childGroup);
+                }
+
+                while (childrenOfCurrentRoster.Count != 0)
+                {
+                    var child = childrenOfCurrentRoster.Dequeue();
+
+                    var childAsIQuestion = child as IQuestion;
+                    if (childAsIQuestion != null)
+                    {
+                        var varName = !String.IsNullOrEmpty(childAsIQuestion.StataExportCaption) ?
+                            childAsIQuestion.StataExportCaption :
+                            childAsIQuestion.PublicKey.FormatGuid();
+                        var question = new QuestionTemplateModel()
+                        {
+                            Id = childAsIQuestion.PublicKey,
+                            VariableName = varName,
+                            Conditions = childAsIQuestion.ConditionExpression,
+                            Validations = childAsIQuestion.ValidationExpression,
+                            QuestionType = childAsIQuestion.QuestionType,
+
+                            GeneratedQuestionTypeName = this.GenerateQuestionTypeName(childAsIQuestion),
+                            GeneratedQuestionMemberName = "@__" + varName,
+                            GeneratedQuestionStateName = "@__" + varName + "_state",
+                            GeneratedIdName = "@__" + varName + "_id" 
+                        };
+
+                        currentScope.Questions.Add(question);
+
+                        this.AllQuestions.Add(question);
+                        
+                        continue;
+                    }
+
+                    var childAsIGroup = child as IGroup;
+                    if (childAsIGroup != null)
+                    {
+                        if (IsRosterGroup(childAsIGroup))
+                        {
+                            var varName = childAsIGroup.PublicKey.FormatGuid();
+                            var roster = new RosterTemplateModel()
                             {
-                                Id = qestion.PublicKey,
-                                VariableName = qestion.StataExportCaption,
-                                Conditions = qestion.ConditionExpression,
-                                Validations = qestion.ValidationExpression,
-                                QuestionType = qestion.QuestionType,
+                                Id = childAsIGroup.PublicKey,
+                                Conditions = childAsIGroup.ConditionExpression,
+                                VariableName = "@__" + varName, //waiting for merge roster name from default
+                                RosterGeneratedTypeName = "@__" + varName + "_type",
+                                GeneratedStateName = "@__" + varName + "_state",
+                                ParentScope = currentScope,
+                                GeneratedIdName = "@__" + varName + "_id"
+                            };
 
-                                GeneratedQuestionTypeName = this.GenerateQuestionTypeName(qestion),
-                                GeneratedQuestionMemberName = "@__" + qestion.StataExportCaption,
-                                GeneratedQuestionStateName = qestion.StataExportCaption + "_state"
-                            }).ToList();
+                            rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(childAsIGroup, roster));
+                            this.AllRosters.Add(roster);
+                            currentScope.Rosters.Add(roster);
 
-            this.Rosters =
-                questionnaireDocument.Find<IGroup>(x => x.IsRoster)
-                    .Select(
-                        roster =>
-                            new RosterTemplateModel()
+                            continue;
+                        }
+                        else
+                        {
+                            var varName = childAsIGroup.PublicKey.FormatGuid();
+                            var group = 
+                                new GroupTemplateModel()
+                                {
+
+                                    Id = childAsIGroup.PublicKey,
+                                    Conditions = childAsIGroup.ConditionExpression,
+                                    VariableName = "@__" + varName, //generating variable name by publicKey
+                                    GeneratedGroupStateName = "@__" + varName + "_state",
+                                    GeneratedIdName = "@__" + varName + "_id"
+                                };
+
+                            currentScope.Groups.Add(group);
+                            this.AllGroups.Add(group);
+                            foreach (var childGroup in childAsIGroup.Children)
                             {
-                                Id = roster.PublicKey,
-                                Conditions = roster.ConditionExpression,
-                                VariableName = roster.PublicKey.ToString(), //waiting for merge roster name from default
-                                RosterGeneratedTypeName = roster.PublicKey.ToString() + "_type"
-                            })
-                    .ToList();
+                                childrenOfCurrentRoster.Enqueue(childGroup);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-            this.Groups =
-                questionnaireDocument.Find<IGroup>(x => x.IsRoster != true)
-                    .Select(
-                        group =>
-                            new GroupTemplateModel()
-                            {
-                                Id = group.PublicKey,
-                                Conditions = group.ConditionExpression,
-                                VariableName =  "@" + group.PublicKey.ToString(), //generating variable name by publicKey
-                                GeneratedGroupStateName = group.PublicKey.ToString() + "_state"
-                            })
-                    .ToList();
-
-
+        private static bool IsRosterGroup(IGroup group)
+        {
+            return group.Propagated == Propagate.AutoPropagated || group.IsRoster;
         }
 
         private Dictionary<Guid, List<Guid>> BuildDependencyTree(QuestionnaireDocument questionnaireDocument)
@@ -112,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return new List<Guid>();
         }
 
-        private string GenerateQuestionTypeName(AbstractQuestion question)
+        private string GenerateQuestionTypeName(IQuestion question)
         {
             switch (question.QuestionType)
             {
@@ -128,18 +196,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 case QuestionType.QRBarcode:
                     return "string";
 
-                // does linked multioption have scence?
                 case QuestionType.MultyOption:
                     return (question.LinkedToQuestionId == null) ? "decimal[]" : "decimal[][]";
 
                 case QuestionType.DateTime:
                     return "DateTime?";
-
-                // does linked singleoption have scence in conditions?
+                
                 case QuestionType.SingleOption:
                     return (question.LinkedToQuestionId == null) ? "decimal?" : "decimal[]";
 
-                // does text list have scence?
                 case QuestionType.TextList:
                     return "Tuple<decimal, string>[]";
 
@@ -153,10 +218,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     }
 
 
-    public interface IParent
+    public interface IRosterScope
     {
-        IParent GetParent();
+        IRosterScope GetParentScope();
         string GetTypeName();
+
         IEnumerable<QuestionTemplateModel> GetQuestions();
+        IEnumerable<RosterTemplateModel> GetRosters();
+
+        List<QuestionTemplateModel> Questions { set; get; }
+        List<GroupTemplateModel> Groups { set; get; }
+        List<RosterTemplateModel> Rosters { set; get; }
     }
 }

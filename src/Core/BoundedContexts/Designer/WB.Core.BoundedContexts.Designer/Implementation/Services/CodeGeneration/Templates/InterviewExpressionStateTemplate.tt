@@ -3,17 +3,12 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-// ReSharper disable InconsistentNaming
-
-namespace WB.Core.SharedKernels.ExpressionProcessing
+namespace WB.Core.SharedKernels.DataCollection.Generated
 {
     public class InterviewExpressionState : AbstractInterviewExpressionState 
     {
@@ -57,29 +52,11 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
 
-            if (rosterId == IdOf.hhMember || rosterId == IdOf.jobActivity)
-            {
-                var parentHolder = parent as QuestionnaireLevel;
-                var rosterLevel = new HhMember_type(rosterVector, rosterIdentityKey, parentHolder, this.GetRosterInstances, IdOf.conditionalDependencies);
-                this.InterviewScopes.Add(rosterStringKey, rosterLevel);
-                this.SetSiblings(rosterScopeIds, rosterStringKey);
-            }
+            var rosterLevel = parent.CreateChildRosterInstance(rosterId, rosterVector, rosterIdentityKey);
 
-            if (rosterId == IdOf.foodConsumption)
-            {
-                var parentHolder = parent as HhMember_type;
-                var rosterLevel = new FoodConsumption_type(rosterVector, rosterIdentityKey, parentHolder, this.GetRosterInstances, IdOf.conditionalDependencies);
-                this.InterviewScopes.Add(rosterStringKey, rosterLevel);
-                this.SetSiblings(rosterScopeIds, rosterStringKey);
-            }
+            this.InterviewScopes.Add(rosterStringKey, rosterLevel);
+            this.SetSiblings(rosterScopeIds, rosterStringKey);
 
-            if (rosterId == IdOf.fixedId)
-            {
-                var parentHolder = parent as QuestionnaireLevel;
-                var rosterLevel = new Education_type(rosterVector, rosterIdentityKey, parentHolder, this.GetRosterInstances, IdOf.conditionalDependencies);
-                this.InterviewScopes.Add(rosterStringKey, rosterLevel);
-                this.SetSiblings(rosterScopeIds, rosterStringKey);
-            }
         }
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
@@ -109,20 +86,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            if (questionId == IdOf.persons_count)
-            {
-                (targetLevel as QuestionnaireLevel).persons_count = answer;
-            }
-
-            if (questionId == IdOf.age)
-            {
-                (targetLevel as HhMember_type).age = answer;
-            }
-
-            if (questionId == IdOf.times_per_week)
-            {
-                (targetLevel as FoodConsumption_type).times_per_week = answer;
-            }
+            targetLevel.UpdateIntAnswer(questionId, answer);
         }
 
         public override void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
@@ -130,10 +94,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            if (questionId == IdOf.price_for_food)
-            {
-                (targetLevel as FoodConsumption_type).price_for_food = answer;
-            }
+            targetLevel.UpdateDecimalAnswer(questionId, answer);
         }
 
         public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)
@@ -141,10 +102,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            if (questionId == IdOf.date)
-            {
-                (targetLevel as HhMember_type).date = answer;
-            }
+            targetLevel.UpdateDateTimeAnswer(questionId, answer);
         }
 
         public override void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
@@ -152,31 +110,15 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            if (questionId == IdOf.id)
-            {
-                (targetLevel as QuestionnaireLevel).id = answer;
-            }
-
-            if (questionId == IdOf.name)
-            {
-                (targetLevel as HhMember_type).name = answer;
-            }
-
-            if (questionId == IdOf.job_title)
-            {
-                (targetLevel as HhMember_type).job_title = answer;
-            }
-
-            if (questionId == IdOf.person_id)
-            {
-                (targetLevel as HhMember_type).person_id = answer;
-            }
+            targetLevel.UpdateTextAnswer(questionId, answer);
         }
         
         public override void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
+
+            targetLevel.UpdateQrBarcodeAnswer(questionId, answer);
         }
 
         public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
@@ -184,35 +126,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            if (questionId == IdOf.sex)
-            {
-                (targetLevel as HhMember_type).sex = answer;
-            }
-
-            if (questionId == IdOf.role)
-            {
-                (targetLevel as HhMember_type).role = answer;
-            }
-
-            if (questionId == IdOf.has_job)
-            {
-                (targetLevel as HhMember_type).has_job = answer;
-            }
-
-            if (questionId == IdOf.marital_status)
-            {
-                (targetLevel as HhMember_type).marital_status = answer;
-            }
-
-            if (questionId == IdOf.edu_visit)
-            {
-                (targetLevel as QuestionnaireLevel).edu_visit = answer;
-            }
-
-            if (questionId == IdOf.edu)
-            {
-                (targetLevel as Education_type).edu = answer;
-            }
+            targetLevel.UpdateSingleOptionAnswer(questionId, answer);
         }
 
         public override void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
@@ -220,33 +134,31 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            if (questionId == IdOf.food)
-            {
-                (targetLevel as HhMember_type).food = answer;
-            }
+            targetLevel.UpdateMultiOptionAnswer(questionId, answer);
         }
 
-        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude)
+        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude, double accuracy)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
+
+            targetLevel.UpdateGeoLocationAnswer(questionId, latitude,  longitude,  accuracy);
         }
 
         public override void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
+
+            targetLevel.UpdateTextListAnswer(questionId, answers);
         }
 
         public override void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
-
-            if (questionId == IdOf.best_job_owner)
-            {
-                (targetLevel as HhMember_type).best_job_owner = selectedPropagationVector;
-            }
+            
+            targetLevel.UpdateLinkedSingleOptionAnswer(questionId, selectedPropagationVector);
         }
 
         public override void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] answer)
@@ -254,16 +166,9 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            if (questionId == IdOf.married_with)
-            {
-                (targetLevel as HhMember_type).married_with = answer;
-            }
+            targetLevel.UpdateLinkedMultiOptionAnswer(questionId, answer);
         }
-
-
-        ////
-
-
+        
         public override Dictionary<Guid, Guid[]> GetParentsMap()
         {
             return IdOf.parentsMap;
@@ -290,13 +195,14 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         //generate QuestionnaireLevel
         <#           
-                QuestionnaireLevelTemplate questionnairetemplate = new QuestionnaireLevelTemplate(QuestionnaireTemplateStructure.QuestionnaireLevelModel);
-                this.Write(questionnairetemplate .TransformText());                           
+            QuestionnaireLevelTemplate questionnairetemplate = new QuestionnaireLevelTemplate(QuestionnaireTemplateStructure.QuestionnaireLevelModel);
+            this.Write(questionnairetemplate .TransformText());                           
          #>
 
         //generating all rosters
-         <#foreach (var roster in QuestionnaireTemplateStructure.Rosters) 
+        <#foreach (var roster in QuestionnaireTemplateStructure.AllRosters) 
            {
+
                 RosterTemplate template = new RosterTemplate(roster);
                 this.Write(template.TransformText());                
            }
@@ -305,46 +211,41 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
         public static class IdOf
         {
-            public static readonly Guid questionnaire = <#= QuestionnaireTemplateStructure.Id #>; //Guid.Parse("72897e3f-3dc8-4115-81e0-8a9c1cadec2d");
-
+            public static readonly Guid questionnaire = Guid.Parse("<#= QuestionnaireTemplateStructure.Id #>"); 
             //questions
-            <#foreach (var q in QuestionnaireTemplateStructure.Questions) 
+            <#foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
             {#>
-              public static readonly Guid <#= q.VariableName#> = <#= q.Id #>;
+            public static readonly Guid <#= q.GeneratedIdName#> = Guid.Parse("<#= q.Id #>");
             <# }#>           
-            
             //rosters
-            <#foreach (var r in QuestionnaireTemplateStructure.Rosters) 
+            <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
             {#>
-              public static readonly Guid <#= r.VariableName#> = <#= r.Id #>;
-            <# }#>
-
-            //public static readonly Guid hhMember = Guid.Parse("69b02bcf-0ed1-4b5a-80bb-bd465ab096da");
-            
+            public static readonly Guid <#= r.GeneratedIdName#> = Guid.Parse("<#= r.Id #>");
+            <# }#>                        
             //generate groups Ids
-            <#foreach (var g in QuestionnaireTemplateStructure.Groups) 
+            <#foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
             {#>
-              public static readonly Guid <#= g.VariableName#> = <#= g.Id #>;
+            public static readonly Guid <#= g.GeneratedIdName#> = Guid.Parse("<#= g.Id #>");
             <# }#>
             //public static readonly Guid groupId = Guid.Parse("039ed69e-5583-46af-b983-488568f20e1c");
             
             //TODO: generate scopes
-            public static readonly Guid[] eduScopeIds = new[] { fixedId };
-            public static readonly Guid[] hhMemberScopeIds = new[] { persons_count };
-            public static readonly Guid[] foodConsumptionIds = new[] { persons_count, food };
+            //public static readonly Guid[] eduScopeIds = new[] { fixedId };
+            //public static readonly Guid[] hhMemberScopeIds = new[] { persons_count };
+            //public static readonly Guid[] foodConsumptionIds = new[] { persons_count, food };
 
             
             public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
             {
-            <#foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies) 
+                <#foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies) 
             {#>
-              { <#= dependency.Key #>, new Guid[]{
-              <#foreach (var d in dependency.Value)
-                    {#>
-                    <#= d #>,
-                    <# }#>
-              }}
-            <# }#>
+                { Guid.Parse("<#= dependency.Key #>"), new Guid[]{
+                <#foreach (var d in dependency.Value)
+                {#>
+                    Guid.Parse("<#= d #>"),
+                <# }#>
+                }},
+                <# }#>
 
                 //{ id, new Guid[] { } },
                 //{ persons_count, new Guid[] { married_with } },
@@ -354,42 +255,23 @@ namespace WB.Core.SharedKernels.ExpressionProcessing
 
             public static Dictionary<Guid, Guid[]> parentsMap = new Dictionary<Guid, Guid[]>
             {
-            { id, new []{questionnaire} },
-            { persons_count, new []{questionnaire}},
-            { edu_visit, new []{questionnaire} },
-            { name, hhMemberScopeIds },
-            { age, hhMemberScopeIds },
-            { date, hhMemberScopeIds },
-            { sex, hhMemberScopeIds },
-            { role, hhMemberScopeIds },
-            { food, hhMemberScopeIds },
-            { times_per_week, foodConsumptionIds },
-            { price_for_food, foodConsumptionIds },
-            { has_job, hhMemberScopeIds },
-            { job_title, hhMemberScopeIds },
-            { best_job_owner, hhMemberScopeIds },
-            { person_id, hhMemberScopeIds },
-            { marital_status, hhMemberScopeIds },
-            { married_with, hhMemberScopeIds },
-            { edu, eduScopeIds },
+            //{ id, new []{questionnaire} },
+            
+            //{ name, hhMemberScopeIds },
+            
 
             //groups
-            { groupId, hhMemberScopeIds },
-            { fixedId, eduScopeIds },
-            { hhMember, hhMemberScopeIds },
-            { foodConsumption, foodConsumptionIds },
-            
-        };
+            //{ groupId, hhMemberScopeIds },
+                        
+            };
 
             public static Dictionary<Guid, Guid[]> rostersIdToScopeMap = new Dictionary<Guid, Guid[]>
-        {
-            { fixedId, eduScopeIds },
-            { hhMember, hhMemberScopeIds },
-            { foodConsumption, foodConsumptionIds },
-            { jobActivity, hhMemberScopeIds }
-        };
+            {
+            //{ fixedId, eduScopeIds },
+            //{ hhMember, hhMemberScopeIds },
+            //{ foodConsumption, foodConsumptionIds },
+            //{ jobActivity, hhMemberScopeIds }
+            };
         }
     }
 }
-
-// ReSharper restore InconsistentNaming
