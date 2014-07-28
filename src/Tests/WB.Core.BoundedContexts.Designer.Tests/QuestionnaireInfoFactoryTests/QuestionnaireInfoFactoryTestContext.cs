@@ -101,12 +101,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                     {
                         Id = q3Id,
                         ParentGroupId = g2Id,
+                        Title = "text title",
                         ParentGroupsIds = new Guid[] { g2Id, g1Id },
                         RosterScopeIds = new Guid[] { q2Id }
                     },
                     new TextListDetailsView
                     {
                         Id = q4Id,
+                        Title = "text list title",
                         ParentGroupId = g3Id,
                         ParentGroupsIds = new Guid[] { g3Id, g2Id, g1Id },
                         RosterScopeIds = new Guid[] { g3Id, q2Id }
@@ -114,6 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                     new NumericDetailsView
                     {
                         Id = q5Id,
+                        Title = "numeric title",
                         IsInteger = false,
                         ParentGroupId = g4Id,
                         ParentGroupsIds = new Guid[] { g4Id, g2Id, g1Id },

@@ -60,55 +60,55 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
             result.RosterTitleQuestionId.ShouldEqual(GetGroup(rosterId).RosterTitleQuestionId);
 
         It should_return_grouped_list_of_multi_questions_with_one_pair = () =>
-            result.NotLinkedMultiOptionQuestions.Count.ShouldEqual(1);
+            result.NotLinkedMultiOptionQuestions.Count.ShouldEqual(2);
 
         It should_return_grouped_list_of_multi_questions_with_one_pair_and_key_equals_ = () =>
-            result.NotLinkedMultiOptionQuestions.Keys.ShouldContainOnly("Group 1");
+            result.NotLinkedMultiOptionQuestions.ElementAt(0).Title.ShouldEqual("Group 1");
 
         It should_return_grouped_list_of_multi_questions_with_values_ids_contains_only_q2Id = () =>
-            result.NotLinkedMultiOptionQuestions["Group 1"].Select(x => x.Id).ShouldContainOnly(q2Id);
+            result.NotLinkedMultiOptionQuestions.ElementAt(1).Id.ShouldContainOnly(q2Id.FormatGuid());
 
         It should_return_grouped_list_of_multi_questions_with_values_titles_contains_only_q2Id = () =>
-            result.NotLinkedMultiOptionQuestions["Group 1"].Select(x => x.Title).ShouldContainOnly(GetQuestion(q2Id).Title);
+            result.NotLinkedMultiOptionQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q2Id).Title);
 
         It should_return_grouped_list_of_integer_titles_with_one_pair = () =>
-            result.NumericIntegerTitles.Count.ShouldEqual(1);
+            result.NumericIntegerTitles.Count.ShouldEqual(2);
 
         It should_return_grouped_list_of_integer_titles_with_two_pairs_and_key_equals__textListGroupKey = () =>
-            result.NumericIntegerTitles.Keys.ShouldContainOnly(textListGroupKey);
+            result.NumericIntegerTitles.ElementAt(0).Title.ShouldEqual(textListGroupKey);
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_ids_contains_only_q4Id = () =>
-            result.NumericIntegerTitles[textListGroupKey].Select(x => x.Id).ShouldContainOnly(q4Id);
+            result.NumericIntegerTitles.ElementAt(1).Id.ShouldContainOnly(q4Id.FormatGuid());
 
         It should_return_grouped_list_of_integer_questions_with_two_pair = () =>
-            result.NumericIntegerQuestions.Count.ShouldEqual(2);
+            result.NumericIntegerQuestions.Count.ShouldEqual(4);
 
         It should_return_grouped_list_of_integer_questions_with_two_pairs_and_key_equals__group_1__group_2 = () =>
-            result.NumericIntegerQuestions.Keys.ShouldContainOnly("Group 1", "Group 2");
+            result.NumericIntegerQuestions.Where(x => x.IsSectionPlaceHolder).Select(x => x.Title).ShouldContainOnly("Group 1", "Group 2");
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_ids_contains_only_q1Id = () =>
-            result.NumericIntegerQuestions["Group 1"].Select(x => x.Id).ShouldContainOnly(q1Id);
+            result.NumericIntegerQuestions.ElementAt(1).Id.ShouldContainOnly(q1Id.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_titles_contains_only_q1_title = () =>
-            result.NumericIntegerQuestions["Group 1"].Select(x => x.Title).ShouldContainOnly(GetQuestion(q1Id).Title);
+            result.NumericIntegerQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q1Id).Title);
 
         It should_return_integer_questions_in_group_with_key__Group_2__with_ids_contains_only_q1Id = () =>
-            result.NumericIntegerQuestions["Group 2"].Select(x => x.Id).ShouldContainOnly(q6Id);
+            result.NumericIntegerQuestions.ElementAt(3).Id.ShouldContainOnly(q6Id.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__Group_2__with_titles_contains_only_q1_title = () =>
-            result.NumericIntegerQuestions["Group 2"].Select(x => x.Title).ShouldContainOnly(GetQuestion(q6Id).Title);
+            result.NumericIntegerQuestions.ElementAt(3).Title.ShouldContainOnly(GetQuestion(q6Id).Title);
 
         It should_return_grouped_list_of_integer_questions_with_one_pair = () =>
-            result.TextListsQuestions.Count.ShouldEqual(1);
+            result.TextListsQuestions.Count.ShouldEqual(2);
 
         It should_return_grouped_list_of_integer_questions_with_two_pairs_and_key_equals__group_1__group_12__ = () =>
-            result.TextListsQuestions.Keys.ShouldContainOnly(textListGroupKey);
+            result.TextListsQuestions.ElementAt(0).Title.ShouldEqual(textListGroupKey);
 
         It should_return_integer_questions_in_group_with_key__textListGroupKey__with_ids_contains_only_q4Id = () =>
-            result.TextListsQuestions[textListGroupKey].Select(x => x.Id).ShouldContainOnly(q4Id);
+            result.TextListsQuestions.ElementAt(1).Id.ShouldContainOnly(q4Id.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__textListGroupKey__with_titles_contains_only_q4_title = () =>
-            result.TextListsQuestions[textListGroupKey].Select(x => x.Title).ShouldContainOnly(GetQuestion(q4Id).Title);
+            result.TextListsQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q4Id).Title);
         
         private static GroupAndRosterDetailsView GetGroup(Guid groupId)
         {
