@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="form-group" ng-hide="activeQuestion.questionScope == 'Headquarter'" bs-has-error>
+        <div class="form-group" ng-hide="activeQuestion.questionScope == 'Headquarter'" ng-class="{'has-error': !questionForm.enablementCondition.$valid}">
             <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /> <a href="javascript:void(0);">Script reference</a></label>
             <input id="edit-question-enablement-condition"
                    name="enablementCondition"

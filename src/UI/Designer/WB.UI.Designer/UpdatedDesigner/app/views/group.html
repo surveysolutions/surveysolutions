@@ -11,7 +11,7 @@
             <input id="edit-group-description" type="text" class="form-control bg-white width-auto" ng-model="activeGroup.description">
         </div>
 
-        <div class="form-group" ng-if="!activeGroup.isFirstChapter" bs-has-error>
+        <div class="form-group" ng-if="!activeGroup.isFirstChapter" ng-class="{'has-error': !groupForm.groupCondition.$valid}">
             <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression" /></label><br>
             <input name="groupCondition" id="edit-group-condition" type="text" class="form-control bg-white width-auto" ng-model="activeGroup.enablementCondition" deny-this-keyword>
             <p class="help-block ng-cloak" ng-show="groupForm.groupCondition.$error.denyThisKeyword">
