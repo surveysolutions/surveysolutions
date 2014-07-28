@@ -483,12 +483,13 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
         position: relative;
         height: 100%;
         background: white;
+        padding:0;
 
-        @form-btns-hldr-height: 95px;
+        @form-btns-hldr-height: 66px;
         @form-holder-height: calc(~"100%" - (@form-btns-hldr-height));
 
         > .form-holder {
-          padding: 36px 40px;
+          padding: 10px 20px;
           height: @form-holder-height;
           overflow: auto;
 
@@ -515,7 +516,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
         }
 
         > .form-buttons-holder {
-          padding: 25px 40px;
+          padding: 10px 20px;
           position: absolute;
           width: 100%;
           height: @form-btns-hldr-height;
@@ -548,6 +549,16 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
       }
     }
   }
+}
+
+.question-editor .type-container-dropdown{
+    width: 100%;
+
+    #questionTypeBtn,
+    #rosterTypeBtn,
+    .dropdown-menu {
+         width: 100%;
+    }
 }
 
 .wb-question-item('questionnarie');

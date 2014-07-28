@@ -3,8 +3,8 @@
 
     <form role="form" unsaved-warning-form name="questionForm">
         <div class="row">
-            <div class="form-group col-xs-8">
-                <div class="btn-group" dropdown>
+            <div class="form-group col-xs-7">
+                <div class="btn-group type-container-dropdown" dropdown>
                     <button id="questionTypeBtn" class="btn btn-default dropdown-toggle form-control" type="button">
                         <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
                         <span class="vertical-line"></span>
@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <div class="form-group input-variable-name col-xs-3 pull-right">
+            <div class="form-group input-variable-name col-xs-4 pull-right">
                 <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable"
                        class="form-control" placeholder="Set variable">
             </div>

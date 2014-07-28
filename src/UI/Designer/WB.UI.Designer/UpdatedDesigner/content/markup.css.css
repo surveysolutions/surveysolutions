@@ -1,4 +1,4 @@
-/**
+﻿/**
  * WorldBank Designer
  * file: markup.css.less
  * description: LESS main import script
@@ -1496,10 +1496,11 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   position: relative;
   height: 100%;
   background: white;
+  padding: 0;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-editor > .form-holder {
-  padding: 36px 40px;
-  height: calc(100% - 95px);
+  padding: 10px 20px;
+  height: calc(100% - 66px);
   overflow: auto;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-editor > .form-holder > .breadcrumbs {
@@ -1557,10 +1558,10 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   font-weight: normal;
 }
 #designer-editor.container section#main > .questionnaire-tree > .question-editor > .form-buttons-holder {
-  padding: 25px 40px;
+  padding: 10px 20px;
   position: absolute;
   width: 100%;
-  height: 95px;
+  height: 66px;
   bottom: 0;
   left: 0;
 }
@@ -1598,6 +1599,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   font-size: 12px;
   line-height: 12px;
   letter-spacing: 1px;
+}
+.question-editor .type-container-dropdown {
+  width: 100%;
+}
+.question-editor .type-container-dropdown #questionTypeBtn,
+.question-editor .type-container-dropdown #rosterTypeBtn,
+.question-editor .type-container-dropdown .dropdown-menu {
+  width: 100%;
 }
 .item,
 .buttons-item {
@@ -1798,7 +1807,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   width: 37px;
 }
 .item.selected > .qname-block {
-  padding-right: 37px;
   background-color: #ffffff;
 }
 .item.selected > .qname-block:before {
@@ -2107,3 +2115,4 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog a.owner {
   color: #2fc507;
 }
+/*# sourceMappingURL=markup.css.css.map */

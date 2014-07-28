@@ -3,9 +3,9 @@
 
     <form role="form" id="roster-editor" name="editRosterForm" unsaved-warning-form>
         <div class="row">
-            <div class="form-group col-xs-8">
+            <div class="form-group col-xs-7">
                 <label for="edit-group-title" class="wb-label">Roster Type <help key="rosterType" /></label><br>
-                <div class="btn-group" dropdown>
+                <div class="btn-group type-container-dropdown" dropdown>
                     <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control" type="button">
                         {{activeRoster.getTitleForRosterType()}}
                         <span class="dropdown-arrow"></span>
@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <div class="form-group input-variable-name col-xs-3 pull-right">
+            <div class="form-group input-variable-name col-xs-4 pull-right">
                 <label for="edit-group-variableName" class="wb-label">Variable name <help key="variableName" /></label><br>
                 <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.variableName">
             </div>

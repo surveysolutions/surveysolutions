@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div ng-if="isStaticText(item) && !item.isDeleted"
              class="question item"
              ui-sref-active="selected">
@@ -78,7 +78,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="section item"
              ng-if="isGroup(item)"
              ng-class="{ 'highlighted': is_highlighted }"
@@ -88,11 +88,20 @@
 
             <a class="handler" ui-tree-handle></a>
 
-            <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
-                    ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
-
-            <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
-            <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"> </a>
+            <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText">
+                <div class="item-text">
+                    <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
+                            ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
+                    <span ng-bind-html="item.title | highlight:search.searchText"></span>
+                </div>
+            </a>
+            <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})">
+                <div class="item-text">
+                    <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
+                            ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
+                    <span ng-bind-html="item.title | highlight:search.searchText"></span>
+                </div>
+            </a>
             <div class="qname-block">
 
                 <span ng-if="item.isRoster" ng-bind-html="item.variable | highlight:search.searchText"></span>
@@ -125,7 +134,7 @@
     </script>
 
     <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
-        
+
         <div ui-tree-nodes ng-model="items">
             <div ng-repeat="item in items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
             </div>
