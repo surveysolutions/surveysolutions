@@ -240,7 +240,7 @@
     <Compile Include="Views\Questionnaire\Edit\GroupDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IChapterInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\IQuestionnaireInfoFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\LinkedQuestionSource.cs" />
+    <Compile Include="Views\Questionnaire\Edit\DropdownQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditGroupView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
