@@ -124,7 +124,8 @@ body {
   font-family: Georgia, serif;
   font-size: 14px;
   font-style: italic;
-  color: #c80000;
+  font-weight: normal;
+  color: #555555;
   line-height: 22px;
 }
 .wb-question-verify-error-li-var-fontstyle {
@@ -1452,7 +1453,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   position: relative;
   width: 100%;
   height: 100%;
-  padding-right: 28px;
+  padding-right: 10px;
   overflow: auto;
 }
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .question-list .angular-ui-tree-placeholder {
@@ -1888,7 +1889,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 #verify-popover-content .question-list .item {
   background-color: #edeff1;
-  color: #c80000;
+  color: #555555;
 }
 #verify-popover-content .question-list .item:first-child {
   margin-top: 5px;
@@ -2050,7 +2051,8 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   font-family: Georgia, serif;
   font-size: 14px;
   font-style: italic;
-  color: #c80000;
+  font-weight: normal;
+  color: #555555;
   line-height: 22px;
 }
 #verify-popover-content .question-list ul.error-list > li:before {
@@ -2061,13 +2063,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   content: '';
   margin-left: -2em;
   margin-right: 1em;
-  border-bottom: 1px #c80000 solid;
+  border-bottom: 1px #555555 solid;
 }
 #verify-popover-content .question-list ul.error-list a {
   font-family: Georgia, serif;
   font-size: 14px;
   font-style: italic;
-  color: #c80000;
+  font-weight: normal;
+  color: #555555;
   line-height: 22px;
 }
 #verify-popover-content .question-list ul.error-list > li > span.var {
@@ -2075,6 +2078,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   font-style: normal;
   color: #ff4200;
   font-size: 12px;
+}
+#verify-popover-content .question-list .question {
+  height: auto;
+  white-space: normal;
+  min-height: 35px;
+  padding-right: 80px;
+  padding-left: 15px;
+  color: #d20426;
 }
 .share-window .modal-content {
   width: 800px;
