@@ -231,6 +231,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\Edit\Breadcrumb.cs" />
+    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterItemType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IQuestionnaireItem.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\StaticTextInfoView.cs" />
