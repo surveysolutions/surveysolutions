@@ -100,8 +100,6 @@
                         "itemId": newId,
                         "title": 'New Question',
                         "type": 'Text',
-                        "linkedVariables": [],
-                        "brokenLinkedVariables": null,
                         getParentItem: function () { return parent; }
                     };
 

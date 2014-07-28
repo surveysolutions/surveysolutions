@@ -461,7 +461,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Title = questionTitle,
                 Type = questionType,
                 Variable = questionVariable,
-                LinkedVariables = questionsUsedInConditionExpression,
                 LinkedToQuestionId = linkedToQuestionId
             };
 
@@ -496,7 +495,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             questionView.Title = questionTitle;
             questionView.Type = questionType;
             questionView.Variable = questionVariable;
-            questionView.LinkedVariables = questionsUsedInConditionExpression;
             questionView.LinkedToQuestionId = linkedToQuestionId;
         }
 
