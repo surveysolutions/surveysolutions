@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -13,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizationServiceTests
 {
-    internal class when_sync_package_contains_information_about_questionnaire : CapiDataSynchronizationServiceTestContext
+    internal class when_sync_package_contains_information_about_questionnaire_in_census_mode : CapiDataSynchronizationServiceTestContext
     {
         Establish context = () =>
         {
@@ -22,7 +26,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
                 PublicKey = Guid.NewGuid()
             };
 
-            var questionnaireMetadata = new QuestionnaireMetadata(1, false);
+            var questionnaireMetadata = new QuestionnaireMetadata(1, true);
 
             syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", Id = Guid.NewGuid() };
 
@@ -32,7 +36,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
 
             commandService = new Mock<ICommandService>();
 
-            plainQuestionnaireRepositoryMock=new Mock<IPlainQuestionnaireRepository>();
+            plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
 
             changeLogManipulator = new Mock<IChangeLogManipulator>();
             capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null,
@@ -48,7 +52,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
                         x.Execute(
                             Moq.It.Is<RegisterPlainQuestionnaire>(
                                 param =>
-                                    param.QuestionnaireId==questionnaireDocument.PublicKey && param.Version==1 && param.AllowCensusMode==false), null),
+                                    param.QuestionnaireId == questionnaireDocument.PublicKey && param.Version == 1 && param.AllowCensusMode == true), null),
                     Times.Once);
 
         It should_store_questionnaire_in_plaine_storage_once =
