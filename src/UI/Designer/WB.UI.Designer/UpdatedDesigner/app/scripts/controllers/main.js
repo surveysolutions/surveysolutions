@@ -100,6 +100,7 @@
                         "itemId": newId,
                         "title": 'New Question',
                         "type": 'Text',
+                        itemType: 'Question',
                         getParentItem: function () { return parent; }
                     };
 
@@ -118,6 +119,7 @@
                         "itemId": newId,
                         "title": "New group",
                         "items": [],
+                        itemType: 'Group',
                         getParentItem: function () { return parent; }
                     };
                     commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function (result) {
@@ -135,6 +137,7 @@
                         "itemId": newId,
                         "title": "New roster",
                         "items": [],
+                        itemType: 'Group',
                         isRoster: true,
                         getParentItem: function () { return parent; }
                     };
@@ -153,6 +156,7 @@
                     var emptyStaticText = {
                         "itemId": newId,
                         "text": "New static text",
+                        itemType: 'StaticText',
                         getParentItem: function () { return parent; }
                     };
 
