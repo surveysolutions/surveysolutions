@@ -1,23 +1,37 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    public class RosterTemplateModel : IParent
+    public class RosterTemplateModel : IRosterScope
     {
+        public RosterTemplateModel()
+        {
+            this.Questions = new List<QuestionTemplateModel>();
+            this.Groups = new List<GroupTemplateModel>();
+            this.Rosters = new List<RosterTemplateModel>();
+        }
+
         public Guid Id { set; get; }
         public string VariableName { set; get; }
         public string Conditions { set; get; }
         public string RosterGeneratedTypeName { set; get; }
+        public string GeneratedStateName { set; get; }
 
-        public List<QuestionTemplateModel> Questions { private set; get; }
-        public List<GroupTemplateModel> Groups { private set; get; }
+        public string GeneratedIdName { set; get; }
 
-        public IParent Parent { set; get; }
+        public List<QuestionTemplateModel> Questions {  set; get; }
+        public List<GroupTemplateModel> Groups { set; get; }
 
-        public IParent GetParent()
+        public List<RosterTemplateModel> Rosters { set; get; }
+
+
+        public IRosterScope ParentScope { set; get; }
+
+        public IRosterScope GetParentScope()
         {
-            return this.Parent;
+            return this.ParentScope;
         }
 
         public string GetTypeName()
@@ -27,7 +41,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public IEnumerable<QuestionTemplateModel> GetQuestions()
         {
-            return this.Questions;
+            return ParentScope != null ? this.Questions.Union(ParentScope.GetQuestions()) : this.Questions ;
+        }
+
+        public IEnumerable<RosterTemplateModel> GetRosters()
+        {
+            return ParentScope != null ? this.Rosters.Union(ParentScope.GetRosters()) : this.Rosters;
         }
     }
 }

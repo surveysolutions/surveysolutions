@@ -12,6 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection
         void SetParent(IValidatable parentLevel);
         IValidatable GetParent();
 
+        IValidatable CreateChildRosterInstance(Guid rosterId,decimal[] rosterVector, Identity[] rosterIdentityKey);
+
         void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
 
         void CalculateConditionChanges(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled,
@@ -25,6 +27,18 @@ namespace WB.Core.SharedKernels.DataCollection
 
         void DeclareAnswerValid(Guid questionId);
         void DeclareAnswerInvalid(Guid questionId);
+
+        void UpdateIntAnswer(Guid questionId, long answer);
+        void UpdateDecimalAnswer(Guid questionId, decimal answer);
+        void UpdateDateTimeAnswer(Guid questionId, DateTime answer);
+        void UpdateTextAnswer(Guid questionId, string answer);
+        void UpdateQrBarcodeAnswer(Guid questionId, string answer);
+        void UpdateSingleOptionAnswer(Guid questionId, decimal answer);
+        void UpdateMultiOptionAnswer(Guid questionId, decimal[] answer);
+        void UpdateGeoLocationAnswer(Guid questionId, double latitude, double longitude, double precision);
+        void UpdateTextListAnswer(Guid questionId, Tuple<decimal, string>[] answers);
+        void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] selectedPropagationVector);
+        void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[][] selectedPropagationVectors);
 
     }
 
@@ -65,7 +79,22 @@ namespace WB.Core.SharedKernels.DataCollection
         public Identity[] RosterKey { get; private set; }
 
         protected Dictionary<Guid, ConditionalState> EnablementStates {get; private set; }
-        
+
+        protected Dictionary<Guid, Action<string>> QuestionStringUpdateMap { get; private set; }
+        protected Dictionary<Guid, Action<long?>> QuestionLongUpdateMap { get; private set; }
+        protected Dictionary<Guid, Action<decimal?>> QuestionDecimalUpdateMap { get; private set; }
+        protected Dictionary<Guid, Action<DateTime?>> QuestionDateTimeUpdateMap { get; private set; }
+
+        protected Dictionary<Guid, Action<decimal[]>> QuestionDecimal1DArrayUpdateMap { get; private set; }
+        protected Dictionary<Guid, Action<decimal[][]>> QuestionDecimal2DArrayUpdateMap { get; private set; }
+
+        protected Dictionary<Guid, Action<Tuple<decimal, string>[]>> QuestionTupleArrayUpdateMap { get; private set; }
+
+        protected Dictionary<Guid, Action<double,double, double> > QuestionGPSUpdateMap { get; private set; }
+
+
+        protected Dictionary<Guid, Func<decimal[], Identity[], IValidatable>> RosterGenerators { get; set; }
+
         public decimal[] me
         {
             get { return this.RosterVector; }
@@ -75,6 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection
         protected HashSet<Guid> InvalidAnsweredQuestions = new HashSet<Guid>();
 
         protected Func<Identity[], IEnumerable<IValidatable>> GetInstances { get; private set;}
+
         protected Dictionary<Guid, Guid[]> ConditionalDependencies { get; set; }
 
 
@@ -88,6 +118,21 @@ namespace WB.Core.SharedKernels.DataCollection
             this.RosterKey = rosterKey;
             this.EnablementStates = new Dictionary<Guid, ConditionalState>();
             this.ConditionalDependencies = conditionalDependencies;
+
+            this.QuestionStringUpdateMap = new Dictionary<Guid, Action<string>>();
+            this.QuestionLongUpdateMap = new Dictionary<Guid, Action<long?>>();
+            this.QuestionDateTimeUpdateMap = new Dictionary<Guid, Action<DateTime?>>();
+            this.QuestionDecimal1DArrayUpdateMap = new Dictionary<Guid, Action<decimal[]>>();
+            this.QuestionDecimal2DArrayUpdateMap = new Dictionary<Guid, Action<decimal[][]>>();
+            this.QuestionDecimalUpdateMap = new Dictionary<Guid, Action<decimal?>>();
+            this.QuestionGPSUpdateMap = new Dictionary<Guid, Action<double, double, double>>();
+            this.QuestionTupleArrayUpdateMap = new Dictionary<Guid, Action<Tuple<decimal, string>[]>>();
+
+        }
+
+        public IValidatable CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector, Identity[] rosterIdentityKey)
+        {
+            return RosterGenerators[rosterId].Invoke(rosterVector, rosterIdentityKey);
         }
 
         private State RunConditionExpression(Func<bool> expression)
@@ -126,6 +171,48 @@ namespace WB.Core.SharedKernels.DataCollection
             }
         }
 
+        protected void AddUpdaterToMap(Guid id, Action<string> action)
+        {
+            QuestionStringUpdateMap.Add(id, action);
+        }
+
+
+        protected void AddUpdaterToMap(Guid id, Action<long?> action)
+        {
+            QuestionLongUpdateMap.Add(id, action);
+        }
+
+        protected void AddUpdaterToMap(Guid id, Action<DateTime?> action)
+        {
+            QuestionDateTimeUpdateMap.Add(id, action);
+        }
+
+        protected void AddUpdaterToMap(Guid id, Action<decimal[]> action)
+        {
+            QuestionDecimal1DArrayUpdateMap.Add(id, action);
+        }
+
+
+        protected void AddUpdaterToMap(Guid id, Action<decimal[][]> action)
+        {
+            QuestionDecimal2DArrayUpdateMap.Add(id, action);
+        }
+
+        protected void AddUpdaterToMap(Guid id, Action<decimal?> action)
+        {
+            QuestionDecimalUpdateMap.Add(id, action);
+        }
+
+        protected void AddUpdaterToMap(Guid id, Action<double, double, double> action)
+        {
+            QuestionGPSUpdateMap.Add(id, action);
+        }
+
+        protected void AddUpdaterToMap(Guid id, Action<Tuple<decimal,string>[]> action)
+        {
+            QuestionTupleArrayUpdateMap.Add(id, action);
+        }
+        
         protected Action Verifier(Func<bool> isEnabled, Guid questionId, ConditionalState questionState)
         {
             return () =>
@@ -246,6 +333,62 @@ namespace WB.Core.SharedKernels.DataCollection
             List<Identity> groupsToBeDisabled)
         {
             this.EvaluateConditions(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
+        }
+
+        public void UpdateTextAnswer(Guid questionId, string answer)
+        {
+            QuestionStringUpdateMap[questionId].Invoke(answer);
+            
+        }
+
+        public void UpdateIntAnswer(Guid questionId, long answer)
+        {
+            QuestionLongUpdateMap[questionId].Invoke(answer);
+        }
+
+        public void UpdateDecimalAnswer(Guid questionId, decimal answer)
+        {
+            QuestionDecimalUpdateMap[questionId].Invoke(answer);
+        }
+
+        public void UpdateDateTimeAnswer(Guid questionId, DateTime answer)
+        {
+            QuestionDateTimeUpdateMap[questionId].Invoke(answer);
+        }
+
+        public void UpdateQrBarcodeAnswer(Guid questionId, string answer)
+        {
+            QuestionStringUpdateMap[questionId].Invoke(answer);
+        }
+
+        public void UpdateSingleOptionAnswer(Guid questionId, decimal answer)
+        {
+            QuestionDecimalUpdateMap[questionId].Invoke(answer);
+        }
+
+        public void UpdateMultiOptionAnswer(Guid questionId, decimal[] answer)
+        {
+            QuestionDecimal1DArrayUpdateMap[questionId].Invoke(answer);
+        }
+
+        public void UpdateGeoLocationAnswer(Guid questionId, double latitude, double longitude, double precision)
+        {
+            QuestionGPSUpdateMap[questionId].Invoke(latitude,longitude,precision);
+        }
+
+        public void UpdateTextListAnswer(Guid questionId, Tuple<decimal, string>[] answers)
+        {
+            QuestionTupleArrayUpdateMap[questionId].Invoke(answers);
+        }
+
+        public void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] selectedPropagationVector)
+        {
+            QuestionDecimal1DArrayUpdateMap[questionId].Invoke(selectedPropagationVector);
+        }
+
+        public void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[][] selectedPropagationVectors)
+        {
+            QuestionDecimal2DArrayUpdateMap[questionId].Invoke(selectedPropagationVectors);
         }
     }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -21,11 +23,40 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
 
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = id};
+            
+            Guid chapterId = Guid.Parse("23232323232323232323232323232323");
+            Guid questionId = Guid.Parse("23232323232323232323232323232311");
+
+            questionnaireDocument.AddChapter(chapterId);
+
+            questionnaireDocument.Add(new NumericQuestion() 
+            {
+                PublicKey = questionId,
+                StataExportCaption = "persons_n",
+                IsInteger = true
+
+            }, chapterId, null);
+
+            var rosterId = Guid.Parse("23232323232323232323232323232322");
+            questionnaireDocument.Add(new Group()
+            {
+                PublicKey = rosterId,
+                IsRoster = true,
+                RosterSizeQuestionId = questionId
+                
+            }, chapterId, null);
+
+            questionnaireDocument.Add(new Group()
+            {
+                PublicKey = Guid.Parse("23232323232323232323232323232324"),
+                IsRoster = true,
+                RosterSizeQuestionId = questionId
+
+            }, rosterId, null);
         };
 
         private Because of = () =>
             emitResult = expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
-
 
         private It should_result_succeded = () =>
             emitResult.Success.ShouldEqual(true);
