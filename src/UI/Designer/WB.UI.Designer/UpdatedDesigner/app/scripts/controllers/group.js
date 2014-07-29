@@ -28,7 +28,6 @@
                             dataBind(result.group);
                             $scope.activeGroup.breadcrumbs = result.breadcrumbs;
                             $scope.initialGroup = angular.copy($scope.activeGroup);
-                            utilityService.focus('focusGroup');
                         }
                     );
                 };
