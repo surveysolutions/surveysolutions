@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
 {
     public interface IMaskedFormatter {
         string Mask { get; }
-        String ValueToString(string value, ref int oldCurstorPosition);
+        string FormatValue(string value, ref int oldCursorPosition);
         bool IsTextMaskMatched(string text);
     }
 }

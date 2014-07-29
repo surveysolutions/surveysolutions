@@ -9,31 +9,31 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
 {
     public class MaskedWatcher : Java.Lang.Object, ITextWatcher
     {
-        private readonly IMaskedFormatter mMaskFormatter;
+        private readonly IMaskedFormatter maskFormatter;
         private readonly EditText editor;
         public MaskedWatcher(String mask, EditText editor)
         {
             this.editor = editor;
             if (string.IsNullOrEmpty(mask))
-                mMaskFormatter = new EmptyMaskFormatter();
+                this.maskFormatter = new EmptyMaskFormatter();
             else
-                mMaskFormatter = new MaskedFormatter(mask);
+                this.maskFormatter = new MaskedFormatter(mask);
         }
 
         public String Mask
         {
-            get { return this.mMaskFormatter.Mask; }
+            get { return this.maskFormatter.Mask; }
         }
 
-        public bool IsTextMatchesToMask()
+        public bool IsTextMaskMatched()
         {
-            return mMaskFormatter.IsTextMaskMatched(editor.Text);
+            return this.maskFormatter.IsTextMaskMatched(editor.Text);
         }
 
         public void AfterTextChanged(IEditable s)
         {
             int cursorPosition = editor.SelectionEnd;
-            var filtered = mMaskFormatter.ValueToString(editor.Text, ref cursorPosition);
+            var filtered = this.maskFormatter.FormatValue(editor.Text, ref cursorPosition);
             if (!string.Equals(editor.Text, filtered))
             {
                 s.Replace(0, s.Length(), filtered);

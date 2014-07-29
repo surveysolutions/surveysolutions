@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
         };
 
         private Because of = () =>
-            result = maskedFormatter.ValueToString(value, ref cursorPosition);
+            result = maskedFormatter.FormatValue(value, ref cursorPosition);
 
         private It should_result_be_equal_to_passed_value = () =>
             result.ShouldEqual("w1-234-____");

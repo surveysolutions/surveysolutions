@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
         };
 
         Because of = () =>
-            result = maskedFormatter.ValueToString(value, ref cursorPosition);
+            result = maskedFormatter.FormatValue(value, ref cursorPosition);
 
         It should_result_be_equal_to_passed_value = () =>
             result.ShouldEqual("__-___-____");
