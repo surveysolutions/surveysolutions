@@ -127,6 +127,19 @@
          "variable":"linked1_2",
          "linkedToQuestionId":"36f222c26d9f46de8eadd48d548902ca",
          "type":"MultyOption"
+      },
+      {
+         "itemId":"dd45293c816e982d482334b1222ec41f",
+         "itemType":"Group",
+         "title":"Test group",
+         "isRoster":false,
+         "items":[
+
+         ],
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0,
+         "variable":null
       }
    ],
    "questionsCount":0,

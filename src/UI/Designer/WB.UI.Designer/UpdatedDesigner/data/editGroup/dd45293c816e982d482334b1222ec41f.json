@@ -1,0 +1,16 @@
+﻿{
+   "group":{
+      "id":"dd45293c-816e-982d-4823-34b1222ec41f",
+      "title":"Test group",
+      "description":"",
+      "enablementCondition":"",
+      "variableName":null
+   },
+   "breadcrumbs":[
+      {
+         "id":"38cb6def401b4a88847377b5f47009af",
+         "title":"I. Roster multie option supervisor's question",
+         "isRoster":false
+      }
+   ]
+}
