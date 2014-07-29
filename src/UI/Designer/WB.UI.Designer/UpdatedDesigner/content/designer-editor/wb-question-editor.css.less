@@ -131,44 +131,28 @@ input#edit-question-title, input#edit-group-title {
       display: table-row;
       height: 38px;
 
-      .column-1, .column-2, .column-3, .column-4 {
+      .column-2, .column-3, .column-4 {
         padding-left: 0;
         padding-right: 0;
         display: table-cell;
         vertical-align: top;
       }
 
-      .column-1, .column-4 {
-        width: 40px;
+      .column-4 {
+        width: 35px;
       }
 
-      .column-2 {width: 100px;}
-
-      .column-1 {
-        text-align: center;
-
-        > .backing {
-          background-color: #ffffff;
-          border-color: #fff;
-          box-shadow: none;
+      .column-2 {
+          width: 100px;
           border-radius: 4px 0 0 4px;
-          height: 34px;
-
-          > input.wb-radio + label,  > input.wb-checkbox + label{
-            margin-right: 0;
-            span {
-              vertical-align: inherit;
-            }
-          }
-
-        }
       }
-
+     
       .column-2 input{
         border: 2px solid #f1f2f3;
-        border-radius: 0;
+       border-radius: 4px 0 0 4px;
         border-top-color: #fff;
         border-bottom-color: #fff;
+        border-left-color: #fff;
         box-shadow: none;
         .questionnarie-question-list-item-qname-fontstyle();
         font-size: 14px;
@@ -300,4 +284,8 @@ input#edit-question-title, input#edit-group-title {
         padding-top: 8px;
         padding-bottom: 8px;
     }
+}
+
+textarea.form-control{
+    height: 37px;
 }

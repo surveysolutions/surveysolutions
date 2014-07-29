@@ -836,8 +836,6 @@ input#edit-group-title {
   display: table-row;
   height: 38px;
 }
-.question-editor .singleOption .table-holder .table-row .column-1,
-.question-editor .multyOption .table-holder .table-row .column-1,
 .question-editor .singleOption .table-holder .table-row .column-2,
 .question-editor .multyOption .table-holder .table-row .column-2,
 .question-editor .singleOption .table-holder .table-row .column-3,
@@ -849,46 +847,22 @@ input#edit-group-title {
   display: table-cell;
   vertical-align: top;
 }
-.question-editor .singleOption .table-holder .table-row .column-1,
-.question-editor .multyOption .table-holder .table-row .column-1,
 .question-editor .singleOption .table-holder .table-row .column-4,
 .question-editor .multyOption .table-holder .table-row .column-4 {
-  width: 40px;
+  width: 35px;
 }
 .question-editor .singleOption .table-holder .table-row .column-2,
 .question-editor .multyOption .table-holder .table-row .column-2 {
   width: 100px;
-}
-.question-editor .singleOption .table-holder .table-row .column-1,
-.question-editor .multyOption .table-holder .table-row .column-1 {
-  text-align: center;
-}
-.question-editor .singleOption .table-holder .table-row .column-1 > .backing,
-.question-editor .multyOption .table-holder .table-row .column-1 > .backing {
-  background-color: #ffffff;
-  border-color: #fff;
-  box-shadow: none;
   border-radius: 4px 0 0 4px;
-  height: 34px;
-}
-.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label,
-.question-editor .multyOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label,
-.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-checkbox + label,
-.question-editor .multyOption .table-holder .table-row .column-1 > .backing > input.wb-checkbox + label {
-  margin-right: 0;
-}
-.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label span,
-.question-editor .multyOption .table-holder .table-row .column-1 > .backing > input.wb-radio + label span,
-.question-editor .singleOption .table-holder .table-row .column-1 > .backing > input.wb-checkbox + label span,
-.question-editor .multyOption .table-holder .table-row .column-1 > .backing > input.wb-checkbox + label span {
-  vertical-align: inherit;
 }
 .question-editor .singleOption .table-holder .table-row .column-2 input,
 .question-editor .multyOption .table-holder .table-row .column-2 input {
   border: 2px solid #f1f2f3;
-  border-radius: 0;
+  border-radius: 4px 0 0 4px;
   border-top-color: #fff;
   border-bottom-color: #fff;
+  border-left-color: #fff;
   box-shadow: none;
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 12px;
@@ -1011,6 +985,9 @@ input#edit-group-title {
 #question-editor .input-variable-name > input {
   padding-top: 8px;
   padding-bottom: 8px;
+}
+textarea.form-control {
+  height: 37px;
 }
 .ui-match {
   background-color: #FFCC00;
@@ -1713,7 +1690,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .item.section {
   font-weight: bold;
   text-transform: uppercase;
-  padding-left: 22px;
+  padding-left: 20px;
   margin-left: 0;
 }
 .item.section + .slide {
@@ -1937,7 +1914,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #verify-popover-content .question-list .item.section {
   font-weight: bold;
   text-transform: uppercase;
-  padding-left: 22px;
+  padding-left: 20px;
   margin-left: 0;
 }
 #verify-popover-content .question-list .item.section + .slide {
