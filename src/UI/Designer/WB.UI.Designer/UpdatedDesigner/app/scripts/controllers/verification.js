@@ -14,7 +14,7 @@
                     verificationService.verify($routeParams.questionnaireId).success(function(result) {
                         $scope.verificationStatus.errors = result.errors;
                         $scope.verificationStatus.errorsCount = result.errors.length;
-
+                        
                         if ($scope.verificationStatus.errorsCount > 0) {
                             $('#verification-modal').modal({
                                 backdrop: false,

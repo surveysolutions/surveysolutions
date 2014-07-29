@@ -28,15 +28,9 @@
                                 backdrop: false,
                                 show: true
                             });
-                            // --- dialog and arrow positioning
-                            $('#verification-modal .modal-dialog').stop().css({
-                                position: 'absolute',
-                                top: $('#verification-btn').offset().top + 15
-                            });
                             $('#verification-modal .modal-dialog .arrow').css({
-                                left: $('#verification-btn').offset().left +5
+                                left: $('#verification-btn').offset().left - 10
                             });
-                            // ---
                         }
                     });
                 };
