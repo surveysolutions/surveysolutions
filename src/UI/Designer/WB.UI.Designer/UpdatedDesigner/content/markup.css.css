@@ -943,7 +943,6 @@ input#edit-group-title {
 .roster-type-specific-block,
 .question-type-specific-block {
   background: #f1f2f3;
-  margin-top: -2px;
   padding: 8px;
   border-radius: 0 0 4px 4px;
 }

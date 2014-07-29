@@ -19,6 +19,7 @@
                 $scope.questionnaireId = $state.params.questionnaireId;
 
                 $scope.verify = function () {
+                    $scope.verificationStatus.errors = [];
                     verificationService.verify($state.params.questionnaireId).success(function (result) {
                         $scope.verificationStatus.errors = result.errors;
                         $scope.verificationStatus.errorsCount = result.errors.length;
