@@ -195,6 +195,7 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewCreated_event.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_questions_one_with_var_lable_other_without.cs" />
     <Compile Include="InterviewSynchronizationDtoFactoryTests\when_build_from_interview_created_onclient.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_static_text.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_question_which_uses_roster_title_in_substitution_and_placed_in_nested_group.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_duplicate_values.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_integer_value_greater_then_allowed_max_value.cs" />
