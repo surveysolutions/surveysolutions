@@ -34,6 +34,7 @@
     "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.0",
     "angular-unsavedChanges": "~0.1.1",
     "angular-xeditable": "~0.1.8",
-    "console-shim": "*"
+    "console-shim": "*",
+    "angular-elastic": "~2.3.5"
   }
 }

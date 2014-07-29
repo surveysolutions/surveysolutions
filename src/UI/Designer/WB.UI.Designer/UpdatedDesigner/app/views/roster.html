@@ -26,7 +26,7 @@
 
         <div class="form-group">
             <label for="edit-group-title" class="wb-label">Title <help key="title" /></label><br>
-            <textarea id="edit-group-title" class="form-control" ng-model="activeRoster.title"></textarea>
+            <textarea id="edit-group-title" class="form-control" ng-model="activeRoster.title" msd-elastic></textarea>
             
             <div class="roster-type-specific-block" ng-include="activeRoster.type + '-template.html'" ng-if="activeRoster.type != undefined">
             </div>
@@ -36,7 +36,7 @@
        
         <div class="form-group">
             <label for="edit-group-description" class="wb-label">Description <help key="description" /></label><br>
-            <textarea id="edit-group-description" class="form-control" ng-model="activeRoster.description"></textarea>
+            <textarea id="edit-group-description" class="form-control" ng-model="activeRoster.description" msd-elastic></textarea>
         </div>
 
         <div class="form-group" ng-class="{'has-error': !editRosterForm.enablementCondition.$valid}">
@@ -45,7 +45,7 @@
                       id="edit-group-condition"
                       class="form-control"
                       ng-model="activeRoster.enablementCondition"
-                      deny-this-keyword></textarea>
+                      deny-this-keyword msd-elastic></textarea>
             <p class="help-block ng-cloak" ng-show="editRosterForm.enablementCondition.$error.denyThisKeyword">
                 You cannot use self-reference in conditions
             </p>

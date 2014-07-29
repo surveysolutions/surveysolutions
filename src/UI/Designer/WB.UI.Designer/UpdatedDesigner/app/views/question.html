@@ -38,7 +38,7 @@
 
         <div class="form-group">
             <label for="edit-question-title" class="wb-label">Title <help key="title" /></label><br>
-            <textarea id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text" />
+            <textarea id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text" msd-elastic></textarea>
 
             <div class="question-type-specific-block"
                  ng-include="activeQuestion.type + '-template.html'"
@@ -56,7 +56,7 @@
             <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
                 <div class="form-group col-xs-11">
                     <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
-                    <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control"></textarea>
+                    <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>
                 </div>
 
                 <div class="form-group col-xs-1 pull-right">
@@ -68,7 +68,7 @@
                 <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /> <a href="javascript:void(0);">Script reference</a></label>
                 <textarea id="edit-question-enablement-condition"
                           name="enablementCondition"
-                          deny-this-keyword
+                          deny-this-keyword msd-elastic
                           ng-model="activeQuestion.enablementCondition"
                           class="form-control"></textarea>
                 <p class="help-block ng-cloak" ng-show="questionForm.enablementCondition.$error.denyThisKeyword">
@@ -79,13 +79,13 @@
             <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
                 <label for="edit-question-validation-expression">Validation expression <help key="validationExpression" /> <a href="javascript:void(0);">Script reference</a></label>
                 <textarea id="edit-question-validation-expression" ng-model="activeQuestion.validationExpression"
-                          class="form-control"></textarea>
+                          class="form-control" msd-elastic></textarea>
             </div>
 
             <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
                 <label for="edit-question-validation-message">Validation message <help key="validationMessage" /></label>
                 <textarea id="edit-question-validation-message" ng-model="activeQuestion.validationMessage"
-                          class="form-control"></textarea>
+                          class="form-control" msd-elastic></textarea>
             </div>
 
 

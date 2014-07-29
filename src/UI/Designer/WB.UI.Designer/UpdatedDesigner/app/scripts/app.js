@@ -16,7 +16,8 @@
         'angular-loading-bar',
         'cfp.hotkeys',
         'blockUI',
-        'unsavedChanges'
+        'unsavedChanges',
+        'monospaced.elastic'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
