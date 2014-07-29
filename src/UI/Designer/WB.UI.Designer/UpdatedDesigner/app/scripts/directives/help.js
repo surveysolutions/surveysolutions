@@ -10,7 +10,7 @@
                 link: function(scope, element, attrs) {
                     scope.message = helpService.getHelpMessage(scope.key);
                 },
-                template: '<span popover-placement="top" popover="{{message}}">(<a href="javascript:void(0);">?</a>)</span>',
+                template: '<span tooltip="{{message}}">(<a href="javascript:void(0);">?</a>)</span>',
                 replace: false //otherwise we are getting conflict with angular ui popover directive
             };
         }
