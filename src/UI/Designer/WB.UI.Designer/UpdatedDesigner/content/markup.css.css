@@ -820,8 +820,8 @@ input#edit-group-title {
 .question-editor .singleOption,
 .question-editor .multyOption {
   background-color: #f1f2f3;
-  margin-top: -20px;
-  padding: 0 15px 10px;
+  margin-top: 0;
+  padding: 10px 15px;
   border-radius: 4px;
 }
 .question-editor .singleOption .table-holder,
@@ -946,26 +946,33 @@ input#edit-group-title {
   padding-left: 10px;
   width: 100%;
 }
-.roster-type-specific-block {
+.roster-type-specific-block,
+.question-type-specific-block {
   background: #f1f2f3;
   margin-top: -2px;
   padding: 8px;
   border-radius: 0 0 4px 4px;
 }
 .roster-type-specific-block:before,
-.roster-type-specific-block:after {
+.question-type-specific-block:before,
+.roster-type-specific-block:after,
+.question-type-specific-block:after {
   content: " ";
   display: table;
 }
-.roster-type-specific-block:after {
+.roster-type-specific-block:after,
+.question-type-specific-block:after {
   clear: both;
 }
 .roster-type-specific-block:before,
-.roster-type-specific-block:after {
+.question-type-specific-block:before,
+.roster-type-specific-block:after,
+.question-type-specific-block:after {
   content: " ";
   display: table;
 }
-.roster-type-specific-block:after {
+.roster-type-specific-block:after,
+.question-type-specific-block:after {
   clear: both;
 }
 #roster-editor #rosterTypeBtn {
@@ -1640,6 +1647,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .buttons-item > a:hover {
   text-decoration: none;
 }
+.buttons-item {
+  padding-left: 0;
+}
 .item {
   cursor: pointer;
 }
@@ -1893,6 +1903,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #verify-popover-content .question-list .item > a:hover,
 #verify-popover-content .question-list .buttons-item > a:hover {
   text-decoration: none;
+}
+#verify-popover-content .question-list .buttons-item {
+  padding-left: 0;
 }
 #verify-popover-content .question-list .item {
   background-color: #edeff1;

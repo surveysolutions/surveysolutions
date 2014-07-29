@@ -37,83 +37,92 @@
         </div>
 
         <div class="form-group">
-            <label for="edit-group-title" class="wb-label">Title <help key="title" /></label><br>
-            <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text">
+            <label for="edit-question-title" class="wb-label">Title <help key="title" /></label><br>
+            <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="wb-input bg-white width-auto" placeholder="Question text">
 
-            <div class="gray">
-                <input id="mandatory-question" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" />
-                <label for="mandatory-question"><span></span>Mandatory question</label>
+            <div class="question-type-specific-block"
+                 ng-include="activeQuestion.type + '-template.html'"
+                 ng-if="activeQuestion.type != undefined
+                 && ( activeQuestion.type!='DateTime'
+                 && activeQuestion.type!='GpsCoordinates'
+                 && activeQuestion.type!='QRBarcode')
+                 ">
             </div>
         </div>
-
-        <div ng-include="activeQuestion.type + '-template.html'" ng-if="activeQuestion.type != undefined">
-        </div>
-
-        <div class="form-group" ng-show="!((showInstruction===undefined && initialQuestion.instructions) || showInstruction)">
-            <button class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
-        </div>
-
-        <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
-            <div class="form-group col-xs-11">
-                <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
-                <textarea id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions" class="form-control"></textarea>
+            <div class="form-group" ng-show="!((showInstruction===undefined && initialQuestion.instructions) || showInstruction)">
+                <button class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
             </div>
 
-            <div class="form-group col-xs-1 pull-right">
-                <button class="btn cross instructions-cross" ng-click="showInstruction=false;activeQuestion.instructions='';"></button>
+            <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
+                <div class="form-group col-xs-11">
+                    <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
+                    <textarea id="edit-question-instructions" type="text" ng-model="activeQuestion.instructions" class="form-control"></textarea>
+                </div>
+
+                <div class="form-group col-xs-1 pull-right">
+                    <button class="btn cross instructions-cross" ng-click="showInstruction=false;activeQuestion.instructions='';"></button>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group" ng-hide="activeQuestion.questionScope == 'Headquarter'" ng-class="{'has-error': !questionForm.enablementCondition.$valid}">
-            <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /> <a href="javascript:void(0);">Script reference</a></label>
-            <input id="edit-question-enablement-condition"
-                   name="enablementCondition"
-                   type="text"
-                   deny-this-keyword
-                   ng-model="activeQuestion.enablementCondition"
-                   class="form-control" />
-            <p class="help-block ng-cloak" ng-show="questionForm.enablementCondition.$error.denyThisKeyword">
-                You cannot use self-reference in conditions
-            </p>
-        </div>
-
-        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
-            <label for="edit-question-validation-expression">Validation expression <help key="validationExpression" /> <a href="javascript:void(0);">Script reference</a></label>
-            <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression"
-                   class="form-control">
-        </div>
-
-        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
-            <label for="edit-question-validation-message">Validation message <help key="validationMessage" /></label>
-            <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage"
-                   class="form-control">
-        </div>
-
-        <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
-            <label for="Question-scope">Question scope</label><br>
-            <div class="btn-group dropup" dropdown>
-                <button class="btn dropdown-toggle" id="Question-scope" type="button">
-                    {{ activeQuestion.questionScope }}
-                    <span class="dropdown-arrow"></span>
-                </button>
-
-                <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates'">
-                    <li role="presentation" ng-repeat="scope in activeQuestion.allQuestionScopeOptions">
-                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
-                            {{scope.text}}
-                        </a>
-                    </li>
-                </ul>
-                <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-show="activeQuestion.type == 'GpsCoordinates'">
-                    <li role="presentation" ng-repeat="scope in activeQuestion.notPrefilledQuestionScopeOptions">
-                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
-                            {{scope.text}}
-                        </a>
-                    </li>
-                </ul>
+            <div class="form-group" ng-hide="activeQuestion.questionScope == 'Headquarter'" ng-class="{'has-error': !questionForm.enablementCondition.$valid}">
+                <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /> <a href="javascript:void(0);">Script reference</a></label>
+                <input id="edit-question-enablement-condition"
+                       name="enablementCondition"
+                       type="text"
+                       deny-this-keyword
+                       ng-model="activeQuestion.enablementCondition"
+                       class="form-control" />
+                <p class="help-block ng-cloak" ng-show="questionForm.enablementCondition.$error.denyThisKeyword">
+                    You cannot use self-reference in conditions
+                </p>
             </div>
-        </div>
-    </form>
+
+            <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
+                <label for="edit-question-validation-expression">Validation expression <help key="validationExpression" /> <a href="javascript:void(0);">Script reference</a></label>
+                <input id="edit-question-validation-expression" type="text" ng-model="activeQuestion.validationExpression"
+                       class="form-control">
+            </div>
+
+            <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
+                <label for="edit-question-validation-message">Validation message <help key="validationMessage" /></label>
+                <input id="edit-question-validation-message" type="text" ng-model="activeQuestion.validationMessage"
+                       class="form-control">
+            </div>
+
+
+            <div class="form-group" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
+                <div class="row">
+                    <div class="form-group col-xs-4">
+                        <input id="mandatory-question" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" />
+                        <label for="mandatory-question"><span></span>Mandatory question</label>
+                    </div>
+                    <div class="form-group col-xs-4" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
+                        <label for="Question-scope">Question scope</label><br>
+                        <div class="btn-group dropup" dropdown>
+                            <button class="btn dropdown-toggle" id="Question-scope" type="button">
+                                {{ activeQuestion.questionScope }}
+                                <span class="dropdown-arrow"></span>
+                            </button>
+
+                            <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates'">
+                                <li role="presentation" ng-repeat="scope in activeQuestion.allQuestionScopeOptions">
+                                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
+                                        {{scope.text}}
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-show="activeQuestion.type == 'GpsCoordinates'">
+                                <li role="presentation" ng-repeat="scope in activeQuestion.notPrefilledQuestionScopeOptions">
+                                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
+                                        {{scope.text}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</form>
 
     <script type="text/ng-template" id="SingleOption-template.html">
         <div class="singleOption">
@@ -234,8 +243,7 @@
             <input id="edit-question-count-decimal" type="text" ng-model="activeQuestion.countOfDecimalPlaces" class="form-control">
         </div>
     </script>
-    <script type="text/ng-template" id="DateTime-template.html">
-    </script>
+  
     <script type="text/ng-template" id="Text-template.html">
         <div class="form-group">
             <label for="edit-mask">Mask <help key="mask" /></label>
@@ -243,13 +251,16 @@
         </div>
     
     </script>
-    <script type="text/ng-template" id="GpsCoordinates-template.html">
-    </script>
+
     <script type="text/ng-template" id="TextList-template.html">
         <div class="form-group">
             <label for="edit-question-max-answers-number">Maximum number of answers</label>
             <input id="edit-question-max-answers-number" type="text" ng-model="activeQuestion.instructions" class="form-control">
         </div>
+    </script>
+    <script type="text/ng-template" id="DateTime-template.html">
+    </script>
+    <script type="text/ng-template" id="GpsCoordinates-template.html">
     </script>
     <script type="text/ng-template" id="QRBarcode-template.html">
     </script>
