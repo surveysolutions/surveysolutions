@@ -50,7 +50,7 @@
             </div>
         </div>
             <div class="form-group" ng-show="!((showInstruction===undefined && initialQuestion.instructions) || showInstruction)">
-                <button class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
+                <button type="button" class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Instruction</button>
             </div>
 
             <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="form-group col-xs-1 pull-right">
-                    <button class="btn cross instructions-cross" ng-click="showInstruction=false;activeQuestion.instructions='';"></button>
+                    <button type="button" class="btn cross instructions-cross" ng-click="showInstruction=false;activeQuestion.instructions='';"></button>
                 </div>
             </div>
 
@@ -140,7 +140,7 @@
                 </div>
             </div>
             <p>
-                <input type="submit" class="btn btn-link" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
+                <input class="btn btn-link" value="Add Option" ng-click="addOption()">
             </p>
             <div class="checkbox">
                 <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
@@ -197,7 +197,7 @@
                 </div>
             </div>
             <p>
-                <input type="submit" class="btn btn-link" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
+                <input class="btn btn-link" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
             </p>
             <div class="row">
                 <div class="col-xs-3">
@@ -269,12 +269,12 @@
 </div>
 <div class="form-buttons-holder">
     <div class="pull-left">
-        <button id="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveQuestion()" ng-disabled="!questionForm.$valid">Save</button>
-        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelQuestion()">Cancel</button>
+        <button type="submit" id="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveQuestion()" ng-disabled="!questionForm.$valid">Save</button>
+        <button type="button"  id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelQuestion()">Cancel</button>
     </div>
     <div class="pull-right">
-        <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion(activeQuestion)">Delete</button>
-        <button id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneQuestion()">Clone</button>
+        <button type="button" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion(activeQuestion)">Delete</button>
+        <button type="button" id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneQuestion()">Clone</button>
         <ng-include src="'moveToChapterSnippet'" />
     </div>
 </div>

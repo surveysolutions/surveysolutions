@@ -403,13 +403,13 @@ textarea {
 }
 #verification-modal {
   right: 50%;
-  top: 65px;
+  top: 77px;
 }
 #verification-modal .modal-dialog {
   width: 90%;
   margin-left: 8%;
   margin-right: 2%;
-  margin-top: 23px;
+  margin-top: 20px;
 }
 .modal {
   overflow-y: inherit;
@@ -1874,7 +1874,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   display: none;
 }
 #verify-popover-content {
-  max-height: 600px;
   overflow: auto;
 }
 #verify-popover-content .question-list .item,
@@ -2103,6 +2102,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding-right: 80px;
   padding-left: 15px;
   color: #d20426;
+  line-height: 1.6;
 }
 .share-window .modal-content {
   width: 800px;

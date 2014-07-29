@@ -5,7 +5,7 @@
                 <input type="text" ng-model="search.searchText" ng-model-options="{debounce: 300}" focus-on="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
                 <span class="input-group-addon glyphicon glyphicon-search" title="Search"></span>
             </div>
-            <button ng-click="hideSearch()" title="Cancel search"></button>
+            <button ng-click="hideSearch()" title="Cancel search" type="button"></button>
         </div>
 
         <div ng-switch-when="default">
@@ -91,7 +91,7 @@
 
                 <a ui-sref="{{!item.isRoster ? 'questionnaire.chapter.group({itemId: item.itemId})' : 'questionnaire.chapter.roster({itemId: item.itemId})'}}">
                     <div class="item-text">
-                        <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
+                        <button type="button" ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
                                 ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
                         <span ng-bind-html="item.title | highlight:search.searchText"></span>
                     </div>
@@ -146,13 +146,13 @@
             <p>This chapter is empty.</p>
 
             <p>
-                You can start by using <button class="btn" disabled>ADD QUESTION</button> and <button class="btn" disabled>ADD GROUP</button> buttons<br />
+                You can start by using <button class="btn" disabled type="button">ADD QUESTION</button> and <button type="button"  class="btn" disabled>ADD GROUP</button> buttons<br />
                 on top of this section or manage chapters with <span class="left-panel-glyph"></span> left panel
             </p>
 
             <p>
                 Language of survey, device types, collaboration and other options<br />
-                can be found at <button class="btn" disabled>SETTINGS</button> panel (top right corner)
+                can be found at <button class="btn" type="button" disabled>SETTINGS</button> panel (top right corner)
             </p>
         </div>
     </div>
