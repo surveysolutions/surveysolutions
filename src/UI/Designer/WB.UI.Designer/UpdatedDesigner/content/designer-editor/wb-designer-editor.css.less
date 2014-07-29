@@ -489,65 +489,71 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
         background: white;
         padding:0;
 
-        @form-btns-hldr-height: 66px;
-        @form-holder-height: calc(~"100%" - (@form-btns-hldr-height));
-
-        > .form-holder {
-          padding: 10px 20px;
-          height: @form-holder-height;
-          overflow: auto;
-
-          > .breadcrumbs {
-            margin-bottom: 10px;
-            .wb-breadcrumbs('gray');
-          }
-
-          .gray {
-            padding: 8px;
-            background: #f1f2f3;
-            border-radius: 4px;
-            .clearfix();
-          }
-
-          .form-group {
-            > label {
-              .lucida-console-font();
-              font-size: 14px;
-              color: #5d5d5d;
-              font-weight: normal;
-            }
-          }
-        }
-
-        > .form-buttons-holder {
-          padding: 10px 20px;
-          position: absolute;
+        > form {
           width: 100%;
-          height: @form-btns-hldr-height;
-          bottom: 0;
-          left: 0;
+          height: 100%;
 
-          //margin: 16px 0px;
-          .clearfix();
+          @form-btns-hldr-height: 66px;
+          @form-holder-height: calc(~"100%" - (@form-btns-hldr-height));
 
-          .pull-left, .pull-right {
-            height: 42px;
-          }
+          > .form-holder {
+            padding: 10px 20px;
+            height: @form-holder-height;
+            overflow: auto;
 
-          .pull-left {
-            > * {
-              margin-right: 12px;
+            > .breadcrumbs {
+              margin-bottom: 10px;
+              .wb-breadcrumbs('gray');
+            }
+
+            .gray {
+              padding: 8px;
+              background: #f1f2f3;
+              border-radius: 4px;
+              .clearfix();
+            }
+
+            .form-group {
+              > label {
+                .lucida-console-font();
+                font-size: 14px;
+                color: #5d5d5d;
+                font-weight: normal;
+              }
             }
           }
-          .pull-right {
-            > * {
-              margin-left: 12px;
-            }
-          }
 
-          > div > a {
-            cursor: pointer;
-            .inline-button-fontstyle();
+          > .form-buttons-holder {
+            background-color: #fff;
+            padding: 10px 20px;
+            position: absolute;
+            width: 100%;
+            height: @form-btns-hldr-height;
+            bottom: 0;
+            left: 0;
+
+            //margin: 16px 0px;
+            .clearfix();
+
+            .pull-left, .pull-right {
+              height: 42px;
+            }
+
+            .pull-left {
+              > * {
+                margin-right: 12px;
+              }
+            }
+            .pull-right {
+              > * {
+                margin-left: 12px;
+              }
+            }
+
+            > div > a {
+              cursor: pointer;
+              .inline-button-fontstyle();
+            }
           }
         }
       }

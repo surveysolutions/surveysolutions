@@ -1,7 +1,7 @@
-﻿<div class="form-holder">
+﻿<form role="form" id="question-editor" name="questionForm" unsaved-warning-form>
+    <div class="form-holder">
     <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>
 
-    <form role="form" id="question-editor" name="questionForm" unsaved-warning-form>
         <div class="row">
             <div class="form-group col-xs-7">
                 <label for="edit-group-title" class="wb-label">Question Type <help key="questionType" /></label><br>
@@ -121,7 +121,6 @@
                     </div>
                 </div>
             </div>
-</form>
 
     <script type="text/ng-template" id="SingleOption-template.html">
         <div class="singleOption">
@@ -269,7 +268,7 @@
 <div class="form-buttons-holder">
     <div class="pull-left">
         <button type="submit" id="edit-chapter-save-button" class="btn btn-lg btn-primary" ng-click="saveQuestion()" ng-disabled="!questionForm.$valid">Save</button>
-        <button type="button"  id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelQuestion()">Cancel</button>
+        <button type="reset"  id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelQuestion()">Cancel</button>
     </div>
     <div class="pull-right">
         <button type="button" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion(activeQuestion)">Delete</button>
@@ -277,3 +276,4 @@
         <ng-include src="'moveToChapterSnippet'" />
     </div>
 </div>
+</form>
