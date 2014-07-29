@@ -3667,6 +3667,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var questions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
                 .Where(q => q.PublicKey != questionPublicKey)
+                .Where(q => !string.IsNullOrEmpty(q.StataExportCaption))
                 .ToDictionary(q => q.StataExportCaption, q => q);
 
             var propagationQuestionsVector = GetQuestionnaireItemDepthAsVector(@group.PublicKey);
