@@ -420,6 +420,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="UpdatedDesigner\app\scripts\app.js" />
+    <Content Include="UpdatedDesigner\app\scripts\components\autogrow.js" />
     <Content Include="UpdatedDesigner\app\scripts\components\contextMenu.js" />
     <Content Include="UpdatedDesigner\app\scripts\components\markup.js" />
     <Content Include="UpdatedDesigner\app\scripts\components\ujs.js" />
