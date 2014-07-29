@@ -24,7 +24,7 @@
                 };
 
                 $scope.saveStaticText = function () {
-                    commandService.updateStaticText(questionaireId, $scope.activeStaticText).success(function (result) {
+                    commandService.updateStaticText($state.params.questionnaireId, $scope.activeStaticText).success(function (result) {
                         $scope.initialStaticText = angular.copy($scope.activeStaticText);
                         $rootScope.$emit('staticTextUpdated', {
                             itemId: $scope.activeStaticText.itemId,
