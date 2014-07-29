@@ -77,6 +77,9 @@
                     if (type == 'GpsCoordinates' && $scope.activeQuestion.questionScope == 'Prefilled') {
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
+                    if (type != "SingleOption" && type != "MultyOption") {
+                        $scope.setLinkSource(null);
+                    }
                 };
 
                 $scope.cancelQuestion = function() {
