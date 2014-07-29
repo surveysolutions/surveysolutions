@@ -61,7 +61,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             {
                 return;
             }
-            if (!maskedWatcher.IsTextMatchesToMask())
+            if (!maskedWatcher.IsTextMaskMatched())
             {
                 PutAnswerStoredInModelToUI();
                 if (!this.IsCommentsEditorFocused)
