@@ -113,6 +113,10 @@
     vertical-align: top;
 }
 
+.notify {
+    top: 60px;
+}
+
 /*
     Details 
  */
