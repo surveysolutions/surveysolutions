@@ -98,7 +98,7 @@
                     case "Text":
                         break;
                     case "TextList":
-                        command.maxAnswerCount = 10;
+                        command.maxAnswerCount = question.maxAnswerCount;
                         break;
                     }
                     var questionType = question.type == "MultyOption" ? "MultiOption" : question.type; // we have different name in enum and in command. Correct one is 'Multi' but we cant change it in enum

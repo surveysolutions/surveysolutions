@@ -25,6 +25,7 @@
                     $scope.activeQuestion.allQuestionScopeOptions = result.allQuestionScopeOptions;
                     $scope.activeQuestion.notPrefilledQuestionScopeOptions = result.notPrefilledQuestionScopeOptions;
                     $scope.activeQuestion.instructions = result.instructions;
+                    $scope.activeQuestion.maxAnswerCount = result.maxAnswerCount;
 
                     var options = result.options || [];
                     _.each(options, function(option) {
