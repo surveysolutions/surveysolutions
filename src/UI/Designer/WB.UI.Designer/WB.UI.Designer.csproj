@@ -877,6 +877,14 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap\test-infra\s3_cache.py" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\test-infra\sauce_browsers.yml" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\test-infra\uncached-npm-install.sh" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\.gitignore" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\console-shim.js" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\console-shim.min.js" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\demo\index.html" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\demo\log4javascript.js" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\Gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\LICENSE.txt" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\test\index.html" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\.gitignore" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\CHANGES" />
@@ -1258,6 +1266,11 @@
     <Content Include="UpdatedDesigner\data\questionnaire\dc89d22b9e78480da5756806d2466637.json" />
     <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="UpdatedDesigner\data\editRoster\547ae6ee75a44751bd63147fbb9f3e4f.json" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\.npmignore" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\console-shim.map" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\package.json" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
