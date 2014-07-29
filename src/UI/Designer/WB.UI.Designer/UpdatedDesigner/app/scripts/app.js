@@ -79,5 +79,8 @@
     .config(['blockUIConfigProvider', function(blockUiConfigProvider) {
         blockUiConfigProvider.message('Please wait...');
         blockUiConfigProvider.autoBlock(false);
+    }])
+    .config(['unsavedWarningsConfigProvider', function(unsavedWarningsConfigProvider) {
+        unsavedWarningsConfigProvider.routeEvent = '$stateChangeStart';
     }]);
 }(jQuery));

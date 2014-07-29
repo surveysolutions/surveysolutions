@@ -11,6 +11,8 @@
                     $scope.activeStaticText.breadcrumbs = result.breadcrumbs;
                     $scope.activeStaticText.itemId = $state.params.itemId;
                     $scope.activeStaticText.text = result.text;
+
+                    $scope.staticTextForm.$setPristine();
                 };
 
                 $scope.loadStaticText = function () {
@@ -28,6 +30,7 @@
                             itemId: $scope.activeStaticText.itemId,
                             text: $scope.activeStaticText.text
                         });
+                        $scope.staticTextForm.$setPristine();
                     });
                 };
 
