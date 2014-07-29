@@ -247,6 +247,7 @@
     <Compile Include="Api\TesterController.cs" />
     <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
+    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Code\CamelCaseAttribute.cs" />
+    <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1250,10 +1252,11 @@
       <DependentUpon>ui-utils.min.js</DependentUpon>
     </Content>
     <Content Include="UpdatedDesigner\data\questionnaire\dc89d22b9e78480da5756806d2466637.json" />
+    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Filters\" />
+    <Folder Include="UpdatedDesigner\test\spec\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
