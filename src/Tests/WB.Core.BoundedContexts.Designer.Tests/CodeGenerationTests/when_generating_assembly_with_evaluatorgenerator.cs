@@ -46,11 +46,39 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 
             }, chapterId, null);
 
+            Guid pets_questionId = Guid.Parse("23232323232323232323232323232317");
+            questionnaireDocument.Add(new NumericQuestion()
+            {
+                PublicKey = pets_questionId,
+                StataExportCaption = "pets_n",
+                IsInteger = true
+
+            }, rosterId, null);
+
+            var groupId = Guid.Parse("12345678912345678912345678912345");
+            questionnaireDocument.Add(new Group()
+            {
+                PublicKey = groupId,
+                IsRoster = false,
+                ConditionExpression = "pets_n > 0"
+
+            }, rosterId, null);
+
+            questionnaireDocument.Add(new TextQuestion()
+            {
+                PublicKey = Guid.Parse("12345678912345678912345678912340"),
+                StataExportCaption = "pets_text",
+                ConditionExpression = "pets_n > 0",
+                ValidationExpression = "pets_n == 0"
+
+            }, groupId, null);
+
             questionnaireDocument.Add(new Group()
             {
                 PublicKey = Guid.Parse("23232323232323232323232323232324"),
                 IsRoster = true,
-                RosterSizeQuestionId = questionId
+                RosterSizeQuestionId = pets_questionId,
+                ConditionExpression = "pets_text.Length > 0"
 
             }, rosterId, null);
         };

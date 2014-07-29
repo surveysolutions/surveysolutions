@@ -76,10 +76,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             Validations = childAsIQuestion.ValidationExpression,
                             QuestionType = childAsIQuestion.QuestionType,
 
-                            GeneratedQuestionTypeName = this.GenerateQuestionTypeName(childAsIQuestion),
-                            GeneratedQuestionMemberName = "@__" + varName,
-                            GeneratedQuestionStateName = "@__" + varName + "_state",
-                            GeneratedIdName = "@__" + varName + "_id" 
+                            GeneratedTypeName = this.GenerateQuestionTypeName(childAsIQuestion),
+                            GeneratedMemberName = "@__" + varName,
+                            GeneratedStateName = "@__" + varName + "_state",
+                            GeneratedIdName = "@__" + varName + "_id",
+                            GeneratedConditionsMethodName = "IsEnabled_"+ varName,
+                            GeneratedValidationsMethodName = "IsValid_" + varName,
+                            GeneratedMandatoryMethodName = "IsManadatoryValid_" + varName,
+                            IsMandatory = childAsIQuestion.Mandatory
                         };
 
                         currentScope.Questions.Add(question);
@@ -100,10 +104,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 Id = childAsIGroup.PublicKey,
                                 Conditions = childAsIGroup.ConditionExpression,
                                 VariableName = "@__" + varName, //waiting for merge roster name from default
-                                RosterGeneratedTypeName = "@__" + varName + "_type",
+                                GeneratedTypeName = "@__" + varName + "_type",
                                 GeneratedStateName = "@__" + varName + "_state",
                                 ParentScope = currentScope,
-                                GeneratedIdName = "@__" + varName + "_id"
+                                GeneratedIdName = "@__" + varName + "_id",
+                                GeneratedConditionsMethodName = "IsEnabled_" + varName,
                             };
 
                             rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(childAsIGroup, roster));
@@ -122,8 +127,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                     Id = childAsIGroup.PublicKey,
                                     Conditions = childAsIGroup.ConditionExpression,
                                     VariableName = "@__" + varName, //generating variable name by publicKey
-                                    GeneratedGroupStateName = "@__" + varName + "_state",
-                                    GeneratedIdName = "@__" + varName + "_id"
+                                    GeneratedStateName = "@__" + varName + "_state",
+                                    GeneratedIdName = "@__" + varName + "_id",
+                                    GeneratedConditionsMethodName = "IsEnabled_" + varName,
                                 };
 
                             currentScope.Groups.Add(group);
