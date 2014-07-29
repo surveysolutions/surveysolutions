@@ -1,4 +1,4 @@
-﻿/**
+/**
  * WorldBank Designer
  * file: markup.css.less
  * description: LESS main import script
@@ -1424,7 +1424,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title > .search-box > .input-group {
   margin-top: 7px;
   line-height: 40px;
-  width: calc(100% - 50px);
+  margin-right: 50px;
   float: left;
 }
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title > .search-box > .input-group > input {
@@ -1454,8 +1454,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   border: none;
   padding: 0;
   display: block;
-  float: left;
   background: transparent url(i/cross.png) 0 0;
+  position: absolute;
+  right: 4px;
 }
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title > .search-box > button:hover {
   background-position: 0 -40px;
@@ -2143,4 +2144,3 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog a.owner {
   color: #2fc507;
 }
-/*# sourceMappingURL=markup.css.css.map */

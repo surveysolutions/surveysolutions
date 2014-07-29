@@ -389,8 +389,10 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             > .input-group {
               margin-top: 7px;
               line-height: @h;
-              width: ~"calc(100% - 50px)";
+              //width: ~"calc(100% - 50px)";
+              margin-right: 50px;
               float: left;
+
               > input {
                 height: @h;
                 border: none;
@@ -420,8 +422,10 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
               border: none;
               padding: 0;
               display: block;
-              float: left;
+              //float: left;
               background: transparent url(../i/cross.png) 0 0;
+              position: absolute;
+              right: 4px;
               &:hover {
                 background-position: 0 -40px;
               }
