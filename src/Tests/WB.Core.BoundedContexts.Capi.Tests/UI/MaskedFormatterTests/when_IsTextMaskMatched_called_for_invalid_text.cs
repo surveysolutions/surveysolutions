@@ -9,26 +9,22 @@ using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 {
     [Subject(typeof(MaskedFormatter))]
-    internal class when_symbol_added_in_the_middle
+    internal class when_IsTextMaskMatched_called_for_invalid_text
     {
         Establish context = () =>
         {
-            maskedFormatter=new MaskedFormatter(mask);
+            maskedFormatter = new MaskedFormatter(mask);
         };
 
         Because of = () =>
-            result=maskedFormatter.ValueToString(value,ref cursorPosition);
+            result = maskedFormatter.IsTextMaskMatched(value);
 
-        It should_result_be_equal_to_passed_value = () =>
-            result.ShouldEqual("w2-9__-____");
-
-        It should_cursor_be_equal_to_4 = () =>
-            cursorPosition.ShouldEqual(4);
+        It should_result_be_false = () =>
+            result.ShouldEqual(false);
 
         private static MaskedFormatter maskedFormatter;
-        private static string result;
+        private static bool result;
         private static string mask = "a*-999-a999";
-        private static string value = "w2-9___-____";
-        private static int cursorPosition = 4;
+        private static string value = "19-123-s123";
     }
 }

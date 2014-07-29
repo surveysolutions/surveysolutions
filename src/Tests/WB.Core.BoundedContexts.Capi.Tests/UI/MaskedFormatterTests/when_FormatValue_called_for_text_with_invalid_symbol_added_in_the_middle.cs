@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 {
     [Subject(typeof(MaskedFormatter))]
-    internal class when_invalid_symbol_added_in_the_middle
+    internal class when_FormatValue_called_for_text_with_invalid_symbol_added_in_the_middle
     {
         Establish context = () =>
         {
@@ -17,9 +17,9 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
         };
 
         Because of = () =>
-            result = maskedFormatter.ValueToString(value, ref cursorPosition);
+            result = maskedFormatter.FormatValue(value, ref cursorPosition);
 
-        It should_result_be_equal_to_passed_value = () =>
+        It should_result_be_equal_to_fomatted_value = () =>
             result.ShouldEqual("w2-355-b___");
 
         It should_cursor_be_equal_to_8 = () =>

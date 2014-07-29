@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 {
     [Subject(typeof(MaskedFormatter))]
-    internal class when_symbol_located_befoure_literal_symbol_is_added
+    internal class when_FormatValue_called_for_text_with_symbol_located_before_literal_symbol_is_added
     {
         private Establish context = () =>
         {
@@ -17,9 +17,9 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
         };
 
         private Because of = () =>
-            result = maskedFormatter.ValueToString(value, ref cursorPosition);
+            result = maskedFormatter.FormatValue(value, ref cursorPosition);
 
-        private It should_result_be_equal_to_passed_value = () =>
+        private It should_result_be_equal_to_formatted_value = () =>
             result.ShouldEqual("w1-234-____");
 
         private It should_cursor_be_equal_to_7 = () =>

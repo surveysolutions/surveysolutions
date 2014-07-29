@@ -8,27 +8,27 @@ using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 
 namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 {
-    [Subject(typeof (MaskedFormatter))]
-    class when_symbol_added_in_the_end_of_full_mask
+    [Subject(typeof(MaskedFormatter))]
+    class when_FormatValue_called_for_text_with_invalid_symbol_added_in_the_end
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             maskedFormatter = new MaskedFormatter(mask);
         };
 
-        private Because of = () =>
-            result = maskedFormatter.ValueToString(value+"x", ref cursorPosition);
+        Because of = () =>
+            result = maskedFormatter.FormatValue(value, ref cursorPosition);
 
-        private It should_result_be_equal_to_passed_value = () =>
+        It should_result_be_equal_to_passed_value = () =>
             result.ShouldEqual(value);
 
-        private It should_cursor_be_equal_to_11 = () =>
+        It should_cursor_be_equal_to_11 = () =>
             cursorPosition.ShouldEqual(11);
 
         private static MaskedFormatter maskedFormatter;
         private static string result;
         private static string mask = "a*-999-a999";
         private static string value = "w1-234-a567";
-        private static int cursorPosition = 12;
+        private static int cursorPosition = 11;
     }
 }

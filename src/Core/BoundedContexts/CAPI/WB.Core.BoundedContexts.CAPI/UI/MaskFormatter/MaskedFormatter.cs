@@ -42,13 +42,13 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
 
         public char PlaceholderCharacter { get; private set; }
 
-        public String ValueToString(string value, ref int oldCurstorPosition)
+        public string FormatValue(string value, ref int oldCursorPosition)
         {
             var stringValue = value ?? "";
             var result = new StringBuilder();
 
             int index = 0;
-            int newCursorPosition = oldCurstorPosition;
+            int newCursorPosition = oldCursorPosition;
             int lastSuccessfulIndex = 0;
             bool isLiteralAppearedAfterCursor = false;
             bool isAddedLastCharSuccessful = false;
@@ -61,11 +61,11 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                 }
                 else
                 {
-                    if (oldIndex == oldCurstorPosition - 1)
+                    if (oldIndex == oldCursorPosition - 1)
                     {
                         isAddedLastCharSuccessful = true;
                     }
-                    if (oldIndex > oldCurstorPosition && !isLiteralAppearedAfterCursor)
+                    if (oldIndex > oldCursorPosition && !isLiteralAppearedAfterCursor)
                     {
                         if (maskChars[i].IsLiteral())
                             isLiteralAppearedAfterCursor = true;
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                 }
             }
 
-            if (oldCurstorPosition > this.maskChars.Length)
+            if (oldCursorPosition > this.maskChars.Length)
                 newCursorPosition = this.maskChars.Length;
 
             if (stringValue.Length > maskChars.Length || stringValue.Length == 1)
@@ -83,10 +83,10 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                 if (isAddedLastCharSuccessful)
                     newCursorPosition = lastSuccessfulIndex + 1;
                 else
-                    newCursorPosition = oldCurstorPosition - 1;
+                    newCursorPosition = oldCursorPosition - 1;
             }
 
-            oldCurstorPosition = newCursorPosition;
+            oldCursorPosition = newCursorPosition;
             return result.ToString();
         }
 

@@ -9,26 +9,26 @@ using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 {
     [Subject(typeof(MaskedFormatter))]
-    internal class when_symbol_added_at_position_befoure_it_became_valid
+    internal class when_FormatValue_called_for_text_with_deleted_symbol_located_before_literal_symbol
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             maskedFormatter = new MaskedFormatter(mask);
         };
 
-        Because of = () =>
-            result = maskedFormatter.ValueToString(value, ref cursorPosition);
+        private Because of = () =>
+            result = maskedFormatter.FormatValue(value, ref cursorPosition);
 
-        It should_result_be_equal_to_passed_value = () =>
-            result.ShouldEqual("w2-123-____");
+        private It should_result_be_equal_to_formatted_value = () =>
+            result.ShouldEqual("w1-234-____");
 
-        It should_cursor_be_equal_to_7 = () =>
-            cursorPosition.ShouldEqual(7);
+        private It should_cursor_be_equal_to_6 = () =>
+            cursorPosition.ShouldEqual(6);
 
         private static MaskedFormatter maskedFormatter;
         private static string result;
         private static string mask = "a*-999-a999";
-        private static string value = "w2-123-5____";
-        private static int cursorPosition = 8;
+        private static string value = "w1-234____";
+        private static int cursorPosition = 6;
     }
 }

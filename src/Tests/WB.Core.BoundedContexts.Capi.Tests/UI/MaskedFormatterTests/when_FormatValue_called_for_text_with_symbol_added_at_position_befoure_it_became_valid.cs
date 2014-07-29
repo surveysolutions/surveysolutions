@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
 namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 {
     [Subject(typeof(MaskedFormatter))]
-    internal class when_valid_character_is_added_befoure_any_char_mask
+    internal class when_FormatValue_called_for_text_with_symbol_added_at_position_befoure_it_became_valid
     {
         Establish context = () =>
         {
@@ -17,18 +17,18 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
         };
 
         Because of = () =>
-            result = maskedFormatter.ValueToString(value, ref cursorPosition);
+            result = maskedFormatter.FormatValue(value, ref cursorPosition);
 
-        It should_result_be_equal_to_passed_value = () =>
-            result.ShouldEqual("b_-___-____");
+        It should_result_be_equal_to_formatted_value = () =>
+            result.ShouldEqual("w2-123-____");
 
-        It should_cursor_be_equal_to_1 = () =>
-            cursorPosition.ShouldEqual(1);
+        It should_cursor_be_equal_to_7 = () =>
+            cursorPosition.ShouldEqual(7);
 
         private static MaskedFormatter maskedFormatter;
         private static string result;
         private static string mask = "a*-999-a999";
-        private static string value = "b__-___-____";
-        private static int cursorPosition = 1;
+        private static string value = "w2-123-5____";
+        private static int cursorPosition = 8;
     }
 }

@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             get { return string.Empty; }
         }
 
-        public string ValueToString(string value, ref int oldCurstorPosition)
+        public string FormatValue(string value, ref int oldCursorPosition)
         {
             return value ?? "";
         }
