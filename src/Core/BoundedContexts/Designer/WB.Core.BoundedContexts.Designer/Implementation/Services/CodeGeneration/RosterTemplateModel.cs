@@ -16,10 +16,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Guid Id { set; get; }
         public string VariableName { set; get; }
         public string Conditions { set; get; }
-        public string RosterGeneratedTypeName { set; get; }
-        public string GeneratedStateName { set; get; }
 
+        public string GeneratedTypeName { set; get; }
+        public string GeneratedStateName { set; get; }
         public string GeneratedIdName { set; get; }
+        public string GeneratedConditionsMethodName { set; get; }
 
         public List<QuestionTemplateModel> Questions {  set; get; }
         public List<GroupTemplateModel> Groups { set; get; }
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string GetTypeName()
         {
-            return this.RosterGeneratedTypeName;
+            return this.GeneratedTypeName;
         }
 
         public IEnumerable<QuestionTemplateModel> GetQuestions()

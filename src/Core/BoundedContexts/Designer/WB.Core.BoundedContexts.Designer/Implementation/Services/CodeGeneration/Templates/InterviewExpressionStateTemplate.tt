@@ -12,7 +12,6 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 {
     public class InterviewExpressionState : AbstractInterviewExpressionState 
     {
-
         public InterviewExpressionState() 
         {
             var questionnaireLevelScope = new[] { IdOf.questionnaire };
@@ -56,7 +55,6 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
             this.SetSiblings(rosterScopeIds, rosterStringKey);
-
         }
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
@@ -199,7 +197,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.Write(questionnairetemplate .TransformText());                           
          #>
 
-        //generating all rosters
+        //generating rosters
         <#foreach (var roster in QuestionnaireTemplateStructure.AllRosters) 
            {
 
@@ -207,7 +205,6 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                 this.Write(template.TransformText());                
            }
          #>
-
 
         public static class IdOf
         {
@@ -222,12 +219,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             {#>
             public static readonly Guid <#= r.GeneratedIdName#> = Guid.Parse("<#= r.Id #>");
             <# }#>                        
-            //generate groups Ids
+            //groups
             <#foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
             {#>
             public static readonly Guid <#= g.GeneratedIdName#> = Guid.Parse("<#= g.Id #>");
             <# }#>
-            //public static readonly Guid groupId = Guid.Parse("039ed69e-5583-46af-b983-488568f20e1c");
+            
             
             //TODO: generate scopes
             //public static readonly Guid[] eduScopeIds = new[] { fixedId };
