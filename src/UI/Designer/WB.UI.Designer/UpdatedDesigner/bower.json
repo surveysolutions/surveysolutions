@@ -33,6 +33,7 @@
     "angular-block-ui": "~0.0.8",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.0",
     "angular-unsavedChanges": "~0.1.1",
-    "angular-xeditable": "~0.1.8"
+    "angular-xeditable": "~0.1.8",
+    "console-shim": "*"
   }
 }

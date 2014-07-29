@@ -93,14 +93,16 @@
                     } else {
                         var nextItemIndex = _.indexOf(parent.items, currentItem) + updownStepValue;
 
-                        if (nextItemIndex < $scope.items.length && nextItemIndex >= 0) {
+                        if (nextItemIndex < parent.items.length && nextItemIndex >= 0) {
                             target = parent.items[nextItemIndex];
                         }
                     }
 
-                    $state.go('questionnaire.chapter.' + getItemType(target), {
-                        itemId: target.itemId
-                    });
+                    if (!_.isNull(target)) {
+                        $state.go('questionnaire.chapter.' + getItemType(target), {
+                            itemId: target.itemId
+                        });
+                    }
                 }
             };
 
