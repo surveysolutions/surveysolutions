@@ -919,6 +919,24 @@ input#edit-group-title {
 .question-editor ul[aria-labelledby="edit-roster-numeric-source"] {
   width: 100%;
 }
+.question-editor .checkbox-in-column {
+  margin-top: 5px;
+}
+.question-editor .checkbox-in-column .stick-to-top {
+  margin-top: -3px;
+}
+.question-editor .checkbox-in-column input.wb-checkbox + label {
+  font-family: "Lucida Console", Monaco, monospace;
+  color: #5d5d5d;
+  font-size: 14px;
+}
+.question-editor .small-numeric-input {
+  width: 80px !important;
+}
+.question-editor .form-group.singleline-group label,
+.question-editor .form-group.singleline-group input {
+  display: inline-block;
+}
 .row .form-group button.cross {
   display: block;
   background: url("i/cross-red.png") center center no-repeat;
