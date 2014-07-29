@@ -420,7 +420,6 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="UpdatedDesigner\app\scripts\app.js" />
-    <Content Include="UpdatedDesigner\app\scripts\components\autogrow.js" />
     <Content Include="UpdatedDesigner\app\scripts\components\contextMenu.js" />
     <Content Include="UpdatedDesigner\app\scripts\components\markup.js" />
     <Content Include="UpdatedDesigner\app\scripts\components\ujs.js" />
@@ -670,6 +669,9 @@
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\elastic.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\index.html" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\LICENCE.txt" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.css" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.js" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.min.css" />
@@ -1271,6 +1273,10 @@
     <Content Include="UpdatedDesigner\vendor\console-shim\console-shim.map" />
     <Content Include="UpdatedDesigner\vendor\console-shim\package.json" />
     <Content Include="UpdatedDesigner\vendor\console-shim\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\package.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
