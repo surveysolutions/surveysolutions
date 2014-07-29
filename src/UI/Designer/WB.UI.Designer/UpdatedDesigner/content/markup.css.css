@@ -978,6 +978,13 @@ input#edit-group-title {
   padding-top: 8px;
   padding-bottom: 8px;
 }
+#question-editor .input-variable-name:before {
+  top: 35px;
+}
+#question-editor .input-variable-name > input {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
 .ui-match {
   background-color: #FFCC00;
   border-top: solid 1px #FAD540;

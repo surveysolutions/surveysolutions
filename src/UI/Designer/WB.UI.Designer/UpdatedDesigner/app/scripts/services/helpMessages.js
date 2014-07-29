@@ -14,7 +14,9 @@
                 'sourceQuestion': 'Source question (answer generates number of rows)',
                 'titleQuestion': 'Titles of rows',
                 'fixedTitles': 'Fixed roster titles',
-
+                'questionType': 'Question Type',
+                'variable': 'Variable',
+                'variableLabel': 'Variable Label'
             };
 
             helpService.getHelpMessage = function(key) {

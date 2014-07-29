@@ -1,9 +1,10 @@
 ﻿<div class="form-holder">
     <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>
 
-    <form role="form" unsaved-warning-form name="questionForm">
+    <form role="form" id="question-editor" name="questionForm" unsaved-warning-form>
         <div class="row">
             <div class="form-group col-xs-7">
+                <label for="edit-group-title" class="wb-label">Question Type <help key="questionType" /></label><br>
                 <div class="btn-group type-container-dropdown" dropdown>
                     <button id="questionTypeBtn" class="btn btn-default dropdown-toggle form-control" type="button">
                         <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
@@ -24,16 +25,19 @@
             </div>
 
             <div class="form-group input-variable-name col-xs-4 pull-right">
+                <label for="edit-group-title" class="wb-label">Variable <help key="variable" /></label><br>
                 <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable"
                        class="form-control" placeholder="Set variable">
             </div>
         </div>
 
         <div class="form-group">
+            <label for="edit-group-title" class="wb-label">Variable label<help key="variableLabel" /></label><br>
             <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" placeholder="Variable label">
         </div>
 
         <div class="form-group">
+            <label for="edit-group-title" class="wb-label">Title <help key="title" /></label><br>
             <input id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text">
 
             <div class="gray">
