@@ -402,11 +402,11 @@ namespace WB.Core.SharedKernels.DataCollection
             get { return this.RosterVector.Last(); }
         }
 
-        protected Dictionary<Identity, Func<bool>[]> validationExpressions = new Dictionary<Identity, Func< bool>[]>();
+        protected Dictionary<Identity, Func<bool>[]> ValidationExpressions = new Dictionary<Identity, Func< bool>[]>();
 
         protected void Validate(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
         {
-            foreach (var validationExpression in this.validationExpressions)
+            foreach (var validationExpression in this.ValidationExpressions)
             {
                 try
                 {
