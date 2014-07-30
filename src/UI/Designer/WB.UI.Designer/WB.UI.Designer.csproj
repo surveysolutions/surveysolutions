@@ -644,7 +644,6 @@
     <Content Include="UpdatedDesigner\content\i\pretty-checkable-sprites.png" />
     <Content Include="UpdatedDesigner\content\i\question-item-dots.png" />
     <Content Include="UpdatedDesigner\content\i\search-glyph.png" />
-    <Content Include="UpdatedDesigner\content\lib\controls\wb-breadcrumbs.css.css" />
     <Content Include="UpdatedDesigner\content\lib\i\breadcrumb-slash.png" />
     <Content Include="UpdatedDesigner\content\lib\i\btn-dropdown-blue.png" />
     <Content Include="UpdatedDesigner\content\markup.css.css">
@@ -1158,7 +1157,6 @@
     <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.less" />
-    <Content Include="UpdatedDesigner\content\lib\controls\wb-breadcrumbs.css.css.map" />
     <Content Include="UpdatedDesigner\content\lib\controls\wb-breadcrumbs.css.less" />
     <Content Include="UpdatedDesigner\content\lib\controls\wb-buttons.css.less" />
     <Content Include="UpdatedDesigner\content\lib\controls\wb-inputs.css.less" />
