@@ -489,6 +489,7 @@
     <Content Include="UpdatedDesigner\data\editQuestion\beb6b8328fc74c90a7dbec96bd1bb8e3.json" />
     <Content Include="UpdatedDesigner\data\editQuestion\0be767d337cc4b6ba9a49be314f98eb9.json" />
     <Content Include="UpdatedDesigner\data\editGroup\dd45293c816e982d482334b1222ec41f.json" />
+    <Content Include="UpdatedDesigner\data\editGroup\ddfaab0f37394a679f088add19325cfe.json" />
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\app\index.html" />
@@ -1277,6 +1278,7 @@
     <Content Include="UpdatedDesigner\vendor\angular-elastic\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-elastic\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-elastic\README.md" />
+    <Content Include="UpdatedDesigner\data\editStaticText\0000f14f18294f2aa324f02d84b6bed9.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

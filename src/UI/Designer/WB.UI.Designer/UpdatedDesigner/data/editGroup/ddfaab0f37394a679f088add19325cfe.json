@@ -1,0 +1,18 @@
+﻿{
+    "group": {
+        "id": "4292c534-3743-bc5f-c867-b48c74ecf3c3",
+        "title": "New group",
+        "description": "",
+        "enablementCondition": "",
+        "variableName": null
+    },
+    "breadcrumbs": [{
+        "id": "a5f83593814240e08028e787e46aa7ee",
+        "title": "New Chapter",
+        "isRoster": false
+    }, {
+        "id": "47761266569397d46b77e36c3de2600b",
+        "title": "New group",
+        "isRoster": false
+    }]
+}

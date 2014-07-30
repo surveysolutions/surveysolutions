@@ -4,6 +4,11 @@
    "title":"I. Roster multie option supervisor's question",
    "isRoster":false,
    "items":[
+       {
+        "itemId": "0000f14f18294f2aa324f02d84b6bed9",
+        "itemType": "StaticText",
+        "text": "New static text 1"
+    },
       {
          "itemId":"90c1f14f18294f2aa324f02d84b6bed9",
          "itemType":"Question",
