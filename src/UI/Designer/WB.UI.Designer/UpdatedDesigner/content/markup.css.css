@@ -1,4 +1,4 @@
-/**
+﻿/**
  * WorldBank Designer
  * file: markup.css.less
  * description: LESS main import script
@@ -943,7 +943,6 @@ input#edit-group-title {
 .roster-type-specific-block,
 .question-type-specific-block {
   background: #f1f2f3;
-  margin-top: -2px;
   padding: 8px;
   border-radius: 0 0 4px 4px;
 }
@@ -2149,3 +2148,4 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog a.owner {
   color: #2fc507;
 }
+/*# sourceMappingURL=markup.css.css.map */
