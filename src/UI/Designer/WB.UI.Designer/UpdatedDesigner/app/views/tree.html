@@ -173,3 +173,11 @@
 
 
 </script>
+
+
+            <div class="section item" ng-show="!isAtLeastOneItemPresent(items)">
+                <div class="item-text">
+                    <span class="ng-binding">Nothing found</span>
+                </div>
+            </div>
+            <div class="buttons-item" ng-show="!search.searchText">
