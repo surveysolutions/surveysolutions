@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
     {
         public InterviewExpressionState() 
         {
-            var questionnaireLevelScope = new[] { IdOf.questionnaire };
+            var questionnaireLevelScope = new[] { IdOf.@__questionnaire };
             var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
             var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GetTypeName()#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies);
             this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
@@ -28,13 +28,13 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {
-            if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
             {
                 return;
             }
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
-            Guid[] rosterScopeIds = IdOf.rostersIdToScopeMap[rosterId];
+            Guid[] rosterScopeIds = IdOf.parentScopeMap[rosterId];
             var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
             string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
 
@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             decimal[] parentRosterVector = outerRosterVector;
 
             var rosterParentIdentityKey = parentRosterVector.Length == 0
-                ? Util.GetRosterKey(new[] { IdOf.questionnaire }, new decimal[0])
+                ? Util.GetRosterKey(new[] { IdOf.@__questionnaire }, new decimal[0])
                 : Util.GetRosterKey(rosterScopeIds.Shrink(), parentRosterVector);
 
             var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
@@ -59,13 +59,13 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
-            if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
             {
                 return;
             }
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
-            var rosterIdentityKey = Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
             
             var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
             
@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         
         public override Dictionary<Guid, Guid[]> GetParentsMap()
         {
-            return IdOf.parentsMap;
+            return IdOf.parentScopeMap;
         }
 
         public override IInterviewExpressionState Clone()
@@ -208,29 +208,29 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
         public static class IdOf
         {
-            public static readonly Guid questionnaire = Guid.Parse("<#= QuestionnaireTemplateStructure.Id #>"); 
+            public static readonly Guid @__questionnaire = Guid.Parse("<#= QuestionnaireTemplateStructure.Id #>"); 
             //questions
             <#foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
             {#>
             public static readonly Guid <#= q.GeneratedIdName#> = Guid.Parse("<#= q.Id #>");
-            <# }#>           
-            //rosters
-            <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
-            {#>
-            public static readonly Guid <#= r.GeneratedIdName#> = Guid.Parse("<#= r.Id #>");
-            <# }#>                        
+            <# }#>
             //groups
             <#foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
             {#>
             public static readonly Guid <#= g.GeneratedIdName#> = Guid.Parse("<#= g.Id #>");
             <# }#>
-            
-            
-            //TODO: generate scopes
-            //public static readonly Guid[] eduScopeIds = new[] { fixedId };
-            //public static readonly Guid[] hhMemberScopeIds = new[] { persons_count };
-            //public static readonly Guid[] foodConsumptionIds = new[] { persons_count, food };
+            //rosters
+            <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
+            {#>
+            public static readonly Guid <#= r.GeneratedIdName#> = Guid.Parse("<#= r.Id #>");
+            <# }#>                        
 
+            public static readonly Guid[] <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedRosterScopeName#> = new[] {@__questionnaire};
+
+            <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
+            {#>
+            public static readonly Guid[] <#= r.GeneratedRosterScopeName#> = new[] {<#=String.Join(" ,", r.RosterScope.Select(g => string.Format("Guid.Parse(\"{0}\")", g)).ToArray()) #>};            
+            <# }#> 
             
             public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
             {
@@ -243,31 +243,26 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                 <# }#>
                 }},
                 <# }#>
-
-                //{ id, new Guid[] { } },
-                //{ persons_count, new Guid[] { married_with } },
-                //{ edu_visit, new Guid[] { fixedId } },
-
             };
 
-            public static Dictionary<Guid, Guid[]> parentsMap = new Dictionary<Guid, Guid[]>
+            public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
             {
-            //{ id, new []{questionnaire} },
-            
-            //{ name, hhMemberScopeIds },
-            
-
-            //groups
-            //{ groupId, hhMemberScopeIds },
-                        
-            };
-
-            public static Dictionary<Guid, Guid[]> rostersIdToScopeMap = new Dictionary<Guid, Guid[]>
-            {
-            //{ fixedId, eduScopeIds },
-            //{ hhMember, hhMemberScopeIds },
-            //{ foodConsumption, foodConsumptionIds },
-            //{ jobActivity, hhMemberScopeIds }
+                //questions
+                <#foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
+                {#>
+                {<#= q.GeneratedIdName#>, <#= q.RosterScopeName#>},            
+                <# }#>
+                //groups
+                <#foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
+                {#>
+                {<#= g.GeneratedIdName#>, <#= g.RosterScopeName#>},
+                <# }#>
+                //rosters
+                <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
+                {#>
+                {<#= r.GeneratedIdName#>, <#= r.GeneratedRosterScopeName#>},
+                <# }#>
+                //{ groupId, hhMemberScopeIds },                        
             };
         }
     }

@@ -17,7 +17,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<GroupTemplateModel> Groups {  set; get; }
         public List<RosterTemplateModel> Rosters { set; get; }
 
-        public string GeneratedTypeName {
+        public string GeneratedRosterScopeName {
+            set {} 
+            get { return "@__questionnaire_scope"; }
+            
+        }
+
+        public string GeneratedTypeName 
+        {
             get { return "QuestionnaireTopLevel"; }
         }
 
@@ -39,6 +46,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public IEnumerable<RosterTemplateModel> GetRosters()
         {
             return this.Rosters;
+        }
+
+        public List<Guid> GetRosterScope()
+        {
+            return new List<Guid>();
         }
     }
 }
