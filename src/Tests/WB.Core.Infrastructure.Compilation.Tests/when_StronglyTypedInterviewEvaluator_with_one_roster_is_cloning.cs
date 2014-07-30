@@ -24,7 +24,7 @@ namespace WB.Core.Infrastructure.Compilation.Tests
             .persons_count.ShouldEqual(persons_count);
 
         It should_clone_answer_of_roster_question = () =>
-            (copyResult.InterviewScopes[GetRosterKey(StronglyTypedInterviewEvaluator.IdOf.rostersIdToScopeMap[StronglyTypedInterviewEvaluator.IdOf.hhMember], firstLevelRosterVector)] as StronglyTypedInterviewEvaluator.HhMember_type)
+            (copyResult.InterviewScopes[GetRosterKey(StronglyTypedInterviewEvaluator.IdOf.parentScopeMap[StronglyTypedInterviewEvaluator.IdOf.hhMember], firstLevelRosterVector)] as StronglyTypedInterviewEvaluator.HhMember_type)
             .age.ShouldEqual(age);
 
 

@@ -83,7 +83,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             GeneratedConditionsMethodName = "IsEnabled_"+ varName,
                             GeneratedValidationsMethodName = "IsValid_" + varName,
                             GeneratedMandatoryMethodName = "IsManadatoryValid_" + varName,
-                            IsMandatory = childAsIQuestion.Mandatory
+                            IsMandatory = childAsIQuestion.Mandatory,
+                            RosterScopeName = currentScope.GeneratedRosterScopeName
                         };
 
                         currentScope.Questions.Add(question);
@@ -98,7 +99,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     {
                         if (IsRosterGroup(childAsIGroup))
                         {
+                            Guid currentScopeId = childAsIGroup.RosterSizeSource == RosterSizeSourceType.FixedTitles
+                                ? childAsIGroup.PublicKey
+                                : childAsIGroup.RosterSizeQuestionId.Value;
+
+                            var currentRosterScope = currentScope.GetRosterScope().Select(t => t).ToList();
+                            currentRosterScope.Add(currentScopeId);
                             var varName = childAsIGroup.PublicKey.FormatGuid();
+
                             var roster = new RosterTemplateModel()
                             {
                                 Id = childAsIGroup.PublicKey,
@@ -109,6 +117,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 ParentScope = currentScope,
                                 GeneratedIdName = "@__" + varName + "_id",
                                 GeneratedConditionsMethodName = "IsEnabled_" + varName,
+                                RosterScope = currentRosterScope,
+                                GeneratedRosterScopeName = "@__"+ varName + "_scope",
+
                             };
 
                             rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(childAsIGroup, roster));
@@ -130,6 +141,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                     GeneratedStateName = "@__" + varName + "_state",
                                     GeneratedIdName = "@__" + varName + "_id",
                                     GeneratedConditionsMethodName = "IsEnabled_" + varName,
+                                    RosterScopeName = currentScope.GeneratedRosterScopeName
                                 };
 
                             currentScope.Groups.Add(group);
@@ -232,8 +244,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         IEnumerable<QuestionTemplateModel> GetQuestions();
         IEnumerable<RosterTemplateModel> GetRosters();
 
+        List<Guid> GetRosterScope();
+        
+
         List<QuestionTemplateModel> Questions { set; get; }
         List<GroupTemplateModel> Groups { set; get; }
         List<RosterTemplateModel> Rosters { set; get; }
+
+        string GeneratedRosterScopeName { set; get; }
     }
 }
