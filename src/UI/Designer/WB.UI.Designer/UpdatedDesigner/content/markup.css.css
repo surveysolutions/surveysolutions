@@ -2136,6 +2136,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog .form-group {
   vertical-align: top;
 }
+.share-question-dialog .form-group .questionaire-title {
+  width: 600px;
+}
 .share-question-dialog .form-group .share-with-email {
   width: 400px;
 }
