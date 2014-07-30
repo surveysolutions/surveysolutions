@@ -26,7 +26,12 @@
         <div ui-tree-nodes ng-model="items">
             <div ng-repeat="item in items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
             </div>
-            <div class="buttons-item">
+            <div class="section item" ng-show="!isAtLeastOneItemPresent(items)">
+                <div class="item-text">
+                    <span class="ng-binding">Nothing found</span>
+                </div>
+            </div>
+            <div class="buttons-item" ng-show="!search.searchText">
                 <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
                 <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
@@ -173,11 +178,3 @@
 
 
 </script>
-
-
-            <div class="section item" ng-show="!isAtLeastOneItemPresent(items)">
-                <div class="item-text">
-                    <span class="ng-binding">Nothing found</span>
-                </div>
-            </div>
-            <div class="buttons-item" ng-show="!search.searchText">
