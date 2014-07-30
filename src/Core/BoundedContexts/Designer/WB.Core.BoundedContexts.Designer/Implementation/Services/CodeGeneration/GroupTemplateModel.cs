@@ -11,5 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string GeneratedStateName { set; get; }
         public string GeneratedIdName { set; get; }
         public string GeneratedConditionsMethodName { set; get; }
+
+        public string RosterScopeName { set; get; }
     }
 }

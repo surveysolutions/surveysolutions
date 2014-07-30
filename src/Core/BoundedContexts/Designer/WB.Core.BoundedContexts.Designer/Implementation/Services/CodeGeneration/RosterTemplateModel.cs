@@ -22,11 +22,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string GeneratedIdName { set; get; }
         public string GeneratedConditionsMethodName { set; get; }
 
+        public string GeneratedRosterScopeName { set; get; }
+
         public List<QuestionTemplateModel> Questions {  set; get; }
         public List<GroupTemplateModel> Groups { set; get; }
-
         public List<RosterTemplateModel> Rosters { set; get; }
 
+        public List<Guid> RosterScope { set; get; }
+        public List<Guid> GetRosterScope()
+        {
+            return this.RosterScope;
+        }
 
         public IRosterScope ParentScope { set; get; }
 

@@ -24,13 +24,13 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {
-            if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
             {
                 return;
             }
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
-            Guid[] rosterScopeIds = IdOf.rostersIdToScopeMap[rosterId];
+            Guid[] rosterScopeIds = IdOf.parentScopeMap[rosterId];
             var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
             string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
 
@@ -72,13 +72,13 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
-            if (!IdOf.rostersIdToScopeMap.ContainsKey(rosterId))
+            if (!IdOf.parentScopeMap.ContainsKey(rosterId))
             {
                 return;
             }
 
             decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
-            var rosterIdentityKey = Util.GetRosterKey(IdOf.rostersIdToScopeMap[rosterId], rosterVector);
+            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);
             
             var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
             
@@ -250,7 +250,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override Dictionary<Guid, Guid[]> GetParentsMap()
         {
-            return IdOf.parentsMap;
+            return IdOf.parentScopeMap;
         }
 
         public override IInterviewExpressionState Clone()
@@ -922,6 +922,7 @@ namespace WB.Core.SharedKernels.DataCollection
             public static readonly Guid groupId = Guid.Parse("039ed69e-5583-46af-b983-488568f20e1c");
             public static readonly Guid fixedId = Guid.Parse("a7b0d842-0355-4eab-a943-968c9c013d97");
 
+
             public static readonly Guid[] eduScopeIds = new[] { fixedId };
             public static readonly Guid[] hhMemberScopeIds = new[] { persons_count };
             public static readonly Guid[] foodConsumptionIds = new[] { persons_count, food };
@@ -954,11 +955,12 @@ namespace WB.Core.SharedKernels.DataCollection
                 { fixedId, new Guid[] { edu } },
             };
 
-            public static Dictionary<Guid, Guid[]> parentsMap = new Dictionary<Guid, Guid[]>
+            public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
         {
             { id, new []{questionnaire} },
             { persons_count, new []{questionnaire}},
             { edu_visit, new []{questionnaire} },
+
             { name, hhMemberScopeIds },
             { age, hhMemberScopeIds },
             { date, hhMemberScopeIds },
@@ -980,16 +982,17 @@ namespace WB.Core.SharedKernels.DataCollection
             { fixedId, eduScopeIds },
             { hhMember, hhMemberScopeIds },
             { foodConsumption, foodConsumptionIds },
+            { jobActivity, hhMemberScopeIds }
             
         };
 
-            public static Dictionary<Guid, Guid[]> rostersIdToScopeMap = new Dictionary<Guid, Guid[]>
+        /*    public static Dictionary<Guid, Guid[]> rostersIdToScopeMap = new Dictionary<Guid, Guid[]>
         {
             { fixedId, eduScopeIds },
             { hhMember, hhMemberScopeIds },
             { foodConsumption, foodConsumptionIds },
             { jobActivity, hhMemberScopeIds }
-        };
+        };*/
         }
     }
 }

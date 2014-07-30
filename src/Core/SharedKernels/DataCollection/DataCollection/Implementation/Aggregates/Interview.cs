@@ -35,10 +35,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasCompleted;
         private InterviewStatus status;
 
-        private readonly InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
+        private static IInterviewExpressionState GetNewInterviewExpressionState()
+        {
+            return new StronglyTypedInterviewEvaluator();
+        }
 
-        private IInterviewExpressionState expressionProcessorStatePrototype = new StronglyTypedInterviewEvaluator();
-        private ExpressionProcessor expressionSharpProcessor = new ExpressionProcessor();
+        private InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
+        private IInterviewExpressionState expressionProcessorStatePrototype = GetNewInterviewExpressionState();
+        private IExpressionProcessor expressionSharpProcessor = new ExpressionProcessor();
 
         private void Apply(InterviewCreated @event)
         {
@@ -66,7 +70,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void Apply(InterviewSynchronized @event)
         {
-            this.expressionProcessorStatePrototype = new StronglyTypedInterviewEvaluator();
+            this.interviewState = new InterviewStateDependentOnAnswers();
+            this.expressionProcessorStatePrototype = GetNewInterviewExpressionState();
 
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
