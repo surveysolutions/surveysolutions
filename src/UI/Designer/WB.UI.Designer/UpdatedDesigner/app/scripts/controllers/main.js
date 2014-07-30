@@ -24,14 +24,19 @@
                         $scope.verificationStatus.errors = result.errors;
                         $scope.verificationStatus.errorsCount = result.errors.length;
 
+                        var verificationModal = $('#verification-modal');
+
                         if ($scope.verificationStatus.errorsCount > 0) {
-                            $('#verification-modal').modal({
+                            verificationModal.modal({
                                 backdrop: false,
                                 show: true
                             });
                             $('#verification-modal .modal-dialog .arrow').css({
                                 left: $('#verification-btn').offset().left - 10
                             });
+                        } else {
+                            if (verificationModal.hasClass('in'))
+                                verificationModal.modal('toggle');
                         }
                     });
                 };
