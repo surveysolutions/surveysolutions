@@ -6696,8 +6696,10 @@ input#edit-group-title {
   padding-top: 8px;
   padding-bottom: 8px;
 }
-textarea.form-control {
+textarea.form-control,
+textarea#edit-group-description {
   height: 37px;
+  min-height: 37px;
 }
 .ui-match {
   background-color: #FFCC00;
