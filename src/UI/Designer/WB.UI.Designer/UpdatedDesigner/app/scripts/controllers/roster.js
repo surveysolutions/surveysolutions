@@ -94,12 +94,10 @@
 
                     modalInstance.result.then(function(confirmResult) {
                         if (confirmResult === 'ok') {
-                            commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function(result) {
-                                if (result.IsSuccess) {
-                                    var itemIdToDelete = $stateParams.itemId;
-                                    questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
-                                    $scope.resetSelection();
-                                }
+                            commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function() {
+                                var itemIdToDelete = $stateParams.itemId;
+                                questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                                $scope.resetSelection();
                             });
                         }
                     });

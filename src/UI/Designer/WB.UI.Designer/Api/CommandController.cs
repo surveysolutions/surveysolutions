@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
-using System.Web.Routing;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.GenericSubdomains.Logging;
@@ -33,7 +34,7 @@ namespace WB.UI.Designer.Api
             this.commandDeserializer = commandDeserializer;
         }
 
-        public JsonQuestionnaireResult Post(CommandExecutionModel model)
+        public HttpResponseMessage Post(CommandExecutionModel model)
         {
             try
             {
@@ -49,18 +50,16 @@ namespace WB.UI.Designer.Api
                     this.logger.Error(string.Format("Error on command of type ({0}) handling ", model.Type), e);
                     throw;
                 }
-                else
+
+                if (domainEx.ErrorType == DomainExceptionType.DoesNotHavePermissionsForEdit)
                 {
-                    return new JsonQuestionnaireResult
-                    {
-                        IsSuccess = false,
-                        HasPermissions = domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit,
-                        Error = domainEx.Message
-                    };
+                    return this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, domainEx.Message);
                 }
+                    
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, domainEx.Message);
             }
 
-            return new JsonQuestionnaireResult { IsSuccess = true };
+            return Request.CreateResponse(new JsonQuestionnaireResult());
         }
     }
 }

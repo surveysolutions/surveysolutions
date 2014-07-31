@@ -46,15 +46,13 @@
                 var targetIndex = _.indexOf($scope.questionnaire.chapters, chapter) + 1;
 
                 commandService.cloneGroup($state.params.questionnaireId, idToClone, targetIndex, newId).success(function (result) {
-                    if (result.IsSuccess) {
-                        var newChapter = {
-                            title: chapter.title,
-                            itemId: newId
-                        };
-                        $scope.questionnaire.chapters.splice(targetIndex, 0, newChapter);
-                        $rootScope.$emit('chapterCloned');
-                        $state.go('questionnaire.chapter.group', { chapterId: newId, itemId: newId });
-                    }
+                    var newChapter = {
+                        title: chapter.title,
+                        itemId: newId
+                    };
+                    $scope.questionnaire.chapters.splice(targetIndex, 0, newChapter);
+                    $rootScope.$emit('chapterCloned');
+                    $state.go('questionnaire.chapter.group', { chapterId: newId, itemId: newId });
                 });
             };
 
@@ -67,23 +65,21 @@
                     if (confirmResult === 'ok') {
                         commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
                             .success(function (result) {
-                                if (result.IsSuccess) {
-                                    var index = $scope.questionnaire.chapters.indexOf(chapter);
-                                    if (index > -1) {
-                                        $scope.questionnaire.chapters.splice(index, 1);
-                                        $rootScope.$emit('chapterDeleted');
-                                    }
-
-                                    questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (questionnaire) {
-                                        $scope.questionnaire = questionnaire;
-                                        if (questionnaire.chapters.length > 0) {
-                                            var defaultChapter = _.first(questionnaire.chapters);
-                                            var itemId = defaultChapter.itemId;
-                                            $scope.currentChapter = defaultChapter;
-                                            $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
-                                        }
-                                    });
+                                var index = $scope.questionnaire.chapters.indexOf(chapter);
+                                if (index > -1) {
+                                    $scope.questionnaire.chapters.splice(index, 1);
+                                    $rootScope.$emit('chapterDeleted');
                                 }
+
+                                questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (questionnaire) {
+                                    $scope.questionnaire = questionnaire;
+                                    if (questionnaire.chapters.length > 0) {
+                                        var defaultChapter = _.first(questionnaire.chapters);
+                                        var itemId = defaultChapter.itemId;
+                                        $scope.currentChapter = defaultChapter;
+                                        $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
+                                    }
+                                });
                             });
                     }
                 });

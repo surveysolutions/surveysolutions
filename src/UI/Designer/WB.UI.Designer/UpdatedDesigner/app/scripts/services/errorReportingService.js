@@ -4,14 +4,12 @@
             '$q', 'notificationService',
             function ($q, notificationService) {
                 return {
-                    response: function (response) {
-                        if (response.data.IsSuccess === false) {
-                            notificationService.notice(response.data.Error);
-                        }
-                        return response;
-                    },
                     responseError: function (rejection) {
-                        notificationService.error('Request failed unexpectedly.');
+                        if (rejection.status === 406 || rejection.status === 403) {
+                            notificationService.notice(rejection.data.Message);
+                        } else {
+                            notificationService.error('Request failed unexpectedly.');
+                        }
                         return $q.reject(rejection);
                     }
                 }

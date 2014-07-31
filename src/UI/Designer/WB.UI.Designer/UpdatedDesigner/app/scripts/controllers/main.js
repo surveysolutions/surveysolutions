@@ -73,11 +73,6 @@
                         if (event.dest.index !== event.source.index) {
                             var group = event.source.nodeScope.chapter;
                             questionnaireService.moveGroup(group.itemId, event.dest.index, null, $state.params.questionnaireId)
-                                .success(function (data) {
-                                    if (!data.IsSuccess) {
-                                        rollback(group, event.source.index);
-                                    }
-                                })
                                 .error(function () {
                                     rollback(group, event.source.index);
                                 });
@@ -122,12 +117,10 @@
                         itemType: 'Group',
                         getParentItem: function () { return parent; }
                     };
-                    commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function (result) {
-                        if (result.IsSuccess) {
-                            parent.items.push(emptyGroup);
-                            $rootScope.$emit('groupAdded');
-                            $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
-                        }
+                    commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function () {
+                        parent.items.push(emptyGroup);
+                        $rootScope.$emit('groupAdded');
+                        $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
                     });
                 };
 
@@ -142,12 +135,10 @@
                         getParentItem: function () { return parent; }
                     };
 
-                    commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId).success(function (result) {
-                        if (result.IsSuccess) {
-                            parent.items.push(emptyRoster);
-                            $rootScope.$emit('rosterAdded');
-                            $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
-                        }
+                    commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId).success(function () {
+                        parent.items.push(emptyRoster);
+                        $rootScope.$emit('rosterAdded');
+                        $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
                     });
                 };
                 
@@ -160,11 +151,9 @@
                         getParentItem: function () { return parent; }
                     };
 
-                    commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId).success(function (result) {
-                        if (result.IsSuccess) {
-                            parent.items.push(emptyStaticText);
-                            $state.go('questionnaire.chapter.staticText', { chapterId: $state.params.chapterId, itemId: newId });
-                        }
+                    commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId).success(function () {
+                        parent.items.push(emptyStaticText);
+                        $state.go('questionnaire.chapter.staticText', { chapterId: $state.params.chapterId, itemId: newId });
                     });
                 };
 
