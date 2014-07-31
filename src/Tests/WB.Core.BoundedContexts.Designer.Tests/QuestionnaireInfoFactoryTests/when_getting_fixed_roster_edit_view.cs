@@ -72,13 +72,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
             result.NotLinkedMultiOptionQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q2Id).Title);
 
         It should_return_grouped_list_of_integer_titles_with_one_pair = () =>
-            result.NumericIntegerTitles.Count.ShouldEqual(2);
+            result.NumericIntegerTitles.Count.ShouldEqual(3);
 
         It should_return_grouped_list_of_integer_titles_with_two_pairs_and_key_equals__textListGroupKey = () =>
             result.NumericIntegerTitles.ElementAt(0).Title.ShouldEqual(textListGroupKey);
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_ids_contains_only_q4Id = () =>
             result.NumericIntegerTitles.ElementAt(1).Id.ShouldContainOnly(q4Id.FormatGuid());
+
+        It should_return_integer_questions_in_group_with_index_2_with_ids_contains_only_q7Id = () =>
+          result.NumericIntegerTitles.ElementAt(2).Id.ShouldContainOnly(q7Id.FormatGuid());
 
         It should_return_grouped_list_of_integer_questions_with_two_pair = () =>
             result.NumericIntegerQuestions.Count.ShouldEqual(4);
@@ -99,17 +102,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
             result.NumericIntegerQuestions.ElementAt(3).Title.ShouldContainOnly(GetQuestion(q6Id).Title);
 
         It should_return_grouped_list_of_integer_questions_with_one_pair = () =>
-            result.TextListsQuestions.Count.ShouldEqual(2);
+            result.TextListsQuestions.Count.ShouldEqual(0);
 
-        It should_return_grouped_list_of_integer_questions_with_two_pairs_and_key_equals__group_1__group_12__ = () =>
-            result.TextListsQuestions.ElementAt(0).Title.ShouldEqual(textListGroupKey);
-
-        It should_return_integer_questions_in_group_with_key__textListGroupKey__with_ids_contains_only_q4Id = () =>
-            result.TextListsQuestions.ElementAt(1).Id.ShouldContainOnly(q4Id.FormatGuid());
-
-        It should_return_integer_questions_in_group_with_key__textListGroupKey__with_titles_contains_only_q4_title = () =>
-            result.TextListsQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q4Id).Title);
-        
         private static GroupAndRosterDetailsView GetGroup(Guid groupId)
         {
             return questionnaireView.Groups.Single(x => x.Id == groupId);

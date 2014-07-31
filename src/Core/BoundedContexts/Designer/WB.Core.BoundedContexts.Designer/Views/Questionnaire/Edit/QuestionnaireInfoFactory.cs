@@ -139,6 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             RosterType rosterType = this.getRosterType(questionnaire: questionnaire,
                 rosterSizeSourceType: roster.RosterSizeSourceType, rosterSizeQuestionId: roster.RosterSizeQuestionId);
 
+            var parentRosterScopeIds = roster.RosterScopeIds.Take(roster.RosterScopeIds.Length - 1).ToArray();
             var result = new NewEditRosterView
             {
                 ItemId = roster.Id.FormatGuid(),
@@ -155,10 +156,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 RosterFixedTitles = roster.RosterFixedTitles,
                 RosterTypeOptions = RosterTypeOptions,
 
-                NotLinkedMultiOptionQuestions = this.GetNotLinkedMultiOptionQuestionBriefs(questionnaire),
-                NumericIntegerQuestions = this.GetNumericIntegerQuestionBriefs(questionnaire),
+                NotLinkedMultiOptionQuestions = this.GetNotLinkedMultiOptionQuestionBriefs(questionnaire, parentRosterScopeIds),
+                NumericIntegerQuestions = this.GetNumericIntegerQuestionBriefs(questionnaire, parentRosterScopeIds),
                 NumericIntegerTitles = this.GetNumericIntegerTitles(questionnaire, roster),
-                TextListsQuestions = this.GetTextListsQuestionBriefs(questionnaire),
+                TextListsQuestions = this.GetTextListsQuestionBriefs(questionnaire, parentRosterScopeIds),
                 Breadcrumbs = this.GetBreadcrumbs(questionnaire, roster)
             };
 
@@ -305,27 +306,40 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }
 
-        private List<DropdownQuestionView> GetNumericIntegerQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private List<DropdownQuestionView> GetNumericIntegerQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid[] rosterScopeIds)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                q => q.OfType<NumericDetailsView>().Where(x => x.IsInteger).Cast<QuestionDetailsView>().ToList();
+                questions => questions
+                    .OfType<NumericDetailsView>()
+                    .Where(x => x.IsInteger)
+                    .Where(x => x.RosterScopeIds.Length <= rosterScopeIds.Length)
+                    .Where(x => x.RosterScopeIds.All(rosterScopeIds.Contains))
+                    .Cast<QuestionDetailsView>().ToList();
 
             return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }
 
-        private List<DropdownQuestionView> GetNotLinkedMultiOptionQuestionBriefs(
-            QuestionsAndGroupsCollectionView questionsCollection)
+        private List<DropdownQuestionView> GetNotLinkedMultiOptionQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid[] rosterScopeIds)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                q => q.OfType<MultiOptionDetailsView>().Where(x => x.LinkedToQuestionId == null).Cast<QuestionDetailsView>().ToList();
+                questions => questions
+                    .OfType<MultiOptionDetailsView>()
+                    .Where(x => x.LinkedToQuestionId == null)
+                    .Where(x => x.RosterScopeIds.Length <= rosterScopeIds.Length)
+                    .Where(x => x.RosterScopeIds.All(rosterScopeIds.Contains))
+                    .Cast<QuestionDetailsView>().ToList();
 
             return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }
 
-        private List<DropdownQuestionView> GetTextListsQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private List<DropdownQuestionView> GetTextListsQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid[] rosterScopeIds)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                q => q.OfType<TextListDetailsView>().Cast<QuestionDetailsView>().ToList();
+                questions => questions
+                    .OfType<TextListDetailsView>()
+                    .Where(x => x.RosterScopeIds.Length <= rosterScopeIds.Length)
+                    .Where(x => x.RosterScopeIds.All(rosterScopeIds.Contains))
+                    .Cast<QuestionDetailsView>().ToList();
 
             return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }

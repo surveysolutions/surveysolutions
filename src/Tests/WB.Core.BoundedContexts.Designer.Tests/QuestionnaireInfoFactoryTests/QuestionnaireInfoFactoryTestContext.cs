@@ -115,6 +115,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                     },
                     new NumericDetailsView
                     {
+                        Id = q7Id,
+                        Title = "numeric title",
+                        ParentGroupId = g3Id,
+                        ParentGroupsIds = new Guid[] { g3Id, g2Id, g1Id },
+                        RosterScopeIds = new Guid[] { g3Id, q2Id }
+                    },
+                    new NumericDetailsView
+                    {
                         Id = q5Id,
                         Title = "numeric title",
                         IsInteger = false,
@@ -166,7 +174,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         protected static Guid q4Id = Guid.Parse("99999999999999999999999999999999");
         protected static Guid q5Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         protected static Guid q6Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-
+        protected static Guid q7Id = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        
         protected static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         protected static Guid st2Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
     }

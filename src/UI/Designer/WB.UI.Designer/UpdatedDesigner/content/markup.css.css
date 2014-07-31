@@ -6603,7 +6603,7 @@ input#edit-group-title {
 .question-editor .checkbox-in-column {
   margin-top: 5px;
 }
-.question-editor .checkbox-in-column .stick-to-top {
+.question-editor .checkbox-in-column.stick-to-top {
   margin-top: -3px;
 }
 .question-editor .checkbox-in-column input.wb-checkbox + label {
