@@ -4,6 +4,7 @@
     angular.module('designerApp', [
         'ngCookies',
         'ngSanitize',
+        'ngResource',
         'ngAnimate',
         'ui.bootstrap',
         'ui.bootstrap.tpls',
