@@ -148,10 +148,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 VariableName = roster.VariableName,
 
                 Type = rosterType,
-                RosterSizeListQuestionId = rosterType == RosterType.List ? roster.RosterSizeQuestionId : null,
-                RosterSizeNumericQuestionId = rosterType == RosterType.Numeric ? roster.RosterSizeQuestionId : null,
-                RosterSizeMultiQuestionId = rosterType == RosterType.Multi ? roster.RosterSizeQuestionId : null,
-                RosterTitleQuestionId = roster.RosterTitleQuestionId,
+                RosterSizeListQuestionId = rosterType == RosterType.List ? roster.RosterSizeQuestionId.FormatGuid() : null,
+                RosterSizeNumericQuestionId = rosterType == RosterType.Numeric ? roster.RosterSizeQuestionId.FormatGuid() : null,
+                RosterSizeMultiQuestionId = rosterType == RosterType.Multi ? roster.RosterSizeQuestionId.FormatGuid() : null,
+                RosterTitleQuestionId = roster.RosterTitleQuestionId.FormatGuid(),
                 RosterFixedTitles = roster.RosterFixedTitles,
                 RosterTypeOptions = RosterTypeOptions,
 
