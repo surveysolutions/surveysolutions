@@ -32,7 +32,7 @@
     "jquery-cookie": "~1.4.1",
     "angular-block-ui": "~0.0.8",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.0",
-    "angular-unsavedChanges": "~0.1.1",
+    "angular-unsavedChanges": "0.2.3-alpha.1",
     "angular-xeditable": "~0.1.8",
     "console-shim": "*",
     "angular-elastic": "~2.3.5",
