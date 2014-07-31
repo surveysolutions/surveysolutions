@@ -4,68 +4,70 @@
 @{
     ViewBag.Title = "MapReport";
 }
+<div id="menu" class="col-sm-3 col-md-2 sidebar">
+    <div id="report-builder">
+        <div class="central-pane">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="form-group">
+                        <label for="questionnaire">Questionnaire</label>
+                        <div class="controls">
+                            <select class="form-control" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="version">Version</label>
+                        <div class="controls">
+                            <select class="form-control" id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : questionnaireVersions"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="version">Variables</label>
+                        <div class="controls">
+                            <select class="form-control" id="version" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : questionnaireVariables"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="controls">
+                            <button class="btn-block btn" data-bind="click: showPointsOnMap, enable : selectedVariable">Add markers on map</button>
 
-<div id="report-builder">
-    <div class="central-pane">
-        <div class="row-fluid">
-            <div class="span12">
-                <div class="form-group">
-                    <label  for="questionnaire">Questionnaire</label>
-                    <div class="controls">
-                        <select class="form-control" id="questionnaire" data-bind="options: questionnaires, value: selectedQuestionnaire, optionsText : 'Title', optionsCaption : 'Select questionnaire'"></select>
+                        </div>
+                    </div>
+                    <div class="currently-on-map" data-bind="visible: markersSetsInfo().length > 0">
+                        <h4>Currently on map</h4>
+                        <ul class="unstyled" data-bind="foreach: markersSetsInfo">
+                            <li>
+                                <button class="close" data-bind="click: $root.removeMarkersSet">&times;</button>
+                                <span data-bind="text: title"></span>
+                                (ver.&nbsp;<span data-bind="text: version"></span>, var. <span data-bind="text: variable"></span>)
+                                <span class="label"><span class="label" data-bind="text: count"></span>&nbsp;<span data-bind="visible: count == 1">point</span><span data-bind="visible: count > 1 || count == 0">points</span></span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label  for="version">Version</label>
-                    <div class="controls">
-                        <select class="form-control" id="version" data-bind="options: questionnaireVersions, value: selectedVersion, optionsCaption : 'Select version', enable : questionnaireVersions"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label  for="version">Variables</label>
-                    <div class="controls">
-                        <select class="form-control" id="version" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : questionnaireVariables"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="controls">
-                        <button class="btn-block btn" data-bind="click: showPointsOnMap, enable : selectedVariable">Add markers on map</button>
-
-                    </div>
-                </div>
-                <div class="currently-on-map" data-bind="visible: markersSetsInfo().length > 0">
-                    <h4>Currently on map</h4>
-                    <ul class="unstyled" data-bind="foreach: markersSetsInfo">
-                        <li>
-                            <button class="close" data-bind="click: $root.removeMarkersSet">&times;</button>
-                            <span data-bind="text: title"></span>
-                            (ver.&nbsp;<span data-bind="text: version"></span>, var. <span data-bind="text: variable"></span>)
-                            <span class="label"><span class="label" data-bind="text: count"></span>&nbsp;<span data-bind="visible: count == 1">point</span><span data-bind="visible: count > 1 || count == 0">points</span></span>
-                        </li>
-                    </ul>
+            </div>
+        </div>
+        <div class="bottom-pane">
+            <div class="row-fluid">
+                <div class="span12">
+                    <button class="btn-block btn btn-danger" data-bind="click: clearAllMarkers">Clear all markers</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="bottom-pane">
-        <div class="row-fluid">
-            <div class="span12">
-                <button class="btn-block btn btn-danger" data-bind="click: clearAllMarkers">Clear all markers</button>
-            </div>
+    <script type="text/html" id="interview-tooltip-template">
+        <div>
+            <div class="row-fluid"><strong>Interviewer:</strong>&nbsp;<span data-bind="text: InterviewerName">[interviewer name]</span></div>
+            <div class="row-fluid"><strong>Supervisor:</strong>&nbsp;<span data-bind="text: SupervisorName">[supervisor name]</span> </div>
+            <div class="row-fluid"><strong>Status:</strong>&nbsp;<span data-bind="text: LastStatus">[status]</span> </div>
+            <div class="row-fluid"><strong>Completion date:</strong>&nbsp;<span data-bind="text: LastCompletedDate">[last completed date]</span></div>
+            <div class="row-fluid" style="white-space:nowrap;"><strong>View interview content:</strong>&nbsp;<a target="_blank" data-bind="attr: { href: $interviewDetailsUrl + '/' + InterviewId }">details</a></div>
         </div>
-    </div>
+    </script>
 </div>
-<script type="text/html" id="interview-tooltip-template">
-    <div>
-        <div class="row-fluid"><strong>Interviewer:</strong>&nbsp;<span data-bind="text: InterviewerName">[interviewer name]</span></div>
-        <div class="row-fluid"><strong>Supervisor:</strong>&nbsp;<span data-bind="text: SupervisorName">[supervisor name]</span> </div>
-        <div class="row-fluid"><strong>Status:</strong>&nbsp;<span data-bind="text: LastStatus">[status]</span> </div>
-        <div class="row-fluid"><strong>Completion date:</strong>&nbsp;<span data-bind="text: LastCompletedDate">[last completed date]</span></div>
-        <div class="row-fluid" style="white-space:nowrap;"><strong>View interview content:</strong>&nbsp;<a target="_blank" data-bind="attr: { href: $interviewDetailsUrl + '/' + InterviewId }">details</a></div>
-    </div>
-</script>
-<div id="map-canvas" class="google-maps" />
-
+<div id="content">
+    <div id="map-canvas" class="google-maps" />
+</div>
 @section scripts
 {
 
@@ -87,6 +89,10 @@
             ko.applyBindings(model);
             model.initializeMap();
             model.load();
+
+            var windowHeight = $(window).height();
+            var navigationHeight = $('.navbar.navbar-fixed-top').height();
+            $('#map-canvas').css('min-height', (windowHeight - navigationHeight) + 'px');
         });
     </script>
 }

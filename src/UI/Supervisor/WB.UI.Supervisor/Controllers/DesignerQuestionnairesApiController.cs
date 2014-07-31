@@ -107,7 +107,7 @@ namespace WB.UI.Supervisor.Controllers
 
                 document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
-                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document));
+                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document, false));
 
                 return new QuestionnaireVerificationResponse(true);
             }

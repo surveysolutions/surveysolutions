@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
             questionnaireEntityFactoryMock
                 .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>()))
-                .Returns((Guid entityId, string text) => new StaticText(entityId: entityId, text: text));
+                .Returns((Guid entityId, string text) => new StaticText(publicKey: entityId, text: text));
 
             evnt = CreateStaticTextAddedEvent(entityId:staticTextId, parentId: g4Id, text: staticText);
 

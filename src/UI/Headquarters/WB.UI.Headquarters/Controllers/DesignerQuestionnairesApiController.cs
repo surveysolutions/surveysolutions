@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
-                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document));
+                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document, request.AllowCensusMode));
 
                 return new QuestionnaireVerificationResponse(true);
             }
@@ -135,6 +135,7 @@ namespace WB.UI.Headquarters.Controllers
         public class ImportQuestionnaireRequest
         {
             public Guid QuestionnaireId { get; set; }
+            public bool AllowCensusMode { get; set; }
         }
     }
 }

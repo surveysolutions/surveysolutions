@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             get { return string.Empty; }
         }
 
-        public string ValueToString(string value, ref int oldCurstorPosition)
+        public string FormatValue(string value, ref int oldCursorPosition)
         {
             return value ?? "";
         }
@@ -15,11 +15,6 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
         public bool IsTextMaskMatched(string text)
         {
             return true;
-        }
-
-        public string GetCleanText(string text)
-        {
-            return text.Trim();
         }
     }
 }

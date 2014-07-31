@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -103,12 +101,22 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                     {
                         Id = q3Id,
                         ParentGroupId = g2Id,
+                        Title = "text title",
                         ParentGroupsIds = new Guid[] { g2Id, g1Id },
                         RosterScopeIds = new Guid[] { q2Id }
                     },
                     new TextListDetailsView
                     {
                         Id = q4Id,
+                        Title = "text list title",
+                        ParentGroupId = g3Id,
+                        ParentGroupsIds = new Guid[] { g3Id, g2Id, g1Id },
+                        RosterScopeIds = new Guid[] { g3Id, q2Id }
+                    },
+                    new NumericDetailsView
+                    {
+                        Id = q7Id,
+                        Title = "numeric title",
                         ParentGroupId = g3Id,
                         ParentGroupsIds = new Guid[] { g3Id, g2Id, g1Id },
                         RosterScopeIds = new Guid[] { g3Id, q2Id }
@@ -116,6 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                     new NumericDetailsView
                     {
                         Id = q5Id,
+                        Title = "numeric title",
                         IsInteger = false,
                         ParentGroupId = g4Id,
                         ParentGroupsIds = new Guid[] { g4Id, g2Id, g1Id },
@@ -165,7 +174,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         protected static Guid q4Id = Guid.Parse("99999999999999999999999999999999");
         protected static Guid q5Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         protected static Guid q6Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-
+        protected static Guid q7Id = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        
         protected static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         protected static Guid st2Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
     }

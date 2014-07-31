@@ -414,15 +414,13 @@
                             <th>by</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- ko foreach: HistoryItems -->
+                    <tbody data-bind="foreach: HistoryItems">
                         <tr>
                             <td data-bind="text: State" />
                             <td data-bind="text: Comment" />
                             <td data-bind="text: Date" />
                             <td data-bind="text: Responsible" />
                         </tr>
-                        <!-- /ko -->
                     </tbody>
                 </table>
             </div>
