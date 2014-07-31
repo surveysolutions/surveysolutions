@@ -439,7 +439,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                         Title = chapter1Title,
                         Children = new List<IComposite>()
                         {
-                            new StaticText(entityId: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
+                            new StaticText(publicKey: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
                             new Group()
                             {
                                 PublicKey = GetQuestionnaireItemId(chapter1GroupId),
