@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer.App_Start
+﻿using WB.UI.Designer.Filters;
+
+namespace WB.UI.Designer.App_Start
 {
     using System.Web.Mvc;
 
@@ -8,6 +10,8 @@
         {
             //errors are handled in global.asax Application_Error
             //filters.Add(new HandleErrorAttribute());
+
+            filters.Add(new MaintenanceFilter());
         }
     }
 }

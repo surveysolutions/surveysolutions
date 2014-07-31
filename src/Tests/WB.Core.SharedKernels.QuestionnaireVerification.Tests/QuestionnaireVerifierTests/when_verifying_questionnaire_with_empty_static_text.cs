@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 Children = new List<IComposite>()
                 {
-                    new StaticText(entityId: staticTextId, text: string.Empty),
+                    new StaticText(publicKey: staticTextId, text: string.Empty),
                     new TextQuestion() {StataExportCaption = "var"}
                 }
             });

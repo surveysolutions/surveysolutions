@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -35,25 +36,25 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
             result.Title.ShouldEqual(GetQuestion(questionId).Title);
 
         It should_return_grouped_list_of_multi_questions_with_one_pair = () =>
-            result.SourceOfLinkedQuestions.Count.ShouldEqual(2);
+            result.SourceOfLinkedQuestions.Count.ShouldEqual(6);
 
         It should_replace_guids_in_condition_expressions_for_var_names = () =>
             result.EnablementCondition.ShouldEqual("[q1] > 25");
 
         It should_return_grouped_list_of_multi_questions_with_one_pair_and_key_equals_ = () =>
-            result.SourceOfLinkedQuestions.Keys.ShouldContainOnly(linkedQuestionsKey1, linkedQuestionsKey2);
+            result.SourceOfLinkedQuestions.Select(x => x.Title).ShouldContain(linkedQuestionsKey1, linkedQuestionsKey2);
 
         It should_return_integer_questions_in_group_with_key__linkedQuestionsKey1__with_ids_contains_only_q3Id = () =>
-            result.SourceOfLinkedQuestions[linkedQuestionsKey1].Select(x => x.Id).ShouldContainOnly(q3Id);
+            result.SourceOfLinkedQuestions.Select(x => x.Id).ShouldContain(q3Id.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__linkedQuestionsKey1__with_titles_contains_only_q3_title = () =>
-            result.SourceOfLinkedQuestions[linkedQuestionsKey1].Select(x => x.Title).ShouldContainOnly(GetQuestion(q3Id).Title);
+            result.SourceOfLinkedQuestions.Select(x => x.Title).ShouldContain(GetQuestion(q3Id).Title);
 
         It should_return_integer_questions_in_group_with_key__linkedQuestionsKey2__with_ids_contains_only_q5Id = () =>
-            result.SourceOfLinkedQuestions[linkedQuestionsKey2].Select(x => x.Id).ShouldContainOnly(q5Id);
+            result.SourceOfLinkedQuestions.Select(x => x.Id).ShouldContain(q5Id.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__linkedQuestionsKey2__with_titles_contains_only_q5_title = () =>
-            result.SourceOfLinkedQuestions[linkedQuestionsKey2].Select(x => x.Title).ShouldContainOnly(GetQuestion(q5Id).Title);
+            result.SourceOfLinkedQuestions.Select(x => x.Title).ShouldContain(GetQuestion(q5Id).Title);
 
         private static QuestionDetailsView GetQuestion(Guid questionId)
         {

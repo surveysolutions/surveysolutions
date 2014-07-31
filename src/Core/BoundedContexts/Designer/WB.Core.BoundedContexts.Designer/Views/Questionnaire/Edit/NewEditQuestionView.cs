@@ -8,6 +8,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     public class NewEditQuestionView
     {
         //public QuestionDetailsView Question { get; set; }
+        public NewEditQuestionView()
+        {
+            this.SourceOfLinkedQuestions = new List<DropdownQuestionView>();
+        }
+
         public Guid Id { get; set; }
         public Guid[] ParentGroupsIds { get; set; }
         public Guid[] RosterScopeIds { get; set; }
@@ -23,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string ValidationExpression { get; set; }
         public string ValidationMessage { get; set; }
         public QuestionType Type { get; set; }
-        public Guid? LinkedToQuestionId { get; set; }
+        public string LinkedToQuestionId { get; set; }
         public CategoricalOption[] Options { get; set; }
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
@@ -33,9 +38,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? CountOfDecimalPlaces { get; set; }
         public int? MaxAnswerCount { get; set; }
 
-        public Dictionary<string, QuestionBrief[]> SourceOfLinkedQuestions { get; set; }
+        public List<DropdownQuestionView> SourceOfLinkedQuestions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
-        public QuestionnaireInfoFactory.SelectOption[] QuestionScopeOptions { get; set; }
+        public QuestionnaireInfoFactory.SelectOption[] AllQuestionScopeOptions { get; set; }
+        public QuestionnaireInfoFactory.SelectOption[] NotPrefilledQuestionScopeOptions { get; set; }
         public Breadcrumb[] Breadcrumbs { get; set; }
     }
 }

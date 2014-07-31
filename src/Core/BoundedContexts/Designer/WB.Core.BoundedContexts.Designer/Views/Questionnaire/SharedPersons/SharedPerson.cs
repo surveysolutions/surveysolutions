@@ -6,5 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
+        public bool IsOwner { get; set; }
     }
 }

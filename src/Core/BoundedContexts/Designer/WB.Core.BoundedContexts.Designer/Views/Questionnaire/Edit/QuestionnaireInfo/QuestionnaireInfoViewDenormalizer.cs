@@ -68,6 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QuestionnaireUpdated> evnt)
         {
             currentState.Title = evnt.Payload.Title;
+            currentState.IsPublic = evnt.Payload.IsPublic;
 
             return currentState;
         }
