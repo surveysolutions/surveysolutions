@@ -60,18 +60,6 @@
                 $scope.search.searchText = '';
             };
 
-            $scope.isAtLeastOneItemPresent = function(items) {
-                if (!$scope.search.searchText)
-                    return true;
-
-                for (var index = 0; index < items.length; index++) {
-                    if ($scope.searchItem(items[index])) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
             $scope.searchItem = function(item) {
                 if (!$scope.search.searchText) return true;
                 var variableMatches = item.variable && item.variable.toLowerCase().indexOf($scope.search.searchText.toLowerCase()) != -1;
