@@ -35,6 +35,7 @@
     "angular-unsavedChanges": "~0.1.1",
     "angular-xeditable": "~0.1.8",
     "console-shim": "*",
-    "angular-elastic": "~2.3.5"
+    "angular-elastic": "~2.3.5",
+    "angular": "~1.2.21"
   }
 }
