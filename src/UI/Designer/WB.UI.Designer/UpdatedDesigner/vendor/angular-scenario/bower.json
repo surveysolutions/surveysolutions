@@ -1,8 +1,0 @@
-{
-  "name": "angular-scenario",
-  "version": "1.3.0-build.2693+sha.e9bc51c",
-  "main": "./angular-scenario.js",
-  "dependencies": {
-    "angular": "1.3.0-build.2693+sha.e9bc51c"
-  }
-}

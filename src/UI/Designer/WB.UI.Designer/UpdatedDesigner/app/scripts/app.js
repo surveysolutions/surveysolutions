@@ -3,7 +3,6 @@
 
     angular.module('designerApp', [
         'ngCookies',
-        'ngResource',
         'ngSanitize',
         'ngAnimate',
         'ui.bootstrap',
