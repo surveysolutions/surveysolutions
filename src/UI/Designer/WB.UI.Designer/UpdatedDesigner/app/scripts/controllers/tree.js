@@ -279,6 +279,7 @@
 
                     var cloneDeep = {
                         itemId: newId,
+                            itemType: "StaticText",
                         text: clonnedItem.text
                     };
 
@@ -288,7 +289,7 @@
                     $rootScope.$emit('staticTextCloned');
                 });
             };
-
+         
             $scope.cloneQuestion = function(questionId) {
                 var itemIdToClone = questionId || $state.params.itemId;
                 var newId = utilityService.guid();
@@ -300,6 +301,7 @@
                         itemId: newId,
                         variable: '',
                         title: 'Copy of - ' + clonnedItem.title,
+                            itemType: "Question",
                         type: clonnedItem.type
                     };
 
