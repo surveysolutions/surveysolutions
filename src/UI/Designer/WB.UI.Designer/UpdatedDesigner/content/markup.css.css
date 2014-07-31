@@ -1,4 +1,4 @@
-﻿/**
+/**
  * WorldBank Designer
  * file: markup.css.less
  * description: LESS main import script
@@ -6294,6 +6294,12 @@ textarea {
   font-size: 12px;
   color: #9ca4aa;
 }
+.dropdown-menu > li > a:hover {
+  color: #2a81cb;
+  text-decoration: none;
+  outline: 0;
+  background-color: #ffffff;
+}
 /*
   string @color: 'blue' or 'gray'
 */
@@ -7856,4 +7862,3 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog a.owner {
   color: #2fc507;
 }
-/*# sourceMappingURL=markup.css.css.map */
