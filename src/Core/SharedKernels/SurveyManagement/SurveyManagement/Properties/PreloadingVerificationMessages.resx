@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PL0001_NoQuestionnaire" xml:space="preserve">
-    <value>Questionnaire template is missing.</value>
+    <value>[PL0001] Questionnaire template is missing.</value>
   </data>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
     <value>[PL0002] N/A</value>
@@ -136,7 +136,7 @@
     <value>Duplicate Id values found.</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
-    <value>Service column is absent.</value>
+    <value>One ore more parent Id columns are missing.</value>
   </data>
   <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
     <value>Roster record does not have a parent.</value>
@@ -157,30 +157,32 @@
     <value>Provided value is null or empty</value>
   </data>
   <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>Parsed value not allowed for this question</value>
+    <value>Categorical question value not allowed.</value>
   </data>
   <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>Type of question is not correct</value>
+    <value>[PL0015] Type of question is not correct.</value>
   </data>
   <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
-    <value>Expected Date or Time value was not recognized</value>
+    <value>Invalid Date or Time value.</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
-    <value>Expected GPS value was not recognized</value>
+    <value>Invalid GPS value.</value>
   </data>
   <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
-    <value>Expected Integer value was not recognized</value>
+    <value>Only integer values are allowed.</value>
   </data>
   <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
-    <value>Expected Decimal value was not recognized</value>
+    <value>Categorical question cannot have non-numeric values.</value>
+    <comment>Non-numeric value found for categorical question</comment>
   </data>
   <data name="PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue" xml:space="preserve">
-    <value>Answer is incorrect because is greater than max value</value>
+    <value>Value cannot be greater than the max value.</value>
+    <comment>Integer numeric questions with specified max value option</comment>
   </data>
   <data name="PL0021_MultyOptionQuestionHasDuplicateAnswers" xml:space="preserve">
-    <value>Categorical multiple answers question has duplicate answer values</value>
+    <value>Categorical multiple answers question has duplicate values.</value>
   </data>
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
-    <value>Question has negative value and is used as roster size question</value>
+    <value>Roster size question cannot have negative values.</value>
   </data>
 </root>

@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire template is missing..
+        ///   Looks up a localized string similar to [PL0001] Questionnaire template is missing..
         /// </summary>
         internal static string PL0001_NoQuestionnaire {
             get {
@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service column is absent..
+        ///   Looks up a localized string similar to One ore more parent Id columns are missing..
         /// </summary>
         internal static string PL0007_ServiceColumnIsAbsent {
             get {
@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parsed value not allowed for this question.
+        ///   Looks up a localized string similar to Categorical question value not allowed..
         /// </summary>
         internal static string PL0014_ParsedValueIsNotAllowed {
             get {
@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type of question is not correct.
+        ///   Looks up a localized string similar to [PL0015] Type of question is not correct..
         /// </summary>
         internal static string PL0015_QuestionTypeIsIncorrect {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expected Date or Time value was not recognized.
+        ///   Looks up a localized string similar to Invalid Date or Time value..
         /// </summary>
         internal static string PL0016_ExpectedDateTimeNotParsed {
             get {
@@ -205,7 +205,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expected GPS value was not recognized.
+        ///   Looks up a localized string similar to Invalid GPS value..
         /// </summary>
         internal static string PL0017_ExpectedGpsNotParsed {
             get {
@@ -214,7 +214,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expected Integer value was not recognized.
+        ///   Looks up a localized string similar to Only integer values are allowed..
         /// </summary>
         internal static string PL0018_ExpectedIntNotParsed {
             get {
@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expected Decimal value was not recognized.
+        ///   Looks up a localized string similar to Categorical question cannot have non-numeric values..
         /// </summary>
         internal static string PL0019_ExpectedDecimalNotParsed {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer is incorrect because is greater than max value.
+        ///   Looks up a localized string similar to Value cannot be greater than the max value..
         /// </summary>
         internal static string PL0020_AnswerIsIncorrectBecauseIsGreaterThanMaxValue {
             get {
@@ -241,7 +241,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical multiple answers question has duplicate answer values.
+        ///   Looks up a localized string similar to Categorical multiple answers question has duplicate values..
         /// </summary>
         internal static string PL0021_MultyOptionQuestionHasDuplicateAnswers {
             get {
@@ -250,7 +250,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has negative value and is used as roster size question.
+        ///   Looks up a localized string similar to Roster size question cannot have negative values..
         /// </summary>
         internal static string PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative {
             get {
