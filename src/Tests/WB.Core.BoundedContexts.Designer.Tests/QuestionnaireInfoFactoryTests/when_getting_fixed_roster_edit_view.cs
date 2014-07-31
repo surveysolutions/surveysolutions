@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
             result.Type.ShouldEqual(RosterType.Fixed);
 
         It should_return_roster_with_RosterTitleQuestionId_equals_g3_RosterTitleQuestionId = () =>
-            result.RosterTitleQuestionId.ShouldEqual(GetGroup(rosterId).RosterTitleQuestionId);
+            result.RosterTitleQuestionId.ShouldEqual(GetGroup(rosterId).RosterTitleQuestionId.FormatGuid());
 
         It should_return_grouped_list_of_multi_questions_with_one_pair = () =>
             result.NotLinkedMultiOptionQuestions.Count.ShouldEqual(2);
