@@ -24,11 +24,11 @@
     <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
 
         <div ui-tree-nodes ng-model="items">
-            <div ng-repeat="item in items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
+            <div ng-repeat="item in items | filter:searchItem as results" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
             </div>
-            <div class="section item" ng-show="!isAtLeastOneItemPresent(items)">
+            <div class="section item" ng-if="filtersBoxMode == 'search' && results.length === 0">
                 <div class="item-text">
-                    <span class="ng-binding">Nothing found</span>
+                    <span>Nothing found</span>
                 </div>
             </div>
             <div class="buttons-item" ng-show="!search.searchText">
