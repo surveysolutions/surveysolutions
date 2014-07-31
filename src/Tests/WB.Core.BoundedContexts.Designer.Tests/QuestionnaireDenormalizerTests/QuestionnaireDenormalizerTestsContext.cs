@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         protected static StaticText CreateStaticText(Guid entityId, string text)
         {
-            return new StaticText(entityId: entityId, text: text);
+            return new StaticText(publicKey: entityId, text: text);
         }
 
         protected static IPublishedEvent<GroupDeleted> CreateGroupDeletedEvent(Guid groupId)

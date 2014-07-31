@@ -6,9 +6,9 @@ namespace Main.Core.Entities.SubEntities
 {
     public class StaticText : IStaticText
     {
-        public StaticText(Guid entityId, string text)
+        public StaticText(Guid publicKey, string text)
         {
-            this.PublicKey = entityId;
+            this.PublicKey = publicKey;
             this.Text = text;
         }
 
