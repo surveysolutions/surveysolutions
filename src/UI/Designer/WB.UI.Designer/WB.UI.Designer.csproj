@@ -698,6 +698,8 @@
     <Content Include="UpdatedDesigner\vendor\angular-mocks\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\app\demo.html" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\src\pnotify.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\angular-sanitize.js" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\angular-sanitize.min.js" />
@@ -1271,6 +1273,10 @@
     <Content Include="UpdatedDesigner\vendor\angular-elastic\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-elastic\README.md" />
     <Content Include="UpdatedDesigner\data\editStaticText\0000f14f18294f2aa324f02d84b6bed9.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.min.js.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
