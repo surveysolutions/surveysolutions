@@ -13,10 +13,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public RosterType Type { get; set; }
 
-        public Guid? RosterSizeListQuestionId { get; set; }
-        public Guid? RosterSizeNumericQuestionId { get; set; }
-        public Guid? RosterSizeMultiQuestionId { get; set; }
-        public Guid? RosterTitleQuestionId { get; set; }
+        public string RosterSizeListQuestionId { get; set; }
+        public string RosterSizeNumericQuestionId { get; set; }
+        public string RosterSizeMultiQuestionId { get; set; }
+        public string RosterTitleQuestionId { get; set; }
         public string[] RosterFixedTitles { get; set; }
 
         public QuestionnaireInfoFactory.SelectOption[] RosterTypeOptions { get; set; }
