@@ -475,6 +475,9 @@
       <DependentUpon>markup.css.css</DependentUpon>
     </Content>
     <Content Include="UpdatedDesigner\content\vendor.css.css" />
+    <Content Include="UpdatedDesigner\content\vendor.css.min.css">
+      <DependentUpon>vendor.css.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\data\editGroup\manualListRoster.json" />
     <Content Include="UpdatedDesigner\content\designer-editor\animations.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\animations.css.map">
@@ -490,6 +493,9 @@
     <Content Include="UpdatedDesigner\data\editQuestion\0be767d337cc4b6ba9a49be314f98eb9.json" />
     <Content Include="UpdatedDesigner\data\editGroup\dd45293c816e982d482334b1222ec41f.json" />
     <Content Include="UpdatedDesigner\data\editGroup\ddfaab0f37394a679f088add19325cfe.json" />
+    <Content Include="UpdatedDesigner\content\vendor.css.css.map">
+      <DependentUpon>vendor.css.css</DependentUpon>
+    </Content>
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\app\index.html" />
