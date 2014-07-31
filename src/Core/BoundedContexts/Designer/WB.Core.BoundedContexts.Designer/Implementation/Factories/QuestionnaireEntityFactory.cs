@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
     {
         public IStaticText CreateStaticText(Guid entityId, string text)
         {
-            return new StaticText(entityId: entityId, text: text);
+            return new StaticText(publicKey: entityId, text: text);
         }
 
         public IQuestion CreateQuestion(QuestionData data)
