@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             string chapter1StaticTextId = null, string chapter1StaticText = null,
             bool? isPublic = null)
         {
-            return ToPublishedEvent(new QuestionnaireCloned()
+            var result = ToPublishedEvent(new QuestionnaireCloned()
             {
                 QuestionnaireDocument =
                     CreateQuestionnaireDocument(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle,
@@ -86,6 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                         chapter1StaticTextId: chapter1StaticTextId, chapter1StaticText: chapter1StaticText,
                         isPublic: isPublic ?? false)
             }, new Guid(questionnaireId));
+            return result;
         }
 
         public static IPublishedEvent<TemplateImported> TemplateImportedEvent(string questionnaireId,
@@ -128,9 +129,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests
         }
 
         public static IPublishedEvent<QuestionnaireUpdated> QuestionnaireUpdatedEvent(string questionnaireId,
-            string questionnaireTitle)
+            string questionnaireTitle,
+            bool isPublic = false)
         {
-            return ToPublishedEvent(new QuestionnaireUpdated() {Title = questionnaireTitle}, new Guid(questionnaireId));
+            return ToPublishedEvent(new QuestionnaireUpdated() {Title = questionnaireTitle, IsPublic = isPublic}, new Guid(questionnaireId));
         }
 
         public static IPublishedEvent<TextListQuestionAdded> TextListQuestionAddedEvent(string questionId = null,
@@ -437,7 +439,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                         Title = chapter1Title,
                         Children = new List<IComposite>()
                         {
-                            new StaticText(entityId: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
+                            new StaticText(publicKey: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
                             new Group()
                             {
                                 PublicKey = GetQuestionnaireItemId(chapter1GroupId),

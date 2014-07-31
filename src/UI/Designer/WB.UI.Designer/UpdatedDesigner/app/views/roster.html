@@ -1,111 +1,197 @@
-﻿<div class="form-holder">
+﻿<form role="form" id="roster-editor" name="editRosterForm" unsaved-warning-form>
+    <div class="form-holder">
     <div data-item-breadcrumbs data-crumbs="activeRoster.breadcrumbs"></div>
 
-    <form role="form" name="editRosterForm" unsaved-warning-form>
-        <label for="edit-group-title" class="wb-label">Roster Type <span>(<a>?</a>)</span></label><br>
-        <div class="form-group span-12">
-            <div class="btn-group" dropdown>
-                <button id="rosterTypeBtn" class="btn dropdown-toggle" type="button">
-                    {{rosterTypes[activeRoster.rosterTemplate]}}
-                    <span class="dropdown-arrow"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="rosterTypeBtn">
-                    <li role="presentation" ng-repeat="type in rosterTypes">
-                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="updateRosterType(type)">{{ type }}</a>
-                    </li>
-                </ul>
+        <div class="row">
+            <div class="form-group col-xs-7">
+                <label for="edit-group-title" class="wb-label">Roster Type <help key="rosterType" /></label><br>
+                <div class="btn-group type-container-dropdown" dropdown>
+                    <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control" type="button">
+                        {{activeRoster.getTitleForRosterType()}}
+                        <span class="dropdown-arrow"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="rosterTypeBtn">
+                        <li role="presentation" ng-repeat="type in activeRoster.rosterTypeOptions">
+                            <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="updateRosterType(type.value)">{{type.text}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group input-variable-name col-xs-4 pull-right">
+                <label for="edit-group-variableName" class="wb-label">Variable name <help key="variableName" /></label><br>
+                <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.variableName">
             </div>
         </div>
 
         <div class="form-group">
-            <label for="edit-group-title" class="wb-label">Title<span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-title" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.title">
+            <label for="edit-group-title" class="wb-label">Title <help key="title" /></label><br>
+            <textarea id="edit-group-title" class="form-control" ng-model="activeRoster.title" msd-elastic></textarea>
+            
+            <div class="roster-type-specific-block" ng-include="activeRoster.type + '-template.html'" ng-if="activeRoster.type != undefined">
+            </div>
+
         </div>
 
+       
         <div class="form-group">
-            <label for="edit-group-variableName" class="wb-label">Variable name <span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.variableName">
+            <label for="edit-group-description" class="wb-label">Description <help key="description" /></label><br>
+            <textarea id="edit-group-description" class="form-control" ng-model="activeRoster.description" msd-elastic></textarea>
         </div>
 
-        <div ng-include="activeRoster.rosterTemplate" ng-if="activeRoster.roster.rosterSizeSourceType != undefined">
+        <div class="form-group" ng-class="{'has-error': !editRosterForm.enablementCondition.$valid}">
+            <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression" /></label><br>
+            <textarea name="enablementCondition"
+                      id="edit-group-condition"
+                      class="form-control"
+                      ng-model="activeRoster.enablementCondition"
+                      deny-this-keyword msd-elastic></textarea>
+            <p class="help-block ng-cloak" ng-show="editRosterForm.enablementCondition.$error.denyThisKeyword">
+                You cannot use self-reference in conditions
+            </p>
         </div>
-
-        <div class="form-group">
-            <label for="edit-group-description" class="wb-label">Description <span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-description" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.description">
-        </div>
-
-        <div class="form-group">
-            <label for="edit-group-condition" class="wb-label">Condition expression <span>(<a>?</a>)</span></label><br>
-            <input id="edit-group-condition" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.roster.enablementCondition">
-        </div>
-    </form>
 </div>
 
 <div class="form-buttons-holder">
     <div class="pull-left">
-        <button id="edit-roster-save-button" class="btn btn-lg btn-primary" ng-click="saveRoster()" unsaved-warning-clear>Save</button>
-        <button id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelRoster()" unsaved-warning-clear>Cancel</button>
+        <button type="submit" id="edit-roster-save-button" class="btn btn-lg btn-primary" ng-click="saveRoster()" ng-disabled="!editRosterForm.$valid">Save</button>
+        <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelRoster()">Cancel</button>
     </div>
     <div class="pull-right">
-        <button id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteRoster()">Delete</button>
-        <button id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneGroup()">Clone</button>
+        <button type="button" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteRoster()" unsaved-warning-clear>Delete</button>
+        <button type="button" id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="cloneGroup()">Clone</button>
+        <ng-include src="'moveToChapterSnippet'" />
     </div>
 </div>
 
 <script type="text/ng-template" id="List-template.html">
-    <div class="form-group span-12">
-        <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
-        <div class="btn-group width100" dropdown>
-            <button id="edit-roster-numeric-source" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.lists, activeRoster.roster.rosterSizeQuestionId) }}</span>
+    
+    <div class="dropdown-with-breadcrumbs-and-icons">
+        <label>Source question (answer generates number of rows): </label>
+        <div class="btn-group" dropdown>
+            <button class="btn dropdown-toggle" type="button">
+                <span class="select-placeholder" ng-if="selectedListQuestion == null">Select question</span>
+                <span class="selected-item" ng-if="selectedListQuestion !== null">
+                    <span class="path">{{selectedListQuestion.breadcrumbs}}</span>
+                    <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedListQuestion.type"></i>{{selectedListQuestion.title}}</span>
+                </span>
                 <span class="dropdown-arrow"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
-                <li role="presentation" ng-repeat="list in activeRoster.lists">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.roster.rosterSizeQuestionId = list.id">{{ list.title }}</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</script>
 
-<script type="text/ng-template" id="Numeric-template.html">
-    <div class="form-group">
-        <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
-        <div class="btn-group width100" dropdown>
-            <button id="questionSelectBtn" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.numerics, activeRoster.roster.rosterSizeQuestionId) }}</span>
-                <span class="dropdown-arrow"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
-                <li role="presentation" ng-repeat="numeric in activeRoster.numerics">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.roster.rosterSizeQuestionId = numeric.id">{{ numeric.title }}</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="edit-roster-numeric-source" class="wb-label">Source question (answer generates number of rows): <span>(<a>?</a>)</span></label><br>
-        <div class="btn-group width100" dropdown>
-            <button id="questionSelectBtn" class="btn dropdown-toggle" type="button">
-                <span class="edit-roster">{{ getSelected(activeRoster.multiOption, activeRoster.roster.rosterTitleQuestionId) }}</span>
-                <span class="dropdown-arrow"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="edit-roster-numeric-source">
-                <li role="presentation" ng-repeat="multiOption in activeRoster.multiOption">
-                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="activeRoster.roster.rosterTitleQuestionId = multiOption.id">
-                        {{ multiOption.title }}
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.lists">
+                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                    <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                       ng-click="selectListQuestion(breadCrumb.id)"
+                       role="menuitem"
+                       tabindex="-1"
+                       href="javascript:void(0);">
+                        <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
                     </a>
                 </li>
             </ul>
         </div>
     </div>
+
 </script>
 
-<script type="text/ng-template" id="FixedTitles-template.html">
+<script type="text/ng-template" id="Numeric-template.html">
+    
+    <div class="dropdown-with-breadcrumbs-and-icons">
+        <label>Source question (answer generates number of rows):</label>
+        <div class="btn-group" dropdown>
+            <button class="btn dropdown-toggle" type="button">
+                <span class="select-placeholder" ng-if="selectedNumericQuestion == null">Select question</span>
+                <span class="selected-item" ng-if="selectedNumericQuestion !== null">
+                    <span class="path">{{selectedNumericQuestion.breadcrumbs}}</span>
+                    <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedNumericQuestion.type"></i>{{selectedNumericQuestion.title}}</span>
+                </span>
+                <span class="dropdown-arrow"></span>
+            </button>
+
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.numerics">
+                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                    <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                       ng-click="selectNumericQuestion(breadCrumb.id)"
+                       role="menuitem"
+                       tabindex="-1"
+                       href="javascript:void(0);">
+                        <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="dropdown-with-breadcrumbs-and-icons">
+        <label>Titles of rows:</label>
+        <div class="btn-group" dropdown>
+            <button class="btn dropdown-toggle" type="button">
+                <span class="select-placeholder" ng-if="selectedTitleQuestion == null">Select question</span>
+                <span class="selected-item" ng-if="selectedTitleQuestion !== null">
+                    <span class="path">{{selectedTitleQuestion.breadcrumbs}}</span>
+                    <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedTitleQuestion.type"></i>{{selectedTitleQuestion.title}}</span>
+                </span>
+                <span class="dropdown-arrow"></span>
+            </button>
+
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.titles">
+                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                    <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                       ng-click="selectTitleQuestion(breadCrumb.id)"
+                       role="menuitem"
+                       tabindex="-1"
+                       href="javascript:void(0);">
+                        <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</script>
+
+<script type="text/ng-template" id="Fixed-template.html">
     <div class="form-group">
-        <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <span>(<a>?</a>)</span></label>
-        <textarea id="edit-fixed-roster-title" class="form-control" rows="5" cols="100" split-array ng-model="activeRoster.roster.rosterFixedTitles"></textarea>
+        <label for="edit-fixed-roster-title" class="wb-label">Fixed roster titles: <help key="fixedTitles" /></label>
+        <textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.rosterFixedTitles" msd-elastic split-array></textarea>
     </div>
 </script>
+
+<script type="text/ng-template" id="Multi-template.html">
+    
+    <div class="dropdown-with-breadcrumbs-and-icons">
+        <label>Source question (answer generates number of rows): </label>
+        <div class="btn-group" dropdown>
+            <button class="btn dropdown-toggle" type="button">
+                <span class="select-placeholder" ng-if="selectedMultiQuestion == null">Select question</span>
+                <span class="selected-item" ng-if="selectedMultiQuestion !== null">
+                    <span class="path">{{selectedMultiQuestion.breadcrumbs}}</span>
+                    <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedMultiQuestion.type"></i>{{selectedMultiQuestion.title}}</span>
+                </span>
+                <span class="dropdown-arrow"></span>
+            </button>
+
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in activeRoster.multiOption">
+                    <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                    <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                       ng-click="selectMultiQuestion(breadCrumb.id)"
+                       role="menuitem"
+                       tabindex="-1"
+                       href="javascript:void(0);">
+                        <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</script>
+</form>

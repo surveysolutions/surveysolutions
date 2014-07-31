@@ -1,7 +1,7 @@
 {
   "name": "angular-loading-bar",
-  "version": "0.4.3",
-  "main": ["src/loading-bar.js", "src/loading-bar.css"],
+  "version": "0.5.0",
+  "main": ["build/loading-bar.js", "build/loading-bar.css"],
   "ignore": [
     "**/.*",
     "node_modules",

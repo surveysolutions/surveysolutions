@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -986,12 +987,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
         {
-            var textQuestion = question as TextQuestion;
-            string mask = null;
-            if (textQuestion != null)
-            {
-                mask = textQuestion.Mask;
-            }
+            var mask = Monads.Maybe(() => (question as TextQuestion).Mask);
+
             return new ValueQuestionViewModel(
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType,

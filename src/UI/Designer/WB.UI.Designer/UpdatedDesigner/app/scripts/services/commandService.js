@@ -56,6 +56,7 @@
                 };
 
                 commandService.sendUpdateQuestionCommand = function(questionnaireId, question) {
+
                     var command = {
                         questionnaireId: questionnaireId,
                         questionId: question.itemId,
@@ -64,14 +65,20 @@
                         variableName: question.variable,
                         variableLabel: question.variableLabel,
                         mask: question.mask,
-                        isPreFilled: question.questionScope == 'Headquarter',
                         isMandatory: question.isMandatory,
-                        scope: question.questionScope,
                         enablementCondition: question.enablementCondition,
                         validationExpression: question.validationExpression,
                         validationMessage: question.validationMessage,
                         instructions: question.instructions
                     };
+
+                    var doesQuestionSupportScopes = question.type != 'TextList' && question.type != 'QRBarcode';
+
+                    if (doesQuestionSupportScopes) {
+                        var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
+                        command.isPreFilled = isPrefilledScopeSelected;
+                        command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
+                    }
 
                     switch (question.type) {
                     case "SingleOption":
@@ -79,6 +86,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.options = question.options;
+                        command.linkedToQuestionId = question.linkedToQuestionId;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;
@@ -90,7 +98,7 @@
                     case "Text":
                         break;
                     case "TextList":
-                        command.maxAnswerCount = 10;
+                        command.maxAnswerCount = question.maxAnswerCount;
                         break;
                     }
                     var questionType = question.type == "MultyOption" ? "MultiOption" : question.type; // we have different name in enum and in command. Correct one is 'Multi' but we cant change it in enum
@@ -146,7 +154,7 @@
                         "isRoster": true,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "FixedTitles",
-                        "rosterFixedTitles": ["111"], // todo: temp solution
+                        "rosterFixedTitles": ["Title"],
                         "rosterTitleQuestionId": null,
                         "parentGroupId": parentGroupId,
                         "variableName": group.variableName
@@ -184,19 +192,33 @@
                 };
 
                 commandService.updateRoster = function(questionnaireId, incomingRoster) {
+
                     var command = {
                         "questionnaireId": questionnaireId,
                         "groupId": incomingRoster.itemId,
-                        "title": incomingRoster.roster.title,
-                        "description": incomingRoster.roster.description,
-                        "condition": incomingRoster.roster.enablementCondition,
-                        "rosterSizeQuestionId": incomingRoster.roster.rosterSizeQuestionId,
-                        "rosterSizeSource": incomingRoster.roster.rosterSizeSourceType,
-                        "rosterFixedTitles": incomingRoster.roster.rosterFixedTitles,
-                        "rosterTitleQuestionId": incomingRoster.roster.rosterTitleQuestionId,
-                        "variableName": incomingRoster.roster.variableName,
+                        "title": incomingRoster.title,
+                        "description": incomingRoster.description,
+                        "condition": incomingRoster.enablementCondition,
+                        "variableName": incomingRoster.variableName,
                         "isRoster": true
                     };
+
+                    switch (incomingRoster.type) {
+                    case "Fixed":
+                        command.rosterSizeSource = "FixedTitles";
+                        command.rosterFixedTitles = incomingRoster.rosterFixedTitles;
+                        break;
+                    case "Numeric":
+                        command.rosterSizeQuestionId = incomingRoster.rosterSizeNumericQuestionId;
+                        command.rosterTitleQuestionId = incomingRoster.rosterTitleQuestionId;
+                        break;
+                    case "List":
+                        command.rosterSizeQuestionId = incomingRoster.rosterSizeListQuestionId;
+                        break;
+                    case "Multi":
+                        command.rosterSizeQuestionId = incomingRoster.rosterSizeMultiQuestionId;
+                        break;
+                    }
 
                     return commandCall("UpdateGroup", command);
                 };

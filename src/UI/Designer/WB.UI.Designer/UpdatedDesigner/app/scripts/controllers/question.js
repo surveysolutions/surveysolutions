@@ -5,12 +5,14 @@
         .controller('QuestionCtrl', [
             '$rootScope', '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log',
             function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log) {
-                var dataBind = function(result) {
+                $scope.currentChapterId = $state.params.chapterId;
+
+                var dataBind = function (result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
 
                     $scope.activeQuestion.itemId = $state.params.itemId;
-                    $scope.activeQuestion.type = result.type;
+                    
                     $scope.activeQuestion.variable = result.variableName;
                     $scope.activeQuestion.variableLabel = result.variableLabel;
                     $scope.activeQuestion.mask = result.mask;
@@ -20,8 +22,11 @@
                     $scope.activeQuestion.enablementCondition = result.enablementCondition;
                     $scope.activeQuestion.validationExpression = result.validationExpression;
                     $scope.activeQuestion.validationMessage = result.validationMessage;
-                    $scope.activeQuestion.questionScopeOptions = result.questionScopeOptions;
+                    $scope.activeQuestion.allQuestionScopeOptions = result.allQuestionScopeOptions;
+                    $scope.activeQuestion.notPrefilledQuestionScopeOptions = result.notPrefilledQuestionScopeOptions;
                     $scope.activeQuestion.instructions = result.instructions;
+                    $scope.activeQuestion.maxAnswerCount = result.maxAnswerCount;
+
                     var options = result.options || [];
                     _.each(options, function(option) {
                         option.id = utilityService.guid();
@@ -32,11 +37,13 @@
                     $scope.activeQuestion.maxValue = result.maxValue;
                     $scope.activeQuestion.countOfDecimalPlaces = result.countOfDecimalPlaces;
 
-                    if (result.isPreFilled) {
-                        $scope.activeQuestion.questionScope = 'Headquarter';
-                    } else {
-                        $scope.activeQuestion.questionScope = 'Interviewer';
-                    }
+                    $scope.activeQuestion.questionScope = result.isPreFilled ? 'Prefilled' : result.questionScope;
+
+
+                    $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
+                    $scope.setQuestionType(result.type);
+                    $scope.setLinkSource(result.linkedToQuestionId);
+
                     $scope.questionForm.$setPristine();
                 };
 
@@ -48,21 +55,31 @@
                         });
                 };
 
-                $scope.saveQuestion = function() {
-                    commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function(result) {
-                        $scope.initialQuestion = angular.copy($scope.activeQuestion);
-                        $rootScope.$emit('questionUpdated', {
-                            itemId: $scope.activeQuestion.itemId,
-                            title: $scope.activeQuestion.title,
-                            variable: $scope.activeQuestion.variable,
-                            type: $scope.activeQuestion.type
+                $scope.saveQuestion = function () {
+                    if ($scope.questionForm.$valid) {
+                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function(result) {
+                            $scope.initialQuestion = angular.copy($scope.activeQuestion);
+                            $rootScope.$emit('questionUpdated', {
+                                itemId: $scope.activeQuestion.itemId,
+                                title: $scope.activeQuestion.title,
+                                variable: $scope.activeQuestion.variable,
+                                type: $scope.activeQuestion.type,
+                                linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
+                            });
+                            $scope.questionForm.$setPristine();
                         });
-                        $scope.questionForm.$setPristine();
-                    });
+                    }
                 };
 
                 $scope.setQuestionType = function(type) {
                     $scope.activeQuestion.type = type;
+                    $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
+                    if (type == 'GpsCoordinates' && $scope.activeQuestion.questionScope == 'Prefilled') {
+                        $scope.activeQuestion.questionScope = 'Interviewer';
+                    }
+                    if (type != "SingleOption" && type != "MultyOption") {
+                        $scope.setLinkSource(null);
+                    }
                 };
 
                 $scope.cancelQuestion = function() {
@@ -85,8 +102,22 @@
 
                 $scope.changeQuestionScope = function(scope) {
                     $scope.activeQuestion.questionScope = scope.text;
-                    if ($scope.activeQuestion.questionScope == 'Headquarter') {
+                    if ($scope.activeQuestion.questionScope == 'Prefilled') {
                         $scope.activeQuestion.enablementCondition = '';
+                    }
+                };
+
+                $scope.$watch('activeQuestion.isLinked', function(newValue) {
+                    if (!newValue && $scope.activeQuestion) {
+                        $scope.activeQuestion.linkedToQuestionId = null;
+                    }
+                });
+
+                $scope.setLinkSource = function (itemId) {
+                    $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
+                    if (itemId) {
+                        $scope.activeQuestion.linkedToQuestionId = itemId;
+                        $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
                     }
                 };
 

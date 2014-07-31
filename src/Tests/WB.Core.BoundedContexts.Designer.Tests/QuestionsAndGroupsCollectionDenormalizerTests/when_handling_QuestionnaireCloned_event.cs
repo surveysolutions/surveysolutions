@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                                         PublicKey = g4Id,
                                         Children = new List<IComposite>
                                         {
-                                            new StaticText(entityId: st2Id, text: st2Text),
+                                            new StaticText(publicKey: st2Id, text: st2Text),
                                             new TextQuestion{ PublicKey = q5Id, QuestionType = QuestionType.Text},
                                         }
                                     }
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                         PublicKey = g5Id,
                         Children = new List<IComposite>
                         {
-                            new StaticText(entityId: st1Id, text: st1Text),
+                            new StaticText(publicKey: st1Id, text: st1Text),
                             new TextQuestion{ PublicKey = q6Id, QuestionType = QuestionType.Text},
                         }
                     },

@@ -27,7 +27,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.Children = @group.Children.Select(composite => new QuestionnaireEntityNode
             {
                 Id = composite.PublicKey,
-                Type = (composite is IQuestion) ? QuestionnaireEntityType.Question : QuestionnaireEntityType.Group
+                Type =
+                    (composite is IQuestion)
+                        ? QuestionnaireEntityType.Question
+                        : ((composite is IStaticText)
+                            ? QuestionnaireEntityType.StaticText
+                            : QuestionnaireEntityType.Group)
             }).ToList();
         }
 

@@ -247,6 +247,7 @@
     <Compile Include="Api\TesterController.cs" />
     <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
+    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Code\CamelCaseAttribute.cs" />
+    <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -319,6 +321,7 @@
     <Compile Include="Utils\TypeResolver.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\admin.css" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -395,9 +398,10 @@
     </None>
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
+    <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="Scripts\details\model.staticText.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.2.js" />
@@ -430,14 +434,18 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\share.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\tree.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\verification.js" />
+    <Content Include="UpdatedDesigner\app\scripts\decorators\exceptionhandlerdecorator.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\animations.js" />
+    <Content Include="UpdatedDesigner\app\scripts\directives\denyThisKeyword.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\directives.js" />
+    <Content Include="UpdatedDesigner\app\scripts\directives\help.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\itemBreadcrumbs.js" />
     <Content Include="UpdatedDesigner\app\scripts\fixtures\no-backend.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\authorizationinterceptor.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\commandService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\confirmService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\errorReportingService.js" />
+    <Content Include="UpdatedDesigner\app\scripts\services\helpMessages.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\questionnaireService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\shareService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\utilityService.js" />
@@ -454,6 +462,9 @@
     <Content Include="UpdatedDesigner\content\designer-editor\animations.min.css">
       <DependentUpon>animations.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.min.css">
+      <DependentUpon>wb-question-list.css.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\i\btn-disabled.png" />
     <Content Include="UpdatedDesigner\content\i\chapter-panel-btn-small.png" />
     <Content Include="UpdatedDesigner\content\i\cross-red.png" />
@@ -464,6 +475,9 @@
       <DependentUpon>markup.css.css</DependentUpon>
     </Content>
     <Content Include="UpdatedDesigner\content\vendor.css.css" />
+    <Content Include="UpdatedDesigner\content\vendor.css.min.css">
+      <DependentUpon>vendor.css.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\data\editGroup\manualListRoster.json" />
     <Content Include="UpdatedDesigner\content\designer-editor\animations.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\animations.css.map">
@@ -471,10 +485,23 @@
     </Content>
     <Content Include="UpdatedDesigner\content\vendor.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-editor.css.less" />
+    <Content Include="UpdatedDesigner\data\editQuestion\746c323e5bf49176f1594a4719327ea8.json" />
+    <Content Include="UpdatedDesigner\data\chapter\b33dc986d65048a8a11b4578bae23515.json" />
+    <Content Include="UpdatedDesigner\data\chapter\883f24bcf1484e73aada2b5023cfa5bf.json" />
+    <Content Include="UpdatedDesigner\data\editQuestion\90c1f14f18294f2aa324f02d84b6bed9.json" />
+    <Content Include="UpdatedDesigner\data\editQuestion\beb6b8328fc74c90a7dbec96bd1bb8e3.json" />
+    <Content Include="UpdatedDesigner\data\editQuestion\0be767d337cc4b6ba9a49be314f98eb9.json" />
+    <Content Include="UpdatedDesigner\data\editGroup\dd45293c816e982d482334b1222ec41f.json" />
+    <Content Include="UpdatedDesigner\data\editGroup\ddfaab0f37394a679f088add19325cfe.json" />
+    <Content Include="UpdatedDesigner\content\vendor.css.css.map">
+      <DependentUpon>vendor.css.css</DependentUpon>
+    </Content>
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\app\index.html" />
-    <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css" />
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.css">
+      <DependentUpon>wb-question-list.css.less</DependentUpon>
+    </Content>
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\body.css" />
     <Content Include="Content\bootstrap-mvc-validation.css" />
@@ -623,15 +650,15 @@
     <Content Include="UpdatedDesigner\content\i\pretty-checkable-sprites.png" />
     <Content Include="UpdatedDesigner\content\i\question-item-dots.png" />
     <Content Include="UpdatedDesigner\content\i\search-glyph.png" />
-    <Content Include="UpdatedDesigner\content\lib\controls\wb-breadcrumbs.css.css" />
     <Content Include="UpdatedDesigner\content\lib\i\breadcrumb-slash.png" />
     <Content Include="UpdatedDesigner\content\lib\i\btn-dropdown-blue.png" />
-    <Content Include="UpdatedDesigner\content\markup.css.css" />
+    <Content Include="UpdatedDesigner\content\markup.css.css">
+      <DependentUpon>markup.css.less</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\app\views\main.html" />
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\test.html" />
-    <Content Include="UpdatedDesigner\test\spec\services\authorizationinterceptor.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.css" />
@@ -648,6 +675,9 @@
     <Content Include="UpdatedDesigner\vendor\angular-cookies\angular-cookies.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-cookies\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\elastic.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\index.html" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\LICENCE.txt" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.css" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.js" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\build\hotkeys.min.css" />
@@ -668,24 +698,14 @@
     <Content Include="UpdatedDesigner\vendor\angular-mocks\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\app\demo.html" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\src\pnotify.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-resource\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.js" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.min.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.min.js.map" />
-    <Content Include="UpdatedDesigner\vendor\angular-resource\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-resource\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\angular-sanitize.js" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\angular-sanitize.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\angular-sanitize.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-sanitize\README.md" />
-    <Content Include="UpdatedDesigner\vendor\angular-scenario\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-scenario\angular-scenario.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-scenario\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-scenario\jstd-scenario-adapter-config.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-scenario\jstd-scenario-adapter.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-scenario\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-router\release\angular-ui-router.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-router\release\angular-ui-router.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-router\src\common.js" />
@@ -855,6 +875,14 @@
     <Content Include="UpdatedDesigner\vendor\bootstrap\test-infra\s3_cache.py" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\test-infra\sauce_browsers.yml" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\test-infra\uncached-npm-install.sh" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\.gitignore" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\console-shim.js" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\console-shim.min.js" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\demo\index.html" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\demo\log4javascript.js" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\Gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\LICENSE.txt" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\test\index.html" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\.gitignore" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\CHANGES" />
@@ -1125,7 +1153,6 @@
     <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.less" />
-    <Content Include="UpdatedDesigner\content\lib\controls\wb-breadcrumbs.css.css.map" />
     <Content Include="UpdatedDesigner\content\lib\controls\wb-breadcrumbs.css.less" />
     <Content Include="UpdatedDesigner\content\lib\controls\wb-buttons.css.less" />
     <Content Include="UpdatedDesigner\content\lib\controls\wb-inputs.css.less" />
@@ -1134,14 +1161,15 @@
     <Content Include="UpdatedDesigner\content\lib\wb-fontstyles.css.less" />
     <Content Include="UpdatedDesigner\content\lib\wb-mixins.css.less" />
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.less" />
-    <Content Include="UpdatedDesigner\content\markup.css.css.map" />
+    <Content Include="UpdatedDesigner\content\markup.css.css.map">
+      <DependentUpon>markup.css.less</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\markup.css.less" />
     <Content Include="UpdatedDesigner\content\wb-init.css.less" />
     <Content Include="UpdatedDesigner\.bowerrc" />
     <Content Include="UpdatedDesigner\bower.json" />
     <Content Include="UpdatedDesigner\data\chapter\34e31f00cdbff703a680db5fa66bf8b5.json" />
     <Content Include="UpdatedDesigner\data\chapter\6e240642274c4bdea937baa78cd4ad6f.json" />
-    <Content Include="UpdatedDesigner\data\editGroup\ddfaab0f37394a679f088add19325cfe.json" />
     <Content Include="UpdatedDesigner\data\editQuestion\20ec89157c0e41e49d77db46e929db5d.json" />
     <Content Include="UpdatedDesigner\data\questionnaire\7c97b1925b0244b782ed6741a5035fae.json" />
     <Content Include="UpdatedDesigner\.jscsrc" />
@@ -1227,10 +1255,32 @@
     <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\readme.md" />
     <Content Include="UpdatedDesigner\vendor\angular-unsavedChanges\travis_test.sh" />
+    <Content Include="Views\ControlPanel\Index.cshtml" />
+    <Content Include="Views\Shared\Layout.admin.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-utils\ui-utils.min.js.map">
+      <DependentUpon>ui-utils.min.js</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\data\questionnaire\dc89d22b9e78480da5756806d2466637.json" />
+    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
+    <Content Include="UpdatedDesigner\data\editRoster\547ae6ee75a44751bd63147fbb9f3e4f.json" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\.npmignore" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\console-shim.map" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\package.json" />
+    <Content Include="UpdatedDesigner\vendor\console-shim\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\package.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-elastic\README.md" />
+    <Content Include="UpdatedDesigner\data\editStaticText\0000f14f18294f2aa324f02d84b6bed9.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.min.js.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-resource\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Filters\" />
+    <Folder Include="UpdatedDesigner\test\spec\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

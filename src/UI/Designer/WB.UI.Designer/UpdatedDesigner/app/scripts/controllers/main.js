@@ -19,25 +19,24 @@
                 $scope.questionnaireId = $state.params.questionnaireId;
 
                 $scope.verify = function () {
+                    $scope.verificationStatus.errors = [];
                     verificationService.verify($state.params.questionnaireId).success(function (result) {
                         $scope.verificationStatus.errors = result.errors;
                         $scope.verificationStatus.errorsCount = result.errors.length;
 
+                        var verificationModal = $('#verification-modal');
+
                         if ($scope.verificationStatus.errorsCount > 0) {
-                            $('#verification-modal').modal({
+                            verificationModal.modal({
                                 backdrop: false,
                                 show: true
                             });
-                            // --- dialog and arrow positioning
-                            $('#verification-modal .modal-dialog').stop().css({
-                                position: 'absolute',
-                                top: $('#verification-btn').offset().top + 15,
-                                left: 50
-                            });
                             $('#verification-modal .modal-dialog .arrow').css({
-                                left: $('#verification-btn').offset().left - 45
+                                left: $('#verification-btn').offset().left - 10
                             });
-                            // ---
+                        } else {
+                            if (verificationModal.hasClass('in'))
+                                verificationModal.modal('toggle');
                         }
                     });
                 };
@@ -74,11 +73,6 @@
                         if (event.dest.index !== event.source.index) {
                             var group = event.source.nodeScope.chapter;
                             questionnaireService.moveGroup(group.itemId, event.dest.index, null, $state.params.questionnaireId)
-                                .success(function (data) {
-                                    if (!data.IsSuccess) {
-                                        rollback(group, event.source.index);
-                                    }
-                                })
                                 .error(function () {
                                     rollback(group, event.source.index);
                                 });
@@ -101,8 +95,7 @@
                         "itemId": newId,
                         "title": 'New Question',
                         "type": 'Text',
-                        "linkedVariables": [],
-                        "brokenLinkedVariables": null,
+                        itemType: 'Question',
                         getParentItem: function () { return parent; }
                     };
 
@@ -121,14 +114,13 @@
                         "itemId": newId,
                         "title": "New group",
                         "items": [],
+                        itemType: 'Group',
                         getParentItem: function () { return parent; }
                     };
-                    commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function (result) {
-                        if (result.IsSuccess) {
-                            parent.items.push(emptyGroup);
-                            $rootScope.$emit('groupAdded');
-                            $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
-                        }
+                    commandService.addGroup($state.params.questionnaireId, emptyGroup, parent.itemId).success(function () {
+                        parent.items.push(emptyGroup);
+                        $rootScope.$emit('groupAdded');
+                        $state.go('questionnaire.chapter.group', { chapterId: $state.params.chapterId, itemId: newId });
                     });
                 };
 
@@ -138,16 +130,15 @@
                         "itemId": newId,
                         "title": "New roster",
                         "items": [],
+                        itemType: 'Group',
                         isRoster: true,
                         getParentItem: function () { return parent; }
                     };
 
-                    commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId).success(function (result) {
-                        if (result.IsSuccess) {
-                            parent.items.push(emptyRoster);
-                            $rootScope.$emit('rosterAdded');
-                            $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
-                        }
+                    commandService.addRoster($state.params.questionnaireId, emptyRoster, parent.itemId).success(function () {
+                        parent.items.push(emptyRoster);
+                        $rootScope.$emit('rosterAdded');
+                        $state.go('questionnaire.chapter.roster', { chapterId: $state.params.chapterId, itemId: newId });
                     });
                 };
                 
@@ -156,17 +147,15 @@
                     var emptyStaticText = {
                         "itemId": newId,
                         "text": "New static text",
+                        itemType: 'StaticText',
                         getParentItem: function () { return parent; }
                     };
 
-                    commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId).success(function (result) {
-                        if (result.IsSuccess) {
-                            parent.items.push(emptyStaticText);
-                            $state.go('questionnaire.chapter.staticText', { chapterId: $state.params.chapterId, itemId: newId });
-                        }
+                    commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId).success(function () {
+                        parent.items.push(emptyStaticText);
+                        $state.go('questionnaire.chapter.staticText', { chapterId: $state.params.chapterId, itemId: newId });
                     });
                 };
-
 
                 $rootScope.$on('groupDeleted', function() {
                     $scope.questionnaire.groupsCount--;
@@ -199,7 +188,12 @@
                 $rootScope.$on('chapterDeleted', function () {
                     getQuestionnaire();
                 });
+                $scope.getPersonsSharedWith = function (questionnaire) {
+                    if (!questionnaire)
+                        return [];
 
+                    return _.without(questionnaire.sharedPersons, _.findWhere(questionnaire.sharedPersons, { isOwner: true }));
+                }
                 $scope.showShareInfo = function () {
                     $modal.open({
                         templateUrl: 'views/share.html',
@@ -223,6 +217,8 @@
                             $scope.currentChapter = defaultChapter;
                             $state.go('questionnaire.chapter.group', { chapterId: itemId, itemId: itemId });
                         }
+
+                        $rootScope.$emit('questionnaireLoaded');
                     });
                 };
 

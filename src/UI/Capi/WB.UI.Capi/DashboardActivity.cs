@@ -66,15 +66,19 @@ namespace WB.UI.Capi
         {
             var view = this.LayoutInflater.Inflate(Resource.Layout.dashboard_survey_row, null);
             var txtSurveyName = view.FindViewById<TextView>(Resource.Id.txtSurveyName);
-            txtSurveyName.Text = dashboardSurveyItem.SurveyTitle;
+            txtSurveyName.Text = string.Format("{0} - v.{1}", dashboardSurveyItem.SurveyTitle, dashboardSurveyItem.QuestionnaireVersion);
             var txtSurveyCount = view.FindViewById<TextView>(Resource.Id.txtSurveyCount);
             txtSurveyCount.Text = dashboardSurveyItem.ActiveItems.Count.ToString(CultureInfo.InvariantCulture);
 
             var btnNewInterview = view.FindViewById<Button>(Resource.Id.btnNewInterview);
             btnNewInterview.SetTag(Resource.Id.QuestionnaireId, dashboardSurveyItem.QuestionnaireId.ToString());
-            btnNewInterview.SetTag(Resource.Id.QuestionnaireVersion, dashboardSurveyItem.QuestionnaireMaxVersion.ToString());
+            btnNewInterview.SetTag(Resource.Id.QuestionnaireVersion, dashboardSurveyItem.QuestionnaireVersion.ToString());
 
             btnNewInterview.Click += this.btnNewInterview_ButtonClick;
+            if (!dashboardSurveyItem.AllowCensusMode)
+            {
+                btnNewInterview.Visibility=ViewStates.Gone;
+            }
             
             var llQuestionnaireHolder = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnarieHolder);
 

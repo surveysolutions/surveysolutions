@@ -31,18 +31,6 @@
                     });
                 };
 
-                utilityService.union = function (arrays) {
-                    var union = [];
-                    arrays.forEach(function (array) {
-                        array.forEach(function (element) {
-                            if (union.indexOf(element) === -1) {
-                                union.push(element);
-                            }
-                        });
-                    });
-                    return union;
-                };
-
                 return utilityService;
             }
         ]);

@@ -229,7 +229,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(questionnareUri).Result;
 
             this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireId, questionnaireVersion, questionnaireDocument);
-            this.executeCommand(new RegisterPlainQuestionnaire(questionnaireId, questionnaireVersion));
+            this.executeCommand(new RegisterPlainQuestionnaire(questionnaireId, questionnaireVersion, false));
         }
 
         private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)

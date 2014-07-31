@@ -47,15 +47,22 @@
         "value": "QRBarcode",
         "text": "QR Barcode"
     }],
-    "questionScopeOptions": [{
+    "allQuestionScopeOptions": [{
         "value": "Interviewer",
         "text": "Interviewer"
     }, {
         "value": "Supervisor",
         "text": "Supervisor"
     }, {
-        "value": "Headquarter",
-        "text": "Headquarters"
+        "value": "Prefilled",
+        "text": "Prefilled"
+    }],
+    "notPrefilledQuestionScopeOptions": [{
+        "value": "Interviewer",
+        "text": "Interviewer"
+    }, {
+        "value": "Supervisor",
+        "text": "Supervisor"
     }],
     "breadcrumbs":[
       {

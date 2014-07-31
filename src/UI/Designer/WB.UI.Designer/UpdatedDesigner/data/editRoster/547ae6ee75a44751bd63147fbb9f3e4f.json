@@ -1,0 +1,292 @@
+﻿{
+   "itemId":"547ae6ee75a44751bd63147fbb9f3e4f",
+   "title":"Roster group. Condition Numeric>2",
+   "description":"",
+   "enablementCondition":"[num]>=2",
+   "variableName":null,
+   "type":"Multi",
+   "rosterSizeListQuestionId":null,
+   "rosterSizeNumericQuestionId":null,
+   "rosterSizeMultiQuestionId":"0be767d3-37cc-4b6b-a9a4-9be314f98eb9",
+   "rosterTitleQuestionId":null,
+   "rosterFixedTitles":null,
+   "rosterTypeOptions":[
+      {
+         "value":"Fixed",
+         "text":"Fixed Titles"
+      },
+      {
+         "value":"List",
+         "text":"Answer to list question"
+      },
+      {
+         "value":"Multi",
+         "text":"Answer to Multi Option"
+      },
+      {
+         "value":"Numeric",
+         "text":"Answer to numeric question"
+      }
+   ],
+   "numericIntegerQuestions":[
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"I. Roster multie option supervisor's question",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"42fa71d9fc1e4842aaab4700cc7fa84f",
+         "title":"Numeric",
+         "breadcrumbs":"I. Roster multie option supervisor's question",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"II. Roster multie option",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"b5d45df4330042cf87dbf100c8f59998",
+         "title":"Numeric",
+         "breadcrumbs":"II. Roster multie option",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"IV. Roster Numeric integer",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"6143e0d86a2e4d558b74cff2b37d9e19",
+         "title":"Numeric",
+         "breadcrumbs":"IV. Roster Numeric integer",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"db8ccb6662d54331bea1464edef9138a",
+         "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"II. Roster multie option / Roster group. Condition Numeric>2",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"dd1497b9b2e449008a40536788836e50",
+         "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+         "breadcrumbs":"II. Roster multie option / Roster group. Condition Numeric>2",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"III. Roster fixed / Roster group",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"062ebd1d129b4fa7a80c7fdd87db7164",
+         "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+         "breadcrumbs":"III. Roster fixed / Roster group",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"IV. Roster Numeric integer / Roster group",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"eb9a12929eef446c8324dc3bcc92bac6",
+         "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+         "breadcrumbs":"IV. Roster Numeric integer / Roster group",
+         "type":"numeric"
+      }
+   ],
+   "numericIntegerTitles":[
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"231b3c92c3ca4bfdbfd9590bba833e2f",
+         "title":"Categorical: one answer",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"singleoption"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2166875819804970b568197bf13808c0",
+         "title":"Categorical: multiple answers",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"multyoption"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"db8ccb6662d54331bea1464edef9138a",
+         "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"36f222c26d9f46de8eadd48d548902ca",
+         "title":"text",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"fc232e007a5740838ec7f90f689abba2",
+         "title":"Date",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"datetime"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"6366223fce5542a9b572be5e6a0f8103",
+         "title":"GPS Coordinates",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"gpscoordinates"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"b1189c8b65904e81bf793771dce9ade6",
+         "title":"Linked in roster",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"singleoption"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"9b46f8ea0bb443e4b230029afc6a3c41",
+         "title":"Linked in roster 1",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"multyoption"
+      }
+   ],
+   "notLinkedMultiOptionQuestions":[
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"I. Roster multie option supervisor's question",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"0be767d337cc4b6ba9a49be314f98eb9",
+         "title":"Categorical: multiple",
+         "breadcrumbs":"I. Roster multie option supervisor's question",
+         "type":"multyoption"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"II. Roster multie option",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"173ec03756e24f6a88fdfe585ee43a9f",
+         "title":"Categorical: multiple",
+         "breadcrumbs":"II. Roster multie option",
+         "type":"multyoption"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2166875819804970b568197bf13808c0",
+         "title":"Categorical: multiple answers",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"multyoption"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"II. Roster multie option / Roster group. Condition Numeric>2",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"9662a506d13147b6b0032d1ecd089064",
+         "title":"Categorical: multiple answers",
+         "breadcrumbs":"II. Roster multie option / Roster group. Condition Numeric>2",
+         "type":"multyoption"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"III. Roster fixed / Roster group",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"e81a57fb58494f13957f4b26f4f26ed6",
+         "title":"Categorical: multiple answers",
+         "breadcrumbs":"III. Roster fixed / Roster group",
+         "type":"multyoption"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"IV. Roster Numeric integer / Roster group",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"3a37e42a4ada49c08d239f5eda7d5696",
+         "title":"Categorical: multiple answers",
+         "breadcrumbs":"IV. Roster Numeric integer / Roster group",
+         "type":"multyoption"
+      }
+   ],
+   "textListsQuestions":[
+
+   ],
+   "breadcrumbs":[
+      {
+         "id":"38cb6def401b4a88847377b5f47009af",
+         "title":"I. Roster multie option supervisor's question",
+         "isRoster":false
+      }
+   ]
+}

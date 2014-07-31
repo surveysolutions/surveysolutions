@@ -1,5 +1,6 @@
-@import "../vendor/bootstrap-select/bootstrap-select.min.css";
+﻿@import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
+@import "../vendor/angular/angular-csp.css";
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -5774,3 +5775,4 @@ button.close {
     display: none !important;
   }
 }
+/*# sourceMappingURL=vendor.css.css.map */

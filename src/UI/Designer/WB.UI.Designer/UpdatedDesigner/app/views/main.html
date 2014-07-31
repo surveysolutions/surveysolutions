@@ -10,14 +10,16 @@
             </ul>
         </div>
         <div class="header-menu">
-            This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong><span ng-repeat="q in questionnaire.sharedPersons"><span ng-if="$first">, shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
-                                                                                                                                                  </span>
-                                                                                                   <span ng-if="!$first && $last">
-                                                                                                       and <a href="javascript:void(0);" ng-click="showShareInfo()">{{$index}} other</a>
-                                                                                                   </span>
-                                                                                               </span>
+            This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong><span ng-repeat="q in getPersonsSharedWith(questionnaire)">
+    <span ng-if="$first">
+        , shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
+    </span>
+    <span ng-if="!$first && $last">
+        and <a href="javascript:void(0);" ng-click="showShareInfo()">{{$index}} other</a>
+    </span>
+</span>
             <div class="buttons">
-                <button class="btn" ng-click="showShareInfo()">SHARE</button>
+                <button class="btn" type="button" ng-click="showShareInfo()">Settings</button>
                 <a class="btn" ng-href="../../questionnaire/edit/{{questionnaireId}}">Old designer</a>
                 <a class="btn" href="../../account/logoff">LOG OUT</a>
             </div>
@@ -27,8 +29,9 @@
         <div class="title">
             {{questionnaire.title}} <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
             <input id="verification-btn" type="button" class="btn" value="VERIFY" ng-click="verify()" />
-            <span id="verify-btn" data-toggle="modal" data-target="#verification-modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
+            <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
                 <a href="javascript:void(0);"
+                   ng-click="verify()"
                    ng-pluralize
                    count="verificationStatus.errorsCount"
                    when="{'one': '1 error',
@@ -45,15 +48,15 @@
     <div class="right"></div>
 </section>
 
-<section id="main" class="row" >
+<section id="main" class="row">
     <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
         <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
-        <div class="ul-holder" >
+        <div class="ul-holder" ng-mouseleave="foldback()">
             <ul class="chapters" ui-tree-nodes ng-model="questionnaire.chapters">
                 <li class="chapter-panel-item"
                     ng-repeat="chapter in questionnaire.chapters"
                     ui-tree-node
-                    ui-sref-active="current">
+                    ng-class="{ current: isCurrentChapter(chapter) }">
                     <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
                         <div class="inner">
                             <a class="handler" ui-tree-handle></a>
@@ -62,7 +65,7 @@
                                 <a href="javascript:void(0);" data-toggle="dropdown" ng-click="$event.stopPropagation()" class="dropdown-toggle"></a>
                                 <ul class="dropdown-menu">
                                     <li><a ng-click="editChapter(chapter);$event.stopPropagation();">Edit</a></li>
-                                    <li><a ng-click="cloneChapter(chapter);$event.stopPropagation();">Clone</a></li>
+                                    <li><a ng-click="cloneChapter(chapter.itemId);$event.stopPropagation();">Clone</a></li>
                                     <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();">Delete</a></li>
                                 </ul>
                             </div>
@@ -79,7 +82,7 @@
 </section>
 
 <div id="verification-modal" class="modal fade">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="arrow"></div>
         <div class="modal-content">
             <div class="modal-header">
@@ -90,7 +93,7 @@
                     <div id="verify-popover-content">
                         <div class="question-list">
                             <div ng-repeat="error in verificationStatus.errors">
-                                <div class="question item cat-multianswer">
+                                <div class="question item">
                                     <div class="icon"></div>
                                     {{error.message}}
                                     <div class="qname-block">{{error.code}}</div>
@@ -119,8 +122,8 @@
             <h1>Move to another chapter:</h1>
             <ul>
                 <li ng-repeat="chapter in questionnaire.chapters">
-                    <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId">
-                        {{chapter.title}}<br/>
+                    <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId" unsaved-warning-clear>
+                        {{chapter.title}}<br />
                         <small>({{chapter.questionsCount}} questions, {{chapter.groupsCount}} groups, {{chapter.rostersCount}} rosters)</small>
                     </a>
                 </li>

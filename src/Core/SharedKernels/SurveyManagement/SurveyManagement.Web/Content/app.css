@@ -32,7 +32,7 @@
 /*
  * Sidebar
  */
-
+ 
 .sidebar {
   display: none;
 }
@@ -111,6 +111,10 @@
 .table > thead > tr > th.sorting {
     padding-right: 20px;
     vertical-align: top;
+}
+
+.notify {
+    top: 60px;
 }
 
 /*
@@ -203,7 +207,6 @@
 }
 
 #map-canvas {
-     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
@@ -215,7 +218,7 @@
     top: 0;
     bottom: 0;
     left: 0;
-    width: 226px;
+    width: 100%;
     background: white;
     z-index: 30;
     -webkit-box-shadow: 5px 0px 25px 0px rgba(50, 50, 50, 0.75);

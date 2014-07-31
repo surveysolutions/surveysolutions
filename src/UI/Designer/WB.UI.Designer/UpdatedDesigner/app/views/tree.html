@@ -5,7 +5,7 @@
                 <input type="text" ng-model="search.searchText" ng-model-options="{debounce: 300}" focus-on="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
                 <span class="input-group-addon glyphicon glyphicon-search" title="Search"></span>
             </div>
-            <button ng-click="hideSearch()" title="Cancel search"></button>
+            <button ng-click="hideSearch()" title="Cancel search" type="button"></button>
         </div>
 
         <div ng-switch-when="default">
@@ -21,8 +21,47 @@
         </div>
     </div>
 
-    <script type="text/ng-template" id="tree_item_renderer.html">
-        <div ng-if="isQuestion(item)"
+    <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
+
+        <div ui-tree-nodes ng-model="items">
+            <div ng-repeat="item in items | filter:searchItem as results" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
+            </div>
+            <div class="section item" ng-if="filtersBoxMode == 'search' && results.length === 0">
+                <div class="item-text">
+                    <span>Nothing found</span>
+                </div>
+            </div>
+            <div class="buttons-item" ng-show="!search.searchText">
+                <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
+                <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
+                <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
+                <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(currentChapter)" />
+            </div>
+        </div>
+
+        <div class="start-box" ng-if="showStartScreen()">
+
+            <p>This chapter is empty.</p>
+
+            <p>
+                You can start by using <button class="btn" disabled type="button">ADD QUESTION</button> and <button type="button"  class="btn" disabled>ADD GROUP</button> buttons<br />
+                on top of this section or manage chapters with <span class="left-panel-glyph"></span> left panel
+            </p>
+
+            <p>
+                Language of survey, device types, collaboration and other options<br />
+                can be found at <button class="btn" type="button" disabled>SETTINGS</button> panel (top right corner)
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="question-editor col-xs-6" ui-view></div>
+
+
+<script type="text/ng-template" id="tree_item_renderer.html">
+    <ng-switch on="item.itemType">
+        <div ng-switch-when="Question"
              class="question item"
              ui-sref-active="selected">
 
@@ -51,8 +90,8 @@
                 </div>
             </div>
         </div>
-        
-        <div ng-if="isStaticText(item) && !item.isDeleted"
+
+        <div ng-switch-when="StaticText"
              class="question item"
              ui-sref-active="selected">
 
@@ -78,24 +117,41 @@
                 </div>
             </div>
         </div>
-        
-        <div class="section item"
-             ng-if="isGroup(item)"
+
+        <div ng-switch-when="Group"
+             class="section item"
+             ng-class="{ 'highlighted': is_highlighted }"
              ui-sref-active="selected"
              ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
                                          'questionnaire.chapter.group({itemId: item.itemId})' }}">
 
             <a class="handler" ui-tree-handle></a>
 
-            <button ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
-                    ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
+            <a ui-sref="{{!item.isRoster ? 'questionnaire.chapter.group({itemId: item.itemId})' : 'questionnaire.chapter.roster({itemId: item.itemId})'}}">
+                <div class="item-text">
+                    <button type="button" ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
+                            ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
+                    <span ng-bind-html="item.title | highlight:search.searchText"></span>
+                </div>
+            </a>
 
-            <a ng-if="!item.isRoster" ui-sref="questionnaire.chapter.group({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
-            <a ng-if="item.isRoster" ui-sref="questionnaire.chapter.roster({itemId: item.itemId})" ng-bind-html="item.title | highlight:search.searchText"></a>
             <div class="qname-block">
+                <span ng-if="item.isRoster" ng-bind-html="item.variable | highlight:search.searchText"></span>
                 <div class="btn-group dropdown">
                     <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
                     <ul class="dropdown-menu">
+                        <li>
+                            <a ng-click="addQuestion(item)">Add question</a>
+                        </li>
+                        <li>
+                            <a ng-click="addGroup(item)">Add subgroup</a>
+                        </li>
+                        <li>
+                            <a ng-click="addRoster(item)">Add roster</a>
+                        </li>
+                        <li>
+                            <a ng-click="addStaticText(item)">Add static text</a>
+                        </li>
                         <li>
                             <a ng-click="deleteGroup(item)">Delete</a>
                         </li>
@@ -105,49 +161,20 @@
                     </ul>
                 </div>
             </div>
+
         </div>
 
         <div ng-hide="collapsed" class="slide" ui-tree-nodes="item.items" ng-model="item.items">
             <div ng-repeat="item in item.items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
             </div>
         </div>
-
-        <div class="buttons-item" ng-if="isGroup(item)" ng-class="{ hidden: collapsed }">
-            <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(item)" />
+        <!--<div class="buttons-item" ng-if="item.itemType === 'Group'" ng-class="{ hidden: collapsed }">
             <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
             <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
             <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(item)" />
-        </div>
-    </script>
+            <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(item)" />
+        </div>-->
+    </ng-switch>
 
-    <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
-        
-        <div ui-tree-nodes ng-model="items">
-            <div ng-repeat="item in items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
-            </div>
-            <div class="buttons-item">
-                <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(currentChapter)" />
-                <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
-                <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
-                <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
-            </div>
-        </div>
 
-        <div class="start-box" ng-if="showStartScreen()">
-
-            <p>This chapter is empty.</p>
-
-            <p>
-                You can start by using <button class="btn" disabled>ADD QUESTION</button> and <button class="btn" disabled>ADD GROUP</button> buttons<br />
-                on top of this section or manage chapters with <span class="left-panel-glyph"></span> left panel
-            </p>
-
-            <p>
-                Language of survey, device types, collaboration and other options<br />
-                can be found at <button class="btn" disabled>SETTINGS</button> panel (top right corner)
-            </p>
-        </div>
-    </div>
-</div>
-
-<div class="question-editor col-xs-6" ui-view></div>
+</script>

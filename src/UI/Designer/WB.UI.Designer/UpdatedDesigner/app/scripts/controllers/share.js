@@ -5,13 +5,15 @@
         '$scope', '$log', '$modalInstance', 'questionnaire', 'shareService',
         function($scope, $log, $modalInstance, questionnaire, shareService) {
             $scope.questionnaire = questionnaire;
+            $scope.initialTitle = questionnaire.title;
 
             $scope.viewModel = {
                 shareWith: '',
                 shareForm: {}
             };
 
-            $scope.cancel = function() {
+            $scope.cancel = function () {
+                $scope.questionnaire.title = $scope.initialTitle;
                 $modalInstance.dismiss();
             };
 
@@ -30,6 +32,13 @@
                             $scope.viewModel.shareWith = '';
                         });
                     }
+                });
+            };
+
+            $scope.updateTitle = function() {
+                var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.title, $scope.questionnaire.isPublic);
+                updateRequest.success(function () {
+                    $modalInstance.dismiss();
                 });
             };
 

@@ -1,313 +1,154 @@
 {
-    "itemId": "6e240642274c4bdea937baa78cd4ad6f",
-    "title": "Chapter",
-    "items": [{
-        "itemId": "ddfaab0f37394a679f088add19325cfe",
-        "title": "Group 1",
-        "items": [{
-            "itemId": "20ec89157c0e41e49d77db46e929db5d",
-            "title": "How much in total did the household spend (in TSH) on in the past 4 weeks for all illness. Lorem ipsum dolor sit amet",
-            "variable": "q1",
-            "type": "Text",
-            "linkedVariables": ["q2"],
-            "brokenLinkedVariables": null
-        }, 
-        {
-         "itemId":"3c0ff7a6d1614aa2b9af21aaa40cdb47",
-         "title":"Categorical: single answer",
-         "variable":"type_of_food",
+   "itemId":"38cb6def401b4a88847377b5f47009af",
+   "itemType":"Group",
+   "title":"I. Roster multie option supervisor's question",
+   "isRoster":false,
+   "items":[
+       {
+        "itemId": "0000f14f18294f2aa324f02d84b6bed9",
+        "itemType": "StaticText",
+        "text": "New static text 1"
+    },
+      {
+         "itemId":"90c1f14f18294f2aa324f02d84b6bed9",
+         "itemType":"Question",
+         "title":"Prefilled",
+         "variable":"prefilled",
          "linkedToQuestionId":null,
-         "type":"SingleOption",
-         "linkedVariables":[
-
-         ],
-         "brokenLinkedVariables":null
+         "type":"Text"
       },
       {
-         "itemId":"d6c5faeed9fe43338b76e7a3ef184f5a",
-         "title":"Categorical multiple answers",
-         "variable":"drinks",
+         "itemId":"beb6b8328fc74c90a7dbec96bd1bb8e3",
+         "itemType":"Question",
+         "title":"Pre-filled Categorical: one answer",
+         "variable":"one",
          "linkedToQuestionId":null,
-         "type":"MultyOption",
-         "linkedVariables":[
-
-         ],
-         "brokenLinkedVariables":null
-      }, 
-      {
-            "itemId": "5ebbab39c975441cab18b44fdea5be72",
-            "title": "Roster: manual list",
-            "isRoster": true,
-            "items": [],
-            "questionsCount": 0,
-            "groupsCount": 0,
-            "rostersCount": 0
+         "type":"SingleOption"
       },
       {
-            "itemId": "a6aa60ac221c441e9215ad3882c81204",
-            "title": "numeric roster",
-            "variable": "numeric_roster",
-            "type": "Numeric",
-            "linkedVariables": ["q1"],
-            "brokenLinkedVariables": null
-        }, {
-            "itemId": "b56d04a460e4474482d1143036cc0d50",
-            "title": "Q3",
-            "variable": "q3",
-            "type": "Text",
-            "linkedVariables": ["q4"],
-            "brokenLinkedVariables": null
-        }, {
-            "itemId": "ab0132a0c781451da62eac218a81f480",
-            "title": "Group 3",
-            "items": [{
-                "itemId": "ce2ded31d704461483f3fc66e6133ac0",
-                "title": "Group 4",
-                "items": [{
-                    "itemId": "f1f0ef177e7d442a802ad82faefab858",
-                    "title": "Q5",
-                    "variable": "q5",
-                    "type": "Text",
-                    "linkedVariables": ["q3"],
-                    "brokenLinkedVariables": null
-                }, {
-                    "itemId": "2b734f7a3f324466ad16a5af6ac15f51",
-                    "title": "Group 5",
-                    "items": [{
-                        "itemId": "e1fb39ca4c16432f88513e6e92359e0e",
-                        "title": "Group 6",
-                        "items": [{
-                            "itemId": "b3ad4c444b494d4bbdadb67fdb3b9be8",
-                            "title": "Group 7",
-                            "items": [{
-                                "itemId": "94cbc135119114d097b6fbc3a42f8501",
-                                "title": "New Question",
-                                "variable": "",
-                                "type": "Text",
-                                "linkedVariables": [],
-                                "brokenLinkedVariables": null
-                            }, {
-                                "itemId": "21cf422f263c3330bfd9ee7e853b1ada",
-                                "title": "New Question",
-                                "variable": "",
-                                "type": "Text",
-                                "linkedVariables": [],
-                                "brokenLinkedVariables": null
-                            }, {
-                                "itemId": "4a2833a0044d0a9280859857fdcce8c5",
-                                "title": "New Question",
-                                "variable": "",
-                                "type": "Text",
-                                "linkedVariables": [],
-                                "brokenLinkedVariables": null
-                            }, {
-                                "itemId": "d7cdd72bb076d2b4f36705c65de4d100",
-                                "title": "New Question",
-                                "variable": "",
-                                "type": "Text",
-                                "linkedVariables": [],
-                                "brokenLinkedVariables": null
-                            }, {
-                                "itemId": "4b2d3153ca69de898958b064b82f03fd",
-                                "title": "New Question",
-                                "variable": "",
-                                "type": "Text",
-                                "linkedVariables": [],
-                                "brokenLinkedVariables": null
-                            }, {
-                                "itemId": "027980aae71aeab97f884bfa4349d2d8",
-                                "title": "New Question",
-                                "variable": "",
-                                "type": "Text",
-                                "linkedVariables": [],
-                                "brokenLinkedVariables": null
-                            }, {
-                                "itemId": "93757bfa6a4946188362cee19a81125c",
-                                "title": "New Group",
-                                "items": [{
-                                    "itemId": "0e2f8afa02ae6cae70adcada72048813",
-                                    "title": "New group",
-                                    "items": [{
-                                        "itemId": "f3fdc3cd4fb455cc2c85d951db1a7771",
-                                        "title": "New Question",
-                                        "variable": "",
-                                        "type": "Text",
-                                        "linkedVariables": [],
-                                        "brokenLinkedVariables": null
-                                    }],
-                                    "questionsCount": 0,
-                                    "groupsCount": 0,
-                                    "rostersCount": 0
-                                }, {
-                                    "itemId": "d5e88635c8b9828447fb077f24314fa8",
-                                    "title": "New group",
-                                    "items": [{
-                                        "itemId": "de179061d9ad9dce29bff65fbea26e13",
-                                        "title": "New Question",
-                                        "variable": "",
-                                        "type": "Text",
-                                        "linkedVariables": [],
-                                        "brokenLinkedVariables": null
-                                    }, {
-                                        "itemId": "74e09fd334891379fe7fac8c7c01737d",
-                                        "title": "New Question",
-                                        "variable": "",
-                                        "type": "Text",
-                                        "linkedVariables": [],
-                                        "brokenLinkedVariables": null
-                                    }, {
-                                        "itemId": "da69116a3c1036eb0ccaedda992af13b",
-                                        "title": "New group",
-                                        "items": [],
-                                        "questionsCount": 0,
-                                        "groupsCount": 0,
-                                        "rostersCount": 0
-                                    }],
-                                    "questionsCount": 0,
-                                    "groupsCount": 0,
-                                    "rostersCount": 0
-                                }],
-                                "questionsCount": 0,
-                                "groupsCount": 0,
-                                "rostersCount": 0
-                            }],
-                            "questionsCount": 0,
-                            "groupsCount": 0,
-                            "rostersCount": 0
-                        }],
-                        "questionsCount": 0,
-                        "groupsCount": 0,
-                        "rostersCount": 0
-                    }],
-                    "questionsCount": 0,
-                    "groupsCount": 0,
-                    "rostersCount": 0
-                }, {
-                    "itemId": "dc1dc5d25b9d48fd9ed3a170a4652d11",
-                    "title": "New Question",
-                    "variable": "aaa",
-                    "type": "Text",
-                    "linkedVariables": [],
-                    "brokenLinkedVariables": null
-                }],
-                "questionsCount": 0,
-                "groupsCount": 0,
-                "rostersCount": 0
-            }],
-            "questionsCount": 0,
-            "groupsCount": 0,
-            "rostersCount": 0
-        }],
-        "questionsCount": 0,
-        "groupsCount": 0,
-        "rostersCount": 0
-    }, {
-        "itemId": "c606765913dd4f58bb010375fc9d21d3",
-        "title": "Group 2",
-        "items": [{
-            "itemId": "dd7a14064806484b903187850cd7ebf7",
-            "title": "Q4",
-            "variable": "q4",
-            "type": "Text",
-            "linkedVariables": ["q5"],
-            "brokenLinkedVariables": null
-        }, {
-            "itemId": "0d7307f095b089e633e27d15466cc5cc",
-            "title": "New Question",
-            "variable": "",
-            "type": "Text",
-            "linkedVariables": [],
-            "brokenLinkedVariables": null
-        }, {
-            "itemId": "99ee8c54a2bfca7f207fc195b58498fd",
-            "title": "New group",
-            "items": [{
-                "itemId": "26de7b2ba32118d87f5491c1e4a170a4",
-                "title": "New Question",
-                "variable": "",
-                "type": "Text",
-                "linkedVariables": [],
-                "brokenLinkedVariables": null
-            }, {
-                "itemId": "50b8a35862d9d0c491d300284fd1353c",
-                "title": "New group",
-                "items": [],
-                "questionsCount": 0,
-                "groupsCount": 0,
-                "rostersCount": 0
-            }],
-            "questionsCount": 0,
-            "groupsCount": 0,
-            "rostersCount": 0
-        }, {
-            "itemId": "2ad98c35df0799be312d47eb7ac11e2e",
-            "title": "New Question",
-            "variable": "",
-            "type": "Text",
-            "linkedVariables": [],
-            "brokenLinkedVariables": null
-        }, {
-            "itemId": "aad8a67e3760c9cc19bc1c8053adb77f",
-            "title": "New Question",
-            "variable": "",
-            "type": "Text",
-            "linkedVariables": [],
-            "brokenLinkedVariables": null
-        }, {
-            "itemId": "d773babc214e749f52881e0ccd8f948f",
-            "title": "New group - to clone",
-            "items": [{
-                "itemId": "1a0710427e44b84c0c00bf63fcdbc157",
-                "title": "New Question",
-                "variable": "",
-                "type": "Text",
-                "linkedVariables": [],
-                "brokenLinkedVariables": null
-            }, {
-                "itemId": "8961f9673754885ecd0be430ff5b3e1a",
-                "title": "New group",
-                "items": [{
-                    "itemId": "050d963e20e66b0a5df6f20eb380c6fd",
-                    "title": "New Question",
-                    "variable": "",
-                    "type": "Text",
-                    "linkedVariables": [],
-                    "brokenLinkedVariables": null
-                }, {
-                    "itemId": "3d5bc2c580c03f0eea343b48af95eafc",
-                    "title": "New Question",
-                    "variable": "",
-                    "type": "Text",
-                    "linkedVariables": [],
-                    "brokenLinkedVariables": null
-                }, {
-                    "itemId": "bfaef47c3c6d64786a51dbb448d8bf1a",
-                    "title": "New Question",
-                    "variable": "",
-                    "type": "Text",
-                    "linkedVariables": [],
-                    "brokenLinkedVariables": null
-                }, {
-                    "itemId": "c036e0f6accd936653d4b86d33ac7b98",
-                    "title": "New group",
-                    "items": [],
-                    "questionsCount": 0,
-                    "groupsCount": 0,
-                    "rostersCount": 0
-                }],
-                "questionsCount": 0,
-                "groupsCount": 0,
-                "rostersCount": 0
-            }],
-            "questionsCount": 0,
-            "groupsCount": 0,
-            "rostersCount": 0
-        }],
-        "questionsCount": 0,
-        "groupsCount": 0,
-        "rostersCount": 0
-    }],
-    "questionsCount": 0,
-    "groupsCount": 0,
-    "rostersCount": 0
+         "itemId":"42fa71d9fc1e4842aaab4700cc7fa84f",
+         "itemType":"Question",
+         "title":"Numeric",
+         "variable":"num",
+         "linkedToQuestionId":null,
+         "type":"Numeric"
+      },
+      {
+         "itemId":"0be767d337cc4b6ba9a49be314f98eb9",
+         "itemType":"Question",
+         "title":"Categorical: multiple",
+         "variable":"cat1",
+         "linkedToQuestionId":null,
+         "type":"MultyOption"
+      },
+      {
+         "itemId":"547ae6ee75a44751bd63147fbb9f3e4f",
+         "itemType":"Group",
+         "title":"Roster group. Condition Numeric>2",
+         "isRoster":true,
+         "items":[
+            {
+               "itemId":"231b3c92c3ca4bfdbfd9590bba833e2f",
+               "itemType":"Question",
+               "title":"Categorical: one answer",
+               "variable":"one_answer",
+               "linkedToQuestionId":null,
+               "type":"SingleOption"
+            },
+            {
+               "itemId":"2166875819804970b568197bf13808c0",
+               "itemType":"Question",
+               "title":"Categorical: multiple answers",
+               "variable":"cat_mult",
+               "linkedToQuestionId":null,
+               "type":"MultyOption"
+            },
+            {
+               "itemId":"db8ccb6662d54331bea1464edef9138a",
+               "itemType":"Question",
+               "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+               "variable":"num1_2",
+               "linkedToQuestionId":null,
+               "type":"Numeric"
+            },
+            {
+               "itemId":"36f222c26d9f46de8eadd48d548902ca",
+               "itemType":"Question",
+               "title":"text",
+               "variable":"text",
+               "linkedToQuestionId":null,
+               "type":"Text"
+            },
+            {
+               "itemId":"fc232e007a5740838ec7f90f689abba2",
+               "itemType":"Question",
+               "title":"Date",
+               "variable":"date",
+               "linkedToQuestionId":null,
+               "type":"DateTime"
+            },
+            {
+               "itemId":"6366223fce5542a9b572be5e6a0f8103",
+               "itemType":"Question",
+               "title":"GPS Coordinates",
+               "variable":"geo",
+               "linkedToQuestionId":null,
+               "type":"GpsCoordinates"
+            },
+            {
+               "itemId":"b1189c8b65904e81bf793771dce9ade6",
+               "itemType":"Question",
+               "title":"Linked in roster",
+               "variable":"link_roster",
+               "linkedToQuestionId":"36f222c26d9f46de8eadd48d548902ca",
+               "type":"SingleOption"
+            },
+            {
+               "itemId":"9b46f8ea0bb443e4b230029afc6a3c41",
+               "itemType":"Question",
+               "title":"Linked in roster 1",
+               "variable":"link_roster1",
+               "linkedToQuestionId":"36f222c26d9f46de8eadd48d548902ca",
+               "type":"MultyOption"
+            }
+         ],
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0,
+         "variable":null
+      },
+      {
+         "itemId":"e5ea8a57529a4607a72abd51bec59cc6",
+         "itemType":"Question",
+         "title":"Linked",
+         "variable":"linked",
+         "linkedToQuestionId":"db8ccb6662d54331bea1464edef9138a",
+         "type":"SingleOption"
+      },
+      {
+         "itemId":"bd8f58e244374ad48d640e375ed59d24",
+         "itemType":"Question",
+         "title":"Linked 2 (text)",
+         "variable":"linked1_2",
+         "linkedToQuestionId":"36f222c26d9f46de8eadd48d548902ca",
+         "type":"MultyOption"
+      },
+      {
+         "itemId":"dd45293c816e982d482334b1222ec41f",
+         "itemType":"Group",
+         "title":"Test group",
+         "isRoster":false,
+         "items":[
+
+         ],
+         "questionsCount":0,
+         "groupsCount":0,
+         "rostersCount":0,
+         "variable":null
+      }
+   ],
+   "questionsCount":0,
+   "groupsCount":0,
+   "rostersCount":0,
+   "variable":null
 }

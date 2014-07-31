@@ -907,7 +907,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles,
             Guid? rosterTitleQuestionId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
@@ -1047,127 +1047,152 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
 
                 var question = questionnaireItem as IQuestion;
-                if (question == null) continue;
-
-
-                var variableName = string.Empty;
-                var variableLabel = string.Empty;
-                var title = question.QuestionText;
-                var isMandatory = question.Mandatory;
-                var enablementCondition = question.ConditionExpression;
-                var instructions = question.Instructions;
-
-                var numericQuestion = question as INumericQuestion;
-                if (numericQuestion != null)
+                if (question != null)
                 {
-                    this.ApplyNumericQuestionCloneEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel:variableLabel, parentGroupId: groupId, title: title,
-                        isMandatory: isMandatory, isPreFilled: numericQuestion.Featured,
-                        scope: numericQuestion.QuestionScope, enablementCondition: enablementCondition,
-                        validationExpression: numericQuestion.ValidationExpression,
-                        validationMessage: numericQuestion.ValidationMessage, instructions: instructions,
-                        sourceQuestionId: sourceItemId, responsibleId: responsibleId,
-                        maxValue: numericQuestion.MaxValue, isInteger: numericQuestion.IsInteger,
-                        countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces);
-                    continue;
+
+                    var variableName = string.Empty;
+                    var variableLabel = string.Empty;
+                    var title = question.QuestionText;
+                    var isMandatory = question.Mandatory;
+                    var enablementCondition = question.ConditionExpression;
+                    var instructions = question.Instructions;
+
+                    var numericQuestion = question as INumericQuestion;
+                    if (numericQuestion != null)
+                    {
+                        this.ApplyNumericQuestionCloneEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
+                            title: title,
+                            isMandatory: isMandatory, isPreFilled: numericQuestion.Featured,
+                            scope: numericQuestion.QuestionScope, enablementCondition: enablementCondition,
+                            validationExpression: numericQuestion.ValidationExpression,
+                            validationMessage: numericQuestion.ValidationMessage, instructions: instructions,
+                            sourceQuestionId: sourceItemId, responsibleId: responsibleId,
+                            maxValue: numericQuestion.MaxValue, isInteger: numericQuestion.IsInteger,
+                            countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces);
+                        continue;
+                    }
+
+                    var textListQuestion = question as ITextListQuestion;
+                    if (textListQuestion != null)
+                    {
+                        this.ApplyTextListQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
+                            title: title,
+                            isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            instructions: instructions,
+                            sourceQuestionId: sourceItemId, responsibleId: responsibleId,
+                            maxAnswerCount: textListQuestion.MaxAnswerCount);
+                        continue;
+                    }
+
+                    var qrBarcodeQuestion = question as IQRBarcodeQuestion;
+                    if (qrBarcodeQuestion != null)
+                    {
+                        this.ApplyQRBarcodeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
+                            title: title,
+                            isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            instructions: instructions,
+                            sourceQuestionId: sourceItemId, responsibleId: responsibleId);
+                        continue;
+                    }
+
+                    var textQuestion = question as TextQuestion;
+                    if (textQuestion != null)
+                    {
+                        this.ApplyTextQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
+                            title: title, isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, responsibleId: responsibleId,
+                            sourceQuestionId: sourceItemId, instructions: instructions, mask: textQuestion.Mask,
+                            isPreFilled: textQuestion.Featured,
+                            scope: textQuestion.QuestionScope, validationExpression: textQuestion.ValidationExpression,
+                            validationMessage: textQuestion.ValidationMessage);
+                        continue;
+                    }
+
+                    var geoLocationQuestion = question as GpsCoordinateQuestion;
+                    if (geoLocationQuestion != null)
+                    {
+                        this.ApplyGeoLocationQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, title: title,
+                            isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, instructions: instructions,
+                            parentGroupId: groupId, sourceQuestionId: sourceItemId,
+                            responsibleId: responsibleId);
+                        continue;
+                    }
+
+                    var dateTitmeQuestion = question as DateTimeQuestion;
+                    if (dateTitmeQuestion != null)
+                    {
+                        this.ApplyDateTimeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, title: title,
+                            isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, instructions: instructions,
+                            parentGroupId: groupId, sourceQuestionId: sourceItemId,
+                            responsibleId: responsibleId, scope: dateTitmeQuestion.QuestionScope,
+                            isPreFilled: dateTitmeQuestion.Featured,
+                            validationExpression: dateTitmeQuestion.ValidationExpression,
+                            validationMessage: dateTitmeQuestion.ValidationMessage);
+                        continue;
+                    }
+
+                    var categoricalMultiQuestion = question as MultyOptionsQuestion;
+                    if (categoricalMultiQuestion != null)
+                    {
+                        this.ApplyCategoricalMultiAnswersQuestionClonedEvent(questionId: itemId,
+                            targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel,
+                            title: title, isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, parentGroupId: groupId,
+                            sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
+                            scope: categoricalMultiQuestion.QuestionScope,
+                            validationExpression: categoricalMultiQuestion.ValidationExpression,
+                            validationMessage: categoricalMultiQuestion.ValidationMessage,
+                            linkedToQuestionId: categoricalMultiQuestion.LinkedToQuestionId,
+                            areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
+                            maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
+                            options:
+                                categoricalMultiQuestion.Answers.Select(
+                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
+                                    .ToArray());
+                        continue;
+                    }
+
+                    var categoricalSingleQuestion = question as SingleQuestion;
+                    if (categoricalSingleQuestion != null)
+                    {
+                        this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: itemId,
+                            targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel,
+                            title: title, isMandatory: isMandatory,
+                            enablementCondition: enablementCondition, parentGroupId: groupId,
+                            sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
+                            scope: categoricalSingleQuestion.QuestionScope,
+                            validationExpression: categoricalSingleQuestion.ValidationExpression,
+                            validationMessage: categoricalSingleQuestion.ValidationMessage,
+                            linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
+                            isPreFilled: categoricalSingleQuestion.Featured,
+                            options:
+                                categoricalSingleQuestion.Answers.Select(
+                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
+                                    .ToArray());
+                        continue;
+                    }
                 }
 
-                var textListQuestion = question as ITextListQuestion;
-                if (textListQuestion != null)
+                var staticText = questionnaireItem as IStaticText;
+                if (staticText != null)
                 {
-                    this.ApplyTextListQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title,
-                        isMandatory: isMandatory, enablementCondition: enablementCondition,
-                        instructions: instructions,
-                        sourceQuestionId: sourceItemId, responsibleId: responsibleId,
-                        maxAnswerCount: textListQuestion.MaxAnswerCount);
-                    continue;
-                }
-
-                var qrBarcodeQuestion = question as IQRBarcodeQuestion;
-                if (qrBarcodeQuestion != null)
-                {
-                    this.ApplyQRBarcodeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title,
-                        isMandatory: isMandatory, enablementCondition: enablementCondition,
-                        instructions: instructions,
-                        sourceQuestionId: sourceItemId, responsibleId: responsibleId);
-                    continue;
-                }
-
-                var textQuestion = question as TextQuestion;
-                if (textQuestion != null)
-                {
-                    this.ApplyTextQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, responsibleId: responsibleId,
-                        sourceQuestionId: sourceItemId, instructions: instructions,mask:textQuestion.Mask, isPreFilled: textQuestion.Featured,
-                        scope: textQuestion.QuestionScope, validationExpression: textQuestion.ValidationExpression,
-                        validationMessage: textQuestion.ValidationMessage);
-                    continue;
-                }
-
-                var geoLocationQuestion = question as GpsCoordinateQuestion;
-                if (geoLocationQuestion != null)
-                {
-                    this.ApplyGeoLocationQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, instructions: instructions,
-                        parentGroupId: groupId, sourceQuestionId: sourceItemId,
-                        responsibleId: responsibleId);
-                    continue;
-                }
-
-                var dateTitmeQuestion = question as DateTimeQuestion;
-                if (dateTitmeQuestion != null)
-                {
-                    this.ApplyDateTimeQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                        variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, instructions: instructions,
-                        parentGroupId: groupId, sourceQuestionId: sourceItemId,
-                        responsibleId: responsibleId, scope: dateTitmeQuestion.QuestionScope,
-                        isPreFilled: dateTitmeQuestion.Featured,
-                        validationExpression: dateTitmeQuestion.ValidationExpression,
-                        validationMessage: dateTitmeQuestion.ValidationMessage);
-                    continue;
-                }
-
-                var categoricalMultiQuestion = question as MultyOptionsQuestion;
-                if (categoricalMultiQuestion != null)
-                {
-                    this.ApplyCategoricalMultiAnswersQuestionClonedEvent(questionId: itemId,
-                        targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, parentGroupId: groupId,
-                        sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
-                        scope: categoricalMultiQuestion.QuestionScope,
-                        validationExpression: categoricalMultiQuestion.ValidationExpression,
-                        validationMessage: categoricalMultiQuestion.ValidationMessage,
-                        linkedToQuestionId: categoricalMultiQuestion.LinkedToQuestionId,
-                        areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
-                        maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
-                        options:
-                            categoricalMultiQuestion.Answers.Select(
-                                answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
-                                .ToArray());
-                    continue;
-                }
-
-                var categoricalSingleQuestion = question as SingleQuestion;
-                if (categoricalSingleQuestion != null)
-                {
-                    this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: itemId,
-                        targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel, title: title, isMandatory: isMandatory,
-                        enablementCondition: enablementCondition, parentGroupId: groupId,
-                        sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
-                        scope: categoricalSingleQuestion.QuestionScope,
-                        validationExpression: categoricalSingleQuestion.ValidationExpression,
-                        validationMessage: categoricalSingleQuestion.ValidationMessage,
-                        linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
-                        isPreFilled: categoricalSingleQuestion.Featured,
-                        options:
-                            categoricalSingleQuestion.Answers.Select(
-                                answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
-                                .ToArray());
+                    this.ApplyEvent(new StaticTextCloned()
+                    {
+                        EntityId = itemId,
+                        ParentId = groupId,
+                        SourceEntityId = sourceItemId,
+                        TargetIndex = itemTargetIndex,
+                        Text = staticText.Text,
+                        ResponsibleId = responsibleId
+                    });
                     continue;
                 }
             }
@@ -1177,7 +1202,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
             RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -1313,7 +1338,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument.ConnectChildrenWithParent();
             IComposite parentGroup = question.GetParent();
-            this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            this.ThrowIfChapterHasMoreThanAllowedLimit(question.PublicKey);
 
             var asMultioptions = question as IMultyOptionsQuestion;
 
@@ -1354,11 +1379,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions, Option[] options, Guid sourceQuestionId, int targetIndex, Guid responsibleId,
             Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-
-            variableName = variableName.Trim();
-            title = title.Trim();
 
             var parentGroup = this.GetGroupById(parentGroupId);
 
@@ -1410,11 +1434,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
-            variableName = Monads.Maybe(() => variableName.Trim());
-            title = title.Trim();
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId);
@@ -1451,19 +1475,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void NewUpdateQuestion(Guid questionId,
+        public void UpdateQuestion(Guid questionId,
             string title, QuestionType type, string variableName, string variableLabel, string mask,
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId,
             bool areAnswersOrdered, int? maxAllowedAnswers)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-
-            variableName = variableName.Trim();
-            title = title.Trim();
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -1558,7 +1581,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string mask,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1600,7 +1623,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string mask,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -1646,7 +1669,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int targetIndex,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1674,7 +1697,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1707,7 +1730,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -1742,7 +1765,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int targetIndex,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1772,7 +1795,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1812,7 +1835,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -1856,7 +1879,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int targetIndex,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1892,7 +1915,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -1939,7 +1962,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
@@ -1990,7 +2013,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool areAnswersOrdered,
             int? maxAllowedAnswers)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -2028,7 +2051,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? linkedToQuestionId,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -2072,7 +2095,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Option[] options,
             Guid? linkedToQuestionId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
@@ -2121,7 +2144,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Option[] options,
             Guid? linkedToQuestionId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -2159,9 +2182,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isInteger, 
             int? countOfDecimalPlaces)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            variableName = variableName.Trim();
-            title = title.Trim();
 
             var parentGroup = this.GetGroupById(parentGroupId);
 
@@ -2211,10 +2234,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isInteger, 
             int? countOfDecimalPlaces)
         {
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+            PrepareGeneralProperties(ref title, ref variableName);
 
-            variableName = variableName.Trim();
-            title = title.Trim();
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             var parentGroup = this.GetGroupById(parentGroupId);
 
@@ -2248,11 +2270,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isInteger,
             int? countOfDecimalPlaces)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-
-            variableName = variableName.Trim();
-            title = title.Trim();
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
@@ -2290,13 +2311,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddTextListQuestion(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             var isPrefilled = false;
             var validationExpression = string.Empty;
 
-            variableName = variableName.Trim();
-            title = title.Trim();
             var parentGroup = this.GetGroupById(parentGroupId);
 
 
@@ -2327,14 +2348,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId, int? maxAnswerCount)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             var isPrefilled = false;
             var validationExpression = string.Empty;
             var validationMessage = string.Empty;
 
-            variableName = variableName.Trim();
-            title = title.Trim();
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled,
@@ -2353,6 +2374,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
+            PrepareGeneralProperties(ref title, ref variableName);
+
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
@@ -2360,9 +2383,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var validationExpression = string.Empty;
             var validationMessage = string.Empty;
 
-
-            variableName = variableName.Trim();
-            title = title.Trim();
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName,
@@ -2395,7 +2415,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddQRBarcodeQuestion(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
@@ -2418,7 +2438,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel,
             bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
@@ -2443,7 +2463,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
             Guid responsibleId)
         {
-            this.PrepareGeneralProperties(ref title, ref variableName);
+            PrepareGeneralProperties(ref title, ref variableName);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: parentGroupId, title: title,
@@ -2639,7 +2659,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, false, parentGroup);
 
-            this.innerDocument.GetChapterOfItemById(questionId);
+            if (parentGroupId.HasValue)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
+            }
         }
 
         private void ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(string condition,
@@ -2665,7 +2688,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
 
-            this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
         }
 
         private void ThrowIfChapterHasMoreThanAllowedLimit(Guid itemId)
@@ -2883,7 +2909,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameSpecialCharacters,
-                    "Valid variable name should contains only letters, digits and underscore character");
+                    "Valid variable name should contain only letters, digits and underscore character");
             }
 
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
@@ -3376,7 +3402,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             switch (rosterSizeSource)
             {
                 case RosterSizeSourceType.Question:
-                    this.ThrowIfRosterSizeQuestionIsIncorrect(groupId, rosterSizeQuestionId.Value, rosterTitleQuestionId, rosterFixedTitles,
+                    this.ThrowIfRosterSizeQuestionIsIncorrect(groupId, rosterSizeQuestionId, rosterTitleQuestionId, rosterFixedTitles,
                         rosterDepthFunc);
                     break;
                 case RosterSizeSourceType.FixedTitles:
@@ -3414,11 +3440,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid rosterSizeQuestionId, Guid? rosterTitleQuestionId,
+        private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid? rosterSizeQuestionId, Guid? rosterTitleQuestionId,
             string[] rosterFixedTitles, Func<Guid[]> rosterDepthFunc)
         {
-            var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(rosterSizeQuestionId);
+            if (!rosterSizeQuestionId.HasValue)
+                throw new QuestionnaireException("Roster size question is empty");
 
+            var localRosterSizeQuestionId = rosterSizeQuestionId.Value;
+            var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(localRosterSizeQuestionId);
             if (rosterSizeQuestion == null)
                 // TODO: Guid should be replaced, but question is missing, so title or variable name cannot be found 
                 throw new QuestionnaireException(string.Format(
@@ -3428,30 +3457,30 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (!RosterSizeQuestionTypes.Contains(rosterSizeQuestion.QuestionType))
                 throw new QuestionnaireException(string.Format(
                     "Roster size question {0} should have Numeric or Categorical Multy Answers or List type.",
-                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+                    FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
             if (
                 !this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(rosterSizeQuestionId),
                     rosterDepthFunc()))
                 throw new QuestionnaireException(string.Format(
                     "Roster size question {0} cannot be placed deeper then roster.",
-                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+                    FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
 
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterSizeQuestion.LinkedToQuestionId.HasValue)
                 throw new QuestionnaireException(string.Format(
                     "Roster size question {0} should not be linked.",
-                    FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+                    FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterTitleQuestionId.HasValue)
                 throw new QuestionnaireException(string.Format(
                     "Roster having categorical multiple answers question {0} as roster size source cannot have roster title question.",
-                    this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+                    this.FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.TextList && rosterTitleQuestionId.HasValue)
                 throw new QuestionnaireException(string.Format(
                     "Roster having list question {0} as roster size source cannot have roster title question.",
-                    this.FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+                    this.FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.Numeric)
             {
@@ -3460,7 +3489,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (!numericQuestion.IsInteger)
                     throw new QuestionnaireException(string.Format(
                         "Roster size question {0} should be Integer.",
-                        FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+                        FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
                 if (rosterTitleQuestionId.HasValue)
                 {
@@ -3472,11 +3501,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                     if (
                         !IsRosterTitleInRosterByRosterSize(rosterTitleQuestion: rosterTitleQuestion,
-                            rosterSizeQuestionId: rosterSizeQuestionId, currentRosterId: groupId))
+                            rosterSizeQuestionId: localRosterSizeQuestionId, currentRosterId: groupId))
                         throw new QuestionnaireException(string.Format(
                             "Question for roster titles {0} should be placed only inside groups where roster size question is {1}",
                             FormatQuestionForException(rosterTitleQuestionId.Value, this.innerDocument),
-                            FormatQuestionForException(rosterSizeQuestionId, this.innerDocument)));
+                            FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
                 }
             }
 
@@ -3619,7 +3648,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Utilities
 
-        private void PrepareGeneralProperties(ref string title, ref string variableName)
+        private static void PrepareGeneralProperties(ref string title, ref string variableName)
         {
             if (variableName != null)
                 variableName = variableName.Trim();
@@ -3638,6 +3667,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var questions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
                 .Where(q => q.PublicKey != questionPublicKey)
+                .Where(q => !string.IsNullOrEmpty(q.StataExportCaption))
                 .ToDictionary(q => q.StataExportCaption, q => q);
 
             var propagationQuestionsVector = GetQuestionnaireItemDepthAsVector(@group.PublicKey);

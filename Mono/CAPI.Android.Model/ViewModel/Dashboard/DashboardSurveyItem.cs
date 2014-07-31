@@ -6,23 +6,25 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class DashboardSurveyItem
     {
-        public DashboardSurveyItem(Guid questionnaireId, long maxVersion, string surveyTitle, IEnumerable<DashboardQuestionnaireItem> items)
+        public DashboardSurveyItem(string id, string questionnaireId, long questionnaireVersion, string surveyTitle, IEnumerable<DashboardQuestionnaireItem> items, bool allowCensusMode)
         {
-            this.QuestionnaireId = questionnaireId;
+            this.AllowCensusMode = !string.IsNullOrEmpty(questionnaireId) && allowCensusMode;
+            this.QuestionnaireId = string.IsNullOrEmpty(questionnaireId) ? Guid.Parse(id) : Guid.Parse(questionnaireId);
             this.SurveyTitle = surveyTitle;
             this.cachedItems = items.ToList();
-            this.QuestionnaireMaxVersion = maxVersion;
+            this.QuestionnaireVersion = questionnaireVersion;
         }
 
         public Guid QuestionnaireId { get; private set; }
-        public long QuestionnaireMaxVersion { get; private set; }
+        public long QuestionnaireVersion { get; private set; }
         public string SurveyTitle { get; private set; }
+        public bool AllowCensusMode { get; private set; }
 
         public IList<DashboardQuestionnaireItem> ActiveItems
         {
             get { return this.cachedItems; }
         }
 
-        private IList<DashboardQuestionnaireItem> cachedItems = new List<DashboardQuestionnaireItem>();
+        private readonly IList<DashboardQuestionnaireItem> cachedItems = new List<DashboardQuestionnaireItem>();
     }
 }

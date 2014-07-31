@@ -3,8 +3,8 @@
 
     angular.module('designerApp', [
         'ngCookies',
-        'ngResource',
         'ngSanitize',
+        'ngResource',
         'ngAnimate',
         'ui.bootstrap',
         'ui.bootstrap.tpls',
@@ -16,7 +16,8 @@
         'angular-loading-bar',
         'cfp.hotkeys',
         'blockUI',
-        'unsavedChanges'
+        'unsavedChanges',
+        'monospaced.elastic'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -34,15 +35,7 @@
                 views: {
                     '': {
                         templateUrl: "views/tree.html",
-                        controller: 'TreeCtrl',
-                        resolve: {
-                            questionnaireId: ['$stateParams', function($stateParams) {
-                                return $stateParams.questionnaireId;
-                            }],
-                            itemId: ['$stateParams', function ($stateParams) {
-                                return $stateParams.itemId;
-                            }]
-                        }
+                        controller: 'TreeCtrl'
                     }
                 }
                 
@@ -51,12 +44,7 @@
                 views: {
                     '': {
                         templateUrl: 'views/question.html',
-                        controller: 'QuestionCtrl',
-                        resolve: {
-                            questionnaireId: ['$stateParams', function ($stateParams) {
-                                return $stateParams.questionnaireId;
-                            }]
-                        }
+                        controller: 'QuestionCtrl'
                     }
                 }
             }).state('questionnaire.chapter.group', {
@@ -64,12 +52,7 @@
                 views: {
                     '': {
                         templateUrl: 'views/group.html',
-                        controller: 'GroupCtrl',
-                        resolve: {
-                            questionnaireId: ['$stateParams', function ($stateParams) {
-                                return $stateParams.questionnaireId;
-                            }]
-                        }
+                        controller: 'GroupCtrl'
                     }
                 }
             }).state('questionnaire.chapter.roster', {
@@ -77,12 +60,7 @@
                 views: {
                     '': {
                         templateUrl: 'views/roster.html',
-                        controller: 'RosterCtrl',
-                        resolve: {
-                            questionnaireId: ['$stateParams', function ($stateParams) {
-                                return $stateParams.questionnaireId;
-                            }]
-                        }
+                        controller: 'RosterCtrl'
                     }
                 }
             }).state('questionnaire.chapter.staticText', {
@@ -90,12 +68,7 @@
                 views: {
                     '': {
                         templateUrl: 'views/static-text.html',
-                        controller: 'StaticTextCtrl',
-                        resolve: {
-                            questionnaireId: ['$stateParams', function ($stateParams) {
-                                return $stateParams.questionnaireId;
-                            }]
-                        }
+                        controller: 'StaticTextCtrl'
                     }
                 }
             });
@@ -107,5 +80,8 @@
     .config(['blockUIConfigProvider', function(blockUiConfigProvider) {
         blockUiConfigProvider.message('Please wait...');
         blockUiConfigProvider.autoBlock(false);
+    }])
+    .config(['unsavedWarningsConfigProvider', function(unsavedWarningsConfigProvider) {
+        unsavedWarningsConfigProvider.routeEvent = '$stateChangeStart';
     }]);
 }(jQuery));

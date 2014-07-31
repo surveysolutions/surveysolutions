@@ -93,11 +93,13 @@
 
             groups = new LocalEntitySet(modelmapper.group, model.Group.Nullo),
             questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, { groups: groups }),
+            staticTexts = new LocalEntitySet(modelmapper.staticText, model.StaticText.Nullo, { groups: groups }),
             questionnaire = modelmapper.questionnaire.fromDto(input.questionnaire);
 
 
         groups.parse(input.questionnaire.Groups);
         questions.parse(input.questionnaire.Questions);
+        staticTexts.parse(input.questionnaire.StaticTexts);
 
         //input.questionnaire = null;
 
@@ -243,6 +245,9 @@
                 if (item.type() == "QuestionView")
                     return item;
 
+                if (item.type() == "StaticTextView")
+                    return null;
+
                 return getAllQuestionsFromGroup(item);
             });
         };
@@ -326,6 +331,9 @@
         var getChildItemByIdAndType = function (item) {
             if (item.type === "GroupView")
                 return groups.getLocalById(item.id);
+            else if (item.type === "StaticTextView") {
+                return staticTexts.getLocalById(item.id);
+            }
             return questions.getLocalById(item.id);
         };
 
@@ -665,6 +673,7 @@
         var datacontext = {
             groups: groups,
             questions: questions,
+            staticTexts: staticTexts,
             questionnaire: questionnaire,
             sendCommand: sendCommand,
             runRemoteVerification: runRemoteVerification

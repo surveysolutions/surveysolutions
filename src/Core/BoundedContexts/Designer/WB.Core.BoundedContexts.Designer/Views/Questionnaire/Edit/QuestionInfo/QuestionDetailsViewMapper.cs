@@ -70,9 +70,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var textQuestion = question as TextQuestion;
             if (textQuestion != null)
             {
-                var textQuestionView = ((TextDetailsView)questionView);
-                textQuestionView.Mask = textQuestion.Mask;
-                return textQuestionView;
+                var textQuestionView = questionView as TextDetailsView;
+                if (textQuestionView != null)
+                {
+                    textQuestionView.Mask = textQuestion.Mask;
+                    return textQuestionView;
+                }
             }
 
             return questionView;

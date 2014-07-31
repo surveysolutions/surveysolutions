@@ -93,14 +93,16 @@
                     } else {
                         var nextItemIndex = _.indexOf(parent.items, currentItem) + updownStepValue;
 
-                        if (nextItemIndex < $scope.items.length && nextItemIndex >= 0) {
+                        if (nextItemIndex < parent.items.length && nextItemIndex >= 0) {
                             target = parent.items[nextItemIndex];
                         }
                     }
 
-                    $state.go('questionnaire.chapter.' + getItemType(target), {
-                        itemId: target.itemId
-                    });
+                    if (!_.isNull(target)) {
+                        $state.go('questionnaire.chapter.' + getItemType(target), {
+                            itemId: target.itemId
+                        });
+                    }
                 }
             };
 
@@ -215,32 +217,16 @@
                     if (event.dest.nodesScope !== event.source.nodesScope || event.dest.index !== event.source.index) {
                         if ($scope.isQuestion(movedItem)) {
                             questionnaireService.moveQuestion(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
-                                .success(function(data) {
-                                    if (!data.IsSuccess) {
-                                        putItem(movedItem, me.draggedFrom, event.source.index);
-                                    }
-                                })
                                 .error(function() {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
                         } else if ($scope.isStaticText(movedItem)) {
                             questionnaireService.moveStaticText(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
-                                .success(function(data) {
-                                    if (!data.IsSuccess) {
-                                        putItem(movedItem, me.draggedFrom, event.source.index);
-                                    }
-                                })
                                 .error(function() {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
                         } else {
                             questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
-                                .success(function(data) {
-                                    if (!data.IsSuccess) {
-                                        putItem(movedItem, me.draggedFrom, event.source.index);
-
-                                    }
-                                })
                                 .error(function() {
                                     putItem(movedItem, me.draggedFrom, event.source.index);
                                 });
@@ -276,43 +262,41 @@
                 var itemIdToClone = staticTextId || $state.params.itemId;
                 var newId = utilityService.guid();
                 commandService.cloneStaticText($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
-                    if (result.IsSuccess) {
-                        var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
-                        var parentItem = clonnedItem.getParentItem() || $scope;
+                    var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
+                    var parentItem = clonnedItem.getParentItem() || $scope;
 
-                        var cloneDeep = {
-                            itemId: newId,
-                            text: clonnedItem.text
-                        };
+                    var cloneDeep = {
+                        itemId: newId,
+                            itemType: "StaticText",
+                        text: clonnedItem.text
+                    };
 
-                        var indexOf = _.indexOf(parentItem.items, clonnedItem);
-                        parentItem.items.splice(indexOf + 1, 0, cloneDeep);
-                        connectTree();
-                        $rootScope.$emit('staticTextCloned');
-                    }
+                    var indexOf = _.indexOf(parentItem.items, clonnedItem);
+                    parentItem.items.splice(indexOf + 1, 0, cloneDeep);
+                    connectTree();
+                    $rootScope.$emit('staticTextCloned');
                 });
             };
-
+         
             $scope.cloneQuestion = function(questionId) {
                 var itemIdToClone = questionId || $state.params.itemId;
                 var newId = utilityService.guid();
                 commandService.cloneQuestion($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
-                    if (result.IsSuccess) {
-                        var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
-                        var parentItem = clonnedItem.getParentItem() || $scope;
+                    var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
+                    var parentItem = clonnedItem.getParentItem() || $scope;
 
-                        var cloneDeep = {
-                            itemId: newId,
-                            variable: '',
-                            title: 'Copy of - ' + clonnedItem.title,
-                            type: clonnedItem.type
-                        };
+                    var cloneDeep = {
+                        itemId: newId,
+                        variable: '',
+                        title: 'Copy of - ' + clonnedItem.title,
+                            itemType: "Question",
+                        type: clonnedItem.type
+                    };
 
-                        var indexOf = _.indexOf(parentItem.items, clonnedItem);
-                        parentItem.items.splice(indexOf + 1, 0, cloneDeep);
-                        connectTree();
-                        $rootScope.$emit('questionAdded');
-                    }
+                    var indexOf = _.indexOf(parentItem.items, clonnedItem);
+                    parentItem.items.splice(indexOf + 1, 0, cloneDeep);
+                    connectTree();
+                    $rootScope.$emit('questionAdded');
                 });
             };
 
@@ -322,20 +306,17 @@
                 var parentItem = clonnedItem.getParentItem() || $scope;
                 var indexOf = _.indexOf(parentItem.items, clonnedItem);
                 var newId = utilityService.guid();
-
                 commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function(result) {
-                    if (result.IsSuccess) {
-                        $scope.refreshTree();
-                        var publishAdd = function(added) {
-                            var children = added.items || [];
-                            $rootScope.$emit(getItemType(added) + 'Added');
-                            _.each(children, function(child) {
-                                publishAdd(child);
-                            });
-                        }
-
-                        publishAdd(clonnedItem);
+                    $scope.refreshTree();
+                    var publishAdd = function(added) {
+                        var children = added.items || [];
+                        $rootScope.$emit(getItemType(added) + 'Added');
+                        _.each(children, function(child) {
+                            publishAdd(child);
+                        });
                     }
+
+                    publishAdd(clonnedItem);
                 });
             };
 
@@ -346,14 +327,11 @@
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete)
-                            .success(function(result) {
-                                if (result.IsSuccess) {
-                                    questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
-                                    $scope.resetSelection();
-                                    $rootScope.$emit('questionDeleted');
-                                }
-                            });
+                        commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete).success(function(result) {
+                            questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                            $scope.resetSelection();
+                            $rootScope.$emit('questionDeleted');
+                        });
                     }
                 });
             };
@@ -363,24 +341,22 @@
 
                 var modalInstance = confirmService.open(item);
 
-                modalInstance.result.then(function(confirmResult) {
+                modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
                         commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                            .success(function(result) {
-                                if (result.IsSuccess) {
-                                    var publishDelete = function(deleted) {
-                                        var children = deleted.items || [];
-                                        $rootScope.$emit(getItemType(deleted) + 'Deleted');
-                                        _.each(children, function(child) {
-                                            publishDelete(child);
-                                        });
-                                    }
-
-                                    publishDelete(questionnaireService.findItem($scope.items, itemIdToDelete));
-
-                                    questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
-                                    $scope.resetSelection();
+                            .success(function (result) {
+                                var publishDelete = function (deleted) {
+                                    var children = deleted.items || [];
+                                    $rootScope.$emit(getItemType(deleted) + 'Deleted');
+                                    _.each(children, function (child) {
+                                        publishDelete(child);
+                                    });
                                 }
+
+                                publishDelete(questionnaireService.findItem($scope.items, itemIdToDelete));
+
+                                questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
+                                $scope.resetSelection();
                             });
                     }
                 });
@@ -402,10 +378,8 @@
                 }
 
                 moveCommand(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function(result) {
-                    if (result.IsSuccess) {
-                        questionnaireService.removeItemWithId($scope.items, itemToMoveId);
-                        $scope.resetSelection();
-                    }
+                    questionnaireService.removeItemWithId($scope.items, itemToMoveId);
+                    $scope.resetSelection();
                 });
             };
 
@@ -431,6 +405,7 @@
                     question.title = data.title;
                     question.variable = data.variable;
                     question.type = data.type;
+                    question.linkedToQuestionId = data.linkedToQuestionId;
                 }
             });
 
@@ -456,6 +431,7 @@
                 var roster = questionnaireService.findItem($scope.items, data.itemId);
                 if (roster != null) {
                     roster.title = data.title;
+                    roster.variable = data.variable;
                 }
             });
         }
