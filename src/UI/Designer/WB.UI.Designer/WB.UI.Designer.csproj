@@ -433,7 +433,6 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\roster.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\share.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\tree.js" />
-    <Content Include="UpdatedDesigner\app\scripts\controllers\verification.js" />
     <Content Include="UpdatedDesigner\app\scripts\decorators\exceptionhandlerdecorator.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\animations.js" />
     <Content Include="UpdatedDesigner\app\scripts\directives\denyThisKeyword.js" />
