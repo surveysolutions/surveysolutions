@@ -283,6 +283,19 @@
         background-color: @questionnarie-question-list-item-hover-color;
       }
     }
+
+    & when (@purpose='verify') {
+      & > .qname-block, &:hover > .qname-block {
+        background-color: transparent;
+        background-image: none;
+      }
+      &, &:hover {
+        > .qname-block:before {
+          background-color: transparent;
+          background-image: none;
+        }
+      }
+    }
   }
 }
 

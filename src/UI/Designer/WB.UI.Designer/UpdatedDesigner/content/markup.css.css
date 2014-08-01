@@ -7752,6 +7752,16 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   color: #fff;
   background-color: #2a81cb;
 }
+#verify-popover-content .question-list .item > .qname-block,
+#verify-popover-content .question-list .item:hover > .qname-block {
+  background-color: transparent;
+  background-image: none;
+}
+#verify-popover-content .question-list .item > .qname-block:before,
+#verify-popover-content .question-list .item:hover > .qname-block:before {
+  background-color: transparent;
+  background-image: none;
+}
 #verify-popover-content .question-list .breadcrumbs {
   margin: 10px 0;
 }
@@ -7782,6 +7792,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #verify-popover-content .question-list ul.error-list {
   margin-top: 5px;
   list-style: none;
+  margin-bottom: 20px;
   font-family: Georgia, serif;
   font-size: 14px;
   font-style: italic;
@@ -7816,7 +7827,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #verify-popover-content .question-list .question {
   height: auto;
   white-space: normal;
-  min-height: 35px;
+  min-height: 25px;
   padding-right: 80px;
   padding-left: 15px;
   color: #d20426;
