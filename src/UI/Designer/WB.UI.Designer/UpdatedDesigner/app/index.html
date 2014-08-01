@@ -22,8 +22,11 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
+    <!-- inject:css -->
     <link rel="stylesheet" href="../content/vendor.css.css">
     <link rel="stylesheet" href="../content/markup.css.css">
+    <!-- endinject -->
+    
     <!-- endbuild -->
     
 </head>
@@ -44,6 +47,10 @@
 
         <!-- build:js(.) scripts/oldieshim.js -->
         <!-- endbuild -->
+
+
+  <!-- inject:js -->
+  
 
         <!-- build:js(.) scripts/vendor.js -->
         <!-- bower:js -->
@@ -105,5 +112,6 @@
         <script src="scripts/decorators/exceptionhandlerdecorator.js"></script>
         <script src="scripts/directives/denythiskeyword.js"></script>
         <!-- endbuild -->
+<!-- endinject -->
     </body>
 </html>
