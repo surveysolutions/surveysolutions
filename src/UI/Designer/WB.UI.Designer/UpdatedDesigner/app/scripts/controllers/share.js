@@ -5,7 +5,7 @@
         '$scope', '$log', '$modalInstance', 'questionnaire', 'shareService',
         function($scope, $log, $modalInstance, questionnaire, shareService) {
             $scope.questionnaire = questionnaire;
-            $scope.initialTitle = questionnaire.title;
+            $scope.questionnaire.editedTitle = questionnaire.title;
 
             $scope.viewModel = {
                 shareWith: '',
@@ -13,7 +13,7 @@
             };
 
             $scope.cancel = function () {
-                $scope.questionnaire.title = $scope.initialTitle;
+                //$scope.questionnaire.title = $scope.initialTitle;
                 $modalInstance.dismiss();
             };
 
@@ -36,8 +36,9 @@
             };
 
             $scope.updateTitle = function() {
-                var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.title, $scope.questionnaire.isPublic);
+                var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.editedTitle, $scope.questionnaire.isPublic);
                 updateRequest.success(function () {
+                    $scope.questionnaire.title = $scope.questionnaire.editedTitle;
                     $modalInstance.dismiss();
                 });
             };
