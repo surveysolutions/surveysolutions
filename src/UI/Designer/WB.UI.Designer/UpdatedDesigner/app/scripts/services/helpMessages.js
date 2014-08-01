@@ -2,19 +2,12 @@
     .factory('helpService', [
         function() {
             var helpService = {
-                // need to add messages
-                'title': 'Title', // remove this message
-                'description': 'Description', // remove this message
                 'instruction': 'Instruction button will be attached to the question that will show this text',
                 'mask': 'Formatted entry for alfa-numerical values: phone numbers, ID codes, etc.',
-                'rosterType': 'Roster Type', // remove this message
                 'variableName': 'Variable names may be 1 to 32 characters long and must start with a-z, A-Z, or _, and the remaining characters may be a-z, A-Z, _, or 0-9.',
                 'titleQuestion': 'Titles of rows',
-                'questionType': 'Question Type', //remove this message
                 'variable': 'Variable',
                 'variableLabel': 'A text up to 80 characters that will be attached to the exported variable',
-
-                // messages from old designer
                 'conditionExpression': 'A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions.',
                 'validationExpression': 'A logical expression that validates an answer to the current question. Might include values of other questions.',
                 'validationMessage': 'Validation message is shown when an answer to the current question fails a validation condition.',
