@@ -48,7 +48,10 @@
           ]
       },
       "angular-block-ui": {
-        "main": "angular-block-ui.js"
+        "main": [
+          "angular-block-ui.js",
+          "angular-block-ui.css"
+          ]
       }
   }
 }

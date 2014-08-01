@@ -24,6 +24,16 @@ gulp.task("styles", function(){
 	    .pipe(plugins.minifyCss())
 	    .pipe(plugins.rev())
 	    .pipe(gulp.dest('build'));
+
+   gulp.src(mainBowerFiles())
+    	.pipe(plugins.filter(['*.css']))
+    	.pipe(plugins.rewriteCss({destination:'build'}))
+	    .pipe(plugins.replace('\\', '/'))
+	    .pipe(plugins.concat('libs.css'))
+	    .pipe(plugins.minifyCss())
+	    .pipe(plugins.rev())
+	    .pipe(gulp.dest('build'));
+	});
 });
 
 gulp.task("bowerJs", function(){
@@ -53,8 +63,10 @@ gulp.task('index', ['clean', 'bowerJs', 'styles', 'devJs'], function () {
   var sources = gulp.src(['./build/libs*.js',
   	//'./vendor/angular-block-ui/angular-block-ui.min.js',
   	'./build/app*.js',
+  	'./build/*.js',
   	'./build/vendor*.css',
-  	'./build/markup*.css'], {read: false});
+  	'./build/markup*.css'.
+  	'./build/*.css'], {read: false});
 
   return target.pipe(plugins.inject(sources, {relative: true}))
     .pipe(gulp.dest('./app'));
