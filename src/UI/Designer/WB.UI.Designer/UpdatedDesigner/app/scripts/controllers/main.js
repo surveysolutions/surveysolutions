@@ -7,7 +7,8 @@
             function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, $log) {
                 $scope.verificationStatus = {
                     errorsCount: null,
-                    errors: []
+                    errors: [],
+                    time: new Date()
                 };
 
                 $scope.questionnaire = {
@@ -23,6 +24,7 @@
                     verificationService.verify($state.params.questionnaireId).success(function (result) {
                         $scope.verificationStatus.errors = result.errors;
                         $scope.verificationStatus.errorsCount = result.errors.length;
+                        $scope.verificationStatus.time = new Date();
 
                         var verificationModal = $('#verification-modal');
 

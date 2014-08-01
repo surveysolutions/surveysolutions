@@ -38,7 +38,7 @@
                           'other': '{} errors'}">
                 </a>
             </span>
-            <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK<em>, saved at 12:43</em></span>
+            <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK<em>, saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
         </div>
     </div>
 </section>
