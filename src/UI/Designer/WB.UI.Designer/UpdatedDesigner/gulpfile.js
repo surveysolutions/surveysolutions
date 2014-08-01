@@ -10,12 +10,12 @@ var paths = {
 };
 
 gulp.task('clean', function	(){
-	gulp.src('build/*')
+	return gulp.src('build/*')
 		.pipe(plugins.clean());
 });
 
 gulp.task("styles", function(){
-	gulp.src(paths.styles)
+	return gulp.src(paths.styles)
 	    .pipe(plugins.less({
 	    	relativeUrls: true
 	    }))
@@ -24,20 +24,10 @@ gulp.task("styles", function(){
 	    .pipe(plugins.minifyCss())
 	    .pipe(plugins.rev())
 	    .pipe(gulp.dest('build'));
-
-   gulp.src(mainBowerFiles())
-    	.pipe(plugins.filter(['*.css']))
-    	.pipe(plugins.rewriteCss({destination:'build'}))
-	    .pipe(plugins.replace('\\', '/'))
-	    .pipe(plugins.concat('libs.css'))
-	    .pipe(plugins.minifyCss())
-	    .pipe(plugins.rev())
-	    .pipe(gulp.dest('build'));
-	});
 });
 
 gulp.task("bowerJs", function(){
-    gulp.src(mainBowerFiles())
+    return gulp.src(mainBowerFiles())
     	.pipe(plugins.filter(['*.js']))
     	.pipe(plugins.ngAnnotate())
     	.pipe(plugins.uglify())
@@ -57,21 +47,23 @@ gulp.task('devJs', function () {
       .pipe(gulp.dest('build'));
 });
 
-gulp.task('index', ['clean', 'bowerJs', 'styles', 'devJs'], function () {
+gulp.task('index', function () {
   var target = gulp.src('app/index.html');
   // It's not necessary to read the files (will speed up things), we're only after their paths:
   var sources = gulp.src(['./build/libs*.js',
-  	//'./vendor/angular-block-ui/angular-block-ui.min.js',
   	'./build/app*.js',
   	'./build/*.js',
   	'./build/vendor*.css',
-  	'./build/markup*.css'.
+  	'./build/markup*.css',
   	'./build/*.css'], {read: false});
 
   return target.pipe(plugins.inject(sources, {relative: true}))
-    .pipe(gulp.dest('./app'));
+    		   .pipe(gulp.dest('./app'));
 });
 
 gulp.task('default', function(callback){
-	runSequence('clean', ['devJs', 'bowerJs', 'styles'], 'index', callback);
+	runSequence('clean', 
+		['devJs', 'bowerJs', 'styles'], 
+		'index', 
+		callback);
 });
