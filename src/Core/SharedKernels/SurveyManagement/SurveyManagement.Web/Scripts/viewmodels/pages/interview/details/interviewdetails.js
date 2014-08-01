@@ -73,7 +73,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
             entity.matchFilter(f);
         });
         $.each(self.groups(), function(index, group) {
-            if (group.visibleQuestionsCount() > 0) {
+            if (group.visibleEntitiesCount() > 0) {
                 group.isSelected(true);
             }
         });
@@ -352,9 +352,9 @@ Supervisor.VM.InterviewDetails = function (settings) {
             group.href = ko.computed(function () {
                 return "#/group/" + group.uiId;
             });
-            group.visibleQuestionsCount = ko.computed(function () {
+            group.visibleEntitiesCount = ko.computed(function () {
                 return _.reduce(group.entities, function (count, entity) {
-                    return count + (entity.isVisible() && !self.isStaticText(entity) ? 1 : 0);
+                    return count + (self.filter() == "all" ? entity.isVisible() : entity.isVisible() && !self.isStaticText(entity)) ? 1 : 0;
                 }, 0);
             });
         });
