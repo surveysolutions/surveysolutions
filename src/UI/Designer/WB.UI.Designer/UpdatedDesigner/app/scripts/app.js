@@ -63,7 +63,7 @@
                         controller: 'RosterCtrl'
                     }
                 }
-            }).state('questionnaire.chapter.staticText', {
+            }).state('questionnaire.chapter.statictext', {
                 url: "/static-text/{itemId}",
                 views: {
                     '': {

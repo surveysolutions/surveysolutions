@@ -155,7 +155,7 @@
 
                     commandService.addStaticText($state.params.questionnaireId, emptyStaticText, parent.itemId).success(function () {
                         parent.items.push(emptyStaticText);
-                        $state.go('questionnaire.chapter.staticText', { chapterId: $state.params.chapterId, itemId: newId });
+                        $state.go('questionnaire.chapter.statictext', { chapterId: $state.params.chapterId, itemId: newId });
                     });
                 };
 
