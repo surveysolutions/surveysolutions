@@ -66,7 +66,11 @@
                 $scope.questionnaire = null;
 
                 $scope.chaptersTree = {
+                    dragStart: function (event) {
+                        $scope.chaptersTree.isDragging = true;
+                    },
                     dropped: function (event) {
+                        $scope.chaptersTree.isDragging = false;
                         var rollback = function (item, targetIndex) {
                             $scope.questionnaire.chapters.splice(_.indexOf($scope.chapters, item), 1);
                             $scope.questionnaire.chapters.splice(targetIndex, 0, item);

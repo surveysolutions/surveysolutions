@@ -12,6 +12,9 @@
             };
 
             $scope.foldback = function () {
+                if ($scope.chaptersTree.isDragging) {
+                    return;
+                }
                 $scope.isFolded = false;
             };
 
