@@ -9,8 +9,8 @@ angular.module('designerApp')
                     if (!_.isEmpty(viewValue)) {
                         var thisKeywordUsed = viewValue.indexOf('[this]') > -1;
                         ctrl.$setValidity('denyThisKeyword', !thisKeywordUsed);
-
                     }
+                    return viewValue;
                 });
             }
         };
