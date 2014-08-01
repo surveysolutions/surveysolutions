@@ -160,18 +160,12 @@
                 });
             };
 
-            var getItemType = function(item) {
-                if (item.hasOwnProperty('type')) {
-                    return itemTypes.question;
+            var getItemType = function (item) {
+                switch (item.itemType) {
+                    case 'Question': return itemTypes.question;
+                    case 'Group': return (item.isRoster ? itemTypes.roster : temTypes.group);
+                    case 'StaticText': return itemTypes.staticText;
                 }
-                if (item.isRoster) {
-                    return itemTypes.roster;
-                }
-                if (!item.hasOwnProperty('type'))
-                    return itemTypes.group;
-
-                if (!item.hasOwnProperty('text'))
-                    return itemTypes.staticText;
                 throw 'unknown item type: ' + item;
             };
 
