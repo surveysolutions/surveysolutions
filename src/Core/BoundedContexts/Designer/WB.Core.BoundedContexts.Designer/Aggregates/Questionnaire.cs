@@ -2742,7 +2742,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     string.Format(
-                        "You can't move group {0} to roster {1} because it contains roster size question(s): {2}",
+                        "You can't move group {0} to roster {1} because it contains roster source question(s): {2}",
                         FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
                         FormatGroupForException(targetGroup.PublicKey, this.innerDocument),
                         string.Join(Environment.NewLine,
@@ -3368,7 +3368,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 targetRoster.RosterSizeQuestionId.HasValue && sourceRoster.RosterSizeQuestionId != targetRoster.RosterSizeQuestionId))
                 throw new QuestionnaireException(
                     string.Format(
-                        "You can move a roster title question {0} only to a roster group that has a roster size question {1}",
+                        "You can move a roster title question {0} only to a roster group that has a roster source question {1}",
                         this.FormatQuestionForException(question.PublicKey, this.innerDocument),
                         this.FormatQuestionForException(sourceRoster.RosterSizeQuestionId.Value, this.innerDocument)));
         }
@@ -3388,7 +3388,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         GetQuestionnaireItemDepthAsVector(groupByRosterSizeQuestion)))
                     //   if (GetQuestionnaireItemDepth(targetGroup.PublicKey) > GetQuestionnaireItemDepth(groupByRosterSizeQuestion) - 1)
                     throw new QuestionnaireException(string.Format(
-                        "Roster size question {0} cannot be placed deeper then roster.",
+                        "Roster source question {0} cannot be placed deeper then roster.",
                         FormatQuestionForException(question.PublicKey, this.innerDocument)));
             }
         }
@@ -3431,7 +3431,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (rosterSizeQuestionId.HasValue)
             {
-                throw new QuestionnaireException("Roster by fixed titles could not have roster size question");
+                throw new QuestionnaireException("Roster by fixed titles could not have roster source question");
             }
 
             if (rosterTitleQuestionId.HasValue)
@@ -3444,32 +3444,32 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string[] rosterFixedTitles, Func<Guid[]> rosterDepthFunc)
         {
             if (!rosterSizeQuestionId.HasValue)
-                throw new QuestionnaireException("Roster size question is empty");
+                throw new QuestionnaireException("Roster source question is empty");
 
             var localRosterSizeQuestionId = rosterSizeQuestionId.Value;
             var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(localRosterSizeQuestionId);
             if (rosterSizeQuestion == null)
                 // TODO: Guid should be replaced, but question is missing, so title or variable name cannot be found 
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} is missing in questionnaire.",
+                    "Roster source question {0} is missing in questionnaire.",
                     rosterSizeQuestionId));
 
             if (!RosterSizeQuestionTypes.Contains(rosterSizeQuestion.QuestionType))
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} should have Numeric or Categorical Multy Answers or List type.",
+                    "Roster source question {0} should have Numeric or Categorical Multy Answers or List type.",
                     FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
             if (
                 !this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(rosterSizeQuestionId),
                     rosterDepthFunc()))
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} cannot be placed deeper then roster.",
+                    "Roster source question {0} cannot be placed deeper then roster.",
                     FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
 
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterSizeQuestion.LinkedToQuestionId.HasValue)
                 throw new QuestionnaireException(string.Format(
-                    "Roster size question {0} should not be linked.",
+                    "Roster source question {0} should not be linked.",
                     FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
             if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterTitleQuestionId.HasValue)
@@ -3488,7 +3488,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if (!numericQuestion.IsInteger)
                     throw new QuestionnaireException(string.Format(
-                        "Roster size question {0} should be Integer.",
+                        "Roster source question {0} should be Integer.",
                         FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
 
                 if (rosterTitleQuestionId.HasValue)
@@ -3503,7 +3503,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         !IsRosterTitleInRosterByRosterSize(rosterTitleQuestion: rosterTitleQuestion,
                             rosterSizeQuestionId: localRosterSizeQuestionId, currentRosterId: groupId))
                         throw new QuestionnaireException(string.Format(
-                            "Question for roster titles {0} should be placed only inside groups where roster size question is {1}",
+                            "Question for roster titles {0} should be placed only inside groups where roster source question is {1}",
                             FormatQuestionForException(rosterTitleQuestionId.Value, this.innerDocument),
                             FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
                 }
@@ -3522,7 +3522,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (referencingRoster != null)
                 throw new QuestionnaireException(
-                    string.Format("Question {0} is referenced as roster size question by group {1}.",
+                    string.Format("Question {0} is referenced as roster source question by group {1}.",
                         FormatQuestionForException(questionId, this.innerDocument),
                         FormatGroupForException(referencingRoster.PublicKey, this.innerDocument)));
         }

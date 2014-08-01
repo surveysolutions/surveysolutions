@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             exception.Message.ToLower().ShouldContain("where");
 
         It should_throw_exception_with_message_containting__size__ = () =>
-            exception.Message.ToLower().ShouldContain("size");
+            exception.Message.ToLower().ShouldContain("source");
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
