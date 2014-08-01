@@ -25,6 +25,14 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
             };
         }
 
+        internal static QuestionnaireVerificationError[] CreateStaticTextVerificationError(Guid staticTextId)
+        {
+            return new QuestionnaireVerificationError[1]
+            {
+                new QuestionnaireVerificationError("aaa","aaaa", new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.StaticText, staticTextId)})
+            };
+        }
+
         internal static QuestionnaireDocument CreateQuestionnaireDocument(Guid questionId, Guid groupId, string groupTitle, string questionTitle)
         {
             return new QuestionnaireDocument
@@ -40,6 +48,24 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
                             {
                                 PublicKey = questionId
                             }
+                        }
+                    }
+                }
+            };
+        }
+
+        internal static QuestionnaireDocument CreateQuestionnaireDocumentWithStaticText(Guid staticTextId, Guid chapterId)
+        {
+            return new QuestionnaireDocument
+            {
+                Children = new List<IComposite>
+                {
+                    new Group()
+                    {
+                        PublicKey = chapterId,
+                        Children = new List<IComposite>
+                        {
+                            new StaticText(staticTextId, null)
                         }
                     }
                 }
