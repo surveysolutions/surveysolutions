@@ -60,7 +60,6 @@
                     }
                 };
 
-
                 if ($scope.questionnaire) {
                     $scope.loadGroup();
                 } else {
