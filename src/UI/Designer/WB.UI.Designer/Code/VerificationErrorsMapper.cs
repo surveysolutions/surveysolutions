@@ -62,6 +62,18 @@ namespace WB.UI.Designer.Code
                         ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
                     };
                 }
+                else if (reference.Type == QuestionnaireVerificationReferenceType.StaticText)
+                {
+                    var staticText = questionnaireDocument.Find<IStaticText>(reference.Id);
+
+                    yield return new VerificationReference
+                    {
+                        ItemId = reference.Id.FormatGuid(),
+                        Type = reference.Type,
+                        Title = string.IsNullOrEmpty(staticText.Text) ? "static text" : staticText.Text,
+                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
+                    };
+                }
                 else
                 {
                     var question = questionnaireDocument.Find<IQuestion>(reference.Id);
