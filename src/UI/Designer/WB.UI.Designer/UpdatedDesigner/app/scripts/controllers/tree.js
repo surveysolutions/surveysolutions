@@ -163,7 +163,7 @@
             var getItemType = function (item) {
                 switch (item.itemType) {
                     case 'Question': return itemTypes.question;
-                    case 'Group': return (item.isRoster ? itemTypes.roster : temTypes.group);
+                    case 'Group': return (item.isRoster ? itemTypes.roster : itemTypes.group);
                     case 'StaticText': return itemTypes.staticText;
                 }
                 throw 'unknown item type: ' + item;
