@@ -17,6 +17,10 @@
                 staticText: 'staticText'
             };
 
+            $scope.itemTemplate = function(itemType){
+                return 'views/tree' + itemType + '.html';
+            }
+
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];

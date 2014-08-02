@@ -1,0 +1,27 @@
+
+        <div 
+             class="question item"
+             ui-sref-active="selected">
+
+            <a class="handler" ui-tree-handle></a>
+            <a ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})">
+                <div class="item-text">
+                    <div class="icon"></div>
+                    <span ng-bind-html="item.text | highlight:search.searchText"></span>
+                </div>
+            </a>
+
+            <div class="qname-block">
+                <div class="btn-group dropdown">
+                    <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ng-click="deleteStaticText(item.itemId)">Delete</a>
+                        </li>
+                        <li>
+                            <a ng-click="cloneStaticText(item.itemId)">Clone</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>

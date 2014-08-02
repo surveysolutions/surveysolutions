@@ -24,7 +24,10 @@
     <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
 
         <div ui-tree-nodes ng-model="items">
-            <div ng-repeat="item in items | filter:searchItem as results" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
+            <div ng-repeat="item in items | filter:searchItem as results"
+                 class="filter-animate"
+                 ui-tree-node>
+                 <ng-include src="itemTemplate(item.itemType)" ></ng-include>
             </div>
             <div class="section item" ng-if="filtersBoxMode == 'search' && results.length === 0">
                 <div class="item-text">
@@ -58,123 +61,3 @@
 
 <div class="question-editor col-xs-6" ui-view></div>
 
-
-<script type="text/ng-template" id="tree_item_renderer.html">
-    <ng-switch on="item.itemType">
-        <div ng-switch-when="Question"
-             class="question item"
-             ui-sref-active="selected">
-
-            <a class="handler" ui-tree-handle></a>
-            <a ui-sref="questionnaire.chapter.question({itemId: item.itemId})">
-                <div class="item-text">
-                    <div class="icon {{answerTypeClass[item.type]}}"></div>
-                    <span ng-bind-html="item.title | highlight:search.searchText"></span>
-                </div>
-            </a>
-
-            <div class="qname-block">
-                <a ng-if="item.linkedToQuestionId" href="javascript:void(0);" class="linked"></a>
-                <span ng-bind-html="item.variable | highlight:search.searchText"></span>
-
-                <div class="btn-group dropdown">
-                    <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a ng-click="deleteQuestion(item)">Delete</a>
-                        </li>
-                        <li>
-                            <a ng-click="cloneQuestion(item.itemId)">Clone</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div ng-switch-when="StaticText"
-             class="question item"
-             ui-sref-active="selected">
-
-            <a class="handler" ui-tree-handle></a>
-            <a ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})">
-                <div class="item-text">
-                    <div class="icon"></div>
-                    <span ng-bind-html="item.text | highlight:search.searchText"></span>
-                </div>
-            </a>
-
-            <div class="qname-block">
-                <div class="btn-group dropdown">
-                    <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a ng-click="deleteStaticText(item.itemId)">Delete</a>
-                        </li>
-                        <li>
-                            <a ng-click="cloneStaticText(item.itemId)">Clone</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div ng-switch-when="Group"
-             class="section item"
-             ng-class="{ 'highlighted': is_highlighted }"
-             ui-sref-active="selected"
-             ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
-                                         'questionnaire.chapter.group({itemId: item.itemId})' }}">
-
-            <a class="handler" ui-tree-handle></a>
-
-            <a ui-sref="{{!item.isRoster ? 'questionnaire.chapter.group({itemId: item.itemId})' : 'questionnaire.chapter.roster({itemId: item.itemId})'}}">
-                <div class="item-text">
-                    <button type="button" ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
-                            ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
-                    <span ng-bind-html="item.title | highlight:search.searchText"></span>
-                </div>
-            </a>
-
-            <div class="qname-block">
-                <span ng-if="item.isRoster" ng-bind-html="item.variable | highlight:search.searchText"></span>
-                <div class="btn-group dropdown">
-                    <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a ng-click="addQuestion(item)">Add question</a>
-                        </li>
-                        <li>
-                            <a ng-click="addGroup(item)">Add subgroup</a>
-                        </li>
-                        <li>
-                            <a ng-click="addRoster(item)">Add roster</a>
-                        </li>
-                        <li>
-                            <a ng-click="addStaticText(item)">Add static text</a>
-                        </li>
-                        <li>
-                            <a ng-click="deleteGroup(item)">Delete</a>
-                        </li>
-                        <li>
-                            <a ng-click="cloneGroup(item.itemId)">Clone</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-
-        <div ng-hide="collapsed" class="slide" ui-tree-nodes="item.items" ng-model="item.items">
-            <div ng-repeat="item in item.items | filter:searchItem" class="filter-animate" ui-tree-node ng-include="'tree_item_renderer.html'">
-            </div>
-        </div>
-        <!--<div class="buttons-item" ng-if="item.itemType === 'Group'" ng-class="{ hidden: collapsed }">
-            <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
-            <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
-            <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(item)" />
-            <input type="button" class="btn lighter-hover" value="ADD STATIC TEXT" ng-click="addStaticText(item)" />
-        </div>-->
-    </ng-switch>
-
-
-</script>
