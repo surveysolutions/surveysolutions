@@ -26,7 +26,7 @@ function GetPathToJarsigner() {
 }
 
 function GetPathToZipalign() {
-	return 'C:\Users\Administrator\AppData\Local\Android\android-sdk\tools\zipalign.exe'
+	return 'C:\Android\android-sdk\tools\zipalign.exe'
 }
 
 function GetPathToManifest([string]$CapiProject) {
