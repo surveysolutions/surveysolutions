@@ -15,12 +15,12 @@ function CleanFolders($Filter) {
     Write-Host "##teamcity[blockOpened name='$Filter']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    $folders = Get-ChildItem -Filter $Filter -Recurse | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } | %{ GetPathRelativeToCurrectLocation $_.FullName }
+    $folders = Get-ChildItem -Filter $Filter -Recurse -ErrorAction SilentlyContinue | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } | %{ GetPathRelativeToCurrectLocation $_.FullName }
 
     if ($folders -ne $null) {
         foreach ($folder in $folders) {
             Write-Host $folder
-            Remove-Item $folder -Force -Recurse
+            Remove-Item $folder -Force -Recurse -ErrorAction SilentlyContinue
         }
     }
 
@@ -60,7 +60,7 @@ function ShouldSolutionBeIgnored($Solution) {
 }
 
 function GetSolutionsToBuild() {
-    $foundSolutions = Get-ChildItem -Filter *.sln -Recurse | %{ GetPathRelativeToCurrectLocation $_.FullName }
+    $foundSolutions = Get-ChildItem -Filter *.sln -Recurse -ErrorAction SilentlyContinue | %{ GetPathRelativeToCurrectLocation $_.FullName }
     $solutionsToIgnore = $foundSolutions | ?{ ShouldSolutionBeIgnored $_ }
     $solutionsToBuild = $foundSolutions | ?{ -not (ShouldSolutionBeIgnored $_) }
 
@@ -135,7 +135,7 @@ function BuildSolutions($BuildConfiguration,  [switch] $ClearBinAndObjFoldersBef
 
 
 function GetProjectsWithTests() {
-    return Get-ChildItem -Filter *Test*.csproj -Recurse | %{ GetPathRelativeToCurrectLocation $_.FullName }
+    return Get-ChildItem -Filter *Test*.csproj -Recurse -ErrorAction SilentlyContinue | %{ GetPathRelativeToCurrectLocation $_.FullName }
 }
 
 function GetOutputAssembly($Project, $BuildConfiguration) {
