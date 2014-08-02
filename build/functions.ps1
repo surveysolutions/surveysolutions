@@ -289,7 +289,7 @@ function GetVersionString([string]$Project)
 function UpdateProjectVersion([string]$BuildNumber, [string]$Project)
 {
 	$ver = GetVersionString $Project
-	$foundFiles = get-childitem $path -include *AssemblyInfo.cs -recurse
+	$foundFiles = get-childitem $path -include *AssemblyInfo.cs -recurse -ErrorAction SilentlyContinue
 	foreach ($file in $foundFiles) {
 		UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
 	}
