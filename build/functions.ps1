@@ -33,6 +33,7 @@ function CleanBinAndObjFolders() {
 
     CleanFolders 'bin'
     CleanFolders 'obj'
+    CleanFolders 'src\UI\Designer\WB.UI.Designer\UpdatedDesigner\build'
 
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
