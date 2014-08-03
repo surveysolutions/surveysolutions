@@ -36,7 +36,16 @@ function CleanBinAndObjFolders() {
 
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
-
+function BuildNewDesigner(){
+    $installCommand = "npm install"
+    $targetLocation = "src\UI\Designer\WB.UI.Designer\UpdatedDesigner"
+    Write-Host "Pushing location to $targetLocation"
+    Push-Location -Path $targetLocation
+    Write-Host $installCommand
+    iex $installCommand #install node js dependencies
+    &gulp #will execute script gulpfile.js in UpdatedDesigner folder
+    Pop-Location
+}
 function CheckPrerequisites() {
     Write-Host "##teamcity[blockOpened name='Checking prerequisities']"
     Write-Host "##teamcity[progressStart 'Checking prerequisities']"

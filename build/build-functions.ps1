@@ -69,17 +69,6 @@ function BuildSupervisor($Solution, $Project, $BuildConfiguration, $AndroidPacka
 	AddArtifacts $Project $BuildConfiguration
 }
 
-function BuildNewDesigner(){
-    $installCommand = "npm install"
-    $targetLocation = "src\UI\Designer\WB.UI.Designer\UpdatedDesigner"
-    Write-Host "Pushing location to $targetLocation"
-    Push-Location -Path $targetLocation
-    Write-Host $installCommand
-    iex $installCommand #install node js dependencies
-    &gulp #will execute script gulpfile.js in UpdatedDesigner folder
-    Pop-Location
-}
-
 function BuildDesigner($Solution, $Project, $BuildConfiguration) {
 	CleanBinAndObjFolders
 	BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
