@@ -75,7 +75,18 @@ function BuildDesigner($Solution, $Project, $BuildConfiguration) {
 	RunTests $BuildConfiguration
 
 	RunConfigTransform "src\UI\Designer\WB.UI.Designer\Web.config" "src\UI\Designer\WB.UI.Designer\Web.$BuildConfiguration.config"
-	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
+	$installCommand = "npm install"
+    $targetLocation = "src\UI\Designer\WB.UI.Designer\UpdatedDesigner"
+    Write-Host "Pushing location to $targetLocation"
+    Push-Location -Path $targetLocation
+    Write-Host $installCommand
+    iex $installCommand #install node js dependencies
+    &gulp #will execute script gulpfile.js in UpdatedDesigner folder
+
+    Pop-Location
+
+
+    BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
 
