@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireHelper
 {
     internal class when_getting_public_questionnaire_data_deleted_questionnaires_should_not_be_editable_ : QuestionnaireHelperTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             var user = Mock.Of<IMembershipWebUser>(x =>
                 x.IsAdmin == true &&
@@ -28,13 +28,13 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireHelper
             questionnaireHelper = new UI.Designer.Code.QuestionnaireHelper(userHelperMock, userViewFactoryMock);
         };
 
-        private Because of = () =>
+        Because of = () =>
             result = questionnaireHelper.GetPublicQuestionnaires(Moq.It.IsAny<Guid>());
 
-        private It should_be_not_allowed_to_edit_deleted_questionnaire_for_zero_element = () =>
+        It should_be_not_allowed_to_edit_deleted_questionnaire_for_zero_element = () =>
             result[0].CanEdit.ShouldEqual(false);
 
-        private It should_be_allowed_to_edit_not_deleted_questionnaire_for_first_element = () =>
+        It should_be_allowed_to_edit_not_deleted_questionnaire_for_first_element = () =>
             result[1].CanEdit.ShouldEqual(true);
 
         private static UI.Designer.Code.QuestionnaireHelper questionnaireHelper;
