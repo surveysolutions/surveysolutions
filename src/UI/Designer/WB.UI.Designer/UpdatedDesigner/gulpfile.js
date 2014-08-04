@@ -19,9 +19,9 @@ gulp.task("styles", function(){
 	    .pipe(plugins.less({
 	    	relativeUrls: true
 	    }))
-	    .pipe(plugins.rewriteCss({destination:'build'}))
-	    .pipe(plugins.replace('\\', '/'))
-	    .pipe(plugins.minifyCss())
+      .pipe(plugins.cssUrlAdjuster({
+        prepend: '../content/'
+      }))
 	    .pipe(plugins.rev())
 	    .pipe(gulp.dest('build'));
 });
