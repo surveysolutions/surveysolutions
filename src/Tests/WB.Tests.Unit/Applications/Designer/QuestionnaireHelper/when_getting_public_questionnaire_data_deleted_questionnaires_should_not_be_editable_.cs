@@ -10,7 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.QuestionnaireHelper
 {
-    internal class when_getting_questionnaire_data_deleted_questionnaires_should_be_editable_ : QuestionnaireHelperTestContext
+    internal class when_getting_public_questionnaire_data_deleted_questionnaires_should_not_be_editable_ : QuestionnaireHelperTestContext
     {
         private Establish context = () =>
         {
