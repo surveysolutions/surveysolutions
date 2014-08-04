@@ -198,7 +198,7 @@
                     me.draggedFrom = event.source.nodeScope.item.getParentItem();
                 },
                 dropped: function(event) {
-
+                    connectTree();
                     var movedItem = event.source.nodeScope.item;
                     var destItem = event.dest.nodesScope.item;
                     var destGroupId = destItem ? destItem.itemId : $scope.questionnaire.chapters[0].itemId;
