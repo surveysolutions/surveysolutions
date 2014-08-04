@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
     public class MaskedFormatter : IMaskedFormatter
     {
         private const char DigitKey = '#';
-        private const char CharacterKey = '@';
+        private const char CharacterKey = '~';
         private const char AnythingKey = '*';
        /* private const char LiteralKey = '\'';
         private const char UppercaseKey = 'U';
