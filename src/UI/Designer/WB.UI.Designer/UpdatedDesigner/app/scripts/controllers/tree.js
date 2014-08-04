@@ -192,7 +192,7 @@
 
             $scope.groupsTree = {
                 accept: function(sourceNodeScope, destNodesScope) {
-                    var accept = sourceNodeScope.item.itemType !== 'Chapter' && (_.isNull(destNodesScope.item) || destNodesScope.item.itemType === itemTypes.group);
+                    var accept = sourceNodeScope.item.itemType !== 'Chapter' && (_.isNull(destNodesScope.item) || destNodesScope.item.itemType === "Group");
                     return accept;
                 },
                 beforeDrop: function(event) {
