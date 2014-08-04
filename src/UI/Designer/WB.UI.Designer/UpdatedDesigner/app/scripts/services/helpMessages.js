@@ -4,13 +4,13 @@
             var helpService = {
                 'instruction': 'Instruction button will be attached to the question that will show this text',
                 'mask': 'Formatted entry for alfa-numerical values: phone numbers, ID codes, etc.\n' +
-                    'Examples:"@" - Represents an alpha character (A-Z,a-z), ' +
+                    'Examples:"~" - Represents an alpha character (A-Z,a-z), ' +
                     '"#" - Represents a numeric character (0-9), ' +
                     '"*" - Represents an alphanumeric character (A-Z,a-z,0-9). ' +
                     '"##/##/####" - date, ' +
                     '"(###) ###-####" - phone number, ' +
                     '"AA####" - flight number operated by American AireLines or ' +
-                    '"@*-###-@###"',
+                    '"~*-###-~###"',
                 'variableName': 'Variable names may be 1 to 32 characters long and must start with a-z, A-Z, or _, and the remaining characters may be a-z, A-Z, _, or 0-9.',
                 'titleQuestion': 'Titles of rows',
                 'variable': 'Variable',
