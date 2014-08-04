@@ -29,11 +29,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 version = version_1_6_2;
 
             int maskQuestionCount = GetQuestionsWithMaskCount(questionnaire);
+            int staticTextCount = GetStaticTextCount(questionnaire);
             int groupWithVariableNameCount = GetGroupWithVariableNameCount(questionnaire);
-            if ((maskQuestionCount > 0 || groupWithVariableNameCount > 0) && version < version_2_1_0)
+            if ((maskQuestionCount > 0 || groupWithVariableNameCount > 0 || staticTextCount > 0) && version < version_2_1_0)
                 version = version_2_1_0;
 
             return version;
+        }
+
+        private int GetStaticTextCount(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Find<IStaticText>(x => true).Count();
         }
 
         private int GetNestedRostersCount(QuestionnaireDocument questionnaire)
