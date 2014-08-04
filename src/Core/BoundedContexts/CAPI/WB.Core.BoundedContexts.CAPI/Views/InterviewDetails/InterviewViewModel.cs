@@ -987,7 +987,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
         {
-            var mask = Monads.Maybe(() => (question as TextQuestion).Mask);
+            var txtQuestion = question as TextQuestion;
+            var mask = "";
+            if (txtQuestion != null)
+            {
+                mask = txtQuestion.Mask;
+            }
 
             return new ValueQuestionViewModel(
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
