@@ -13,7 +13,6 @@
                     '"a*-999-a999"',
                 'variableName': 'Variable names may be 1 to 32 characters long and must start with a-z, A-Z, or _, and the remaining characters may be a-z, A-Z, _, or 0-9.',
                 'titleQuestion': 'Titles of rows',
-                'variable': 'Variable',
                 'variableLabel': 'A text up to 80 characters that will be attached to the exported variable',
                 'conditionExpression': 'A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions.',
                 'validationExpression': 'A logical expression that validates an answer to the current question. Might include values of other questions.',
