@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 
         private static MaskedFormatterTestable maskedFormatter;
         private static MaskCharacter[] maskCharacters;
-        private static string mask = @"#-@*\'";
+        private static string mask = @"#-~*\'";
     }
 
     internal class MaskedFormatterTestable : MaskedFormatter
