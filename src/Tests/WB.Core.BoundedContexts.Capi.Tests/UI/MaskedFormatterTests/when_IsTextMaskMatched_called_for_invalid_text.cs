@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 
         private static MaskedFormatter maskedFormatter;
         private static bool result;
-        private static string mask = "a*-999-a999";
+        private static string mask = "@*-###-@###";
         private static string value = "19-123-s123";
     }
 }
