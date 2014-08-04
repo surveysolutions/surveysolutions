@@ -14,7 +14,7 @@
                 question: 'question',
                 roster: 'roster',
                 group: 'group',
-                staticText: 'staticText'
+                staticText: 'statictext'
             };
 
             $scope.itemTemplate = function(itemType){
