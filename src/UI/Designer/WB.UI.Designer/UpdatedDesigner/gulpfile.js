@@ -6,7 +6,7 @@ var runSequence = require('run-sequence');
 
 var paths = {
   scripts: ['app/scripts/**/*.js'],
-  styles: ['content/markup.css.less', 'content/vendor.css.less']
+  styles: ['content/markup.css.less']
 };
 
 gulp.task('clean', function	(){
