@@ -128,6 +128,8 @@
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireHelper\QuestionnaireHelperTestContext.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireHelper\when_getting_questionnaire_data_deleted_questionnaires_should_be_editable_.cs" />
     <Compile Include="Applications\Designer\SynchronizationControllerTests.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
