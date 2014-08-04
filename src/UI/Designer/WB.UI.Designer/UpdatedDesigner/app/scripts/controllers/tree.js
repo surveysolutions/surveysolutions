@@ -86,26 +86,28 @@
             var upDownMove = function(updownStepValue) {
                 if ($scope.items && $state.params.itemId) {
                     var currentItem = getCurrentItem();
-                    var parent = currentItem.getParentItem();
-                    var target = null;
+                    if (currentItem) {
+                        var parent = currentItem.getParentItem();
+                        var target = null;
 
-                    if (_.isNull(parent)) {
-                        var siblingIndex = _.indexOf($scope.items, currentItem) + updownStepValue;
-                        if (siblingIndex < $scope.items.length && siblingIndex >= 0) {
-                            target = $scope.items[siblingIndex];
+                        if (_.isNull(parent)) {
+                            var siblingIndex = _.indexOf($scope.items, currentItem) + updownStepValue;
+                            if (siblingIndex < $scope.items.length && siblingIndex >= 0) {
+                                target = $scope.items[siblingIndex];
+                            }
+                        } else {
+                            var nextItemIndex = _.indexOf(parent.items, currentItem) + updownStepValue;
+
+                            if (nextItemIndex < parent.items.length && nextItemIndex >= 0) {
+                                target = parent.items[nextItemIndex];
+                            }
                         }
-                    } else {
-                        var nextItemIndex = _.indexOf(parent.items, currentItem) + updownStepValue;
 
-                        if (nextItemIndex < parent.items.length && nextItemIndex >= 0) {
-                            target = parent.items[nextItemIndex];
+                        if (!_.isNull(target)) {
+                            $state.go('questionnaire.chapter.' + getItemType(target), {
+                                itemId: target.itemId
+                            });
                         }
-                    }
-
-                    if (!_.isNull(target)) {
-                        $state.go('questionnaire.chapter.' + getItemType(target), {
-                            itemId: target.itemId
-                        });
                     }
                 }
             };
@@ -120,11 +122,14 @@
 
             $scope.goToParent = function() {
                 if ($scope.items && $state.params.itemId) {
-                    var parent = getCurrentItem().getParentItem();
-                    if (parent != null) {
-                        $state.go('questionnaire.chapter.' + getItemType(parent), {
-                            itemId: parent.itemId
-                        });
+                    var itemToFind = getCurrentItem();
+                    if (itemToFind) {
+                        var parent = itemToFind.getParentItem();
+                        if (parent != null) {
+                            $state.go('questionnaire.chapter.' + getItemType(parent), {
+                                itemId: parent.itemId
+                            });
+                        }
                     }
                 }
             };
@@ -132,7 +137,7 @@
             $scope.goToChild = function() {
                 if ($scope.items && $state.params.itemId) {
                     var currentItem = getCurrentItem();
-                    if (!_.isEmpty(currentItem.items)) {
+                    if (currentItem && !_.isEmpty(currentItem.items)) {
                         var target = currentItem.items[0];
                         $state.go('questionnaire.chapter.' + getItemType(target), {
                             itemId: target.itemId
