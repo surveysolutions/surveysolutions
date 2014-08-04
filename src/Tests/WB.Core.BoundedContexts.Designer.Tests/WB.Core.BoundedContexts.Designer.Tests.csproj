@@ -229,6 +229,7 @@
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_question_and_roster_size_question_is_empty.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_numeric_question_and_question_is_null.cs" />
+    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_static_text.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_group_with_variable_name.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_masked_text_question.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
