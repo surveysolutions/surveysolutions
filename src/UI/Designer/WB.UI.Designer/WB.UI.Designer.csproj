@@ -423,16 +423,13 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="UpdatedDesigner\app\scripts\components\contextMenu.js" />
     <Content Include="UpdatedDesigner\app\views\treegroup.html" />
     <Content Include="UpdatedDesigner\app\views\treequestion.html" />
     <Content Include="UpdatedDesigner\app\views\treestatictext.html" />
     <Content Include="UpdatedDesigner\build\*.js" />
     <Content Include="UpdatedDesigner\build\*.css" />
     <Content Include="UpdatedDesigner\app\scripts\app.js" />
-    <Content Include="UpdatedDesigner\app\scripts\components\contextMenu.js" />
-    <Content Include="UpdatedDesigner\app\scripts\components\markup.js" />
-    <Content Include="UpdatedDesigner\app\scripts\components\ujs.js" />
-    <Content Include="UpdatedDesigner\app\scripts\components\wb-designer-editor.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\chapters.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\confirm.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\group.js" />
