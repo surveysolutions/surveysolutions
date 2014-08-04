@@ -24,7 +24,7 @@
     <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
 
         <div ui-tree-nodes ng-model="items">
-            <div ng-repeat="item in items | filter:searchItem as results"
+            <div ng-repeat="item in items | filter:searchItem as results track by item.itemId"
                  class="filter-animate"
                  ui-tree-node>
                  <ng-include src="itemTemplate(item.itemType)" ></ng-include>

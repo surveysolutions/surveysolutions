@@ -1,51 +1,46 @@
-<div 
-             class="section item"
-             ng-class="{ 'highlighted': is_highlighted }"
-             ui-sref-active="selected"
-             ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
+<div class="section item"
+     ng-class="{ 'highlighted': is_highlighted }"
+     ui-sref-active="selected"
+     ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
                                          'questionnaire.chapter.group({itemId: item.itemId})' }}">
-
-            <a class="handler" ui-tree-handle></a>
-
-            <a ui-sref="{{!item.isRoster ? 'questionnaire.chapter.group({itemId: item.itemId})' : 'questionnaire.chapter.roster({itemId: item.itemId})'}}">
-                <div class="item-text">
-                    <button type="button" ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
-                            ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
-                    <span ng-bind-html="item.title | highlight:search.searchText"></span>
-                </div>
-            </a>
-
-            <div class="qname-block">
-                <span ng-if="item.isRoster" ng-bind-html="item.variable | highlight:search.searchText"></span>
-                <div class="btn-group dropdown">
-                    <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a ng-click="addQuestion(item)">Add question</a>
-                        </li>
-                        <li>
-                            <a ng-click="addGroup(item)">Add subgroup</a>
-                        </li>
-                        <li>
-                            <a ng-click="addRoster(item)">Add roster</a>
-                        </li>
-                        <li>
-                            <a ng-click="addStaticText(item)">Add static text</a>
-                        </li>
-                        <li>
-                            <a ng-click="deleteGroup(item)">Delete</a>
-                        </li>
-                        <li>
-                            <a ng-click="cloneGroup(item.itemId)">Clone</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
+    <a class="handler" ui-tree-handle></a>
+    <a ui-sref="{{!item.isRoster ? 'questionnaire.chapter.group({itemId: item.itemId})' : 'questionnaire.chapter.roster({itemId: item.itemId})'}}">
+        <div class="item-text">
+            <button type="button" ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
+                    ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
+            <span ng-bind-html="item.title | highlight:search.searchText"></span>
         </div>
-        <div ng-hide="collapsed" class="slide" ui-tree-nodes="item.items" ng-model="item.items">
-            <div ng-repeat="item in item.items | filter:searchItem" 
-            	class="filter-animate" 
-            	ui-tree-node ng-include="itemTemplate(item.itemType)">
-            </div>
+    </a>
+    <div class="qname-block">
+        <span ng-if="item.isRoster" ng-bind-html="item.variable | highlight:search.searchText"></span>
+        <div class="btn-group dropdown">
+            <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a ng-click="addQuestion(item)">Add question</a>
+                </li>
+                <li>
+                    <a ng-click="addGroup(item)">Add subgroup</a>
+                </li>
+                <li>
+                    <a ng-click="addRoster(item)">Add roster</a>
+                </li>
+                <li>
+                    <a ng-click="addStaticText(item)">Add static text</a>
+                </li>
+                <li>
+                    <a ng-click="deleteGroup(item)">Delete</a>
+                </li>
+                <li>
+                    <a ng-click="cloneGroup(item.itemId)">Clone</a>
+                </li>
+            </ul>
         </div>
+    </div>
+</div>
+<div ng-hide="collapsed" class="slide" ui-tree-nodes="item.items" ng-model="item.items">
+    <div ng-repeat="item in item.items | filter:searchItem track by item.itemId"
+         class="filter-animate"
+         ui-tree-node ng-include="itemTemplate(item.itemType)">
+    </div>
+</div>

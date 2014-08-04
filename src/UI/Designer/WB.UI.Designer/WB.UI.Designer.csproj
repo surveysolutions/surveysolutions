@@ -419,6 +419,7 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="UpdatedDesigner\app\scripts\directives\fasuspendable.js" />
     <Content Include="UpdatedDesigner\app\views\treegroup.html" />
     <Content Include="UpdatedDesigner\app\views\treequestion.html" />
     <Content Include="UpdatedDesigner\app\views\treestatictext.html" />
