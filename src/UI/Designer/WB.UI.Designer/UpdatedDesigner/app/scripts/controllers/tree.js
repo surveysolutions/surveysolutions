@@ -177,7 +177,8 @@
                 return item.hasOwnProperty('type');
             };
 
-            $scope.isGroup = function(item) {
+            $scope.isGroup = function (item) {
+
                 return !($scope.isQuestion(item) || $scope.isStaticText(item));
             };
 
@@ -191,8 +192,8 @@
 
             $scope.groupsTree = {
                 accept: function(sourceNodeScope, destNodesScope) {
-                    var message = _.isNull(destNodesScope.item) || $scope.isGroup(destNodesScope.item);
-                    return message;
+                    var accept = sourceNodeScope.item.itemType !== 'Chapter' && (_.isNull(destNodesScope.item) || destNodesScope.item.itemType === itemTypes.group);
+                    return accept;
                 },
                 beforeDrop: function(event) {
                     me.draggedFrom = event.source.nodeScope.item.getParentItem();

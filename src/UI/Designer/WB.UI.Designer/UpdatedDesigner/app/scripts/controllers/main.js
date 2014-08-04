@@ -66,6 +66,9 @@
                 $scope.questionnaire = null;
 
                 $scope.chaptersTree = {
+                    accept: function (sourceNodeScope) {
+                        return _.isEmpty(sourceNodeScope.item);
+                    },
                     dragStart: function (event) {
                         $scope.chaptersTree.isDragging = true;
                     },
