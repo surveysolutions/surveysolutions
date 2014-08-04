@@ -1,5 +1,4 @@
 ﻿ko.validation.init({ insertMessages: false, decorateElement: true, errorElementClass: 'has-error' });
-
 ko.bindingHandlers.datepicker = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         //initialize datepicker with some optional options
@@ -60,10 +59,19 @@ ko.validation.rules['digit'] = {
     message: 'Please enter a digit'
 };
 ko.bindingHandlers.maskFormatter = {
+    
     init: function (element, valueAccessor) {
+      
         var value = ko.utils.unwrapObservable(valueAccessor());
         if (!value)
             return;
+
+        $.mask.definitions = {
+            '#': "[0-9]",
+            '@': "[A-Za-z]",
+            '*': "[A-Za-z0-9]"
+        };
+
         $(element).mask(value);
     }
 };

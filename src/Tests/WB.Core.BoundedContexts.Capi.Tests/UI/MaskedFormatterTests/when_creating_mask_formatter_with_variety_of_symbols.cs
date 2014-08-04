@@ -27,29 +27,17 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
             maskCharacters[1].ShouldBeOfExactType<LiteralCharacter>();
 
         It should_third_mask_character_be_upper_case_character = () =>
-            maskCharacters[2].ShouldBeOfExactType<UpperCaseCharacter>();
+            maskCharacters[2].ShouldBeOfExactType<CharCharacter>();
 
         It should_fourth_mask_character_be_lower_case_character = () =>
-            maskCharacters[3].ShouldBeOfExactType<LowerCaseCharacter>();
+            maskCharacters[3].ShouldBeOfExactType<MaskCharacter>();
 
         It should_fifth_mask_character_be_alpha_numeric_character = () =>
-            maskCharacters[4].ShouldBeOfExactType<AlphaNumericCharacter>();
-
-        It should_six_mask_character_be_character = () =>
-            maskCharacters[5].ShouldBeOfExactType<CharCharacter>();
-
-        It should_seventh_mask_character_be_any_character = () =>
-            maskCharacters[6].ShouldBeOfExactType<MaskCharacter>();
-
-        It should_eighth_mask_character_be_hex_character = () =>
-            maskCharacters[7].ShouldBeOfExactType<HexCharacter>();
-
-        It should_ninth_mask_character_be_literal_character = () =>
-            maskCharacters[8].ShouldBeOfExactType<LiteralCharacter>();
+            maskCharacters[4].ShouldBeOfExactType<LiteralCharacter>();
 
         private static MaskedFormatterTestable maskedFormatter;
         private static MaskCharacter[] maskCharacters;
-        private static string mask = @"9-ULAa*H\'A";
+        private static string mask = @"#-@*\'";
     }
 
     internal class MaskedFormatterTestable : MaskedFormatter

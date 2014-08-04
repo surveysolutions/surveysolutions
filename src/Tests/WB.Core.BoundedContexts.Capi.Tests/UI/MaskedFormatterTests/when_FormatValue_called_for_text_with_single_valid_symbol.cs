@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.UI.MaskedFormatterTests
 
         private static MaskedFormatter maskedFormatter;
         private static string result;
-        private static string mask = "+1(999)-999";
+        private static string mask = "+1(###)-###";
         private static string value = "3";
         private static int cursorPosition = 1;
     }

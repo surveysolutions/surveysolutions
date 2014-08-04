@@ -7,14 +7,14 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
 {
     public class MaskedFormatter : IMaskedFormatter
     {
-        private const char DigitKey = '9';
-        private const char LiteralKey = '\'';
+        private const char DigitKey = '#';
+        private const char CharacterKey = '@';
+        private const char AnythingKey = '*';
+       /* private const char LiteralKey = '\'';
         private const char UppercaseKey = 'U';
         private const char LowercaseKey = 'L';
         private const char AlphaNumericKey = 'A';
-        private const char CharacterKey = 'a';
-        private const char AnythingKey = '*';
-        private const char HexKey = 'H';
+        private const char HexKey = 'H';*/
 
         private readonly String mask;
         internal MaskCharacter[] maskChars;
@@ -125,34 +125,6 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                                 this.ValidCharacters));
                             break;
                         }
-                        case LiteralKey:
-                        {
-                            if (++counter < maxCounter)
-                            {
-                                maskChar = mask[counter];
-                                temp.Add(new LiteralCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
-                                    this.ValidCharacters, maskChar));
-                            }
-                            break;
-                        }
-                        case UppercaseKey:
-                        {
-                            temp.Add(new UpperCaseCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
-                                this.ValidCharacters));
-                            break;
-                        }
-                        case LowercaseKey:
-                        {
-                            temp.Add(new LowerCaseCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
-                                this.ValidCharacters));
-                            break;
-                        }
-                        case AlphaNumericKey:
-                        {
-                            temp.Add(new AlphaNumericCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
-                                this.ValidCharacters));
-                            break;
-                        }
                         case CharacterKey:
                         {
                             temp.Add(new CharCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
@@ -163,11 +135,6 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                         {
                             temp.Add(new MaskCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
                                 this.ValidCharacters));
-                            break;
-                        }
-                        case HexKey:
-                        {
-                            temp.Add(new HexCharacter(this.InvalidCharacters, this.PlaceholderCharacter, this.ValidCharacters));
                             break;
                         }
                         default:
