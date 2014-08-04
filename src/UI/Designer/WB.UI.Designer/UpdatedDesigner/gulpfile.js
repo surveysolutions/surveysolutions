@@ -6,7 +6,7 @@ var runSequence = require('run-sequence');
 
 var paths = {
   scripts: ['app/scripts/**/*.js'],
-  styles: ['content/markup.css.less', 'content/vendor.css.less']
+  styles: ['content/markup.css.less']
 };
 
 gulp.task('clean', function	(){
@@ -19,9 +19,9 @@ gulp.task("styles", function(){
 	    .pipe(plugins.less({
 	    	relativeUrls: true
 	    }))
-	    .pipe(plugins.rewriteCss({destination:'build'}))
-	    .pipe(plugins.replace('\\', '/'))
-	    .pipe(plugins.minifyCss())
+      .pipe(plugins.cssUrlAdjuster({
+        prepend: '../content/'
+      }))
 	    .pipe(plugins.rev())
 	    .pipe(gulp.dest('build'));
 });
