@@ -52,6 +52,9 @@
           "angular-block-ui.js",
           "angular-block-ui.css"
           ]
+      },
+      "angular": {
+        "main": "angular.min.js"
       }
   }
 }
