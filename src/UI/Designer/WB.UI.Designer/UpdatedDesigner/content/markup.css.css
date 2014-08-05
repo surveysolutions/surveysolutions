@@ -1,4 +1,4 @@
-@import "../vendor/bootstrap-select/bootstrap-select.min.css";
+﻿@import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/angular/angular-csp.css";
 /**
@@ -6101,7 +6101,7 @@ input.wb-radio:checked:disabled + label span {
   background: url(i/icon-qname-block-link.png) center center no-repeat;
 }
 .form-group.input-variable-name > input {
-  color: #ff4200;
+  color: #2e6da3;
 }
 textarea {
   resize: vertical;
@@ -6580,7 +6580,7 @@ input#edit-group-title {
   box-shadow: none;
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 12px;
-  color: #ff4200;
+  color: #2e6da3;
   font-size: 14px;
 }
 .question-editor .singleOption .table-holder .table-row .column-3 input,
@@ -7454,7 +7454,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-color: #dbdfe2;
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 12px;
-  color: #ff4200;
+  color: #2e6da3;
   /*> .dropdown-btn {
         display: none;
         //display: inline-block;
@@ -7674,7 +7674,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding-right: 10px;
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 12px;
-  color: #ff4200;
+  color: #2e6da3;
   /*> .dropdown-btn {
         display: none;
         //display: inline-block;
@@ -7871,3 +7871,4 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .share-question-dialog a.owner {
   color: #2fc507;
 }
+/*# sourceMappingURL=markup.css.css.map */
