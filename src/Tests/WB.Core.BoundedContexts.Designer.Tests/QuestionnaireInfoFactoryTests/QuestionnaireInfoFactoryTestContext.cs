@@ -162,6 +162,95 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
             };
         }
 
+        protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionViewWithListQuestions(bool shouldReplaceFixedRosterWithListOne = false)
+        {
+            var fixedNestedRoster = new GroupAndRosterDetailsView
+            {
+                Id = g3Id,
+                Title = "fixed_roster_inside_list_roster",
+                VariableName = "fixed_roster_inside_list_roster",
+                IsRoster = true,
+                RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+                RosterFixedTitles = new[] { "1", "2", "3" },
+                ParentGroupId = g2Id,
+                ParentGroupsIds = new Guid[] { g2Id, g1Id },
+                RosterScopeIds = new Guid[] { g3Id, q1Id }
+            };
+            var listNestedRoster = new GroupAndRosterDetailsView
+            {
+                Id = g3Id,
+                Title = "list_roster_inside_list_roster",
+                VariableName = "fixed_roster_inside_list_roster",
+                IsRoster = true,
+                RosterSizeSourceType = RosterSizeSourceType.Question,
+                RosterSizeQuestionId = q2Id,
+                ParentGroupId = g2Id,
+                ParentGroupsIds = new Guid[] { g2Id, g1Id },
+                RosterScopeIds = new Guid[] { q2Id, q1Id }
+            };
+            return new QuestionsAndGroupsCollectionView
+            {
+                Groups = new List<GroupAndRosterDetailsView>
+                {
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = g1Id,
+                        Title = "Chapter",
+                        ParentGroupId = Guid.Empty,
+                        ParentGroupsIds = new Guid[0],
+                        RosterScopeIds = new Guid[0]
+                    },
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = g2Id,
+                        Title = "list_roster",
+                        VariableName = "list_roster",
+                        IsRoster = true,
+                        RosterSizeSourceType = RosterSizeSourceType.Question,
+                        RosterSizeQuestionId = q1Id,
+                        ParentGroupId = g1Id,
+                        ParentGroupsIds = new Guid[] { g1Id },
+                        RosterScopeIds = new Guid[] { q1Id }
+                    },
+                    (shouldReplaceFixedRosterWithListOne? listNestedRoster : fixedNestedRoster)
+                },
+                Questions = new List<QuestionDetailsView>
+                {
+                    new TextListDetailsView
+                    {
+                        Id = q1Id,
+                        Title = "list_question",
+                        MaxAnswerCount = 16,
+                        ParentGroupId = g1Id,
+                        VariableName = "list_question",
+                        ParentGroupsIds = new Guid[] { g1Id },
+                        RosterScopeIds = new Guid[] {  }
+                    },
+                    new TextListDetailsView
+                    {
+                        Id = q2Id,
+                        Title = "list_question_inside_roster",
+                        MaxAnswerCount = 16,
+                        ParentGroupId = g1Id,
+                        VariableName = "list_question",
+                        ParentGroupsIds = new Guid[] { g2Id, g1Id },
+                        RosterScopeIds = new Guid[] { q1Id }
+                    },
+                    new TextListDetailsView
+                    {
+                        Id = q3Id,
+                        Title = "list_question_inside_fixed_roster",
+                        MaxAnswerCount = 16,
+                        ParentGroupId = g1Id,
+                        VariableName = "list_question",
+                        ParentGroupsIds = new Guid[] { g3Id, g2Id, g1Id },
+                        RosterScopeIds = new Guid[] { g3Id, q1Id }
+                    }
+                },
+                StaticTexts = new List<StaticTextDetailsView>()
+            };
+        }
+
         protected static Guid g1Id = Guid.Parse("11111111111111111111111111111111");
         protected static Guid g2Id = Guid.Parse("22222222222222222222222222222222");
         protected static Guid g3Id = Guid.Parse("33333333333333333333333333333333");
