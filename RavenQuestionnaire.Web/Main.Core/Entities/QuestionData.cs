@@ -12,6 +12,7 @@ namespace Main.Core.Entities
             QuestionScope questionScope,
             string questionText,
             string stataExportCaption,
+            string variableLabel,
             string conditionExpression,
             string validationExpression,
             string validationMessage,
@@ -20,6 +21,7 @@ namespace Main.Core.Entities
             bool mandatory,
             bool capital,
             string instructions,
+            string mask,
             List<Guid> triggers,
             int? maxValue,
             Answer[] answers,
@@ -36,6 +38,7 @@ namespace Main.Core.Entities
             this.QuestionScope = questionScope;
             this.QuestionText = questionText;
             this.StataExportCaption = stataExportCaption;
+            this.VariableLabel = variableLabel;
             this.ConditionExpression = conditionExpression;
             this.ValidationExpression = validationExpression;
             this.ValidationMessage = validationMessage;
@@ -53,7 +56,7 @@ namespace Main.Core.Entities
 
             this.AreAnswersOrdered = areAnswersOrdered;
             this.MaxAllowedAnswers = maxAllowedAnswers;
-
+            this.Mask = mask;
             this.MaxAnswerCount = maxAnswerCount;
         }
 
@@ -62,6 +65,7 @@ namespace Main.Core.Entities
         public readonly QuestionScope QuestionScope;
         public readonly string QuestionText;
         public readonly string StataExportCaption;
+        public readonly string VariableLabel;
         public readonly string ConditionExpression;
         public readonly string ValidationExpression;
         public readonly string ValidationMessage;
@@ -70,6 +74,7 @@ namespace Main.Core.Entities
         public readonly bool Mandatory;
         public readonly bool Capital;
         public readonly string Instructions;
+        public readonly string Mask;
         public readonly List<Guid> Triggers;
         public readonly int? MaxValue;
         public readonly Answer[] Answers;

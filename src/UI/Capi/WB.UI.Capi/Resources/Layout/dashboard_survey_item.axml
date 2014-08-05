@@ -5,13 +5,18 @@
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:background="@drawable/dashboardquestionnaire">  
-    <LinearLayout android:id="@+id/llQuestionnairie"
-          android:orientation=    "horizontal"
-          android:layout_width=    "fill_parent"
-          android:layout_height=    "wrap_content"
-          android:background="?android:attr/selectableItemBackground"
-          android:padding="10dip" android:layout_weight="1">
-   
-    </LinearLayout>
+      android:background="@drawable/dashboardquestionnaire">
+  <LinearLayout android:id="@+id/llQuestionnairie"
+        android:orientation=    "horizontal"
+        android:layout_width=    "fill_parent"
+        android:layout_height=    "wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="10dip" android:layout_weight="1">
+
+  </LinearLayout>
+  <TextView
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:id="@+id/tvComment" android:background="?android:attr/selectableItemBackground"
+  android:textStyle="italic" android:paddingBottom="10dip" android:paddingLeft="10dip" android:paddingRight="10dip" />
 </LinearLayout>

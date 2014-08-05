@@ -9,6 +9,7 @@
 .lucida-console-font() { font-family: "Lucida Console", Monaco, monospace; }
 .georgia-font() { font-family: Georgia, serif; }
 .roboto-font() { font-family: 'Roboto', sans-serif; }
+.opensanslight-font() { font-family: 'Open Sans Light', sans-serif; }
 
 .breadcrumbs-fontstyle(@color) {
   .trebuchet-font();
@@ -49,6 +50,18 @@
   }
 }
 
+.questionnarie-title-span-success-fontstyle() {
+  .lucida-console-font();
+  font-size: 16px;
+  color: @success-message-color;
+
+  > em {
+    .georgia-font();
+    font-size: 14px;
+    color: @designer-editor-title-span-color;
+  }
+}
+
 .questionnarie-chapter-title-fontstyle() {
   .arial-font();
   font-size: 16px;
@@ -64,9 +77,11 @@
 }
 
 .questionnarie-chapter-list-fontstyle() {
-  .arial-font();
-  font-size: 16px;
-  color: @designer-editor-chapter-list-color;
+  &, > a {
+    .arial-font();
+    font-size: 16px;
+    color: @designer-editor-chapter-list-color;
+  }
 }
 
 .questionnarie-chapter-list-span-fontstyle() {
@@ -76,15 +91,17 @@
 }
 
 .questionnarie-question-list-item-fontstyle() {
-  .arial-font();
-  font-size: 16px;
-  color: @questionnarie-question-list-item-color;
+  &, > a {
+    .arial-font();
+    font-size: 16px;
+    color: @questionnarie-question-list-item-color;
+  }
 }
 
 .questionnarie-question-list-item-qname-fontstyle() {
   .lucida-console-font();
   font-size: 12px;
-  color: #ff4200;
+  color: @qname-color;
 }
 
 .questionnarie-question-editor-group-h1-fontstyle() {
@@ -136,6 +153,7 @@
   .georgia-font();
   font-size: 14px;
   font-style: italic;
+  font-weight: normal;
   color: @verify-popup-color;
   line-height: 22px;
 }
@@ -168,4 +186,23 @@
     color: #2a81cb;
     cursor: pointer;
   }
+}
+
+.edit-question-title-fontstyle() {
+  .arial-font();
+  font-size: 16px;
+  color: #000;
+  font-weight: bold;
+}
+
+.confirm-text() {
+  .arial-font();
+  font-size: 18px;
+  color: #000;
+  font-weight: bold;
+}
+
+.confirm-title() {
+  .opensanslight-font();
+  font-size: 36px;
 }

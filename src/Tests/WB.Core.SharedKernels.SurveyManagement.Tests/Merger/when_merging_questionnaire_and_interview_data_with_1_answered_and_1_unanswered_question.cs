@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -76,12 +77,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
 
         private static InterviewQuestionView GetAnsweredQuestion()
         {
-            return GetNestedGroup().Questions.Find(q => q.Id == answeredQuestionId);
+            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == answeredQuestionId);
         }
 
         private static InterviewQuestionView GetUnAnsweredQuestion()
         {
-            return GetNestedGroup().Questions.Find(q => q.Id == unAnsweredQuestionId);
+            return GetNestedGroup().Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == unAnsweredQuestionId);
         }
 
         private static InterviewDataAndQuestionnaireMerger merger;

@@ -1,0 +1,264 @@
+﻿{
+   "id":"beb6b832-8fc7-4c90-a7db-ec96bd1bb8e3",
+   "parentGroupsIds":[
+      "38cb6def-401b-4a88-8473-77b5f47009af"
+   ],
+   "rosterScopeIds":[
+
+   ],
+   "parentGroupId":"38cb6def-401b-4a88-8473-77b5f47009af",
+   "enablementCondition":"",
+   "isPreFilled":true,
+   "instructions":"",
+   "isMandatory":false,
+   "questionScope":"Interviewer",
+   "variableName":"one",
+   "variableLabel":null,
+   "title":"Pre-filled Categorical: one answer",
+   "validationExpression":"",
+   "validationMessage":"",
+   "type":"SingleOption",
+   "linkedToQuestionId":null,
+   "options":[
+      {
+         "value":1.0,
+         "title":"One"
+      },
+      {
+         "value":2.0,
+         "title":"Two"
+      },
+      {
+         "value":3.0,
+         "title":"Three"
+      }
+   ],
+   "areAnswersOrdered":false,
+   "maxAllowedAnswers":null,
+   "isInteger":false,
+   "mask":null,
+   "maxValue":null,
+   "countOfDecimalPlaces":null,
+   "maxAnswerCount":null,
+   "sourceOfLinkedQuestions":[
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"db8ccb6662d54331bea1464edef9138a",
+         "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"36f222c26d9f46de8eadd48d548902ca",
+         "title":"text",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"fc232e007a5740838ec7f90f689abba2",
+         "title":"Date",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"datetime"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"6366223fce5542a9b572be5e6a0f8103",
+         "title":"GPS Coordinates",
+         "breadcrumbs":"I. Roster multie option supervisor's question / Roster group. Condition Numeric>2",
+         "type":"gpscoordinates"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"II. Roster multie option / Roster group. Condition Numeric>2",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"dd1497b9b2e449008a40536788836e50",
+         "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+         "breadcrumbs":"II. Roster multie option / Roster group. Condition Numeric>2",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2a330201b3ee486bba6713a8b501bbb0",
+         "title":"text",
+         "breadcrumbs":"II. Roster multie option / Roster group. Condition Numeric>2",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"11aeaadd252447a8867f752a9ab094d5",
+         "title":"Date",
+         "breadcrumbs":"II. Roster multie option / Roster group. Condition Numeric>2",
+         "type":"datetime"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"6058f793e1a345c982e8980a8edefc6c",
+         "title":"GPS Coordinates",
+         "breadcrumbs":"II. Roster multie option / Roster group. Condition Numeric>2",
+         "type":"gpscoordinates"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"III. Roster fixed / Roster group",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"062ebd1d129b4fa7a80c7fdd87db7164",
+         "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+         "breadcrumbs":"III. Roster fixed / Roster group",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"833a69be979d4774a9199368a2334134",
+         "title":"text",
+         "breadcrumbs":"III. Roster fixed / Roster group",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"0ba9b73420be4c3fbdecc2b30e24b7f5",
+         "title":"Date",
+         "breadcrumbs":"III. Roster fixed / Roster group",
+         "type":"datetime"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"93b72d816d8046119bcb6d84d75a7c57",
+         "title":"GPS Coordinates",
+         "breadcrumbs":"III. Roster fixed / Roster group",
+         "type":"gpscoordinates"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"IV. Roster Numeric integer / Roster group",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"66c52d142e764d2e88a5395d143f64f2",
+         "title":"text",
+         "breadcrumbs":"IV. Roster Numeric integer / Roster group",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"eb9a12929eef446c8324dc3bcc92bac6",
+         "title":"Numeric. Roster Title Condition: Categorical multiple=1",
+         "breadcrumbs":"IV. Roster Numeric integer / Roster group",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"49fb0ff8aec8416ab17a585e9af62e56",
+         "title":"Date",
+         "breadcrumbs":"IV. Roster Numeric integer / Roster group",
+         "type":"datetime"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2b94506f044c4f02a4557bb3a7d75969",
+         "title":"GPS Coordinates",
+         "breadcrumbs":"IV. Roster Numeric integer / Roster group",
+         "type":"gpscoordinates"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"IV. Roster Numeric integer / Second roster group numeric",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"699a003a17154ab3acb9b91132490b52",
+         "title":"text",
+         "breadcrumbs":"IV. Roster Numeric integer / Second roster group numeric",
+         "type":"text"
+      }
+   ],
+   "questionTypeOptions":[
+      {
+         "value":"SingleOption",
+         "text":"Categorical: one answer"
+      },
+      {
+         "value":"MultyOption",
+         "text":"Categorical: multiple answers"
+      },
+      {
+         "value":"Numeric",
+         "text":"Numeric"
+      },
+      {
+         "value":"DateTime",
+         "text":"Date"
+      },
+      {
+         "value":"Text",
+         "text":"Text"
+      },
+      {
+         "value":"GpsCoordinates",
+         "text":"Geo Location"
+      },
+      {
+         "value":"TextList",
+         "text":"List"
+      },
+      {
+         "value":"QRBarcode",
+         "text":"QR Barcode"
+      }
+   ],
+   "allQuestionScopeOptions":[
+      {
+         "value":"Interviewer",
+         "text":"Interviewer"
+      },
+      {
+         "value":"Supervisor",
+         "text":"Supervisor"
+      },
+      {
+         "value":"Prefilled",
+         "text":"Prefilled"
+      }
+   ],
+   "notPrefilledQuestionScopeOptions":[
+      {
+         "value":"Interviewer",
+         "text":"Interviewer"
+      },
+      {
+         "value":"Supervisor",
+         "text":"Supervisor"
+      }
+   ],
+   "breadcrumbs":[
+      {
+         "id":"38cb6def401b4a88847377b5f47009af",
+         "title":"I. Roster multie option supervisor's question",
+         "isRoster":false
+      }
+   ]
+}

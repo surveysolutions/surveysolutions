@@ -37,7 +37,7 @@ namespace CAPI.Androids.Core.Model.Tests.InterviewMetaInfo
             };
 
             var qDTO = new QuestionnaireDTO(
-                interviewId, Guid.NewGuid(), Guid.NewGuid(), InterviewStatus.Completed, properties, 1, true);
+                interviewId, Guid.NewGuid(), Guid.NewGuid(), InterviewStatus.Completed, properties, 1, null, true);
 
             Mock<IFilterableReadSideRepositoryReader<QuestionnaireDTO>> readSideRepositoryReaderMock =
                 new Mock<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>();

@@ -1,0 +1,834 @@
+﻿{
+   "id":"e6b5a8c4-f32d-4ca6-a1f1-519f40201359",
+   "parentGroupsIds":[
+      "47548759-0b9c-cfd9-f375-ec48c329936a"
+   ],
+   "rosterScopeIds":[
+
+   ],
+   "parentGroupId":"47548759-0b9c-cfd9-f375-ec48c329936a",
+   "enablementCondition":"[wanting_work]==1 and [economic_activity]==2 and [age]>=15 and ([temporary_job_absence]==2 or [job_absence_reason]==5) and [availability_to_work]==5",
+   "isPreFilled":false,
+   "instructions":null,
+   "isMandatory":false,
+   "questionScope":"Interviewer",
+   "variableName":"",
+   "variableLabel":"",
+   "title":"20.1. If other, please specify",
+   "validationExpression":null,
+   "validationMessage":null,
+   "type":"Text",
+   "linkedToQuestionId":null,
+   "options":[
+
+   ],
+   "areAnswersOrdered":false,
+   "maxAllowedAnswers":null,
+   "isInteger":false,
+   "mask":null,
+   "maxValue":null,
+   "countOfDecimalPlaces":null,
+   "maxAnswerCount":null,
+   "sourceOfLinkedQuestions":[
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":" ECONOMIC ACTIVITY / Household Info",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"e6f0acbc83d24c1d9e82bc0cd2322d06",
+         "title":"District",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"974fb91dbae14c719eed71bdcdc8a504",
+         "title":"Enumeration District",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"696cd892fda1416cbb508981f714d4f3",
+         "title":"Sub-sample",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"ea76bad684804e3fb470e65dcef83761",
+         "title":"Household Number",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"0de912bd7c9745029602706c9acdaa3e",
+         "title":"For the week ending",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"datetime"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"26896613831148608964694991561c97",
+         "title":"Address of Household",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"71ac452af52c4fd3b7c1e2410263cadc",
+         "title":"Community",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"40c9a23654ca4e638f80fa435a9387f5",
+         "title":"Town/Village Hello, Namibia!",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"0b32215fd15a4dec8418c2e9064a4243",
+         "title":"Interview Location",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"gpscoordinates"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"edc5257a1d64446fb4ceebf3e069bf49",
+         "title":"Contact Person",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"196741a3354647dbaf19e21019d34941",
+         "title":"How many persons in this household left St. Lucia to live abroad in the 12 months period preceding .../.../...?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"5244443a0113456f9626a239004f94d3",
+         "title":"How many exactly males left St. Lucia to live abroad?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"1674c56e56f0b7fcb2b93a65551a8522",
+         "title":"New Question",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"0bb35aaea131c3d9912add85fadedde1",
+         "title":"New Question",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"cca55139cea8fc4d2dcbed44cf889caf",
+         "title":"Copy of - Community",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"f8df2850bbb416710c277209b7cc5817",
+         "title":"Copy of - Copy of - Community",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"965e300e413b21c16351221a3d8be82d",
+         "title":"Copy of - Copy of - Copy of - Community",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"435391df3144af70972cac9628fc9b9b",
+         "title":"Copy of - Copy of - Copy of - Copy of - Community",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"d6a7b4df9d5838c698e58199b49a487c",
+         "title":"Copy of - Copy of - Copy of - Copy of - Copy of - Community",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"df0bcf9680066627a979e2543d14efaf",
+         "title":"Copy of - Copy of - Copy of - Copy of - Copy of - Copy of - Community",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"aa7233ef26154f70340eb17477777691",
+         "title":"Copy of - Copy of - Copy of - Copy of - Copy of - Copy of - Copy of - Community",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"3194e38c19de9e900bc68c3cca04ce9d",
+         "title":"Copy of - Household Number",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"b5e9c0e2f65a83e1a3f11a162a0c49d2",
+         "title":"Copy of - For the week ending",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"datetime"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"15e1cf858a7ea59a9bf7c7c3f15f05b1",
+         "title":"Copy of - Address of Household",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"7bf8e098642849c74154216603ddcb0d",
+         "title":"Copy of - Copy of - Address of Household",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"b18680e71a06aa37c718478d6ef0ace3",
+         "title":"Copy of - For the week ending",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info",
+         "type":"datetime"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"PART 1 / MEMBER OF THE HOUSEHOLD",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"9853ef56aec140f79efb1ece211738e7",
+         "title":"1. NAME OF PERSON\r\nWhat are the names of all those who slept four or more nights and shared at least one daily meal in this dwelling during the week ending",
+         "breadcrumbs":"PART 1 / MEMBER OF THE HOUSEHOLD",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"0dce590e9ca74c1ab50304416c494dd7",
+         "title":"4. 1.  STATUS\r\nWhat is your (...'s) place of birth \r\nWRITE IN COUNTRY NAME",
+         "breadcrumbs":"PART 1 / MEMBER OF THE HOUSEHOLD",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"919822abe3104d27b380506557ffce35",
+         "title":"4. 1.1  STATUS What is your (...'s) place of birth  WRITE IN COUNTRY NAME",
+         "breadcrumbs":"PART 1 / MEMBER OF THE HOUSEHOLD",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"3275e67b3295412bab31cfb07b626d55",
+         "title":"5. MIGRATION\r\nHow many months have you lived in St. Lucia before the week ending .../.../...?",
+         "breadcrumbs":"PART 1 / MEMBER OF THE HOUSEHOLD",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"0b4b8b4fa0ef45daba8c4fa95806d8e2",
+         "title":"6. AGE What was your (...'s) age at last birthday?",
+         "breadcrumbs":"PART 1 / MEMBER OF THE HOUSEHOLD",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"ebeac06328284dd9818257cecb218740",
+         "title":"12.1. During the past 12 months, how many weeks were you (was...) working?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"e66efaf5cab24693ab4c7c571241a2fc",
+         "title":"12.3. During the past 12 months, how many weeks were you (was...) without work, not wanting work and/or not available for work?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"94d9bc95677e4565a2e85cd14cff07a9",
+         "title":"13.1. If other, please specify",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"5ed489d10cfc42fd8545bd8eaef17c0a",
+         "title":"16.1. If other, please specify",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"4ffd76cdd2ef4b428348d904294b9b64",
+         "title":"12.1. During the past 12 months, how many weeks were you (was...) working?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"6594f816596c41899c591e84c4283784",
+         "title":"12.3. During the past 12 months, how many weeks were you (was...) without work, not wanting work and/or not available for work?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"dab37349c6bf4ba59dcd9e7695cc2b09",
+         "title":"13.1. If other, please specify",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"47dcfd98625c4582b54087b3ee140105",
+         "title":"16.1. If other, please specify",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"c6b1f009e8094b97a782c5ddb46a975c",
+         "title":"12.1. During the past 12 months, how many weeks were you (was...) working?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"b532072ebc7b48be97422f42fdd09256",
+         "title":"12.3. During the past 12 months, how many weeks were you (was...) without work, not wanting work and/or not available for work?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"7b41bc59ea8842708595744095611b0e",
+         "title":"13.1. If other, please specify",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"8061194288f94e1abc72cc1490df3d56",
+         "title":"16.1. If other, please specify",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info /  ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"PART 3 / 3A: FIRST JOB HOLDING",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"4522ad9d20934bbd98c26a81e162eedf",
+         "title":"22. USUAL HOURS OF WORK How many hours do you (does...) usually work per week?",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"0a9c0c5faf914732882a1f224c93227f",
+         "title":"23. ACTUAL HOURS How many hours did you work during the week ending .../.../...?",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"43bad614b7464073bbdfad0da4b149ae",
+         "title":"24.1.  Other reason (actual less than usual), please specify",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"e15983a98ac04147a4e65f67e4e00b50",
+         "title":"24.2. Other reason (actual greater than usual), please specify",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"9e0f08c79465413b8c1e95736950f85e",
+         "title":"25.1. If other, please specify",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2562c2c18bf84aa1b7b5f2e95a850ef9",
+         "title":"27.1. If other, please specify",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"905b0b7359cd43d5917fb8aa21181693",
+         "title":"28. OCCUPATION What is your (. . .'s) job title?",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2080bb866c8d4f7e9dba8b5cbe74afb3",
+         "title":"28.1 OCCUPATION What is the code for the job?",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2a43baa006a743929ec9454f9b89b940",
+         "title":"29. INDUSTRY What is the name of the business where you work? What type of activity is carried on there?",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"03d496c1b1fe4d4b888d1391082fa765",
+         "title":"29.1 INDUSTRY What is the code for the industry?",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"d2062a5c55a84c6f9aa7206fe33a03e4",
+         "title":"32. USUAL HOURS OF WORK How many hours do you does (...) usually work per week in main job?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"7cbe41a23f3e45548e53faeafa509d59",
+         "title":"32. USUAL HOURS OF WORK How many hours do you does (...) usually work per week in other job?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"f244792068cf443889a4884dfb6a5d34",
+         "title":"33. ACTUAL HOURS OF WORK How many hours did you work on your main job during the week ending .../.../...?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"e9407be46144427293361736d963923d",
+         "title":"33. ACTUAL HOURS OF WORK How many hours did you work on other jobs during the week ending .../.../...?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"dc051153064a4d51b8df26b403edfe4d",
+         "title":"38.1. OCCUPATION What is your (...'s) job title in your MAIN job?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2fb444e0685a4e5a971b16b2d699c760",
+         "title":"38.2. OCCUPATION What is your (...'s) job title in your SECOND job?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"ec71b6fe115945c19f2306c4983d60bd",
+         "title":"38.1.1 OCCUPATION What is the code for the job title for the MAIN job?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"389cb84bf66c4f60b9ce7d5d05c98159",
+         "title":"38.2.1 OCCUPATION What is the code for the job title for the MAIN job?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"1d7ef1461a18436cbe682162c127555b",
+         "title":"39.1. INDUSTRY What is (are) the name(s) of the business(es) where you (...) work? What type of activity is carried on there?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"66d428049f7c4e5d99fdf8d775dad7cd",
+         "title":"39.1. INDUSTRY What is (are) the name(s) of the business(es) where you (...) work? What type of activity is carried on there?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"be3639fad773423b82666deaacede18e",
+         "title":"39.2.1 INDUSTRY What is the code of the second job industry?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"f76ba703102f446bb7aef779beb68e9c",
+         "title":"39.2.2 INDUSTRY What is the code of the second job industry?",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2b98800b2bfb41229a4a4715bf2d058f",
+         "title":"42.1 Other reason",
+         "breadcrumbs":"PART 3 / 3B: INFORMATION ABOUT SECOND JOB",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"Household Info /  ECONOMIC ACTIVITY / PART 4 / FOR UNEMPLOYED PERSONS",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"2da9f621e9ed42a4ac31077e2fe5a382",
+         "title":"46.1. If other, please specify",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY / PART 4 / FOR UNEMPLOYED PERSONS",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"c72f6bc6215b4e7b93bdc63dbaf82214",
+         "title":"47. OCCUPATION\r\nWhat was your (...'s) job title?",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY / PART 4 / FOR UNEMPLOYED PERSONS",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"a72aa3a8ba5b4af6911cf78f05475fd5",
+         "title":"47.1 OCCUPATION What is the code?",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY / PART 4 / FOR UNEMPLOYED PERSONS",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"18a87ab2d81c4d5286efd2d1d9d7ba28",
+         "title":"48. INDUSTRY\r\nWhat is the name of the business where you (. . .) last worked?\r\nWhat type of business activity was carried on there?",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY / PART 4 / FOR UNEMPLOYED PERSONS",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"8d60e37e3db14ac68fb626f6e52d0f81",
+         "title":"48.1 INDUSTRY What is the code for the industry?",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY / PART 4 / FOR UNEMPLOYED PERSONS",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"d188ca8d95ff4ff8a3be29473028345d",
+         "title":"50.1. If other, specify",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY / PART 4 / FOR UNEMPLOYED PERSONS",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"PART 5 / FOR PERSONS NOT IN THE LABOUR FORCE",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"9c35b27efcac48149e2a50da746e5943",
+         "title":"53.1. If other, please specify",
+         "breadcrumbs":"PART 5 / FOR PERSONS NOT IN THE LABOUR FORCE",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"1a840a59464742c6b129323db5132439",
+         "title":"54. OCCUPATION\r\nWhat is your (...'s) job title?",
+         "breadcrumbs":"PART 5 / FOR PERSONS NOT IN THE LABOUR FORCE",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"ea4cc11650944db89ba44720d56b8366",
+         "title":"54.1 OCCUPATION What is the code for this occupation?",
+         "breadcrumbs":"PART 5 / FOR PERSONS NOT IN THE LABOUR FORCE",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"c0b4a71c6a6d4752aaaef03a7d5d228c",
+         "title":"55. INDUSTRY\r\nWhat is the name of the business where you (. . .) last worked?\r\nWhat type of business activity is carried on there?",
+         "breadcrumbs":"PART 5 / FOR PERSONS NOT IN THE LABOUR FORCE",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"3fe695c42a4146c3b36fc6c589dc5ff4",
+         "title":"55.1 INDUSTRY What is the name of the business where you (. . .) last worked? What type of business activity is carried on there?",
+         "breadcrumbs":"PART 5 / FOR PERSONS NOT IN THE LABOUR FORCE",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"ba9ac1b4f1724abfb950675748644cec",
+         "title":"56.1. If other, please specify",
+         "breadcrumbs":"PART 5 / FOR PERSONS NOT IN THE LABOUR FORCE",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"PART 2 / EDUCATION & TRAINING / Sub group / Sub sub group",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"4806ff222df6eb59e8895c87c0fd64a9",
+         "title":"New Question",
+         "breadcrumbs":"PART 2 / EDUCATION & TRAINING / Sub group / Sub sub group",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"PART 3 / 3A: FIRST JOB HOLDING / New group",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"4a8391107bd66e88bc0f8980cdef76e5",
+         "title":"New Question",
+         "breadcrumbs":"PART 3 / 3A: FIRST JOB HOLDING / New group",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"PART 2 / EDUCATION & TRAINING / Sub group / Sub sub group / New roster",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"b3aa7d1c5db49016cc765ae256a4697b",
+         "title":"New Question",
+         "breadcrumbs":"PART 2 / EDUCATION & TRAINING / Sub group / Sub sub group / New roster",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"Household Info /  ECONOMIC ACTIVITY",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"c809cb0f8e264d3da424268bb491c783",
+         "title":"12.1. During the past 12 months, how many weeks were you (was...) working?",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"ca5784847f9c4cdf97bcd22fa07bee91",
+         "title":"12.3. During the past 12 months, how many weeks were you (was...) without work, not wanting work and/or not available for work?",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"16925dea0d464117af0b38c70074e5e4",
+         "title":"13.1. If other, please specify",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"b65ef8c26e1c41c0b2f85479e6a0259e",
+         "title":"16.1. If other, please specify",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":" ECONOMIC ACTIVITY / Household Info / ECONOMIC ACTIVITY",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"c78c07832e2e4cd58e170b7f08313c90",
+         "title":"12.1. During the past 12 months, how many weeks were you (was...) working?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info / ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"b9073fdfd57341d8adcad93fad508ce5",
+         "title":"12.3. During the past 12 months, how many weeks were you (was...) without work, not wanting work and/or not available for work?",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info / ECONOMIC ACTIVITY",
+         "type":"numeric"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"9e015f45f6d94edeaab6a1f4036ecfe1",
+         "title":"13.1. If other, please specify",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info / ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"997caf3ba8344918b9f2cf4cbcc1d791",
+         "title":"16.1. If other, please specify",
+         "breadcrumbs":" ECONOMIC ACTIVITY / Household Info / ECONOMIC ACTIVITY",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"Household Info /  ECONOMIC ACTIVITY / HOUSING",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"25b5ba59553c23b1b4d5a1a80b13a446",
+         "title":"Copy of - If Makeshift, please specify",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY / HOUSING",
+         "type":"text"
+      },
+      {
+         "isSectionPlaceHolder":true,
+         "id":null,
+         "title":"Household Info /  ECONOMIC ACTIVITY / PART 4",
+         "breadcrumbs":null,
+         "type":null
+      },
+      {
+         "isSectionPlaceHolder":false,
+         "id":"64b17e303c438d92331f1f386a79ef8d",
+         "title":"New Question",
+         "breadcrumbs":"Household Info /  ECONOMIC ACTIVITY / PART 4",
+         "type":"text"
+      }
+   ],
+   "questionTypeOptions":[
+      {
+         "value":"SingleOption",
+         "text":"Categorical: one answer"
+      },
+      {
+         "value":"MultyOption",
+         "text":"Categorical: multiple answers"
+      },
+      {
+         "value":"Numeric",
+         "text":"Numeric"
+      },
+      {
+         "value":"DateTime",
+         "text":"Date"
+      },
+      {
+         "value":"Text",
+         "text":"Text"
+      },
+      {
+         "value":"GpsCoordinates",
+         "text":"Geo Location"
+      },
+      {
+         "value":"TextList",
+         "text":"List"
+      },
+      {
+         "value":"QRBarcode",
+         "text":"QR Barcode"
+      }
+   ],
+   "allQuestionScopeOptions":[
+      {
+         "value":"Interviewer",
+         "text":"Interviewer"
+      },
+      {
+         "value":"Supervisor",
+         "text":"Supervisor"
+      },
+      {
+         "value":"Prefilled",
+         "text":"Prefilled"
+      }
+   ],
+   "notPrefilledQuestionScopeOptions":[
+      {
+         "value":"Interviewer",
+         "text":"Interviewer"
+      },
+      {
+         "value":"Supervisor",
+         "text":"Supervisor"
+      }
+   ],
+   "breadcrumbs":[
+      {
+         "id":"475487590b9ccfd9f375ec48c329936a",
+         "title":"HOUSING",
+         "isRoster":false
+      }
+   ]
+}

@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(),newState);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(),newState, false);
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             // act
             TestDelegate act =
                 () =>
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), docMock.Object);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), docMock.Object, false);
             
             // assert
             Assert.Throws<QuestionnaireException>(act);
@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var newState = JsonConvert.DeserializeObject<QuestionnaireDocument>(questionnaireTemplate, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), newState);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), newState, false);
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var newState = JsonConvert.DeserializeObject<QuestionnaireDocument>(questionnaireTemplate, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), newState);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), newState, false);
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));

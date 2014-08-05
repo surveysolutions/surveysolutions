@@ -3,30 +3,42 @@
     <div class="header-line">
         <div class="breadcrumbs">
             <ul>
-                <li><a href="../">Designer home</a></li>
-                <li><a href="../">My Questionnaires</a></li>
+                <li>
+                    <a href="../../">My Questionnaires</a>
+                </li>
+                <li><a href="../../public">Public Questionnaires</a></li>
             </ul>
         </div>
         <div class="header-menu">
-            This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong><span ng-repeat="q in questionnaire.sharedPersons"><span ng-if="$first">, shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
-                </span>
-                <span ng-if="!$first && $last">
-                    and <a href="javascript:void(0);" ng-click="showShareInfo()">{{$index}} other</a>
-                </span>
-            </span>
+            This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong><span ng-repeat="q in getPersonsSharedWith(questionnaire)">
+    <span ng-if="$first">
+        , shared with <a href="mailto:{{q.email}}">{{q.email}}</a>
+    </span>
+    <span ng-if="!$first && $last">
+        and <a href="javascript:void(0);" ng-click="showShareInfo()">{{$index}} other</a>
+    </span>
+</span>
             <div class="buttons">
-                <button class="btn" ng-click="showShareInfo()">SHARE</button>
-                <button class="btn">HELP</button>
-                <a class="btn" href="../account/logoff">LOG OUT</a>
+                <button class="btn" type="button" ng-click="showShareInfo()">Settings</button>
+                <a class="btn" ng-href="../../questionnaire/edit/{{questionnaireId}}">Old designer</a>
+                <a class="btn" href="../../account/logoff">LOG OUT</a>
             </div>
         </div>
     </div>
     <div class="questionnarie-title">
         <div class="title">
             {{questionnaire.title}} <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
-            <input type="button" class="btn error" value="VERIFY" ng-click="verify()" />
-            <span id="verify-btn" data-toggle="modal" data-target="#verification-modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide"><a href=""><span ng-bind="verificationStatus.errorsCount"></span>  errors</a></span>
-            <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK</span>
+            <input id="verification-btn" type="button" class="btn" value="VERIFY" ng-click="verify()" />
+            <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
+                <a href="javascript:void(0);"
+                   ng-click="verify()"
+                   ng-pluralize
+                   count="verificationStatus.errorsCount"
+                   when="{'one': '1 error',
+                          'other': '{} errors'}">
+                </a>
+            </span>
+            <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK<em>, saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
         </div>
     </div>
 </section>
@@ -37,40 +49,24 @@
 </section>
 
 <section id="main" class="row">
-    <div class="questionnaire-tree col-xs-6">
-        <div class="chapter-title" ng-switch on="filtersBoxMode" ng-animate="'animate'">
-            <div class="search-box" ng-switch-when="search">
-                <div class="input-group">
-                    <input type="text" ng-model="search.searchText" focus-on="focusSearch" />
-                    <span class="input-group-addon glyphicon glyphicon-search" title="Search"></span>
-                </div>
-                <button ng-click="hideSearch()" title="Cancel search">
-                </button>
-            </div>
-
-            <div ng-switch-when="default">
-                {{currentChapter.title }}
-                <ul class="controls-right">
-                    <li><a class="filter" title="Toggle Filter"></a></li>
-                    <li>
-                        <a href="javascript:void(0);" ng-click="showSearch()" class="search" title="Toggle Search"></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded == true}" ng-controller="ChaptersCtrl">
-            <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
-            <ul class="chapters">
-                <li ng-repeat="chapter in questionnaire.chapters" ng-class="{current: currentChapterId == chapter.itemId}" ng-click="changeChapter(chapter);">
-                    <div class="holder">
+    <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
+        <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="ul-holder">
+            <ul class="chapters" ui-tree-nodes ng-model="questionnaire.chapters">
+                <li class="chapter-panel-item"
+                    ng-repeat="chapter in questionnaire.chapters"
+                    ui-tree-node
+                    ng-class="{ current: isCurrentChapter(chapter) }">
+                    <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
                         <div class="inner">
-                            <h1>{{chapter.title}}</h1>
-                            <div class="btn-group" ng-class="{open: chapter.isMenuOpen == true}" ng-click="openMenu(chapter);$event.stopPropagation();">
-                                <a class="dropdown-toggle" data-toggle="dropdown"></a>
+                            <a class="handler" ui-tree-handle></a>
+                            <h1><a ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">{{chapter.title}}</a></h1>
+                            <div class="btn-group" dropdown>
+                                <a href="javascript:void(0);" data-toggle="dropdown" ng-click="$event.stopPropagation()" class="dropdown-toggle"></a>
                                 <ul class="dropdown-menu">
-                                    <li><a ng-click="editChapter(chapter);$event.stopPropagation()">Edit</a></li>
-                                    <li><a ng-click="cloneChapter(chapter);$event.stopPropagation()">Clone</a></li>
-                                    <li><a ng-click="deleteChapter(chapter);$event.stopPropagation()">Delete</a></li>
+                                    <li><a ng-click="editChapter(chapter);$event.stopPropagation();">Edit</a></li>
+                                    <li><a ng-click="cloneChapter(chapter.itemId);$event.stopPropagation();">Clone</a></li>
+                                    <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();">Delete</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -81,124 +77,29 @@
                 <input type="button" class="btn lighter-hover" value="ADD NEW CHAPTER" ng-click="addNewChapter()">
             </div>
         </div>
-
-        <script type="text/ng-template" id="tree_item_renderer.html">
-            <div ng-click="setItem(item)"
-                 ng-if="isQuestion(item)"
-                 ng-hide="item.isDeleted"
-                 class="question item {{answerTypeClass[item.type]}}"
-                 ng-class="{'selected' : item.itemId == currentItemId}">
-
-                <div class="handler" ui-tree-handle></div>
-                <div class="icon"></div>
-                <span ng-bind-html="item.title | highlight:search.searchText"></span>
-
-                <div class="qname-block">
-
-                    <a ng-if="item.linkedToQuestionId" href="javascript:void(0);" class="linked"></a>
-
-                    <span ng-bind-html="item.variable | highlight:search.searchText"></span>
-                    <!--<div class="btn-group dropdown">
-            <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle"></a>
-            <ul class="dropdown-menu">
-                <li>
-                    <a>Delete</a>
-                </li>
-                <li>
-                    <a>Clone</a>
-                </li>
-            </ul>-->
-                </div>
-            </div>
-            </div>
-            <div class="section item"
-                 ng-class="{'selected' : item.itemId == currentItemId}"
-                 ng-click="setItem(item)"
-                 ng-if="!isQuestion(item) && !item.isDeleted">
-
-                <div class="handler" ui-tree-handle></div>
-
-                <span ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"></span>
-                <span ng-bind-html="item.title | highlight:search.searchText"></span>
-
-            </div>
-
-            <div ng-class="{hidden: collapsed}" ui-tree-nodes="item.items" ng-model="item.items">
-                <div ng-repeat="item in item.items | filter:search.searchText" ui-tree-node ng-include="'tree_item_renderer.html'" style="margin-left: 20px;">
-                </div>
-            </div>
-
-            <div class="buttons-item" ng-if="!isQuestion(item)" ng-class="{hidden: collapsed}">
-                <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(item)" />
-                <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(item)" />
-                <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(item)" />
-            </div>
-        </script>
-
-        <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
-            <div ui-tree-nodes ng-model="items">
-                <div ng-repeat="item in items | filter:search.searchText" ui-tree-node ng-include="'tree_item_renderer.html'">
-                </div>
-            </div>
-
-            <div class="start-box" ng-show="currentChapter==undefined || currentChapter.items.length == 0">
-                <div class="buttons-item">
-                    <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
-                    <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
-                    <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />
-                </div>
-
-                <p>This questionnaire is empty.</p>
-
-                <p>
-                    You can start by using <button class="btn" disabled>ADD QUESTION</button> and <button class="btn" disabled>ADD GROUP</button> buttons<br />
-                    on top of this section or manage chapters with <span class="left-panel-glyph"></span> left panel
-                </p>
-
-                <p>
-                    Language of survey, device types, collaboration and other options<br />
-                    can be found at <button class="btn" disabled>SETTINGS</button> panel (top right corner)
-                </p>
-            </div>
-        </div>
     </div>
-
-    <div class="question-editor col-xs-6" ng-if="activeChapter != undefined" ng-include src="'app/views/chapter.html'" ng-controller="ChapterCtrl">
-    </div>
-
-    <div class="question-editor col-xs-6" ng-if="activeRoster != undefined" ng-include src="'app/views/roster.html'" ng-controller="RosterCtrl">
-    </div>
-
-    <div class="question-editor col-xs-6" ng-if="activeQuestion != undefined" ng-include src="'app/views/question.html'" ng-controller="QuestionCtrl">
-    </div>
-
+    <div class="questionnaire-tree" ui-view></div>
 </section>
 
 <div id="verification-modal" class="modal fade">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
+        <div class="arrow"></div>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><!--&times;--></button>
-                <!--<h4 class="modal-title">Modal title</h4>-->
             </div>
             <div class="modal-body">
                 <div>
                     <div id="verify-popover-content">
                         <div class="question-list">
                             <div ng-repeat="error in verificationStatus.errors">
-                                <!--<div class="breadcrumbs">
-                                    <ul>
-                                        <li><a href="#">Chapter 1. Household</a></li>
-                                        <li><a href="#">members information</a></li>
-                                    </ul>
-                                </div>-->
-                                <div class="question item cat-multianswer">
+                                <div class="question item">
                                     <div class="icon"></div>
                                     {{error.message}}
                                     <div class="qname-block">{{error.code}}</div>
                                 </div>
                                 <ul class="error-list">
-                                    <li ng-repeat="reference in error.references" ng-click="navigateTo(reference.itemId, reference.chapterId)">
+                                    <li ng-repeat="reference in error.references" ng-click="navigateTo(reference)">
                                         <a href="javascript:void(0);">{{reference.title}}</a>
                                     </li>
                                 </ul>
@@ -207,10 +108,9 @@
                     </div>
                 </div>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
+        </div>
+    </div>
+</div>
 
 <script type="text/ng-template" id="moveToChapterSnippet">
     <div class="btn-group dropup">
@@ -218,13 +118,16 @@
             Move to <span class="caret"></span>
         </button>
 
-        <ul role="menu" class="dropdown-menu dropdown-menu-right">
-            <li ng-repeat="chapter in questionnaire.chapters">
-                <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId">
-                    {{chapter.title}}
-                    <small>({{chapter.questionsCount}} questions, {{chapter.groupsCount}} groups, {{chapter.rostersCount}} rosters)</small>
-                </a>
-            </li>
-        </ul>
+        <div role="menu" class="chapter-menu dropdown-menu dropdown-menu-right">
+            <h1>Move to another chapter:</h1>
+            <ul>
+                <li ng-repeat="chapter in questionnaire.chapters">
+                    <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId" unsaved-warning-clear>
+                        {{chapter.title}}<br />
+                        <small>({{chapter.questionsCount}} questions, {{chapter.groupsCount}} groups, {{chapter.rostersCount}} rosters)</small>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </script>

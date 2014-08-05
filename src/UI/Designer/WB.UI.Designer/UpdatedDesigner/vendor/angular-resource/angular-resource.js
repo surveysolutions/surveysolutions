@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.3.0-build.2693+sha.e9bc51c
+ * @license AngularJS v1.3.0-build.3002+sha.9a2f8e1
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -111,8 +111,8 @@ function shallowClearAndCopy(src, dst) {
  *   Given a template `/path/:verb` and parameter `{verb:'greet', salutation:'Hello'}` results in
  *   URL `/path/greet?salutation=Hello`.
  *
- *   If the parameter value is prefixed with `@` then the value of that parameter is extracted from
- *   the data object (useful for non-GET operations).
+ *   If the parameter value is prefixed with `@` then the value of that parameter will be taken
+ *   from the corresponding key on the data object (useful for non-GET operations).
  *
  * @param {Object.<Object>=} actions Hash with declaration of custom action that should extend
  *   the default set of resource actions. The declaration should be created in the format of {@link
@@ -126,8 +126,8 @@ function shallowClearAndCopy(src, dst) {
  *
  *   - **`action`** – {string} – The name of action. This name becomes the name of the method on
  *     your resource object.
- *   - **`method`** – {string} – HTTP request method. Valid methods are: `GET`, `POST`, `PUT`,
- *     `DELETE`, and `JSONP`.
+ *   - **`method`** – {string} – Case insensitive HTTP method (e.g. `GET`, `POST`, `PUT`,
+ *     `DELETE`, `JSONP`, etc).
  *   - **`params`** – {Object=} – Optional set of pre-bound parameters for this action. If any of
  *     the parameter value is a function, it will be executed every time when a param value needs to
  *     be obtained for a request (unless the param was overridden).
@@ -315,20 +315,20 @@ function shallowClearAndCopy(src, dst) {
  * # Creating a custom 'PUT' request
  * In this example we create a custom method on our resource to make a PUT request
  * ```js
- *		var app = angular.module('app', ['ngResource', 'ngRoute']);
+ *    var app = angular.module('app', ['ngResource', 'ngRoute']);
  *
- *		// Some APIs expect a PUT request in the format URL/object/ID
- *		// Here we are creating an 'update' method
- *		app.factory('Notes', ['$resource', function($resource) {
+ *    // Some APIs expect a PUT request in the format URL/object/ID
+ *    // Here we are creating an 'update' method
+ *    app.factory('Notes', ['$resource', function($resource) {
  *    return $resource('/notes/:id', null,
  *        {
  *            'update': { method:'PUT' }
  *        });
- *		}]);
+ *    }]);
  *
- *		// In our controller we get the ID from the URL using ngRoute and $routeParams
- *		// We pass in $routeParams and our Notes factory along with $scope
- *		app.controller('NotesCtrl', ['$scope', '$routeParams', 'Notes',
+ *    // In our controller we get the ID from the URL using ngRoute and $routeParams
+ *    // We pass in $routeParams and our Notes factory along with $scope
+ *    app.controller('NotesCtrl', ['$scope', '$routeParams', 'Notes',
                                       function($scope, $routeParams, Notes) {
  *    // First get a note object from the factory
  *    var note = Notes.get({ id:$routeParams.id });
@@ -338,7 +338,7 @@ function shallowClearAndCopy(src, dst) {
  *    Notes.update({ id:$id }, note);
  *
  *    // This will PUT /notes/ID with the note object in the request payload
- *		}]);
+ *    }]);
  * ```
  */
 angular.module('ngResource', ['ng']).
@@ -498,6 +498,13 @@ angular.module('ngResource', ['ng']).
           shallowClearAndCopy(value || {}, this);
         }
 
+        Resource.prototype.toJSON = function () {
+          var data = extend({}, this);
+          delete data.$promise;
+          delete data.$resolved;
+          return data;
+        };
+
         forEach(actions, function (action, name) {
           var hasBody = /^(POST|PUT|PATCH)$/i.test(action.method);
 
@@ -578,7 +585,14 @@ angular.module('ngResource', ['ng']).
                 if (action.isArray) {
                   value.length = 0;
                   forEach(data, function (item) {
-                    value.push(new Resource(item));
+                    if (typeof item === "object") {
+                      value.push(new Resource(item));
+                    } else {
+                      // Valid JSON values may be string literals, and these should not be converted
+                      // into objects. These items will not have access to the Resource prototype
+                      // methods, but unfortunately there
+                      value.push(item);
+                    }
                   });
                 } else {
                   shallowClearAndCopy(data, value);

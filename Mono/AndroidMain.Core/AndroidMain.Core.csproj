@@ -169,6 +169,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IQuestion.cs">
       <Link>Entities\SubEntities\IQuestion.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IStaticText.cs">
+      <Link>Entities\SubEntities\IStaticText.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Option.cs">
       <Link>Entities\SubEntities\Option.cs</Link>
     </Compile>
@@ -234,6 +237,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\RosterSizeSourceType.cs">
       <Link>Entities\SubEntities\RosterSizeSourceType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\StaticText.cs">
+      <Link>Entities\SubEntities\StaticText.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\UserLight.cs">
       <Link>Entities\SubEntities\UserLight.cs</Link>
@@ -404,7 +410,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

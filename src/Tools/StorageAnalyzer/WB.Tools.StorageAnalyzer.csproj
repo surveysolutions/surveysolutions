@@ -72,26 +72,6 @@
       <Project>{ea93a91d-7bc9-4ec0-8a22-8a772afd76c3}</Project>
       <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
-      <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
-      <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
-      <Name>Main.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
-      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
-      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
-      <Name>WB.Core.SharedKernel.Structures</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
-      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
-      <Name>WB.Core.SharedKernel.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

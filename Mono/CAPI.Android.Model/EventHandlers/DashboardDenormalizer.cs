@@ -65,20 +65,20 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status,
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status, evnt.Payload.Comments,
                 evnt.Payload.FeaturedQuestionsMeta, evnt.Payload.CreatedOnClient, false);
         }
 
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, InterviewStatus.InterviewerAssigned, 
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, InterviewStatus.InterviewerAssigned, null,
                 new AnsweredQuestionSynchronizationDto[0], true, true);
         }
 
 
         private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, Guid interviewId, Guid responsibleId,
-                                                     InterviewStatus status, IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions, 
+                                                     InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions, 
                                                      bool createdOnClient, bool canBeDeleted)
         {
             var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId);
@@ -94,7 +94,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             
             questionnaireDtOdocumentStorage.Store(
                 new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                                     items, questionnaireTemplate.Version, createdOnClient, canBeDeleted), interviewId);
+                                     items, questionnaireTemplate.Version, comments, createdOnClient, canBeDeleted), interviewId);
         }
 
         private FeaturedItem CreateFeaturedItem(IQuestion featuredQuestion, object answer)
@@ -122,7 +122,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
             AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId,
-                                            evnt.Payload.InterviewData.Status, evnt.Payload.InterviewData.Answers, 
+                                            evnt.Payload.InterviewData.Status,evnt.Payload.InterviewData.Comments, evnt.Payload.InterviewData.Answers, 
                                             evnt.Payload.InterviewData.CreatedOnClient, false);
         }
 
@@ -132,7 +132,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             long version = evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            this.StoreSurveyDto(id, questionnaireDocument, version);
+            this.StoreSurveyDto(id, questionnaireDocument, version, evnt.Payload.AllowCensusMode);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -141,12 +141,13 @@ namespace CAPI.Android.Core.Model.EventHandlers
             long version = evnt.Payload.Version;
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            this.StoreSurveyDto(id, questionnaireDocument, evnt.Payload.Version);
+            this.StoreSurveyDto(id, questionnaireDocument, evnt.Payload.Version, evnt.Payload.AllowCensusMode);
         }
 
-        private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version)
+        private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode)
         {
-            this.surveyDtoDocumentStorage.Store(new SurveyDto(id, questionnaireDocument.Title, version), id);
+            var surveyDto = new SurveyDto(id, questionnaireDocument.Title, version, allowCensusMode);
+            this.surveyDtoDocumentStorage.Store(surveyDto, surveyDto.Id);
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
@@ -281,7 +282,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
                 new GeoPosition(latitude: evnt.Payload.Latitude, longitude: evnt.Payload.Longitude,
-                    accuracy: evnt.Payload.Accuracy, timestamp: evnt.Payload.Timestamp));
+                    accuracy: evnt.Payload.Accuracy, altitude:evnt.Payload.Altitude, 
+                    timestamp: evnt.Payload.Timestamp));
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)

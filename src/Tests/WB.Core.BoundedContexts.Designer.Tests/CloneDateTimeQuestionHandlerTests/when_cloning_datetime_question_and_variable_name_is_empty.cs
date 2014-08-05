@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneDateTimeQuestionHandlerTes
                     questionId: questionId,
                     title: title,
                     variableName: emptyVariableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
@@ -46,12 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneDateTimeQuestionHandlerTes
                     targetIndex: targetIndex,
                     responsibleId: responsibleId));
 
-        private It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        private It should_throw_exception_with_message_containting__empty__variable__ = () =>
-            new[] { "empty", "variable" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
+        It should_not_throw_exception = () => exception.ShouldBeNull();
 
 
         private static Questionnaire questionnaire;

@@ -790,6 +790,22 @@ ul.list.ui-sortable:empty {
     border-radius: 4px 0 0 4px;
 }
 
+.q-item-wrap .handler-static {
+    background: rgba(0,0,0,0.3);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 20px;
+    border-right: 1px solid rgba(0,0,0,0.2);
+    box-shadow: -1px 0 0 rgba(255,255,255,0.3) inset;
+    -webkit-border-radius: 4px 0 0 4px;
+    -moz-border-radius: 4px 0 0 4px;
+    -ms-border-radius: 4px 0 0 4px;
+    -o-border-radius: 4px 0 0 4px;
+    border-radius: 4px 0 0 4px;
+}
+
 .q-item-wrap.q-group.hasErrors > .handler,
 .q-item-wrap.q-question.hasErrors > .handler {
     background: #bd362f;

@@ -20,6 +20,7 @@ namespace Main.Core.Entities.SubEntities
         QuestionType QuestionType { get; set; }
         QuestionScope QuestionScope { get; set; } 
         string StataExportCaption { get; set; }
+        string VariableLabel { get; set; }
         string ValidationExpression { get; set; }
         string ValidationMessage { get; set; }
 

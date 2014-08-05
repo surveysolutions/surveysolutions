@@ -284,7 +284,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 AddInterviewStatus(summary: interview, status: InterviewStatus.Restarted,
-                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                    date: evnt.Payload.RestartTime, comment: null, responsibleId: evnt.Payload.UserId);
             });
         }
 
@@ -293,7 +293,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 AddInterviewStatus(summary: interview, status: InterviewStatus.Completed,
-                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+                    date: evnt.Payload.CompleteTime, comment: null, responsibleId: evnt.Payload.UserId);
             });
         }
 

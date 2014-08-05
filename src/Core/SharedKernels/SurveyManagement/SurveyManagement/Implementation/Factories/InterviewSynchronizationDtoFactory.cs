@@ -20,13 +20,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             this.questionnriePropagationStructures = questionnriePropagationStructures;
         }
 
-        public InterviewSynchronizationDto BuildFrom(InterviewData interview)
+        public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments)
         {
-            var result = BuildFrom(interview, Guid.Empty, interview.Status);
+            var result = BuildFrom(interview, Guid.Empty, interview.Status, comments);
             return result;
         }
 
-        public InterviewSynchronizationDto BuildFrom(InterviewData interview, Guid userId, InterviewStatus status)
+        public InterviewSynchronizationDto BuildFrom(InterviewData interview, Guid userId, InterviewStatus status, string comments)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
@@ -68,18 +68,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     propagatedGroupInstanceCounts);
             }
             return new InterviewSynchronizationDto(interview.InterviewId,
-                status,
-                userId, 
-                interview.QuestionnaireId, 
+                status, comments,
+                userId,
+                interview.QuestionnaireId,
                 interview.QuestionnaireVersion,
-                answeredQuestions.ToArray(), 
-                disabledGroups, 
+                answeredQuestions.ToArray(),
+                disabledGroups,
                 disabledQuestions,
-                validQuestions, 
-                invalidQuestions, 
-                null, 
+                validQuestions,
+                invalidQuestions,
+                null,
                 propagatedGroupInstanceCounts,
-                interview.WasCompleted, 
+                interview.WasCompleted,
                 interview.CreatedOnClient);
         }
 

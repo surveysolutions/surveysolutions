@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
         public static TQuestion GetQuestion<TQuestion>(this QuestionnaireDocument questionnaireDocument, Guid questionId)
             where TQuestion : class, IQuestion
         {
-            return questionnaireDocument.GetAllQuestions<TQuestion>().Single(question => question.PublicKey == questionId);
+            return questionnaireDocument.GetEntitiesByType<TQuestion>().Single(question => question.PublicKey == questionId);
         }
 
         public static IEnumerable<IQuestion> GetAllQuestions(this QuestionnaireDocument questionnaireDocument)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 
@@ -53,10 +49,20 @@ namespace Main.Core.Tests.Entities.SubEntities.GeoPositionTests
         It should_parsed_result_longitude_be_equal_2 = () =>
           Results[ValidFormat].Longitude.ShouldEqual(2);
 
+        It should_parsed_result_altitude_be_equal44 = () =>
+          Results[ValidFormatWithAltitude].Altitude.ShouldEqual(44);
+        
+        It should_result_be_null_for_invalid_altitude = () =>
+            Results[FormatWithInvalidAltitude].ShouldBeNull();
+
+        It should_result_be_null_for_invalid_count = () =>
+            Results[InValidFormatWithAltitude].ShouldBeNull();
+
+
         protected static string[] PossibleGeoPositionStrings = new[]
         {
             EmptyString, UnparsedAtAll, CoordinatesAreMissing, OnlyOneCoordinate, InvalidLatitude, InvalidLongitude,
-            UnparsedAccuracy, ValidFormat
+            UnparsedAccuracy, ValidFormat, ValidFormatWithAltitude, FormatWithInvalidAltitude, InValidFormatWithAltitude
         };
 
         protected static Dictionary<string, GeoPosition> Results = new Dictionary<string, GeoPosition>();
@@ -68,5 +74,9 @@ namespace Main.Core.Tests.Entities.SubEntities.GeoPositionTests
         private const string InvalidLongitude = "4,b[invalid longitude]";
         private const string UnparsedAccuracy = "1,2[unparsed accuracy]";
         private const string ValidFormat = "1,2[3]";
+
+        private const string InValidFormatWithAltitude = "2,1,2[3]4";
+        private const string ValidFormatWithAltitude = "1,2[3]44";
+        private const string FormatWithInvalidAltitude = "1,2[3]4q";
     }
 }

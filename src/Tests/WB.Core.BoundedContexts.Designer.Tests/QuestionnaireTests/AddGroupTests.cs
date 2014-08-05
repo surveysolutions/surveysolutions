@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act =
                 () =>
-                    questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: emptyTitle, rosterSizeQuestionId: null,
+                    questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: emptyTitle, variableName: null, rosterSizeQuestionId: null,
                         description: null, condition: null, parentGroupId: null, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // act
-                questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: notEmptyNewTitle, rosterSizeQuestionId: null,
+                questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: notEmptyNewTitle, variableName: null, rosterSizeQuestionId: null,
                     description: null, condition: null, parentGroupId: null, isRoster: false,
                     rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaireWithOneNotRosterGroup(groupId: parentRegularGroupId, responsibleId: responsibleId);
 
                 // act
-                questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null,
+                questionnaire.AddGroup(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null,
                     description: null, condition: null, parentGroupId: parentRegularGroupId, isRoster: false,
                     rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act =
                 () =>
-                    questionnaire.AddGroup(Guid.NewGuid(), responsibleId: Guid.NewGuid(), title: "Title", rosterSizeQuestionId: null,
+                    questionnaire.AddGroup(Guid.NewGuid(), responsibleId: Guid.NewGuid(), title: "Title", variableName: null, rosterSizeQuestionId: null,
                         description: null, condition: null, parentGroupId: null, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             // assert
@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -175,7 +175,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -204,7 +204,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.AddGroup(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert

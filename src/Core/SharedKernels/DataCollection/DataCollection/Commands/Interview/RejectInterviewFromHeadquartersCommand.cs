@@ -12,22 +12,19 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public Guid SupervisorId { get; set; }
         public InterviewSynchronizationDto InterviewDto { get; set; }
         public DateTime SynchronizationTime { get; set; }
-        public string Comment { get; set; }
 
         public RejectInterviewFromHeadquartersCommand(Guid interviewId, 
             Guid userId, 
             Guid supervisorId, 
             Guid? interviewerId,
             InterviewSynchronizationDto interviewDto, 
-            DateTime synchronizationTime, 
-            string comment)
+            DateTime synchronizationTime)
             : base(interviewId, userId)
         {
             this.InterviewerId = interviewerId;
             this.SupervisorId = supervisorId;
             this.InterviewDto = interviewDto;
             this.SynchronizationTime = synchronizationTime;
-            this.Comment = comment;
         }
     }
 }

@@ -125,26 +125,26 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f040002
 			public static int ScreenId = 2130968578;
 			
-			// aapt resource value: 0x7f04001d
-			public static int btnAnswered = 2130968605;
+			// aapt resource value: 0x7f04001e
+			public static int btnAnswered = 2130968606;
 			
-			// aapt resource value: 0x7f040021
-			public static int btnComplete = 2130968609;
+			// aapt resource value: 0x7f040022
+			public static int btnComplete = 2130968610;
 			
 			// aapt resource value: 0x7f040008
 			public static int btnInstructions = 2130968584;
 			
-			// aapt resource value: 0x7f040020
-			public static int btnInvalid = 2130968608;
+			// aapt resource value: 0x7f040021
+			public static int btnInvalid = 2130968609;
 			
 			// aapt resource value: 0x7f040015
 			public static int btnNavigation = 2130968597;
 			
-			// aapt resource value: 0x7f04001e
-			public static int btnUnanswered = 2130968606;
+			// aapt resource value: 0x7f04001f
+			public static int btnUnanswered = 2130968607;
 			
-			// aapt resource value: 0x7f040022
-			public static int contentFrame = 2130968610;
+			// aapt resource value: 0x7f040023
+			public static int contentFrame = 2130968611;
 			
 			// aapt resource value: 0x7f04000f
 			public static int etComments = 2130968591;
@@ -191,14 +191,17 @@ namespace WB.UI.Shared.Android
 			// aapt resource value: 0x7f04000b
 			public static int tvError = 2130968587;
 			
-			// aapt resource value: 0x7f04001f
-			public static int tvErrorWarning = 2130968607;
+			// aapt resource value: 0x7f040020
+			public static int tvErrorWarning = 2130968608;
 			
 			// aapt resource value: 0x7f040018
 			public static int tvITem = 2130968600;
 			
 			// aapt resource value: 0x7f04000a
 			public static int tvMError = 2130968586;
+			
+			// aapt resource value: 0x7f04001d
+			public static int tvText = 2130968605;
 			
 			// aapt resource value: 0x7f04000c
 			public static int tvTitle = 2130968588;
@@ -235,13 +238,16 @@ namespace WB.UI.Shared.Android
 			public static int ScreenContentFragment = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public static int StatisticsContent = 2130903045;
+			public static int StaticTextView = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public static int zxingscanneractivitylayout = 2130903046;
+			public static int StatisticsContent = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public static int zxingscannerfragmentlayout = 2130903047;
+			public static int zxingscanneractivitylayout = 2130903047;
+			
+			// aapt resource value: 0x7f030008
+			public static int zxingscannerfragmentlayout = 2130903048;
 			
 			static Layout()
 			{

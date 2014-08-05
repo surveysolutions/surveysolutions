@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-                questionnaire.AddGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, anotherRosterId, true,
+                questionnaire.AddGroup(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, anotherRosterId, true,
                     RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         It should_raise_NewGroupAdded_event = () =>

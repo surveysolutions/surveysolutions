@@ -13,6 +13,8 @@
                self.title = ko.observable('New Question').extend({ required: true });
                self.parent = ko.observable();
                self.alias = ko.observable('');
+               self.variableLabel = ko.observable('');
+               self.mask = ko.observable('');
 
                self.type = ko.observable("QuestionView"); // Object type
                self.template = "QuestionView"; // tempate id in html file
@@ -103,6 +105,10 @@
                    return !(self.qtype() == 'TextList' && self.isFeatured() == false);
                });
 
+               self.isMaskVisible = ko.computed(function () {
+                   return self.qtype() == 'Text';
+               });
+
                self.addAnswer = function () {
                    var answer = new answerOption().id(Math.uuid()).title('').value('');
 
@@ -124,7 +130,7 @@
                self.isNullo = false;
                self.cloneSource = ko.observable();
 
-               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype,
+               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.variableLabel, self.mask, self.qtype,
                    self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression,
                    self.validationMessage, self.instruction, self.answerOptions, self.maxValue,
                    self.selectedLinkTo, self.isLinkedAsBool, self.isInteger, self.countOfDecimalPlaces,
@@ -496,6 +502,7 @@
 
                    item.validationExpression(this.validationExpression());
                    item.validationMessage(this.validationMessage());
+                   item.mask(this.mask());
 
                    item.parent(this.parent());
                    item.id(Math.uuid());
@@ -513,6 +520,10 @@
                    item.alias('');
                    item.alias.valueHasMutated();
 
+                   item.variableLabel('');
+                   item.variableLabel.valueHasMutated();
+
+                   
                    item.isLinked(this.isLinked());
                    item.selectedLinkTo(this.selectedLinkTo());
 
@@ -533,6 +544,8 @@
            update: function (data) {
                this.title(data.title);
                this.alias(data.alias);
+               this.variableLabel(data.variableLabel);
+               this.mask(data.mask);
                this.qtype(data.qtype);
                this.isFeatured(data.isFeatured);
                this.isMandatory(data.isMandatory);

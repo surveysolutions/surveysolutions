@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = Guid.NewGuid(),
                     IsRoster = true,
+                    VariableName = "a",
                     RosterSizeQuestionId = rosterSizeLevel1Id,
                     Children = new List<IComposite>()
                     {
@@ -35,6 +36,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             PublicKey = Guid.NewGuid(),
                             IsRoster = true,
+                            VariableName = "b",
                             RosterSizeQuestionId = rosterSizeLevel2Id,
                             Children = new List<IComposite>()
                             {
@@ -43,6 +45,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                                 {
                                     PublicKey = Guid.NewGuid(),
                                     IsRoster = true,
+                                    VariableName = "c",
                                     RosterSizeQuestionId = rosterSizeLevel3Id,
                                     Children = new List<IComposite>()
                                     {
@@ -51,6 +54,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                                         {
                                             PublicKey = Guid.NewGuid(),
                                             IsRoster = true,
+                                            VariableName = "d",
                                             RosterSizeQuestionId = rosterSizeLevel4Id,
                                             Children = new List<IComposite>()
                                             {
@@ -59,6 +63,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                                                 {
                                                     PublicKey = rosterGroupId,
                                                     IsRoster = true,
+                                                    VariableName = "e",
                                                     RosterSizeQuestionId = rosterSizeLevel5Id,
                                                     Children = new List<IComposite>()
                                                     {

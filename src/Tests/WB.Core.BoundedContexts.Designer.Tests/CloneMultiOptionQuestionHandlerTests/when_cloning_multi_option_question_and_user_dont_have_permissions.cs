@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneMultiOptionQuestionHandler
                 questionnaire.CloneMultiOptionQuestion(questionId: questionId,
                     title: title,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     scope: scope,
                     enablementCondition: enablementCondition,

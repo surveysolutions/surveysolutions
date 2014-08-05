@@ -30,7 +30,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneQrBarcodeQuestionHandlerTe
 
         Because of = () =>            
                 questionnaire.CloneQRBarcodeQuestion(questionId: questionId, title: "title", parentGroupId: chapterId,
-                    variableName: "qr_barcode_question", isMandatory: isMandatory, enablementCondition: condition, instructions: instructions,
+                    variableName: "qr_barcode_question",
+                variableLabel: null, isMandatory: isMandatory, enablementCondition: condition, instructions: instructions,
                     responsibleId: responsibleId, sourceQuestionId: sourceQuestionId, targetIndex: targetIndex);
 
         Cleanup stuff = () =>

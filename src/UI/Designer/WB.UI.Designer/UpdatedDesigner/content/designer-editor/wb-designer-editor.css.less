@@ -1,4 +1,4 @@
-@content-padding-left: 75px;
+@content-padding-left: 65px;
 @left-column-width: 55px;
 @header-height: 75px;
 @spacer-height: 2px;
@@ -11,9 +11,122 @@
     border-radius: 3px;
 }
 
-#designer-editor.container {
+li.chapter-panel-item {
+  position: relative;
+  display: block;
+  height: 70px;
+  border-bottom: 1px #d7dbde solid;
+  cursor: pointer;
 
+  > .holder {
+    display: inline-table;
+    width: 100%;
+    height: 100%;
+    min-width: 336px;
+
+    > .inner {
+      //position: relative;
+      display: table-cell;
+      vertical-align: middle;
+      padding-left: 18px;
+
+      > .handler {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 18px;
+      }
+
+      > h1 {
+        margin: 0;
+        .questionnarie-chapter-list-fontstyle();
+
+        > a, a:hover {
+          text-decoration: none;
+        }
+      }
+
+      > span {
+        .questionnarie-chapter-list-span-fontstyle();
+      }
+
+      > .btn-group {
+        position: absolute;
+        top: 20px;
+        right: 8px;
+
+        &.open > .dropdown-toggle {
+          display: inline-block;
+          box-shadow: none;
+        }
+
+        > .dropdown-toggle {
+          display: none;
+          //position: absolute;
+          //top: 11px;
+          //right: 8px;
+          .wb-dropdown-button();
+        }
+
+        > ul.dropdown-menu {
+          list-style: none;
+          margin: 6px 0;
+          padding: 0;
+
+          .context-menu-fontstyle();
+
+          li {
+            a {
+              letter-spacing: inherit;
+              color: inherit;
+              display: block;
+              padding: 0 12px;
+              width: 100%;
+              height: 100%;
+              text-decoration: none;
+              line-height: inherit;
+              &:hover {
+                color: #fff;
+                background-color: @common-blue-color;
+              }
+            }
+          }
+        }
+      }
+
+      &:hover {
+        > .btn-group > .dropdown-toggle {
+          display: inline-block;
+        }
+
+        /*background-color: #dbdfe2;
+        > .handler {
+          background: #dbdfe2 url(../i/chapter-list-li-dots.png) center no-repeat;
+        } */
+      }
+    }
+  }
+
+  &.current > .holder > .inner > h1 {
+    font-weight: bold;
+  }
+}
+
+ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:hover {
+  > .holder {
+    > .inner {
+      background-color: #dbdfe2;
+      > .handler {
+        background: #dbdfe2 url(../i/chapter-list-li-dots.png) center no-repeat;
+      }
+    }
+  }
+}
+
+#designer-editor.container {
   width: 100%;
+  min-width: 1280px;
   height: 100%;
   padding: 0 15px;
 
@@ -67,12 +180,22 @@
       > .title {
         .questionnarie-title-fontstyle();
 
+        #verification-button {
+          margin-left: 5px;
+        }
+
         > span.gray {
           .questionnarie-title-span-gray-fontstyle();
         }
 
         > span.error-message {
+          margin-left: 5px;
           .questionnarie-title-span-error-fontstyle();
+        }
+
+        > span.text-success {
+          margin-left: 5px;
+          .questionnarie-title-span-success-fontstyle()
         }
       }
     }
@@ -102,162 +225,62 @@
     height: @main-height;
     //overflow: hidden;
 
-    > .questionnaire-tree {
+    > .chapter-panel {
+      @unfolded_width: 354px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 10;
+      width: @left-column-width;
       height: 100%;
-      padding-left: @content-padding-left;
-      padding-top: 55px;
-      padding-right: 0;
-      background: @designer-editor-lightblue-bg-color;
+      background: @designer-editor-mediumblue-bg-color url(../i/chapter-panel-btn.png) 0 19px no-repeat;
+      cursor: pointer;
+      .transition(width 0.4s ease);
+      &:hover {
+        background-position: -555px 19px;
+      }
 
-      > .chapter-title {
+      > .foldback-button {
+        @side: 55px;
+        display: none;
         position: absolute;
-        left: 0;
+        cursor: pointer;
         top: 0;
-        width: 100%;
-        height: @left-column-width;
-        padding-left: @content-padding-left;
-        background: @designer-editor-lightblue-bg-color;
-        .questionnarie-chapter-title-fontstyle();
-        line-height: @left-column-width;
-        box-shadow: -5px 5px 10px rgba(0, 0, 0, .25);
-        z-index: 5;
+        right: -@side;
+        z-index: 15;
 
-        > span {
-          .questionnarie-chapter-title-span-fontstyle();
-        }
+        width: @side;
+        height: @side;
+        background: #dbdfe2 url(../i/arrow-left.png) center 0 no-repeat;
+        //.box-shadow(50px 0 50px -15px rgba(0, 0, 0, 0.25));
 
-        ul.controls-right {
-          display: block;
-          position: absolute;
-          top: 7px;
-          right: 5px;
-          margin: 0;
-          padding: 0;
-          list-style: none;
-          .clearfix();
-
-          li {
-            float: left;
-            @side: 40px;
-            width: @side;
-            height: @side;
-            a {
-              display: block;
-              width: 100%;
-              height: 100%;
-              background: no-repeat center 0;
-              &:hover {
-                background-position: center (-@side);
-              }
-              &.filter {
-                background-image: url(../i/filter-glyph.png);
-              }
-              &.search {
-                background-image: url(../i/search-glyph.png);
-              }
-            }
-          }
-        }
-
-        > .search-box {
-          @h: 40px;
-          .clearfix();
-          > .input-group {
-            margin-top: 7px;
-            line-height: @h;
-            width: ~"calc(100% - 50px)";
-            float: left;
-            > input {
-              height: @h;
-              border: none;
-              border-radius: 3px 0 0 3px;
-              padding: 0 14px;
-              width: 100%;
-              .arial-font();
-              font-size: 16px;
-              color: #000;
-            }
-            > span {
-              height: @h;
-              border: none;
-              border-radius: 0 3px 3px 0;
-              background-color: #fff;
-              cursor: pointer;
-            }
-          }
-          > button {
-            @btn-size: 40px;
-            margin: 7px 0 0 3px;
-            line-height: @h;
-            width: @btn-size;
-            height: @btn-size;
-            border: none;
-            padding: 0;
-            display: block;
-            float: left;
-            background: transparent url(../i/cross.png) 0 0;
-            &:hover {
-              background-position: 0 -40px;
-            }
-          }
+        &:hover {
+          background-position: 0 -@side;
         }
       }
 
-      > .chapter-panel {
-        @unfolded_width: 354px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: 10;
-        width: @left-column-width;
-        height: 100%;
-        background: @designer-editor-mediumblue-bg-color url(../i/chapter-panel-btn.png) 0 19px no-repeat;
-        cursor: pointer;
-        .transition(width 0.4s ease);
-        &:hover {
-          background-position: -555px 19px;
+      &.unfolded {
+        width: @unfolded_width;
+        cursor: default;
+        background-image: none;
+        //.box-shadow(0 5px 100px rgba(0, 0, 0, .45));
+        //.box-shadow(50px 0 50px -15px rgba(0, 0, 0, 0.25));
+        &:after {
+          @shadow-width: 219px;
+          position: absolute;
+          content: '';
+          width: @shadow-width;
+          height: 100%;
+          top: 0;
+          right: -@shadow-width;
+          background: url(../i/left-panel-shadow.png) repeat-y;
         }
 
         > .foldback-button {
-          @side: 55px;
-          display: none;
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          right: -@side;
-          z-index: 15;
-
-          width: @side;
-          height: @side;
-          background: #dbdfe2 url(../i/arrow-left.png) center 0 no-repeat;
-          //.box-shadow(50px 0 50px -15px rgba(0, 0, 0, 0.25));
-
-          &:hover {
-            background-position: 0 -@side;
-          }
+          display: block;
         }
 
-        &.unfolded {
-          width: @unfolded_width;
-          cursor: default;
-          background-image: none;
-          //.box-shadow(0 5px 100px rgba(0, 0, 0, .45));
-          //.box-shadow(50px 0 50px -15px rgba(0, 0, 0, 0.25));
-          &:after {
-            @shadow-width: 219px;
-            position: absolute;
-            content: '';
-            width: @shadow-width;
-            height: 100%;
-            top: 0;
-            right: -@shadow-width;
-            background: url(../i/left-panel-shadow.png) repeat-y;
-          }
-
-          > .foldback-button {
-            display: block;
-          }
-
+        > .ul-holder {
           > ul.chapters {
             display: block;
           }
@@ -266,6 +289,13 @@
             display: block;
           }
         }
+      }
+
+      > .ul-holder {
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
 
         > ul.chapters {
           display: none;
@@ -274,90 +304,13 @@
           padding: 0;
           //overflow: hidden;
 
-          > li {
-            position: relative;
-            display: block;
-            height: 70px;
-            padding-left: 18px;
-            border-bottom: 1px #d7dbde solid;
+          .angular-ui-tree-placeholder {
+            outline: 2px dashed white;
+          }
 
-            > .holder {
-              display: inline-table;
-              width: 100%;
-              height: 100%;
-              min-width: 336px;
-
-              > .inner {
-                display: table-cell;
-                vertical-align: middle;
-
-                > h1 {
-                  margin: 0;
-                  .questionnarie-chapter-list-fontstyle();
-                }
-
-                > span {
-                  .questionnarie-chapter-list-span-fontstyle();
-                }
-
-                > .btn-group {
-                  position: absolute;
-                  top: 11px;
-                  right: 8px;
-
-                  &.open > .dropdown-toggle {
-                    display: inline-block;
-                    box-shadow: none;
-                  }
-
-                  > .dropdown-toggle {
-                    //display: inline-block;
-                    display: none;
-                    //position: absolute;
-                    //top: 11px;
-                    //right: 8px;
-                    .wb-dropdown-button();
-                  }
-
-                  > ul.dropdown-menu {
-                    list-style: none;
-                    margin: 6px 0;
-                    padding: 0;
-
-                    .context-menu-fontstyle();
-
-                    li {
-                      a {
-                        letter-spacing: inherit;
-                        color: inherit;
-                        display: block;
-                        padding: 0 12px;
-                        width: 100%;
-                        height: 100%;
-                        text-decoration: none;
-                        line-height: inherit;
-                        &:hover {
-                          color: #fff;
-                          background-color: @common-blue-color;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-            &.current > .holder > .inner > h1 {
-              font-weight: bold;
-            }
-
-            &:hover {
-              background: #dbdfe2 url(../i/chapter-list-li-dots.png) 5px center no-repeat;
-
-              > .holder > .inner > .btn-group > .dropdown-toggle {
-                display: inline-block;
-              }
-            }
+          .btn-group ul.dropdown-menu {
+            left: inherit;
+            right: 0;
           }
         }
 
@@ -368,111 +321,254 @@
           overflow: hidden;
         }
       }
-
-      > .question-list {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-
-        > .start-box {
-          .questionnarie-startbox-fontstyle();
-          text-align: center;
-          position: absolute;
-          width: 100%;
-          top: 30%;
-
-          button {
-            margin-left: 5px; margin-right: 5px;
-            background-color: #edeff1;
-          }
-
-          p {
-            line-height: 175%;
-            margin: 1.5em 0;
-          }
-
-          span.left-panel-glyph {
-            display: inline-block;
-            @s: 26px;
-            background: #cbd1d5 url(../i/chapter-panel-btn-small.png) no-repeat center;
-            border-radius: 3px;
-            width: @s;
-            height: @s;
-            vertical-align: middle;
-          }
-        }
-      }
     }
 
-    > .question-editor {
-      position: relative;
+    > .questionnaire-tree {
       height: 100%;
-      background: white;
 
-      @form-btns-hldr-height: 95px;
-      @form-holder-height: calc(~"100%" - (@form-btns-hldr-height));
+      > .questionnaire-tree-holder {
+        height: 100%;
+        padding-left: @content-padding-left;
+        padding-top: 55px;
+        padding-right: 0;
+        background: @designer-editor-lightblue-bg-color;
 
-      > .form-holder {
-        padding: 36px 40px;
-        height: @form-holder-height;
-        overflow: auto;
+        > .chapter-title {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: @left-column-width;
+          padding-left: @content-padding-left;
+          background: @designer-editor-lightblue-bg-color;
+          .questionnarie-chapter-title-fontstyle();
+          line-height: @left-column-width;
+          box-shadow: -5px 5px 10px rgba(0, 0, 0, .25);
+          z-index: 5;
 
-        > .breadcrumbs {
-          margin-bottom: 10px;
-          .wb-breadcrumbs('gray');
+          > span {
+            .questionnarie-chapter-title-span-fontstyle();
+          }
+
+          ul.controls-right {
+            display: block;
+            position: absolute;
+            top: 7px;
+            right: 5px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            .clearfix();
+
+            li {
+              float: left;
+              @side: 40px;
+              width: @side;
+              height: @side;
+              a {
+                display: block;
+                width: 100%;
+                height: 100%;
+                background: no-repeat center 0;
+                &:hover {
+                  background-position: center (-@side);
+                }
+                &.filter {
+                  background-image: url(../i/filter-glyph.png);
+                }
+                &.search {
+                  background-image: url(../i/search-glyph.png);
+                }
+              }
+            }
+          }
+
+          > .search-box {
+            @h: 40px;
+            .clearfix();
+            > .input-group {
+              margin-top: 7px;
+              line-height: @h;
+              //width: ~"calc(100% - 50px)";
+              margin-right: 50px;
+              float: left;
+
+              > input {
+                height: @h;
+                border: none;
+                border-radius: 3px 0 0 3px;
+                padding: 0 14px;
+                width: 100%;
+                .arial-font();
+                font-size: 16px;
+                color: #000;
+                outline: none;
+              }
+              > span {
+                height: @h;
+                border: none;
+                border-radius: 0 3px 3px 0;
+                background-color: #fff;
+                cursor: pointer;
+                top: 0;
+              }
+            }
+            > button {
+              @btn-size: 40px;
+              margin: 7px 0 0 3px;
+              line-height: @h;
+              width: @btn-size;
+              height: @btn-size;
+              border: none;
+              padding: 0;
+              display: block;
+              //float: left;
+              background: transparent url(../i/cross.png) 0 0;
+              position: absolute;
+              right: 4px;
+              &:hover {
+                background-position: 0 -40px;
+              }
+            }
+          }
         }
 
-        .gray {
-          padding: 8px;
-          background: #f1f2f3;
-          border-radius: 4px;
-          .clearfix();
-        }
+        > .question-list {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          padding-right: 10px;
+          overflow: auto;
 
-        .form-group {
-          > label {
-            .lucida-console-font();
-            font-size: 14px;
-            color: #5d5d5d;
-            font-weight: normal;
+          .angular-ui-tree-placeholder {
+            outline: 2px dashed #BCC3C8;
+          }
+
+          .item:after, .buttons-item:after {
+              // horizontal grid line
+              display: block;
+              content: '';
+              width: 100%;
+              height: 1px;
+              background: #e6e9ec;
+          }
+
+          > .start-box {
+            .questionnarie-startbox-fontstyle();
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            top: 30%;
+
+            button {
+              margin-left: 5px; margin-right: 5px;
+              background-color: #edeff1;
+            }
+
+            p {
+              line-height: 175%;
+              margin: 1.5em 0;
+            }
+
+            span.left-panel-glyph {
+              display: inline-block;
+              @s: 26px;
+              background: #cbd1d5 url(../i/chapter-panel-btn-small.png) no-repeat center;
+              border-radius: 3px;
+              width: @s;
+              height: @s;
+              vertical-align: middle;
+            }
           }
         }
       }
 
-      > .form-buttons-holder {
-        padding: 25px 40px;
-        position: absolute;
-        width: 100%;
-        height: @form-btns-hldr-height;
-        bottom: 0;
-        left: 0;
+      > .question-editor {
+        position: relative;
+        height: 100%;
+        background: white;
+        padding:0;
 
-        //margin: 16px 0px;
-        .clearfix();
+        > form {
+          width: 100%;
+          height: 100%;
 
-        .pull-left, .pull-right {
-          height: 42px;
-        }
+          @form-btns-hldr-height: 66px;
+          @form-holder-height: calc(~"100%" - (@form-btns-hldr-height));
 
-        .pull-left {
-          > * {
-            margin-right: 12px;
+          > .form-holder {
+            padding: 10px 20px;
+            height: @form-holder-height;
+            overflow: auto;
+
+            > .breadcrumbs {
+              margin-bottom: 10px;
+              .wb-breadcrumbs('gray');
+            }
+
+            .gray {
+              padding: 8px;
+              background: #f1f2f3;
+              border-radius: 4px;
+              .clearfix();
+            }
+
+            .form-group {
+              > label {
+                .lucida-console-font();
+                font-size: 14px;
+                color: #5d5d5d;
+                font-weight: normal;
+              }
+            }
           }
-        }
-        .pull-right {
-          > * {
-            margin-left: 12px;
-          }
-        }
 
-        > div a {
-          cursor: pointer;
-          .inline-button-fontstyle();
+          > .form-buttons-holder {
+            background-color: #fff;
+            padding: 10px 20px;
+            position: absolute;
+            width: 100%;
+            height: @form-btns-hldr-height;
+            bottom: 0;
+            left: 0;
+
+            //margin: 16px 0px;
+            .clearfix();
+
+            .pull-left, .pull-right {
+              height: 42px;
+            }
+
+            .pull-left {
+              > * {
+                margin-right: 12px;
+              }
+            }
+            .pull-right {
+              > * {
+                margin-left: 12px;
+              }
+            }
+
+            > div > a {
+              cursor: pointer;
+              .inline-button-fontstyle();
+            }
+          }
         }
       }
     }
   }
+}
+
+.question-editor .type-container-dropdown{
+    width: 100%;
+
+    #questionTypeBtn,
+    #rosterTypeBtn,
+    .dropdown-menu {
+         width: 100%;
+    }
 }
 
 .wb-question-item('questionnarie');

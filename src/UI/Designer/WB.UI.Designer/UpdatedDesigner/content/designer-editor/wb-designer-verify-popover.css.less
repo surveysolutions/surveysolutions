@@ -5,7 +5,7 @@
 }
 
 #verify-popover-content {
-  max-height: 600px;
+  //max-height: 600px;
   overflow: auto;
   //width: 900px;
 
@@ -21,6 +21,7 @@
     ul.error-list {
       margin-top: 5px;
       list-style: none;
+      margin-bottom: 20px;
       .wb-question-verify-error-li-fontstyle();
 
       > li:before {
@@ -39,6 +40,20 @@
       > li > span.var {
         .wb-question-verify-error-li-var-fontstyle();
       }
+    }
+
+    .question {
+        height: auto;
+        white-space: normal;
+        min-height: 25px;
+        padding-right: 80px;
+        padding-left: 15px;
+        color: @verify-popup-error-color;
+        line-height: 1.6;
+    }
+
+    .item{
+        cursor: auto;
     }
   }
 }

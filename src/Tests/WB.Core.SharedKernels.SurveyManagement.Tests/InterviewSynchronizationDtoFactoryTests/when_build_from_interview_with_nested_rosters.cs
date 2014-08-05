@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.InterviewSynchronizationD
         };
 
         Because of = () =>
-            result = interviewSynchronizationDtoFactory.BuildFrom(interviewData);
+            result = interviewSynchronizationDtoFactory.BuildFrom(interviewData, null);
 
         It should_result_has_3_roster_instances = () =>
             result.RosterGroupInstances.Count().ShouldEqual(3);

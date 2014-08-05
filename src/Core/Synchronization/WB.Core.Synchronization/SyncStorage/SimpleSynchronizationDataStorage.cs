@@ -58,7 +58,7 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, responsibleId);
         }
 
-        public void SaveQuestionnaire(QuestionnaireDocument doc, long version)
+        public void SaveQuestionnaire(QuestionnaireDocument doc, long version, bool allowCensusMode)
         {
             var syncItem = new SyncItem
             {
@@ -66,7 +66,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 ItemType = SyncItemType.Template,
                 IsCompressed = UseCompression,
                 Content = GetItemAsContent(doc),
-                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(version)),
+                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(version, allowCensusMode)),
             };
             chunkStorageWriter.StoreChunk(syncItem, null);
         }

@@ -27,6 +27,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             get { return InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned; }
         }
 
+        protected override string FormatString(string s)
+        {
+            if (s.EndsWith(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator))
+                return s;
+            decimal parsedAnswer;
+            if (!IsParseAnswerStringSucceeded(s, out parsedAnswer))
+                return s;
+            return parsedAnswer.ToString("##,###.############################", CultureInfo.CurrentCulture);
+        }
 
         protected override void Initialize()
         {
@@ -47,9 +56,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override bool IsParseAnswerStringSucceeded(string newAnswer, out decimal answer)
         {
-            var replacedAnswer = newAnswer.Replace(".", NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
-
-            return decimal.TryParse(replacedAnswer, out answer);
+            var replacedAnswer = newAnswer.Replace(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator, CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+            return decimal.TryParse(replacedAnswer, NumberStyles.Number, CultureInfo.CurrentCulture, out answer);
         }
 
         protected override AnswerQuestionCommand CreateAnswerQuestionCommand(decimal answer)

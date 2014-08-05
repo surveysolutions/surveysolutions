@@ -21,5 +21,6 @@ namespace Main.Core.Events.Questionnaire
 
         public bool? AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
+        public string Mask { get; set; }
     }
 }

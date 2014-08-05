@@ -96,10 +96,15 @@
     <Compile Include="Commands\Questionnaire\Base\FullQuestionDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityAddCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityCloneCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityMoveCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\CloneQuestionByIdCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DateTime\AddDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DateTime\CloneDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DateTime\UpdateDateTimeQuestionCommand.cs" />
@@ -139,6 +144,11 @@
     <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticTextCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\AddStaticTextCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\CloneStaticTextCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
@@ -147,6 +157,11 @@
     <Compile Include="Events\Questionnaire\AbstractQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionCloned.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireEntityEvent.cs" />
+    <Compile Include="Events\Questionnaire\StaticTextCloned.cs" />
+    <Compile Include="Events\Questionnaire\StaticTextDeleted.cs" />
+    <Compile Include="Events\Questionnaire\StaticTextUpdated.cs" />
+    <Compile Include="Events\Questionnaire\StaticTextAdded.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionAdded.cs" />
@@ -184,12 +199,19 @@
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Exceptions\DomainExceptionType.cs" />
-    <Compile Include="Implementation\Factories\IQuestionFactory.cs" />
-    <Compile Include="Implementation\Factories\QuestionFactory.cs" />
+    <Compile Include="Implementation\Factories\IQuestionnaireEntityFactory.cs" />
+    <Compile Include="Implementation\Factories\QuestionnaireEntityFactory.cs" />
+    <Compile Include="Implementation\Services\ExpressionReplacer.cs" />
     <Compile Include="Implementation\Services\JsonExportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVersioner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Roster.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Roster.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\IJsonExportService.cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\IQuestionnaireVersioner.cs" />
@@ -208,17 +230,22 @@
     <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoStatisticsView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\Breadcrumb.cs" />
+    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterItemType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IQuestionnaireItem.cs" />
+    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\StaticTextInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\QuestionInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChaptersInfoViewDenormalizer.cs" />
+    <Compile Include="Views\Questionnaire\Edit\EditStaticTextView.cs" />
     <Compile Include="Views\Questionnaire\Edit\GroupDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IChapterInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\IQuestionnaireInfoFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\DropdownQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditGroupView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\NewEditStaticTextView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionBrief.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\CategoricalOption.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DateTimeDetailsView.cs" />
@@ -235,6 +262,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\SingleOptionDetailsView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\StaticTextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
@@ -255,7 +283,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterInfoViewFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewDenormalizer.cs" />
-    <Compile Include="Views\Questionnaire\Edit\RosterDetailsView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
     <Compile Include="Views\Questionnaire\Indexes\DesignerReportQuestionnaireListViewItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -277,6 +305,7 @@
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireView.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\PdfStaticTextView.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionView.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -364,13 +393,13 @@
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
+      <Project>{8c4b0e67-8c0a-4222-8646-3cf3131cade5}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
-      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
-      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -380,6 +409,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Roster.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />

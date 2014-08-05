@@ -217,10 +217,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
-      <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
-      <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
@@ -240,10 +236,6 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\CAPI\WB.Core.BoundedContexts.Capi.Synchronization\WB.Core.BoundedContexts.Capi.Synchronization.csproj">
       <Project>{f907b0f2-4cfd-438c-8b53-f2d44c581f56}</Project>
       <Name>WB.Core.BoundedContexts.Capi.Synchronization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
-      <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
-      <Name>WB.Core.BoundedContexts.Supervisor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A}</Project>
@@ -304,10 +296,6 @@
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
       <Name>WB.Core.Synchronization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
-      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
-      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

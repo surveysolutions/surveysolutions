@@ -9,58 +9,66 @@ namespace Main.Core.Entities.SubEntities
         public double Longitude { get; set; }
         public double Accuracy { get; set; }
 
+        public double Altitude { get; set; }
+
         public override string ToString()
         {
-            return string.Format("{0},{1}[{2}]", Latitude, Longitude, Accuracy);
+            return string.Format("{0},{1}[{2}]{3}", Latitude, Longitude, Accuracy, Altitude);
         }
 
-        public GeoPosition()
-        {
-        }
+        public GeoPosition(){}
 
-        public GeoPosition(double latitude, double longitude, double accuracy, DateTimeOffset timestamp)
+        public GeoPosition(double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp)
         {
             this.Latitude = latitude;
             this.Longitude = longitude;
             this.Accuracy = accuracy;
             this.Timestamp = timestamp;
+            this.Altitude = altitude;
         }
-
-
-        public GeoPosition(string position)
-        {
-            var coordinates = position.Split(',');
-            Latitude = Double.Parse(coordinates[0]);
-            Longitude = Double.Parse(coordinates[1]);
-        }
-
+        
         public static GeoPosition Parse(string value)
         {
+            //supports string with and without altitude
+
             if (string.IsNullOrEmpty(value))
                 return null;
-            var indexOfSquareBracket = value.IndexOf('[');
-            if (indexOfSquareBracket < 0)
+
+            
+            var properties = value.Split('[', ']');
+            if (properties.Length != 3)
                 return null;
-            var subStringWithCoordinates = value.Substring(0, value.IndexOf('['));
-            if(string.IsNullOrEmpty(subStringWithCoordinates))
-                return null;
-            var coordinates = subStringWithCoordinates.Split(',');
-            if(coordinates.Length!=2)
+            
+            var coordinates = properties[0].Split(',');
+            if (coordinates.Length != 2)
                 return null;
 
             double latitude;
-            double longitude;
             if(!double.TryParse(coordinates[0], out latitude))
                 return null;
 
+            double longitude;
             if (!double.TryParse(coordinates[1], out longitude))
                 return null;
 
-            var accuracyString = value.Substring(subStringWithCoordinates.Length + 1, value.Length - subStringWithCoordinates.Length - 2);
             double accuracy;
-            if (!double.TryParse(accuracyString, out accuracy))
+            if (!double.TryParse(properties[1], out accuracy))
                 return null;
-            return new GeoPosition(latitude, longitude, accuracy, new DateTimeOffset(DateTime.Now));
+
+
+            double altitude;
+            if (!String.IsNullOrEmpty(properties[2]))
+            {
+                if (!double.TryParse(properties[2], out altitude))
+                    return null;
+            }
+            else
+            {
+                altitude = 0;
+            }
+
+            
+            return new GeoPosition(latitude, longitude, accuracy, altitude, new DateTimeOffset(DateTime.Now));
         }
     }
 }

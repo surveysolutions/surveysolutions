@@ -15,6 +15,7 @@ using WB.UI.Headquarters.API.Filters;
 namespace WB.UI.Headquarters.API.Feeds
 {
     [TokenValidationAuthorizationAttribute]
+    [HeadquarterFeatureOnly]
     public class InterviewsFeedController : ApiController
     {
         private const int PageSize = 100;

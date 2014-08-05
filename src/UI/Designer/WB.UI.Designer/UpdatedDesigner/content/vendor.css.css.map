@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "file": "vendor.css.css",
+  "sources": [
+    "vendor.css.less"
+  ],
+  "names": [],
+  "mappings": "QAAQ;QACA;QACA"
+}

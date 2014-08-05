@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
         public string StataExportCaption { get; set; }
+        public string VariableLabel { get; set; }
         public int? MaxAnswerCount { get; set; }
     }
 }

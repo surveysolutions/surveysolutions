@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.ReadSide.Repository;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
-    public class QuestionnaireInfoView : GroupInfoStatisticsView, IReadSideRepositoryEntity
+    public class QuestionnaireInfoView : IReadSideRepositoryEntity
     {
         public QuestionnaireInfoView()
         {
@@ -17,5 +16,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public bool IsPublic { get; set; }
         public List<ChapterInfoView> Chapters { get; set; }
         public List<SharedPerson> SharedPersons { get; set; }
+        public int QuestionsCount { get; set; }
+        public int GroupsCount { get; set; }
+        public int RostersCount { get; set; }
     }
 }

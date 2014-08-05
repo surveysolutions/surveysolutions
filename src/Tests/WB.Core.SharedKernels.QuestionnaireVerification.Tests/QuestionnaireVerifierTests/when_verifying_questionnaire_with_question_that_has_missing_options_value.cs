@@ -37,19 +37,19 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             resultErrors = verifier.Verify(questionnaire);
 
         It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+            resultErrors.Count().ShouldEqual(2);
 
         It should_return_error_with_code__WB0045 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0045");
+            resultErrors.First().Code.ShouldEqual("WB0045");
 
         It should_return_error_with_one_reference = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+            resultErrors.First().References.Count().ShouldEqual(1);
 
         It should_return_first_error_reference_with_type_Question = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            resultErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_first_error_reference_with_id_of_questionWithCustomCondition = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(questionWithMissingValues);
+            resultErrors.First().References.First().Id.ShouldEqual(questionWithMissingValues);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;

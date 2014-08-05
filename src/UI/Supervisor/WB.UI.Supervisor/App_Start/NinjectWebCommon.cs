@@ -31,6 +31,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispa
 using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.QuestionnaireUpgrader;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
@@ -38,6 +39,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Intervie
 using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
@@ -108,7 +110,9 @@ namespace WB.UI.Supervisor.App_Start
                 password: WebConfigurationManager.AppSettings["Raven.Password"],
                 eventsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 viewsDatabase: WebConfigurationManager.AppSettings["Raven.Databases.Views"],
-                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
+                plainDatabase: WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
+                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
+                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"]);
 
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
@@ -159,6 +163,7 @@ namespace WB.UI.Supervisor.App_Start
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
+                new QuestionnaireUpgraderModule(),
                 new SurveyManagementSharedKernelModule(
                     AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),

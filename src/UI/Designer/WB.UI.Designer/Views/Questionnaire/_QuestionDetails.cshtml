@@ -21,6 +21,12 @@
                                 <input id="alias" placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
                             </div>
                         </div>
+                        <div class="control-group" data-bind="visible: isMaskVisible">
+                            <label class="control-label" data-bind="validationElement: mask">Mask</label>
+                            <div class="controls">
+                                <input id="mask" placeholder="Mask" data-bind="value: mask, valueUpdate: 'afterkeydown'" type="text" class="span12" />
+                            </div>
+                        </div>
                     </div>
                     <div class="row-fluid">
                         <div class="control-group" data-bind="validationElement: qtype">

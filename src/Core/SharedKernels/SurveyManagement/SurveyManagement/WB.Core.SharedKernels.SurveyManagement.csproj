@@ -84,7 +84,9 @@
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
+    <Compile Include="Implementation\Factories\CsvWriterFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
+    <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoader.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataProcessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
@@ -120,7 +123,6 @@
     <Compile Include="Implementation\Services\DataExport\InterviewDataExportException.cs" />
     <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
     <Compile Include="Implementation\Services\DataExport\StataEnvironmentContentService.cs" />
-    <Compile Include="Implementation\Services\DataFileService.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadingTemplateService.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
@@ -137,9 +139,9 @@
       <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
+    <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IDataExportService.cs" />
     <Compile Include="Services\IDataFileExportService.cs" />
-    <Compile Include="Services\IDataFileService.cs" />
     <Compile Include="Services\IEnvironmentContentService.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
@@ -173,6 +175,8 @@
     <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
     <Compile Include="Views\DataExport\ExportedQuestion.cs" />
     <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
+    <Compile Include="Views\DataExport\InterviewActionExportView.cs" />
+    <Compile Include="Views\DataExport\InterviewActionLog.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
@@ -198,9 +202,14 @@
     <Compile Include="Views\Interview\AllInterviewsView.cs" />
     <Compile Include="Views\Interview\AllInterviewsViewItem.cs" />
     <Compile Include="Views\Interview\AnswersByVariableCollection.cs" />
+    <Compile Include="Views\Interview\IInterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewBrief.cs" />
     <Compile Include="Views\Interview\InterviewData.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
+    <Compile Include="Views\Interview\InterviewEntityView.cs" />
+    <Compile Include="Views\Interview\InterviewStaticTextView.cs" />
+    <Compile Include="Views\Interview\InterviewSummaryViewFactory.cs" />
+    <Compile Include="Views\Interview\InterviewSummaryForMapPointView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
@@ -243,6 +252,7 @@
     <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\MapPointView.cs" />
     <Compile Include="Views\Reposts\Views\MapReportView.cs" />
     <Compile Include="Views\Reposts\Views\QuestionnaireAndVersionsView.cs" />
     <Compile Include="Views\Reposts\Views\QuestionnaireQuestionInfoView.cs" />
@@ -292,10 +302,6 @@
     <Compile Include="Views\ViewerStatus.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs.Spec\Ncqrs.Spec.csproj">
-      <Project>{aa90754b-ca47-429e-bdc8-2a83e94179b7}</Project>
-      <Name>Ncqrs.Spec</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
@@ -335,6 +341,10 @@
     <ProjectReference Include="..\..\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
+      <Project>{8C4B0E67-8C0A-4222-8646-3CF3131CADE5}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>

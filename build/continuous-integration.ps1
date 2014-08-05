@@ -47,6 +47,7 @@ try {
 	RunTests $BuildConfiguration
 
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
+	BuildNewDesigner
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration

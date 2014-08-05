@@ -1,11 +1,30 @@
 .popover {
   max-width: inherit;
 }
-
+#verification-modal{
+    right: 50%;
+    top: 67px;
+    .modal-dialog{
+        width: 90%;
+        margin-left: 8%;
+        margin-right:2%;
+        margin-top: 20px;
+    }
+}
 .modal {
   overflow-y: inherit;
 
   .modal-dialog {
+    > .arrow {
+      position: absolute;
+      top: -20px;
+      left: 100px;
+      width: 42px;
+      height: 21px;
+      background: url(../../i/popover-arrow.png) center no-repeat;
+      z-index: 100;
+    }
+
     .modal-header {
       border-bottom: none;
       border-radius: 5px 5px 0 0;
@@ -15,7 +34,7 @@
       }
 
       h1 {
-        .roboto-font();
+        .opensanslight-font();
       }
 
       button.close {
@@ -54,3 +73,33 @@
     }
   }
 }
+
+.modal-header {
+  border-top: 8px solid #d7e4ee;
+}
+.modal-title {
+  .confirm-title();
+}
+
+.modal-body {
+  .confirm-text();
+}
+
+.modal-footer {
+  text-align: left; // right align buttons
+  border-top: none;
+}
+.alert {border: none; margin-bottom: 0;}
+
+.alert-warning, .alert-info, .alert-success, .alert-danger {
+  background-color: #ffffff;
+  color: #000000;
+  border-top: 8px solid transparent;
+}
+
+.alert-warning { border-top-color: #2a81cb; }
+.alert-info { border-top-color: #2a81cb; }
+.alert-success { border-top-color: #2fc507;}
+.alert-danger { border-top-color: #ff2b2b;}
+
+.ui-pnotify .ui-pnotify-shadow { box-shadow: 0 0 30px rgba(50, 50, 50, 1); }

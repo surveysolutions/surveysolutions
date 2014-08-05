@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             long version = evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            this.StoreBrowseItem(id, version, questionnaireDocument);
+            this.StoreBrowseItem(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -36,12 +36,12 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             long version = evnt.Payload.Version;
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            this.StoreBrowseItem(id, version, questionnaireDocument);
+            this.StoreBrowseItem(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode);
         }
 
-        private void StoreBrowseItem(Guid id, long version, QuestionnaireDocument document)
+        private void StoreBrowseItem(Guid id, long version, QuestionnaireDocument document, bool allowCensusMode)
         {
-            var browseItem = new QuestionnaireBrowseItem(document, version);
+            var browseItem = new QuestionnaireBrowseItem(document, version, allowCensusMode);
             this.documentStorage.Store(browseItem, id);
         }
     }

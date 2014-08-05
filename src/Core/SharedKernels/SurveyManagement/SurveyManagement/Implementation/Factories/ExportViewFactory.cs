@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Factories;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -17,12 +18,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
     {
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public ExportViewFactory(IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory,
-            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory)
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, IFileSystemAccessor fileSystemAccessor)
         {
             this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire, long version)
@@ -80,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             exportedHeaderItem.PublicKey = question.PublicKey;
             exportedHeaderItem.QuestionType = question.QuestionType;
             exportedHeaderItem.VariableName = question.StataExportCaption;
-            exportedHeaderItem.Titles = new string[] { question.QuestionText };
+            exportedHeaderItem.Titles = new []{ string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel };
             exportedHeaderItem.ColumnNames = new string[] { question.StataExportCaption };
 
             exportedHeaderItem.Labels = new Dictionary<Guid, LabelItem>();
@@ -192,8 +195,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             if(!rootGroups.Any())
                 throw new InvalidOperationException("level is absent in template");
-            
-            var levelTitle = rootGroups.First().Title;
+
+            var firstRootGroup = rootGroups.First();
+            var levelTitle = firstRootGroup.VariableName ?? fileSystemAccessor.MakeValidFileName(firstRootGroup.Title);
             
             var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, referenceInfoForLinkedQuestions,
                 maxValuesForRosterSizeQuestions, levelVector);

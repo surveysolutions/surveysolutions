@@ -60,6 +60,16 @@ namespace WB.UI.Designer
             get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.PlainStorage"); }
         }
 
+        public string FailoverBehavior
+        {
+            get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.FailoverBehavior"); }
+        }
+
+        public string ActiveBundles
+        {
+            get { return ConfigurationManager.AppSettings.GetString("Raven.Databases.ActiveBundles"); }
+        }
+
         public string WKHtmlToPdfExecutablePath
         {
             get { return ConfigurationManager.AppSettings.GetString("WKHtmlToPdfExecutablePath"); }
@@ -78,11 +88,6 @@ namespace WB.UI.Designer
         public string SupportEmail
         {
             get { return ConfigurationManager.AppSettings.GetString("SupportEmail"); }
-        }
-
-        public bool IsNewDesignerEditPageEnabled
-        {
-            get { return ConfigurationManager.AppSettings.GetBool("IsNewDesignerEditPageEnabled", false); }
         }
     }
 }

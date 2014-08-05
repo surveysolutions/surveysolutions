@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -17,13 +18,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     {
         Establish context = () =>
         {
+            dataFileExportServiceMock=new Mock<IDataFileExportService>();
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock
                 .Setup(x => x.IsDirectoryExists(it.IsAny<string>()))
                 .Returns(true)
                 .Callback<string>(directory => existingDirectory = directory);
 
-            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object);
+            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, dataFileExportServiceMock.Object);
         };
 
         Because of = () =>
@@ -39,9 +41,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         It should_copy_directory = () =>
             fileSystemAccessorMock.Verify(accessor => accessor.CopyFileOrDirectory(existingDirectory, it.IsAny<string>()), Times.Once);
 
+        It should_action_file_be_created = () =>
+          dataFileExportServiceMock.Verify(dataFileExportService => dataFileExportService.CreateHeaderForActionFile(Moq.It.IsAny<string>()), Times.Once);
+
         private static FileBasedDataExportService fileBasedDataExportService;
         private static InterviewDataExportException raisedException;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
+        private static Mock<IDataFileExportService> dataFileExportServiceMock;
+
         private static string existingDirectory;
     }
 }

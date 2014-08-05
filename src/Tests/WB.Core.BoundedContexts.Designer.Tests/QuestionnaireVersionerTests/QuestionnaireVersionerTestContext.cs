@@ -29,6 +29,21 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVersionerTests
             }; 
         }
 
+        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] items)
+        {
+            return new QuestionnaireDocument
+            {
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter")
+                    {
+                        PublicKey = Guid.Parse("11111111111111111111111111111111"),
+                        Children = items.ToList()
+                    }
+                }
+            };
+        }
+
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithQRQuestion()
         {
             return new QuestionnaireDocument

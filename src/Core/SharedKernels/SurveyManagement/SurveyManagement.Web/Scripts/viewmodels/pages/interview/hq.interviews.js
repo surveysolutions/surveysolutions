@@ -28,5 +28,14 @@
             self.TotalCount(self.TotalCount() - deletedInterviews.length);
         });
     };
+
+    self.selectAll = function (checkbox) {
+        var isCheckboxSelected = $(checkbox).is(":checked");
+        ko.utils.arrayForEach(self.Items(), function (item) {
+            if (item.CanDelete) {
+                item.IsSelected(isCheckboxSelected);
+            }
+        });
+    };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.HQInterviews, Supervisor.VM.InterviewsBase);

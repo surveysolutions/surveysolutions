@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -11,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
     internal class when_InterviewApproved_recived_by_interview_with_roster_with_2_rows_with_nested_groups : InterviewExportedDataEventHandlerTestContext
     {
@@ -61,7 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
         };
 
         Because of = () =>
-            interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
+            interviewExportedDataDenormalizer.Handle(CreateInterviewApprovedByHQPublishableEvent());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result, new[] { rosterSizeQuestionId }).Records.Length.ShouldEqual(2);

@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         Establish context = () =>
         {
             questionDetailsReaderMock = new Mock<IReadSideRepositoryReader<QuestionsAndGroupsCollectionView>>();
-            questionnaireView = CreateQuestionsAndGroupsCollectionView();
+            var questionnaireView = CreateQuestionsAndGroupsCollectionView();
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(questionnaireView);
@@ -26,10 +26,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
 
         It should_return_null = () =>
             result.ShouldBeNull();
-
+       
         private static QuestionnaireInfoFactory factory;
         private static NewEditGroupView result;
-        private static QuestionsAndGroupsCollectionView questionnaireView;
         private static Mock<IReadSideRepositoryReader<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

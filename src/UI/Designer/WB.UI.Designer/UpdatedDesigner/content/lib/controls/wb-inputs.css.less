@@ -1,3 +1,7 @@
+.width100 {
+  width: 100%;
+}
+
 .wb-input {
   border-radius: 4px;
   .wb-input-text-fontstyle();
@@ -13,20 +17,45 @@
   }
 }
 
-.prettycheckbox > a, .prettyradio > a {
-  background: url(../../i/pretty-checkable-sprites.png)
+.checkbox {
+  padding-left: 0;
 }
 
-.prettycheckbox {
-  label {
-    font-size: 14px !important;
+input.wb-checkbox, input.wb-radio {
+  display: none;
+
+  & + label {
+    font-size: 14px;
     margin: 4px 6px 4px 0;
     .wb-checkbox-fontstyle();
   }
+
+  & + label span {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: transparent url(../../i/pretty-checkable-sprites.png) no-repeat;
+    vertical-align: middle;
+  }
+}
+
+input.wb-checkbox {
+  & + label span { background-position: 0 0;  }
+  &:checked + label span { background-position: -60px 0; }
+  &:disabled + label span { background-position: -30px 0; }
+  &:checked:disabled + label span { background-position: -90px 0; }
+}
+
+input.wb-radio {
+  & + label span { background-position: -180 0;  }
+  &:checked + label span { background-position: -240px 0; }
+  &:disabled + label span { background-position: -210px 0; }
+  &:checked:disabled + label span { background-position: -270px 0; }
 }
 
 .form-control {
   border-width: 2px;
+  color: #000000;
   .placeholder-style() {
     .lucida-console-font();
     font-size: 16px;
@@ -36,4 +65,30 @@
   &::-moz-placeholder { .placeholder-style(); }
   &:-ms-input-placeholder { .placeholder-style(); }
   &::-webkit-input-placeholder { .placeholder-style(); }
+}
+
+.form-group.input-variable-name {
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: -10px;
+    display: block;
+    height: 20px;
+    width: 15px;
+    background: url(../../i/icon-qname-block-link.png) center center no-repeat;
+    // vertical-align: middle;
+    //margin-right: 3px;
+  }
+
+
+  > input {
+    color: @qname-color;
+  }
+}
+
+textarea {
+  resize: vertical;
 }

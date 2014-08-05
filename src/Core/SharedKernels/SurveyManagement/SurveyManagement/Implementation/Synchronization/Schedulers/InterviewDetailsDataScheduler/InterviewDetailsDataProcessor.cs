@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             int numberOfSuccessfullyLoadedInterviews = 0;
             for (int indexOfLoadedInterviews = 0; indexOfLoadedInterviews < allCapiPackages.Length; indexOfLoadedInterviews++)
             {
-                if (numberOfSuccessfullyLoadedInterviews >
+                if (numberOfSuccessfullyLoadedInterviews >=
                     this.interviewDetailsDataLoaderSettings.NumberOfInterviewsProcessedAtTime)
                     break;
 

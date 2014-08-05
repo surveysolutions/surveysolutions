@@ -1,0 +1,103 @@
+﻿{
+    "id":"d6c5faee-d9fe-4333-8b76-e7a3ef184f5a",
+    "parentGroupsIds":[
+       "7b068300-8502-4e19-9f70-94c24a65b62b"
+    ],
+    "rosterScopeIds":[
+
+    ],
+    "parentGroupId":"7b068300-8502-4e19-9f70-94c24a65b62b",
+    "enablementCondition":"",
+    "isPreFilled":false,
+    "instructions":"",
+    "isMandatory":false,
+    "questionScope":"Interviewer",
+    "variableName":"drinks",
+    "variableLabel":"",
+    "title":"Categorical multiple answers",
+    "validationExpression":"",
+    "validationMessage":"",
+    "type":"MultyOption",
+    "linkedToQuestionId":null,
+    "options":[
+       {
+           "value":1.0,
+           "title":"water"
+       },
+       {
+           "value":2.0,
+           "title":"beer"
+       },
+       {
+           "value":3.0,
+           "title":"wine"
+       }
+    ],
+    "areAnswersOrdered":false,
+    "maxAllowedAnswers":3,
+    "isInteger":false,
+    "maxValue":null,
+    "countOfDecimalPlaces":null,
+    "maxAnswerCount":null,
+    "sourceOfLinkedQuestions":{
+
+    },
+   "questionTypeOptions":[
+      {
+          "value":"SingleOption",
+          "text":"Categorical: one answer"
+      },
+      {
+          "value":"MultyOption",
+          "text":"Categorical: multiple answers"
+      },
+      {
+          "value":"Numeric",
+          "text":"Numeric"
+      },
+      {
+          "value":"DateTime",
+          "text":"Date"
+      },
+      {
+          "value":"Text",
+          "text":"Text"
+      },
+      {
+          "value":"GpsCoordinates",
+          "text":"Geo Location"
+      },
+      {
+          "value":"TextList",
+          "text":"List"
+      },
+      {
+          "value":"QRBarcode",
+          "text":"QR Barcode"
+      }
+   ],
+    "allQuestionScopeOptions": [{
+        "value": "Interviewer",
+        "text": "Interviewer"
+    }, {
+        "value": "Supervisor",
+        "text": "Supervisor"
+    }, {
+        "value": "Prefilled",
+        "text": "Prefilled"
+    }],
+    "notPrefilledQuestionScopeOptions": [{
+        "value": "Interviewer",
+        "text": "Interviewer"
+    }, {
+        "value": "Supervisor",
+        "text": "Supervisor"
+    }],
+   "breadcrumbs":[
+      {
+          "id":"7b06830085024e199f7094c24a65b62b",
+          "title":"Chapter 3",
+          "isRoster":false
+      }
+   ]
+}

@@ -7,12 +7,10 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using CAPI.Android.Core.Model;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Events.User;
 using Main.Core.Utility;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
@@ -27,13 +25,11 @@ using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Tools.CapiDataGenerator;
-using WB.UI.Shared.Web;
 
 namespace CapiDataGenerator
 {
@@ -532,7 +528,7 @@ namespace CapiDataGenerator
         private void ImportTemplate(IQuestionnaireDocument template)
         {
             this.Log("import template");
-            this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template));
+            this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template, true));
 
             //incorrect. should be saved on denormalizer
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, 1, template as QuestionnaireDocument);
@@ -546,7 +542,7 @@ namespace CapiDataGenerator
             {
                 var interview = interviews.ElementAt(z);
 
-                commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value, "auto complete comment"));
+                commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value, "auto complete comment", DateTime.Now));
 
                 if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor ||
                     AppSettings.Instance.CurrentMode == GenerationMode.DataSplitOnCapiCreatedAndSupervisor)
@@ -689,6 +685,7 @@ namespace CapiDataGenerator
                         sycnhronizedInterview: new InterviewSynchronizationDto(
                             id: interviewData.Key,
                             status: InterviewStatus.InterviewerAssigned,
+                            comments:null, 
                             userId: interviewData.Value,
                             questionnaireId: template.PublicKey,
                             questionnaireVersion: 1,

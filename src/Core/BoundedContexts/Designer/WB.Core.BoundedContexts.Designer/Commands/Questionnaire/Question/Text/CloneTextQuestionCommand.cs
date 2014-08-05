@@ -16,10 +16,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text
             Guid sourceQuestionId,
             int targetIndex,
             string title,
-            string variableName,
+            string variableName, string variableLabel,
             bool isMandatory,
             string enablementCondition,
             string instructions,
+            string mask,
             Guid responsibleId,
             string validationExpression,
             string validationMessage,
@@ -28,12 +29,13 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,
                 parentGroupId: parentGroupId,
-                sourceQuestionId: sourceQuestionId, targetIndex: targetIndex)
+                sourceQuestionId: sourceQuestionId, targetIndex: targetIndex,variableLabel:variableLabel)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
             this.ValidationMessage = validationMessage;
             this.ValidationExpression = validationExpression;
+            this.Mask = mask;
         }
 
         public QuestionScope Scope { get; set; }
@@ -41,6 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text
         public string ValidationMessage { get; set; }
 
         public string ValidationExpression { get; set; }
+
+        public string Mask { get; set; }
 
         public bool IsPreFilled { get; set; }
     }

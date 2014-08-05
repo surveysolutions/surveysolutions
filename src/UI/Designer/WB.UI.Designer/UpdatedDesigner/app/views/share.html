@@ -1,22 +1,27 @@
 ﻿<div class="modal-header blue-strip">
     <button type="button" class="close" aria-hidden="true" ng-click="cancel()"><!--&times;--></button>
-    <h1>Share this questionnaire</h1>
-    <h2>
-        {{questionnaire.title}}
-        <small>({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</small>
-    </h2>
+    <h1>Questionnaire settings</h1>
+
 </div>
 
 <div class="modal-body">
     <div class="container share-question-dialog">
+        <form role="form" class="row">
+            <div class="form-group">
+                <label class="control-label" for="questionnaireTitle">Questionnaire name:</label> <br/>
+                <textarea id="questionnaireTitle" type="text" class="form-control questionaire-title" ng-model="questionnaire.editedTitle"></textarea>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary" ng-click="updateTitle()">Update</button>
+        </form>
         <div class="row">
             <h3>Who has access:</h3>
             <ul class="accounts">
                 <li ng-repeat="s in questionnaire.sharedPersons">
-                    <a href="mailto:{{s.email}}">{{s.email}}</a> - <div class="btn-group">
-                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                    <a href="mailto:{{s.email}}">{{s.email}}</a> <i class="text-muted" ng-if="s.isOwner">(you)</i> - <div class="btn-group">
+                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" ng-if="!s.isOwner">
                             Can edit <span class="caret"></span>
                         </button>
+                        <a href="javascript:void(0);" ng-if="s.isOwner" class="owner"><i>owner</i></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a ng-click="revokeAccess(s)">Revoke access</a></li>
                         </ul>
@@ -31,7 +36,7 @@
             <h3>Invite collaborators by e-mail:</h3>
             <div class="form-group" bs-has-error>
                 <input type="text" class="form-control share-with-email" placeholder="Email to share with" name="shareWithInput" ng-model="viewModel.shareWith" />
-               
+
                 <p class="help-block" ng-hide="viewModel.shareForm.shareWithInput.$valid">
                     Provide email of existing user
                 </p>

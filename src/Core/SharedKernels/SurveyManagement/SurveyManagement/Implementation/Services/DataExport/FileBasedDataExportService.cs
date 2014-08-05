@@ -21,7 +21,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IDataFileExportService dataFileExportService;
         private readonly IEnvironmentContentService environmentContentService;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IDataFileService dataFileService;
         private readonly ILogger logger;
 
         public FileBasedDataExportService(
@@ -29,12 +28,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             string folderPath,
             IDataFileExportService dataFileExportService, 
             IEnvironmentContentService environmentContentService,
-            IFileSystemAccessor fileSystemAccessor, IDataFileService dataFileService, ILogger logger)
+            IFileSystemAccessor fileSystemAccessor, ILogger logger)
         {
             this.dataFileExportService = dataFileExportService;
             this.environmentContentService = environmentContentService;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.dataFileService = dataFileService;
             this.logger = logger;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
 
@@ -93,13 +91,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             this.fileSystemAccessor.CreateDirectory(dataFolderForTemplatePath);
 
-            var cleanedFileNamesForLevels =
-                this.dataFileService.CreateCleanedFileNamesForLevels(
-                    questionnaireExportStructure.HeaderToLevelMap.Values.ToDictionary(h => h.LevelScopeVector, h => h.LevelName));
 
             foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
-                string levelFileName = cleanedFileNamesForLevels[headerStructureForLevel.LevelScopeVector];
+                string levelFileName = headerStructureForLevel.LevelName;
 
                 var interviewExportedDataFileName = this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName);
                 var contentOfAdditionalFileName = this.environmentContentService.GetEnvironmentContentFileName(levelFileName);
@@ -110,6 +105,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel, interviewExportedDataFileName,
                     this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, contentOfAdditionalFileName));
             }
+
+            this.dataFileExportService.CreateHeaderForActionFile(this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
         }
 
         public void AddExportedDataByInterview(InterviewDataExportView interviewDataExportView)
@@ -118,16 +115,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             this.ThrowArgumentExceptionIfDataFolderMissing(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion, dataFolderForTemplatePath);
 
-            var cleanedFileNamesForLevels =
-                this.dataFileService.CreateCleanedFileNamesForLevels(interviewDataExportView.Levels.ToDictionary(l => l.LevelVector,
-                    l => l.LevelName));
-
+           
             foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
             {
-                string levelFileName = cleanedFileNamesForLevels[interviewDataExportLevelView.LevelVector];
+                string levelFileName = interviewDataExportLevelView.LevelName;
 
                 this.dataFileExportService.AddRecord(interviewDataExportLevelView, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName)));
             }
+        }
+
+        public void AddInterviewActions(Guid questionnaireId, long questionnaireVersion, IEnumerable<InterviewActionExportView> actions)
+        {
+            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
+
+            this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, questionnaireVersion, dataFolderForTemplatePath);
+
+            this.dataFileExportService.AddActionRecords(actions, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
         }
 
         private void ThrowArgumentExceptionIfDataFolderMissing(Guid questionnaireId, long version, string dataDirectoryPath)

@@ -15,12 +15,12 @@ function CleanFolders($Filter) {
     Write-Host "##teamcity[blockOpened name='$Filter']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    $folders = Get-ChildItem -Filter $Filter -Recurse | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } | %{ GetPathRelativeToCurrectLocation $_.FullName }
+    $folders = Get-ChildItem -Filter $Filter -Recurse -ErrorAction SilentlyContinue | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } | %{ GetPathRelativeToCurrectLocation $_.FullName }
 
     if ($folders -ne $null) {
         foreach ($folder in $folders) {
             Write-Host $folder
-            Remove-Item $folder -Force -Recurse
+            Remove-Item $folder -Force -Recurse -ErrorAction SilentlyContinue
         }
     }
 
@@ -33,10 +33,20 @@ function CleanBinAndObjFolders() {
 
     CleanFolders 'bin'
     CleanFolders 'obj'
+    CleanFolders 'src\UI\Designer\WB.UI.Designer\UpdatedDesigner\build'
 
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
-
+function BuildNewDesigner(){
+    $installCommand = "npm install"
+    $targetLocation = "src\UI\Designer\WB.UI.Designer\UpdatedDesigner"
+    Write-Host "Pushing location to $targetLocation"
+    Push-Location -Path $targetLocation
+    Write-Host $installCommand
+    iex $installCommand #install node js dependencies
+    &gulp #will execute script gulpfile.js in UpdatedDesigner folder
+    Pop-Location
+}
 function CheckPrerequisites() {
     Write-Host "##teamcity[blockOpened name='Checking prerequisities']"
     Write-Host "##teamcity[progressStart 'Checking prerequisities']"
@@ -60,7 +70,7 @@ function ShouldSolutionBeIgnored($Solution) {
 }
 
 function GetSolutionsToBuild() {
-    $foundSolutions = Get-ChildItem -Filter *.sln -Recurse | %{ GetPathRelativeToCurrectLocation $_.FullName }
+    $foundSolutions = Get-ChildItem -Filter *.sln -Recurse -ErrorAction SilentlyContinue | %{ GetPathRelativeToCurrectLocation $_.FullName }
     $solutionsToIgnore = $foundSolutions | ?{ ShouldSolutionBeIgnored $_ }
     $solutionsToBuild = $foundSolutions | ?{ -not (ShouldSolutionBeIgnored $_) }
 
@@ -135,7 +145,7 @@ function BuildSolutions($BuildConfiguration,  [switch] $ClearBinAndObjFoldersBef
 
 
 function GetProjectsWithTests() {
-    return Get-ChildItem -Filter *Test*.csproj -Recurse | %{ GetPathRelativeToCurrectLocation $_.FullName }
+    return Get-ChildItem -Filter *Test*.csproj -Recurse -ErrorAction SilentlyContinue | %{ GetPathRelativeToCurrectLocation $_.FullName }
 }
 
 function GetOutputAssembly($Project, $BuildConfiguration) {
@@ -272,7 +282,7 @@ function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
 	get-content $file | 
 		%{$_ -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
 		%{$_ -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewFileVersion } |
-		%{$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,2} \(Build [0-9]+\)"\)', $NewInformationalVerson } > $TmpFile
+		%{$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,2} \(build [0-9]+\)"\)', $NewInformationalVerson } > $TmpFile
 
 	move-item $TmpFile $file -force
 	Write-Host "##teamcity[message text='Updated $file to version $ver']"
@@ -289,7 +299,7 @@ function GetVersionString([string]$Project)
 function UpdateProjectVersion([string]$BuildNumber, [string]$Project)
 {
 	$ver = GetVersionString $Project
-	$foundFiles = get-childitem $path -include *AssemblyInfo.cs -recurse
+	$foundFiles = get-childitem $path -include *AssemblyInfo.cs -recurse -ErrorAction SilentlyContinue
 	foreach ($file in $foundFiles) {
 		UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
 	}

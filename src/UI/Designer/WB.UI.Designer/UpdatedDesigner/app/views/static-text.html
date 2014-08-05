@@ -1,0 +1,21 @@
+﻿<form role="form" id="static-text-editor" name="staticTextForm" unsaved-warning-form>
+    <div class="form-holder">
+        <div data-item-breadcrumbs data-crumbs="activeStaticText.breadcrumbs"></div>
+
+        <div class="form-group">
+            <label for="edit-static-text" class="wb-label">Static Text</label><br>
+            <textarea id="edit-static-text" ng-model="activeStaticText.text" class="form-control" rows="10" msd-elastic></textarea>
+        </div>
+    </div>
+    <div class="form-buttons-holder">
+        <div class="pull-left">
+            <button id="edit-static-text-save-button" class="btn btn-lg btn-primary" ng-click="saveStaticText()">Save</button>
+            <button id="edit-static-text-cancel-button" class="btn btn-lg btn-link" ng-click="cancelStaticText()">Cancel</button>
+        </div>
+        <div class="pull-right">
+            <button id="edit-static-text-delete-button" class="btn btn-lg btn-link" ng-click="deleteStaticText()" unsaved-warning-clear>Delete</button>
+            <button id="edit-static-text-clone-button" class="btn btn-lg btn-link" ng-click="cloneStaticText()">Clone</button>
+            <ng-include src="'moveToChapterSnippet'" />
+        </div>
+    </div>
+</form>

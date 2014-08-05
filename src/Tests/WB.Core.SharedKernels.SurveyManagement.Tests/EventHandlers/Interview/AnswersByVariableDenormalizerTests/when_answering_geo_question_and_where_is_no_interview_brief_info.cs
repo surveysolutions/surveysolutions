@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.AnswersByVariableDenormalizerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.AnswersByVariableDenormalizerTests
 {
     internal class when_answering_geo_question_and_where_is_no_interview_brief_info : AnswersByVariableDenormalizerTestContext
     {

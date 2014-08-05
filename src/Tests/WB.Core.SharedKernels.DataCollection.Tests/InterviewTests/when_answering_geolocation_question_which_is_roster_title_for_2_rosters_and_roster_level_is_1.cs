@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             interview.AnswerGeoLocationQuestion(
                 userId, questionId, rosterVector, DateTime.Now,
-                latitude: -1.234, longitude: 1.00025, accuracy: 0, timestamp: new DateTimeOffset(DateTime.Now));
+                latitude: -1.234, longitude: 1.00025, accuracy: 10, altitude:34, timestamp: new DateTimeOffset(DateTime.Now));
 
         Cleanup stuff = () =>
         {

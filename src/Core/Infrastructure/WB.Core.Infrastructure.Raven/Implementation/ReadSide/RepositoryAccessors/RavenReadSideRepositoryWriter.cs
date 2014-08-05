@@ -108,7 +108,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 cachedEntitiesWhichNeedToBeStoredToRepository);
         }
 
-        public Type ViewType {
+        public Type ViewType
+        {
             get { return typeof (TEntity); }
         }
 

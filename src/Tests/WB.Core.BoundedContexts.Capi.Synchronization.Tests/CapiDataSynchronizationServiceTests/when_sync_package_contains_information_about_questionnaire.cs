@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
                 PublicKey = Guid.NewGuid()
             };
 
-            var questionnaireMetadata = new QuestionnaireMetadata(1);
+            var questionnaireMetadata = new QuestionnaireMetadata(1, false);
 
             syncItem = new SyncItem() { ItemType = SyncItemType.Template, IsCompressed = true, Content = "some content", MetaInfo = "some metadata", Id = Guid.NewGuid() };
 
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
                         x.Execute(
                             Moq.It.Is<RegisterPlainQuestionnaire>(
                                 param =>
-                                    param.QuestionnaireId==questionnaireDocument.PublicKey && param.Version==1), null),
+                                    param.QuestionnaireId==questionnaireDocument.PublicKey && param.Version==1 && param.AllowCensusMode==false), null),
                     Times.Once);
 
         It should_store_questionnaire_in_plaine_storage_once =

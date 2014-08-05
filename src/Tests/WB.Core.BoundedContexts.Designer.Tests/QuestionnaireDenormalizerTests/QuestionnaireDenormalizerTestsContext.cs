@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
@@ -31,15 +32,21 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null,
-            IQuestionFactory questionFactory = null,
+            IQuestionnaireEntityFactory questionnaireEntityFactory = null,
             ILogger logger = null,
             IQuestionnaireDocumentUpgrader upgrader = null)
         {
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(),
-                questionFactory ?? Mock.Of<IQuestionFactory>(),
+                questionnaireEntityFactory ?? Mock.Of<IQuestionnaireEntityFactory>(),
                 logger ?? Mock.Of<ILogger>(),
                 upgrader ?? Mock.Of<IQuestionnaireDocumentUpgrader>());
+        }
+
+        protected static T GetEntityById<T>(QuestionnaireDocument document, Guid entityId)
+            where T : class, IComposite
+        {
+            return document.FirstOrDefault<T>(entity => entity.PublicKey == entityId);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] children)
@@ -124,6 +131,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionType = QuestionType.TextList
             };
+        }
+
+        protected static StaticText CreateStaticText(Guid entityId, string text)
+        {
+            return new StaticText(publicKey: entityId, text: text);
         }
 
         protected static IPublishedEvent<GroupDeleted> CreateGroupDeletedEvent(Guid groupId)
@@ -347,5 +359,44 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             });
         }
 
+        protected static IPublishedEvent<StaticTextAdded> CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextAdded()
+            {
+                EntityId = entityId,
+                ParentId = parentId,
+                Text = text
+            });
+        }
+
+        protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextUpdated()
+            {
+                EntityId = entityId,
+                Text = text
+            });
+        }
+
+        protected static IPublishedEvent<StaticTextCloned> CreateStaticTextClonedEvent(Guid targetEntityId,
+            Guid sourceEntityId, Guid parentId, string text = null, int targetIndex = 0)
+        {
+            return ToPublishedEvent(new StaticTextCloned()
+            {
+                EntityId = targetEntityId,
+                SourceEntityId = sourceEntityId,
+                ParentId = parentId,
+                Text = text,
+                TargetIndex = targetIndex
+            });
+        }
+
+        protected static IPublishedEvent<StaticTextDeleted> CreateStaticTextDeletedEvent(Guid entityId)
+        {
+            return ToPublishedEvent(new StaticTextDeleted()
+            {
+                EntityId = entityId
+            });
+        }
     }
 }

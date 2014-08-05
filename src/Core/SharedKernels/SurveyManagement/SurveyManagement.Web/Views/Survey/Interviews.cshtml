@@ -43,7 +43,10 @@
     <table class="table table-striped table-bordered table-condensed table-hover table-break-words">
         <thead>
             <tr>
-                <th></th>
+                <th>
+                    <input type="checkbox"
+                           data-bind="checked: !IsNothingSelected(), click: $root.selectAll($element)" />
+                </th>
                 <!-- ko if:SelectedTemplate() == '' -->
                 <th>Pre-filled Questions</th>
                 <!-- /ko -->

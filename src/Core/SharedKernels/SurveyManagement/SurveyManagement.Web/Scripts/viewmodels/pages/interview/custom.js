@@ -1,5 +1,4 @@
 ﻿ko.validation.init({ insertMessages: false, decorateElement: true, errorElementClass: 'has-error' });
-
 ko.bindingHandlers.datepicker = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         //initialize datepicker with some optional options
@@ -22,12 +21,26 @@ ko.validation.rules['notempty'] = {
     message: 'The array must contain at least one valid element.'
 };
 
-ko.validation.rules['precision'] = {
+ko.validation.rules['numericValidator'] = {
     validator: function (val, countOfDecimalPlaces) {
-        var stringVal = (val || '').toString();
+        var newValue = val.split(',').join('');
+
+        if (isNaN(newValue)) {
+            this.message = 'Please enter a number';
+            return false;
+        }
+        if (countOfDecimalPlaces===true)
+            return true;
+        var stringVal = (newValue || '').toString();
         if (stringVal.indexOf(".") == -1) {
             return true;
         }
+
+        if (countOfDecimalPlaces <= 0) {
+            this.message = 'Only integer values are allowed';
+            return false;
+        }
+
         var countOfDecimalDigits = stringVal.substring(stringVal.indexOf(".") + 1).length;
         if (countOfDecimalDigits > countOfDecimalPlaces) {
             this.message = 'According to questionnaire, count of decimal places should not be greater than ' + countOfDecimalPlaces;
@@ -45,7 +58,131 @@ ko.validation.rules['digit'] = {
     },
     message: 'Please enter a digit'
 };
+ko.bindingHandlers.maskFormatter = {
+    
+    init: function (element, valueAccessor) {
+      
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        if (!value)
+            return;
 
+        $.mask.definitions = {
+            '#': "[0-9]",
+            '~': "[A-Za-z]",
+            '*': "[A-Za-z0-9]"
+        };
+
+        $(element).mask(value);
+    }
+};
+ko.bindingHandlers.numericformatter = {
+    init: function (element, valueAccessor) {
+        ko.utils.registerEventHandler(element, 'keyup', function () {
+            var observable = valueAccessor();
+            observable($(element).val());
+        });
+    },
+    update: function (element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        if (!value)
+            return;
+
+        var jElement = $(element);
+
+        if (ko.bindingHandlers.numericformatter.endWith(value, '.')) {
+            jElement.text(value);
+            jElement.val(value);
+            return;
+        }
+
+        if (ko.bindingHandlers.numericformatter.endWith(value, ',')) {
+            value = value.slice(0, -1) + '.';
+            jElement.text(value);
+            jElement.val(value);
+            return;
+        }
+        var newValue = ko.bindingHandlers.numericformatter.format(value.split(',').join(''));
+
+        if (jElement.is('input')) {
+            var oldCursorPosition = ko.bindingHandlers.numericformatter.getCursorPosition(element);
+            var newPosition = ko.bindingHandlers.numericformatter.getNewCursorPosition(value, newValue, oldCursorPosition);
+            jElement.val(newValue);
+            if (newValue != value)
+                ko.bindingHandlers.numericformatter.selectRange(element, newPosition);
+        }
+
+        if ($.isFunction(jElement.text)) {
+            jElement.text(newValue);
+        }
+    },
+    endWith: function (str, symbol) {
+        return str.indexOf(symbol, str.length - 1) !== -1;
+    },
+    format: function (val, comma, period) {
+        comma = comma || ',';
+        period = period || '.';
+        var periodLength = 3;
+        var split = val.toString().split('.');
+        var numeric = split[0];
+        var decimal = split.length > 1 ? period + split[1] : '';
+        var countOfPeriods = parseInt((numeric.length - 1) / periodLength);
+        var separatedNumeric ='';
+        for (var i = 0; i < countOfPeriods; i++) {
+            var subValue = numeric.substr(numeric.length - ((i + 1) * periodLength), periodLength);
+            separatedNumeric = comma + subValue + separatedNumeric;
+        }
+        return numeric.substr(0, numeric.length - countOfPeriods * periodLength) + separatedNumeric + decimal;
+    },
+    getNewCursorPosition: function (oldText, newText, oldCursorPosition) {
+        var newCursorPosition = newText.length;
+        var indexOfOldValue = 0;
+
+        for (var i = 0; i < newText.length; i++) {
+            while (newText[i] != oldText[indexOfOldValue]) {
+
+                if (isNaN(parseInt(newText[i])))
+                    break;
+
+                indexOfOldValue++;
+            }
+
+            if (indexOfOldValue + 1 >= oldCursorPosition) {
+                newCursorPosition = i + 1;
+                break;
+            }
+        }
+
+        return newCursorPosition;
+    },
+    selectRange: function (input, start, end) {
+        if (!end) end = start;
+
+        if (input.setSelectionRange) {
+            input.focus();
+            input.setSelectionRange(start, end);
+        } else if (input.createTextRange) {
+            var range = input.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', end);
+            range.moveStart('character', start);
+            range.select();
+        }
+    },
+    getCursorPosition: function (input) {
+        if (!input) return; // No (input) element found
+        if ('selectionStart' in input) {
+            // Standard-compliant browsers
+            return input.selectionStart;
+        } else if (document.selection) {
+            // IE
+            input.focus();
+            var sel = document.selection.createRange();
+            var selLen = document.selection.createRange().text.length;
+            sel.moveStart('character', -input.value.length);
+            return sel.text.length - selLen;
+        }
+    }
+};
 (function () {
     ko.validation.registerExtenders();
 }());

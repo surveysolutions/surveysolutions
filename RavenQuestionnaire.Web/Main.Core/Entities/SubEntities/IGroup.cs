@@ -13,6 +13,8 @@ namespace Main.Core.Entities.SubEntities
 
         string Description { get; set; }
 
+        string VariableName { get; set; }
+
         bool IsRoster { get; }
 
         Guid? RosterSizeQuestionId { get; }

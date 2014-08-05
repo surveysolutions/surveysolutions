@@ -82,12 +82,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
 
         public static IPublishedEvent<InterviewRestarted> InterviewRestartedEvent(string userId = null)
         {
-            return ToPublishedEvent(new InterviewRestarted(userId: GetGuidIdByStringId(userId)));
+            return ToPublishedEvent(new InterviewRestarted(userId: GetGuidIdByStringId(userId),restartTime: DateTime.Now));
         }
 
         public static IPublishedEvent<InterviewCompleted> InterviewCompletedEvent(string userId = null)
         {
-            return ToPublishedEvent(new InterviewCompleted(userId: GetGuidIdByStringId(userId)));
+            return ToPublishedEvent(new InterviewCompleted(userId: GetGuidIdByStringId(userId), completeTime: DateTime.Now));
         }
 
         public static IPublishedEvent<InterviewRejected> InterviewRejectedEvent(string userId = null, string comment = null)
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
             return
                 ToPublishedEvent(new SynchronizationMetadataApplied(userId: GetGuidIdByStringId(userId), status: status,
                     questionnaireId: GetGuidIdByStringId(questionnaireId), featuredQuestionsMeta: featuredQuestionsMeta,
-                    createdOnClient: createdOnClient));
+                    createdOnClient: createdOnClient, comments:null));
         }
 
         private static Guid GetGuidIdByStringId(string stringId)

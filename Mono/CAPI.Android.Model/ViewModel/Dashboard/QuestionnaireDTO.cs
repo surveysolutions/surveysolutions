@@ -11,7 +11,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     public class QuestionnaireDTO : DenormalizerRow
     {
         public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IList<FeaturedItem> properties,
-            long surveyVersion, bool? createdOnClient = false, bool justInitilized = false)
+            long surveyVersion, string comments, bool? createdOnClient = false, bool justInitilized = false)
         {
             this.Id = id.FormatGuid();
             this.Status = (int) status;
@@ -21,6 +21,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             this.CreatedOnClient = createdOnClient;
             this.JustInitilized = justInitilized;
             this.SurveyVersion = surveyVersion;
+            this.Comments = comments;
         }
 
         public QuestionnaireDTO() {}
@@ -38,11 +39,11 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         public bool? CreatedOnClient { get; set; }
         public long SurveyVersion { get; set; }
 
-        public DashboardQuestionnaireItem GetDashboardItem(string surveyKey, string title)
+        public DashboardQuestionnaireItem GetDashboardItem(string surveyKey, string title, string comments)
         {
             return new DashboardQuestionnaireItem(
                 Guid.Parse(this.Id), Guid.Parse(surveyKey), this.GetTypedStatus(),
-                this.GetProperties(), title, this.CreatedOnClient,
+                this.GetProperties(), title, comments, this.CreatedOnClient,
                 this.JustInitilized.HasValue && this.JustInitilized.Value);
         }
 

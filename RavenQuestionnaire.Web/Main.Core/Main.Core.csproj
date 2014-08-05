@@ -198,6 +198,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\GeoPosition.cs" />
+    <Compile Include="Entities\SubEntities\IStaticText.cs" />
     <Compile Include="Entities\SubEntities\NumericQuestionUtils.cs" />
     <Compile Include="Entities\SubEntities\QuestionIdAndVariableName.cs" />
     <Compile Include="Entities\SubEntities\Question\IQRBarcodeQuestion.cs" />
@@ -263,6 +264,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\RosterSizeSourceType.cs" />
+    <Compile Include="Entities\SubEntities\StaticText.cs" />
     <Compile Include="Entities\SubEntities\UserLight.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -354,17 +356,9 @@
     <Compile Include="WCF\IAuthorizationService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
-      <Project>{ea93a91d-7bc9-4ec0-8a22-8a772afd76c3}</Project>
-      <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
@@ -377,14 +371,6 @@
     <ProjectReference Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
-      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
-      <Name>WB.Core.SharedKernel.Structures</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
-      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
-      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
