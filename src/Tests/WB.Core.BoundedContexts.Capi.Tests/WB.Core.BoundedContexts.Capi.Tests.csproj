@@ -90,6 +90,7 @@
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\QuestionnaireBrowseItemDenormalizerTestContext.cs" />
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_PlainQuestionnaireRegistered_event_arrived.cs" />
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_TemplateImported_event_arrived.cs" />
+    <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_1_and_mask_with_any_sumbol_and_lower_dashes.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_IsTextMaskMatched_called_for_invalid_text.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_IsTextMaskMatched_called_for_valid_text.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_creating_mask_formatter_with_variety_of_symbols.cs" />
