@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -33,9 +34,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         
         public HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName)
         {
+            var levelNameWithoutExtension = Path.GetFileNameWithoutExtension(levelFileName);
             return
                 exportStructure.HeaderToLevelMap.Values.FirstOrDefault(
-                    header => levelFileName.StartsWith(header.LevelName, StringComparison.OrdinalIgnoreCase));
+                    header => string.Equals(levelNameWithoutExtension, header.LevelName, StringComparison.OrdinalIgnoreCase));
         }
 
         public PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels)
@@ -225,7 +227,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
         {
-            return allLevels.FirstOrDefault(l => l.FileName.StartsWith(name, StringComparison.OrdinalIgnoreCase));
+            return allLevels.FirstOrDefault(l => string.Equals(Path.GetFileNameWithoutExtension(l.FileName),name, StringComparison.OrdinalIgnoreCase));
         }
 
         private PreloadedLevelDto[] GetHierarchicalAnswersByLevelName(string levelName, string[] parentIds, PreloadedDataByFile[] rosterData)
