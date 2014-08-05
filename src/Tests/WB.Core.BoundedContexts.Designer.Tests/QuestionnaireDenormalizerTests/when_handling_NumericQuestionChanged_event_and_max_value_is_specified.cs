@@ -39,10 +39,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             updatedQuestionWithMaxValue = Mock.Of<IQuestion>(question
                 => question.PublicKey == questionId);
 
-            var questionFactory = Mock.Of<IQuestionFactory>(factory
+            var questionFactory = Mock.Of<IQuestionnaireEntityFactory>(factory
                 => factory.CreateQuestion(it.Is<QuestionData>(data => data.PublicKey == questionId && data.MaxValue == maxValue)) == updatedQuestionWithMaxValue);
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory);
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionnaireEntityFactory: questionFactory);
         };
 
         Because of = () =>

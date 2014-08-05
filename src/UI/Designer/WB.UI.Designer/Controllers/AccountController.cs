@@ -67,6 +67,7 @@ namespace WB.UI.Designer.Controllers
             if (this.ModelState.IsValid
                 && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
+                Response.Cookies[0].Expires = DateTime.Now.AddDays(1);
                 return this.RedirectToLocal(returnUrl);
             }
 

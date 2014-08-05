@@ -94,6 +94,7 @@ namespace WB.UI.Designer.App_Start
                     "~/Scripts/details/model.group.js",
                     "~/Scripts/details/model.mapper.js",
                     "~/Scripts/details/model.question.js",
+                    "~/Scripts/details/model.staticText.js",
                     "~/Scripts/details/model.sharePerson.js",
                     "~/Scripts/details/model.questionnaire.js",
                     "~/Scripts/details/model.js",

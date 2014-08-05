@@ -18,7 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
     {
         Establish context = () =>
         {
-            interviewSynchronizationDto = new InterviewSynchronizationDto { Status = InterviewStatus.RejectedByHeadquarters };
+            rejectComment = "reject comment";
+            interviewSynchronizationDto = new InterviewSynchronizationDto { Status = InterviewStatus.RejectedByHeadquarters, Comments = rejectComment};
             commentedQuestionId = Guid.NewGuid();
             answerComment = new CommentSynchronizationDto
             {
@@ -37,7 +38,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
                 }
             };
 
-            rejectComment = "reject comment";
             synchronizationTime = DateTime.Now;
 
             var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), interviewerId, interviewSynchronizationDto, synchronizationTime, rejectComment);
+        Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), interviewerId, interviewSynchronizationDto, synchronizationTime);
 
         It should_raise_InterviewRejectedByHQ_event = () => eventContext.ShouldContainEvent<InterviewRejectedByHQ>(@event => @event.UserId == userId);
         

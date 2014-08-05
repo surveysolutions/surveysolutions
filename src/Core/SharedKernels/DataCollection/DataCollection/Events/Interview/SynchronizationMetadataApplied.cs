@@ -8,9 +8,10 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     public class SynchronizationMetadataApplied : InterviewActiveEvent
     {
         public SynchronizationMetadataApplied(Guid userId, Guid questionnaireId, InterviewStatus status,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool createdOnClient)
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool createdOnClient, string comments)
             : base(userId)
         {
+            this.Comments = comments;
             this.QuestionnaireId = questionnaireId;
             this.Status = status;
             this.FeaturedQuestionsMeta = featuredQuestionsMeta;
@@ -24,5 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public AnsweredQuestionSynchronizationDto[] FeaturedQuestionsMeta { get; private set; }
 
         public bool CreatedOnClient { get; private set; }
+
+        public string Comments { get; private set; }
     }
 }

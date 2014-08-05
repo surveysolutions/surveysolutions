@@ -191,8 +191,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 supervisorIdGuid, 
                 feedEntry.InterviewerId != null ? (Guid?)Guid.Parse(feedEntry.InterviewerId) : null,
                 interviewDetails, 
-                DateTime.Now, 
-                feedEntry.Comment));
+                DateTime.Now));
         }
 
         public void Push(Guid userId)
@@ -230,7 +229,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(questionnareUri).Result;
 
             this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireId, questionnaireVersion, questionnaireDocument);
-            this.executeCommand(new RegisterPlainQuestionnaire(questionnaireId, questionnaireVersion));
+            this.executeCommand(new RegisterPlainQuestionnaire(questionnaireId, questionnaireVersion, false));
         }
 
         private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -16,7 +18,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services
 {
-    internal class QuestionnaireVerifier : IQuestionnaireVerifier
+    internal partial class QuestionnaireVerifier : IQuestionnaireVerifier
     {
         #region Constants
 
@@ -71,15 +73,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         #endregion
 
         private readonly IExpressionProcessor expressionProcessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         protected static ISubstitutionService SubstitutionService
         {
             get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
         }
 
-        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor)
+        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor)
         {
             this.expressionProcessor = expressionProcessor;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -130,20 +134,51 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IQuestion>(QuestionHasValidationExpressionWithoutValidationMessage, "WB0065", VerificationMessages.WB0065_QuestionHasValidationExpressionWithoutValidationMessage),
-                     Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
+                    Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
+                    Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
+                    Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
+                    Verifier<IGroup>(RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
+                    Verifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
+                    Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
+                    Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
+
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
-                    ErrorsByQuestionsWithDuplicateVariableName
+                    ErrorsByQuestionsWithDuplicateVariableName,
+                    ErrorsByRostersWithDuplicateVariableName
                 };
             }
+        }
+
+        private bool StaticTextIsEmpty(IStaticText staticText)
+        {
+            return string.IsNullOrWhiteSpace(staticText.Text);
         }
 
         private bool QuestionTypeIsNotAllowed(IQuestion question)
         {
             return !WhiteListOfQuestionTypes.Contains(question.QuestionType);
+        }
+
+        private bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question)
+        {
+            if (question.Answers != null)
+            {
+                return question.Answers.Where(x => x.AnswerText != null).Select(x => x.AnswerText.Trim()).Distinct().Count() != question.Answers.Count;
+            }
+            return false;
+        }
+
+        private bool OptionValuesMustBeUniqueForCategoricalQuestion(IQuestion question)
+        {
+            if (question.Answers != null)
+            {
+                return question.Answers.Where(x => x.AnswerValue != null).Select(x => x.AnswerValue.Trim()).Distinct().Count() != question.Answers.Count;
+            }
+            return false;
         }
 
         private bool CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2(IMultyOptionsQuestion question)
@@ -431,6 +466,37 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return string.IsNullOrWhiteSpace(arg.StataExportCaption);
         }
 
+        private bool RosterHasEmptyVariableName(IGroup group)
+        {
+            if (!group.IsRoster)
+                return false;
+            return string.IsNullOrWhiteSpace(group.VariableName);
+        }
+
+        private bool RosterHasInvalidVariableName(IGroup group)
+        {
+            if (!group.IsRoster)
+                return false;
+            if (string.IsNullOrEmpty(group.VariableName))
+                return false;
+            if (group.VariableName.Length > 32)
+                return true;
+            var regExp = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
+            return !regExp.IsMatch(group.VariableName);
+        }
+
+        private bool RosterHasVariableNameEqualToQuestionnaireTitle(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            if (!group.IsRoster)
+                return false;
+            if (string.IsNullOrEmpty(group.VariableName))
+                return false;
+
+            var questionnaireVariableName = this.fileSystemAccessor.MakeValidFileName(questionnaire.Title);
+
+            return group.VariableName.Equals(questionnaireVariableName, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         private EntityVerificationResult<IComposite> QuestionShouldNotHaveCircularReferences(IQuestion entity, QuestionnaireDocument questionnaire)
         {
             if (String.IsNullOrEmpty(entity.ConditionExpression))
@@ -631,11 +697,29 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithDuplicateVariableName(QuestionnaireDocument questionnaire)
         {
             var questionsDuplicates = questionnaire.Find<IQuestion>(q => true)
+                .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
                 .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
                 .SelectMany(group => group.Skip(1));
 
             foreach (IQuestion questionsDuplicate in questionsDuplicates)
                 yield return VariableNameIsUsedAsOtherQuestionVariableName(questionsDuplicate);
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByRostersWithDuplicateVariableName(QuestionnaireDocument questionnaire)
+        {
+            var rosterVariableNameMappedOnRosters = questionnaire.Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
+                .GroupBy(s => s.VariableName, StringComparer.InvariantCultureIgnoreCase).ToDictionary(r => r.Key, r => r.ToArray());
+
+            foreach (var rosterVariableNameMappedOnRoster in rosterVariableNameMappedOnRosters)
+            {
+                if (rosterVariableNameMappedOnRoster.Value.Length < 2)
+                    continue;
+
+                yield return new QuestionnaireVerificationError("WB0068",
+                    VerificationMessages.WB0068_RosterHasNotUniqueVariableName,
+                    rosterVariableNameMappedOnRoster.Value.Select(CreateReference).ToArray());
+            }
+
         }
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithSubstitutions(QuestionnaireDocument questionnaire)
@@ -770,7 +854,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {
             return new QuestionnaireVerificationReference(
-                entity is IGroup ? QuestionnaireVerificationReferenceType.Group : QuestionnaireVerificationReferenceType.Question,
+                entity is IGroup
+                    ? QuestionnaireVerificationReferenceType.Group
+                    : (entity is IStaticText
+                        ? QuestionnaireVerificationReferenceType.StaticText
+                        : QuestionnaireVerificationReferenceType.Question),
                 entity.PublicKey);
         }
 

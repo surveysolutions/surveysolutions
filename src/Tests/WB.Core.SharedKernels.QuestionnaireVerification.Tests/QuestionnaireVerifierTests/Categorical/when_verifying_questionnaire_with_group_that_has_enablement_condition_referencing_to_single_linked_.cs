@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new Group()
                 {
                     IsRoster = true,
+                    VariableName = "a",
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     RosterFixedTitles = new[] { "fixed title 1" },
                     Children =

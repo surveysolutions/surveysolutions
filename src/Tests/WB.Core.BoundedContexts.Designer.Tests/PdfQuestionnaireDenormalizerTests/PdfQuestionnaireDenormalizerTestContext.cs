@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTests
 {
@@ -63,6 +64,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTes
                 PublicId = questionId ?? Guid.NewGuid(),
                 Title = title,
                 QuestionType = type
+            };
+        }
+
+        protected static PdfStaticTextView CreateStaticText(Guid? entityId = null, string title = "Static Text X")
+        {
+            return new PdfStaticTextView()
+            {
+                PublicId = entityId ?? Guid.NewGuid(),
+                Title = title
             };
         }
     }

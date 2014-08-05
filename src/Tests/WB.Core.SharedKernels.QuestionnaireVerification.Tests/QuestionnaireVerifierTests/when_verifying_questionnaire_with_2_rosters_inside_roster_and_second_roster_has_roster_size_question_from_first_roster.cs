@@ -36,12 +36,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new Group
                 {
                     IsRoster = true,
+                    VariableName = "a",
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>
                     {
                         new Group
                         {
                             IsRoster = true,
+                            VariableName = "b",
                             RosterSizeQuestionId = rosterSizeQuestionForChildRoster1Id,
                             Children = new List<IComposite>
                             {
@@ -58,6 +60,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             PublicKey = groupWithInvalidRosterSizeQuestionId,
                             IsRoster = true,
+                            VariableName = "c",
                             RosterSizeQuestionId = rosterSizeQuestionWithInvalidRosterLevelId,
                             Children = new List<IComposite>
                             {

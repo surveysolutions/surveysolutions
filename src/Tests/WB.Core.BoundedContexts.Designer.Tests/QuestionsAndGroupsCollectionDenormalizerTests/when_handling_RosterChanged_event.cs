@@ -17,14 +17,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         {
             InitializePreviousState();
             questionDetailsFactoryMock = new Mock<IQuestionDetailsViewMapper>();
-            questionFactoryMock = new Mock<IQuestionFactory>();
+            questionFactoryMock = new Mock<IQuestionnaireEntityFactory>();
 
             
             evnt = CreateRosterChangedEvent(g2Id, null, RosterSizeSourceType.FixedTitles, rosterFixedTitles, null);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsFactoryMock.Object,
-                questionFactory: questionFactoryMock.Object);
+                questionnaireEntityFactory: questionFactoryMock.Object);
         };
 
         Because of = () =>
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         private static IPublishedEvent<RosterChanged> evnt;
         private static QuestionsAndGroupsCollectionView newState = null;
         private static Mock<IQuestionDetailsViewMapper> questionDetailsFactoryMock = null;
-        private static Mock<IQuestionFactory> questionFactoryMock;
+        private static Mock<IQuestionnaireEntityFactory> questionFactoryMock;
         private static string[] rosterFixedTitles = new []{"5","6","7"};
     }
 }

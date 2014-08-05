@@ -9,12 +9,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
     /// </summary>
     public class QuestionnaireListViewItem : IView
     {
-        #region Constructors and Destructors
         public QuestionnaireListViewItem()
         {
+            this.SharedPersons = new List<Guid>();
         }
 
-        public QuestionnaireListViewItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic)
+        public QuestionnaireListViewItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic) : this()
         {
             this.PublicId = id;
             this.Title = title;
@@ -22,12 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             this.LastEntryDate = lastEntryDate;
             this.CreatedBy = createdBy;
             this.IsPublic = isPublic;
-            this.SharedPersons = new List<Guid>();
         }
-
-        #endregion
-
-        #region Public Properties
 
         /// <summary>
         /// Gets the creation date.
@@ -72,7 +67,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public List<Guid> SharedPersons { get; private set; }
 
         public string Owner { get; set; }
-
-        #endregion
     }
 }

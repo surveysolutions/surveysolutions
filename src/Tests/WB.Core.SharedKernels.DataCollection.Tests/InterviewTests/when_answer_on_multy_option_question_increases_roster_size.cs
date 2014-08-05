@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview.SynchronizeInterview(
                 userId,
-                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, userId, questionnaireId,
+                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, userId, questionnaireId,
                     questionnaire.Version,
                     new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] {}, new decimal[] { 1 }, string.Empty) },
                     new HashSet<InterviewItemId>(),

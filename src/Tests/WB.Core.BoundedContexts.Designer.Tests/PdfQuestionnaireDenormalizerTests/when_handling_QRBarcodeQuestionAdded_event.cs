@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTes
 
         private static PdfQuestionView GetQuestion()
         {
-            return pdfQuestionnaireDocument.GetQuestion(Guid.Parse(questionId));
+            return pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(Guid.Parse(questionId));
         }
 
         private static PdfQuestionnaireDenormalizer denormalizer;

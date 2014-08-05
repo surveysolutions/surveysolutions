@@ -38,14 +38,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateGroup(rosterId, responsibleId, "title", rosterSizeQuestionId, null, null, true,
+                questionnaire.UpdateGroup(rosterId, responsibleId, "title", null, rosterSizeQuestionId, null, null, true,
                     RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: titleQuestionId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__question_placed_deeper_then_roster = () =>
-            new[] { "question for roster titles", "should be placed only inside groups where roster size question is" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+            new[] { "question for roster titles", "should be placed only inside groups where roster source question is" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;
         private static Guid responsibleId;

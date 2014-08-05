@@ -6,6 +6,17 @@
     Layout = "~/Views/Shared/Layout.empty.cshtml";
 }
 
+
+<!--[if lt IE 9]>
+    <div class="hero-unit">
+        <h1>
+            You are using an outdated browser
+        </h1>
+        <p>Please <a href="http://browsehappy.com/">upgrade your browser</a> to use designer application.</p>
+    </div>
+<![endif]-->
+
+
 @using (Html.BeginForm("login", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()

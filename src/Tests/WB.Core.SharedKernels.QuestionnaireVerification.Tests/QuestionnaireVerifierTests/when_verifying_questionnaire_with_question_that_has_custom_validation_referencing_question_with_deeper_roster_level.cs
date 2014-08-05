@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 MaxValue = 5
             });
 
-            var rosterGroup = new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterQuestionId };
+            var rosterGroup = new Group() { PublicKey = rosterGroupId, VariableName = "a", IsRoster = true, RosterSizeQuestionId = rosterQuestionId };
             rosterGroup.Children.Add(new NumericQuestion() { PublicKey = underDeeperRosterLevelQuestionId, StataExportCaption = underDeeperRosterLevelQuestionId.ToString() });
             questionnaire.Children.Add(rosterGroup);
             questionnaire.Children.Add(new SingleQuestion()

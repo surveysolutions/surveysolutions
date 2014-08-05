@@ -13,8 +13,6 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.Synchronization;
-
 namespace WB.Core.BoundedContexts.Supervisor.Tests.EventHandlers.ReadyToSendToHeadquartersInterviewDenormalizerTests
 {
     [Subject(typeof(ReadyToSendToHeadquartersInterviewDenormalizer))]

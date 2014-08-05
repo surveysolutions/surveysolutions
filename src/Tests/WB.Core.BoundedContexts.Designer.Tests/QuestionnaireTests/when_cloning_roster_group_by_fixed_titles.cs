@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.CloneGroupWithoutChildren(groupId: groupId, responsibleId: responsibleId, title: "title",
+            questionnaire.CloneGroupWithoutChildren(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
                 parentGroupId: parentGroupId, description: null, condition: null, rosterSizeQuestionId: null, isRoster: true,
                 rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: rosterFixedTitles, rosterTitleQuestionId: null, targetIndex: 0,
                 sourceGroupId: sourceGroupId);

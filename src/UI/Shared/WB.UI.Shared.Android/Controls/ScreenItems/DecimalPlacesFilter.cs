@@ -18,10 +18,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         public ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
         {
             var text = dest.ToString() + source;
-
-            var replacedAnswer = text.Replace(".", NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
+            var replacedAnswer = text.Replace(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator, CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
             decimal answer;
-            if (!decimal.TryParse(replacedAnswer, out answer))
+            if (!decimal.TryParse(replacedAnswer, NumberStyles.Number, CultureInfo.CurrentCulture, out answer))
             {
                 if (allowedStringValues.Contains(replacedAnswer))
                     return null;

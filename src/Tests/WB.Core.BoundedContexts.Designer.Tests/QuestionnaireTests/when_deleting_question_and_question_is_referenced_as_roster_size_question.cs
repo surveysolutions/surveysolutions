@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             exception.Message.ToLower().ShouldContain("roster");
 
         It should_throw_exception_with_message_containting__using__ = () =>
-            exception.Message.ToLower().ShouldContain("size");
+            exception.Message.ToLower().ShouldContain("source");
 
         It should_throw_exception_with_message_containting__referenced__ = () =>
             exception.Message.ToLower().ShouldContain("referenced");

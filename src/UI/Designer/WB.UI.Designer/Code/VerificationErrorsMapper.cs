@@ -57,8 +57,21 @@ namespace WB.UI.Designer.Code
                     yield return new VerificationReference
                     {
                         ItemId = reference.Id.FormatGuid(),
+                        Type = group.IsRoster ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
+                        Title = group.Title,
+                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
+                    };
+                }
+                else if (reference.Type == QuestionnaireVerificationReferenceType.StaticText)
+                {
+                    var staticText = questionnaireDocument.Find<IStaticText>(reference.Id);
+
+                    yield return new VerificationReference
+                    {
+                        ItemId = reference.Id.FormatGuid(),
                         Type = reference.Type,
-                        Title = group.Title
+                        Title = string.IsNullOrEmpty(staticText.Text) ? "static text" : staticText.Text,
+                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
                     };
                 }
                 else

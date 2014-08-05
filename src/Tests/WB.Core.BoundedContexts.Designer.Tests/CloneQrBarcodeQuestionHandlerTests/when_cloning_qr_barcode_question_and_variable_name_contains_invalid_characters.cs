@@ -30,14 +30,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneQrBarcodeQuestionHandlerTe
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.CloneQRBarcodeQuestion(questionId: questionId, title: "title",
-                    variableName: variableNameWithInvalidCharacters, isMandatory: false, enablementCondition: null, instructions: null,
+                    variableName: variableNameWithInvalidCharacters,
+                variableLabel: null, isMandatory: false, enablementCondition: null, instructions: null,
                     responsibleId: responsibleId, sourceQuestionId:sourceQuestionId, parentGroupId: chapterId, targetIndex: 1));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__variable__contains__characters__ = () =>
-             new[] { "variable", "contains", "character" }.ShouldEachConformTo(
+             new[] { "variable", "contain", "character" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 
         

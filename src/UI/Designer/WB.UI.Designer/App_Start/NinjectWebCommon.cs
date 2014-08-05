@@ -16,10 +16,12 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.QuestionnaireUpgrader;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
@@ -66,7 +68,9 @@ namespace WB.UI.Designer.App_Start
                 username: AppSettings.Instance.RavenUserName, password: AppSettings.Instance.RavenUserPassword,
                 eventsDatabase: AppSettings.Instance.RavenEventsDatabase,
                 viewsDatabase: AppSettings.Instance.RavenViewsDatabase,
-                plainDatabase: AppSettings.Instance.RavenPlainDatabase);
+                plainDatabase: AppSettings.Instance.RavenPlainDatabase,
+                failoverBehavior: AppSettings.Instance.FailoverBehavior,
+                activeBundles: AppSettings.Instance.ActiveBundles);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
@@ -74,11 +78,13 @@ namespace WB.UI.Designer.App_Start
                 new RavenWriteSideInfrastructureModule(ravenSettings, AppSettings.Instance.UseStreamingForAllEvents),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
-                new DesignerBoundedContextModule(AppSettings.Instance.IsNewDesignerEditPageEnabled),
+                new DesignerBoundedContextModule(),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
+                new QuestionnaireUpgraderModule(),
                 new MembershipModule(),
                 new MainModule(),
+                 new FileInfrastructureModule(),
                 new DesignerRegistry()
                 );
 

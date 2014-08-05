@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-            interview.Apply(new GeoLocationQuestionAnswered(userId, geoQuestionId, new decimal[0], DateTime.Now, 0.111, 0.222, 333, new DateTimeOffset(DateTime.Now)));
+            interview.Apply(new GeoLocationQuestionAnswered(userId, geoQuestionId, new decimal[0], DateTime.Now, 0.111, 0.222, 333, 44, new DateTimeOffset(DateTime.Now)));
             
             eventContext = new EventContext();
         };

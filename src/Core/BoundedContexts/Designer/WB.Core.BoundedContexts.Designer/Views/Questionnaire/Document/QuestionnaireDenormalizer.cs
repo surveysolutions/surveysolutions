@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 {
@@ -48,19 +49,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<QRBarcodeQuestionCloned>,
 
+        IEventHandler<StaticTextAdded>,
+        IEventHandler<StaticTextUpdated>,
+        IEventHandler<StaticTextCloned>,
+        IEventHandler<StaticTextDeleted>,
+
         IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader upgrader;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
-        private readonly IQuestionFactory questionFactory;
+        private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
-            IQuestionFactory questionFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader)
+            IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger, IQuestionnaireDocumentUpgrader upgrader)
         {
             this.upgrader = upgrader;
             this.documentStorage = documentStorage;
-            this.questionFactory = questionFactory;
+            this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
         }
 
@@ -89,6 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
+            group.VariableName = evnt.Payload.VariableName;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -124,6 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
+            group.VariableName = evnt.Payload.VariableName;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
@@ -153,7 +161,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<QuestionDeleted> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            item.RemoveQuestion(evnt.Payload.QuestionId);
+            item.RemoveEntity(evnt.Payload.QuestionId);
 
             item.RemoveHeadPropertiesFromRosters(evnt.Payload.QuestionId);
 
@@ -184,7 +192,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             {
                 return;
             }
-            IQuestion result = questionFactory.CreateQuestion(data);
+            IQuestion result = questionnaireEntityFactory.CreateQuestion(data);
             IGroup group = item.Find<IGroup>(groupId);
 
             if (result == null || group == null)
@@ -218,9 +226,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            IQuestion newQuestion = this.questionFactory.CreateQuestion(data);
+            IQuestion newQuestion = this.questionnaireEntityFactory.CreateQuestion(data);
 
-            document.ReplaceQuestionWithNew(question, newQuestion);
+            document.ReplaceEntity(question, newQuestion);
 
             document.UpdateRosterGroupsIfNeeded(data.Triggers, data.PublicKey);
 
@@ -233,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            IQuestion result = questionFactory.CreateQuestion(data);
+            IQuestion result = questionnaireEntityFactory.CreateQuestion(data);
             IGroup group = document.Find<IGroup>(groupId);
 
             if (result == null || group == null)
@@ -250,6 +258,71 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             this.UpdateQuestionnaire(evnt, document);
         }
+
+        #region Static text modifications
+        private void AddStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, string text)
+        {
+            QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
+            if (questionnaireDocument == null)
+            {
+                return;
+            }
+
+            var parentGroup = questionnaireDocument.Find<IGroup>(parentId);
+            if (parentGroup == null)
+            {
+                return;
+            }
+
+            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+
+            questionnaireDocument.Add(staticText, parentId, null);
+
+            this.UpdateQuestionnaire(evnt, questionnaireDocument);
+        }
+
+        private void UpdateStaticText(IPublishableEvent evnt, Guid entityId, string text)
+        {
+            QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
+            if (questionnaireDocument == null)
+            {
+                return;
+            }
+
+            var oldStaticText = questionnaireDocument.Find<IStaticText>(entityId);
+            if (oldStaticText == null)
+            {
+                return;
+            }
+
+            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+
+            questionnaireDocument.ReplaceEntity(oldStaticText, newStaticText);
+
+            this.UpdateQuestionnaire(evnt, questionnaireDocument);
+        }
+
+        private void CloneStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, int targetIndex, string text)
+        {
+            QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
+            if (questionnaireDocument == null)
+            {
+                return;
+            }
+
+            var parentGroup = questionnaireDocument.Find<IGroup>(parentId);
+            if (parentGroup == null)
+            {
+                return;
+            }
+
+            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+
+            questionnaireDocument.Insert(index: targetIndex, c: staticText, parent: parentId);
+
+            this.UpdateQuestionnaire(evnt, questionnaireDocument);
+        }
+        #endregion
 
         public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
         {
@@ -330,7 +403,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             item.UpdateGroup(
                 evnt.Payload.GroupPublicKey,
-                evnt.Payload.GroupText,
+                evnt.Payload.GroupText, evnt.Payload.VariableName,
                 evnt.Payload.Description,
                 evnt.Payload.ConditionExpression);
 
@@ -428,6 +501,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QRBarcodeQuestionCloned e = evnt.Payload;
             CloneQuestion(evnt, e.ParentGroupId, e.TargetIndex,EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
+        }
+
+        public void Handle(IPublishedEvent<StaticTextAdded> evnt)
+        {
+            this.AddStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, parentId: evnt.Payload.ParentId,
+                text: evnt.Payload.Text);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextUpdated> evnt)
+        {
+            this.UpdateStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, text: evnt.Payload.Text);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextCloned> evnt)
+        {
+            this.CloneStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, parentId: evnt.Payload.ParentId,
+                targetIndex: evnt.Payload.TargetIndex, text: evnt.Payload.Text);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextDeleted> evnt)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            item.RemoveEntity(evnt.Payload.EntityId);
+            
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)

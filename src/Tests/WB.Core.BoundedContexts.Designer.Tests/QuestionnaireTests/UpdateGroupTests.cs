@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act =
                 () =>
-                    questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: emptyTitle, rosterSizeQuestionId: null,
+                    questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: emptyTitle, variableName: null, rosterSizeQuestionId: null,
                         description: null, condition: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 string notEmptyNewTitle = "Some new title";
 
                 // act
-                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: notEmptyNewTitle, rosterSizeQuestionId: null,
+                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: notEmptyNewTitle, variableName: null, rosterSizeQuestionId: null,
                     description: null, condition: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 // assert
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act = () =>
             {
-                questionnaire.UpdateGroup(notExistingGroupPublicKey, responsibleId: responsibleId, title: null, rosterSizeQuestionId: null,
+                questionnaire.UpdateGroup(notExistingGroupPublicKey, responsibleId: responsibleId, title: null, variableName: null, rosterSizeQuestionId: null,
                     description: null, condition: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             };
 
@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupPublicKey, responsibleId: responsibleId);
 
                 // act
-                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: "group text", rosterSizeQuestionId: null,
+                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: "group text", variableName: null, rosterSizeQuestionId: null,
                     description: null, condition: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 // assert
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 var groupText = "new group text";
 
                 // act
-                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: groupText, rosterSizeQuestionId: null,
+                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: groupText, variableName: null, rosterSizeQuestionId: null,
                     description: null, condition: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 // assert
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 var conditionExpression = "2 < 7";
 
                 // act
-                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: "text of a group", rosterSizeQuestionId: null,
+                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: "text of a group", variableName: null, rosterSizeQuestionId: null,
                     description: null, condition: conditionExpression, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 // assert
@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 var description = "hardest questionnaire in the world";
 
                 // act
-                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null,
+                questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null,
                     description: description, condition: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 // assert
@@ -172,7 +172,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act =
                 () =>
-                    questionnaire.UpdateGroup(groupPublicKey, responsibleId: Guid.NewGuid(), title: "Title", rosterSizeQuestionId: null,
+                    questionnaire.UpdateGroup(groupPublicKey, responsibleId: Guid.NewGuid(), title: "Title", variableName: null, rosterSizeQuestionId: null,
                         description: description, condition: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -199,7 +199,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.UpdateGroup(
                         groupId: groupId,
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -226,7 +226,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.UpdateGroup(
                         groupId: groupId,
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.UpdateGroup(
                         groupId: groupId,
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -282,7 +282,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.UpdateGroup(
                         groupId: groupId,
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert

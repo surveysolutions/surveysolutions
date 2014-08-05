@@ -12,6 +12,7 @@ namespace WB.UI.Headquarters.API
 {
     [AllowAnonymous]
     [TokenValidationAuthorization]
+    [HeadquarterFeatureOnly]
     public class SyncController : ApiController
     {
         private readonly ISyncManager syncManager;

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
@@ -27,8 +23,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.MapReportTests
         Because of = () => 
             view = mapReport.Load(input);
 
-        private It should_return_view_with_empty_collection_of_answers = () =>
-            view.Answers.Length.ShouldEqual(0);
+        It should_return_view_with_empty_collection_of_point = () =>
+            view.Points.Length.ShouldEqual(0);
 
 
         private static MapReport mapReport;

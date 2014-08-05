@@ -29,11 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             interviewToExport = new InterviewDataExportView(Guid.NewGuid(), 1,
                 new[] { interviewLevelToExport });
 
-            dataFileServiceMock=new Mock<IDataFileService>();
-            dataFileServiceMock.Setup(x => x.CreateCleanedFileNamesForLevels(Moq.It.IsAny<IDictionary<ValueVector<Guid>, string>>()))
-                .Returns(new Dictionary<ValueVector<Guid>, string>() { { interviewLevelToExport.LevelVector, interviewLevelToExport.LevelName } });
-
-            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object,null, dataFileServiceMock.Object);
+            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object);
         };
 
         Because of = () =>
@@ -48,7 +44,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         private static FileBasedDataExportService fileBasedDataExportService;
         
         private static Mock<IDataFileExportService> interviewExportServiceMock;
-        private static Mock<IDataFileService> dataFileServiceMock;
         private static InterviewDataExportView interviewToExport;
         private static InterviewDataExportLevelView interviewLevelToExport;
     }

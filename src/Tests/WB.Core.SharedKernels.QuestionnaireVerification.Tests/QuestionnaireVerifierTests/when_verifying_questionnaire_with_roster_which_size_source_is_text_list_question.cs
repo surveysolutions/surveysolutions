@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 new TextListQuestion { QuestionType = QuestionType.TextList, PublicKey = textListQuestionId, StataExportCaption = "var" },
-                new Group { IsRoster = true, RosterSizeSource = RosterSizeSourceType.Question, RosterSizeQuestionId = textListQuestionId, PublicKey = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") },
+                new Group { IsRoster = true, RosterSizeSource = RosterSizeSourceType.Question,VariableName = "a", RosterSizeQuestionId = textListQuestionId, PublicKey = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") },
             });
 
             verifier = CreateQuestionnaireVerifier();

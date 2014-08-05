@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = new EventContext();
         };
 
-        Because of = () => questionnaire.CloneGroupWithoutChildren(targetGroupId, responsibleId, "title", null, null, null, parentRosterId,
+        Because of = () => questionnaire.CloneGroupWithoutChildren(targetGroupId, responsibleId, "title",null, null, null, null, parentRosterId,
                     sourceGroupId, 0, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         Cleanup stuff = () =>

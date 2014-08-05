@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Because of = () =>
             exception = Catch.Exception(
                 () =>
-                    questionnaire.CloneGroupWithoutChildren(groupId: newGroupId, responsibleId: responsibleId, title: "title",
+                    questionnaire.CloneGroupWithoutChildren(groupId: newGroupId, responsibleId: responsibleId, title: "title", variableName: null,
                         parentGroupId: parentGroupId, description: null, condition: null, rosterSizeQuestionId: rosterSizeQuestionId,
                         isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null,
                         rosterTitleQuestionId: rosterTitleQuestionId, targetIndex: 0, sourceGroupId: groupId));

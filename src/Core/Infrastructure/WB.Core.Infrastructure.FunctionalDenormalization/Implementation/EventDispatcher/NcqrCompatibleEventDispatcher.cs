@@ -28,10 +28,24 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
 
         public void Publish(IPublishableEvent eventMessage)
         {
+            var occurredExceptions = new List<Exception>();
+
             foreach (var handler in this.registredHandlers.Values.ToList())
             {
-                handler.Bus.Publish(eventMessage);
+                try
+                {
+                    handler.Bus.Publish(eventMessage);
+                }
+                catch (Exception exception)
+                {
+                    occurredExceptions.Add(exception);
+                }
             }
+
+            if (occurredExceptions.Count > 0)
+                throw new AggregateException(
+                    string.Format("{0} handler(s) failed to handle published event '{1}'.", occurredExceptions.Count, eventMessage.EventIdentifier),
+                    occurredExceptions);
         }
 
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)

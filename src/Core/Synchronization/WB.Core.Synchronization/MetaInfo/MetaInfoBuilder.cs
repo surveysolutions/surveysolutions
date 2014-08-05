@@ -35,6 +35,7 @@ namespace WB.Core.Synchronization.MetaInfo
             metaInfo.TemplateId = doc.QuestionnaireId;
             metaInfo.Status = (int) doc.Status;
             metaInfo.CreatedOnClient = doc.CreatedOnClient;
+            metaInfo.Comments = doc.Comments;
 
             var featuredQuestionList = new List<FeaturedQuestionMeta>();
 

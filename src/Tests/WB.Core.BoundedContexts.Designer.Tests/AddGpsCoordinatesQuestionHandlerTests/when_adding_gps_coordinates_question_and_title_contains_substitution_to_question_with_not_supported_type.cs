@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddGpsCoordinatesQuestionHandle
                     parentGroupId: chapterId,
                     title: titleWithSubstitution,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,

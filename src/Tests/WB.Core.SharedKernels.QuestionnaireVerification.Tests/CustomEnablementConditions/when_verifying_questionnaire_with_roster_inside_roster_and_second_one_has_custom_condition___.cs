@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = Guid.Parse("aa333333333333333333333333333333"),
                     IsRoster = true,
+                    VariableName = "a",
                     RosterSizeQuestionId = rosterQuestionId,
                     Children = new List<IComposite>
                     {
@@ -39,6 +40,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             PublicKey = groupWithCustomCondition,
                             IsRoster = true,
+                            VariableName = "b",
                             RosterSizeQuestionId = rosterQuestionId,
                             ConditionExpression = "some random expression",
                             Children = new List<IComposite>

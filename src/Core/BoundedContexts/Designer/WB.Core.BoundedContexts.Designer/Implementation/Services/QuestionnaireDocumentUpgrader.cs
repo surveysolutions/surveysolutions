@@ -12,11 +12,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal class QuestionnaireDocumentUpgrader : IQuestionnaireDocumentUpgrader
     {
-        private readonly IQuestionFactory _questionFactory;
+        private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
 
-        public QuestionnaireDocumentUpgrader(IQuestionFactory questionFactory)
+        public QuestionnaireDocumentUpgrader(IQuestionnaireEntityFactory questionnaireEntityFactory)
         {
-            _questionFactory = questionFactory;
+            this.questionnaireEntityFactory = questionnaireEntityFactory;
         }
 
         public QuestionnaireDocument TranslatePropagatePropertiesToRosterProperties(QuestionnaireDocument originalDocument)
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 IQuestion newNumericQuestion = CreateNumericQuestion(question, maxValue);
 
-                document.ReplaceQuestionWithNew(question, newNumericQuestion);
+                document.ReplaceEntity(question, newNumericQuestion);
                 document.ConnectChildrenWithParent();
                 foreach (var groupId in triggers)
                 {
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 document.UpdateGroup(
                     @group.PublicKey,
-                    @group.Title,
+                    @group.Title, null,
                     @group.Description,
                     conditionExpression: @group.ConditionExpression);
 
@@ -97,12 +97,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private IQuestion CreateNumericQuestion(AbstractQuestion question, int? maxValue)
         {
-            return this._questionFactory.CreateQuestion(new QuestionData(
+            return this.questionnaireEntityFactory.CreateQuestion(new QuestionData(
                     question.PublicKey,
                     QuestionType.Numeric,
                     question.QuestionScope,
                     question.QuestionText,
                     question.StataExportCaption,
+                    question.VariableLabel,
                     question.ConditionExpression,
                     question.ValidationExpression,
                     question.ValidationMessage,
@@ -111,6 +112,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     question.Mandatory,
                     question.Capital,
                     question.Instructions,
+                    null,
                     triggers: new List<Guid>(),
                     maxValue: maxValue,
                     answers: null,

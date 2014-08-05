@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         protected static InterviewSynchronizationDto CreateInterviewSynchronizationDto(AnsweredQuestionSynchronizationDto[] answers,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> propagatedGroupInstanceCounts)
         {
-            return new InterviewSynchronizationDto(id: Guid.NewGuid(), status: InterviewStatus.InterviewerAssigned,
+            return new InterviewSynchronizationDto(id: Guid.NewGuid(), status: InterviewStatus.InterviewerAssigned,comments: null,
                 userId: Guid.NewGuid(), questionnaireId: Guid.NewGuid(), questionnaireVersion: 1,
                 answers: answers,
                 disabledGroups: new HashSet<InterviewItemId>(),

@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
                             new AnsweredQuestionSynchronizationDto(
                                 q.PublicKey, new decimal[0], q.Value,
                                 string.Empty))
-                        .ToArray(), string.Empty, true, createdOnClient));
+                        .ToArray(), metaInfo.Comments, true, createdOnClient));
              
                 this.capiSynchronizationCacheService.SaveItem(metaInfo.PublicKey, item.Content);
             }
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             }
 
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
-            this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version));
+            this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode));
         }
 
         private TResult ExtractObject<TResult>(string initialString, bool isCompressed)

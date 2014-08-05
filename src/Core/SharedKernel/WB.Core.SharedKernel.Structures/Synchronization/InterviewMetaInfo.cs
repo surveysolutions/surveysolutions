@@ -53,11 +53,13 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
     public class QuestionnaireMetadata
     {
-        public QuestionnaireMetadata(long version)
+        public QuestionnaireMetadata(long version, bool allowCensusMode)
         {
+            this.AllowCensusMode = allowCensusMode;
             this.Version = version;
         }
 
         public long Version { get; private set; }
+        public bool AllowCensusMode { get; private set; }
     }
 }
