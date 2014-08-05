@@ -110,6 +110,8 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_circular_references.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_1_option.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_empty_static_text.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multi_question_without_options.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multi_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question-inside_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_of_type_not_included_in_white_list_of_question_types.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_two_question_with_same_variable_names.cs" />
@@ -187,6 +189,8 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_which_size_source_is_text_list_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_that_have_roster_level_more_than_4_and_rosters_have_the_same_roster_size_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_with_nested_plain_group.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_single_question_without_options.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_single_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="QuestionnaireVersionTests\QuestionnaireVersionTestsContext.cs" />
     <Compile Include="QuestionnaireVersionTests\when_casting_to_string_questionnaire_version.cs" />
     <Compile Include="QuestionnaireVersionTests\when_comparing_questionnaire_versions.cs" />
