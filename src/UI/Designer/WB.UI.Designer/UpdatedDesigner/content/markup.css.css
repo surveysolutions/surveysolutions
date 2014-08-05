@@ -7752,6 +7752,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #verify-popover-content .question-list .item:hover > .qname-block {
   background-color: transparent;
   background-image: none;
+  line-height: 25px;
 }
 #verify-popover-content .question-list .item > .qname-block:before,
 #verify-popover-content .question-list .item:hover > .qname-block:before {
@@ -7828,6 +7829,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding-left: 15px;
   color: #d20426;
   line-height: 1.6;
+}
+#verify-popover-content .question-list .item {
+  cursor: auto;
 }
 .share-window .modal-content {
   width: 800px;
