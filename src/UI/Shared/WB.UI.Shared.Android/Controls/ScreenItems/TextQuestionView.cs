@@ -32,18 +32,16 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-           
 
             this.etAnswer = new EditText(this.Context);
-
             maskedWatcher = new MaskedWatcher(TypedMode.Mask, etAnswer);
-          
             etAnswer.AddTextChangedListener(
               maskedWatcher
               );
+
             this.etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                                    ViewGroup.LayoutParams.WrapContent);
-            this.PutAnswerStoredInModelToUI();
+       
             this.etAnswer.InputType = InputTypes.TextVariationVisiblePassword;
             this.etAnswer.SetSelectAllOnFocus(true);
             this.etAnswer.ImeOptions = ImeAction.Done;
@@ -52,6 +50,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.etAnswer.FocusChange += this.etAnswer_FocusChange;
             this.llWrapper.Click += this.TextQuestionView_Click;
             this.llWrapper.AddView(this.etAnswer);
+
+            this.PutAnswerStoredInModelToUI();
 
         }
 
@@ -64,8 +64,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (!maskedWatcher.IsTextMaskMatched())
             {
                 PutAnswerStoredInModelToUI();
-                if (!this.IsCommentsEditorFocused)
-                    this.HideKeyboard(this.etAnswer);
                 return;
             }
             var newAnswer = etAnswer.Text.Trim();
