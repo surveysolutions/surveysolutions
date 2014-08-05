@@ -3082,14 +3082,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Answer option value should have only number characters");
+                    "Option value should have only number characters");
             }
 
             if (!AreElementsUnique(options.Select(x => x.Value)))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorValueNotUnique,
-                    "Answer option value should have unique in options scope");
+                    "Option values must be unique for categorical question");
             }
 
             if (options.Any(x => string.IsNullOrEmpty(x.Title)))
