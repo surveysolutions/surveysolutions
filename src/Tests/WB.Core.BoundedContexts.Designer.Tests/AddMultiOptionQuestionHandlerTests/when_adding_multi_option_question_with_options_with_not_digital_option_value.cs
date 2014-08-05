@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddMultiOptionQuestionHandlerTe
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__answer_value_only_number_characters__ = () =>
-            new[] { "answer option value should have only number characters" }.ShouldEachConformTo(
+            new[] { "option value should have only number characters" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;
