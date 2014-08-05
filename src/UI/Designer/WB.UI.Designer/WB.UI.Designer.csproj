@@ -477,6 +477,9 @@
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.css" />
+    <Content Include="UpdatedDesigner\content\lib\wb-vars.css.min.css">
+      <DependentUpon>wb-vars.css.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\markup.css.min.css">
       <DependentUpon>markup.css.css</DependentUpon>
     </Content>

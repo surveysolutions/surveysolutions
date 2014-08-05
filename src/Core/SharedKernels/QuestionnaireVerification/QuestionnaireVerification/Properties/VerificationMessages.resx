@@ -310,9 +310,9 @@
     <value>Chapter cannot contain more than 500 child items.</value>
   </data>
   <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
-    <value>Option titles must be unique for categorical question</value>
+    <value>Option titles must be unique</value>
   </data>
   <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
-    <value>Option values must be unique for categorical question</value>
+    <value>Option values must be unique</value>
   </data>
 </root>
