@@ -221,21 +221,19 @@
             </div>
         </div>
     </script>
-    <script type="text/ng-template" id="Numeric-template.html">
+        <script type="text/ng-template" id="Numeric-template.html">
         <div class="row">
-            <div class="col-xs-5">
-                <div class="form-group" ng-show="!activeQuestion.isInteger">
-                    <label for="edit-question-count-decimal">Count Of Decimal Places</label>
-                    <input id="edit-question-count-decimal" type="text" ng-model="activeQuestion.countOfDecimalPlaces" class="form-control small-numeric-input">
-                </div>
-            </div>
             <div class="col-xs-3">
-                <div class="checkbox pull-right checkbox-in-column stick-to-top">
+                <div class="checkbox checkbox-in-column">
                     <input id="cb-is-integer" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isInteger" />
                     <label for="cb-is-integer"><span></span>Is Integer</label>
                 </div>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-9 inline-inputs">
+                <div class="form-group" ng-show="!activeQuestion.isInteger">
+                    <label for="edit-question-count-decimal">Count Of Decimal Places</label>
+                    <input id="edit-question-count-decimal" type="text" ng-model="activeQuestion.countOfDecimalPlaces" class="form-control small-numeric-input">
+                </div>
                 <div class="form-group" ng-show="activeQuestion.isInteger">
                     <label for="edit-question-max-value">Max value</label>
                     <input id="edit-question-max-value" type="text" ng-model="activeQuestion.maxValue" class="form-control  small-numeric-input">

@@ -1,4 +1,4 @@
-﻿@import "../vendor/bootstrap-select/bootstrap-select.min.css";
+@import "../vendor/bootstrap-select/bootstrap-select.min.css";
 @import "../vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
 @import "../vendor/angular/angular-csp.css";
 /**
@@ -6612,9 +6612,6 @@ input#edit-group-title {
 .question-editor .checkbox-in-column {
   margin-top: 5px;
 }
-.question-editor .checkbox-in-column.stick-to-top {
-  margin-top: -3px;
-}
 .question-editor .checkbox-in-column input.wb-checkbox + label {
   font-family: "Lucida Console", Monaco, monospace;
   color: #5d5d5d;
@@ -6626,6 +6623,10 @@ input#edit-group-title {
 .question-editor .form-group.singleline-group label,
 .question-editor .form-group.singleline-group input {
   display: inline-block;
+}
+.question-editor .inline-inputs .form-group .form-control {
+  display: inline-block;
+  margin-left: 5px;
 }
 .row .form-group button.cross {
   display: block;
