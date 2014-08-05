@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             this.mask = mask;
             this.PlaceholderCharacter = placeholderCharacter;
             this.Placeholder = placeholder;
-            this.InvalidCharacters = invalidCharacters??placeholderCharacter.ToString();
+            this.InvalidCharacters = invalidCharacters ?? placeholderCharacter.ToString();
             this.ValidCharacters = validCharacters;
             this.UpdateInternalMask();
         }
@@ -55,6 +55,11 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             for (int i = 0; i < this.maskChars.Length; i++)
             {
                 var oldIndex = index;
+                if (stringValue.Length > maskChars.Length && oldCursorPosition == index)
+                {
+                    index++;
+                }
+
                 if (!this.maskChars[i].Append(result, stringValue, ref index, this.Placeholder))
                 {
                     result.Append(this.maskChars[i][this.PlaceholderCharacter]);
