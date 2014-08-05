@@ -139,6 +139,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
                     Verifier<IGroup>(RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
                     Verifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
+                    Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
+                    Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
+
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -158,6 +161,24 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private bool QuestionTypeIsNotAllowed(IQuestion question)
         {
             return !WhiteListOfQuestionTypes.Contains(question.QuestionType);
+        }
+
+        private bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question)
+        {
+            if (question.Answers != null)
+            {
+                return question.Answers.Where(x => x.AnswerText != null).Select(x => x.AnswerText.Trim()).Distinct().Count() != question.Answers.Count;
+            }
+            return false;
+        }
+
+        private bool OptionValuesMustBeUniqueForCategoricalQuestion(IQuestion question)
+        {
+            if (question.Answers != null)
+            {
+                return question.Answers.Where(x => x.AnswerValue != null).Select(x => x.AnswerValue.Trim()).Distinct().Count() != question.Answers.Count;
+            }
+            return false;
         }
 
         private bool CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2(IMultyOptionsQuestion question)
@@ -456,7 +477,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             if (!group.IsRoster)
                 return false;
-            if(string.IsNullOrEmpty(group.VariableName))
+            if (string.IsNullOrEmpty(group.VariableName))
                 return false;
             if (group.VariableName.Length > 32)
                 return true;
@@ -470,7 +491,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return false;
             if (string.IsNullOrEmpty(group.VariableName))
                 return false;
-            
+
             var questionnaireVariableName = this.fileSystemAccessor.MakeValidFileName(questionnaire.Title);
 
             return group.VariableName.Equals(questionnaireVariableName, StringComparison.InvariantCultureIgnoreCase);
@@ -688,7 +709,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             var rosterVariableNameMappedOnRosters = questionnaire.Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
                 .GroupBy(s => s.VariableName, StringComparer.InvariantCultureIgnoreCase).ToDictionary(r => r.Key, r => r.ToArray());
-            
+
             foreach (var rosterVariableNameMappedOnRoster in rosterVariableNameMappedOnRosters)
             {
                 if (rosterVariableNameMappedOnRoster.Value.Length < 2)
