@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -29,7 +32,7 @@ namespace WB.Core.Synchronization.Tests
 
             // act
             target.SaveInterview(
-                new InterviewSynchronizationDto(questionnarieId, InterviewStatus.Created, userId, Guid.NewGuid(),1, null, null, null,null,
+                new InterviewSynchronizationDto(questionnarieId, InterviewStatus.Created, null, userId, Guid.NewGuid(),1, null, null, null,null,
                                                 null, null, null, false), userId);
 
             // assert
@@ -85,13 +88,68 @@ namespace WB.Core.Synchronization.Tests
             Assert.That(result.Id, Is.EqualTo(questionnarieId));
             Assert.That(result.Content, Is.EqualTo(questionnarieId.ToString()));
         }
+
+        [Test]
+        public void SaveQuestionnaire_When_questionnarie_is_census_mode_Then_last_stored_chunk_by_questionnarie_is_command_For_create_questionnaire()
+        {
+            // arrange
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
+            var questionnarieId = Guid.Parse("23333333-3333-3333-3333-333333333333");
+            var supervisorId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+
+
+            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
+
+            // act
+            target.SaveQuestionnaire(new QuestionnaireDocument() { PublicKey = questionnarieId }, 1, true);
+
+            // assert
+            var packageId = questionnarieId.Combine(1);
+            var result = target.GetLatestVersion(packageId);
+            var metaInformation = JsonConvert.DeserializeObject<QuestionnaireMetadata>(result.MetaInfo);
+            Assert.That(result.ItemType, Is.EqualTo(SyncItemType.Template));
+            Assert.That(result.Id, Is.EqualTo(packageId));
+            Assert.That(result.IsCompressed, Is.EqualTo(true));
+            Assert.That(metaInformation.AllowCensusMode, Is.EqualTo(true));
+        }
+
+        [Test]
+        public void SaveQuestionnaire_When_questionnarie_is_not_in_census_mode_Then_last_stored_chunk_by_questionnarie_is_command_For_create_questionnaire()
+        {
+            // arrange
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
+            var questionnarieId = Guid.Parse("23333333-3333-3333-3333-333333333333");
+            var supervisorId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+
+
+            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
+
+            // act
+            target.SaveQuestionnaire(new QuestionnaireDocument() { PublicKey = questionnarieId }, 1, false);
+
+            // assert
+            var packageId = questionnarieId.Combine(1);
+            var result = target.GetLatestVersion(packageId);
+            var metaInformation = JsonConvert.DeserializeObject<QuestionnaireMetadata>(result.MetaInfo);
+            Assert.That(result.ItemType, Is.EqualTo(SyncItemType.Template));
+            Assert.That(result.Id, Is.EqualTo(packageId));
+            Assert.That(result.IsCompressed, Is.EqualTo(true));
+            Assert.That(metaInformation.AllowCensusMode, Is.EqualTo(false));
+        }
+
         private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisor(Guid supervisorId)
         {
             return
                 CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, Guid.NewGuid());
 
         }
-        private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(Guid supervisorId, Guid userId)
+        private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(Guid supervisorId, Guid userId, IMetaInfoBuilder metaInfoBuilder=null)
         {
             var inmemoryChunkStorage = new InMemoryChunkStorage();
           
@@ -100,7 +158,7 @@ namespace WB.Core.Synchronization.Tests
 
             var retval =
                 new SimpleSynchronizationDataStorage(userStorageMock.Object, inmemoryChunkStorage, inmemoryChunkStorage,
-                                                     new Mock<IMetaInfoBuilder>().Object);
+                                                     metaInfoBuilder ?? Mock.Of<IMetaInfoBuilder>());
 
             retval.SaveUser(new UserDocument()
             {

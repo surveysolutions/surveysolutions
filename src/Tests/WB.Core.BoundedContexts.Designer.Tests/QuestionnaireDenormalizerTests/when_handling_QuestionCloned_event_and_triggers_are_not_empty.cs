@@ -40,9 +40,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 => writer.GetById(Moq.It.IsAny<string>()) == questionnaireDocument);
 
             var numericQuestion = CreateNumericQuestion(clonedQuestionId, "title");
-            var questionFactory = Mock.Of<IQuestionFactory>(factory => factory.CreateQuestion(Moq.It.IsAny<QuestionData>()) == numericQuestion);
+            var questionFactory = Mock.Of<IQuestionnaireEntityFactory>(factory => factory.CreateQuestion(Moq.It.IsAny<QuestionData>()) == numericQuestion);
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory);
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionnaireEntityFactory: questionFactory);
         };
 
         Because of = () =>

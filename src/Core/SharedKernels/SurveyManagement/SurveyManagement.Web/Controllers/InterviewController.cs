@@ -6,6 +6,7 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 
@@ -16,14 +17,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
         private readonly IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory;
+        private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
 
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-                                   IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-                                    IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory)
+            IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
+            IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory,
+            IInterviewSummaryViewFactory interviewSummaryViewFactory)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;
             this.revalidateInterviewViewFactory = revalidateInterviewViewFactory;
+            this.interviewSummaryViewFactory = interviewSummaryViewFactory;
         }
 
         public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
@@ -31,10 +35,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.ViewBag.ActivePage = MenuItem.Docs;
 
             ChangeStatusView interviewInfo = this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
-            if (interviewInfo == null)
-            {
+            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
+            
+            if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
-            }
+
+            bool isAccessAllowed =
+                this.GlobalInfo.IsHeadquarter ||
+                (this.GlobalInfo.IsSurepvisor && this.GlobalInfo.GetCurrentUser().Id == interviewSummary.TeamLeadId);
+
+            if (!isAccessAllowed)
+                return HttpNotFound();
 
             return
                 this.View(new InterviewModel()
@@ -56,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [HttpPost]
         public ActionResult Revalidate(RevalidateModel input)
         {
-            return this.RedirectToAction("ConfirmInterviewRevalidation", new {id = input.InterviewId });
+            return this.RedirectToAction("ConfirmRevalidation", new { id = input.InterviewId });
         }
 
         [Authorize(Roles = "Headquarter, Supervisor")]
@@ -68,10 +79,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [Authorize(Roles = "Headquarter, Supervisor")]
         [HttpPost]
-        public ActionResult ConfirmInterviewRevalidation(Guid interviewId)
+        public ActionResult ConfirmRevalidation(RevalidateModel input)
         {
-            this.CommandService.Execute(new ReevaluateSynchronizedInterview(interviewId));
-            var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = interviewId });
+            this.CommandService.Execute(new ReevaluateSynchronizedInterview(input.InterviewId));
+            var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = input.InterviewId });
             return this.View("ConfirmRevalidation", model);
         }
     }

@@ -13,6 +13,7 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
@@ -287,37 +288,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         {
             ThrowIfShouldStopViewsRebuilding();
 
-            UpdateStatusMessage("Determining count of views to be deleted.");
+            UpdateStatusMessage("Deleting all views.");
 
-            var initialViewCount = DocumentsInViewsDatabaseCount();
-            
-            var documentsInViewsDatabaseCount = initialViewCount;
-            
-            const int AllowedAttemptToDeleteCount = 10;
-            
-            int attemptCount = 0;
+            const string defaultIndexName = "Raven/DocumentsByEntityName";
 
-            while (documentsInViewsDatabaseCount > 0)
-            {
-                if (AllowedAttemptToDeleteCount < attemptCount)
-                    throw new Exception(string.Format(
-                        "Failed to delete all views. Initial view count: {0}, remaining view count: {1}.",
-                        initialViewCount, documentsInViewsDatabaseCount));
+            if (ravenStore.DatabaseCommands.GetIndex(defaultIndexName) != null)
+                ravenStore.DatabaseCommands.DeleteByIndex(defaultIndexName, new IndexQuery(), false).WaitForCompletion();
 
-                ravenStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery(), false);
-
-                attemptCount++;
-
-                UpdateStatusMessage("Waiting 3 seconds while views are being deleted.");
-
-                Thread.Sleep(3000);
-
-                UpdateStatusMessage("Checking remaining views count.");
-           
-                documentsInViewsDatabaseCount = DocumentsInViewsDatabaseCount();
-            }
-
-            UpdateStatusMessage(string.Format("{0} views were deleted.", initialViewCount));
+            UpdateStatusMessage("All views were deleted.");
         }
 
         private int DocumentsInViewsDatabaseCount()
@@ -548,7 +526,12 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             return string.Format("{1}: {2}{0}{3}", Environment.NewLine,
                 error.Item1,
                 error.Item2,
-                shouldShowStackTrace ? error.Item3.ToString() : error.Item3.Message);
+                shouldShowStackTrace ? GetFullUnwrappedExceptionText(error.Item3) : error.Item3.Message);
+        }
+
+        private static string GetFullUnwrappedExceptionText(Exception exception)
+        {
+            return string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions());
         }
 
         #endregion // Error reporting methods

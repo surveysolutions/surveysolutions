@@ -15,10 +15,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public InterviewGroupView(Guid id)
         {
-            this.Questions = new List<InterviewQuestionView>();
+            this.Entities = new List<InterviewEntityView>();
             this.Id = id;
         }
         public Guid Id { set; get; }
-        public List<InterviewQuestionView> Questions { set; get; }
+        public List<InterviewEntityView> Entities { set; get; }
     }
 }

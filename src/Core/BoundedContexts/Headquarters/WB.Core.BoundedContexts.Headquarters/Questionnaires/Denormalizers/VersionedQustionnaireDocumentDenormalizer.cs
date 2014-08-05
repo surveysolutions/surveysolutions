@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
 {
-    public class VersionedQustionnaireDocumentDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>
+    internal class VersionedQustionnaireDocumentDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>
     {
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;

@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
                 parentGroupId: chapterId,
                 title: title,
                 variableName: variableName,
+                variableLabel: null,
                 isMandatory: isMandatory,
                 isPreFilled: isPreFilled,
                 scope: QuestionScope.Interviewer,
@@ -31,6 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
                 validationExpression: validationExpression,
                 validationMessage: validationMessage,
                 instructions: instructions,
+                mask:null,
                 responsibleId: responsibleId);
 
         Cleanup stuff = () =>

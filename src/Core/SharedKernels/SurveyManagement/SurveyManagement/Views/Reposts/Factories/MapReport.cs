@@ -25,9 +25,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
             return new MapReportView()
             {
-                Answers = answersCollection == null
-                    ? new string[0]
-                    : answersCollection.Answers.Select(x => string.Join("|", x.Value.Values)).ToArray()
+                Points = answersCollection == null
+                    ? new MapPointView[0]
+                    : answersCollection.Answers.Select(
+                        x =>
+                            new MapPointView()
+                            {
+                                InterviewId = x.Key.ToString(),
+                                Answers = string.Join("|", x.Value.Values)
+                            }).ToArray()
             };
         }
     }

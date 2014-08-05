@@ -42,11 +42,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDocumentUpgraderTe
                 && data.QuestionType == QuestionType.Numeric
                 && data.IsInteger == true;
 
-            var questionFactory = Mock.Of<IQuestionFactory>(factory
+            var questionFactory = Mock.Of<IQuestionnaireEntityFactory>(factory
                 => factory.CreateQuestion(it.Is(isNumericIntegerWithId(firstAutopropagatingQuestionId))) == firstQuestionFromFactory
                 && factory.CreateQuestion(it.Is(isNumericIntegerWithId(secondAutopropagatingQuestionId))) == secondQuestionFromFactory);
             
-            upgrader = CreateQuestionnaireDocumentUpgrader(questionFactory: questionFactory);
+            upgrader = CreateQuestionnaireDocumentUpgrader(questionnaireEntityFactory: questionFactory);
         };
 
         Because of = () =>

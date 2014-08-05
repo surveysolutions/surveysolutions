@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), Guid.NewGuid(), new InterviewSynchronizationDto(), DateTime.Now, "comment");
+        Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), Guid.NewGuid(), new InterviewSynchronizationDto(), DateTime.Now);
 
         It should_restore_interview = () => eventContext.ShouldContainEvent<InterviewRestored>(@event => @event.UserId == userId);
 

@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__title__ = () =>
-            exception.Message.ToLower().ShouldContain("size");
+            exception.Message.ToLower().ShouldContain("source");
 
         It should_throw_exception_with_message_containting__question__ = () =>
             exception.Message.ToLower().ShouldContain("question");

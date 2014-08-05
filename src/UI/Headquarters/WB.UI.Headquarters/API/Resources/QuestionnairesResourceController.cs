@@ -12,6 +12,7 @@ namespace WB.UI.Headquarters.API.Resources
 {
     [TokenValidationAuthorizationAttribute]
     [RoutePrefix("api/resources/questionnaires/v1")]
+    [HeadquarterFeatureOnly]
     public class QuestionnairesResourceController : ApiController
     {
         private readonly IVersionedQuestionnaireReader versionedQuestionnaireReader;

@@ -1,13 +1,30 @@
+using System;
 using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class NewEditRosterView
     {
-        public RosterDetailsView Roster { get; set; }
-        public Dictionary<string, QuestionBrief[]> NumericIntegerQuestions { get; set; }
-        public Dictionary<string, QuestionBrief[]> NotLinkedMultiOptionQuestions { get; set; }
-        public Dictionary<string, QuestionBrief[]> TextListsQuestions { get; set; }
-        public GroupBrief[] Breadcrumbs { get; set; }
+        public string ItemId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string EnablementCondition { get; set; }
+        public string VariableName { get; set; }
+
+        public RosterType Type { get; set; }
+
+        public string RosterSizeListQuestionId { get; set; }
+        public string RosterSizeNumericQuestionId { get; set; }
+        public string RosterSizeMultiQuestionId { get; set; }
+        public string RosterTitleQuestionId { get; set; }
+        public string[] RosterFixedTitles { get; set; }
+
+        public QuestionnaireInfoFactory.SelectOption[] RosterTypeOptions { get; set; }
+
+        public List<DropdownQuestionView> NumericIntegerQuestions { get; set; }
+        public List<DropdownQuestionView> NumericIntegerTitles { get; set; }
+        public List<DropdownQuestionView> NotLinkedMultiOptionQuestions { get; set; }
+        public List<DropdownQuestionView> TextListsQuestions { get; set; }
+        public Breadcrumb[] Breadcrumbs { get; set; }
     }
 }

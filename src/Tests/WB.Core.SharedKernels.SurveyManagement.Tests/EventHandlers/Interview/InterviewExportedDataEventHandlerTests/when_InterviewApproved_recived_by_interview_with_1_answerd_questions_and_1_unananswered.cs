@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewExportedDataEventHandlerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
     internal class when_InterviewApproved_recived_by_interview_with_1_answerd_questions_and_1_unananswered :
         InterviewExportedDataEventHandlerTestContext
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.InterviewEx
         };
 
         Because of = () =>
-            interviewExportedDataDenormalizer.Handle(CreatePublishableEvent());
+            interviewExportedDataDenormalizer.Handle(CreateInterviewApprovedByHQPublishableEvent());
 
         It should_records_count_equals_1 = () =>
             result.Levels[0].Records.Length.ShouldEqual(1);

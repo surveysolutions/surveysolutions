@@ -80,11 +80,7 @@
 
                                             if (actionModel.CanEdit)
                                             {
-                                                <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
-                                            }
-                                            if (actionModel.ShowUpdatedEditForm)
-                                            {
-                                                <li>@Html.ActionLink("Edit New", "Open", "App", routevalues, null)</li>
+                                                <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
                                             }
                                             if (actionModel.CanSynchronize)
                                             {

@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                     new Group("Roster Group")
                     {
                         IsRoster = true,
+                        VariableName = "Roster Group",
                         RosterSizeSource = RosterSizeSourceType.FixedTitles,
                         PublicKey = rosterGroupId,
                         RosterFixedTitles = new[] { "a", "b" },
@@ -41,6 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                                 PublicKey = nestedRosterId,
                                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                                 RosterFixedTitles = new[] { "1", "2" },
+                                VariableName = "nestedRoster",
                                 Children = new List<IComposite>
                                 {
                                     new NumericQuestion()

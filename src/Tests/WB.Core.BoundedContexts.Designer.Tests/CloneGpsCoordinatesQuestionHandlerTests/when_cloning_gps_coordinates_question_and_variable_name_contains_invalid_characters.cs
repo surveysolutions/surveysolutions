@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneGpsCoordinatesQuestionHand
                     questionId: questionId,
                     title: title,
                     variableName: variableNameWithInvalidCharacters,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     enablementCondition: enablementCondition,
                     instructions: instructions,
@@ -45,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneGpsCoordinatesQuestionHand
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         private It should_throw_exception_with_message_containting__variable__contains__characters__ = () =>
-            new[] { "variable", "contains", "character" }.ShouldEachConformTo(
+            new[] { "variable", "contain", "character" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 

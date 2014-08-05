@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
-using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.StatisticsDenormalizerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.StatisticsDenormalizerTests
 {
     internal class when_duplicate_creation_event_exists_in_event_stream : StatisticsDenormalizerTestContext
     {

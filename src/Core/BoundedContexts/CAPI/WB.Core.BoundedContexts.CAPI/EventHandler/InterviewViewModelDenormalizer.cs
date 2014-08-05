@@ -144,7 +144,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
             this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
-                new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Timestamp));
+                new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, 
+                    evnt.Payload.Altitude, evnt.Payload.Timestamp));
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
@@ -655,7 +654,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             : base(id)
         {
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true));
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true, null));
             this.ApplyValidationEvent(isValid);
         }
 
@@ -879,8 +878,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid supervisorId,
             Guid? interviewerId,
             InterviewSynchronizationDto interviewDto,
-            DateTime synchronizationTime,
-            string comment)
+            DateTime synchronizationTime)
         {
 
             var commentedAnswers = (
@@ -901,8 +899,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewRestored(userId));
             }
 
-            this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: comment));
+            this.ApplyEvent(new InterviewRejectedByHQ(userId, interviewDto.Comments));
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments));
 
             if (interviewerId.HasValue)
             {
@@ -1497,15 +1495,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
 
-        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, DateTimeOffset timestamp)
+        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, 
+            double accuracy, double altitude, DateTimeOffset timestamp)
         {
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
             InterviewChanges interviewChanges = CalculateInterviewChangesOnAnswerGeoLocationQuestion(this.interviewState, userId, questionId,
-                rosterVector, answerTime, latitude, longitude, accuracy, timestamp,
-                answeredQuestion, questionnaire);
+                rosterVector, answerTime, latitude, longitude, accuracy, altitude, timestamp, answeredQuestion, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1559,7 +1557,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerGeoLocationQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, DateTimeOffset timestamp, Identity answeredQuestion,
+            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp, Identity answeredQuestion,
             IQuestionnaire questionnaire)
         {
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(
@@ -1567,7 +1565,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answerChanges = new List<AnswerChange>()
             {
-                new AnswerChange( AnswerChangeType.GeoLocation, userId, questionId, rosterVector, answerTime, new GeoLocationPoint(latitude, longitude, accuracy, timestamp))
+                new AnswerChange( AnswerChangeType.GeoLocation, userId, questionId, rosterVector, answerTime, new GeoLocationPoint(latitude, longitude, accuracy, altitude, timestamp))
             };
 
             string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
@@ -1624,58 +1622,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> questionsDeclaredValid = new List<Identity>();
             List<Identity> questionsDeclaredInvalid = new List<Identity>();
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getEnabledQuestionAnswerSupportedInExpressions = (state, questionId) =>
-                GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState,
-                    questionId,
-                    (currentState, q) => this.ShouldQuestionBeDisabledByCustomCondition(this.interviewState, q, questionnaire),
-                    (currentState, g) => this.ShouldGroupBeDisabledByCustomCondition(this.interviewState, g, questionnaire),
-                    questionnaire);
 
-            foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions())
-            {
-                var availableRosterLevels = this.AvailableRosterLevelsForGroup(this.interviewState, questionnaire,
-                    groupWithNotEmptyCustomEnablementCondition);
-
-                foreach (var availableRosterLevel in availableRosterLevels)
-                {
-                    Identity groupIdAtInterview = new Identity(groupWithNotEmptyCustomEnablementCondition, availableRosterLevel);
-
-                    PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
-                        isNewStateEnabled:
-                            this.ShouldGroupBeEnabledByCustomEnablementCondition(this.interviewState, groupIdAtInterview, questionnaire,
-                                getEnabledQuestionAnswerSupportedInExpressions),
-                        isOldStateEnabled: !IsGroupDisabled(this.interviewState, groupIdAtInterview));
-                }
-            }
-
-            foreach (var questionWithNotEmptyEnablementCondition in questionnaire.GetAllQuestionsWithNotEmptyCustomEnablementConditions())
-            {
-                var availableRosterLevels = this.AvailableRosterLevelsForQuestion(this.interviewState, questionnaire,
-                    questionWithNotEmptyEnablementCondition);
-
-                foreach (var availableRosterLevel in availableRosterLevels)
-                {
-                    Identity questionIdAtInterview = new Identity(questionWithNotEmptyEnablementCondition, availableRosterLevel);
-
-                    PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled,
-                        questionsToBeDisabled,
-                        isNewStateEnabled:
-                            this.ShouldQuestionBeEnabledByCustomEnablementCondition(this.interviewState, questionIdAtInterview,
-                                questionnaire,
-                                getEnabledQuestionAnswerSupportedInExpressions),
-                        isOldStateEnabled: !IsQuestionDisabled(this.interviewState, questionIdAtInterview));
-                }
-            }
-
-            Func<Identity, bool> isQuestionDisabled =
-                (questionIdAtInterview) => IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire,
-                    (group) =>
-                        (groupsToBeDisabled.Any(q => AreEqual(q, group)) || IsGroupDisabled(this.interviewState, group)) &&
-                            !groupsToBeEnabled.Any(q => AreEqual(q, group)),
-                    (question) =>
-                        (questionsToBeDisabled.Any(q => AreEqual(q, question)) ||
-                            IsQuestionDisabled(this.interviewState, questionIdAtInterview)) &&
-                            !questionsToBeEnabled.Any(q => AreEqual(q, question)));
 
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
                 (state, question) =>
@@ -1684,6 +1631,92 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         (currstate, currquestion) => !questionsToBeEnabled.Any(q => AreEqual(q, currquestion)) && IsQuestionDisabled(currstate, currquestion),
                         (currstate, currgroup) => !groupsToBeEnabled.Any(q => AreEqual(q, currgroup)) && IsGroupDisabled(currstate, currgroup),
                         questionnaire);
+
+            var conditionStack = new Stack<KeyValuePair<Guid, string>>();
+
+            var calculatedConditions = new HashSet<Guid> { };
+
+            foreach (var questionWithNotEmptyEnablementCondition in questionnaire.GetAllQuestionsWithNotEmptyCustomEnablementConditions())
+            {
+                conditionStack.Push(new KeyValuePair<Guid, string>(questionWithNotEmptyEnablementCondition, "q"));
+            }
+            foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions().Reverse())
+            {
+                conditionStack.Push(new KeyValuePair<Guid, string>(groupWithNotEmptyCustomEnablementCondition, "g"));
+            }
+            while (conditionStack.Any())
+            {
+                var currentNode = conditionStack.Peek();
+                if (currentNode.Value == "g")
+                {
+                    var questionsInvolvedInGroupConditions =
+                        questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(currentNode.Key).Where(q => !calculatedConditions.Contains(q));
+                    var containsUnprocessedConditionsForGroup = questionsInvolvedInGroupConditions.Any();
+
+                    foreach (var questionsInvolvedInGroupCondition in questionsInvolvedInGroupConditions)
+                    {
+                        conditionStack.Push(new KeyValuePair<Guid, string>(questionsInvolvedInGroupCondition, "q"));
+                    }
+                    if (!containsUnprocessedConditionsForGroup)
+                    {
+                        var availableRosterLevelsForGroup = this.AvailableRosterLevelsForGroup(this.interviewState, questionnaire,
+                            currentNode.Key);
+
+                        foreach (var availableRosterLevel in availableRosterLevelsForGroup)
+                        {
+                            Identity groupIdAtInterview = new Identity(currentNode.Key, availableRosterLevel);
+                            PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
+                                isNewStateEnabled:
+                                    this.ShouldGroupBeEnabledByCustomEnablementCondition(this.interviewState, groupIdAtInterview,
+                                        questionnaire, getAnswer
+                                        ),
+                                isOldStateEnabled: !IsGroupDisabled(this.interviewState, groupIdAtInterview));
+                        }
+                        calculatedConditions.Add(currentNode.Key);
+                        conditionStack.Pop();
+                    }
+                }
+                if (currentNode.Value == "q")
+                {
+                    var questionsInvolvedInQuestionCondition =
+                        questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(currentNode.Key).Where(q => !calculatedConditions.Contains(q));
+                    var containsUnprocessedConditionsForQuestion = questionsInvolvedInQuestionCondition.Any();
+
+                    foreach (var questionInvolvedInQuestionCondition in questionsInvolvedInQuestionCondition)
+                    {
+                        conditionStack.Push(new KeyValuePair<Guid, string>(questionInvolvedInQuestionCondition, "q"));
+                    }
+                    if (!containsUnprocessedConditionsForQuestion)
+                    {
+                        var availableRosterLevelsForQuestion = this.AvailableRosterLevelsForQuestion(this.interviewState, questionnaire,
+                           currentNode.Key);
+                        foreach (var availableRosterLevelForQuestion in availableRosterLevelsForQuestion)
+                        {
+                            Identity questionIdAtInterview = new Identity(currentNode.Key, availableRosterLevelForQuestion);
+                            
+                            PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled,
+                                questionsToBeDisabled,
+                                isNewStateEnabled:
+                                    this.ShouldQuestionBeEnabledByCustomEnablementCondition(this.interviewState, questionIdAtInterview,
+                                        questionnaire, getAnswer),
+                                isOldStateEnabled: !IsQuestionDisabled(this.interviewState, questionIdAtInterview));
+                        }
+                        calculatedConditions.Add(currentNode.Key);
+                        conditionStack.Pop();
+                    }
+                }
+            }
+
+
+            Func<Identity, bool> isQuestionDisabled =
+             (questionIdAtInterview) => IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire,
+                 (group) =>
+                     (groupsToBeDisabled.Any(q => AreEqual(q, group)) || IsGroupDisabled(this.interviewState, group)) &&
+                         !groupsToBeEnabled.Any(q => AreEqual(q, group)),
+                 (question) =>
+                     (questionsToBeDisabled.Any(q => AreEqual(q, question)) ||
+                         IsQuestionDisabled(this.interviewState, questionIdAtInterview)) &&
+                         !questionsToBeEnabled.Any(q => AreEqual(q, question)));
 
             foreach (var questionWithNotEmptyValidationExpression in questionnaire.GetAllQuestionsWithNotEmptyValidationExpressions())
             {
@@ -1705,7 +1738,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(this.interviewState,
                         questionIdAtInterview, questionnaire,
-                        getAnswer, a => null);
+                        getAnswer, a => null, (state, id) => isQuestionDisabled(id));
 
                     switch (dependentQuestionValidationResult)
                     {
@@ -1836,7 +1869,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored, comment: null));
         }
 
-        public void Complete(Guid userId, string comment)
+        public void Complete(Guid userId, string comment, DateTime completeTime)
         {
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
@@ -1844,7 +1877,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             /*IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);*/
             bool isInterviewInvalid = this.HasInvalidAnswers() /*|| this.HasNotAnsweredMandatoryQuestions(questionnaire)*/;
 
-            this.ApplyEvent(new InterviewCompleted(userId));
+            this.ApplyEvent(new InterviewCompleted(userId, completeTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
             this.ApplyEvent(isInterviewInvalid
@@ -1852,11 +1885,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : new InterviewDeclaredValid() as object);
         }
 
-        public void Restart(Guid userId, string comment)
+        public void Restart(Guid userId, string comment, DateTime restartTime)
         {
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
 
-            this.ApplyEvent(new InterviewRestarted(userId));
+            this.ApplyEvent(new InterviewRestarted(userId, restartTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment));
         }
 
@@ -1924,7 +1957,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewCreated(userId, interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion));
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments));
 
             this.ApplyRostersEvents(rosters.ToArray());
             foreach (var answerDto in interviewDto.Answers.Where(x => x.Answer != null))
@@ -1953,7 +1986,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.GpsCoordinates:
                         var geoPosition = (GeoPosition)answer;
                         this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, rosterVector, synchronizationTime,
-                            geoPosition.Latitude, geoPosition.Longitude, geoPosition.Accuracy, geoPosition.Timestamp));
+                            geoPosition.Latitude, geoPosition.Longitude, geoPosition.Accuracy, geoPosition.Altitude,
+                            geoPosition.Timestamp));
                         break;
 
                     case QuestionType.QRBarcode:
@@ -2004,7 +2038,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId,
                 interviewStatus,
                 featuredQuestionsMeta,
-                createdOnClient));
+                createdOnClient, comments));
 
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
 
@@ -2284,7 +2318,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case AnswerChangeType.GeoLocation:
                         var geoPosition = (GeoLocationPoint)change.Answer;
                         this.ApplyEvent(new GeoLocationQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, geoPosition.Latitude, geoPosition.Longitude,
-                            geoPosition.Accuracy, geoPosition.Timestamp));
+                            geoPosition.Accuracy, geoPosition.Altitude, geoPosition.Timestamp));
                         break;
 
                     default:
@@ -2769,7 +2803,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         interviewChanges =
                             this.CalculateInterviewChangesOnAnswerGeoLocationQuestion(changeStructures.State, userId, questionId,
                                 currentQuestionRosterVector, answersTime, geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy,
-                                geoAnswer.Timestamp, answeredQuestion, questionnaire);
+                                geoAnswer.Altitude, geoAnswer.Timestamp, answeredQuestion, questionnaire);
                         break;
                     case QuestionType.TextList:
                         interviewChanges =
@@ -3858,7 +3892,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private bool? PerformValidationOfQuestion(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire,
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, Func<Identity, bool?> getNewQuestionState)
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, Func<Identity, bool?> getNewQuestionState, Func<InterviewStateDependentOnAnswers, Identity, bool> isQuestionDisabled = null)
         {
             if (questionnaire.IsQuestionMandatory(question.Id))
             {
@@ -3878,7 +3912,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionChangedState == false)
                 return true;
 
-            if (questionChangedState == null && IsQuestionDisabled(state, question))
+            if (isQuestionDisabled == null)
+                isQuestionDisabled = IsQuestionDisabled;
+
+            if (questionChangedState == null && isQuestionDisabled(state, question))
                 return true;
 
             string validationExpression = questionnaire.GetCustomValidationExpression(question.Id);

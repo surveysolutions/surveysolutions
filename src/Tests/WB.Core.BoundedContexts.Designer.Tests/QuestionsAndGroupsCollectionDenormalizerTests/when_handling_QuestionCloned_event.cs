@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                     ParentGroupId = p
                 });
 
-            questionFactoryMock = new Mock<IQuestionFactory>();
+            questionFactoryMock = new Mock<IQuestionnaireEntityFactory>();
             questionFactoryMock
                 .Setup(x => x.CreateQuestion(Moq.It.IsAny<QuestionData>()))
                 .Returns((QuestionData q) => new TextQuestion { PublicKey = q.PublicKey });
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsFactoryMock.Object,
-                questionFactory: questionFactoryMock.Object);
+                questionnaireEntityFactory: questionFactoryMock.Object);
         };
 
         Because of = () =>
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         private static IPublishedEvent<QuestionCloned> evnt;
         private static QuestionsAndGroupsCollectionView newState = null;
         private static Mock<IQuestionDetailsViewMapper> questionDetailsFactoryMock = null;
-        private static Mock<IQuestionFactory> questionFactoryMock;
+        private static Mock<IQuestionnaireEntityFactory> questionFactoryMock;
         private static Guid questionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
     }
 }

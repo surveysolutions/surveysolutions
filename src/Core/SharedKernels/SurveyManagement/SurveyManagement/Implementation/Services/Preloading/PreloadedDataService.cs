@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -20,24 +21,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly QuestionnaireExportStructure exportStructure;
         private readonly QuestionnaireRosterStructure questionnaireRosterStructure;
         private readonly QuestionnaireDocument questionnaireDocument;
-        private readonly IDataFileService dataFileService;
         private readonly IQuestionDataParser dataParser;
 
         public PreloadedDataService(QuestionnaireExportStructure exportStructure, QuestionnaireRosterStructure questionnaireRosterStructure,
-            QuestionnaireDocument questionnaireDocument, IDataFileService dataFileService, IQuestionDataParser dataParser)
+            QuestionnaireDocument questionnaireDocument, IQuestionDataParser dataParser)
         {
             this.exportStructure = exportStructure;
             this.questionnaireRosterStructure = questionnaireRosterStructure;
             this.questionnaireDocument = questionnaireDocument;
-            this.dataFileService = dataFileService;
             this.dataParser = dataParser;
         }
         
         public HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName)
         {
+            var levelNameWithoutExtension = Path.GetFileNameWithoutExtension(levelFileName);
             return
                 exportStructure.HeaderToLevelMap.Values.FirstOrDefault(
-                    header => levelFileName.IndexOf(dataFileService.CreateValidFileName(header.LevelName), StringComparison.OrdinalIgnoreCase) >= 0);
+                    header => string.Equals(levelNameWithoutExtension, header.LevelName, StringComparison.OrdinalIgnoreCase));
         }
 
         public PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels)
@@ -200,7 +200,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public string GetValidFileNameForTopLevelQuestionnaire()
         {
-            return dataFileService.CreateValidFileName(questionnaireDocument.Title);
+            return exportStructure.HeaderToLevelMap.Values.FirstOrDefault(level => level.LevelScopeVector.Count == 0).LevelName;
         }
 
         public Dictionary<string, int[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)
@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
         {
-            return allLevels.FirstOrDefault(l => l.FileName.IndexOf(dataFileService.CreateValidFileName(name), StringComparison.OrdinalIgnoreCase) >= 0);
+            return allLevels.FirstOrDefault(l => string.Equals(Path.GetFileNameWithoutExtension(l.FileName),name, StringComparison.OrdinalIgnoreCase));
         }
 
         private PreloadedLevelDto[] GetHierarchicalAnswersByLevelName(string levelName, string[] parentIds, PreloadedDataByFile[] rosterData)

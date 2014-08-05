@@ -34,6 +34,11 @@ namespace WB.UI.Headquarters.Controllers
             get { return this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>(); }
         }
 
+        public ActionResult Index()
+        {
+            return this.View();
+        }
+
         public ActionResult NConfig()
         {
             return this.View();

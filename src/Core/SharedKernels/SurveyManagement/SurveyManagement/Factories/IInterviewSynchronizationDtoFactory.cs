@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Factories
 {
     public interface IInterviewSynchronizationDtoFactory 
     {
-        InterviewSynchronizationDto BuildFrom(InterviewData interview, Guid userId,InterviewStatus status);
-        InterviewSynchronizationDto BuildFrom(InterviewData interview);
+        InterviewSynchronizationDto BuildFrom(InterviewData interview, Guid userId, InterviewStatus status, string comments);
+        InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments);
     }
 }

@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneGpsCoordinatesQuestionHand
                     questionId: questionId,
                     title: title,
                     variableName: notUniqueVariableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     enablementCondition: enablementCondition,
                     instructions: instructions,

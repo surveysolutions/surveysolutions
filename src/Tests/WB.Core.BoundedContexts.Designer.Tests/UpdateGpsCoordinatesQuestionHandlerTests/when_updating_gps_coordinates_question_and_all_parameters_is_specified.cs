@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateGpsCoordinatesQuestionHan
                 questionId: questionId,
                 title: title,
                 variableName: variableName,
+                variableLabel: null,
                 isMandatory: isMandatory,
                 scope: scope,
                 enablementCondition: enablementCondition,

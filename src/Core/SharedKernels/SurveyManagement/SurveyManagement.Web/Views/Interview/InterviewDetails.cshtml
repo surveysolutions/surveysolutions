@@ -68,7 +68,7 @@
     <script type="text/html" id="NumericReadOnly">
         <div class="form-group">
             <div class="controls">
-                <input class="form-control" type="text" data-bind="value: answer" disabled="disabled" />
+                <input class="form-control" type="text" data-bind="numericformatter: answer" disabled="disabled" />
             </div>
         </div>
     </script>
@@ -107,6 +107,7 @@
         <div>latitude: <span data-bind="text: latitude"></span></div>
         <div>longitude: <span data-bind="text: longitude"></span></div>
         <div>accuracy: <span data-bind="text: accuracy"></span></div>
+        <div>altitude: <span data-bind="text: altitude"></span></div>
         <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
     </script>
 
@@ -142,7 +143,7 @@
     <script type="text/html" id="NumericFull">
         <div class="form-group" data-bind="validationElement: answer">
             <div class="controls">
-                <input class="form-control" type="text" data-bind="value: answer, disable: isReadonly, valueUpdate: 'afterkeydown'" />
+                <input class="form-control" type="text" data-bind="numericformatter: answer, disable: isReadonly, valueUpdate: 'afterkeydown'" />
                 <span class="help-inline" data-bind="validationMessage: answer"></span>
             </div>
         </div>
@@ -169,7 +170,7 @@
     <script type="text/html" id="TextFull">
         <div class="form-group" data-bind="validationElement: answer">
             <div class="controls">
-                <input class="form-control" type="text" data-bind="value: answer, disable: isReadonly, valueUpdate: 'afterkeydown'" />
+                <input class="form-control" type="text" data-bind="value: answer, disable: isReadonly, valueUpdate: 'afterkeydown', maskFormatter:mask" />
                 <span class="help-inline" data-bind="validationMessage: answer"></span>
             </div>
         </div>
@@ -188,6 +189,7 @@
         <div>latitude: <span data-bind="text: latitude"></span></div>
         <div>longitude: <span data-bind="text: longitude"></span></div>
         <div>accuracy: <span data-bind="text: accuracy"></span></div>
+        <div>altitude: <span data-bind="text: altitude"></span></div>
         <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
     </script>
 
@@ -203,7 +205,7 @@
         <span data-bind="html: answer"></span>
     </script>
     <script type="text/html" id="Numeric">
-        <span data-bind=" text: answer"></span>
+        <span data-bind="numericformatter: answer"></span>
     </script>
     <script type="text/html" id="DateTime">
         <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
@@ -221,6 +223,7 @@
         <div>latitude: <span data-bind="text: latitude"></span></div>
         <div>longitude: <span data-bind="text: longitude"></span></div>
         <div>accuracy: <span data-bind="text: accuracy"></span></div>
+        <div>altitude: <span data-bind="text: altitude"></span></div>
         <div>time stamp: <span data-bind="text: timestamp ? moment(timestamp).format('lll') : '' "></span></div>
     </script>
 }
@@ -258,8 +261,8 @@
                 @if (((Model.InterviewStatus == InterviewStatus.Completed || Model.InterviewStatus == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
                     || (Model.InterviewStatus == InterviewStatus.ApprovedBySupervisor && GlobalInfo.IsHeadquarter))
                 {
-                <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
-                <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
+                    <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
+                    <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
                 }
                 <a href="#/all" class="btn btn-default btn-xs" data-bind="css: { 'btn-primary': filter() == 'all' }">all</a>
                 <a href="#/flaged" class="btn btn-default  btn-xs" data-bind="css: { 'btn-primary': filter() == 'flaged' }">
@@ -292,11 +295,21 @@
         </div>
         <div id="list">
             <!-- ko foreach: groups -->
-            <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
+            <div data-bind="visible: visibleEntitiesCount() > 0 && isVisible()">
                 <h2 data-bind="html: title" class="heading"></h2>
                 <div class="questions">
                     <table class="table table-bordered table-hover">
-                        <tbody data-bind="foreach: questions">
+                        <tbody data-bind="foreach: entities">
+                            <!-- ko if: $root.isStaticText($data) -->
+                            <tr data-bind="visible : isVisible">
+                                <td colspan="3" class="static-text">
+                                    <div class="cell-content">
+                                        <span data-bind="html: staticText"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- /ko -->
+                            <!-- ko ifnot: $root.isStaticText($data) -->
                             <tr data-bind="visible : isVisible,css: {success: isSelected, danger : isInvalid && isEnabled, mandatory : isMandatory, 'text-muted' : isEnabled == false}">
                                 <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
                                     <div class="cell-content" data-bind="css: {featured : isFeatured}">
@@ -334,6 +347,7 @@
                                     </div>
                                 </td>
                             </tr>
+                            <!-- /ko -->
                         </tbody>
                     </table>
                 </div>
@@ -400,15 +414,13 @@
                             <th>by</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- ko foreach: HistoryItems -->
+                    <tbody data-bind="foreach: HistoryItems">
                         <tr>
                             <td data-bind="text: State" />
                             <td data-bind="text: Comment" />
                             <td data-bind="text: Date" />
                             <td data-bind="text: Responsible" />
                         </tr>
-                        <!-- /ko -->
                     </tbody>
                 </table>
             </div>

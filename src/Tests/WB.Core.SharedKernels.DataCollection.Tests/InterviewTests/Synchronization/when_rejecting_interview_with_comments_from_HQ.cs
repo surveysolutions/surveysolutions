@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), interviewerId, interviewSynchronizationDto, DateTime.Now, null);
+        Because of = () => interview.RejectInterviewFromHeadquarters(userId, Guid.NewGuid(), interviewerId, interviewSynchronizationDto, DateTime.Now);
 
 
         It should_add_new_comments = () => eventContext.ShouldContainEvent<AnswerCommented>(@event => 

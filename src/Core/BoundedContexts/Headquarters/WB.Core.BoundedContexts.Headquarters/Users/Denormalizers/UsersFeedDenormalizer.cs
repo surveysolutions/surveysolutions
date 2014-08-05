@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.Denormalizers
 {
-    public class UsersFeedDenormalizer : BaseDenormalizer,
+    internal class UsersFeedDenormalizer : BaseDenormalizer,
                                     IEventHandler<NewUserCreated>,
                                     IEventHandler<UserChanged>
     {

@@ -13,7 +13,9 @@
 
         GroupTitleRequired, 
 
-        QuestionnaireTitleRequired, 
+        QuestionnaireTitleRequired,
+
+        EntityNotFound,
 
         QuestionNotFound, 
 
@@ -45,9 +47,13 @@
 
         NotAllowedQuestionType,
 
+        EntityWithSuchIdAlreadyExists,
+
         QuestionWithSuchIdAlreadyExists,
         
         GroupWithSuchIdAlreadyExists,
+
+        MoreThanOneEntityWithSuchIdExists,
 
         MoreThanOneQuestionsWithSuchIdExists,
 
@@ -114,6 +120,8 @@
 
         QuestionUsedAsRosterTitleOfOtherGroup,
 
-        MaxAnswerCountNotInRange
+        MaxAnswerCountNotInRange,
+
+        StaticTextIsEmpty,
     }
 }

@@ -9,6 +9,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
@@ -25,13 +26,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
             var questionnaireExportStructure = (questionnaireDocument == null
                 ? null
                 : new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
-                    new QuestionnaireRosterStructureFactory()).CreateQuestionnaireExportStructure(questionnaireDocument, 1));
+                    new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>(_ => _.MakeValidFileName(questionnaireDocument.Title) == questionnaireDocument.Title)).CreateQuestionnaireExportStructure(questionnaireDocument, 1));
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
-            var dataFileServiceMock = new Mock<IDataFileService>();
-            dataFileServiceMock.Setup(x => x.CreateValidFileName(Moq.It.IsAny<string>())).Returns<string>((fileName => fileName));
-            return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument, dataFileServiceMock.Object, new QuestionDataParser());
+            return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument, new QuestionDataParser());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

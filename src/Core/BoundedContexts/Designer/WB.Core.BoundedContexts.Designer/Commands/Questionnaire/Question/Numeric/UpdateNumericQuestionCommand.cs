@@ -12,8 +12,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numer
         public UpdateNumericQuestionCommand(
             Guid questionnaireId,
             Guid questionId,
-            string title, 
-            string variableName, 
+            string title,
+            string variableName, string variableLabel, 
             bool isMandatory,
             bool isPreFilled,
             QuestionScope scope, 
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numer
             int? countOfDecimalPlaces)
             : base(
                  responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions)
+                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel)
         {
             this.MaxValue = maxValue;
             this.IsInteger = isInteger;

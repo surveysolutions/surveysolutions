@@ -52,7 +52,7 @@ namespace WB.Tests.Integration.InterviewTests
         {
             return new Questionnaire(
                 userId ?? new Guid("E333E333E333E333E333E333E333E333"),
-                questionnaireDocument);
+                questionnaireDocument, false);
         }
 
         protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)

@@ -50,7 +50,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             var position = this.Model.AnswerObject as GeoPosition;
 
             return position != null
-                ? this.RenderPositionAsText(position.Latitude, position.Longitude, position.Accuracy)
+                ? this.RenderPositionAsText(position.Latitude, position.Longitude, position.Accuracy, position.Altitude)
                 : string.Empty;
         }
 
@@ -108,7 +108,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 }
                 else
                 {
-                    var positionAsText = this.RenderPositionAsText(t.Result.Latitude, t.Result.Longitude, t.Result.Accuracy);
+                    var positionAsText = this.RenderPositionAsText(t.Result.Latitude, t.Result.Longitude, t.Result.Accuracy, t.Result.Altitude);
 
                     this.locationText.Text = positionAsText;
 
@@ -117,18 +117,19 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                         new AnswerGeoLocationQuestionCommand(
                             this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
                             this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, t.Result.Latitude, t.Result.Longitude,
-                            t.Result.Accuracy, t.Result.Timestamp));
+                            t.Result.Accuracy, t.Result.Altitude, t.Result.Timestamp));
                 }
             }));
         }
 
-        private string RenderPositionAsText(double latitude, double longitude, double accuracy)
+        private string RenderPositionAsText(double latitude, double longitude, double accuracy, double altitude)
         {
             StringBuilder sb = new StringBuilder();
             
                 sb.AppendLine(string.Format("Latitude:\u0009\u0009\u0009{0}{1:N4}", latitude > 0 ? " " : "", latitude));
                 sb.AppendLine(string.Format("Longitude:\u0009\u0009{0}{1:N4}", longitude > 0 ? " " : "", longitude));
                 sb.AppendLine(string.Format("Accuracy:\u0009\u0009 {0:N2}m", accuracy));
+                sb.AppendLine(string.Format("Altitude:\u0009\u0009 {0:N2}m", altitude));
             
             return sb.ToString();
         }

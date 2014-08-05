@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Because of = () =>
             exception = Catch.Exception(
                 () =>
-                    questionnaire.CloneGroupWithoutChildren(groupId: newGroupId, responsibleId: responsibleId, title: "title",
+                    questionnaire.CloneGroupWithoutChildren(groupId: newGroupId, responsibleId: responsibleId, title: "title", variableName: null,
                         parentGroupId: parentGroupId, description: null, condition: null, rosterSizeQuestionId: rosterSizeQuestionId,
                         isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null,
                         rosterTitleQuestionId: rosterTitleQuestionId, targetIndex: 0, sourceGroupId: groupId));
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             exception.Message.ToLower().ShouldContain("where");
 
         It should_throw_exception_with_message_containting__size__ = () =>
-            exception.Message.ToLower().ShouldContain("size");
+            exception.Message.ToLower().ShouldContain("source");
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId;

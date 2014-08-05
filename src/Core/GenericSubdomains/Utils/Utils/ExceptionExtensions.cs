@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.GenericSubdomains.Utils
 {
@@ -24,14 +25,16 @@ namespace WB.Core.GenericSubdomains.Utils
         public static IEnumerable<Exception> UnwrapAllInnerExceptions(this Exception exception)
         {
             if (exception == null) throw new ArgumentNullException("exception");
+
             yield return exception;
 
-            Exception innerException = exception.InnerException;
-            
-            while (innerException != null)
+            IEnumerable<Exception> innerExceptions = exception is AggregateException
+                ? ((AggregateException) exception).InnerExceptions
+                : exception.InnerException != null ? exception.InnerException.ToEnumerable() : new Exception[] { };
+
+            foreach (var unwrappedException in innerExceptions.SelectMany(UnwrapAllInnerExceptions))
             {
-                yield return innerException;
-                innerException = innerException.InnerException;
+                yield return unwrappedException;
             }
         }
     }

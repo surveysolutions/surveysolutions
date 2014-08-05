@@ -26,7 +26,7 @@
 
     commands[config.commands.answerNumericIntegerQuestionCommand] = function(question) {
         var command = prepareQuestionCommand(question);
-        command.answer = question.answer();
+        command.answer = question.answer().split(',').join('');
         return command;
     };
 

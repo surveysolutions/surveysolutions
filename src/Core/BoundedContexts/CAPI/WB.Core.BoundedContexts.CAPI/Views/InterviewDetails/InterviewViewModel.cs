@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -839,6 +840,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 var question = item as QuestionViewModel;
                 if (question != null && updateHash)
                     this.UpdateQuestionHash(question);
+
                 result.Add(item);
             }
             return result;
@@ -951,6 +953,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     new QuestionnaireNavigationPanelItem(
                         key, GetScreenViewModel);
             }
+
+            var staticText = item as IStaticText;
+            if (staticText != null)
+            {
+                return new StaticTextViewModel(publicKey: new InterviewItemId(staticText.PublicKey),
+                    text: staticText.Text);
+            }
+
             return null;
         }
 
@@ -977,11 +987,18 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
         {
+            var txtQuestion = question as TextQuestion;
+            var mask = "";
+            if (txtQuestion != null)
+            {
+                mask = txtQuestion.Mask;
+            }
+
             return new ValueQuestionViewModel(
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType,
                 null,
-                true, question.Instructions, null,
+                true, question.Instructions,mask, null,
                 true, question.Mandatory,
                 question.ValidationMessage,
                 question.StataExportCaption,

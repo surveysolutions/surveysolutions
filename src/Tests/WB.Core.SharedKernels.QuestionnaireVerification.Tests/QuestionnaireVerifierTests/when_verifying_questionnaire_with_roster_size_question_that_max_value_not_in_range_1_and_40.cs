@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 IsInteger = true,
                 MaxValue = 41
             });
-            questionnaire.Children.Add(new Group() { PublicKey = rosterGroupId, IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId});
+            questionnaire.Children.Add(new Group() { PublicKey = rosterGroupId, IsRoster = true, VariableName = "a", RosterSizeQuestionId = rosterSizeQuestionId });
 
             verifier = CreateQuestionnaireVerifier();
         };

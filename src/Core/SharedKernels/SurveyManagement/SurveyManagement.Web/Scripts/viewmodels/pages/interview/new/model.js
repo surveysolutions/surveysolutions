@@ -28,7 +28,7 @@
                 return self.isSingleOption() || self.isMultyOption();
             });
             self.errors = ko.validation.group(self);
-
+            self.mask = ko.observable();
             return self;
         },
         Option: function () {

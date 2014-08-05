@@ -8,6 +8,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Raven.Abstractions.Extensions;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -30,6 +31,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextAdded>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextUpdated>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextDeleted>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireItemMoved>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NewGroupAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, GroupDeleted>
@@ -40,15 +45,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionnaireDeleted>
     {
         private readonly IQuestionDetailsViewMapper questionDetailsViewMapper;
-        private readonly IQuestionFactory questionFactory;
+        private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
+        private readonly IQuestionnaireDocumentUpgrader questionnaireUpgrader;
 
         public QuestionsAndGroupsCollectionDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter,
-            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionFactory questionFactory)
+            IQuestionDetailsViewMapper questionDetailsViewMapper, IQuestionnaireEntityFactory questionnaireEntityFactory,
+            IQuestionnaireDocumentUpgrader questionnaireUpgrader)
             : base(readsideRepositoryWriter)
         {
             this.questionDetailsViewMapper = questionDetailsViewMapper;
-            this.questionFactory = questionFactory;
+            this.questionnaireEntityFactory = questionnaireEntityFactory;
+            this.questionnaireUpgrader = questionnaireUpgrader;
         }
 
         public override Type[] UsesViews
@@ -78,84 +86,119 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewQuestionAdded> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NewQuestionAddedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NewQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey.Value, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionCloned> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QuestionClonedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey.Value, question);
 
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionChanged> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QuestionChangedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QuestionChangedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<NumericQuestionAdded> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionAddedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<NumericQuestionChanged> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<NumericQuestionCloned> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.NumericQuestionClonedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<TextListQuestionAdded> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionAddedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupId, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<TextListQuestionCloned> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionClonedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupId, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<TextListQuestionChanged> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<QRBarcodeQuestionAdded> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionAddedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionAddedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.ParentGroupId, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
             return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
             IPublishedEvent<QRBarcodeQuestionCloned> evnt)
         {
-            IQuestion question = this.questionFactory.CreateQuestion(EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.ParentGroupId, question);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<StaticTextAdded> evnt)
+        {
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
+                text: evnt.Payload.Text);
+            return this.UpdateStateWithAddedStaticText(currentState, evnt.Payload.ParentId, staticText);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<StaticTextUpdated> evnt)
+        {
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
+                text: evnt.Payload.Text);
+            return this.UpdateStateWithUpdatedStaticText(currentState, staticText);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<StaticTextCloned> evnt)
+        {
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
+                text: evnt.Payload.Text);
+            return this.UpdateStateWithAddedStaticText(currentState, evnt.Payload.ParentId, staticText);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
+            IPublishedEvent<StaticTextDeleted> evnt)
+        {
+            var staticText = currentState.StaticTexts.FirstOrDefault(x => x.Id == evnt.Payload.EntityId);
+            if (staticText != null)
+            {
+                currentState.StaticTexts.Remove(staticText);   
+            }
+            return currentState;
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionDeleted> evnt)
@@ -190,6 +233,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 UpdateBreadcrumbs(currentState, question, question.ParentGroupId);
                 return currentState;
             }
+            var staticText = currentState.StaticTexts.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
+            if (staticText != null)
+            {
+                staticText.ParentGroupId = evnt.Payload.GroupKey.Value;
+                UpdateBreadcrumbs(currentState, staticText, staticText.ParentGroupId);
+                return currentState;
+            }
 
             var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
             if (group != null)
@@ -202,6 +252,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
                 var descendantQuestion = this.GetAllDescendantQuestions(currentState, group.Id);
                 descendantQuestion.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+
+                var descendantStaticTexts = this.GetAllDescendantStaticTexts(currentState, group.Id);
+                descendantStaticTexts.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
             }
             return currentState;
         }
@@ -210,13 +263,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewGroupAdded> evnt)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description,
+            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.VariableName, evnt.Payload.Description,
                 evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupCloned> evnt)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.Description,
+            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.VariableName, evnt.Payload.Description,
                 evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
@@ -232,6 +285,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             var shouldBeDeletedQuestions = GetAllDescendantQuestions(currentState, evnt.Payload.GroupPublicKey);
             shouldBeDeletedQuestions.ForEach(x => currentState.Questions.Remove(x));
+
+            var shouldBeDeletedStaticTexts = GetAllDescendantStaticTexts(currentState, evnt.Payload.GroupPublicKey);
+            shouldBeDeletedStaticTexts.ForEach(x => currentState.StaticTexts.Remove(x));
+
 
             return currentState;
         }
@@ -255,8 +312,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
             var questions = this.GetAllDescendantQuestions(currentState, evnt.Payload.GroupId);
+            var staticTexts = this.GetAllDescendantStaticTexts(currentState, evnt.Payload.GroupId);
             groups.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
             questions.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+            staticTexts.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
 
             return currentState;
         }
@@ -280,8 +339,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
             var questions = this.GetAllDescendantQuestions(currentState, evnt.Payload.GroupId);
+            var staticTexts = this.GetAllDescendantStaticTexts(currentState, evnt.Payload.GroupId);
             groups.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
             questions.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+            staticTexts.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
 
             return currentState;
         }
@@ -300,6 +361,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             group.Title = evnt.Payload.GroupText;
             group.Description = evnt.Payload.Description;
             group.EnablementCondition = evnt.Payload.ConditionExpression;
+            group.VariableName = evnt.Payload.VariableName;
 
             return currentState;
         }
@@ -307,6 +369,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionnaireDeleted> evnt)
         {
             return null;
+        }
+
+        private List<StaticTextDetailsView> GetAllDescendantStaticTexts(QuestionsAndGroupsCollectionView currentState, Guid groupId)
+        {
+            var descendantStaticTexts = new List<StaticTextDetailsView>();
+
+            currentState
+                .StaticTexts
+                .Where(x => x.ParentGroupsIds.Contains(groupId))
+                .ForEach(descendantStaticTexts.Add);
+
+            return descendantStaticTexts;
         }
 
         private List<QuestionDetailsView> GetAllDescendantQuestions(QuestionsAndGroupsCollectionView currentState, Guid groupId)
@@ -368,13 +442,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         private QuestionsAndGroupsCollectionView CreateStateWithAllQuestions(QuestionnaireDocument questionnaire)
         {
-            questionnaire.ConnectChildrenWithParent();
-            var questions = questionnaire.GetAllQuestions<IQuestion>()
+            var convertedDocument = this.questionnaireUpgrader.TranslatePropagatePropertiesToRosterProperties(questionnaire);
+            convertedDocument.ConnectChildrenWithParent();
+            var questions = convertedDocument.GetEntitiesByType<IQuestion>()
                 .Select(question => this.questionDetailsViewMapper.Map(question, question.GetParent().PublicKey))
                 .Where(q => q != null)
                 .ToList();
 
-            var groups = questionnaire.GetAllGroups()
+            var groups = convertedDocument.GetAllGroups()
                 .Select(g => new GroupAndRosterDetailsView
                 {
                     Id = g.PublicKey,
@@ -385,24 +460,36 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     RosterSizeQuestionId = g.RosterSizeQuestionId,
                     RosterSizeSourceType = g.RosterSizeSource,
                     RosterTitleQuestionId = g.RosterTitleQuestionId,
-                    ParentGroupId = g.GetParent().PublicKey == questionnaire.PublicKey ? Guid.Empty : g.GetParent().PublicKey
+                    ParentGroupId = g.GetParent().PublicKey == convertedDocument.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
+                    EnablementCondition = g.ConditionExpression,
+                    VariableName = g.VariableName
                 })
                 .ToList();
+
+            var staticTexts =
+                convertedDocument.GetEntitiesByType<IStaticText>().Select(staticText => new StaticTextDetailsView()
+                {
+                    Id = staticText.PublicKey,
+                    ParentGroupId = staticText.GetParent().PublicKey,
+                    Text = staticText.Text
+                }).ToList();
 
             var questionCollection = new QuestionsAndGroupsCollectionView
             {
                 Questions = questions,
-                Groups = groups
+                Groups = groups,
+                StaticTexts = staticTexts
             };
 
             groups.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.Id));
             questions.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
+            staticTexts.ForEach(x => UpdateBreadcrumbs(questionCollection, x, x.ParentGroupId));
 
             return questionCollection;
         }
 
         private static QuestionsAndGroupsCollectionView UpdateStateWithAddedGroup(QuestionsAndGroupsCollectionView currentState,
-            Guid groupId, string title, string description, string enablementCondition, Guid parentGroupId)
+            Guid groupId, string title,string variableName, string description, string enablementCondition, Guid parentGroupId)
         {
             if (currentState == null)
             {
@@ -418,7 +505,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 Description = description,
                 EnablementCondition = enablementCondition,
                 ParentGroupsIds = new Guid[0],
-                RosterScopeIds = new Guid[0]
+                RosterScopeIds = new Guid[0],
+                VariableName = variableName
             };
 
             currentState.Groups.Add(group);
@@ -434,7 +522,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 return null;
             }
 
-            var questionDetailsView = this.questionDetailsViewMapper.Map(question, parentGroupId);
+            QuestionDetailsView questionDetailsView = this.questionDetailsViewMapper.Map(question, parentGroupId);
             currentState.Questions.Add(questionDetailsView);
             UpdateBreadcrumbs(currentState, questionDetailsView, questionDetailsView.ParentGroupId);
             return currentState;
@@ -461,6 +549,51 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return currentState;
         }
 
-       
+        private QuestionsAndGroupsCollectionView UpdateStateWithAddedStaticText(
+             QuestionsAndGroupsCollectionView currentState, Guid parentId, IStaticText staticText)
+        {
+            if (currentState == null)
+            {
+                return null;
+            }
+
+            var staticTextDetailsView = new StaticTextDetailsView()
+            {
+                Id = staticText.PublicKey,
+                ParentGroupId = parentId,
+                Text = staticText.Text
+            };
+
+            currentState.StaticTexts.Add(staticTextDetailsView);
+            UpdateBreadcrumbs(currentState, staticTextDetailsView, staticTextDetailsView.ParentGroupId);
+            return currentState;
+        }
+
+        private QuestionsAndGroupsCollectionView UpdateStateWithUpdatedStaticText(
+            QuestionsAndGroupsCollectionView currentState, IStaticText staticText)
+        {
+            if (currentState == null)
+            {
+                return null;
+            }
+
+            var oldstaticTextDetailsView = currentState.StaticTexts.FirstOrDefault(x => x.Id == staticText.PublicKey);
+            if (oldstaticTextDetailsView == null)
+            {
+                return currentState;
+            }
+
+            currentState.StaticTexts.Remove(oldstaticTextDetailsView);
+
+            var staticTextDetailsView = new StaticTextDetailsView()
+            {
+                Id = staticText.PublicKey,
+                ParentGroupId = oldstaticTextDetailsView.ParentGroupId,
+                Text = staticText.Text
+            };
+            UpdateBreadcrumbs(currentState, staticTextDetailsView, staticTextDetailsView.ParentGroupId);
+            currentState.StaticTexts.Add(staticTextDetailsView);
+            return currentState;
+        }
     }
 }
