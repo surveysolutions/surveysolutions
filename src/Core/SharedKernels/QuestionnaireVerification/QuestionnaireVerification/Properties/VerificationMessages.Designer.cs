@@ -640,7 +640,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option titles must be unique for categorical question.
+        ///   Looks up a localized string similar to Option titles must be unique.
         /// </summary>
         internal static string WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion {
             get {
@@ -649,7 +649,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option values must be unique for categorical question.
+        ///   Looks up a localized string similar to Option values must be unique.
         /// </summary>
         internal static string WB0073_OptionValuesMustBeUniqueForCategoricalQuestion {
             get {
