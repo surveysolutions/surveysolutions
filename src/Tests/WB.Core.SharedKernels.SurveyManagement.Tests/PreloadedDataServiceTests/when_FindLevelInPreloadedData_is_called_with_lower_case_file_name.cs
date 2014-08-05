@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
         Because of =
            () =>
                result =
-                   preloadedDataService.FindLevelInPreloadedData("roster group");
+                   preloadedDataService.FindLevelInPreloadedData("roster");
 
         It should_return_not_null_result = () =>
            result.ShouldNotBeNull();
