@@ -220,6 +220,8 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one.cs" />
+    <Compile Include="QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one_that_was_fixed_previously.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_multi_roster_edit_view.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_numeric_roster_edit_view.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_edit_view_and_static_text_is_absent.cs" />

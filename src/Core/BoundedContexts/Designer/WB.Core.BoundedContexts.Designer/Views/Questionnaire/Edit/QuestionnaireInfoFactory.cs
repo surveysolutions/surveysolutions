@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             RosterType rosterType = this.getRosterType(questionnaire: questionnaire,
                 rosterSizeSourceType: roster.RosterSizeSourceType, rosterSizeQuestionId: roster.RosterSizeQuestionId);
 
-            var parentRosterScopeIds = roster.RosterScopeIds.Take(roster.RosterScopeIds.Length - 1).ToArray();
+            var parentRosterScopeIds = roster.RosterScopeIds.Skip(1).ToArray();
             var result = new NewEditRosterView
             {
                 ItemId = roster.Id.FormatGuid(),
