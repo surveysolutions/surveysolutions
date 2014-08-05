@@ -26,7 +26,9 @@
                     $scope.activeQuestion.notPrefilledQuestionScopeOptions = result.notPrefilledQuestionScopeOptions;
                     $scope.activeQuestion.instructions = result.instructions;
                     $scope.activeQuestion.maxAnswerCount = result.maxAnswerCount;
-
+                    $scope.activeQuestion.maxAllowedAnswers = result.maxAllowedAnswers;
+                    $scope.activeQuestion.areAnswersOrdered = result.areAnswersOrdered;
+                    
                     var options = result.options || [];
                     _.each(options, function(option) {
                         option.id = utilityService.guid();

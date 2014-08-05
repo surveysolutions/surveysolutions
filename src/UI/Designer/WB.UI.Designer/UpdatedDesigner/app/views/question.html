@@ -179,7 +179,7 @@
         </div>
     </script>
 
-    <script type="text/ng-template" id="MultyOption-template.html">
+        <script type="text/ng-template" id="MultyOption-template.html">
         <div class="multyOption">
             <div class="table-holder">
                 <div class="table-row" ng-repeat="option in activeQuestion.options">
@@ -206,14 +206,14 @@
                 </div>
                 <div class="col-xs-3">
                     <div class="checkbox checkbox-in-column">
-                        <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" />
+                        <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.areAnswersOrdered" />
                         <label for="cb-is-ordered"><span></span>Ordered</label>
                     </div>
                 </div>
                 <div class="col-xs-6">
                     <div class="form-group singleline-group">
                         <label for="edit-question-max-answers-number">Maximum answers count</label>
-                        <input id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input">
+                        <input id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
                     </div>
                 </div>
             </div>
