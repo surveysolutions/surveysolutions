@@ -47,28 +47,35 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
             var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).Select(x => x.EntryId).FirstOrDefault());
 
-            IEnumerable<AtomFeedEntry<LocalQuestionnaireFeedEntry>> remoteEvents =
+            IList<AtomFeedEntry<LocalQuestionnaireFeedEntry>> remoteEvents =
                 this.feedReader
                     .ReadAfterAsync<LocalQuestionnaireFeedEntry>(this.settings.QuestionnaireChangedFeedUrl, lastStoredEntry)
-                    .Result;
+                    .Result.ToList();
 
-            this.headquartersPullContext.PushMessage(string.Format("Received {0} events from {1} feed", remoteEvents.Count(),
+            this.headquartersPullContext.PushMessage(string.Format("Received {0} events from {1} feed", remoteEvents.Count,
                 this.settings.QuestionnaireChangedFeedUrl));
 
-            foreach (var questionnaireFeedEntry in remoteEvents.Select(r=>r.Content).ToList())
+            foreach (var remoteEvent in remoteEvents)
             {
+                var questionnaireFeedEntry = remoteEvent.Content;
+
                 try
                 {
-                    if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId, questionnaireFeedEntry.QuestionnaireVersion))
+                    if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
+                        questionnaireFeedEntry.QuestionnaireVersion))
                         return;
-                    string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
-                          .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
-                          .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
-                    this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnaireDetailsUrl));
-                    QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
 
-                    this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId, questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
-                    this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId, questionnaireFeedEntry.QuestionnaireVersion, questionnaireFeedEntry.AllowCensusMode));
+                    string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
+                        .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
+                        .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
+                    this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnaireDetailsUrl));
+                    QuestionnaireDocument questionnaireDocument =
+                        this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
+
+                    this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                        questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
+                    this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                        questionnaireFeedEntry.QuestionnaireVersion, questionnaireFeedEntry.AllowCensusMode));
                 }
                 catch (AggregateException ex)
                 {
