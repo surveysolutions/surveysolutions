@@ -153,6 +153,7 @@
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="Synchronization\Interview\EntryType.cs" />
+    <Compile Include="Synchronization\Questionnaire\QuestionnaireFeedEntry.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\IInterviewDetailsDataLoader.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\IInterviewDetailsDataProcessor.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
