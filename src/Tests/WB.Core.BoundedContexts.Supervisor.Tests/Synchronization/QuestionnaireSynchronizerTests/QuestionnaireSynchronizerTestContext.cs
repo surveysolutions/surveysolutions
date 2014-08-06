@@ -23,12 +23,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
     {
         protected static QuestionnaireSynchronizer CreateQuestionnaireSynchronizer(IAtomFeedReader atomFeedReader = null,
             IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage = null, IPlainQuestionnaireRepository plainQuestionnaireRepository=null,
-            IHeadquartersQuestionnaireReader headquartersQuestionnaireReader=null)
+            IHeadquartersQuestionnaireReader headquartersQuestionnaireReader = null, HeadquartersPullContext headquartersPullContext=null)
         {
             return new QuestionnaireSynchronizer(atomFeedReader ?? Mock.Of<IAtomFeedReader>(),
                 new HeadquartersSettings(new Uri("http://localhost"), new Uri("http://localhost"), new Uri("http://localhost"), "http://localhost", "http://localhost",
                     new Uri("http://localhost"), new Uri("http://localhost")),
-                new HeadquartersPullContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
+                headquartersPullContext??new HeadquartersPullContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
                 plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>>(), Mock.Of<ILogger>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(), Mock.Of<ICommandService>(), headquartersQuestionnaireReader ??Mock.Of<IHeadquartersQuestionnaireReader>());
         }
