@@ -211,9 +211,12 @@
                     </div>
                 </div>
                 <div class="col-xs-6">
-                    <div class="form-group singleline-group">
+                    <div class="form-group singleline-group" ng-class="{'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid}">
                         <label for="edit-question-max-answers-number">Maximum answers count</label>
-                        <input id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
+                        <input name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
+                        <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern">
+                            Only integers are allowed
+                        </p>
                     </div>
                 </div>
             </div>
