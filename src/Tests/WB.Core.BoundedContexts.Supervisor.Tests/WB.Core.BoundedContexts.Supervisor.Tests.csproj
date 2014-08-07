@@ -133,6 +133,8 @@
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_one_interview_with_all_events_having_hq_synchronization_origin.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_one_interview_with_one_event_and_headquarters_returns_negative_response.cs" />
     <Compile Include="Synchronization\MockHelpers.cs" />
+    <Compile Include="Synchronization\QuestionnaireSynchronizerTests\QuestionnaireSynchronizerTestContext.cs" />
+    <Compile Include="Synchronization\QuestionnaireSynchronizerTests\when_pull_questionnaire_templates_2_invalid_entity_arrived_one_new_and_one_existing.cs" />
     <Compile Include="Synchronization\SynchronizerTests\SynchronizerTestsContext.cs" />
     <Compile Include="Synchronization\SynchronizerTests\when_pushing_interviews_to_headquarters.cs" />
     <Compile Include="Synchronization\UserChangedFeedReaderTests\when_no_events_stored_yet.cs" />

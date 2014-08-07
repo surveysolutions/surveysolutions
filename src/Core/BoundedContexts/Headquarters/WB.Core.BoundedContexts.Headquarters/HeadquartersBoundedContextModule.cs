@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 this.Kernel.RegisterDenormalizer<InterviewsFeedDenormalizer>();
                 this.Kernel.RegisterDenormalizer<VersionedQustionnaireDocumentDenormalizer>();
                 this.Kernel.RegisterDenormalizer<UsersFeedDenormalizer>();
+                this.Kernel.RegisterDenormalizer<QuestionnaireFeedDenormalizer>();
             }
         }
     }
