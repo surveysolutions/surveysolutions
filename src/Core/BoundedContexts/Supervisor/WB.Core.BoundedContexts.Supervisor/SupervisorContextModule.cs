@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.Bind<ISynchronizer>().To<Synchronizer>();
             this.Bind<IInterviewsSynchronizer>().To<InterviewsSynchronizer>();
             this.Bind<IUserChangedFeedReader>().To<UserChangedFeedReader>();
+            this.Bind<IQuestionnaireSynchronizer>().To<QuestionnaireSynchronizer>();
             this.Bind<ILocalUserFeedProcessor>().To<LocalUserFeedProcessor>();
             this.Bind<IHeadquartersUserReader>().To<HeadquartersUserReader>();
             this.Bind<IHeadquartersQuestionnaireReader>().To<HeadquartersQuestionnaireReader>();

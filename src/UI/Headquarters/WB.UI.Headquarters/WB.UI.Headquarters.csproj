@@ -278,6 +278,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
+    <Compile Include="API\Feeds\QuestionnaireFeedController.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
     <Compile Include="Code\IdentityManager.cs" />
     <Compile Include="Code\IIdentityManager.cs" />
