@@ -11,6 +11,7 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
     {
         private readonly IMaskedFormatter maskFormatter;
         private readonly EditText editor;
+        private string previousValue = null;
         public MaskedWatcher(String mask, EditText editor)
         {
             this.editor = editor;
@@ -32,10 +33,14 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
 
         public void AfterTextChanged(IEditable s)
         {
+            if (previousValue == editor.Text)
+                return;
+            
             int cursorPosition = editor.SelectionEnd;
-            var filtered = this.maskFormatter.FormatValue(editor.Text, ref cursorPosition);
+            var filtered = this.maskFormatter.FormatValue(editor.Text??"", ref cursorPosition);
             if (!string.Equals(editor.Text, filtered))
             {
+                previousValue = filtered;
                 s.Replace(0, s.Length(), filtered);
                 editor.SetSelection(cursorPosition);
             }

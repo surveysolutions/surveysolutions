@@ -44,55 +44,74 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
 
         public string FormatValue(string value, ref int oldCursorPosition)
         {
-            var stringValue = value ?? "";
-            var result = new StringBuilder();
+            bool isIncreasing = IsIncreasedValue(value);
+            
+            value = AddMaskedCharacters(value, isIncreasing, oldCursorPosition);
 
+            Console.WriteLine(value);
+
+            var result = new StringBuilder();
             int index = 0;
-            int newCursorPosition = oldCursorPosition;
-            int lastSuccessfulIndex = 0;
-            bool isLiteralAppearedAfterCursor = false;
-            bool isAddedLastCharSuccessful = false;
+
             for (int i = 0; i < this.maskChars.Length; i++)
             {
-                var oldIndex = index;
-                if (stringValue.Length > maskChars.Length && oldCursorPosition == index)
-                {
-                    index++;
-                }
-
-                if (!this.maskChars[i].Append(result, stringValue, ref index, this.Placeholder))
+                if (!this.maskChars[i].Append(result, value, ref index, this.Placeholder))
                 {
                     result.Append(this.maskChars[i][this.PlaceholderCharacter]);
                 }
-                else
+            }
+
+            oldCursorPosition = GetNewCursorPosition(value, isIncreasing, oldCursorPosition);
+
+            return result.ToString();
+        }
+
+        private bool IsIncreasedValue(string value)
+        {
+            return value.Length == 1 || value.Length > this.maskChars.Length;
+        }
+
+        private int GetNewCursorPosition(string value, bool isIncreasing, int oldCursorPosition)
+        {
+            if (oldCursorPosition > this.maskChars.Length)
+                return this.maskChars.Length;
+
+            if (!isIncreasing)
+                return oldCursorPosition;
+
+            var result = new StringBuilder();
+
+            var index = oldCursorPosition - 1;
+            for (var i = index; i < this.maskChars.Length; i++)
+            {
+                if (!this.maskChars[i].Append(result, value, ref index, this.Placeholder))
                 {
-                    if (oldIndex == oldCursorPosition - 1)
-                    {
-                        isAddedLastCharSuccessful = true;
-                    }
-                    if (oldIndex > oldCursorPosition && !isLiteralAppearedAfterCursor)
-                    {
-                        if (maskChars[i].IsLiteral())
-                            isLiteralAppearedAfterCursor = true;
-                    }
-                    if (!isLiteralAppearedAfterCursor)
-                        lastSuccessfulIndex = i;
+                    return i;
                 }
             }
 
-            if (oldCursorPosition > this.maskChars.Length)
-                newCursorPosition = this.maskChars.Length;
+            return oldCursorPosition;
+        }
 
-            if (stringValue.Length > maskChars.Length || stringValue.Length == 1)
+        private string AddMaskedCharacters(string value, bool isIncreasing, int oldCursorPosition)
+        {
+            if (isIncreasing)
             {
-                if (isAddedLastCharSuccessful)
-                    newCursorPosition = lastSuccessfulIndex + 1;
-                else
-                    newCursorPosition = oldCursorPosition - 1;
+                if (value.Length > oldCursorPosition)
+                {
+                    return value.Remove(oldCursorPosition, value.Length - this.maskChars.Length);
+                }
             }
+            else
+            {
+                return value.Insert(oldCursorPosition,
+                    new string(
+                        Enumerable.Range(0, this.maskChars.Length - value.Length)
+                            .Select(i => this.maskChars[i + oldCursorPosition][this.PlaceholderCharacter])
+                            .ToArray()));
 
-            oldCursorPosition = newCursorPosition;
-            return result.ToString();
+            }
+            return value;
         }
 
         public bool IsTextMaskMatched(string text)
