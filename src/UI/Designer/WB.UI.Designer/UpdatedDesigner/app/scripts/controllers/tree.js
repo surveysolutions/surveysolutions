@@ -375,9 +375,10 @@
                 if ($scope.isStaticText(itemToMove)) {
                     moveCommand = questionnaireService.moveStaticText;
                 }
-                if ($scope.isGroup(itemToMove)) {
+                else if ($scope.isGroup(itemToMove)) {
                     moveCommand = questionnaireService.moveGroup;
-                } else {
+                }
+                else {
                     moveCommand = questionnaireService.moveQuestion;
                 }
 
