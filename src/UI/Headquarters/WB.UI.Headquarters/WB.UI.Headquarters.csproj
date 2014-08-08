@@ -230,6 +230,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Configuration\Dima.Headquarters.Web.config" />
     <None Include="parameters.xml" />
     <Content Include="Views\Shared\HeadquartersMainMenu.cshtml" />
     <Content Include="Views\Supervisor\Create.cshtml" />
