@@ -48,8 +48,6 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             
             value = AddMaskedCharacters(value, isIncreasing, oldCursorPosition);
 
-            Console.WriteLine(value);
-
             var result = new StringBuilder();
             int index = 0;
 
@@ -62,7 +60,6 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             }
 
             oldCursorPosition = GetNewCursorPosition(value, isIncreasing, oldCursorPosition);
-
             return result.ToString();
         }
 
@@ -78,19 +75,23 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
 
             if (!isIncreasing)
                 return oldCursorPosition;
-
-            var result = new StringBuilder();
-
+        
             var index = oldCursorPosition - 1;
+
+            var result = new StringBuilder(value.Substring(0, index));
+
             for (var i = index; i < this.maskChars.Length; i++)
             {
+                if (!this.maskChars[i].IsLiteral() && index > oldCursorPosition - 1)
+                    return i;
+
                 if (!this.maskChars[i].Append(result, value, ref index, this.Placeholder))
                 {
                     return i;
                 }
             }
 
-            return oldCursorPosition;
+            return Math.Min(oldCursorPosition + 1, value.Length);
         }
 
         private string AddMaskedCharacters(string value, bool isIncreasing, int oldCursorPosition)
@@ -134,12 +135,12 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             var fixedCharacters = new List<MaskCharacter>();
             var temp = fixedCharacters;
 
-            String mask = this.Mask;
-            if (mask != null)
+            var tempMask = this.Mask;
+            if (tempMask != null)
             {
-                for (int counter = 0, maxCounter = mask.Length; counter < maxCounter; counter++)
+                for (int counter = 0, maxCounter = tempMask.Length; counter < maxCounter; counter++)
                 {
-                    char maskChar = mask[counter];
+                    char maskChar = tempMask[counter];
 
                     switch (maskChar)
                     {
@@ -157,7 +158,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
                         }
                         case AnythingKey:
                         {
-                            temp.Add(new MaskCharacter(this.InvalidCharacters, this.PlaceholderCharacter,
+                            temp.Add(new MaskCharacter(InvalidCharacters, this.PlaceholderCharacter,
                                 this.ValidCharacters));
                             break;
                         }
