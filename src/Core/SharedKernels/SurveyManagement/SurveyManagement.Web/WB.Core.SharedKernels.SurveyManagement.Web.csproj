@@ -376,6 +376,7 @@
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
     <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />
+    <EmbeddedResource Include="Views\HQ\InterviewsChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
