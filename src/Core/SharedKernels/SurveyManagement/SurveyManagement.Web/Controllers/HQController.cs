@@ -221,6 +221,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View();
         }
 
+        public ActionResult InterviewsChart()
+        {
+            this.ViewBag.ActivePage = MenuItem.InterviewsChart;
+
+            return this.View();
+        }
+
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
