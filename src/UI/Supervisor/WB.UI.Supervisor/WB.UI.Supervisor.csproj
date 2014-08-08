@@ -387,6 +387,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Configuration\Dima.Supervisor.Web.config" />
     <None Include="parameters.xml" />
     <None Include="Service References\DesignerPublicService\PublicService.disco" />
     <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
