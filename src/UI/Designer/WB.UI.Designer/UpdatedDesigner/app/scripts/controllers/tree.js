@@ -207,7 +207,7 @@
                     connectTree();
                     var movedItem = event.source.nodeScope.item;
                     var destItem = event.dest.nodesScope.item;
-                    var destGroupId = destItem ? destItem.itemId : $scope.questionnaire.chapters[0].itemId;
+                    var destGroupId = destItem ? destItem.itemId : $state.params.chapterId;
                     var putItem = function(item, parent, index) {
                         var dropFrom = item.getParentItem() || $scope;
 
