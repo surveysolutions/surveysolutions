@@ -28,6 +28,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire
         public long QuestionnaireVersion { get; set; }
         public bool AllowCensusMode { get; set; }
         public DateTime Timestamp { get; set; }
-        public string EntryId { get; private set; }
+        public string EntryId { get; set; }
     }
 }
