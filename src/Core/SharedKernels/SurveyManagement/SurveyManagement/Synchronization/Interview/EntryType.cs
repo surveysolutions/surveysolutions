@@ -4,6 +4,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview
     {
         SupervisorAssigned = 1,
         InterviewUnassigned = 2,
-        InterviewRejected = 3
+        InterviewRejected = 3, 
+        InterviewDeleted = 4
     }
 }

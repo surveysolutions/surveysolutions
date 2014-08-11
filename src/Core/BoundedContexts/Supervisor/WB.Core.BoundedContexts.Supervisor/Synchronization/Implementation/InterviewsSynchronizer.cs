@@ -134,6 +134,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                             case EntryType.InterviewUnassigned:
                                 this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
                                 break;
+                            case EntryType.InterviewDeleted:
+                                this.HardDeleteInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                break;
                             case EntryType.InterviewRejected:
                                 this.RejectInterview(interviewFeedEntry, interviewDetails);
                                 break;
@@ -228,6 +231,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             Guid userIdGuid = Guid.Parse(userId);
 
             this.executeCommand(new CancelInterviewByHQSynchronizationCommand(interviewId: interviewIdGuid, userId: userIdGuid));
+        }
+
+
+        private void HardDeleteInterview(string interviewId, string userId)
+        {
+            Guid interviewIdGuid = Guid.Parse(interviewId);
+            Guid userIdGuid = Guid.Parse(userId);
+            this.executeCommand(new HardDeleteInterview(interviewId: interviewIdGuid, userId: userIdGuid));
         }
 
         private void StoreEventsToLocalStorage()

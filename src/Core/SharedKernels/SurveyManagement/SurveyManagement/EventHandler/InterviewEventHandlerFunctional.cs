@@ -25,8 +25,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class InterviewEventHandlerFunctional : 
         AbstractFunctionalEventHandler<ViewWithSequence<InterviewData>>,
-        ICreateHandler<ViewWithSequence<InterviewData>, InterviewCreated>, 
+        ICreateHandler<ViewWithSequence<InterviewData>, InterviewCreated>,
         ICreateHandler<ViewWithSequence<InterviewData>, InterviewFromPreloadedDataCreated>,
+        ICreateHandler<ViewWithSequence<InterviewData>, InterviewOnClientCreated>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewStatusChanged>,
         IUpdateHandler<ViewWithSequence<InterviewData>, SupervisorAssigned>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewerAssigned>,
@@ -68,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, FlagSetToAnswer>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewDeclaredInvalid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, InterviewDeclaredValid>,
-        ICreateHandler<ViewWithSequence<InterviewData>, InterviewOnClientCreated>
+        IDeleteHandler<ViewWithSequence<InterviewData>, InterviewHardDeleted>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnriePropagationStructures;
@@ -812,6 +813,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var factory = new InterviewSynchronizationDtoFactory(this.questionnriePropagationStructures);
             return factory.BuildFrom(interview, userId, status, comments);
+        }
+
+        public ViewWithSequence<InterviewData> Delete(ViewWithSequence<InterviewData> currentState, IPublishedEvent<InterviewHardDeleted> evnt)
+        {
+            this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, currentState.Document.ResponsibleId);
+            return currentState;
         }
     }
 }

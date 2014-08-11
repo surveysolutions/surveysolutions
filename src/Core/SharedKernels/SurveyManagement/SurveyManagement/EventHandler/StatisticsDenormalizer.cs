@@ -16,12 +16,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     public class StatisticsDenormalizer : IEventHandler,
                                           IEventHandler<InterviewCreated>,
                                           IEventHandler<InterviewFromPreloadedDataCreated>,
+                                          IEventHandler<InterviewOnClientCreated>,
                                           IEventHandler<InterviewStatusChanged>,
                                           IEventHandler<SupervisorAssigned>,
                                           IEventHandler<InterviewDeleted>,
+                                          IEventHandler<InterviewHardDeleted>,
                                           IEventHandler<InterviewRestored>,
-                                          IEventHandler<InterviewerAssigned>,
-                                          IEventHandler<InterviewOnClientCreated>
+                                          IEventHandler<InterviewerAssigned>
 
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -90,6 +91,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
             var statistics = this.GetStatisticItem(interviewBriefItem);
             
+            interviewBriefItem.IsDeleted = true;
+            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            this.StoreStatisticsItem(interviewBriefItem, statistics);
+        }
+
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
+        {
+            var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
+            var statistics = this.GetStatisticItem(interviewBriefItem);
+
             interviewBriefItem.IsDeleted = true;
             this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             this.StoreStatisticsItem(interviewBriefItem, statistics);
