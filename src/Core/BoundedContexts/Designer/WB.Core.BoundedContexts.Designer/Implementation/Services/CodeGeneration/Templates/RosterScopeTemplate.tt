@@ -3,18 +3,21 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-    private class <#=Model.GeneratedTypeName#> : AbstractRosterLevel<<#=this.Model.GeneratedTypeName#>>, IValidatable
+    private class <#=RosterScopeModel.GeneratedTypeName#> : AbstractRosterLevel<<#=this.RosterScopeModel.GeneratedTypeName#>>, IExpressionExecutable
     {
     
-        public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, <#=this.Model.GetParentScope().GetTypeName()#> parent, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+        public <#=RosterScopeModel.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, <#=this.RosterScopeModel.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
             : this(rosterVector, rosterKey, getInstances, conditionalDependencies)
         {
             this.@__parent = parent; 
         }
 
-        private <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+        private <#=RosterScopeModel.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
         {
+
+        <#foreach (var Model in RosterScopeModel.Rosters) 
+            {#>
         //TODO: generate mandatory                
         <#foreach (var @group in Model.Groups) 
             {#>
@@ -32,32 +35,37 @@
         <#foreach (var @roster in Model.Rosters) 
         {#>    
             RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(rosterVector, identities, this, this.GetInstances, this.ConditionalDependencies));
+        <# }#> 
+
         <# }#>    
         }
     
-        private <#= Model.GetParentScope().GetTypeName()#> @__parent;
+        private <#= RosterScopeModel.ParentTypeName#> @__parent;
 
-        <#foreach (var parentQuestion in Model.GetParentScope().GetQuestions()) 
+        <#foreach (var parentQuestion in RosterScopeModel.GetParentScope().GetQuestions()) 
         {#>
         public <#=parentQuestion.GeneratedTypeName#> <#=parentQuestion.VariableName#> { get { return this.@__parent.<#=parentQuestion.VariableName#>; } }                                        
         <#}#>
 
-        <#foreach (var parentRoster in Model.GetParentScope().GetRosters()) 
+        <#foreach (var parentRoster in RosterScopeModel.GetParentScope().GetRosters()) 
         {#>
         public <#=parentRoster.GeneratedTypeName#>[] <#=parentRoster.VariableName#> { get { return this.@__parent.<#=parentRoster.VariableName#>; } }                                        
         <#}#>
                 
-        public IValidatable CopyMembers()
+        public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
         {
-            var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, this.GetInstances, ConditionalDependencies)
+            var level = new <#=RosterScopeModel.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies)
             {
                 ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
 
+        <#foreach (var Model in RosterScopeModel.Rosters) 
+            {#>
                 <#foreach (var q in Model.Questions) 
                         {#>        
                 <#=q.VariableName#> = this.<#=q.GeneratedMemberName#>,        
-                <#}#>        
+                <#}#>   
+        <#}#>        
             };
 
             ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
@@ -71,6 +79,9 @@
          
             return level;
         }
+
+        <#foreach (var Model in RosterScopeModel.Rosters) 
+            {#>
         
         <#foreach (var question in Model.Questions) 
         {#>            
@@ -117,10 +128,11 @@
         {
             get 
             {
-                var rosters = this.GetInstances(this.RosterKey);
+                var rosters = this.GetInstances(this.RosterKey, IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
                 return rosters == null ? new <#=@roster.GeneratedTypeName#>[0] : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToArray();
             }
         }
+        <# }#>
         <# }#>
         protected override IEnumerable<Action> ConditionExpressions
         {
@@ -128,6 +140,9 @@
             {
                 return new List<Action>
                 {
+                <#foreach (var Model in RosterScopeModel.Rosters) 
+                {#>
+        
                 <#foreach (var q in Model.Questions) 
                 {#>
                 <#if(!string.IsNullOrWhiteSpace(q.Conditions))
@@ -143,24 +158,25 @@
                     Verifier(<#= g.GeneratedConditionsMethodName#>, <#= g.GeneratedStateName#>.ItemId, <#= g.GeneratedStateName#>),                        
                 <# }#>
                 <#}#>
+                <#}#>
                 };
             }
         }
 
-        public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
         {
-            this.Validate(questionsToBeValid, questionsToBeInvalid);
+            this.Validate(out questionsToBeValid, out questionsToBeInvalid);
         }
              
-        public void SetParent(IValidatable parentLevel)            
+        public void SetParent(IExpressionExecutable parentLevel)            
         {
-        <#if(Model.GetParentScope() != null)
+        <#if(RosterScopeModel.GetParentScope() != null)
         {#>
-            this.@__parent = parentLevel as <#= Model.GetParentScope().GetTypeName()#>;
+            this.@__parent = parentLevel as <#= RosterScopeModel.ParentTypeName#>;
         <# }#>
         }
 
-        public IValidatable GetParent()
+        public IExpressionExecutable GetParent()
         {
             return this.@__parent;
         }

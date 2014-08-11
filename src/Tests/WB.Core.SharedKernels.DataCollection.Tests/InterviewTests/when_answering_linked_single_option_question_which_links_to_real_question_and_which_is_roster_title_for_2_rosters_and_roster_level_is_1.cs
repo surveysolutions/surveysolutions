@@ -58,6 +58,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
 
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStateProvider>(
+                CreateInterviewExpressionStateProviderStub());
+
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new RosterRowAdded(linkedToRosterId, emptyRosterVector, linkedOption1Vector[0], sortIndex: null));
             interview.Apply(new RosterRowAdded(linkedToRosterId, emptyRosterVector, linkedOption2Vector[0], sortIndex: null));

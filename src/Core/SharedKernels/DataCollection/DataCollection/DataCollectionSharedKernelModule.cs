@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection
                 this.Bind<IQuestionnaireRepository>().To<DomainQuestionnaireRepository>().InSingletonScope(); // has internal cache, so should be singleton
             }
 
+            this.Bind<IInterviewExpressionStateProvider>().To<InterviewExpressionStateProvider>();
+            
             this.Bind<IQuestionnaireFactory>().To<QuestionnaireFactory>();
 
             this.Bind(typeof(IVersionedReadSideRepositoryWriter<>)).To(typeof(VersionedReadSideRepositoryWriter<>));

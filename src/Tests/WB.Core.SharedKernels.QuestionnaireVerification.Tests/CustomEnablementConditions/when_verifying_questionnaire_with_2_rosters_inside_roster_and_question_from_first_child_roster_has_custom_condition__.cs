@@ -15,6 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablementConditions
 {
+    [Ignore("C#")]
     internal class when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition_referencing_question_from_second_child_roster_and_all_roster_size_questions_is_different : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>

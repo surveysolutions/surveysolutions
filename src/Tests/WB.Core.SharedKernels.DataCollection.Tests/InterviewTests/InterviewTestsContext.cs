@@ -64,6 +64,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire);
         }
 
+        protected static IInterviewExpressionStateProvider CreateInterviewExpressionStateProviderStub()
+        {
+            return new InterviewExpressionStateProvider();
+        }
+
         protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
         {
             Mock.Get(ServiceLocator.Current)

@@ -13,6 +13,7 @@ using it = Moq.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests.QRBarcode
 {
+    [Ignore("C#")]
     internal class when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_qr_barcode_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
