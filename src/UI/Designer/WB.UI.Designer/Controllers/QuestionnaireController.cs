@@ -8,11 +8,14 @@ using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -28,6 +31,8 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory;
@@ -52,6 +57,8 @@ namespace WB.UI.Designer.Controllers
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
             this.editQuestionnaireViewFactory = editQuestionnaireViewFactory;
+            //inject it
+            this.expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
         }
 
         public ActionResult Clone(Guid id)
@@ -68,9 +75,34 @@ namespace WB.UI.Designer.Controllers
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
             var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
 
+            
+            if (questoinnaireErrors.Any())
+            {
+                return this.Json(new VerificationResult
+                {
+                    Errors = questoinnaireErrors
+                });
+            }
+
+            GenerationResult generationResult;
+            try
+            {
+                string resultAssembly;
+                generationResult = this.expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
+            }
+            catch (Exception)
+            {
+                generationResult = new GenerationResult(false);
+                //throw;
+            }
+
+            var generationErrors = generationResult.Success == true
+                ? new QuestionnaireVerificationError[0]
+                : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
+
             return this.Json(new VerificationResult
             {
-                Errors = questoinnaireErrors
+                Errors = generationErrors
             });
         }
 

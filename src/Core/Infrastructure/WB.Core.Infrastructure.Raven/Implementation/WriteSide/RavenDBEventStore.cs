@@ -129,13 +129,13 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                     commmitedEvents.Add(ToCommittedEvent(enumerator.Current.Document));
                 }
             }
-            var lastEventSequenceReadWithStreming = commmitedEvents.Any()
+            var lastEventSequenceReadWithStreaming = commmitedEvents.Any()
                 ? commmitedEvents.Last().EventSequence + 1
                 : minVersion;
 
             commmitedEvents.AddRange(
                 this.AccumulateEvents(
-                    x => x.EventSourceId == id && x.EventSequence >= lastEventSequenceReadWithStreming && x.EventSequence <= maxVersion)
+                    x => x.EventSourceId == id && x.EventSequence >= lastEventSequenceReadWithStreaming && x.EventSequence <= maxVersion)
                     .Select(ToCommittedEvent));
 
             return new CommittedEventStream(id, commmitedEvents);

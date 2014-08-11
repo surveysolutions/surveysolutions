@@ -28,8 +28,9 @@ namespace WB.Core.SharedKernels.DataCollection
         void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
         void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
 
-        void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid);
-        void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled);
+        void ProcessValidationExpressions(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid);
+        void ProcessConditionExpressions(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled, 
+            out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled);
 
         IInterviewExpressionState Clone();
     }

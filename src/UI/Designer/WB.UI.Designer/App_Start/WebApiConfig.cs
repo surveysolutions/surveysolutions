@@ -10,7 +10,7 @@ namespace WB.UI.Designer
             //Temporary comment Web API auth during investigation how it works with Angular
             //config.MessageHandlers.Add(new BasicAuthMessageHandler());
 
-            config.MessageHandlers.Add(new HttpsVerifier());
+            //config.MessageHandlers.Add(new HttpsVerifier());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApiWithAction",

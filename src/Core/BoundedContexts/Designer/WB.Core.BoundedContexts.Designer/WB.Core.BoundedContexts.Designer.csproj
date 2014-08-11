@@ -208,6 +208,7 @@
     <Compile Include="Implementation\Services\CodeGeneration\GroupTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExecutorTemplateModel.cs" />
+    <Compile Include="Services\GenerationResult.cs" />
     <Compile Include="Services\ICodeGenerator.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnireExpressionProcessorGenerator.cs" />
@@ -217,12 +218,12 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplateExt.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterTemplate.cs">
-      <DependentUpon>RosterTemplate.tt</DependentUpon>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.cs">
+      <DependentUpon>RosterScopeTemplate.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterTemplateExt.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplateExt.cs" />
     <Compile Include="Services\IQuestionnaireWrapper.cs" />
     <Compile Include="Implementation\Services\JsonExportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />
@@ -426,9 +427,9 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>QuestionnaireLevelTemplate.cs</LastGenOutput>
     </None>
-    <None Include="Implementation\Services\CodeGeneration\Templates\RosterTemplate.tt">
+    <None Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>RosterTemplate.cs</LastGenOutput>
+      <LastGenOutput>RosterScopeTemplate.cs</LastGenOutput>
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>

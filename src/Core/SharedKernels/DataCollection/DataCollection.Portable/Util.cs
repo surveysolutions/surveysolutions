@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static string GetRosterStringKey(Identity[] scopeIds)
         {
-            return String.Join("$", scopeIds.Select(ConversionHelper.ConvertIdentityToString));
+            return String.Join("$", scopeIds.Select(ConversionHelper.ConvertIdentityToString).ToArray());
         }
 
         public static Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)
@@ -31,9 +31,32 @@ namespace WB.Core.SharedKernels.DataCollection
             return rosterScopeIds.Select(x => new Identity(x, rosterVector)).ToArray();
         }
 
+
+        public static string GetSiblingsKey(Identity[] rosterKey)
+        {
+            return GetSiblingsKey(rosterKey.Shrink(), rosterKey.Last().Id);
+        }
+
+
+        public static string GetSiblingsKey(Identity[] parentRosterKey, Guid scopeId)
+        {
+            var parentStringKey = GetRosterStringKey(parentRosterKey);
+
+            return string.IsNullOrEmpty(parentStringKey)
+                ? string.Format("{0:N}", scopeId)
+                : String.Join("$", GetRosterStringKey(parentRosterKey), string.Format("{0:N}", scopeId));
+        }
+
+        //------
+
         public static string GetSiblingsKey(Guid[] rosterScopeIds)
         {
             return String.Join("$", rosterScopeIds);
+        }
+
+        public static string GetSiblingsKey(Guid[] rosterScopeIds, Guid scopeId)
+        {
+            return String.Join("$", GetSiblingsKey(rosterScopeIds), scopeId);
         }
     }
 }

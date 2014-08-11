@@ -197,6 +197,7 @@
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_variable_name_roster_title.cs" />
     <Compile Include="CodeGenerationTests\CodeGenerationTestsContext.cs" />
+    <Compile Include="CodeGenerationTests\when_generating_assembly_with_.cs" />
     <Compile Include="CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_new_questionnaire.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
@@ -873,6 +874,10 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>

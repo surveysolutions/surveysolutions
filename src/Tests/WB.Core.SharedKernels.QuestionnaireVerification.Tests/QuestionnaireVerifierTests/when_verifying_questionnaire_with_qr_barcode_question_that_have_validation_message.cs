@@ -11,6 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
+    [Ignore("C#")]
     internal class when_verifying_questionnaire_with_qr_barcode_question_that_have_validation_message : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>

@@ -3,12 +3,12 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-    private class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>, IValidatable
+    private class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
     {
-        public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+        public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
         {
-        //TODO: generate mandatory
+        //TODO: generate mandatory 
         <#foreach (var @group in Model.Groups) 
         {#>
             EnablementStates.Add(<#=@group.GeneratedStateName#>.ItemId, <#= @group.GeneratedStateName#>);
@@ -18,8 +18,8 @@
         {#>
             EnablementStates.Add(<#=q.GeneratedStateName#>.ItemId, <#=q.GeneratedStateName#>);
         <#if(!string.IsNullOrWhiteSpace(q.Validations))
-        {#>     
-            ValidationExpressions.Add(new Identity(<#=q.Id#>, this.RosterVector), new Func<bool>[] { <#=q.GeneratedValidationsMethodName#> });
+        {#>    
+            ValidationExpressions.Add(new Identity(IdOf.<#= q.GeneratedIdName#>, this.RosterVector), new Func<bool>[] { <#=q.GeneratedValidationsMethodName#> });             
         <# }#>
             AddUpdaterToMap(IdOf.<#= q.GeneratedIdName#>, (<#=q.GeneratedTypeName#> val) => {<#=q.GeneratedMemberName#>  = val; });
         <# }#>
@@ -29,9 +29,9 @@
         <# }#>
         }                                 
 
-        public IValidatable CopyMembers()
+        public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
         {
-            var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, this.GetInstances, ConditionalDependencies)
+            var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies)
             {
                 ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -86,7 +86,7 @@
         {
             get 
             {
-                var rosters = this.GetInstances(this.RosterKey);
+                var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
                 return rosters == null ? new <#=@roster.GeneratedTypeName#>[0] : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToArray();
             }
         }
@@ -123,16 +123,16 @@
             }
         }
 
-        public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
         {
-            //this.Validate(questionsToBeValid, questionsToBeInvalid);
+            this.Validate(out questionsToBeValid, out questionsToBeInvalid);
         }
             
-        public void SetParent(IValidatable parentLevel)            
+        public void SetParent(IExpressionExecutable parentLevel)            
         {            
         }
 
-        public IValidatable GetParent()
+        public IExpressionExecutable GetParent()
         {
             return null;
         }

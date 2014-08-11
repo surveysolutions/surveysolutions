@@ -42,17 +42,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(">, IValidatable\r\n    {\r\n        public ");
+            this.Write(">, IExpressionExecutable\r\n    {\r\n        public ");
             
             #line 8 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
             #line hidden
-            this.Write(@"(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], IEnumerable<IValidatable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+            this.Write(@"(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
         {
-        //TODO: generate mandatory
+        //TODO: generate mandatory 
         ");
             
             #line 12 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
@@ -112,10 +112,10 @@ if(!string.IsNullOrWhiteSpace(q.Validations))
             
             #line default
             #line hidden
-            this.Write("     \r\n            ValidationExpressions.Add(new Identity(");
+            this.Write("    \r\n            ValidationExpressions.Add(new Identity(IdOf.");
             
             #line 22 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.Id));
+            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedIdName));
             
             #line default
             #line hidden
@@ -126,7 +126,7 @@ if(!string.IsNullOrWhiteSpace(q.Validations))
             
             #line default
             #line hidden
-            this.Write(" });\r\n        ");
+            this.Write(" });             \r\n        ");
             
             #line 23 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
  }
@@ -191,15 +191,16 @@ foreach (var @roster in Model.Rosters)
             
             #line default
             #line hidden
-            this.Write("        }                                 \r\n\r\n        public IValidatable CopyMem" +
-                    "bers()\r\n        {\r\n            var level = new ");
+            this.Write("        }                                 \r\n\r\n        public IExpressionExecutabl" +
+                    "e CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInst" +
+                    "ances)\r\n        {\r\n            var level = new ");
             
             #line 34 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
             #line hidden
-            this.Write(@"(this.RosterVector, this.RosterKey, this.GetInstances, ConditionalDependencies)
+            this.Write(@"(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies)
             {
                 ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -405,7 +406,14 @@ foreach (var @roster in Model.Rosters)
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            get \r\n            {\r\n                var rosters = this." +
-                    "GetInstances(this.RosterKey);\r\n                return rosters == null ? new ");
+                    "GetInstances(new Identity[0], IdOf.");
+            
+            #line 89 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedRosterScopeName));
+            
+            #line default
+            #line hidden
+            this.Write(".Last());\r\n                return rosters == null ? new ");
             
             #line 90 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
@@ -563,16 +571,16 @@ if(!string.IsNullOrWhiteSpace(g.Conditions))
             }
         }
 
-        public void CalculateValidationChanges(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
         {
-            //this.Validate(questionsToBeValid, questionsToBeInvalid);
+            this.Validate(out questionsToBeValid, out questionsToBeInvalid);
         }
             
-        public void SetParent(IValidatable parentLevel)            
+        public void SetParent(IExpressionExecutable parentLevel)            
         {            
         }
 
-        public IValidatable GetParent()
+        public IExpressionExecutable GetParent()
         {
             return null;
         }

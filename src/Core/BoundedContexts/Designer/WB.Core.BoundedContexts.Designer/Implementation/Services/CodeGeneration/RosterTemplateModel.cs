@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string GeneratedStateName { set; get; }
         public string GeneratedIdName { set; get; }
         public string GeneratedConditionsMethodName { set; get; }
-
         public string GeneratedRosterScopeName { set; get; }
 
         public List<QuestionTemplateModel> Questions {  set; get; }
@@ -29,6 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<RosterTemplateModel> Rosters { set; get; }
 
         public List<Guid> RosterScope { set; get; }
+
         public List<Guid> GetRosterScope()
         {
             return this.RosterScope;

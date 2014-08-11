@@ -50,6 +50,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
 
+
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStateProvider>(
+                CreateInterviewExpressionStateProviderStub());
+
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             interview.AnswerNumericIntegerQuestion(userId, propagatingQuestionId, new decimal[] { }, DateTime.Now, 4);

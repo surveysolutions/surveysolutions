@@ -42,6 +42,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
 
+
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStateProvider>(
+                CreateInterviewExpressionStateProviderStub());
+
             eventContext = new EventContext();
         };
 
