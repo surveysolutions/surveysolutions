@@ -66,7 +66,20 @@ namespace WB.Core.Synchronization.SyncStorage
                 ItemType = SyncItemType.Template,
                 IsCompressed = UseCompression,
                 Content = GetItemAsContent(doc),
-                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(version, allowCensusMode)),
+                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(doc.PublicKey,version, allowCensusMode)),
+            };
+            chunkStorageWriter.StoreChunk(syncItem, null);
+        }
+
+        public void DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion)
+        {
+            var syncItem = new SyncItem
+            {
+                Id = questionnaireId.Combine(questionnaireVersion),
+                ItemType = SyncItemType.DeleteTemplate,
+                IsCompressed = UseCompression,
+                Content = questionnaireId.ToString(),
+                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(questionnaireId, questionnaireVersion, false)),
             };
             chunkStorageWriter.StoreChunk(syncItem, null);
         }

@@ -16,10 +16,8 @@ namespace WB.UI.Supervisor.Tests.HQControllerTests
     {
         Establish context = () =>
         {
-            var questionnaireItemFactoryMock = Mock.Of<IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>>(x => x.Load(Moq.It.IsAny<QuestionnairePreloadingDataInputModel>()) == CreateQuestionnaireBrowseItem());
-
             inputModel = CreateBatchUploadModel(file: null, questionnaireId: questionnaireId);
-            controller = CreateHqController(questionnaireItemFactoryMock: questionnaireItemFactoryMock);
+            controller = CreateHqController();
 
             controller.ViewData.ModelState.Clear();
             controller.ModelState.AddModelError("File", "model is invalid");

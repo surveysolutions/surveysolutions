@@ -31,7 +31,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             var eventId = evnt.EventIdentifier.FormatGuid();
-            questionnaireFeed.Store(new QuestionnaireFeedEntry(evnt.EventSourceId, evnt.EventSequence, eventId, evnt.Payload.AllowCensusMode, evnt.EventTimeStamp), eventId);
+            var entityType = evnt.Payload.AllowCensusMode
+                ? QuestionnaireEntryType.CreateQuestionnaireInCensusMode
+                : QuestionnaireEntryType.CreateQuestionnaire;
+            questionnaireFeed.Store(new QuestionnaireFeedEntry(evnt.EventSourceId, evnt.EventSequence, eventId, entityType, evnt.EventTimeStamp), eventId);
         }
     }
 }

@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -61,21 +62,36 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
-                        questionnaireFeedEntry.QuestionnaireVersion))
-                        return;
+                    switch (questionnaireFeedEntry.EntryType)
+                    {
+                        case QuestionnaireEntryType.DeleteQuestionnaire:
+                            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireFeedEntry.QuestionnaireId,
+                                questionnaireFeedEntry.QuestionnaireVersion);
+                            this.executeCommand(new DeleteQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                                questionnaireFeedEntry.QuestionnaireVersion));
+                            break;
+                        case QuestionnaireEntryType.CreateQuestionnaire:
+                        case QuestionnaireEntryType.CreateQuestionnaireInCensusMode:
 
-                    string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
-                        .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
-                        .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
-                    this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnaireDetailsUrl));
-                    QuestionnaireDocument questionnaireDocument =
-                        this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
+                            if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
+                                questionnaireFeedEntry.QuestionnaireVersion))
+                                return;
 
-                    this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
-                        questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
-                    this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
-                        questionnaireFeedEntry.QuestionnaireVersion, questionnaireFeedEntry.AllowCensusMode));
+                            string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
+                                .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
+                                .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
+                            this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL",
+                                questionnaireDetailsUrl));
+                            QuestionnaireDocument questionnaireDocument =
+                                this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
+
+                            this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                                questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
+                            this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                                questionnaireFeedEntry.QuestionnaireVersion,
+                                questionnaireFeedEntry.EntryType == QuestionnaireEntryType.CreateQuestionnaireInCensusMode));
+                            break;
+                    }
                 }
                 catch (AggregateException ex)
                 {

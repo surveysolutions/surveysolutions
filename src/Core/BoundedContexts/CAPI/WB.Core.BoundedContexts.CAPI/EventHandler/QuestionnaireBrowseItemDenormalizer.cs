@@ -10,7 +10,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
-    public class QuestionnaireBrowseItemDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>
+    public class QuestionnaireBrowseItemDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
@@ -43,6 +43,11 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             var browseItem = new QuestionnaireBrowseItem(document, version, allowCensusMode);
             this.documentStorage.Store(browseItem, id);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            this.documentStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
         }
     }
 }

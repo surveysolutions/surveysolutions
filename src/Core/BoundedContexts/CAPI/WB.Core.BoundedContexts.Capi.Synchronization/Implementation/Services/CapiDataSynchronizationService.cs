@@ -68,6 +68,9 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
                 case SyncItemType.Template:
                     this.UpdateQuestionnaire(item);
                     break;
+                case SyncItemType.DeleteTemplate:
+                    this.DeleteQuestionnaire(item);
+                    break;
                 default: break;
             }
 
@@ -161,6 +164,22 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
             this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode));
+        }
+
+        private void DeleteQuestionnaire(SyncItem item)
+        {
+            QuestionnaireMetadata metadata;
+            try
+            {
+                metadata = this.ExtractObject<QuestionnaireMetadata>(item.MetaInfo, item.IsCompressed);
+            }
+            catch (Exception exception)
+            {
+                throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
+            }
+
+            this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
+            this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version));
         }
 
         private TResult ExtractObject<TResult>(string initialString, bool isCompressed)
