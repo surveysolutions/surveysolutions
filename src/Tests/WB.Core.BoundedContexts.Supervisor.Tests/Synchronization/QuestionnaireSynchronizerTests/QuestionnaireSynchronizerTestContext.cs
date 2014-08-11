@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.QuestionnaireSynchronizerTests
 {
@@ -38,11 +39,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
             return new AtomFeedEntry<T>(){Content = entry};
         }
 
-        protected static LocalQuestionnaireFeedEntry CreateLocalQuestionnaireFeedEntry(Guid? entryId = null, bool allowCensusMode = false,
+        protected static LocalQuestionnaireFeedEntry CreateLocalQuestionnaireFeedEntry(Guid? entryId = null, QuestionnaireEntryType questionnaireEntryType = QuestionnaireEntryType.CreateQuestionnaire,
             Guid? questionnaireId = null, long? questionnaireVersion = null)
         {
             return new LocalQuestionnaireFeedEntry(questionnaireId ?? Guid.NewGuid(), questionnaireVersion ?? 1,
-                (entryId ?? Guid.NewGuid()).FormatGuid(), allowCensusMode, DateTime.Now);
+                (entryId ?? Guid.NewGuid()).FormatGuid(), questionnaireEntryType, DateTime.Now);
         }
     }
 }

@@ -61,6 +61,7 @@
     <Compile Include="Commands\Interview\CreateInterviewCreatedOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
+    <Compile Include="Commands\Interview\HardDeleteInterview.cs" />
     <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewForTestingCommand.cs" />
     <Compile Include="Commands\Interview\HqRejectInterviewCommand.cs" />
@@ -69,6 +70,7 @@
     </Compile>
     <Compile Include="Commands\Interview\RejectInterviewFromHeadquartersCommand.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
+    <Compile Include="Commands\Questionnaire\DeleteQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
     <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
     <Compile Include="Commands\Questionnaire\RegisterPlainQuestionnaire.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Events\Interview\GroupsEnabled.cs" />
     <Compile Include="Events\Interview\InterviewApprovedByHQ.cs" />
     <Compile Include="Events\Interview\InterviewFromPreloadedDataCreated.cs" />
+    <Compile Include="Events\Interview\InterviewHardDeleted.cs" />
     <Compile Include="Events\Interview\InterviewOnClientCreated.cs" />
     <Compile Include="Events\Interview\InterviewRejectedByHQ.cs" />
     <Compile Include="Events\Interview\InterviewSentToHeadquarters.cs">
@@ -121,6 +124,7 @@
     <Compile Include="Events\Interview\RosterRowTitleChanged.cs" />
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
     <Compile Include="Events\User\UserLockedBySupervisor.cs" />
     <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />

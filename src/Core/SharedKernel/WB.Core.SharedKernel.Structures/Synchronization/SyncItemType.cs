@@ -7,5 +7,6 @@
         public const string File = "f";
         public const string User = "u";
         public const string Template = "t";
+        public const string DeleteTemplate = "dt";
     }
 }

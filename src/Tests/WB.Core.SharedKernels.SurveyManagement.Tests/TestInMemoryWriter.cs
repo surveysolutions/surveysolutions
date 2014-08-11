@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -24,6 +25,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests
         public void Remove(string id)
         {
             this.storage.Remove(id);
+        }
+
+        public void Remove(T view)
+        {
+            var keyOfItemToRemove = storage.FirstOrDefault(item => item.Value == view).Key;
+            if (string.IsNullOrEmpty(keyOfItemToRemove))
+                return;
+
+            Remove(keyOfItemToRemove);
         }
 
         public void Store(T view, string id)

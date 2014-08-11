@@ -39,6 +39,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return this.repository.GetById(GetRepositoryId(id, version));
         }
 
+        public void DeleteQuestionnaireDocument(Guid id, long version)
+        {
+            this.repository.Remove(GetRepositoryId(id, version));
+        }
+
         private static string GetRepositoryId(Guid id, long version)
         {
             return string.Format("{0}${1}", id.FormatGuid(), version);

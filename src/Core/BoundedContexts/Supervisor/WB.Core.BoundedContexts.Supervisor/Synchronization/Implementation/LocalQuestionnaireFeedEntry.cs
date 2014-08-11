@@ -11,8 +11,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
     {
         public LocalQuestionnaireFeedEntry() {}
 
-        public LocalQuestionnaireFeedEntry(Guid questionnaireId, long questionnaireVersion, string entryId, bool allowCensusMode, DateTime timestamp)
-            : base(questionnaireId, questionnaireVersion, entryId, allowCensusMode, timestamp) {}
+        public LocalQuestionnaireFeedEntry(Guid questionnaireId, long questionnaireVersion, string entryId, QuestionnaireEntryType entryType, DateTime timestamp)
+            : base(questionnaireId, questionnaireVersion, entryId, entryType, timestamp) { }
 
         public bool Processed { get; set; }
 

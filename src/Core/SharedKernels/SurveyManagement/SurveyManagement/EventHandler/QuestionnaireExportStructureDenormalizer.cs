@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler
+    public class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>, IEventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
         private readonly IQuestionnaireUpgradeService questionnaireUpgradeService;
@@ -61,6 +61,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
             this.StoreExportStructure(id, version, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            this.readsideRepositoryWriter.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            this.dataExportService.DeleteExportedDataForQuestionnaireVersion(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
         }
 
         private void StoreExportStructure(Guid id, long version, QuestionnaireDocument questionnaireDocument)

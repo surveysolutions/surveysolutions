@@ -8,12 +8,16 @@ using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.SampleRecordsAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
@@ -31,8 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
-        private readonly IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory;
-      
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
         private readonly ISampleImportService sampleImportService;
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
@@ -48,20 +51,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             ISampleImportService sampleImportService,
             IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
                 allUsersAndQuestionnairesFactory,
-            IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem> questionnairePreloadingDataItemFactory,
             IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository,
-            IPreloadedDataVerifier preloadedDataVerifier, IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory)
+            IPreloadedDataVerifier preloadedDataVerifier,
+            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
-            this.questionnairePreloadingDataItemFactory = questionnairePreloadingDataItemFactory;
             this.preloadingTemplateService = preloadingTemplateService;
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
+            this.interviews = interviews;
             this.supervisorsFactory = supervisorsFactory;
         }
 
@@ -75,6 +79,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                             new QuestionnaireBrowseInputModel() { PageSize = 1024 })
                 };
             return this.View(model);
+        }
+
+
+
+        public ActionResult Delete(Guid id, long version)
+        {
+            var interviewByQuestionnaire =
+              interviews.QueryAll(i => !i.IsDeleted && i.QuestionnaireId == id && i.QuestionnaireVersion == version);
+
+            CommandService.Execute(new DeleteQuestionnaire(id, version));
+
+            foreach (var interviewSummary in interviewByQuestionnaire)
+            {
+                try
+                {
+                    CommandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId, this.GlobalInfo.GetCurrentUser().Id));
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.Message, e);
+                }
+            }
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult Interviews(Guid? questionnaireId)
