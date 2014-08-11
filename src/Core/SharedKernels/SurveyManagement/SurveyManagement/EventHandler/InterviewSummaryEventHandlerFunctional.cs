@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary>, 
         ICreateHandler<InterviewSummary, InterviewCreated>,
         ICreateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
+        ICreateHandler<InterviewSummary, InterviewOnClientCreated>,
         IUpdateHandler<InterviewSummary, InterviewStatusChanged>,
         IUpdateHandler<InterviewSummary, SupervisorAssigned>,
         IUpdateHandler<InterviewSummary, TextQuestionAnswered>,
@@ -41,8 +42,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
-        ICreateHandler<InterviewSummary, InterviewOnClientCreated>,
-        IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>
+        IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
+        IDeleteHandler<InterviewSummary, InterviewHardDeleted>
 
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires;
@@ -266,6 +267,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 AddInterviewStatus(summary: interview, status: InterviewStatus.Deleted,
                     date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
             });
+        }
+
+        public InterviewSummary Delete(InterviewSummary currentState, IPublishedEvent<InterviewHardDeleted> evnt)
+        {
+            return currentState;
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewRestored> evnt)
