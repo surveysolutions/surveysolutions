@@ -8,11 +8,11 @@
         <div class="item-text">
             <button type="button" ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
                     ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
-            <span ng-bind-html="item.title | highlight:search.searchText"></span>
+            <span ng-bind-html="item.title | escape | highlight:search.searchText"></span>
         </div>
     </a>
     <div class="qname-block">
-        <span ng-if="item.isRoster" ng-bind-html="item.variable | highlight:search.searchText"></span>
+        <span ng-if="item.isRoster" ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
         <div class="btn-group dropdown">
             <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
             <ul class="dropdown-menu">

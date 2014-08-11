@@ -27,13 +27,13 @@
             <div class="form-group input-variable-name col-xs-4 pull-right">
                 <label for="edit-group-title" class="wb-label">Variable name<help key="variableName" /></label><br>
                 <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable"
-                       class="form-control" placeholder="Set variable">
+                       class="form-control" >
             </div>
         </div>
 
         <div class="form-group">
             <label for="edit-group-title" class="wb-label">Variable label<help key="variableLabel" /></label><br>
-            <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" placeholder="Variable label">
+            <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" >
         </div>
 
         <div class="form-group">
@@ -211,9 +211,12 @@
                     </div>
                 </div>
                 <div class="col-xs-6">
-                    <div class="form-group singleline-group">
+                    <div class="form-group singleline-group" ng-class="{'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid}">
                         <label for="edit-question-max-answers-number">Maximum answers count</label>
-                        <input id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
+                        <input name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
+                        <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern">
+                            Only integers are allowed
+                        </p>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@
             <a ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})">
                 <div class="item-text">
                     <div class="icon"></div>
-                    <span ng-bind-html="item.text | highlight:search.searchText"></span>
+                    <span ng-bind-html="item.text | escape | highlight:search.searchText"></span>
                 </div>
             </a>
 
