@@ -6,6 +6,7 @@ using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using Newtonsoft.Json;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -121,6 +122,26 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
+            }
+        }
+
+        [Test]
+        public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported_Then_QuestionnaireDeleted_Event_is_Published()
+        {
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaire();
+            var newState = CreateQuestionnaireDocumentWithOneChapter();
+            var userId = Guid.NewGuid();
+
+            using (var eventContext = new EventContext())
+            {
+                questionnaire.ImportFromDesigner(userId, newState, false);
+                // act
+                questionnaire.DeleteQuestionnaire(1);
+                // assert
+                var lastEvent = GetLastEvent<QuestionnaireDeleted>(eventContext);
+            
+                Assert.That(lastEvent.QuestionnaireVersion, Is.EqualTo(1));
             }
         }
 
