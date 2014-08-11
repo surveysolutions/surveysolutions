@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
     internal class InterviewsFeedDenormalizer : BaseDenormalizer,
         IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewRejectedByHQ>
     {
         private readonly IReadSideRepositoryWriter<InterviewFeedEntry> writer;
@@ -53,6 +54,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
             {
                 SupervisorId = interviewData.SupervisorId.GetValueOrDefault().FormatGuid(),
                 EntryType = EntryType.InterviewUnassigned,
+                Timestamp = evnt.EventTimeStamp,
+                InterviewId = evnt.EventSourceId.FormatGuid(),
+                EntryId = evnt.EventIdentifier.FormatGuid(),
+                UserId = evnt.Payload.UserId.FormatGuid()
+            }, evnt.EventIdentifier);
+        }
+
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
+        {
+            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
+
+            this.writer.Store(new InterviewFeedEntry
+            {
+                SupervisorId = interviewData.SupervisorId.GetValueOrDefault().FormatGuid(),
+                EntryType = EntryType.InterviewDeleted,
                 Timestamp = evnt.EventTimeStamp,
                 InterviewId = evnt.EventSourceId.FormatGuid(),
                 EntryId = evnt.EventIdentifier.FormatGuid(),

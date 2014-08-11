@@ -381,6 +381,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewDeleted @event) { }
 
+        private void Apply(InterviewHardDeleted @event) { }
+
         private void Apply(InterviewSentToHeadquarters @event) { }
 
         private void Apply(InterviewRestored @event) { }
@@ -1846,6 +1848,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewDeleted(userId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+        }
+
+        public void HardDelete(Guid userId)
+        {
+            this.ApplyEvent(new InterviewHardDeleted(userId));
         }
 
         public void CancelByHQSynchronization(Guid userId)
