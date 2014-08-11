@@ -235,6 +235,10 @@ namespace WB.UI.QuestionnaireTester
             this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
 
+            this.kernel.Unbind<IInterviewExpressionStateProvider>();
+            this.kernel.Bind<IInterviewExpressionStateProvider>().To<InterviewExpressionStateTesterProvider>().InSingletonScope();
+
+
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;

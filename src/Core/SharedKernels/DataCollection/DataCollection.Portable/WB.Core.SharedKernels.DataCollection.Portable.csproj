@@ -38,7 +38,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AbstractConditionalLevel.cs" />
     <Compile Include="AbstractInterviewExpressionState.cs" />
+    <Compile Include="AbstractRosterLevel.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="ExpressionProcessor.cs" />
@@ -47,7 +49,9 @@
     <Compile Include="IExpressionProcessor.cs" />
     <Compile Include="IInterviewEvaluator.cs" />
     <Compile Include="IInterviewExpressionState.cs" />
-    <Compile Include="InterviewEvaluatorPrototype.cs" />
+    <Compile Include="IInterviewExpressionStateProvider.cs" />
+    <Compile Include="InterviewExpressionStateProvider.cs" />
+    <Compile Include="IExpressionExecutable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireClasses.cs" />
     <Compile Include="StronglyTypedInterviewEvaluator.cs" />

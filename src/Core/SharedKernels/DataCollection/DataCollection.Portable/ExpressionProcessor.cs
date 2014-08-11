@@ -7,10 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public void ProcessValidationExpressions(IInterviewExpressionState interviewExpressionState, out List<Identity> questionsToBeValid,
             out List<Identity> questionsToBeInvalid)
         {
-            questionsToBeValid = new List<Identity>();
-            questionsToBeInvalid = new List<Identity>();
-
-            interviewExpressionState.ProcessValidationExpressions(questionsToBeValid, questionsToBeInvalid);
+            interviewExpressionState.ProcessValidationExpressions(out questionsToBeValid,out questionsToBeInvalid);
         }
 
         public void ProcessConditionExpressions(IInterviewExpressionState interviewExpressionState,
@@ -19,12 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection
             out List<Identity> questionsToBeEnabled,
             out List<Identity> questionsToBeDisabled)
         {
-            enabledGroups = new List<Identity>();
-            disabledGroups = new List<Identity>();
-            questionsToBeEnabled = new List<Identity>();
-            questionsToBeDisabled = new List<Identity>();
-
-            interviewExpressionState.ProcessConditionExpressions(questionsToBeEnabled, questionsToBeDisabled, enabledGroups, disabledGroups);
+            interviewExpressionState.ProcessConditionExpressions(out questionsToBeEnabled, out questionsToBeDisabled, out enabledGroups, out disabledGroups);
         }
     }
 }

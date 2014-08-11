@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
+    [Ignore("C#")]
     internal class when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_with_2_with_correct :
         QuestionnaireVerifierTestsContext
     {

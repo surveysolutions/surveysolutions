@@ -1,7 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Microsoft.CodeAnalysis.Emit;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -20,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
 
-            questionnaireDocument = CreateQuestionnaireForGeneration(Guid.NewGuid(), id);
+            questionnaireDocument = CreateQuestionnaireForGeneration(id);            
         };
 
         private Because of = () =>
@@ -30,14 +29,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             emitResult.Success.ShouldEqual(true);
 
         private It should_result_errors_count = () =>
-            emitResult.Diagnostics.Length.ShouldEqual(0);
+            emitResult.Diagnostics.Count.ShouldEqual(0);
 
         private It should_ = () =>
             resultAssembly.Length.ShouldBeGreaterThan(0);
         
         private static Guid id = Guid.Parse("11111111111111111111111111111111");
         private static string resultAssembly;
-        private static EmitResult emitResult;
+        private static GenerationResult emitResult;
 
         private static QuestionnaireDocument questionnaireDocument;
 

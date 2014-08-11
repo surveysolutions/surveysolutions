@@ -17,31 +17,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<RosterTemplateModel> AllRosters { private set; get; }
         public List<GroupTemplateModel> AllGroups { private set; get; }
 
+        public Dictionary<string, string> GeneratedScopesTypeNames { private set; get; }
+
+        public Dictionary<string, List<RosterTemplateModel>> RostersGroupedByScope { private set; get; }
+
         public Dictionary<Guid, Guid[]> ParentsMap { private set; get; }
         public Dictionary<Guid, Guid[]> RostersIdToScopeMap { private set; get; }
         public Dictionary<Guid, List<Guid>> ConditionalDependencies { private set; get; }
         public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { private set; get; }
 
-        private QuestionnaireDocument questionnaireDoc; 
-
+        
         public QuestionnaireExecutorTemplateModel(QuestionnaireDocument questionnaireDocument)
         {
             AllQuestions = new List<QuestionTemplateModel>();
             AllGroups = new List<GroupTemplateModel>();
             AllRosters = new List<RosterTemplateModel>();
 
-            this.QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel();
-            this.questionnaireDoc = questionnaireDocument;
+            GeneratedScopesTypeNames = new Dictionary<string, string>();
 
+            this.QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel();
+        
             this.Id = questionnaireDocument.PublicKey;
             this.ConditionalDependencies = this.BuildDependencyTree(questionnaireDocument);
 
 
-            this.BuildStructures();
+            this.BuildStructures(questionnaireDocument);
             
         }
 
-        private void BuildStructures()
+        private void BuildStructures(QuestionnaireDocument questionnaireDoc)
         {
             Queue<Tuple<IGroup, IRosterScope>> rostersToProcess = new Queue<Tuple<IGroup, IRosterScope>>();
             rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(questionnaireDoc, this.QuestionnaireLevelModel));
@@ -112,7 +116,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 Id = childAsIGroup.PublicKey,
                                 Conditions = childAsIGroup.ConditionExpression,
                                 VariableName = "@__" + varName, //waiting for merge roster name from default
-                                GeneratedTypeName = "@__" + varName + "_type",
+                                
+                                GeneratedTypeName = GenerateTypeNameByScope(currentRosterScope),
+                                
                                 GeneratedStateName = "@__" + varName + "_state",
                                 ParentScope = currentScope,
                                 GeneratedIdName = "@__" + varName + "_id",
@@ -134,7 +140,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             var group = 
                                 new GroupTemplateModel()
                                 {
-
                                     Id = childAsIGroup.PublicKey,
                                     Conditions = childAsIGroup.ConditionExpression,
                                     VariableName = "@__" + varName, //generating variable name by publicKey
@@ -154,6 +159,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
             }
+
+            RostersGroupedByScope = AllRosters.GroupBy(r => r.GeneratedTypeName).ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+        private string GenerateTypeNameByScope(IEnumerable<Guid> currentRosterScope)
+        {
+            var scopeStringKey = String.Join("$", currentRosterScope);
+            if (!GeneratedScopesTypeNames.ContainsKey(scopeStringKey))
+                GeneratedScopesTypeNames.Add(scopeStringKey, "@__" + Guid.NewGuid().FormatGuid());
+            
+            return GeneratedScopesTypeNames[scopeStringKey];
         }
 
         private static bool IsRosterGroup(IGroup group)

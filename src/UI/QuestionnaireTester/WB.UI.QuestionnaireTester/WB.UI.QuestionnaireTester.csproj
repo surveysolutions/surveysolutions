@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\QuestionnaireListAdapter.cs" />
+    <Compile Include="InterviewExpressionStateTesterProvider.cs" />
     <Compile Include="TesterLoggingModule.cs" />
     <Compile Include="AndroidTesterModelModule.cs" />
     <Compile Include="App.cs" />
@@ -222,6 +223,10 @@
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Rest\Rest\WB.Core.GenericSubdomains.Rest.csproj">
       <Project>{877d263d-c2fe-4a95-b98e-6017843d0746}</Project>
       <Name>WB.Core.GenericSubdomains.Rest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils.Android\WB.Core.SharedKernel.Utils.Android.csproj">
       <Project>{5f8613d4-a556-4826-8d69-9918808b113e}</Project>

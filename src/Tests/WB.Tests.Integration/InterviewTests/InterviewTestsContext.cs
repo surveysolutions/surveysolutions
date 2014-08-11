@@ -9,6 +9,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -32,6 +33,10 @@ namespace WB.Tests.Integration.InterviewTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStateProvider>())
+                .Returns(CreateInterviewExpressionStateProviderStub());
 
             return CreateInterview(questionnaireId: questionnaireId);
         }
@@ -60,6 +65,11 @@ namespace WB.Tests.Integration.InterviewTests
             return Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire
                 && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire);
+        }
+
+        protected static IInterviewExpressionStateProvider CreateInterviewExpressionStateProviderStub()
+        {
+            return new InterviewExpressionStateProvider();
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)

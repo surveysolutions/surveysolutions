@@ -4,7 +4,6 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using Android.Views;
 using Android.Widget;
 using Main.Core;
 using Main.Core.Documents;
@@ -16,6 +15,7 @@ using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Android.Helpers;
@@ -93,6 +93,8 @@ namespace WB.UI.QuestionnaireTester
                 string content = PackageHelper.DecompressString(template.Questionnaire);
                 var questionnaireDocument = JsonUtils.GetObject<QuestionnaireDocument>(content);
 
+                ServiceLocator.Current.GetInstance<IInterviewExpressionStateProvider>().StoreAssembly(questionnaireDocument.PublicKey, 0, template.QuestionnaireAssembly);
+
                 NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(questionnaireDocument));
 
                 Guid interviewUserId = Guid.NewGuid();
@@ -103,7 +105,7 @@ namespace WB.UI.QuestionnaireTester
             catch (Exception e)
             {
                 logger.Error(e.Message, e);
-                ShowLongToastInUIThread("Template is invalid for current version of Tester . Please return to Designer and change it.");
+                ShowLongToastInUIThread("Template is invalid for current version of Tester. Please return to Designer and change it.");
                 
                 return false;
             }

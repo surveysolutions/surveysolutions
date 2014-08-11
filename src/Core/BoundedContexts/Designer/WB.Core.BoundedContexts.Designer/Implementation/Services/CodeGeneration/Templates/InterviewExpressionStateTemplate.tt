@@ -20,10 +20,25 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
         }
 
-        public InterviewExpressionState(Dictionary<string, IValidatable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
+        private InterviewExpressionState(Dictionary<string, IExpressionExecutable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
         {
-            InterviewScopes = interviewScopes;
-            SiblingRosters = siblingRosters;
+            var newScopes = interviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers(this.GetRosterInstances));
+
+            var newSiblingRosters = siblingRosters
+                .ToDictionary(
+                    interviewScope => interviewScope.Key,
+                    interviewScope => new List<string>(interviewScope.Value));
+
+            //set parents
+            foreach (var interviewScope in interviewScopes)
+            {
+                var parent = interviewScope.Value.GetParent();
+                if (parent != null)
+                    newScopes[interviewScope.Key].SetParent(newScopes[Util.GetRosterStringKey(parent.GetRosterKey())]);
+            }
+
+            this.InterviewScopes = newScopes;
+            this.SiblingRosters = newSiblingRosters;
         }
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
@@ -42,19 +57,17 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             {
                 return;
             }
-
-            decimal[] parentRosterVector = outerRosterVector;
-
-            var rosterParentIdentityKey = parentRosterVector.Length == 0
+                        
+            var rosterParentIdentityKey = outerRosterVector.Length == 0
                 ? Util.GetRosterKey(new[] { IdOf.@__questionnaire }, new decimal[0])
-                : Util.GetRosterKey(rosterScopeIds.Shrink(), parentRosterVector);
+                : Util.GetRosterKey(rosterScopeIds.Shrink(), outerRosterVector);
 
             var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
 
             var rosterLevel = parent.CreateChildRosterInstance(rosterId, rosterVector, rosterIdentityKey);
 
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
-            this.SetSiblings(rosterScopeIds, rosterStringKey);
+            this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
 
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
@@ -174,21 +187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
         public override IInterviewExpressionState Clone()
         {
-            var newScopes = this.InterviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers());
-            var newSiblingRosters = this.SiblingRosters
-                .ToDictionary(
-                    interviewScope => interviewScope.Key,
-                    interviewScope => new List<string>(interviewScope.Value));
-
-            //set parents
-            foreach (var interviewScope in this.InterviewScopes)
-            {
-                var parent = interviewScope.Value.GetParent();
-                if (parent != null)
-                    newScopes[interviewScope.Key].SetParent(newScopes[Util.GetRosterStringKey(parent.GetRosterKey())]);
-            }
-
-            return new InterviewExpressionState(newScopes, newSiblingRosters);
+            return new InterviewExpressionState(this.InterviewScopes, this.SiblingRosters);
         }
 
         //generate QuestionnaireLevel
@@ -198,10 +197,10 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
          #>
 
         //generating rosters
-        <#foreach (var roster in QuestionnaireTemplateStructure.AllRosters) 
+        <#foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
            {
 
-                RosterTemplate template = new RosterTemplate(roster);
+                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup);
                 this.Write(template.TransformText());                
            }
          #>

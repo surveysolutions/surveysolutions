@@ -1,10 +1,9 @@
 ﻿using Main.Core.Documents;
-using Microsoft.CodeAnalysis.Emit;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
-    interface IExpressionProcessorGenerator
+    public interface IExpressionProcessorGenerator
     {
-        EmitResult GenerateProcessor(QuestionnaireDocument questionnaire, out string generatedAssembly);
+        GenerationResult GenerateProcessor(QuestionnaireDocument questionnaire, out string generatedAssembly);
     }
 }

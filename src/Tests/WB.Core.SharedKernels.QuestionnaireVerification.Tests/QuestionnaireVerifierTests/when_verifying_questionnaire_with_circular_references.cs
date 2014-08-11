@@ -14,6 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
+    [Ignore("C#")]
     internal class when_verifying_questionnaire_with_circular_references : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>

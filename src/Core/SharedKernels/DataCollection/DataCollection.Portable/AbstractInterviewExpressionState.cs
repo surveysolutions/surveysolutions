@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public abstract class AbstractInterviewExpressionState : IInterviewExpressionState
     {
-        public Dictionary<string, IValidatable> InterviewScopes = new Dictionary<string, IValidatable>();
+        public Dictionary<string, IExpressionExecutable> InterviewScopes = new Dictionary<string, IExpressionExecutable>();
         public Dictionary<string, List<string>> SiblingRosters = new Dictionary<string, List<string>>();
 
         public abstract void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
@@ -19,16 +19,23 @@ namespace WB.Core.SharedKernels.DataCollection
         public abstract void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer);
         public abstract void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer);
         public abstract void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer);
-        public abstract void UpdateGeoLocationAnswer(Guid questionId, decimal[] propagationVector, double latitude, double longitude, double accuracy);
+
+        public abstract void UpdateGeoLocationAnswer(Guid questionId, decimal[] propagationVector, double latitude, double longitude,
+            double accuracy);
+
         public abstract void UpdateTextListAnswer(Guid questionId, decimal[] propagationVector, Tuple<decimal, string>[] answers);
-        public abstract void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[] selectedPropagationVector);
-        public abstract void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] propagationVector, decimal[][] selectedPropagationVectors);
+
+        public abstract void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] propagationVector,
+            decimal[] selectedPropagationVector);
+
+        public abstract void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] propagationVector,
+            decimal[][] selectedPropagationVectors);
 
         public abstract Dictionary<Guid, Guid[]> GetParentsMap();
 
         public abstract IInterviewExpressionState Clone();
 
-        
+
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
             foreach (var identity in invalidQuestions)
@@ -95,8 +102,7 @@ namespace WB.Core.SharedKernels.DataCollection
             }
         }
 
-        
-        protected IValidatable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
+        protected IExpressionExecutable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
         {
             var parentsMap = this.GetParentsMap();
             if (!parentsMap.ContainsKey(questionId))
@@ -107,39 +113,62 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.InterviewScopes.ContainsKey(rosterStringKey) ? this.InterviewScopes[rosterStringKey] : null;
         }
 
-        public void ProcessValidationExpressions(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid)
+        public void ProcessValidationExpressions(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
         {
+            questionsToBeValid = new List<Identity>();
+            questionsToBeInvalid = new List<Identity>();
+
             foreach (var interviewScopeKvp in this.InterviewScopes)
             {
-                interviewScopeKvp.Value.CalculateValidationChanges(questionsToBeValid, questionsToBeInvalid);
+                List<Identity> questionsToBeValidByScope;
+                List<Identity> questionsToBeInvalidByScope;
+
+                interviewScopeKvp.Value.CalculateValidationChanges(out questionsToBeValidByScope,out questionsToBeInvalidByScope);
+
+                questionsToBeValid.AddRange(questionsToBeValidByScope);
+                questionsToBeInvalid.AddRange(questionsToBeInvalidByScope);
             }
         }
 
-        public void ProcessConditionExpressions(List<Identity> questionsToBeEnabled, List<Identity> questionsToBeDisabled, 
-            List<Identity> groupsToBeEnabled, List<Identity> groupsToBeDisabled)
+        public void ProcessConditionExpressions(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,
+            out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled)
         {
+            questionsToBeEnabled = new List<Identity>();
+            questionsToBeDisabled = new List<Identity>();
+            groupsToBeEnabled = new List<Identity>();
+            groupsToBeDisabled = new List<Identity>();
+
             foreach (var interviewScopeKvp in this.InterviewScopes)
             {
-                interviewScopeKvp.Value.CalculateConditionChanges(questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled);
+                List<Identity> questionsToBeEnabledArray;
+                List<Identity> questionsToBeDisabledArray;
+                List<Identity> groupsToBeEnabledArray;
+                List<Identity> groupsToBeDisabledArray;
+
+                interviewScopeKvp.Value.CalculateConditionChanges(out questionsToBeEnabledArray, out questionsToBeDisabledArray, out groupsToBeEnabledArray,
+                    out groupsToBeDisabledArray);
+
+                questionsToBeEnabled.AddRange(questionsToBeEnabledArray);
+                questionsToBeDisabled.AddRange(questionsToBeDisabledArray);
+                groupsToBeEnabled.AddRange(groupsToBeEnabledArray);
+                groupsToBeDisabled.AddRange(groupsToBeDisabledArray);
             }
         }
 
-        
-        public IEnumerable<IValidatable> GetRosterInstances(Identity[] rostrerKey)
+        public IEnumerable<IExpressionExecutable> GetRosterInstances(Identity[] rosterKey, Guid scopeId)
         {
-            var siblingsKey = Util.GetSiblingsKey(rostrerKey.Select(x => x.Id).ToArray());
+            var siblingsKey = Util.GetSiblingsKey(rosterKey, scopeId);
 
-            var siblingRosters = this.SiblingRosters.ContainsKey(siblingsKey) ?
-                this.SiblingRosters[siblingsKey].Select(x => this.InterviewScopes[x])
+            var siblingRosters = this.SiblingRosters.ContainsKey(siblingsKey)
+                ? this.SiblingRosters[siblingsKey].Select(x => this.InterviewScopes[x])
                 : null;
 
             return siblingRosters;
-
         }
 
-        protected void SetSiblings(Guid[] rosterScopeIds, string rosterStringKey)
+        protected void SetSiblings(Identity[] rosterKey, string rosterStringKey)
         {
-            var siblingsKey = Util.GetSiblingsKey(rosterScopeIds);
+            var siblingsKey = Util.GetSiblingsKey(rosterKey);
 
             if (!this.SiblingRosters.ContainsKey(siblingsKey))
             {
