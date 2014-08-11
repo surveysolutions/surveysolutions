@@ -6,13 +6,13 @@
             <a ui-sref="questionnaire.chapter.question({itemId: item.itemId})">
                 <div class="item-text">
                     <div class="icon {{answerTypeClass[item.type]}}"></div>
-                    <span ng-bind-html="item.title | highlight:search.searchText"></span>
+                    <span ng-bind-html="item.title | escape | highlight:search.searchText"></span>
                 </div>
             </a>
 
             <div class="qname-block">
                 <a ng-if="item.linkedToQuestionId" href="javascript:void(0);" class="linked"></a>
-                <span ng-bind-html="item.variable | highlight:search.searchText"></span>
+                <span ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
 
                 <div class="btn-group dropdown">
                     <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
