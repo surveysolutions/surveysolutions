@@ -36,6 +36,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.plainQuestionnaire = new PlainQuestionnaire(e.Source, () => this.Version);
         }
 
+        protected internal void Apply(QuestionnaireDeleted e)
+        {
+            
+        }
+
         private void Apply(PlainQuestionnaireRegistered e)
         {
             this.isProxyToPlainQuestionnaireRepository = true;
@@ -131,6 +136,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ImportFromDesignerForTester(IQuestionnaireDocument source)
         {
             ImportFromQuestionnaireDocument(source);
+        }
+
+        public void DeleteQuestionnaire(long questionnaireVersion)
+        {
+            this.ApplyEvent(new QuestionnaireDeleted() { QuestionnaireVersion = questionnaireVersion });
         }
 
         public void RegisterPlainQuestionnaire(Guid id, long version, bool allowCensusMode)

@@ -13,7 +13,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler
+    public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>, IEventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
@@ -50,6 +50,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode);
         }
 
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            this.documentStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            this.synchronizationDataStorage.DeleteQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+        }
+
         private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode)
         {
             var document = questionnaireDocument.Clone() as QuestionnaireDocument;
@@ -63,6 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 id);
 
             this.synchronizationDataStorage.SaveQuestionnaire(document, version, allowCensusMode);
+            
         }
 
         public string Name

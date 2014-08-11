@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.Questionnaire.Questionnaire
                     x.QuestionnaireId == templateImportedEvent.EventSourceId &&
                     x.QuestionnaireVersion==templateImportedEvent.EventSequence &&
                     x.Timestamp == templateImportedEvent.EventTimeStamp &&
-                    x.AllowCensusMode == true &&
+                    x.EntryType == QuestionnaireEntryType.CreateQuestionnaireInCensusMode &&
                     x.EntryId == templateImportedEvent.EventIdentifier.FormatGuid()),
                 templateImportedEvent.EventIdentifier.FormatGuid());
 

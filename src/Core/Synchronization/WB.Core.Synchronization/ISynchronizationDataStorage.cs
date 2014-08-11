@@ -17,5 +17,6 @@ namespace WB.Core.Synchronization
         void SaveUser(UserDocument doc);
         SyncItem GetLatestVersion(Guid id);
         IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(long sequence, Guid userId);
+        void DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion);
     }
 }

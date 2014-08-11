@@ -109,6 +109,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.dataFileExportService.CreateHeaderForActionFile(this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
         }
 
+        public void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion)
+        {
+            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
+            if (this.fileSystemAccessor.IsDirectoryExists(dataFolderForTemplatePath))
+            {
+                this.fileSystemAccessor.DeleteDirectory(dataFolderForTemplatePath);
+            }
+        }
+
         public void AddExportedDataByInterview(InterviewDataExportView interviewDataExportView)
         {
             var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);

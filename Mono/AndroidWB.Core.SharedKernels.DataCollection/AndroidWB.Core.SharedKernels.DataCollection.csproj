@@ -132,6 +132,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\DeleteInterviewCommand.cs">
       <Link>Commands\Interview\DeleteInterviewCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\HardDeleteInterview.cs">
+      <Link>Commands\Interview\HardDeleteInterview.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\HqApproveInterviewCommand.cs">
       <Link>Commands\Interview\HqApproveInterviewCommand.cs</Link>
     </Compile>
@@ -170,6 +173,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs">
       <Link>Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\DeleteQuestionnaire.cs">
+      <Link>Commands\Questionnaire\DeleteQuestionnaire.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Questionnaire\ImportFromDesigner.cs">
       <Link>Commands\Questionnaire\ImportFromDesigner.cs</Link>
@@ -342,6 +348,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\InterviewFromPreloadedDataCreated.cs">
       <Link>Events\Interview\InterviewFromPreloadedDataCreated.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\InterviewHardDeleted.cs">
+      <Link>Events\Interview\InterviewHardDeleted.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\InterviewOnClientCreated.cs">
       <Link>Events\Interview\InterviewOnClientCreated.cs</Link>
     </Compile>
@@ -434,6 +443,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\PlainQuestionnaireRegistered.cs">
       <Link>Events\Questionnaire\PlainQuestionnaireRegistered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\QuestionnaireDeleted.cs">
+      <Link>Events\Questionnaire\QuestionnaireDeleted.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\TemplateImported.cs">
       <Link>Events\Questionnaire\TemplateImported.cs</Link>
