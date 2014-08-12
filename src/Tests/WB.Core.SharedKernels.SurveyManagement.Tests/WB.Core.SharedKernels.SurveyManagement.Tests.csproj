@@ -125,6 +125,7 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_GrpupPropagated_event_recived_and_new_roster_row_need_to_be_removed.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_handling_answer_for_roster_title_text_question_that_is_title_.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewCreated_event_recived.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewHardDeleted_event_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewOnClientCreated_event_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_assigned_to_interviewer_in_RejectedByHQ_status.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApprovedByHQ_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApprovedByHQ_event.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewHardDeleted_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SynchronizationMetadataApplied_event_and_interview_was_created_on_capi.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApproved_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApproved_event.cs" />
@@ -193,6 +195,10 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewCreated_event.cs" />
+    <Compile Include="EventHandlers\Interview\StatisticsDenormalizerTests\when_interview_hard_deleted_event_recived_.cs" />
+    <Compile Include="EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_QuestionnaireDeleted_event_recived.cs" />
+    <Compile Include="EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
+    <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_questions_one_with_var_lable_other_without.cs" />
     <Compile Include="InterviewSynchronizationDtoFactoryTests\when_build_from_interview_created_onclient.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_static_text.cs" />
@@ -209,6 +215,7 @@
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_AddRecord_called_for_interview_export_view.cs" />
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewActionFileName_is_called.cs" />
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewExportedDataFileName_called_for_level_name.cs" />
+    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_DeleteExportedDataForQuestionnaireVersion_is_called_and_directory_is_present.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_2_capi_packages_and_max_per_process_is_1.cs" />

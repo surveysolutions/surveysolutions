@@ -8,6 +8,7 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -30,6 +31,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
             {
                 Source = questionnaireDocument
             }, questionnaireDocument.PublicKey);
+        }
+
+        protected static IPublishedEvent<QuestionnaireDeleted> CreateQuestionnaireDeletedEvent(Guid? questionnaireId = null,  long? version=null)
+        {
+            questionnaireId = questionnaireId ?? Guid.NewGuid();
+            return ToPublishedEvent(new QuestionnaireDeleted
+            {
+                QuestionnaireVersion = version ?? 1
+            }, questionnaireId);
         }
 
         protected static QuestionnaireQuestionsInfoDenormalizer CreateQuestionnaireQuestionsInfoDenormalizer(IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires = null)
