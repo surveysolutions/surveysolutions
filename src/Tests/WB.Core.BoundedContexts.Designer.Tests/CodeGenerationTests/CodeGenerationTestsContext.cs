@@ -102,7 +102,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId};
 
             Guid chapterId = Guid.Parse("23232323232323232323232323232323");
-            
+            Guid roster1Id = Guid.Parse("23232323232323232323232323232311");
+            Guid roster2Id = Guid.Parse("23232323232323232323232323232111");
+
             questionnaireDocument.AddChapter(chapterId);
 
             questionnaireDocument.Add(new NumericQuestion()
@@ -115,6 +117,25 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             }, chapterId, null);
 
+            questionnaireDocument.Add(new Group()
+            {
+                PublicKey = roster1Id,
+                VariableName = "roster1",
+                IsRoster = true,
+                RosterSizeQuestionId = questionId,
+                RosterSizeSource = RosterSizeSourceType.Question
+
+            }, chapterId, null);
+
+            questionnaireDocument.Add(new Group()
+            {
+                PublicKey = roster2Id,
+                VariableName = "roster2",
+                IsRoster = true,
+                RosterSizeQuestionId = questionId,
+                RosterSizeSource = RosterSizeSourceType.Question
+
+            }, chapterId, null);
 
             return questionnaireDocument;
         }
