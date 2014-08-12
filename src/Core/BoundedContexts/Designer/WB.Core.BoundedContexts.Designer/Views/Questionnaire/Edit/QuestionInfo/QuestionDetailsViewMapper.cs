@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             questionView.QuestionScope = question.QuestionScope;
             questionView.Title = question.QuestionText;
             questionView.VariableName = question.StataExportCaption;
+            questionView.VariableLabel = question.VariableLabel;
             questionView.EnablementCondition = question.ConditionExpression;
             questionView.ValidationExpression = question.ValidationExpression;
             questionView.ValidationMessage = question.ValidationMessage;
@@ -64,6 +65,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 var listQuestionView = ((TextListDetailsView)questionView);
                 listQuestionView.MaxAnswerCount = listQuestion.MaxAnswerCount;
                 return listQuestionView;
+            }
+
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+                var textQuestionView = questionView as TextDetailsView;
+                if (textQuestionView != null)
+                {
+                    textQuestionView.Mask = textQuestion.Mask;
+                    return textQuestionView;
+                }
             }
 
             return questionView;

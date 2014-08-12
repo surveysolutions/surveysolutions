@@ -2,7 +2,6 @@
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Views.Account;
-using WB.UI.Designer.Providers.CQRS;
 
 namespace WB.UI.Designer
 {

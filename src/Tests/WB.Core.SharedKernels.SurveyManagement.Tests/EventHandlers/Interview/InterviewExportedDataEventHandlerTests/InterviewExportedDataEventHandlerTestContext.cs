@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -9,9 +11,11 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -63,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
             var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
             var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
-                new QuestionnaireRosterStructureFactory());
+                new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
             questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
                 .Returns(exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1));
 
@@ -147,9 +151,61 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             return publishableEventMock.Object;
         }
 
+        protected static IPublishedEvent<T> CreatePublishableEventByEventInstance<T>(T eventInstance, Guid? eventSourceId = null)
+        {
+            var publishableEventMock = new Mock<IPublishedEvent<T>>();
+
+            publishableEventMock.Setup(x => x.Payload).Returns(eventInstance);
+            publishableEventMock.Setup(x => x.EventSourceId).Returns(eventSourceId ?? Guid.NewGuid());
+
+            return publishableEventMock.Object;
+        }
+
         protected static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)
         {
             return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelVector.SequenceEqual(levelVector));
+        }
+
+        protected static List<QuestionAnswered> ListOfQuestionAnsweredEventsHandledByDenormalizer
+        {
+            get
+            {
+                return new List<QuestionAnswered>
+                {
+                    new TextQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, "answer"),
+                    new MultipleOptionsQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new decimal[0]),
+                    new SingleOptionQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1),
+                    new NumericRealQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1),
+                    new NumericQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1),
+                    new NumericIntegerQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1),
+                    new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, DateTime.Now),
+                    new GeoLocationQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, 1,1,1,1, DateTime.Now),
+                    new MultipleOptionsLinkedQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new decimal[0][]),
+                    new SingleOptionLinkedQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new decimal[0]),
+                    new TextListQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new Tuple<decimal, string>[0]),
+                    new QRBarcodeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, "answer")
+                };
+            }
+        }
+
+        protected static void HandleQuestionAnsweredEventsByDenormalizer(InterviewExportedDataDenormalizer denormalizer, Dictionary<Guid, Tuple<QuestionAnswered, InterviewActionLog>> eventsAndInterviewActionLog)
+        {
+            foreach (var eventAndInterviewActionLog in eventsAndInterviewActionLog)
+            {
+                var eventType = eventAndInterviewActionLog.Value.Item1.GetType();
+                var publishedEventType = typeof(IPublishedEvent<>).MakeGenericType(eventType);
+                MethodInfo createPublishableEventByEventInstanceMethod =
+                    typeof (InterviewExportedDataEventHandlerTestContext).GetMethod("CreatePublishableEventByEventInstance",
+                        BindingFlags.NonPublic | BindingFlags.Static);
+                MethodInfo genericCreatePublishableEventByEventInstanceMethod =
+                    createPublishableEventByEventInstanceMethod.MakeGenericMethod(eventType);
+                var publishedEvent = genericCreatePublishableEventByEventInstanceMethod.Invoke(null,
+                    new object[] { eventAndInterviewActionLog.Value.Item1, eventAndInterviewActionLog.Key });
+
+                MethodInfo methodInfo = denormalizer.GetType().GetMethod("Handle", new[] { publishedEventType });
+
+                methodInfo.Invoke(denormalizer, new[] { publishedEvent });
+            }
         }
     }
 

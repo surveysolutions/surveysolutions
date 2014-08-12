@@ -40,6 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneDateTimeQuestionHandlerTes
                     questionId: questionId,
                     title: title,
                     variableName: notUniqueVariableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,

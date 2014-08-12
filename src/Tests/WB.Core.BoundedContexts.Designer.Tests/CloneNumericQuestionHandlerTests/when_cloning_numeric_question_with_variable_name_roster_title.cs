@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateNumericQuestionHandlerTes
             exception =
                 Catch.Exception(
                     () =>
-                        questionnaire.CloneNumericQuestion(Guid.NewGuid(), chapterId, "title", rosterTitle, false, false,
+                        questionnaire.CloneNumericQuestion(Guid.NewGuid(), chapterId, "title", rosterTitle,null, false, false,
                             QuestionScope.Interviewer, null, null, null, null,
                             responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null,
                             maxValue: null, sourceQuestionId: questionId, targetIndex: 1));

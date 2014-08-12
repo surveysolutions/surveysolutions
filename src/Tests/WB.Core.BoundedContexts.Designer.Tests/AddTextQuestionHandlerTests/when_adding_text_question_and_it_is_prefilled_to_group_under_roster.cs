@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
                     parentGroupId: groupFromRosterId,
                     title: title,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPrefilled,
                     scope: QuestionScope.Interviewer,
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                     mask: null,
                     responsibleId: responsibleId));
 
         It should_throw_QuestionnaireException = () =>

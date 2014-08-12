@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     questionId: notExistingQuestionId,
                     title: title,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,

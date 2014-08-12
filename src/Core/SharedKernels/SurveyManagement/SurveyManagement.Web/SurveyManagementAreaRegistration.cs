@@ -96,6 +96,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/Math.uuid.js",
                     "~/Scripts/viewmodels/pages/interview/custom.js",
                     "~/Scripts/lodash.underscore.js",
+                    "~/Scripts/jquery.maskedinput.js"
                 }
             },
             {
@@ -115,6 +116,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
                     "~/Scripts/viewmodels/pages/interview/details/interviewdetailssettings.js",
                     "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js",
+                }
+            },
+            {
+                "~/js/map-report", new[]
+                {
+                    "~/Scripts/lodash.underscore.js",
+                    "~/Scripts/markerclusterer_compiled.js",
+                    "~/Scripts/infobubble.js",
+                    "~/Scripts/viewmodels/pages/mapreport.js",
                 }
             },
         };

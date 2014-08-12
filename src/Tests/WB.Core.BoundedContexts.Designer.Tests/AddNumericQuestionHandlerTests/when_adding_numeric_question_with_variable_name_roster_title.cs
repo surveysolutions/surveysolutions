@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddNumericQuestionHandlerTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => questionnaire.AddNumericQuestion(questionId, chapterId, "title", rosterTitle, false, false, QuestionScope.Interviewer, null, null, null, null,
+            exception = Catch.Exception(() => questionnaire.AddNumericQuestion(questionId, chapterId, "title", rosterTitle,null, false, false, QuestionScope.Interviewer, null, null, null, null,
                 responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null,
                 maxValue: null));
 

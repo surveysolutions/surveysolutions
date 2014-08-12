@@ -132,7 +132,6 @@
     <Compile Include="CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__DeleteQuestion__with_questionnaire_id_and_question_id.cs" />
-    <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
     <Compile Include="Integration\ZipUtilsTests.cs" />
     <Compile Include="MessageHandlerTests\MessageHandlerTestContext.cs" />
@@ -141,6 +140,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireApiControllerTests\QuestionnaireApiControllerTestContext.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_getting_absent_chapter.cs" />
+    <Compile Include="QuestionnaireApiControllerTests\when_getting_existing_static_text.cs" />
+    <Compile Include="QuestionnaireApiControllerTests\when_getting_not_existing_static_text.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
     <Compile Include="QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
@@ -150,7 +151,6 @@
     <Compile Include="VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -183,10 +183,6 @@
     <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
-      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
-      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>

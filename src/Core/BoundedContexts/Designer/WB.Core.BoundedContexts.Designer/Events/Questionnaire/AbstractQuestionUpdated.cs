@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public bool IsMandatory { get; set; }
         public string Title { get; set; }
         public string VariableName { get; set; }
+        public string VariableLabel { get; set; }
     }
 }

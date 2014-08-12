@@ -23,13 +23,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     {
         protected static FileBasedDataExportService CreateFileBasedDataExportService(
             IFileSystemAccessor fileSystemAccessor = null, IDataFileExportService dataFileExportService = null,
-            IEnvironmentContentService environmentContentService = null, IDataFileService preloadedDataService = null)
+            IEnvironmentContentService environmentContentService = null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new FileBasedDataExportService(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "",
                 dataFileExportService ?? Mock.Of<IDataFileExportService>(),
                 environmentContentService ?? Mock.Of<IEnvironmentContentService>(), currentFileSystemAccessor,
-                preloadedDataService ?? new DataFileService(currentFileSystemAccessor),
                 Mock.Of<ILogger>());
         }
 

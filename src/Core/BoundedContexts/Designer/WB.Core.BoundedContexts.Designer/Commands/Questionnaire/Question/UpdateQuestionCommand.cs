@@ -7,15 +7,15 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "NewUpdateQuestion")]
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "UpdateQuestion")]
     public class UpdateQuestionCommand : FullQuestionDataCommand
     {
         public UpdateQuestionCommand(
             Guid questionnaireId, 
             Guid questionId,
             string title, 
-            QuestionType type, 
-            string variableName,
+            QuestionType type,
+            string variableName, string variableLabel, string mask,
             bool isMandatory, 
             bool isPreFilled,
             QuestionScope scope, 
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             bool areAnswersOrdered, 
             int? maxAllowedAnswers)
 
-            : base(questionnaireId, questionId, title, type, variableName, isMandatory, isPreFilled,
+            : base(questionnaireId, questionId, title, type, variableName, variableLabel,mask, isMandatory, isPreFilled,
                 scope, enablementCondition, validationExpression, validationMessage, instructions, options, responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers) { }
     }
 }

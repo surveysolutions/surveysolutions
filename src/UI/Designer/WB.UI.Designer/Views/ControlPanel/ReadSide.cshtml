@@ -1,6 +1,6 @@
 ﻿@{
     
-    Layout = "~/Views/Shared/Layout.empty.cshtml";
+    this.Layout = "~/Views/Shared/Layout.admin.cshtml";
     this.ViewBag.Title = "Control Panel: Read Side";
 }
 @model IEnumerable<WB.Core.Infrastructure.EventHandlerDescription>
@@ -40,9 +40,9 @@ Requesting status...
       
     </ul>
    
-    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn ", onclick="return confirmAction()" })
-    <button class="btn" type="submit" onclick="return confirmAction()">Rebuild Selected</button>
-    @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn " })
+    @Html.ActionLink("Rebuild All", "RebuildReadSide", new { }, new { @class = "btn btn-primary", onclick="return confirmAction()" })
+    <button class="btn btn-default" type="submit" onclick="return confirmAction()">Rebuild Selected</button>
+    @Html.ActionLink("Stop", "StopReadSideRebuilding", new { }, new { @class = "btn btn-default" })
 }
 
 @functions{
@@ -58,8 +58,6 @@ Requesting status...
 }
 @section scripts
 {
-    @Scripts.Render("~/simplepage")
-
     <script type="text/javascript">
 
         function updateReadSideStatus() {

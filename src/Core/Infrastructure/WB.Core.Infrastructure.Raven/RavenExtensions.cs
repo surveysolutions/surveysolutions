@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
+using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Connection;
+using Raven.Client.Document;
 using Raven.Client.Extensions;
 
 namespace WB.Core.Infrastructure.Raven
@@ -43,6 +46,35 @@ namespace WB.Core.Infrastructure.Raven
                 throw new Exception(string.Format("Failed to create '{0}' database", databaseName), ex);
             }
             
+        }
+
+        public static void ActivateBundles(this IDocumentStore documentStore, string activeBundles, string database = null)
+        {
+            if(string.IsNullOrEmpty(activeBundles))
+                return;
+            var bundles = activeBundles.Split(';');
+            foreach (var bundle in bundles)
+            {
+                documentStore.ActivateBundle(bundle, database);
+            }
+        }
+
+        public static void ActivateBundle(this IDocumentStore documentStore, string bundleName, string databaseName)
+        {
+            using (var session = documentStore.OpenSession())
+            {
+                var databaseDocument = session.Load<DatabaseDocument>("Raven/Databases/" + databaseName);
+                if(databaseDocument==null)
+                    return;
+                var databaseDocumentSettings = databaseDocument.Settings;
+                var activeBundles = databaseDocumentSettings.ContainsKey(Constants.ActiveBundles) ? databaseDocumentSettings[Constants.ActiveBundles] : null;
+                if (string.IsNullOrEmpty(activeBundles))
+                    databaseDocumentSettings[Constants.ActiveBundles] = bundleName;
+                else if (!activeBundles.Split(';').Contains(bundleName, StringComparer.OrdinalIgnoreCase))
+                    databaseDocumentSettings[Constants.ActiveBundles] = activeBundles + ";" + bundleName;
+
+                session.SaveChanges();
+            }
         }
     }
 }

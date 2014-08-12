@@ -101,6 +101,8 @@
                 question.isSelected(true);
 
                 question.alias.valueHasMutated();
+                question.variableLabel.valueHasMutated();
+                question.mask.valueHasMutated();
                 question.qtype.valueHasMutated();
                 question.selectedLinkTo.valueHasMutated();
                 question.answerOptions.valueHasMutated();
@@ -123,6 +125,7 @@
                 group.isSelected(true);
                 group.allowedQuestions(datacontext.questions.getAllAllowedQuestionsForSelect());
                 group.rosterSizeQuestion.valueHasMutated();
+                group.variableName.valueHasMutated();
                 selectedGroup(group);
                 openDetails("show-group");
             },
@@ -461,7 +464,7 @@
                     return;
                 }
 
-                if (isDropedOutsideAnyChapter) {
+                if (isDropedOutsideAnyChapter && moveItemType == "group" && arg.item.isRoster()) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveAutoPropagatedGroupOutsideGroup);
                     return;

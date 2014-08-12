@@ -148,6 +148,7 @@
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewerController.cs" />
+    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\IGridRequest.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
+    <Compile Include="Models\InterviewSummaryViewModel.cs" />
     <Compile Include="Models\InterviewDetailsViewModel.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
     <Compile Include="Models\InterviewModel.cs" />
@@ -372,6 +374,8 @@
     <EmbeddedResource Include="Views\Shared\SupervisorMainMenu.cshtml" />
     <EmbeddedResource Include="Views\Shared\_AdminLayout.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
+    <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
+    <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
@@ -447,6 +451,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\infobubble.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\jquery.maskedinput.js" />
+    <EmbeddedResource Include="Scripts\jquery.maskedinput.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

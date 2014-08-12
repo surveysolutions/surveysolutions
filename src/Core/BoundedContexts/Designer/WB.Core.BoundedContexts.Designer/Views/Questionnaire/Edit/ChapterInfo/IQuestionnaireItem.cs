@@ -3,5 +3,6 @@
     public interface IQuestionnaireItem
     {
         string ItemId { get; }
+        ChapterItemType ItemType { get; }
     }
 }

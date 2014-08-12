@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateTextQuestionHandlerTests
                     questionId: questionId,
                     title: title,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
@@ -41,17 +42,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateTextQuestionHandlerTests
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                     mask: null,
                     responsibleId: responsibleId
          
                     ));
 
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        It should_throw_exception_with_message_containting__empty__variable__ = () =>
-            new[] { "empty", "variable" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
+        It should_not_throw_exception = () => exception.ShouldBeNull();
 
         private static Questionnaire questionnaire;
         private static Exception exception;

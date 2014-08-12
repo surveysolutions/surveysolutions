@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             exception =
                 Catch.Exception(
                     () =>
-                        questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: "title",
+                        questionnaire.AddGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
                             rosterSizeQuestionId: rosterSizeQuestionId, condition: null, description: null, parentGroupId: chapterId,
                             isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: rosterFixedTitles,
                             rosterTitleQuestionId: null));

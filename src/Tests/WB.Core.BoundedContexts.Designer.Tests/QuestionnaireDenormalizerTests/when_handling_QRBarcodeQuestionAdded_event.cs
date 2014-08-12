@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
     {
         Establish context = () =>
         {
-            questionFactory = new Mock<IQuestionFactory>();
+            questionFactory = new Mock<IQuestionnaireEntityFactory>();
 
             questionFactory.Setup(x => x.CreateQuestion(it.IsAny<QuestionData>()))
                 .Callback((QuestionData qd) => questionData = qd)
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                     questionnaireView = document;
                 });
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, questionFactory: questionFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, questionnaireEntityFactory: questionFactory.Object);
         };
 
         Because of = () =>
@@ -137,7 +137,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         }
 
         private static QuestionData questionData;
-        private static Mock<IQuestionFactory> questionFactory;
+        private static Mock<IQuestionnaireEntityFactory> questionFactory;
         private static QuestionnaireDocument questionnaireView;
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<QRBarcodeQuestionAdded> @event;

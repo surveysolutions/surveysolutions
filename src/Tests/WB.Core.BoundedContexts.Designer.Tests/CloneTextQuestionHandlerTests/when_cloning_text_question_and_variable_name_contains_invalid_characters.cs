@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneTextQuestionHandlerTests
                     questionId: questionId,
                     title: title,
                     variableName: variableNameWithInvalidCharacters,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
@@ -41,6 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneTextQuestionHandlerTests
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                     mask: null,
                     parentGroupId: parentGroupId,
                     sourceQuestionId: sourceQuestionId,
                     targetIndex: targetIndex,
@@ -50,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneTextQuestionHandlerTests
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__variable__contains__characters__ = () =>
-            new[] { "variable", "contains", "character" }.ShouldEachConformTo(
+            new[] { "variable", "contain", "character" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 

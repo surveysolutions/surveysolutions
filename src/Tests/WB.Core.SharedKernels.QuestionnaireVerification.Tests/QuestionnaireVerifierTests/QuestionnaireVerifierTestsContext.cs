@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
@@ -18,7 +19,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
     {
         protected static QuestionnaireVerifier CreateQuestionnaireVerifier(IExpressionProcessor expressionProcessor = null)
         {
-            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object);
+            var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
+            fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
+            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, fileSystemAccessorMock.Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
@@ -46,6 +49,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     {
                         PublicKey = rosterWithCustomValidation,
                         IsRoster = true,
+                        VariableName = "a",
                         RosterSizeQuestionId = rosterQuestionId,
                         ConditionExpression = "some random expression",
                         Children = new List<IComposite>
@@ -80,6 +84,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     {
                         PublicKey = Guid.Parse("13333333333333333333333333333333"),
                         IsRoster = true,
+                        VariableName = "a",
                         RosterSizeQuestionId = numId,
                         Children = new List<IComposite>
                         {
@@ -93,6 +98,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new Group
                     {
                         IsRoster = true,
+                        VariableName = "b",
                         RosterSizeQuestionId = Guid.Parse("a3333333333333333333333333333333"),
                         PublicKey = rosterWithCustomCondition,
                         ConditionExpression = "some random expression"
@@ -119,6 +125,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     {
                         PublicKey = rosterGroupId,
                         IsRoster = true,
+                        VariableName = "a",
                         RosterSizeQuestionId = rosterQuestionId,
                         Children = new List<IComposite>
                         {
@@ -156,6 +163,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     {
                         PublicKey = Guid.Parse("13333333333333333333333333333333"),
                         IsRoster = true,
+                        VariableName = "a",
                         RosterSizeQuestionId = numKey1,
                         Children = new List<IComposite>
                         {
@@ -169,6 +177,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new Group
                     {
                         IsRoster = true,
+                        VariableName = "b",
                         RosterSizeQuestionId = Guid.Parse("a3333333333333333333333333333333"),
                         PublicKey = groupWithCustomValidation,
                         ConditionExpression = "some random expression"
@@ -197,6 +206,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         PublicKey = rosterGroupId,
                         IsRoster = true,
                         RosterSizeQuestionId = rosterQuestionId,
+                        VariableName = "a",
                         Children = new List<IComposite>
                         {
                             new NumericQuestion

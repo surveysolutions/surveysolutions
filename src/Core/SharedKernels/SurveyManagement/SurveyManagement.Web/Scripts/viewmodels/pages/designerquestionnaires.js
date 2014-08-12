@@ -1,6 +1,6 @@
 ﻿Supervisor.VM.DesignerQuestionnaires = function (listViewUrl, getQuestionnaireUrl) {
     Supervisor.VM.DesignerQuestionnaires.superclass.constructor.apply(this, arguments);
-    
+  
     var self = this;
 
     self.ImportFailMessage = ko.observable();
@@ -17,9 +17,9 @@
     self.load = function () {
         self.search();
     };
-    self.getQuestionnaire = function(questionnaireViewItem) {
 
-        var request = { questionnaireId: questionnaireViewItem.Id() };
+    var getQuestionnaireRequest = function (questionnaireViewItem, allowCensusMode) {
+        var request = { questionnaireId: questionnaireViewItem.Id(), allowCensusMode: allowCensusMode };
 
         self.SendCommand(request, function (data) {
             if ((data.ImportError || "") != "") {
@@ -40,6 +40,15 @@
                 self.onQuestionnaireImported();
         });
     };
+
+    self.getQuestionnaire = function(questionnaireViewItem) {
+        getQuestionnaireRequest(questionnaireViewItem, false);
+    };
+
+    self.getQuestionnaireCensus = function(questionnaireViewItem) {
+        getQuestionnaireRequest(questionnaireViewItem, true);
+    };
+
     self.onQuestionnaireImported = function () {
     };
 };

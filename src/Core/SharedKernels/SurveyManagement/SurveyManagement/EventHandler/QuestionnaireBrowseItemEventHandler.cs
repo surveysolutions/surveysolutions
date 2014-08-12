@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            return CreateBrowseItem(version, questionnaireDocument);
+            return CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode);
         }
 
         public QuestionnaireBrowseItem Create(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -42,12 +42,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version;
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            return CreateBrowseItem(version, questionnaireDocument);
+            return CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode);
         }
 
-        private static QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument)
+        private static QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode)
         {
-            return new QuestionnaireBrowseItem(questionnaireDocument, version);
+            return new QuestionnaireBrowseItem(questionnaireDocument, version, allowCensusMode);
         }
     }
 }

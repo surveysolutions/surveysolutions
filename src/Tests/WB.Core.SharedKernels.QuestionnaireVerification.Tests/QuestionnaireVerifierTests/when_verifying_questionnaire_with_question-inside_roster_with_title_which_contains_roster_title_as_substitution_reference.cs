@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     PublicKey = Guid.NewGuid(),
                     IsRoster = true,
                     RosterFixedTitles = new[] { "a" },
+                    VariableName = "a",
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     Children = new List<IComposite>
                     {

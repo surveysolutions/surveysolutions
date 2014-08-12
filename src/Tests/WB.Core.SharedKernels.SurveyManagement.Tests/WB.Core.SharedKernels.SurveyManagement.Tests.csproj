@@ -140,6 +140,7 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextListQuestionAnswered_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataEventHandlerTestContext.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataDenormalizerShouldExtensions.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_ApprovedBySupervisor_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_Completed_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived.cs" />
@@ -192,13 +193,22 @@
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event_and_responsible_user_not_found.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SupervisorAssigned_event.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewCreated_event.cs" />
+    <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_questions_one_with_var_lable_other_without.cs" />
     <Compile Include="InterviewSynchronizationDtoFactoryTests\when_build_from_interview_created_onclient.cs" />
+    <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_static_text.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_question_which_uses_roster_title_in_substitution_and_placed_in_nested_group.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_duplicate_values.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_integer_value_greater_then_allowed_max_value.cs" />
     <Compile Include="QuestionDataParserTests\when_parsing_answer_on_numeric_int_roster_size_question_and_answer_is_negative.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_int_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_is_greater_then_allowed.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\CsvDataFileExportServiceTestContext.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_CreateHeaderForActionFile_called.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_CreateHeader_called.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_AddActionRecords_called_for_list_of_actions.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_AddRecord_called_for_interview_export_view.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewActionFileName_is_called.cs" />
+    <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewExportedDataFileName_called_for_level_name.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_2_capi_packages_and_max_per_process_is_1.cs" />
@@ -368,6 +378,10 @@
     <Compile Include="ServiceTests\InMemoryTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="SupportedVersionProviderTests\SupportedVersionProviderTestContext.cs" />
     <Compile Include="SupportedVersionProviderTests\when_getting_supported_questionnaire_version_for_supervisor_app.cs" />
+    <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\InterviewSummaryViewFactoryTestsContext.cs" />
+    <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_interview_has_deleted_status.cs" />
+    <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary_and_summary_does_not_exists.cs" />
+    <Compile Include="ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
@@ -401,6 +415,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
+      <Project>{8C4B0E67-8C0A-4222-8646-3CF3131CADE5}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>

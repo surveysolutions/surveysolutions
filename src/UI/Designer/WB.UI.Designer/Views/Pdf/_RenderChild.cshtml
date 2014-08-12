@@ -7,6 +7,10 @@
     {
         Html.RenderPartial("_RenderQuestionDetails", (PdfQuestionView) this.Model);
     }
+    else if (this.Model is PdfStaticTextView)
+    {
+        Html.RenderPartial("_RenderStaticTextDetails", this.Model);
+    }
     else
     {
         @Html.Raw(string.Format("<h{0}><span>{2} &nbsp;&nbsp;&nbsp;</span>{1}</h{0}>", Math.Min(4, Model.Depth), Html.Encode(Model.Title), Html.Encode(Model.ItemNumber)))

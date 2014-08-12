@@ -208,21 +208,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null
             };
             var disabledGroups = interviewLevel.DisabledGroups.Union(upperInterviewLevels.SelectMany(upper => upper.DisabledGroups));
-            foreach (var question in currentGroup.Children.OfType<IQuestion>())
+            foreach (var entity in currentGroup.Children)
             {
-                InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
+                if (entity is IGroup) continue;
 
-                Dictionary<string, string> answersForTitleSubstitution =
-                    GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), rosterTitleFromLevel);
+                InterviewEntityView interviewEntity = null;
 
-                bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null &&
-                    IsQuestionParentGroupDisabled(disabledGroups, currentGroup);
+                var question = entity as IQuestion;
+                if (question != null)
+                {
+                    InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
 
-                var interviewQuestion = question.LinkedToQuestionId.HasValue
-                    ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), isQustionsParentGroupDisabled)
-                    : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, isQustionsParentGroupDisabled);
+                    Dictionary<string, string> answersForTitleSubstitution =
+                        GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), rosterTitleFromLevel);
 
-                completedGroup.Questions.Add(interviewQuestion);
+                    bool isQustionsParentGroupDisabled = interviewLevel.DisabledGroups != null &&
+                        IsQuestionParentGroupDisabled(disabledGroups, currentGroup);
+
+                    interviewEntity = question.LinkedToQuestionId.HasValue
+                        ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), isQustionsParentGroupDisabled)
+                        : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, isQustionsParentGroupDisabled);
+    
+                }
+
+                var staticText = entity as IStaticText;
+                if (staticText != null)
+                {
+                    interviewEntity = new InterviewStaticTextView(staticText);
+                }
+                
+                completedGroup.Entities.Add(interviewEntity);
             }
 
             return completedGroup;

@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -32,8 +33,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
             questionnaireExportStructureMock=new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
             dataExportServiceMock=new Mock<IDataExportService>();
             exportViewFactory=new Mock<IExportViewFactory>();
+
+            var questionnaireUpgradeServiceMock = new Mock<IQuestionnaireUpgradeService>();
+            questionnaireUpgradeServiceMock.Setup(x => x.CreateRostersVariableName(Moq.It.IsAny<QuestionnaireDocument>()))
+                .Returns<QuestionnaireDocument>(doc => doc);
+
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
-                questionnaireExportStructureMock.Object, dataExportServiceMock.Object, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>());
+                questionnaireExportStructureMock.Object, dataExportServiceMock.Object, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>(), questionnaireUpgradeServiceMock.Object);
         };
 
         Because of = () =>

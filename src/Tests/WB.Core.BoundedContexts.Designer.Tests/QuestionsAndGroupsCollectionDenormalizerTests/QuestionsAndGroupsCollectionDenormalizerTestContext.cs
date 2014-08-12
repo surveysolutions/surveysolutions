@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -7,21 +8,30 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using It = Moq.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDenormalizerTests
 {
+    [Subject(typeof(QuestionsAndGroupsCollectionDenormalizer))]
     internal class QuestionsAndGroupsCollectionDenormalizerTestContext
     {
         protected static QuestionsAndGroupsCollectionDenormalizer CreateQuestionnaireInfoDenormalizer(
             IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView> readsideRepositoryWriter = null,
             IQuestionDetailsViewMapper questionDetailsViewMapper = null, 
-            IQuestionFactory questionFactory = null)
+            IQuestionnaireEntityFactory questionnaireEntityFactory = null,
+            IQuestionnaireDocumentUpgrader upgrader = null)
         {
+            var upgraderMock = new Mock<IQuestionnaireDocumentUpgrader>();
+            upgraderMock.Setup(x => x.TranslatePropagatePropertiesToRosterProperties(It.IsAny<QuestionnaireDocument>()))
+                .Returns<QuestionnaireDocument>(document => document);
+
             return new QuestionsAndGroupsCollectionDenormalizer(readsideRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<QuestionsAndGroupsCollectionView>>(),
                 questionDetailsViewMapper ?? Mock.Of<IQuestionDetailsViewMapper>(),
-                questionFactory ?? Mock.Of<IQuestionFactory>());
+                questionnaireEntityFactory ?? Mock.Of<IQuestionnaireEntityFactory>(),
+                upgrader ?? upgraderMock.Object);
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
@@ -152,6 +162,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             });
         }
 
+        protected static IPublishedEvent<StaticTextAdded> CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextAdded
+            {
+                EntityId = entityId,
+                ParentId = parentId,
+                Text = text
+            });
+        }
+
         protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
             Guid questionId, Guid parentGroupId)
         {
@@ -189,6 +209,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             });
         }
 
+        protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextUpdated()
+            {
+                EntityId = entityId,
+                Text = text
+            });
+        }
+
         protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
             Guid questionId, int? maxValue = null, List<Guid> triggers = null)
         {
@@ -197,6 +226,26 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
                 PublicKey = questionId,
                 MaxAllowedValue = maxValue,
                 Triggers = triggers ?? new List<Guid>()
+            });
+        }
+
+        protected static IPublishedEvent<StaticTextCloned> CreateStaticTextClonedEvent(Guid entityId, Guid parentId,
+            Guid? sourceEntityId = null, string text = null)
+        {
+            return ToPublishedEvent(new StaticTextCloned
+            {
+                EntityId = entityId,
+                SourceEntityId = sourceEntityId ?? Guid.NewGuid(),
+                ParentId = parentId,
+                Text = text
+            });
+        }
+
+        protected static IPublishedEvent<StaticTextDeleted> CreateStaticTextDeletedEvent(Guid entityId)
+        {
+            return ToPublishedEvent(new StaticTextDeleted()
+            {
+                EntityId = entityId
             });
         }
 

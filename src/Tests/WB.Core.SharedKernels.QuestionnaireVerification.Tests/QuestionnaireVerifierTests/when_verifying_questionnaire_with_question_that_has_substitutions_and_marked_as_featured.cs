@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = featuredQuestionId,
                     StataExportCaption = "var",
-                    Answers = new List<Answer>() { new Answer() { AnswerValue = "1" }, new Answer() { AnswerValue = "2" } },
+                    Answers = new List<Answer>() { new Answer() { AnswerValue = "2", AnswerText = "2" }, new Answer() { AnswerValue = "1", AnswerText = "1" } },
                     QuestionType = QuestionType.MultyOption,
                     Featured = true
                 });

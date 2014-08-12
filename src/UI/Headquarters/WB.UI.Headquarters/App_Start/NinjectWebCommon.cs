@@ -27,6 +27,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispa
 using WB.Core.Infrastructure.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.QuestionnaireUpgrader;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
@@ -40,6 +41,7 @@ using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
+using WB.UI.Shared.Web.Extensions;
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -107,7 +109,9 @@ namespace WB.UI.Headquarters
             var ravenSettings = new RavenConnectionSettings(storePath, isEmbeded, WebConfigurationManager.AppSettings["Raven.Username"],
                 WebConfigurationManager.AppSettings["Raven.Password"], WebConfigurationManager.AppSettings["Raven.Databases.Events"],
                 WebConfigurationManager.AppSettings["Raven.Databases.Views"],
-                WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"]);
+                WebConfigurationManager.AppSettings["Raven.Databases.PlainStorage"],
+                failoverBehavior: WebConfigurationManager.AppSettings["Raven.Databases.FailoverBehavior"],
+                activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"]);
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled && LegacyOptions.SupervisorFunctionsEnabled,
@@ -135,6 +139,7 @@ namespace WB.UI.Headquarters
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
+                new QuestionnaireUpgraderModule(),
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents),
@@ -173,6 +178,8 @@ namespace WB.UI.Headquarters
 
             kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(System.Web.Http.Filters.FilterScope.Controller)
                .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
+
+            kernel.Bind<IIdentityManager>().To<IdentityManager>().InSingletonScope();
 
             if (LegacyOptions.SupervisorFunctionsEnabled)
             {

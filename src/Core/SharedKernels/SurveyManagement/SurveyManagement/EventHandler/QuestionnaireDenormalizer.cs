@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            this.StoreQuestionnaire(id, version, questionnaireDocument);
+            this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -47,10 +47,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version;
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            this.StoreQuestionnaire(id, version, questionnaireDocument);
+            this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode);
         }
 
-        private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
+        private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode)
         {
             var document = questionnaireDocument.Clone() as QuestionnaireDocument;
             if (document == null)
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 new QuestionnaireDocumentVersioned() { Questionnaire = document, Version = version },
                 id);
 
-            this.synchronizationDataStorage.SaveQuestionnaire(document, version);
+            this.synchronizationDataStorage.SaveQuestionnaire(document, version, allowCensusMode);
         }
 
         public string Name

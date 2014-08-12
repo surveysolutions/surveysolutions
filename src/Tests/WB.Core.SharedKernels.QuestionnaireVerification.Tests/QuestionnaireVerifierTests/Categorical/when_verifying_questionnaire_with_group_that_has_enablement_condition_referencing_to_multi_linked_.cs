@@ -25,6 +25,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                    VariableName = "a",
                     RosterFixedTitles = new[] { "fixed title 1" },
                     Children =
                     {

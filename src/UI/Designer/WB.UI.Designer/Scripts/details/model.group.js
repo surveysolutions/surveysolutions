@@ -16,6 +16,9 @@
                 self.template = "GroupView"; // inner html template name
 
                 self.isRoster = ko.observable(false);
+
+                self.variableName = ko.observable('');
+
                 self.rosterSizeSource = ko.observable(config.rosterSizeSourceTypes.Question);
                 self.isRosterSizeSourceQuestion = ko.computed(function () {
                     return self.isRoster() && (self.rosterSizeSource() == config.rosterSizeSourceTypes.Question);
@@ -106,7 +109,7 @@
                 self.cloneSource = ko.observable();
                 self.isSelected = ko.observable();
                 self.isNullo = false;
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.description, self.condition, self.isRoster, self.rosterSizeQuestion, self.rosterSizeSource, self.rosterFixedTitles, self.rosterTitleQuestion]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.variableName, self.description, self.condition, self.isRoster, self.rosterSizeQuestion, self.rosterSizeSource, self.rosterFixedTitles, self.rosterTitleQuestion]);
                 self.dirtyFlag().reset();
                 
                 self.errors = ko.validation.group(self);
@@ -141,7 +144,20 @@
                         }]
                     });
                 };
-                
+
+                self.variableName.extend({
+                    validatable: true,
+                    required: {
+                        onlyIf: function () {
+                            return self.isRoster();
+                        }
+                    },
+                    maxLength: 32,
+                    pattern: {
+                        message: "Valid variable name should contain only letters, digits and the underscore character and should not start with a digit",
+                        params: '^[_A-Za-z][_A-Za-z0-9]*$'
+                    }
+                });
                 return self;
             };
         
@@ -172,6 +188,8 @@
                      var items =_.map(this.childrenID(), function (item) {
                         if (item.type === "GroupView")
                             return dc().groups.getLocalById(item.id);
+                        else if (item.type === "StaticTextView")
+                            return dc().staticTexts.getLocalById(item.id);
                         return dc().questions.getLocalById(item.id);
                      });
                      this.children(items);
@@ -181,6 +199,10 @@
                 clone = function () {
                     var item = new Group();
                     item.title(this.title());
+
+                    item.variableName('');
+                    item.variableName.valueHasMutated();
+
                     item.type(this.type());
                     item.condition(this.condition());
                     item.level(this.level());
@@ -195,19 +217,23 @@
                     item.rosterFixedTitles(this.rosterFixedTitles());
                     item.rosterTitleQuestion(this.rosterTitleQuestion());
 
-                    item.childrenID(_.map(this.childrenID(), function (child) {
-                        var clonedItem;
+                    item.childrenID(_.filter(_.map(this.childrenID(), function (child) {
+                        var clonedItem = null;
                         
                         if (child.type === "GroupView") {
                             clonedItem = dc().groups.getLocalById(child.id).clone();
                             dc().groups.add(clonedItem);
-                        } else {
+                        } else if (child.type === "QuestionView") {
                             clonedItem = dc().questions.getLocalById(child.id).clone();
                             dc().questions.add(clonedItem);
                         }
+
+                        if (_.isNull(clonedItem))
+                            return null;
+
                         clonedItem.parent(item);
                         return { type: clonedItem.type(), id: clonedItem.id() };
-                    }));
+                    })), function(item) { return !_.isNull(item); });
 
                     if (this.isClone() && this.isNew()) {
                         item.cloneSource(this.cloneSource());
@@ -239,6 +265,7 @@
             update: function (data) {
                 
                 this.title(data.title);
+                this.variableName(data.variableName);
                 this.description(data.description);
                 this.condition(data.condition);
                 this.isRoster(data.isRoster);

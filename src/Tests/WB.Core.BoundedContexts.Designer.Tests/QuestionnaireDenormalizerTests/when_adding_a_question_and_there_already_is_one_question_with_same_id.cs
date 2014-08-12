@@ -37,11 +37,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
             var textQuestion = CreateTextQuestion(questionId: questionId, title: addedQuestionTitle);
 
-            var questionFactory = Mock.Of<IQuestionFactory>(x =>
+            var questionFactory = Mock.Of<IQuestionnaireEntityFactory>(x =>
                 x.CreateQuestion(Moq.It.IsAny<QuestionData>()) == textQuestion
             );
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory);
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionnaireEntityFactory: questionFactory);
         };
 
         Because of = () =>

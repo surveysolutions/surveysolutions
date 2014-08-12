@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneMultiOptionQuestionHandler
                     questionId: questionId,
                     title: titleWithSubstitution,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     scope: scope,
                     enablementCondition: enablementCondition,

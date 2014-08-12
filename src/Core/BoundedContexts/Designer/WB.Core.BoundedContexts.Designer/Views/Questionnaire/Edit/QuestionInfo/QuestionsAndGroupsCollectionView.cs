@@ -7,5 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
     {
         public List<QuestionDetailsView> Questions { get; set; }
         public List<GroupAndRosterDetailsView> Groups { get; set; }
+        public List<StaticTextDetailsView> StaticTexts { get; set; }
     }
 }
