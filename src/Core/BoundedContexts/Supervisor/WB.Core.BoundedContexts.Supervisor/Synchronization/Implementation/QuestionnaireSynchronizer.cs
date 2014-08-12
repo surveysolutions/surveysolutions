@@ -75,8 +75,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                             if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion))
-                                break;
-
+                            break;
                             string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
                                 .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
                                 .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
