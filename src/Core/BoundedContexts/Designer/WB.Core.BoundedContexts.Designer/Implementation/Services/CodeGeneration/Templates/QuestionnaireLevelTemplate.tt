@@ -19,7 +19,7 @@
             EnablementStates.Add(<#=q.GeneratedStateName#>.ItemId, <#=q.GeneratedStateName#>);
         <#if(!string.IsNullOrWhiteSpace(q.Validations))
         {#>    
-            ValidationExpressions.Add(new Identity(IdOf.<#= q.GeneratedIdName#>, this.RosterVector), new Func<bool>[] { <#=q.GeneratedValidationsMethodName#> });             
+            ValidationExpressions.Add(new Identity(IdOf.<#= q.GeneratedIdName#>, rosterVector), new Func<bool>[] { <#=q.GeneratedValidationsMethodName#> });             
         <# }#>
             AddUpdaterToMap(IdOf.<#= q.GeneratedIdName#>, (<#=q.GeneratedTypeName#> val) => {<#=q.GeneratedMemberName#>  = val; });
         <# }#>

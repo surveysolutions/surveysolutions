@@ -196,7 +196,9 @@
     <Compile Include="Implementation\Factories\IQuestionFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerator.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\IRosterScope.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireLevelTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\RosterScopeTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

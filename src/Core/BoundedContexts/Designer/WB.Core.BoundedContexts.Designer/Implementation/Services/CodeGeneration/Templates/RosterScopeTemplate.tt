@@ -16,21 +16,21 @@
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
         {
 
-        <#foreach (var Model in RosterScopeModel.Rosters) 
+        <#foreach (var Model in RosterScopeModel.RostersInScope) 
             {#>
         //TODO: generate mandatory                
         <#foreach (var @group in Model.Groups) 
             {#>
             EnablementStates.Add(<#=@group.GeneratedStateName#>.ItemId, <#= @group.GeneratedStateName#>);
         <# }#>
-        <#foreach (var q in Model.Questions) 
+        <#foreach (var question in Model.Questions) 
                         {#>            
-            EnablementStates.Add(<#=q.GeneratedStateName#>.ItemId, <#=q.GeneratedStateName#>);        
-        <#if(!string.IsNullOrWhiteSpace(q.Validations))
+            EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);        
+        <#if(!string.IsNullOrWhiteSpace(question.Validations))
             {#>                 
-            ValidationExpressions.Add(new Identity(IdOf.<#= q.GeneratedIdName#>, this.RosterVector), new Func<bool>[] { <#=q.GeneratedValidationsMethodName#> });                      
+            ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] { <#=question.GeneratedValidationsMethodName#> });                      
         <# }#>
-            AddUpdaterToMap(IdOf.<#= q.GeneratedIdName#>, (<#=q.GeneratedTypeName#> val) => {<#=q.GeneratedMemberName#>  = val; });
+            AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=question.GeneratedTypeName#> val) => {<#=question.GeneratedMemberName#>  = val; });
         <# }#>
         <#foreach (var @roster in Model.Rosters) 
         {#>    
@@ -42,12 +42,12 @@
     
         private <#= RosterScopeModel.ParentTypeName#> @__parent;
 
-        <#foreach (var parentQuestion in RosterScopeModel.GetParentScope().GetQuestions()) 
+        <#foreach (var parentQuestion in RosterScopeModel.GetParentScope().GetAllQuestionsToTop()) 
         {#>
         public <#=parentQuestion.GeneratedTypeName#> <#=parentQuestion.VariableName#> { get { return this.@__parent.<#=parentQuestion.VariableName#>; } }                                        
         <#}#>
 
-        <#foreach (var parentRoster in RosterScopeModel.GetParentScope().GetRosters()) 
+        <#foreach (var parentRoster in RosterScopeModel.GetParentScope().GetAllRostersToTop()) 
         {#>
         public <#=parentRoster.GeneratedTypeName#>[] <#=parentRoster.VariableName#> { get { return this.@__parent.<#=parentRoster.VariableName#>; } }                                        
         <#}#>
@@ -59,7 +59,7 @@
                 ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
 
-        <#foreach (var Model in RosterScopeModel.Rosters) 
+        <#foreach (var Model in RosterScopeModel.RostersInScope) 
             {#>
                 <#foreach (var q in Model.Questions) 
                         {#>        
@@ -80,7 +80,7 @@
             return level;
         }
 
-        <#foreach (var Model in RosterScopeModel.Rosters) 
+        <#foreach (var Model in RosterScopeModel.RostersInScope) 
             {#>
         
         <#foreach (var question in Model.Questions) 
@@ -140,7 +140,7 @@
             {
                 return new List<Action>
                 {
-                <#foreach (var Model in RosterScopeModel.Rosters) 
+                <#foreach (var Model in RosterScopeModel.RostersInScope) 
                 {#>
         
                 <#foreach (var q in Model.Questions) 
