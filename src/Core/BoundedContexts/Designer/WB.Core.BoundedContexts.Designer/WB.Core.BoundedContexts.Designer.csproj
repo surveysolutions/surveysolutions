@@ -40,6 +40,9 @@
     <Reference Include="EmitMapper">
       <HintPath>..\..\..\..\..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlSanitizer">
+      <HintPath>..\..\..\..\..\packages\HtmlSanitizer.1.1.5297.28403\lib\net40\HtmlSanitizer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -215,8 +218,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Roster.resx</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\EventArgs.cs" />
-    <Compile Include="Implementation\Services\HtmlSanitizer.cs" />
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\IJsonExportService.cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
