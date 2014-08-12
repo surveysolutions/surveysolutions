@@ -99,10 +99,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
             var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
-            var statistics = this.GetStatisticItem(interviewBriefItem);
+            this.interviewBriefStorage.Remove(evnt.EventSourceId);
 
-            interviewBriefItem.IsDeleted = true;
-            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            var statistics = this.GetStatisticItem(interviewBriefItem);
+            this.DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+            this.DecreaseStatisticsByStatus(statistics, InterviewStatus.Deleted);
             this.StoreStatisticsItem(interviewBriefItem, statistics);
         }
 

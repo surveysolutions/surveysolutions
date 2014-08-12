@@ -81,6 +81,7 @@
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
     <Compile Include="EventHandler\EventHandlerUtils.cs" />
+    <Compile Include="EventHandler\HardDeletedInterviewEventHandler.cs" />
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Views\Interview\AllInterviewsView.cs" />
     <Compile Include="Views\Interview\AllInterviewsViewItem.cs" />
     <Compile Include="Views\Interview\AnswersByVariableCollection.cs" />
+    <Compile Include="Views\Interview\HardDeletedInterview.cs" />
     <Compile Include="Views\Interview\IInterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewBrief.cs" />
     <Compile Include="Views\Interview\InterviewData.cs" />
