@@ -1455,26 +1455,6 @@ S
         }
 
         /// <summary>
-        /// A test for AnchorTag with US-ASCII encoding xss
-        /// Example <!-- <A HREF="http://www.codeplex.com?url=¼script¾alert(¢XSS¢)¼/script¾">XSS</A> -->
-        /// </summary>   
-        [Test]
-        public void AnchorTagUSASCIIEncodingXSSTest()
-        {
-            // Arrange
-            var sanitizer = new HtmlSanitizer();
-
-
-            // Act
-            string htmlFragment = "<A HREF=\"http://www.codeplex.com?url=¼script¾alert(¢XSS¢)¼/script¾\">XSS</A>";
-            string actual = sanitizer.Sanitize(htmlFragment);
-
-            // Assert
-            string expected = "<a href=\"http://www.codeplex.com/?url=¼script¾alert(¢XSS¢)¼/script¾\">XSS</a>";
-            Assert.That(actual, Is.EqualTo(expected).IgnoreCase);
-        }
-
-        /// <summary>
         /// A test for AnchorTag with Downlevel-Hidden block xss
         /// </summary>   
         [Test]
