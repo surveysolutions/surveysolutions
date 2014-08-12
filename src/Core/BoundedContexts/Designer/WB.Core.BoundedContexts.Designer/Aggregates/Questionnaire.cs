@@ -2,7 +2,6 @@
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Raven.Abstractions.Extensions;
-using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -22,8 +21,6 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
-using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -33,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private const int MaxCountOfDecimalPlaces = 15;
         private const int maxChapterItemsCount = 200;
+        private const int MaxTitleLength = 250;
 
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
@@ -765,6 +763,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private readonly ILogger logger;
 
+
         private static IClock Clock
         {
             get { return NcqrsEnvironment.Get<IClock>(); /*ServiceLocator.Current.GetInstance<IClock>(); */}
@@ -811,7 +810,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
             : base(publicKey)
         {
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
 
@@ -846,7 +845,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
             : base(publicKey)
         {
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             var clock = NcqrsEnvironment.Get<IClock>();
 
@@ -888,7 +887,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 #warning CRUD
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ApplyEvent(new QuestionnaireUpdated() { Title = title, IsPublic = isPublic, ResponsibleId = responsibleId });
         }
@@ -912,7 +911,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
 
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
@@ -957,7 +956,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
 
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
@@ -1210,7 +1209,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
@@ -2649,7 +2648,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string condition, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName);
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
@@ -2680,7 +2679,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
@@ -2825,7 +2824,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException("Question inside roster group can not be pre-filled.");
         }
 
-        private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
+        private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -2833,15 +2832,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.GroupTitleRequired,
                     "The titles of groups and chapters can not be empty or contains whitespace only");
             }
+
+            if (title.Length > MaxTitleLength)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.TitleIsTooLarge,
+                    string.Format("The titles of groups and chapters can't have more than {0} symbols", MaxTitleLength));
+            }
         }
 
-        private void ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(string title)
+        private void ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionnaireTitleRequired,
                     "Questionnaire's title can not be empty or contains whitespace only");
+            }
+            if (title.Length > MaxTitleLength)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.TitleIsTooLarge, 
+                    string.Format("Questionnaire's title can't have more than {0} symbols", MaxTitleLength));
             }
         }
 
@@ -2878,10 +2890,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfTitleIsEmpty(string title)
+        private void ThrowDomainExceptionIfTitleIsEmptyOrTooLong(string title)
         {
             if (string.IsNullOrEmpty(title))
                 throw new QuestionnaireException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
+
+            if (title.Length > MaxTitleLength)
+            {
+                throw new QuestionnaireException(DomainExceptionType.TitleIsTooLarge, 
+                    string.Format("Question's title can't have more than {0} symbols", MaxTitleLength));
+            }
         }
 
         private void ThrowDomainExceptionIfStaticTextIsEmpty(string text)
