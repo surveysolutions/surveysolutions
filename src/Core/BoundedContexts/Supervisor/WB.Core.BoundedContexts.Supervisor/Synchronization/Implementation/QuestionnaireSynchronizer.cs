@@ -61,21 +61,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
+                    if (!this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
                         questionnaireFeedEntry.QuestionnaireVersion))
-                        return;
+                    {
 
-                    string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
-                        .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
-                        .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
-                    this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnaireDetailsUrl));
-                    QuestionnaireDocument questionnaireDocument =
-                        this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
+                        string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
+                            .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
+                            .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
+                        this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL",
+                            questionnaireDetailsUrl));
+                        QuestionnaireDocument questionnaireDocument =
+                            this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
 
-                    this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
-                        questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
-                    this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
-                        questionnaireFeedEntry.QuestionnaireVersion, questionnaireFeedEntry.AllowCensusMode));
+                        this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                            questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
+                        this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
+                            questionnaireFeedEntry.QuestionnaireVersion, questionnaireFeedEntry.AllowCensusMode));
+                    }
                 }
                 catch (AggregateException ex)
                 {
