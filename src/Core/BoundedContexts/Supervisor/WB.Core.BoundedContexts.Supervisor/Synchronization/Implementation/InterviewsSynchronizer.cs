@@ -125,14 +125,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     {
                         var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
 
-                        string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
-                            .Replace("{id}", interviewDetails.QuestionnaireId.FormatGuid())
-                            .Replace("{version}", interviewDetails.QuestionnaireVersion.ToString());
-
                         switch (interviewFeedEntry.EntryType)
                         {
                             case EntryType.SupervisorAssigned:
-                                this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(interviewDetails.QuestionnaireId, interviewDetails.QuestionnaireVersion, new Uri(questionnaireDetailsUrl));
                                 this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId, interviewFeedEntry.UserId);
                                 break;
 
@@ -217,26 +212,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         interviewId.FormatGuid(), exception.Message, string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
             }
-        }
-
-
-        private void StoreQuestionnaireDocumentFromHeadquartersIfNeeded(Guid questionnaireId, long questionnaireVersion, Uri questionnareUri)
-        {
-            if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireId, questionnaireVersion))
-                return;
-
-            this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnareUri));
-            QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(questionnareUri).Result;
-
-            this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireId, questionnaireVersion, questionnaireDocument);
-            this.executeCommand(new RegisterPlainQuestionnaire(questionnaireId, questionnaireVersion, false));
-        }
-
-        private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)
-        {
-            QuestionnaireDocument localQuestionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
-
-            return localQuestionnaireDocument != null;
         }
 
         private void CreateOrUpdateInterviewFromHeadquarters(InterviewSynchronizationDto interviewDetails, string supervisorId, string userId)
