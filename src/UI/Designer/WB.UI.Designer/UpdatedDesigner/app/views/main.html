@@ -124,7 +124,6 @@
                 <li ng-repeat="chapter in questionnaire.chapters">
                     <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId" unsaved-warning-clear>
                         {{chapter.title}}
-                        <!--<br /><small>({{chapter.questionsCount}} questions, {{chapter.groupsCount}} groups, {{chapter.rostersCount}} rosters)</small>-->
                     </a>
                 </li>
             </ul>
