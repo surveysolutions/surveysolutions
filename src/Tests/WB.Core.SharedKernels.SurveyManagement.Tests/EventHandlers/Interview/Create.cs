@@ -75,6 +75,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
             return ToPublishedEvent(new InterviewDeleted(userId: GetGuidIdByStringId(userId)));
         }
 
+        public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeletedEvent(string userId = null)
+        {
+            return ToPublishedEvent(new InterviewHardDeleted(userId: GetGuidIdByStringId(userId)));
+        }
+
         public static IPublishedEvent<InterviewRestored> InterviewRestoredEvent(string userId = null)
         {
             return ToPublishedEvent(new InterviewRestored(userId: GetGuidIdByStringId(userId)));
