@@ -184,7 +184,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
 
             questionnaireDocument
-                .GetAllQuestions<IQuestion>()
+                .GetEntitiesByType<IQuestion>()
                 .ToDictionary(group => @group.PublicKey, group => new List<Guid>())
                 .ToList()
                 .ForEach(x => dependencies.Add(x.Key, x.Value));
@@ -194,7 +194,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .ToDictionary(x => x.PublicKey,
                     x => this.GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, questionnaireDocument));
 
-            questionnaireDocument.GetAllQuestions<IQuestion>()
+            questionnaireDocument.GetEntitiesByType<IQuestion>()
                 .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
                 .ToDictionary(x => x.PublicKey,
                     x => this.GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, questionnaireDocument))
