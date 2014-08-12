@@ -230,6 +230,7 @@
     <Compile Include="QuestionnaireTests\GetChapterOfTests\when_finding_group_that_exists_in_questionnaire.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_question_and_roster_size_question_is_empty.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_numeric_question_and_question_is_null.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_static_text.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_group_with_variable_name.cs" />
