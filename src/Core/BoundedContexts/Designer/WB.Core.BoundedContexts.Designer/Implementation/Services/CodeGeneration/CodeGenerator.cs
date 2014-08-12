@@ -4,17 +4,15 @@ using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    public class CodeGenerator : ICodeGenerator {
-
+    public class CodeGenerator : ICodeGenerator
+    {
         public string Generate(QuestionnaireDocument questionnaire)
         {
             var questionnaireTemplateStructure = new QuestionnaireExecutorTemplateModel(questionnaire);
-
+            
             var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
 
-            string result = template.TransformText();
-
-            return result;
+            return template.TransformText();
         }
     }
 }
