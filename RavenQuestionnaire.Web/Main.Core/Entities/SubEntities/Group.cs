@@ -32,6 +32,8 @@ namespace Main.Core.Entities.SubEntities
 
         public string Description { get; set; }
 
+        public string VariableName { get; set; }
+
         public bool IsRoster { get; set; }
 
         public Guid? RosterSizeQuestionId { get; set; }
@@ -151,6 +153,7 @@ namespace Main.Core.Entities.SubEntities
                 Propagated = this.Propagated,
                 PublicKey = this.PublicKey,
                 Title = this.Title,
+                VariableName = this.VariableName,
                 IsRoster = this.IsRoster,
                 RosterSizeQuestionId = this.RosterSizeQuestionId,
                 RosterSizeSource = this.RosterSizeSource,

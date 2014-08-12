@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.Composite;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace Main.Core.Entities.SubEntities
@@ -121,6 +119,8 @@ namespace Main.Core.Entities.SubEntities
         public virtual QuestionType QuestionType { get; set; }
 
         public string StataExportCaption { get; set; }
+
+        public string VariableLabel { get; set; }
 
         public string ValidationExpression { get; set; }
 

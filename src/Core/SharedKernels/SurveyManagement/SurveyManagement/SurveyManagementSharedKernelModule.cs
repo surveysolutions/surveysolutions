@@ -56,11 +56,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
+            this.Bind<ICsvWriterService>().To<CsvWriterService>();
+            this.Bind<ICsvWriterFactory>().To<CsvWriterFactory>();
             this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
-            this.Bind<IDataFileService>().To<DataFileService>();
             
             var applicationVersionSettings = new ApplicationVersionSettings
             {

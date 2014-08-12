@@ -22,7 +22,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = multyOptionsQuestionId,
                 StataExportCaption = "var",
-                Answers = new List<Answer>() { new Answer() { AnswerValue = "1" }, new Answer() { AnswerValue = "2" } },
+                Answers = new List<Answer>() { new Answer() { AnswerValue = "1", AnswerText = "Hello, 1"},
+                    new Answer() { AnswerValue = "2", AnswerText = "Hello, 2" } },
                 MaxAllowedAnswers = 3
             });
 

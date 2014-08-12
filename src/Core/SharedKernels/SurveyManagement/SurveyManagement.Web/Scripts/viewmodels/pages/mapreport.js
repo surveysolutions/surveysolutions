@@ -1,4 +1,4 @@
-﻿Supervisor.VM.MapReport = function (commandExecutionUrl, questionnaireUrl, questionsUrl, mapReportUrl) {
+﻿Supervisor.VM.MapReport = function (commandExecutionUrl, questionnaireUrl, questionsUrl, mapReportUrl, interiewSummaryUrl) {
     Supervisor.VM.MapReport.superclass.constructor.apply(this, [commandExecutionUrl]);
 
     var self = this;
@@ -6,6 +6,7 @@
     self.questionnaireUrl = questionnaireUrl;
     self.questionsUrl = questionsUrl;
     self.mapReportUrl = mapReportUrl;
+    self.interiewSummaryUrl = interiewSummaryUrl;
 
     self.map = null;
     self.mapClustererOptions = { gridSize: 50, maxZoom: 15 };
@@ -116,6 +117,7 @@
         });
     };
 
+    self.interviewDetailsTooltip = new InfoBubble();
     self.markers = {};
     self.markersSetsInfo = ko.observableArray([]);
     self.showPointsOnMap = function () {
@@ -131,10 +133,10 @@
                 QuestionnaireVersion: self.selectedVersion()
             };
 
-            self.SendRequest(self.mapReportUrl, params, function(data) {
-                var locations = data.Answers;
+            self.SendRequest(self.mapReportUrl, params, function (data) {
+                var mapPoints = data.Points;
 
-                if (locations.length == 0) {
+                if (mapPoints.length == 0) {
                     self.ShowNotification(input.settings.messages.notifyNoMarkersTitle, input.settings.messages.notifyNoMarkersText);
                     return;
                 }
@@ -143,13 +145,32 @@
 
                 var markers = [];
 
-                for (var i = 0; i < locations.length; i++) {
-                    var l = locations[i].split('|');
-                    for (var j = 0; j < l.length; j++) {
-                        var points = l[j].split(';');
+                for (var i = 0; i < mapPoints.length; i++) {
+                    var mapPoint = mapPoints[i];
+                    var mapPointAnswers = mapPoint.Answers.split('|');
+
+                    for (var j = 0; j < mapPointAnswers.length; j++) {
+                        var points = mapPointAnswers[j].split(';');
                         var marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(points[0] * 1, points[1] * 1),
-                            //map: self.map
+                            position: new google.maps.LatLng(points[0] * 1, points[1] * 1)
+                        });
+                        marker.interviewId = mapPoint.InterviewId;
+                        
+                        google.maps.event.addListener(marker, 'click', function () {
+                            var marker = this;
+                            self.SendRequest(self.interiewSummaryUrl, { InterviewId: marker.interviewId }, function (data) {
+                                if (data == undefined || data == null)
+                                    return;
+
+                                data["InterviewId"] = marker.interviewId;
+
+                                var tooltipTemplateElement = document.createElement("div");
+                                $(tooltipTemplateElement).append($("#interview-tooltip-template").html());
+                                ko.applyBindings(data, tooltipTemplateElement);
+
+                                self.interviewDetailsTooltip.setContent($(tooltipTemplateElement).html());
+                                self.interviewDetailsTooltip.open(self.map, marker);
+                            });
                         });
                         markers.push(marker);
                         bounds.extend(marker.getPosition());
@@ -180,6 +201,7 @@
         delete self.markers[key];
 
         self.markersSetsInfo.remove(markerSet);
+        self.interviewDetailsTooltip.close();
     };
 
     self.clearAllMarkers = function() {
@@ -193,6 +215,7 @@
         self.markers = {};
         self.mapClusterer.clearMarkers();
         self.markersSetsInfo.removeAll();
+        self.interviewDetailsTooltip.close();
     };
     $('body').addClass('map-report');
 };

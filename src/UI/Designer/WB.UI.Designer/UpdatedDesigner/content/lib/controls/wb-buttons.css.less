@@ -53,7 +53,7 @@
   vertical-align: middle;
   width: 37px;
   height: 30px;
-  background: url(../../i/btn-dropdown-blue.png) center -5px no-repeat;
+  background: url(../../i/btn-dropdown-blue.png) 0px -5px no-repeat;
   &:hover {
     background-position: center -42px;
   }
@@ -86,4 +86,61 @@
   }
 
 }
+button#questionSelectBtn {padding: 10px 0 10px 0px;width: 100%;}
+button#questionTypeBtn {padding: 10px 40px 10px 50px;width: 380px;}
 
+button#questionTypeBtn, button#questionSelectBtn {
+  background-color: #ffffff;
+  border: 2px solid #cccccc;
+  text-transform: none;
+  text-align: left;
+
+
+
+
+  >i {
+    left: 7px;
+  }
+
+  >span.vertical-line {
+    border-left: 2px solid #cccccc;
+    height: 93%;
+    position: absolute;
+    top: 1px;
+    left: 40px;
+  }
+
+  >span.dropdown-arrow {
+    background: #ffffff url(../../i/dropdown-arrow.png) no-repeat center center;
+    width: 40px;
+    height: 12px;
+    position: absolute;
+    right: 0;
+  }
+}
+ul.dropdown-menu {
+  li > a {
+    overflow: hidden;
+    .inline-button-fontstyle();
+    line-height: 20px;
+    text-transform: none;
+  }
+}
+
+ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
+  width: 100%;
+  position: relative;
+  padding-left: 40px;
+
+  .inline-button-fontstyle();
+  line-height: 20px;
+  text-transform: none;
+
+  >i {
+    left: 7px;
+  }
+}
+
+.instructions-cross {
+  margin-top: 20px;
+}

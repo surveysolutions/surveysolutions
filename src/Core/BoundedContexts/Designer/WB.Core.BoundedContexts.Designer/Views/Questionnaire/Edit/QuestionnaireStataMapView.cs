@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public QuestionnaireStataMapView(QuestionnaireDocument doc)
         {
-            this.StataMap = doc.GetAllQuestions<AbstractQuestion>()
+            this.StataMap = doc.GetEntitiesByType<AbstractQuestion>()
                                .Select(q => new KeyValuePair<Guid, string>(q.PublicKey, q.StataExportCaption))
                                .ToList();
         }

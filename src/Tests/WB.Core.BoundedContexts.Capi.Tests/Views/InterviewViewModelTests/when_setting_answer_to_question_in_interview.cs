@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,8 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
                 new NumericQuestion()
                 {
                     PublicKey = targetQuestionId,
-                    QuestionType = QuestionType.Numeric
+                    QuestionType = QuestionType.Numeric,
+                    IsInteger = true
                 });
 
             rosterStructure = CreateQuestionnaireRosterStructure(questionnarie);
@@ -38,7 +40,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         };
 
         Because of = () =>
-            interviewViewModel.SetAnswer(new InterviewItemId(targetQuestionId, new decimal[0]), 3);
+            interviewViewModel.SetAnswer(new InterviewItemId(targetQuestionId, new decimal[0]), answer);
 
         It should_unansweredQuestions_in_statistic_count_has_zero_elements = () =>
            interviewViewModel.Statistics.UnansweredQuestions.ShouldBeEmpty();
@@ -52,10 +54,14 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
         It should_invalidQuestions_in_statistic_be_empty = () =>
           interviewViewModel.Statistics.InvalidQuestions.ShouldBeEmpty();
 
+        It should_answered_question_has_fomatted_answer_string = () =>
+           interviewViewModel.FindQuestion(q => q.PublicKey.Id == targetQuestionId).SingleOrDefault().AnswerString.ShouldEqual(string.Format(CultureInfo.CurrentCulture, "{0:n0}", answer));
+
         private static InterviewViewModel interviewViewModel;
         private static QuestionnaireDocument questionnarie;
         private static QuestionnaireRosterStructure rosterStructure;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
         private static Guid targetQuestionId;
+        private static int answer = 3;
     }
 }

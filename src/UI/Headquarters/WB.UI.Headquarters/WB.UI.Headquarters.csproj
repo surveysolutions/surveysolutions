@@ -237,6 +237,10 @@
     <Content Include="Views\Supervisor\Index.cshtml" />
     <Content Include="Views\Supervisor\Interviewers.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
+    <Content Include="Views\Install\Finish.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\AdminMenu.cshtml" />
+    <None Include="Properties\PublishProfiles\package.pubxml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -275,6 +279,8 @@
   <ItemGroup>
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
+    <Compile Include="Code\IdentityManager.cs" />
+    <Compile Include="Code\IIdentityManager.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
     <Compile Include="Code\Security\ITokenVerifier.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
@@ -299,6 +305,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
+    <Compile Include="Controllers\InstallController.cs" />
+    <Compile Include="Filters\MaintenanceFilter.cs" />
+    <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />
     <Compile Include="API\SyncController.cs" />
     <Compile Include="Controllers\SupervisorController.cs" />
@@ -372,10 +381,6 @@
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
       <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
-      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
-      <Name>SynchronizationMessages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
       <Project>{3017EC6D-AE4A-4C19-A653-352999592A7E}</Project>
       <Name>WB.Core.BoundedContexts.Headquarters</Name>
@@ -415,6 +420,10 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
+      <Project>{8C4B0E67-8C0A-4222-8646-3CF3131CADE5}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>

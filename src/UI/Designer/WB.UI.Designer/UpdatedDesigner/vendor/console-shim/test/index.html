@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Console shim test</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css" type="text/css" media="screen" />
+    <script type="text/javascript">
+    
+    // Disable the native console and implement a small text
+    // implementation  
+    console = {};
+     
+    var logs = [];
+      
+    console.log = function() {
+        logs.push(Array.prototype.slice.call(arguments));
+    };
+    
+    // Set test flag (Needed so we can test browser-specific hacks in all
+    // browsers
+    __consoleShimTest__ = false;
+    
+    </script>
+    <script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
+    <script type="text/javascript" src="../console-shim.min.js"></script>
+    <script type="text/javascript">
+  
+    $(function() {
+
+    module("console.log");
+    
+    test("Only message", function() {
+        console.log("abc");
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 1, "Only one parameter logged.");
+        equal(log[0], "abc", "Message must match.");
+    });
+   
+    test("Message with parameters", function() {
+        console.log("def", "ghi", 3);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 3, "Three parameters must be logged.");
+        equal(log[0], "def", "Message must match.");
+        equal(log[1], "ghi", "First parameter must match.");
+        equal(log[2], 3, "Second parameter must match.");
+    });
+
+    test("IE-Wrapper", function() {
+        __consoleShimTest__ = true;
+        console.log("format %s", "param", 1, 2);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 4, "Three parameters must be logged.");
+        equal(log[0], "format %s %o %o", "Message must match.");
+        equal(log[1], "param", "First parameter must match.");
+        equal(log[2], 1, "Second parameter must match.");
+        equal(log[3], 2, "Second parameter must match.");
+        __consoleShimTest__ = false;
+    });
+ 
+ 
+    module("console.debug");
+      
+    test("Message with parameter", function() {
+        console.debug("foo", "bar");
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 2, "Two parameters must be logged.");
+        equal(log[0], "foo", "Message must match.");
+        equal(log[1], "bar", "Parameter must match.");
+    });
+
+    test("IE-Wrapper", function() {
+        __consoleShimTest__ = true;
+        console.debug("format %s", "param", 1, 2);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 4, "Three parameters must be logged.");
+        equal(log[0], "format %s %o %o", "Message must match.");
+        equal(log[1], "param", "First parameter must match.");
+        equal(log[2], 1, "Second parameter must match.");
+        equal(log[3], 2, "Second parameter must match.");
+        __consoleShimTest__ = false;
+    });
+    
+
+    module("console.info");
+      
+    test("Message with parameter", function() {
+        console.info("foo", "bar");
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 2, "Two parameters must be logged.");
+        equal(log[0], "foo", "Message must match.");
+        equal(log[1], "bar", "Parameter must match.");
+    });
+   
+    test("IE-Wrapper", function() {
+        __consoleShimTest__ = true;
+        console.info("format %s", "param", 1, 2);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 4, "Three parameters must be logged.");
+        equal(log[0], "format %s %o %o", "Message must match.");
+        equal(log[1], "param", "First parameter must match.");
+        equal(log[2], 1, "Second parameter must match.");
+        equal(log[3], 2, "Second parameter must match.");
+        __consoleShimTest__ = false;
+    });
+
+    
+    module("console.warn");
+      
+    test("Message with parameter", function() {
+        console.warn("foo", "bar");
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 2, "Two parameters must be logged.");
+        equal(log[0], "foo", "Message must match.");
+        equal(log[1], "bar", "Parameter must match.");
+    });
+   
+    test("IE-Wrapper", function() {
+        __consoleShimTest__ = true;
+        console.warn("format %s", "param", 1, 2);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 4, "Three parameters must be logged.");
+        equal(log[0], "format %s %o %o", "Message must match.");
+        equal(log[1], "param", "First parameter must match.");
+        equal(log[2], 1, "Second parameter must match.");
+        equal(log[3], 2, "Second parameter must match.");
+        __consoleShimTest__ = false;
+    });
+
+   
+    module("console.error");
+      
+    test("Message with parameter", function() {
+        console.error("foo", "bar");
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 2, "Two parameters must be logged.");
+        equal(log[0], "foo", "Message must match.");
+        equal(log[1], "bar", "Parameter must match.");
+    });
+   
+    test("IE-Wrapper", function() {
+        __consoleShimTest__ = true;
+        console.error("format %s", "param", 1, 2);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 4, "Three parameters must be logged.");
+        equal(log[0], "format %s %o %o", "Message must match.");
+        equal(log[1], "param", "First parameter must match.");
+        equal(log[2], 1, "Second parameter must match.");
+        equal(log[3], 2, "Second parameter must match.");
+        __consoleShimTest__ = false;
+    });
+
+
+    module("console.assert");
+      
+    test("Expression is true", function() {
+        console.assert(true, "foo bar", 53);
+        equal(logs.length, 0, "No message must be recorded");
+    });
+   
+    test("Expression is false", function() {
+        console.assert(false, "foo bar", 53);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 2, "Two parameters must be logged.");
+        equal(log[0], "Assertion failed: foo bar", "Message must match.");
+        equal(log[1], 53, "Parameter must match.");
+    });
+
+   
+    module("console.clear");
+      
+    test("Ignored", function() {
+        console.clear();
+        ok(true, "Must not fail");
+    });
+   
+   
+    module("console.dir");
+      
+    test("Logging object as message", function() {
+        console.dir(window);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 1, "One parameters must be logged.");
+        strictEqual(log[0], window, "Parameter must match.");
+    });
+
+   
+    module("console.dirxml");
+      
+    test("Logging object as message", function() {
+        console.dirxml(window);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 1, "One parameters must be logged.");
+        strictEqual(log[0], window, "Parameter must match.");
+    });
+   
+
+    module("console.trace");
+      
+    test("Ignored", function() {
+        console.trace();
+        ok(true, "Must not fail");
+    });
+   
+   
+    module("console.group");
+      
+    test("Ignored", function() {
+        console.group("foo");
+        ok(true, "Must not fail");
+    });
+   
+
+    module("console.groupCollapsed");
+      
+    test("Ignored", function() {
+        console.groupCollapsed("foo");
+        ok(true, "Must not fail");
+    });
+   
+
+    module("console.groupEnd");
+      
+    test("Ignored", function() {
+        console.groupEnd();
+        ok(true, "Must not fail");
+    });
+
+
+    module("console.timeAndTimeEnd");
+    
+    test("Recording single time", function() {
+        var start = new Date().getTime();
+        console.time("timer");
+        while (new Date().getTime() - start < 50) {};
+        console.timeEnd("timer");
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 1, "One parameters must be logged.");
+        ok(log[0].match(/^timer: [0-9]+ms$/), "Time must be logged.");
+    });
+   
+    test("Recording two times", function() {
+        var start = new Date().getTime();
+        console.time("timer");
+        while (new Date().getTime() - start < 50) {};
+        console.time("timer2");
+        while (new Date().getTime() - start < 50) {};
+        console.timeEnd("timer");
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 1, "One parameters must be logged.");
+        ok(log[0].match(/^timer: [0-9]+ms$/), "Time must be logged.");
+        console.timeEnd("timer2");
+        var log = logs.pop();
+        ok(!!log, "Another log message must be recorded.");
+        equal(log.length, 1, "One parameters must be logged.");
+        ok(log[0].match(/^timer2: [0-9]+ms$/), "Time must be logged.");
+    });
+   
+    test("Ending unknown timer", function() {
+        console.timeEnd("unknown");
+        equal(logs.length, 0, "No message must be logged.");
+    });
+   
+
+    module("console.profile");
+      
+    test("Ignored", function() {
+        console.profile();
+        ok(true, "Must not fail");
+    });
+
+
+    module("console.profileEnd");
+      
+    test("Ignored", function() {
+        console.profileEnd();
+        ok(true, "Must not fail");
+    });
+   
+
+    module("console.timeStamp");
+      
+    test("Ignored", function() {
+        console.timeStamp();
+        ok(true, "Must not fail");
+    });
+   
+    module("console.count");
+      
+    test("Ignored", function() {
+        console.count();
+        ok(true, "Must not fail");
+    });
+   
+
+    module("console.excption");
+      
+    test("Logging exception as message", function() {
+        var e = new Error("test");
+        console.exception(e, 53);
+        var log = logs.pop();
+        ok(!!log, "Log message must be recorded.");
+        equal(log.length, 2, "Two parameters must be logged.");
+        strictEqual(log[0], e, "Exception must match.");
+        equal(log[1], 53, "First parameter must match.");
+    });
+   
+
+    module("console.table");
+      
+    test("Auto-column", function() {
+        var a = { "name": "John", "age": 37 };
+        var b = { "name": "James", "age": 39 }; 
+        console.table([a, b]);
+        equal(logs.length, 2, "Two log messages must be logged.");
+        var log = logs.shift();
+        equal(log.length, 2, "Two parameters must be logged.");
+        equal(log[0], "John", "First value of first row must be John.");
+        equal(log[1], 37, "Second value of first row must be 37.");
+        var log = logs.shift();
+        equal(log.length, 2, "Two parameters must be logged.");
+        equal(log[0], "James", "First value of second row must be James.");
+        equal(log[1], 39, "Second value of second row must be 39.");
+    });
+   
+    test("Custom columns", function() {
+        var a = { "name": "John", "age": 37 };
+        var b = { "name": "James", "age": 39 }; 
+        console.table([a, b], ["age"]);
+        equal(logs.length, 2, "Two log messages must be logged.");
+        var log = logs.shift();
+        equal(log.length, 1, "One parameter must be logged.");
+        equal(log[0], 37, "First value of first row must be 37.");
+        var log = logs.shift();
+        equal(log.length, 1, "One parameter must be logged.");
+        equal(log[0], 39, "First value of second row must be 39.");
+    });
+
+    });  
+    
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">console-shim test</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">test markup, will be hidden</div>    
+  </body>
+</html>

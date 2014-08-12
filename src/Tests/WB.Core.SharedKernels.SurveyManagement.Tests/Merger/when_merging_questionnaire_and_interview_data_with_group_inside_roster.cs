@@ -81,11 +81,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
 
         It should_have_in_first_nested_group_answered_question = () =>
             mergeResult.Groups.FirstOrDefault(g => g.Id == nestedGroupId && g.RosterVector.Length == 1 && g.RosterVector[0] == 0)
-                .Questions.FirstOrDefault(q => q.Id == questionInNestedGroupId).Answer.ShouldEqual(1);
+                .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == questionInNestedGroupId).Answer.ShouldEqual(1);
 
         It should_have_in_second_nested_group_answered_question = () =>
             mergeResult.Groups.FirstOrDefault(g => g.Id == nestedGroupId && g.RosterVector.Length == 1 && g.RosterVector[0] == 1)
-                .Questions.FirstOrDefault(q => q.Id == questionInNestedGroupId).Answer.ShouldEqual(2);
+                .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == questionInNestedGroupId).Answer.ShouldEqual(2);
 
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;

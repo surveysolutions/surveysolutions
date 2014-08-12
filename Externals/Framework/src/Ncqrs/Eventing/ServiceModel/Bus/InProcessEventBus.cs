@@ -86,15 +86,29 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             var publishedEventClosedType = typeof (PublishedEvent<>).MakeGenericType(eventMessage.Payload.GetType());
             var publishedEvent = (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, eventMessage);
 
+            var occurredExceptions = new List<Exception>();
+
             foreach (var handler in handlers)
             {
                 Log.DebugFormat("Calling handler {0} for event {1}.", handler.GetType().FullName,
                                 eventMessageType.FullName);
 
-                handler(publishedEvent);
+                try
+                {
+                    handler.Invoke(publishedEvent);
+                }
+                catch (Exception exception)
+                {
+                    occurredExceptions.Add(exception);
+                }
 
                 Log.DebugFormat("Call finished.");
             }
+
+            if (occurredExceptions.Count > 0)
+                throw new AggregateException(
+                    string.Format("{0} handler(s) failed to handle published event '{1}'.", occurredExceptions.Count, eventMessage.EventIdentifier),
+                    occurredExceptions);
         }
 
         [ContractVerification(false)]

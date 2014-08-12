@@ -5,7 +5,7 @@
     "parentGroupId": "ddfaab0f-3739-4a67-9f08-8add19325cfe",
     "enablementCondition": "[q2]>0",
     "isPreFilled": false,
-    "instructions": null,
+    "instructions": "test instructions",
     "isMandatory": false,
     "questionScope": "Interviewer",
     "variableName": "q1",
@@ -47,21 +47,33 @@
         "value": "QRBarcode",
         "text": "QR Barcode"
     }],
-    "questionScopeOptions": [{
+    "allQuestionScopeOptions": [{
         "value": "Interviewer",
         "text": "Interviewer"
     }, {
         "value": "Supervisor",
         "text": "Supervisor"
     }, {
-        "value": "Headquarter",
-        "text": "Headquarters"
+        "value": "Prefilled",
+        "text": "Prefilled"
     }],
-    "breadcrumbs": [{
-        "id": "6e240642-274c-4bde-a937-baa78cd4ad6f",
-        "title": "Chapter"
+    "notPrefilledQuestionScopeOptions": [{
+        "value": "Interviewer",
+        "text": "Interviewer"
     }, {
-        "id": "ddfaab0f-3739-4a67-9f08-8add19325cfe",
-        "title": "Group 1"
-    }]
+        "value": "Supervisor",
+        "text": "Supervisor"
+    }],
+    "breadcrumbs":[
+      {
+         "id":"bd2a7dcc79ce4d1f850437e18e666526",
+         "title":"Chapter 1",
+         "isRoster":false
+      },
+      {
+         "id":"37a644516935a32113d60b92e5da90d3",
+         "title":"Questions about age",
+         "isRoster":false
+      }
+   ]
 }

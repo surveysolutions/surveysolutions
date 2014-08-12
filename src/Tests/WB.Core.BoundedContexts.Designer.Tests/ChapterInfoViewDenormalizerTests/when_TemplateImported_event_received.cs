@@ -26,7 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
                     chapter1GroupTitle: chapter1GroupTitle, chapter2Id: chapter2Id, chapter2Title: chapter2Title,
                     chapter2QuestionId: chapter2QuestionId, chapter2QuestionTitle: chapter2QuestionTitle,
                     chapter2QuestionVariable: chapter2QuestionVariable,
-                    chapter2QuestionConditionExpression: chapter2QuestionConditionExpression));
+                    chapter2QuestionConditionExpression: chapter2QuestionConditionExpression,
+                    chapter1StaticTextId: chapter1StaticTextId, chapter1StaticText: chapter1StaticText));
 
         It should_groupInfoView_Id_be_equal_to_questionnaireId = () =>
             viewState.ItemId.ShouldEqual(questionnaireId);
@@ -49,17 +50,26 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         It should_groupInfoView_first_chapter_items_not_be_null = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldNotBeNull();
 
-        It should_groupInfoView_first_chapter_contains_1_item = () =>
-            ((GroupInfoView)viewState.Items[0]).Items.Count.ShouldEqual(1);
+        It should_groupInfoView_first_chapter_contains_group_and_static_text = () =>
+            ((GroupInfoView)viewState.Items[0]).Items.Count.ShouldEqual(2);
 
-        It should_groupInfoView_first_chapter_first_item_be_type_of_GroupInfoView = () =>
-            ((GroupInfoView)viewState.Items[0]).Items[0].ShouldBeOfExactType<GroupInfoView>();
+        It should_import_static_text = () =>
+            ((GroupInfoView)viewState.Items[0]).Items[0].ShouldBeOfExactType<StaticTextInfoView>();
 
-        It should_groupInfoView_first_chapter_first_item_id_be_equal_to_chapter1GroupId = () =>
-            ((GroupInfoView)((GroupInfoView)viewState.Items[0]).Items[0]).ItemId.ShouldEqual(chapter1GroupId);
+        It should_import_static_text_id = () =>
+            ((StaticTextInfoView)((GroupInfoView)viewState.Items[0]).Items[0]).ItemId.ShouldEqual(chapter1StaticTextId);
 
-        It should_groupInfoView_first_chapter_first_item_title_be_equal_to_chapter1GroupTitle = () =>
-            ((GroupInfoView)((GroupInfoView)viewState.Items[0]).Items[0]).Title.ShouldEqual(chapter1GroupTitle);
+        It should_import_static_text_text = () =>
+            ((StaticTextInfoView)((GroupInfoView)viewState.Items[0]).Items[0]).Text.ShouldEqual(chapter1StaticText);
+
+        It should_import_groups = () =>
+            ((GroupInfoView)viewState.Items[0]).Items[1].ShouldBeOfExactType<GroupInfoView>();
+
+        It should_import_group_id = () =>
+            ((GroupInfoView)((GroupInfoView)viewState.Items[0]).Items[1]).ItemId.ShouldEqual(chapter1GroupId);
+
+        It should_import_group_title = () =>
+            ((GroupInfoView)((GroupInfoView)viewState.Items[0]).Items[1]).Title.ShouldEqual(chapter1GroupTitle);
 
         It should_groupInfoView_second_chapter_id_be_equal_chapter2Id = () =>
             viewState.Items[1].ItemId.ShouldEqual(chapter2Id);
@@ -91,15 +101,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         It should_groupInfoView_second_chapter_first_item_type_be_equal_to_text_question_type = () =>
             ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).Type.ShouldEqual(QuestionType.Text);
 
-        It should_groupInfoView_second_chapter_first_item_LinkedVariables_not_be_null = () =>
-            ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).LinkedVariables.ShouldNotBeNull();
-
-        It should_groupInfoView_second_chapter_first_item_LinkedVariables_contains_1_variable = () =>
-            ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).LinkedVariables.Count().ShouldEqual(1);
-
-        It should_groupInfoView_second_chapter_first_item_LinkedVariables_first_variable_be_equal_to_variableUsedInChapter2Question = () =>
-            ((QuestionInfoView)((GroupInfoView)viewState.Items[1]).Items[0]).LinkedVariables.FirstOrDefault(lv=> lv == variableUsedInChapter2Question).ShouldNotBeNull();
-
         private static string questionnaireId = "33333333333333333333333333333333";
         private static string chapter1Id = "22222222222222222222222222222222";
         private static string chapter2Id = "11111111111111111111111111111111";
@@ -112,6 +113,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.ChapterInfoViewDenormalizerTest
         private static string chapter2QuestionVariable = "chapter2textquestion";
         private static string variableUsedInChapter2Question = "var1";
         private static string chapter2QuestionConditionExpression = string.Format("[{0}] > 0", variableUsedInChapter2Question);
+        private static string chapter1StaticTextId = "66666666666666666666666666666666";
+        private static string chapter1StaticText = "some text";
 
         private static ChaptersInfoViewDenormalizer denormalizer;
         private static GroupInfoView viewState;

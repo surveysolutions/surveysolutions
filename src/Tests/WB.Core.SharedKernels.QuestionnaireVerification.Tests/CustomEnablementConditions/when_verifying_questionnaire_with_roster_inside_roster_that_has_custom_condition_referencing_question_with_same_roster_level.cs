@@ -31,12 +31,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new Group
                 {
                     IsRoster = true,
+                    VariableName = "a",
                     RosterSizeQuestionId = rosterSizeQuestion,
                     Children = new List<IComposite>
                     {
                         new Group
                         {
                             IsRoster = true,
+                            VariableName = "b",
                             RosterSizeQuestionId = rosterSizeQuestion,
                             Children = new List<IComposite>
                             {
@@ -50,6 +52,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         new Group
                         {
                             IsRoster = true,
+                            VariableName = "c",
                             RosterSizeQuestionId = rosterSizeQuestion,
                             PublicKey = rosterWithCustomCondition,
                             ConditionExpression = "some random expression"

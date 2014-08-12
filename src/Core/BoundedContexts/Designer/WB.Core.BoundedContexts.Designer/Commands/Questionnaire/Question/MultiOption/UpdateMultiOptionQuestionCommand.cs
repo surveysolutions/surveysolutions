@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Multi
             Guid questionnaireId,
             Guid questionId,
             string title,
-            string variableName,
+            string variableName, string variableLabel,
             bool isMandatory,
             string enablementCondition,
             string instructions,
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Multi
             int? maxAllowedAnswers)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions)
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel)
         {
             this.Scope = scope;
             this.ValidationMessage = validationMessage;

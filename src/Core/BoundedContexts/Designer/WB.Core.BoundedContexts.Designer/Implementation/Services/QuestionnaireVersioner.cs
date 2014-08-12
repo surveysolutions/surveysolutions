@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         private static readonly QuestionnaireVersion version_1_6_1 = new QuestionnaireVersion(1, 6, 1);
         private static readonly QuestionnaireVersion version_1_6_2 = new QuestionnaireVersion(1, 6, 2);
+        private static readonly QuestionnaireVersion version_2_1_0 = new QuestionnaireVersion(2, 1, 0);
 
         public QuestionnaireVersion GetVersion(QuestionnaireDocument questionnaire)
         {
@@ -27,7 +28,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (nestedRostersCount > 0 && version < version_1_6_2) 
                 version = version_1_6_2;
 
+            int maskQuestionCount = GetQuestionsWithMaskCount(questionnaire);
+            int staticTextCount = GetStaticTextCount(questionnaire);
+            int groupWithVariableNameCount = GetGroupWithVariableNameCount(questionnaire);
+            if ((maskQuestionCount > 0 || groupWithVariableNameCount > 0 || staticTextCount > 0) && version < version_2_1_0)
+                version = version_2_1_0;
+
             return version;
+        }
+
+        private int GetStaticTextCount(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Find<IStaticText>(x => true).Count();
         }
 
         private int GetNestedRostersCount(QuestionnaireDocument questionnaire)
@@ -50,6 +62,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static int GetQrBarcodeQuestionsCount(QuestionnaireDocument questionnaire)
         {
             return questionnaire.Find<QRBarcodeQuestion>(x => true).Count();
+        }
+
+        private static int GetQuestionsWithMaskCount(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Find<TextQuestion>(x => !string.IsNullOrEmpty(x.Mask)).Count();
+        }
+
+        private static int GetGroupWithVariableNameCount(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Find<IGroup>(x => !string.IsNullOrEmpty(x.VariableName)).Count();
         }
     }
 }

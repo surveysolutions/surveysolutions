@@ -51,6 +51,7 @@
             </div>
             <button class="btn btn-default" type="button" data-bind="click: filter">Search</button>
         </form>
+    
     </div>
 }
 
@@ -70,6 +71,9 @@
                 <td>
                     <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaire">
                         <i class="glyphicon glyphicon-info-sign"></i> Import
+                    </a>
+                    <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaireCensus">
+                        <i class="glyphicon glyphicon-info-sign"></i> Import with census mode
                     </a>
                 </td>
             </tr>

@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     RosterFixedTitles = new[] { "1", "2" },
+                    VariableName = "rosterGroup",
                     PublicKey = rosterGroupId,
                     Children = new List<IComposite>
                     {
@@ -29,6 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                         {
                             IsRoster = true,
                             PublicKey = nestedRosterId,
+                            VariableName = "nestedRoster",
                             RosterSizeSource = RosterSizeSourceType.FixedTitles,
                             RosterFixedTitles = new[] { "a" }
                         }

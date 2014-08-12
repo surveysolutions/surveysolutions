@@ -132,7 +132,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             long version = evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            this.StoreSurveyDto(id, questionnaireDocument, version);
+            this.StoreSurveyDto(id, questionnaireDocument, version, evnt.Payload.AllowCensusMode);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -141,12 +141,13 @@ namespace CAPI.Android.Core.Model.EventHandlers
             long version = evnt.Payload.Version;
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            this.StoreSurveyDto(id, questionnaireDocument, evnt.Payload.Version);
+            this.StoreSurveyDto(id, questionnaireDocument, evnt.Payload.Version, evnt.Payload.AllowCensusMode);
         }
 
-        private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version)
+        private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode)
         {
-            this.surveyDtoDocumentStorage.Store(new SurveyDto(id, questionnaireDocument.Title, version), id);
+            var surveyDto = new SurveyDto(id, questionnaireDocument.Title, version, allowCensusMode);
+            this.surveyDtoDocumentStorage.Store(surveyDto, surveyDto.Id);
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)

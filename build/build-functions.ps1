@@ -75,7 +75,7 @@ function BuildDesigner($Solution, $Project, $BuildConfiguration) {
 	RunTests $BuildConfiguration
 
 	RunConfigTransform "src\UI\Designer\WB.UI.Designer\Web.config" "src\UI\Designer\WB.UI.Designer\Web.$BuildConfiguration.config"
-	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
+    BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 	AddArtifacts $Project $BuildConfiguration
 }
 

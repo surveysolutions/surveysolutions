@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.View;
 using WB.Core.GenericSubdomains.Utils;
@@ -25,18 +26,27 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             var result = new DashboardModel(input.UserId);
 
             var userId = input.UserId.FormatGuid();
-            var questionnairies = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
 
-            if (questionnairies.Count > 0)
+            var surveys = surveyDtoDocumentStorage.Filter(s => true).ToList();
+            var questionnaires = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
+
+            foreach (var surveyDto in surveys)
             {
-                var surveysIds = questionnairies.Select(q => q.Survey).Distinct().ToList();
-                var surveys = this.surveyDtoDocumentStorage.Filter(s => surveysIds.Contains(s.Id));
-
-                foreach (SurveyDto surveyDto in surveys)
+                var interviews = new List<QuestionnaireDTO>();
+                if (string.IsNullOrEmpty(surveyDto.QuestionnaireId))
                 {
-                    result.Surveys.Add(new DashboardSurveyItem(Guid.Parse(surveyDto.Id), surveyDto.TemplateMaxVersion, surveyDto.SurveyTitle,
-                        questionnairies.Where(q => q.Survey == surveyDto.Id)
-                            .Select(q => q.GetDashboardItem(q.Survey, surveyDto.SurveyTitle, q.Comments))));
+                    interviews.AddRange(questionnaires.Where(q => q.Survey == surveyDto.Id));
+                }
+                else
+                {
+                    interviews.AddRange(
+                        questionnaires.Where(q => q.Survey == surveyDto.QuestionnaireId && q.SurveyVersion == surveyDto.QuestionnaireVersion));
+                }
+                if (interviews.Any() || surveyDto.AllowCensusMode)
+                {
+                    result.Surveys.Add(new DashboardSurveyItem(surveyDto.Id, surveyDto.QuestionnaireId, surveyDto.QuestionnaireVersion,
+                        surveyDto.SurveyTitle, interviews.Select(i => i.GetDashboardItem(i.Survey, surveyDto.SurveyTitle, i.Comments)),
+                        surveyDto.AllowCensusMode));
                 }
             }
             return result;

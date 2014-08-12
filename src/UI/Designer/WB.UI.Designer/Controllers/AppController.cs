@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Shared.Web.Membership;
@@ -22,14 +23,10 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Open(Guid id)
         {
-            if (!AppSettings.Instance.IsNewDesignerEditPageEnabled)
-            {
-                return HttpNotFound();
-            }
-            string url = "~/UpdatedDesigner#/" + id.FormatGuid();
+            var httpCookie = new HttpCookie("questionnaireId", id.FormatGuid());
+            Response.AppendCookie(httpCookie);
 
-            ViewBag.RedirectTo = Url.Content(url);
-            return View();
+            return Redirect("~/UpdatedDesigner/app");
         }
     }
 }

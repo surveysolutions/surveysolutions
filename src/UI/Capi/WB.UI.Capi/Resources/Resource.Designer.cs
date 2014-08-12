@@ -84,6 +84,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Id.tvErrorWarning = global::WB.UI.Capi.Resource.Id.tvErrorWarning;
 			global::WB.UI.Shared.Android.Resource.Id.tvITem = global::WB.UI.Capi.Resource.Id.tvITem;
 			global::WB.UI.Shared.Android.Resource.Id.tvMError = global::WB.UI.Capi.Resource.Id.tvMError;
+			global::WB.UI.Shared.Android.Resource.Id.tvText = global::WB.UI.Capi.Resource.Id.tvText;
 			global::WB.UI.Shared.Android.Resource.Id.tvTitle = global::WB.UI.Capi.Resource.Id.tvTitle;
 			global::WB.UI.Shared.Android.Resource.Id.vpContent = global::WB.UI.Capi.Resource.Id.vpContent;
 			global::WB.UI.Shared.Android.Resource.Layout.AbstractQuestionView = global::WB.UI.Capi.Resource.Layout.AbstractQuestionView;
@@ -91,6 +92,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::WB.UI.Capi.Resource.Layout.list_navigation_item;
 			global::WB.UI.Shared.Android.Resource.Layout.RosterQuestion = global::WB.UI.Capi.Resource.Layout.RosterQuestion;
 			global::WB.UI.Shared.Android.Resource.Layout.ScreenContentFragment = global::WB.UI.Capi.Resource.Layout.ScreenContentFragment;
+			global::WB.UI.Shared.Android.Resource.Layout.StaticTextView = global::WB.UI.Capi.Resource.Layout.StaticTextView;
 			global::WB.UI.Shared.Android.Resource.Layout.StatisticsContent = global::WB.UI.Capi.Resource.Layout.StatisticsContent;
 			global::WB.UI.Shared.Android.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.Capi.Resource.Layout.zxingscanneractivitylayout;
 			global::WB.UI.Shared.Android.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.Capi.Resource.Layout.zxingscannerfragmentlayout;
@@ -253,14 +255,14 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040002
 			public const int ScreenId = 2130968578;
 			
-			// aapt resource value: 0x7f04003e
-			public const int btnAnswered = 2130968638;
+			// aapt resource value: 0x7f04003f
+			public const int btnAnswered = 2130968639;
 			
-			// aapt resource value: 0x7f040044
-			public const int btnBackup = 2130968644;
+			// aapt resource value: 0x7f040045
+			public const int btnBackup = 2130968645;
 			
-			// aapt resource value: 0x7f040048
-			public const int btnCancel = 2130968648;
+			// aapt resource value: 0x7f040049
+			public const int btnCancel = 2130968649;
 			
 			// aapt resource value: 0x7f04003b
 			public const int btnCollect = 2130968635;
@@ -268,14 +270,14 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f04003c
 			public const int btnCollectMajor = 2130968636;
 			
-			// aapt resource value: 0x7f040042
-			public const int btnComplete = 2130968642;
+			// aapt resource value: 0x7f040043
+			public const int btnComplete = 2130968643;
 			
 			// aapt resource value: 0x7f04000a
 			public const int btnInstructions = 2130968586;
 			
-			// aapt resource value: 0x7f040041
-			public const int btnInvalid = 2130968641;
+			// aapt resource value: 0x7f040042
+			public const int btnInvalid = 2130968642;
 			
 			// aapt resource value: 0x7f04002e
 			public const int btnLogin = 2130968622;
@@ -289,20 +291,20 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040015
 			public const int btnNext = 2130968597;
 			
+			// aapt resource value: 0x7f040047
+			public const int btnRestore = 2130968647;
+			
 			// aapt resource value: 0x7f040046
-			public const int btnRestore = 2130968646;
+			public const int btnSendTabletInfo = 2130968646;
 			
-			// aapt resource value: 0x7f040045
-			public const int btnSendTabletInfo = 2130968645;
-			
-			// aapt resource value: 0x7f040043
-			public const int btnSync = 2130968643;
+			// aapt resource value: 0x7f040044
+			public const int btnSync = 2130968644;
 			
 			// aapt resource value: 0x7f040037
 			public const int btnSyncPoint = 2130968631;
 			
-			// aapt resource value: 0x7f04003f
-			public const int btnUnanswered = 2130968639;
+			// aapt resource value: 0x7f040040
+			public const int btnUnanswered = 2130968640;
 			
 			// aapt resource value: 0x7f040038
 			public const int btnVersion = 2130968632;
@@ -310,8 +312,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f040039
 			public const int btnWhereAmI = 2130968633;
 			
-			// aapt resource value: 0x7f040049
-			public const int contentFrame = 2130968649;
+			// aapt resource value: 0x7f04004a
+			public const int contentFrame = 2130968650;
 			
 			// aapt resource value: 0x7f040036
 			public const int editSettingsSyncPoint = 2130968630;
@@ -415,8 +417,8 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f04000d
 			public const int tvError = 2130968589;
 			
-			// aapt resource value: 0x7f040040
-			public const int tvErrorWarning = 2130968640;
+			// aapt resource value: 0x7f040041
+			public const int tvErrorWarning = 2130968641;
 			
 			// aapt resource value: 0x7f040028
 			public const int tvITem = 2130968616;
@@ -424,8 +426,11 @@ namespace WB.UI.Capi
 			// aapt resource value: 0x7f04000c
 			public const int tvMError = 2130968588;
 			
-			// aapt resource value: 0x7f040047
-			public const int tvSyncResult = 2130968647;
+			// aapt resource value: 0x7f040048
+			public const int tvSyncResult = 2130968648;
+			
+			// aapt resource value: 0x7f04003e
+			public const int tvText = 2130968638;
 			
 			// aapt resource value: 0x7f04000e
 			public const int tvTitle = 2130968590;
@@ -513,19 +518,22 @@ namespace WB.UI.Capi
 			public const int SplashScreen = 2130903057;
 			
 			// aapt resource value: 0x7f030012
-			public const int StatisticsContent = 2130903058;
+			public const int StaticTextView = 2130903058;
 			
 			// aapt resource value: 0x7f030013
-			public const int sync_dialog = 2130903059;
+			public const int StatisticsContent = 2130903059;
 			
 			// aapt resource value: 0x7f030014
-			public const int SyncLogin = 2130903060;
+			public const int sync_dialog = 2130903060;
 			
 			// aapt resource value: 0x7f030015
-			public const int zxingscanneractivitylayout = 2130903061;
+			public const int SyncLogin = 2130903061;
 			
 			// aapt resource value: 0x7f030016
-			public const int zxingscannerfragmentlayout = 2130903062;
+			public const int zxingscanneractivitylayout = 2130903062;
+			
+			// aapt resource value: 0x7f030017
+			public const int zxingscannerfragmentlayout = 2130903063;
 			
 			static Layout()
 			{

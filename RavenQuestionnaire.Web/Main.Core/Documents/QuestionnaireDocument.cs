@@ -74,6 +74,8 @@ namespace Main.Core.Documents
 
         public string Description { get; set; }
 
+        public string VariableName { get; set; }
+
         public bool IsRoster
         {
             get { return false; }
@@ -183,22 +185,21 @@ namespace Main.Core.Documents
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        public void ReplaceQuestionWithNew(IQuestion oldQuestion, IQuestion newQuestion)
+        public void ReplaceEntity(IComposite oldEntity, IComposite newEntity)
         {
-            Guid oldQuestionId = oldQuestion.PublicKey;
+            Guid oldEntityId = oldEntity.PublicKey;
 
-            IComposite questionParent = this.GetParentOfQuestion(oldQuestionId);
-
-            if (questionParent != null)
+            var entityParent = this.GetParentById(oldEntityId);
+            if (entityParent != null)
             {
-                int indexOfQuestion = questionParent.Children.FindIndex(child => IsQuestionWithSpecifiedId(child, oldQuestionId));
-                questionParent.Children[indexOfQuestion] = newQuestion;
+                int indexOfEntity = entityParent.Children.FindIndex(child => IsEntityWithSpecifiedId(child, oldEntityId));
+                entityParent.Children[indexOfEntity] = newEntity;
             }
             else
             {
                 logger.Warn(string.Format(
-                    "Failed to replace question '{0}' with new because it's parent is not found.",
-                    oldQuestionId));
+                    "Failed to replace entity '{0}' with new because it's parent is not found.",
+                    oldEntityId));
             }
         }
 
@@ -234,12 +235,13 @@ namespace Main.Core.Documents
             }
         }
 
-        public void UpdateGroup(Guid groupId, string title, string description, string conditionExpression)
+        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression)
         {
             this.UpdateGroup(groupId, group =>
             {
                 @group.ConditionExpression = conditionExpression;
                 @group.Description = description;
+                @group.VariableName = variableName;
                 @group.Update(title);
             });
         }
@@ -252,17 +254,17 @@ namespace Main.Core.Documents
                 update(@group);
         }
 
-        public void RemoveQuestion(Guid questionId)
+        public void RemoveEntity(Guid entityId)
         {
-            IComposite questionParent = this.GetParentOfQuestion(questionId);
+            IComposite entityParent = this.GetParentById(entityId);
 
-            if (questionParent != null)
+            if (entityParent != null)
             {
-                RemoveChildQuestionBySpecifiedId(questionParent, questionId);
+                RemoveChildEntityBySpecifiedId(entityParent, entityId);
             }
             else
             {
-                logger.Warn(string.Format("Failed to remove question '{0}' because it's parent is not found.", questionId));
+                logger.Warn(string.Format("Failed to remove entity '{0}' because it's parent is not found.", entityId));
             }
         }
 
@@ -271,9 +273,9 @@ namespace Main.Core.Documents
             RemoveFirstChild(container, child => IsGroupWithSpecifiedId(child, groupId));
         }
 
-        private static void RemoveChildQuestionBySpecifiedId(IComposite container, Guid questionId)
+        private static void RemoveChildEntityBySpecifiedId(IComposite container, Guid entityId)
         {
-            RemoveFirstChild(container, child => IsQuestionWithSpecifiedId(child, questionId));
+            RemoveFirstChild(container, child => IsEntityWithSpecifiedId(child, entityId));
         }
 
         private static void RemoveFirstChild(IComposite container, Predicate<IComposite> condition)
@@ -306,14 +308,14 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
-        public IGroup GetParentOfQuestion(Guid questionId)
+        public IGroup GetParentById(Guid entityId)
         {
             return this
-                .Find<IGroup>(group => ContainsChildQuestionWithSpecifiedId(group, questionId))
+                .Find<IGroup>(group => ContainsEntityWithSpecifiedId(group, entityId))
                 .SingleOrDefault();
         }
 
-        public IEnumerable<T> GetAllQuestions<T>(IGroup startGroup = null) where T : class, IComposite
+        public IEnumerable<T> GetEntitiesByType<T>(IGroup startGroup = null) where T : class, IComposite
         {
             var result = new List<T>();
             var groups = new Queue<IComposite>();
@@ -322,10 +324,10 @@ namespace Main.Core.Documents
             while (groups.Count != 0)
             {
                 IComposite queueItem = groups.Dequeue();
-                var question = queueItem as T;
-                if (question != null)
+                var entity = queueItem as T;
+                if (entity != null)
                 {
-                    result.Add(question);
+                    result.Add(entity);
                     continue;
                 }
 
@@ -362,6 +364,20 @@ namespace Main.Core.Documents
             return result;
         }
 
+        public IComposite GetChapterOfItemById(Guid itemId)
+        {
+            IComposite item = this.GetItemOrLogWarning(itemId);
+            IComposite parent = item.GetParent();
+
+            while (!(parent is IQuestionnaireDocument) && parent != null)
+            {
+                item = parent;
+                parent = parent.GetParent();
+            }
+
+            return item;
+        }
+
         internal IEnumerable<IQuestion> GetAllQuestions()
         {
             var treeStack = new Stack<IComposite>();
@@ -389,9 +405,9 @@ namespace Main.Core.Documents
             return container.Children.Any(child => IsGroupWithSpecifiedId(child, groupId));
         }
 
-        private static bool ContainsChildQuestionWithSpecifiedId(IComposite container, Guid questionId)
+        private static bool ContainsEntityWithSpecifiedId(IComposite container, Guid entityId)
         {
-            return container.Children.Any(child => IsQuestionWithSpecifiedId(child, questionId));
+            return container.Children.Any(child => IsEntityWithSpecifiedId(child, entityId));
         }
 
         private static bool ContainsChildItem(IComposite container, IComposite item)
@@ -404,9 +420,9 @@ namespace Main.Core.Documents
             return child is IGroup && ((IGroup)child).PublicKey == groupId;
         }
 
-        private static bool IsQuestionWithSpecifiedId(IComposite child, Guid questionId)
+        private static bool IsEntityWithSpecifiedId(IComposite entity, Guid entityId)
         {
-            return child is IQuestion && ((IQuestion)child).PublicKey == questionId;
+            return entity.PublicKey == entityId;
         }
 
         public void ConnectChildrenWithParent()
@@ -534,7 +550,7 @@ namespace Main.Core.Documents
         {
             if (groupPublicKey == null)
             {
-                IComposite questionParent = this.GetParentOfQuestion(questionId);
+                IComposite questionParent = this.GetParentById(questionId);
                 groupPublicKey = questionParent.PublicKey;
             }
 

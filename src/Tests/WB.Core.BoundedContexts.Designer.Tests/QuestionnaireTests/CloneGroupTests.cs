@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.CloneGroupWithoutChildren(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         parentGroupId: null, sourceGroupId: groupId, targetIndex: 1, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.CloneGroupWithoutChildren(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         parentGroupId: null, sourceGroupId: groupId, targetIndex: 1, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.CloneGroupWithoutChildren(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         parentGroupId: null, sourceGroupId: groupId, targetIndex: 1, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                     questionnaire.CloneGroupWithoutChildren(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
                         parentGroupId: null, sourceGroupId: groupId, targetIndex: 1, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 

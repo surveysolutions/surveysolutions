@@ -115,12 +115,12 @@ namespace WB.UI.Capi
                     {
                         StringBuilder infoMessageBuilder = new StringBuilder();
                         string format = "{0} : {1}";
-                        infoMessageBuilder.AppendLine(String.Format(format, "Accuracy", t.Result.Accuracy.ToString("N2") + "m"));
+                        
                         infoMessageBuilder.AppendLine(String.Format(format, "Latitude", t.Result.Latitude.ToString("N4")));
                         infoMessageBuilder.AppendLine(String.Format(format, "Longitude", t.Result.Longitude.ToString("N4")));
-                        infoMessageBuilder.AppendLine(String.Format(format, "Altitude", t.Result.Altitude.ToString("N4")) + "m");
-                        infoMessageBuilder.AppendLine(String.Format(format, "Altitude Accuracy", t.Result.AltitudeAccuracy.ToString("N4") + "m"));
-
+                        infoMessageBuilder.AppendLine(String.Format(format, "Accuracy", t.Result.Accuracy.ToString("N2") + "m"));
+                        infoMessageBuilder.AppendLine(String.Format(format, "Altitude", t.Result.Altitude.ToString("N2")) + "m");
+                        
                         infoMessageBuilder.AppendLine(String.Format(format, "Time: ", t.Result.Timestamp.ToLocalTime().ToString("G")));
 
                         messageToShow = infoMessageBuilder.ToString();

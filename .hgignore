@@ -40,25 +40,14 @@ lib/Release
 lib/Debug
 App_Data/LocalStorage/*
 
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/Elmah/*
-
 scaffolding.config
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/SyncData/*
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/SampleCreationStatus/*
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/TempFileImportData/*
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/IncomigData/*
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/IncomingData/*.sync
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/IncomingData/IncomingDataWithErrors/*.sync
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/ExportedData/*
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/QuestionnaireExportStructureStorage/*
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/TabletInformationStorage/*
 src/UI/Headquarters/WB.UI.Headquarters/App_Data/Elmah/
 src/UI/Headquarters/WB.UI.Headquarters/App_Data/ExportedData/
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/PreLoadingTemplates/*
-RavenQuestionnaire.Web/Web.Supervisor/App_Data/PreLoadedData/*
 src/UI/Headquarters/WB.UI.Headquarters/App_Data/PreLoadedData/*
 src/UI/Headquarters/WB.UI.Headquarters/App_Data/SampleCreationStatus/*
 src/UI/Headquarters/WB.UI.Headquarters/App_Data/
 src/UI/Supervisor/Web.Supervisor/App_Data/Elmah/*
 src/UI/Supervisor/Web.Supervisor/App_Data/ExportedData/*
 src/UI/Supervisor/WB.UI.Supervisor/App_Data
+src/UI/Designer/WB.UI.Designer/UpdatedDesigner/node_modules/
+src/UI/Designer/WB.UI.Designer/UpdatedDesigner/build

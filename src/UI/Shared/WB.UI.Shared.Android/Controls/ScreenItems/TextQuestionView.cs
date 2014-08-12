@@ -1,5 +1,8 @@
 using System;
 using Android.Content;
+using Android.Graphics;
+using Android.Text;
+using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
@@ -8,6 +11,7 @@ using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.UI.Shared.Android.Controls.MaskedEditTextControl;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
@@ -19,14 +23,26 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             : base(context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService, membership)
         {
         }
+        protected ValueQuestionViewModel TypedMode
+        {
+            get { return this.Model as ValueQuestionViewModel; }
+        }
+        protected MaskedWatcher maskedWatcher;
 
         protected override void Initialize()
         {
             base.Initialize();
+
             this.etAnswer = new EditText(this.Context);
+            maskedWatcher = new MaskedWatcher(TypedMode.Mask, etAnswer);
+            etAnswer.AddTextChangedListener(
+              maskedWatcher
+              );
+
             this.etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                                    ViewGroup.LayoutParams.WrapContent);
-            this.PutAnswerStoredInModelToUI();
+       
+            this.etAnswer.InputType = InputTypes.TextVariationVisiblePassword;
             this.etAnswer.SetSelectAllOnFocus(true);
             this.etAnswer.ImeOptions = ImeAction.Done;
             this.etAnswer.SetSingleLine(true);
@@ -34,17 +50,23 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.etAnswer.FocusChange += this.etAnswer_FocusChange;
             this.llWrapper.Click += this.TextQuestionView_Click;
             this.llWrapper.AddView(this.etAnswer);
+
+            this.PutAnswerStoredInModelToUI();
+
         }
 
         private void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (e.HasFocus)
             {
-                // ShowKeyboard(etAnswer);
                 return;
             }
-
-            var newAnswer = this.etAnswer.Text.Trim();
+            if (!maskedWatcher.IsTextMaskMatched())
+            {
+                PutAnswerStoredInModelToUI();
+                return;
+            }
+            var newAnswer = etAnswer.Text.Trim();
 
             if (newAnswer != this.Model.AnswerString)
             {

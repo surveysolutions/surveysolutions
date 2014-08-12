@@ -65,6 +65,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
                     multyoptionQuestion.MaxAllowedAnswers
                 };
             }
+
+            var textQuestion = doc as TextQuestion;
+            if (textQuestion != null)
+            {
+                this.Settings = new
+                {
+                    Mask = textQuestion.Mask
+                };
+            }
         }
 
         public Guid? ParentId { get; set; }

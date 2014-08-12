@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             IsPublic = source.IsPublic;
             Title = source.Title;
 
+            var staticTexts = new List<NodeWithParent>();
             var questions = new List<NodeWithParent>();
             var groups = new List<NodeWithParent>();
 
@@ -55,6 +56,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                             ParentId = node.Node.PublicKey
                         });
                     }
+                    else if(child is IStaticText)
+                    {
+                        staticTexts.Add(new NodeWithParent()
+                        {
+                            Node = child,
+                            ParentId = node.Node.PublicKey
+                        });
+                    }
                 }
             }
             Chapters = source.Children.Select(composite => new QuestionnaireEntityNode
@@ -65,6 +74,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             Groups = groups.Select(@group => new EditGroupView(@group.Node as IGroup, group.ParentId, group.Level)).ToList();
             Questions = questions.Select(question => new EditQuestionView(question.Node as IQuestion, question.ParentId)).ToList();
+            StaticTexts =
+                staticTexts.Select(staticText => new EditStaticTextView(staticText.Node as IStaticText, staticText.ParentId))
+                    .ToList();
         }
 
         public List<QuestionnaireEntityNode> Chapters { get; set; }
@@ -72,6 +84,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public List<EditGroupView> Groups { get; set; }
 
         public List<EditQuestionView> Questions { get; set; }
+
+        public List<EditStaticTextView> StaticTexts { get; set; }
 
         public Guid? CreatedBy { get; set; }
 

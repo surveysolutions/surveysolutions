@@ -1,0 +1,54 @@
+{
+  "name": "angular-block-ui",
+  "version": "0.0.8",
+  "keywords": [
+    "angular",
+    "angularjs",
+    "block",
+    "block-ui",
+    "blockui"
+  ],
+  "authors": [
+    "Null McNull <no@spam.org>"
+  ],
+  "description": "An AngularJS module that allows you to block user interaction on AJAX requests.",
+  "license": "MIT",
+  "main": "package/**/*",
+  "ignore": [
+    "**/.*",
+    "*.sublime-project",
+    "gruntfile.js",
+    "package.json",
+    "package.sh",
+    "node_modules",
+    "vendor",
+    "dist",
+    "grunt",
+    "karma",
+    "server",
+    "src",
+    "tmp"
+  ],
+  "dependencies": {
+    "angular": "~1.2.4"
+  },
+  "devDependencies": {
+    "angular-route": "~1.2.4",
+    "angular-resource": "~1.2.4",
+    "lodash": "~2.4.1",
+    "angular-mocks": "~1.2.4",
+    "showdown": "~0.3.1",
+    "bootstrap-css": "~3.1.1"
+  },
+  "homepage": "https://github.com/McNull/angular-block-ui",
+  "_release": "0.0.8",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.8",
+    "commit": "2d033c4322812f1d89053f9e9e8ace3d05972036"
+  },
+  "_source": "git://github.com/McNull/angular-block-ui.git",
+  "_target": "~0.0.8",
+  "_originalSource": "angular-block-ui",
+  "_direct": true
+}

@@ -14,8 +14,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid questionId, 
             Guid parentGroupId,
             string title, 
-            QuestionType type, 
-            string variableName, 
+            QuestionType type,
+            string variableName, string variableLabel, string mask, 
             bool isMandatory, 
             bool isPreFilled,
             QuestionScope scope, 
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             bool areAnswersOrdered, 
             int? maxAllowedAnswers)
 
-            : base(questionnaireId, questionId, title, type, variableName, isMandatory, isPreFilled,
+            : base(questionnaireId, questionId, title, type, variableName,variableLabel,mask, isMandatory, isPreFilled,
                 scope, enablementCondition, validationExpression, validationMessage, instructions, options, 
                 responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers)
         {

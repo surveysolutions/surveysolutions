@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
 
-            var questionFactory = new Mock<IQuestionFactory>();
+            var questionFactory = new Mock<IQuestionnaireEntityFactory>();
 
             var clonedQuestion = CreateTextListQuestion(questionId: questionId);
 
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 .Callback<QuestionData>(d => questionData = d)
                 .Returns(() => clonedQuestion);
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionnaireEntityFactory: questionFactory.Object);
         };
 
         Because of = () =>

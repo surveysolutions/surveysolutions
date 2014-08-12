@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddDateTimeQuestionHandlerTests
                     parentGroupId: chapterId,
                     title: title,
                     variableName: notUniqueVariableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,

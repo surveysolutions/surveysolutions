@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.AddGroup(groupId, responsibleId, "title", rosterSizeQuestionId, null, null, null, false,
+            questionnaire.AddGroup(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, null, false,
                 RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         Cleanup stuff = () =>

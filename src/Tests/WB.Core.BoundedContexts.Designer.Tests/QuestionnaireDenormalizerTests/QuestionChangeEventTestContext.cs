@@ -12,14 +12,15 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
     internal class QuestionChangeEventTestContext
     {
-        internal static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(IQuestionFactory questionFactoryMock, Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
+        internal static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(IQuestionnaireEntityFactory questionnaireEntityFactoryMock, Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
         {
-            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, questionFactoryMock, Mock.Of<ILogger>(), Mock.Of<IQuestionnaireDocumentUpgrader>());
+            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, questionnaireEntityFactoryMock, Mock.Of<ILogger>(), Mock.Of<IQuestionnaireDocumentUpgrader>());
 
             return denormalizer;
         }

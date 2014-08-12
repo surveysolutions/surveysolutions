@@ -38,6 +38,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                     PublicKey = rosterGroupId,
                     IsRoster = true,
                     RosterSizeQuestionId = rosterQuestionId,
+                    VariableName = "a",
                     Children = new List<IComposite>
                     {
                         new NumericQuestion
@@ -52,6 +53,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                             PublicKey = rosterChildGroupId,
                             IsRoster = true,
                             RosterSizeQuestionId = rosterInsideRosterQuestionId,
+                            VariableName = "b",
                             Children = new List<IComposite>
                             {
                                 new NumericQuestion

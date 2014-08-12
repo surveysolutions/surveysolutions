@@ -26,7 +26,7 @@ function GetPathToJarsigner() {
 }
 
 function GetPathToZipalign() {
-	return 'C:\Users\Administrator\AppData\Local\Android\android-sdk\tools\zipalign.exe'
+	return 'C:\Android\android-sdk\tools\zipalign.exe'
 }
 
 function GetPathToManifest([string]$CapiProject) {
@@ -139,7 +139,7 @@ $ErrorActionPreference = "Stop"
 if([string]::IsNullOrWhiteSpace($VersionName)){
 	$VersionName = (GetVersionString $CapiProject)
 }
-$VersionName = $VersionName + " (Build " + $VersionCode + ")"
+$VersionName = $VersionName + " (build " + $VersionCode + ")"
 
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
 BuildAndroidApp $CapiProject $BuildConfiguration | %{ if (-not $_) { Exit } }

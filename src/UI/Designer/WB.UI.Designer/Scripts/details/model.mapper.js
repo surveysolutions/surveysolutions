@@ -2,8 +2,8 @@
     ['model', 'config'],
     function (model, config) {
         var getType = function (intType) {
-            return intType === 1 ? "QuestionView" : "GroupView";
-        },
+                return intType === 1 ? "QuestionView" : intType === 20 ? "StaticTextView" : "GroupView";
+            },
             // public mapping methods
             error = {
                 getDtoId: function (dto) { return dto.Code; },
@@ -37,6 +37,7 @@
                     item.id(this.getDtoId(dto));
                     item.level(dto.Level);
                     item.title(dto.Title);
+                    item.variableName(dto.VariableName);
                     item.parent(dto.ParentId);
                     item.description(dto.Description);
                     item.condition(dto.ConditionExpression);
@@ -54,6 +55,17 @@
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     item.commit();
+                    return item;
+                }
+            },
+            staticText = {
+                getDtoId: function (dto) { return dto.Id; },
+                fromDto: function (dto, item) {
+                    item = item || new model.StaticText();
+                    item.id(this.getDtoId(dto));
+                    item.title(dto.Title);
+                    item.parent(dto.ParentId);
+
                     return item;
                 }
             },
@@ -80,7 +92,8 @@
                     item.instruction(dto.Instructions);
 
                     item.alias(dto.Alias);
-
+                    item.variableLabel(dto.VariableLabel);
+                   
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
 
@@ -103,6 +116,8 @@
                         item.areAnswersOrdered(_.isBoolean(dto.Settings.AreAnswersOrdered) ? settings.AreAnswersOrdered : false);
                         item.maxAllowedAnswers(_.isNumber(dto.Settings.MaxAllowedAnswers) ? settings.MaxAllowedAnswers : null);
                         item.maxAnswerCount(_.isNumber(dto.Settings.MaxAnswerCount) ? settings.MaxAnswerCount : null);
+
+                        item.mask(_.isEmpty(settings.Mask) ? null : settings.Mask);
                     }
                     item.isNew(false);
                     item.dirtyFlag().reset();
@@ -115,6 +130,7 @@
         return {
             questionnaire: questionnaire,
             question: question,
+            staticText: staticText,
             group: group,
             error: error
         };

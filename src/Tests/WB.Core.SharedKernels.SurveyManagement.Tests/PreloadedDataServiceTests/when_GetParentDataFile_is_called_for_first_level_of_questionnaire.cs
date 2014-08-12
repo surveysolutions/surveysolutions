@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     RosterFixedTitles = new[] { "1" },
+                    VariableName = "roster",
                     PublicKey = rosterGroupId
                 });
 
@@ -30,7 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadedDataServiceTests
         Because of =
            () =>
                result =
-                   preloadedDataService.GetParentDataFile("Roster Group", new[] { CreatePreloadedDataByFile(null, null, "Roster Group"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title) });
+                   preloadedDataService.GetParentDataFile("roster", new[] { CreatePreloadedDataByFile(null, null, "roster"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title) });
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

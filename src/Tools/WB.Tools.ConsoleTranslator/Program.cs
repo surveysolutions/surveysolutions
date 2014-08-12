@@ -103,7 +103,7 @@ namespace WB.Tools.ConsoleTranslator
 
         private static IEnumerable<Entry> ExtractEntriesFromQuestionaire(QuestionnaireDocument questionnaire)
         {
-            foreach (var question in questionnaire.GetAllQuestions<IQuestion>())
+            foreach (var question in questionnaire.GetEntitiesByType<IQuestion>())
             {
                 yield return new Entry
                 {
@@ -133,7 +133,7 @@ namespace WB.Tools.ConsoleTranslator
             int translatedOptions = 0;
             int skippedOptions = 0;
 
-            foreach (var question in questionnaire.GetAllQuestions<IQuestion>())
+            foreach (var question in questionnaire.GetEntitiesByType<IQuestion>())
             {
                 Entry questionEntry = entries.GetQuestionEntry(question.StataExportCaption);
 
