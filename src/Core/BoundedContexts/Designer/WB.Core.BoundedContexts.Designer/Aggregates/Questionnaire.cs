@@ -213,7 +213,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers,
-                        null));
+                        null,
+                        e.IsFilteredCombobox));
 
             if (question == null)
             {
@@ -259,6 +260,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.CountOfDecimalPlaces,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -302,7 +304,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        e.MaxAnswerCount));
+                        e.MaxAnswerCount,
+                        null));
 
             if (question == null)
             {
@@ -341,7 +344,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers,
-                        null));
+                        null,
+                        e.IsFilteredCombobox));
             if (question == null)
             {
                 return;
@@ -382,6 +386,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
+                        null,
                         null,
                         null,
                         null));
@@ -428,7 +433,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        e.MaxAnswerCount));
+                        e.MaxAnswerCount,
+                        null));
 
             if (question == null)
             {
@@ -478,7 +484,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers,
-                        null));
+                        null,
+                        e.IsFilteredCombobox));
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
 
@@ -516,6 +523,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
+                        null,
                         null,
                         null,
                         null));
@@ -556,7 +564,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        e.MaxAnswerCount));
+                        e.MaxAnswerCount,
+                        null));
 
             if (question == null)
             {
@@ -617,6 +626,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -656,6 +666,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -687,6 +698,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Instructions,
                         null,
                         new List<Guid>(),
+                        null,
                         null,
                         null,
                         null,
@@ -1172,6 +1184,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             validationMessage: categoricalSingleQuestion.ValidationMessage,
                             linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
                             isPreFilled: categoricalSingleQuestion.Featured,
+                            isFilteredCombobox: categoricalSingleQuestion.IsFilteredCombobox,
                             options:
                                 categoricalSingleQuestion.Answers.Select(
                                     answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
@@ -1367,7 +1380,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = question.LinkedToQuestionId,
 
                 AreAnswersOrdered = asMultioptions != null ? (bool?)asMultioptions.AreAnswersOrdered : null,
-                MaxAllowedAnswers = asMultioptions != null ? (int?)asMultioptions.MaxAllowedAnswers : null
+                MaxAllowedAnswers = asMultioptions != null ? (int?)asMultioptions.MaxAllowedAnswers : null,
+
+                IsFilteredCombobox = question.IsFilteredCombobox
             });
         }
 
@@ -2076,7 +2091,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Instructions = instructions,
                 Answers = ConvertOptionsToAnswers(options),
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
@@ -2123,7 +2139,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Instructions = instructions,
                 Answers = ConvertOptionsToAnswers(options),
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
@@ -2160,7 +2177,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 enablementCondition: enablementCondition, validationExpression: validationExpression,
                 validationMessage: validationMessage, instructions: instructions, parentGroupId: parentGroupId,
                 sourceQuestionId: sourceQuestionId, targetIndex: targetIndex, responsibleId: responsibleId,
-                options: options, linkedToQuestionId: linkedToQuestionId);
+                options: options, linkedToQuestionId: linkedToQuestionId, isFilteredCombobox: isFilteredCombobox);
         }
 
         #endregion
@@ -4209,7 +4226,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ApplyCategoricalSingleAnswerQuestionEvent(Guid questionId, string title, string variableName, string variableLabel,
             bool isMandatory, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression,
             string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex,
-            Guid responsibleId, Option[] options, Guid? linkedToQuestionId)
+            Guid responsibleId, Option[] options, Guid? linkedToQuestionId, bool? isFilteredCombobox)
         {
             this.ApplyEvent(new QuestionCloned
             {
@@ -4230,7 +4247,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 

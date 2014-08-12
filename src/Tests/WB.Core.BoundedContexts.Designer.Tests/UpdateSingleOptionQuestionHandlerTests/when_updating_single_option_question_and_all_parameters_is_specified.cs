@@ -97,6 +97,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
             eventContext.GetSingleEvent<QuestionChanged>()
                 .ValidationMessage.ShouldEqual(validationMessage);
 
+        It should_raise_QuestionChanged_event_with_isFilteredCombobox_specified = () =>
+            eventContext.GetSingleEvent<QuestionChanged>()
+                .IsFilteredCombobox.ShouldEqual(isFilteredCombobox);
+
         It should_raise_NewQuestionAdded_event_with_same_options_count_as_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .Answers.Length.ShouldEqual(options.Length);
@@ -108,6 +112,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         It should_raise_NewQuestionAdded_event_with_same_option_values_as_specified = () =>
            eventContext.GetSingleEvent<QuestionChanged>()
                .Answers.Select(x => x.AnswerValue).ShouldContainOnly(options.Select(x => x.Value));
+
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
@@ -125,6 +130,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static string validationMessage = "validation message";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
-        private static bool isFilteredCombobox = false;
+        private static bool isFilteredCombobox = true;
     }
 }

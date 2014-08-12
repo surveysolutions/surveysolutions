@@ -42,7 +42,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.CountOfDecimalPlaces,
                 data.AreAnswersOrdered,
                 data.MaxAllowedAnswers,
-                data.MaxAnswerCount);
+                data.MaxAnswerCount,
+                data.IsFilteredCombobox);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
@@ -138,7 +139,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             int? countOfDecimalPlaces,
             bool? areAnswersOrdered,
             int? maxAllowedAnswers,
-            int? masAnswerCount)
+            int? masAnswerCount,
+            bool? isFilteredCombobox)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -154,6 +156,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.Instructions = instructions;
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
+            question.IsFilteredCombobox = isFilteredCombobox;
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
