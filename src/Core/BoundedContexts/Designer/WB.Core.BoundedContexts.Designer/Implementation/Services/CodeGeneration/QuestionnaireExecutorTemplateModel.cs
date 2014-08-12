@@ -71,7 +71,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     {
                         var varName = !String.IsNullOrEmpty(childAsIQuestion.StataExportCaption) ?
                             childAsIQuestion.StataExportCaption :
-                            childAsIQuestion.PublicKey.FormatGuid();
+                            "__" + childAsIQuestion.PublicKey.FormatGuid();
+
                         var question = new QuestionTemplateModel()
                         {
                             Id = childAsIQuestion.PublicKey,
@@ -109,13 +110,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                             var currentRosterScope = currentScope.GetRosterScope().Select(t => t).ToList();
                             currentRosterScope.Add(currentScopeId);
-                            var varName = childAsIGroup.PublicKey.FormatGuid();
+
+                            var varName = !String.IsNullOrWhiteSpace(childAsIGroup.VariableName) ?
+                            childAsIGroup.VariableName :
+                            "__" + childAsIGroup.PublicKey.FormatGuid();
 
                             var roster = new RosterTemplateModel()
                             {
                                 Id = childAsIGroup.PublicKey,
                                 Conditions = childAsIGroup.ConditionExpression,
-                                VariableName = "@__" + varName, //waiting for merge roster name from default
+                                VariableName = varName,
                                 
                                 GeneratedTypeName = GenerateTypeNameByScope(currentRosterScope),
                                 
