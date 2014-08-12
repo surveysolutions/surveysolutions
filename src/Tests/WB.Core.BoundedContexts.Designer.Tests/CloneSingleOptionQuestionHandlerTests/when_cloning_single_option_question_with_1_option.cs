@@ -47,7 +47,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
                     targetIndex: targetIndex,
                     responsibleId: responsibleId,
                     options: options,
-                    linkedToQuestionId: linkedToQuestionId));
+                    linkedToQuestionId: linkedToQuestionId,
+                    isFilteredCombobox: isFilteredCombobox));
 
 
         It should_throw_QuestionnaireException = () =>
@@ -75,5 +76,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static int targetIndex = 1;
+        private static bool isFilteredCombobox = false;
     }
 }
