@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             return questionnaireDocument;
         }
 
-        public static IInterviewExpressionStateProvider GetIInterviewExpressionStateProvider(QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionStateProvider GetInterviewExpressionStateProvider(QuestionnaireDocument questionnaireDocument)
         {
             return new InterviewExpressionStateTestingProvider(questionnaireDocument);
         }

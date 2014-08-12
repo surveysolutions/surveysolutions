@@ -197,7 +197,7 @@
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="CloneNumericQuestionHandlerTests\when_cloning_numeric_question_with_variable_name_roster_title.cs" />
     <Compile Include="CodeGenerationTests\CodeGenerationTestsContext.cs" />
-    <Compile Include="CodeGenerationTests\when_generating_assembly_with_.cs" />
+    <Compile Include="CodeGenerationTests\when_expression_state_processes_validation_expressions.cs" />
     <Compile Include="CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_new_questionnaire.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
