@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
         public UpdateStaticTextCommand(Guid questionnaireId, Guid entityId, string text, Guid responsibleId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId)
         {
-            this.Text = text;
+            this.Text = CommandUtils.SanitizeHtml(text);
         }
 
         public string Text { get; set; }
