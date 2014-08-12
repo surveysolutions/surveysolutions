@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         private static readonly QuestionnaireVersion version_1_6_1 = new QuestionnaireVersion(1, 6, 1);
         private static readonly QuestionnaireVersion version_1_6_2 = new QuestionnaireVersion(1, 6, 2);
-        private static readonly QuestionnaireVersion version_2_1_0 = new QuestionnaireVersion(2, 1, 0);
+        private static readonly QuestionnaireVersion version_2_2_0 = new QuestionnaireVersion(2, 2, 0);
 
         public QuestionnaireVersion GetVersion(QuestionnaireDocument questionnaire)
         {
@@ -31,8 +31,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             int maskQuestionCount = GetQuestionsWithMaskCount(questionnaire);
             int staticTextCount = GetStaticTextCount(questionnaire);
             int groupWithVariableNameCount = GetGroupWithVariableNameCount(questionnaire);
-            if ((maskQuestionCount > 0 || groupWithVariableNameCount > 0 || staticTextCount > 0) && version < version_2_1_0)
-                version = version_2_1_0;
+            if ((maskQuestionCount > 0 || groupWithVariableNameCount > 0 || staticTextCount > 0) && version < version_2_2_0)
+                version = version_2_2_0;
 
             return version;
         }

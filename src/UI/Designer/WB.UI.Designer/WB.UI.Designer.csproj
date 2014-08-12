@@ -424,6 +424,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="UpdatedDesigner\app\scripts\components\contextMenu.js" />
+    <Content Include="UpdatedDesigner\app\scripts\filters\escapeFilter.js" />
     <Content Include="UpdatedDesigner\app\views\treegroup.html" />
     <Content Include="UpdatedDesigner\app\views\treequestion.html" />
     <Content Include="UpdatedDesigner\app\views\treestatictext.html" />

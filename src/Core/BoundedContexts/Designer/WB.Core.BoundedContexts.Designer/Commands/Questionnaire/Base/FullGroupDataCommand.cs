@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             : base(questionnaireId, groupId, responsibleId)
         {
             this.VariableName = variableName;
-            this.Title = title;
+            this.Title = CommandUtils.SanitizeHtml(title);
 
             this.IsRoster = isRoster;
             this.RosterSizeQuestionId = rosterSizeQuestionId;
