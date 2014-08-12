@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         }
 
 
-        public static QuestionnaireDocument CreateQuestionnaireWithOneNumericIntegerQuestionWithValidation(Guid questionnaireId, Guid questionId)
+        public static QuestionnaireDocument CreateQuestionnairDocumenteWithOneNumericIntegerQuestionWithValidationAndTwoRosters(Guid questionnaireId, Guid questionId)
         {
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId};
 

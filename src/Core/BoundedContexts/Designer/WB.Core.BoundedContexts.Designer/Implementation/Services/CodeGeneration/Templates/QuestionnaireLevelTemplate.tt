@@ -104,20 +104,9 @@
             {
                 return new List<Action>
                 {
-                    <#foreach (var q in Model.Questions) 
-                    {#>
-                    <#if(!string.IsNullOrWhiteSpace(q.Conditions))
-                    {#>        
-                    Verifier(<#= q.GeneratedConditionsMethodName#>, <#= q.GeneratedStateName#>.ItemId, <#= q.GeneratedStateName#>),                        
-                    <# }#>
-                    <#}#>
-                    
-                    <#foreach (var g in Model.Groups) 
-                {#>
-                    <#if(!string.IsNullOrWhiteSpace(g.Conditions))
-                {#>
-                    Verifier(<#= g.GeneratedConditionsMethodName#>, <#= g.GeneratedStateName#>.ItemId, <#= g.GeneratedStateName#>),                        
-                    <# }#>
+                    <#foreach (var tuple in QuestionnaireExecutorTemplateModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, null)) 
+                    {#>                    
+                    Verifier(<#= tuple.Item1#>, <#=tuple.Item1#>.ItemId, <#= tuple.Item1#>),                        
                     <#}#>
                 };
             }

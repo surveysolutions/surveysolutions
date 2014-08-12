@@ -303,7 +303,7 @@ foreach (var r in QuestionnaireTemplateStructure.AllRosters)
             
             #line 236 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
 foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies) 
-            {
+                {
             
             #line default
             #line hidden
