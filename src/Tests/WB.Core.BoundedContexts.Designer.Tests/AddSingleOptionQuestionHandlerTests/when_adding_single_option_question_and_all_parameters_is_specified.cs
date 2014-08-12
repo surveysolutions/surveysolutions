@@ -95,6 +95,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .LinkedToQuestionId.ShouldEqual(linkedToQuestionId);
 
+        It should_raise_NewQuestionAdded_event_with_isFilteredCombobox_specified = () =>
+            eventContext.GetSingleEvent<NewQuestionAdded>()
+                .IsFilteredCombobox.ShouldEqual(isFilteredCombobox);
+
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
@@ -110,6 +114,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
         private static string validationMessage = "validationMessage";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
-        private static bool isFilteredCombobox = false;
+        private static bool isFilteredCombobox = true;
     }
 }

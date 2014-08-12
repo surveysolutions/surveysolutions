@@ -127,6 +127,7 @@ namespace Main.Core.Entities.SubEntities
         public string ValidationMessage { get; set; }
 
         public Guid? LinkedToQuestionId { get; set; }
+        public bool? IsFilteredCombobox { get; set; }
 
         public abstract void AddAnswer(Answer answer);
 

@@ -30,7 +30,8 @@ namespace Main.Core.Entities
             int? countOfDecimalPlaces,
             bool? areAnswersOrdered,
             int? maxAllowedAnswers,
-            int? maxAnswerCount
+            int? maxAnswerCount,
+            bool? isFilteredCombobox
             )
         {
             this.PublicKey = publicKey;
@@ -58,6 +59,7 @@ namespace Main.Core.Entities
             this.MaxAllowedAnswers = maxAllowedAnswers;
             this.Mask = mask;
             this.MaxAnswerCount = maxAnswerCount;
+            this.IsFilteredCombobox = isFilteredCombobox;
         }
 
         public readonly Guid PublicKey;
@@ -86,5 +88,6 @@ namespace Main.Core.Entities
         public readonly int? MaxAllowedAnswers;
 
         public readonly int? MaxAnswerCount;
+        public readonly bool? IsFilteredCombobox;
     }
 }

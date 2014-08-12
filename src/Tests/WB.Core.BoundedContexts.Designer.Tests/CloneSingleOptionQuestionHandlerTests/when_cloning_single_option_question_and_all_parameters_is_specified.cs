@@ -96,6 +96,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
             eventContext.GetSingleEvent<QuestionCloned>()
                 .TargetIndex.ShouldEqual(targetIndex);
 
+        It should_raise_QuestionCloned_event_with_IsFilteredCombobox_specified = () =>
+            eventContext.GetSingleEvent<QuestionCloned>()
+                .IsFilteredCombobox.ShouldEqual(isFilteredCombobox);
+
         It should_raise_NewQuestionAdded_event_with_same_options_count_as_specified = () =>
             eventContext.GetSingleEvent<QuestionCloned>()
                 .Answers.Length.ShouldEqual(options.Length);
@@ -126,6 +130,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
         private static string validationMessage = "validationMessage";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
-        private static bool isFilteredCombobox = false;
+        private static bool isFilteredCombobox = true;
     }
 }
