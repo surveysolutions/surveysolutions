@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
         {
             type = "UpdateGroup";
 
-            title = "MAIN";
+            title = @"<b width='7'>MA<font color='red'>IN</font></b><img /><script>alert('hello world!')</script><script/>";
             questionnaireId = "11111111-1111-1111-1111-111111111111";
             groupId = "22222222-2222-2222-2222-222222222222";
             propagationKind = "AutoPropagated";
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             result.ShouldBeOfExactType<UpdateGroupCommand>();
 
         It should_return_same_title_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).Title.ShouldEqual(title);
+            ((UpdateGroupCommand)result).Title.ShouldEqual(sanitizedTitle);
 
         It should_return_same_questionnaire_id_in_NewUpdateGroupCommand = () =>
             ((UpdateGroupCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
@@ -56,6 +56,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
         private static CommandDeserializer deserializer;
         private static string command;
         private static string title;
+        private static string sanitizedTitle = "<b>MA<font color=\"red\">IN</font></b>"; 
         private static string questionnaireId;
         private static string groupId;
         private static string propagationKind;

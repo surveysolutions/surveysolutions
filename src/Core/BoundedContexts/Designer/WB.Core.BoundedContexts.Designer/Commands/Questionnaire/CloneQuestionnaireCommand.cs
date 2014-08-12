@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
         {
             this.PublicKey = publicKey;
             this.CreatedBy = createdBy;
-            this.Title = title;
+            this.Title = CommandUtils.SanitizeHtml(title);
             this.IsPublic = isPublic;
             this.Source = doc;
         }
