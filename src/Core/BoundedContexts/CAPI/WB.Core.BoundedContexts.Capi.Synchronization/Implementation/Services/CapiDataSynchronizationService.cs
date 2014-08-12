@@ -179,7 +179,14 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             }
 
             this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
-            this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version));
+            try
+            {
+
+                this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version));
+            }
+            catch (Exception)
+            {
+            }
         }
 
         private TResult ExtractObject<TResult>(string initialString, bool isCompressed)
