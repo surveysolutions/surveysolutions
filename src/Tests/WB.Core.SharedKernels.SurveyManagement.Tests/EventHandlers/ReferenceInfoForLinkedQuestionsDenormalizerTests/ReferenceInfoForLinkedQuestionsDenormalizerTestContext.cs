@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -31,6 +32,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.ReferenceIn
                 Source = questionnaireDocument
             },
                 questionnaireDocument.PublicKey);
+        }
+
+
+        protected static IPublishedEvent<QuestionnaireDeleted> CreateQuestionnaireDeletedEvent(Guid questionnaireId, long version)
+        {
+            return ToPublishedEvent(new QuestionnaireDeleted
+            {
+                QuestionnaireVersion = version
+            },
+                questionnaireId);
         }
 
         protected static ReferenceInfoForLinkedQuestionsDenormalizer CreateReferenceInfoForLinkedQuestionsDenormalizer(

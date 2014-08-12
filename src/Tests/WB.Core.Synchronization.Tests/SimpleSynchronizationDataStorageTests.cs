@@ -117,6 +117,31 @@ namespace WB.Core.Synchronization.Tests
         }
 
         [Test]
+        public void DeleteQuestionnaire_When_questionnarie_is_census_mode_Then_last_stored_chunk_by_questionnarie_is_command_For_delete_questionnaire()
+        {
+            // arrange
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
+            var questionnarieId = Guid.Parse("23333333-3333-3333-3333-333333333333");
+            var supervisorId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+
+
+            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
+
+            // act
+            target.DeleteQuestionnaire(questionnarieId, 1);
+
+            // assert
+            var packageId = questionnarieId.Combine(1);
+            var result = target.GetLatestVersion(packageId);
+            Assert.That(result.ItemType, Is.EqualTo(SyncItemType.DeleteTemplate));
+            Assert.That(result.Id, Is.EqualTo(packageId));
+            Assert.That(result.IsCompressed, Is.EqualTo(true));
+        }
+
+        [Test]
         public void SaveQuestionnaire_When_questionnarie_is_not_in_census_mode_Then_last_stored_chunk_by_questionnarie_is_command_For_create_questionnaire()
         {
             // arrange
