@@ -234,7 +234,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
             {
                 <#foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies) 
-            {#>
+                {#>
                 { Guid.Parse("<#= dependency.Key #>"), new Guid[]{
                 <#foreach (var d in dependency.Value)
                 {#>

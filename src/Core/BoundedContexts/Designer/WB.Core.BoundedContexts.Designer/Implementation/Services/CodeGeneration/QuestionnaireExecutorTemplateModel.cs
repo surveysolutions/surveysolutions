@@ -26,30 +26,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<Guid, List<Guid>> ConditionalDependencies { private set; get; }
         public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { private set; get; }
 
-        
+
         public QuestionnaireExecutorTemplateModel(QuestionnaireDocument questionnaireDocument)
         {
-            AllQuestions = new List<QuestionTemplateModel>();
-            AllGroups = new List<GroupTemplateModel>();
-            AllRosters = new List<RosterTemplateModel>();
+            this.AllQuestions = new List<QuestionTemplateModel>();
+            this.AllGroups = new List<GroupTemplateModel>();
+            this.AllRosters = new List<RosterTemplateModel>();
 
-            GeneratedScopesTypeNames = new Dictionary<string, string>();
+            this.GeneratedScopesTypeNames = new Dictionary<string, string>();
 
             this.QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel();
-        
+
             this.Id = questionnaireDocument.PublicKey;
             this.ConditionalDependencies = this.BuildDependencyTree(questionnaireDocument);
 
 
             this.BuildStructures(questionnaireDocument);
-            
         }
 
         private void BuildStructures(QuestionnaireDocument questionnaireDoc)
         {
             Queue<Tuple<IGroup, IRosterScope>> rostersToProcess = new Queue<Tuple<IGroup, IRosterScope>>();
             rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(questionnaireDoc, this.QuestionnaireLevelModel));
-            
+
             while (rostersToProcess.Count != 0)
             {
                 var rosterScope = rostersToProcess.Dequeue();
@@ -69,9 +68,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     var childAsIQuestion = child as IQuestion;
                     if (childAsIQuestion != null)
                     {
-                        var varName = !String.IsNullOrEmpty(childAsIQuestion.StataExportCaption) ?
-                            childAsIQuestion.StataExportCaption :
-                            "__" + childAsIQuestion.PublicKey.FormatGuid();
+                        var varName = !String.IsNullOrEmpty(childAsIQuestion.StataExportCaption)
+                            ? childAsIQuestion.StataExportCaption
+                            : "__" + childAsIQuestion.PublicKey.FormatGuid();
 
                         var question = new QuestionTemplateModel()
                         {
@@ -80,12 +79,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             Conditions = childAsIQuestion.ConditionExpression,
                             Validations = childAsIQuestion.ValidationExpression,
                             QuestionType = childAsIQuestion.QuestionType,
-
                             GeneratedTypeName = this.GenerateQuestionTypeName(childAsIQuestion),
                             GeneratedMemberName = "@__" + varName,
                             GeneratedStateName = "@__" + varName + "_state",
                             GeneratedIdName = "@__" + varName + "_id",
-                            GeneratedConditionsMethodName = "IsEnabled_"+ varName,
+                            GeneratedConditionsMethodName = "IsEnabled_" + varName,
                             GeneratedValidationsMethodName = "IsValid_" + varName,
                             GeneratedMandatoryMethodName = "IsManadatoryValid_" + varName,
                             IsMandatory = childAsIQuestion.Mandatory,
@@ -95,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         currentScope.Questions.Add(question);
 
                         this.AllQuestions.Add(question);
-                        
+
                         continue;
                     }
 
@@ -111,25 +109,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             var currentRosterScope = currentScope.GetRosterScope().Select(t => t).ToList();
                             currentRosterScope.Add(currentScopeId);
 
-                            var varName = !String.IsNullOrWhiteSpace(childAsIGroup.VariableName) ?
-                            childAsIGroup.VariableName :
-                            "__" + childAsIGroup.PublicKey.FormatGuid();
+                            var varName = !String.IsNullOrWhiteSpace(childAsIGroup.VariableName)
+                                ? childAsIGroup.VariableName
+                                : "__" + childAsIGroup.PublicKey.FormatGuid();
 
                             var roster = new RosterTemplateModel()
                             {
                                 Id = childAsIGroup.PublicKey,
                                 Conditions = childAsIGroup.ConditionExpression,
                                 VariableName = varName,
-                                
-                                GeneratedTypeName = GenerateTypeNameByScope(currentRosterScope),
-                                
+                                GeneratedTypeName = this.GenerateTypeNameByScope(currentRosterScope),
                                 GeneratedStateName = "@__" + varName + "_state",
                                 ParentScope = currentScope,
                                 GeneratedIdName = "@__" + varName + "_id",
                                 GeneratedConditionsMethodName = "IsEnabled_" + varName,
                                 RosterScope = currentRosterScope,
-                                GeneratedRosterScopeName = "@__"+ varName + "_scope",
-
+                                GeneratedRosterScopeName = "@__" + varName + "_scope",
                             };
 
                             rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(childAsIGroup, roster));
@@ -141,7 +136,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         else
                         {
                             var varName = childAsIGroup.PublicKey.FormatGuid();
-                            var group = 
+                            var group =
                                 new GroupTemplateModel()
                                 {
                                     Id = childAsIGroup.PublicKey,
@@ -164,16 +159,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 }
             }
 
-            RostersGroupedByScope = AllRosters.GroupBy(r => r.GeneratedTypeName).ToDictionary(g => g.Key, g => g.ToList());
+            this.RostersGroupedByScope = this.AllRosters.GroupBy(r => r.GeneratedTypeName).ToDictionary(g => g.Key, g => g.ToList());
         }
 
         private string GenerateTypeNameByScope(IEnumerable<Guid> currentRosterScope)
         {
             var scopeStringKey = String.Join("$", currentRosterScope);
-            if (!GeneratedScopesTypeNames.ContainsKey(scopeStringKey))
-                GeneratedScopesTypeNames.Add(scopeStringKey, "@__" + Guid.NewGuid().FormatGuid());
-            
-            return GeneratedScopesTypeNames[scopeStringKey];
+            if (!this.GeneratedScopesTypeNames.ContainsKey(scopeStringKey))
+                this.GeneratedScopesTypeNames.Add(scopeStringKey, "@__" + Guid.NewGuid().FormatGuid());
+
+            return this.GeneratedScopesTypeNames[scopeStringKey];
         }
 
         private static bool IsRosterGroup(IGroup group)
@@ -239,19 +234,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 case QuestionType.DateTime:
                     return "DateTime?";
-                
+
                 case QuestionType.SingleOption:
                     return (question.LinkedToQuestionId == null) ? "decimal?" : "decimal[]";
 
                 case QuestionType.TextList:
                     return "Tuple<decimal, string>[]";
 
-                //TODO: should be fixed with custom type
+                    //TODO: should be fixed with custom type
                 case QuestionType.GpsCoordinates:
                     return "decimal?";
                 default:
                     throw new ArgumentException("Unknown question type.");
             }
+        }
+
+        public static List<Tuple<string,string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions, List<GroupTemplateModel> groups,
+            Dictionary<Guid, Guid[]> conditionalDependencies)
+        {
+            var sortedList = (from groupTemplateModel 
+                                in groups 
+                             where !string.IsNullOrWhiteSpace(groupTemplateModel.Conditions) 
+                            select new Tuple<string, string>(groupTemplateModel.GeneratedConditionsMethodName, groupTemplateModel.GeneratedStateName)).ToList();
+            
+            sortedList.AddRange(from questionTemplateModel 
+                                  in questions 
+                               where !string.IsNullOrWhiteSpace(questionTemplateModel.Conditions) 
+                              select new Tuple<string, string>(questionTemplateModel.GeneratedConditionsMethodName, questionTemplateModel.GeneratedStateName));
+            
+            return sortedList;
         }
     }
 }
