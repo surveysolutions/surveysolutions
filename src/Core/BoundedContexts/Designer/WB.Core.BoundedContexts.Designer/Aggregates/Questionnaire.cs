@@ -2048,7 +2048,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Option[] options,
             Guid? linkedToQuestionId,
-            Guid responsibleId)
+            Guid responsibleId,
+            bool isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
@@ -2092,7 +2093,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId,
             Option[] options,
-            Guid? linkedToQuestionId)
+            Guid? linkedToQuestionId,
+            bool isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
@@ -2141,7 +2143,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int targetIndex,
             Guid responsibleId,
             Option[] options,
-            Guid? linkedToQuestionId)
+            Guid? linkedToQuestionId,
+            bool isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
