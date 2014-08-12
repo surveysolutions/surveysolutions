@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         ");
             
             #line 19 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var Model in RosterScopeModel.Rosters) 
+foreach (var Model in RosterScopeModel.RostersInScope) 
             {
             
             #line default
@@ -113,7 +113,7 @@ foreach (var @group in Model.Groups)
             this.Write("        ");
             
             #line 26 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var q in Model.Questions) 
+foreach (var question in Model.Questions) 
                         {
             
             #line default
@@ -121,21 +121,21 @@ foreach (var q in Model.Questions)
             this.Write("            \r\n            EnablementStates.Add(");
             
             #line 28 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedStateName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(".ItemId, ");
             
             #line 28 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedStateName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(");        \r\n        ");
             
             #line 29 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-if(!string.IsNullOrWhiteSpace(q.Validations))
+if(!string.IsNullOrWhiteSpace(question.Validations))
             {
             
             #line default
@@ -143,14 +143,14 @@ if(!string.IsNullOrWhiteSpace(q.Validations))
             this.Write("                 \r\n            ValidationExpressions.Add(new Identity(IdOf.");
             
             #line 31 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedIdName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
             
             #line default
             #line hidden
-            this.Write(", this.RosterVector), new Func<bool>[] { ");
+            this.Write(", rosterVector), new Func<bool>[] { ");
             
             #line 31 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedValidationsMethodName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedValidationsMethodName));
             
             #line default
             #line hidden
@@ -164,21 +164,21 @@ if(!string.IsNullOrWhiteSpace(q.Validations))
             this.Write("            AddUpdaterToMap(IdOf.");
             
             #line 33 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedIdName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", (");
             
             #line 33 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedTypeName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" val) => {");
             
             #line 33 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
             
             #line default
             #line hidden
@@ -236,7 +236,7 @@ foreach (var @roster in Model.Rosters)
             this.Write(" @__parent;\r\n\r\n        ");
             
             #line 45 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var parentQuestion in RosterScopeModel.GetParentScope().GetQuestions()) 
+foreach (var parentQuestion in RosterScopeModel.GetParentScope().GetAllQuestionsToTop()) 
         {
             
             #line default
@@ -272,7 +272,7 @@ foreach (var parentQuestion in RosterScopeModel.GetParentScope().GetQuestions())
             this.Write("\r\n        ");
             
             #line 50 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var parentRoster in RosterScopeModel.GetParentScope().GetRosters()) 
+foreach (var parentRoster in RosterScopeModel.GetParentScope().GetAllRostersToTop()) 
         {
             
             #line default
@@ -322,7 +322,7 @@ foreach (var parentRoster in RosterScopeModel.GetParentScope().GetRosters())
         ");
             
             #line 62 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var Model in RosterScopeModel.Rosters) 
+foreach (var Model in RosterScopeModel.RostersInScope) 
             {
             
             #line default
@@ -381,7 +381,7 @@ foreach (var q in Model.Questions)
         ");
             
             #line 83 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var Model in RosterScopeModel.Rosters) 
+foreach (var Model in RosterScopeModel.RostersInScope) 
             {
             
             #line default
@@ -643,7 +643,7 @@ foreach (var @roster in Model.Rosters)
                     "        {\r\n                ");
             
             #line 143 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var Model in RosterScopeModel.Rosters) 
+foreach (var Model in RosterScopeModel.RostersInScope) 
                 {
             
             #line default

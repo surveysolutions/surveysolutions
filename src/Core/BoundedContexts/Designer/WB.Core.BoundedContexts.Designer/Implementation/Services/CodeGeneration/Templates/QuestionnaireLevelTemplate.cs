@@ -119,7 +119,7 @@ if(!string.IsNullOrWhiteSpace(q.Validations))
             
             #line default
             #line hidden
-            this.Write(", this.RosterVector), new Func<bool>[] { ");
+            this.Write(", rosterVector), new Func<bool>[] { ");
             
             #line 22 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedValidationsMethodName));

@@ -46,14 +46,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return this.GeneratedTypeName;
         }
 
-        public IEnumerable<QuestionTemplateModel> GetQuestions()
+        public IEnumerable<QuestionTemplateModel> GetAllQuestionsToTop()
         {
-            return ParentScope != null ? this.Questions.Union(ParentScope.GetQuestions()) : this.Questions ;
+            return ParentScope != null ? this.Questions.Union(ParentScope.GetAllQuestionsToTop()) : this.Questions ;
         }
 
-        public IEnumerable<RosterTemplateModel> GetRosters()
+        public IEnumerable<RosterTemplateModel> GetAllRostersToTop()
         {
-            return ParentScope != null ? this.Rosters.Union(ParentScope.GetRosters()) : this.Rosters;
+            return ParentScope != null ? this.Rosters.Union(ParentScope.GetAllRostersToTop()) : this.Rosters;
         }
     }
 }

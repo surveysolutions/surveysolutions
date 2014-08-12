@@ -13,23 +13,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.RosterScopeModel = new RosterScopeTemplateModel()
             {
                 GeneratedTypeName = rosterScope.Key,
-                Rosters = rosterScope.Value,
+                RostersInScope = rosterScope.Value,
 
                 ParentTypeName = rosterScope.Value[0].GetParentScope().GetTypeName()
             };
-        }
-    }
-
-    public class RosterScopeTemplateModel
-    {
-        public string GeneratedTypeName { set; get; }
-        public List<RosterTemplateModel> Rosters { set; get; }
-
-        public string ParentTypeName { set; get; }
-
-        public IRosterScope GetParentScope()
-        {
-            return Rosters[0].GetParentScope();
         }
     }
 }
