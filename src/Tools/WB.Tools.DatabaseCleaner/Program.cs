@@ -28,6 +28,7 @@ using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -37,6 +38,7 @@ namespace WB.Tools.DatabaseCleaner
     class Program
     {
         private static IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
+        private static IQueryableReadSideRepositoryReader<HardDeletedInterview> hardDeletedInterviewStorage;
         private static DocumentStore sourceStorage;
         static void Main(string[] args)
         {
@@ -61,9 +63,11 @@ namespace WB.Tools.DatabaseCleaner
 
                 var backupStorage = CreateServerStorage(settings.Url, settings.BackupStorageDbName, CreateStoreConventions(CollectionName));
 
-                interviews = CreateInterviewReadSide(settings.Url, settings.SoureViewStorageDbName);
+                interviews = CreateInterviewReadSide<InterviewSummary>(settings.Url, settings.SoureViewStorageDbName);
+                hardDeletedInterviewStorage = CreateInterviewReadSide<HardDeletedInterview>(settings.Url, settings.SoureViewStorageDbName);
 
                 var interviewsForDelete = GetInterviewsForDelete(settings);
+                interviewsForDelete.AddRange(GetHardInterviews());
 
                 RegisterEvents();
 
@@ -72,15 +76,15 @@ namespace WB.Tools.DatabaseCleaner
                     var handledPersent = (int)((((decimal)i / interviewsForDelete.Count)) * 100);
                     Console.WriteLine(string.Format("handled {0}%", handledPersent));
                 
-                    var interviewSummary = interviewsForDelete[i];
-                    var allEventsByInterview = GetEventStreamByInterview(interviewSummary.InterviewId);
+                    var interviewId = interviewsForDelete[i];
+                    var allEventsByInterview = GetEventStreamByInterview(interviewId);
 
                     if (!allEventsByInterview.Any())
                         continue;
 
                     SaveEventsByInterviewInTemporaryDataBase(backupStorage, allEventsByInterview);
 
-                    Clear(interviewSummary.InterviewId);
+                    Clear(interviewId);
                 }
                 
                 BackupTemporaryDataBase(backupStorage, settings.Stauses);
@@ -112,7 +116,7 @@ namespace WB.Tools.DatabaseCleaner
             Process.Start(websiteUrl + "/ControlPanel/ReadSide");
         }
 
-        private static List<InterviewSummary> GetInterviewsForDelete(CommandLineSettings settings)
+        private static List<Guid> GetInterviewsForDelete(CommandLineSettings settings)
         {
             var interviewsForDelete = new List<InterviewSummary>();
             foreach (var interviewStatuse in settings.Stauses)
@@ -120,7 +124,13 @@ namespace WB.Tools.DatabaseCleaner
                 interviewsForDelete.AddRange(
                     interviews.QueryAll((i) => i.Status == interviewStatuse));
             }
-            return interviewsForDelete;
+            return interviewsForDelete.Select(i=>i.InterviewId).ToList();
+        }
+
+
+        private static List<Guid> GetHardInterviews()
+        {
+            return hardDeletedInterviewStorage.QueryAll(null).ToArray().Select(q => q.InterviewId).ToList();
         }
 
         private static void DeleteTemporaryDataBase(DocumentStore backupStorage)
@@ -200,9 +210,9 @@ namespace WB.Tools.DatabaseCleaner
             
             Console.WriteLine("Backup is {0}", backupFileName);
         }
-        private static IQueryableReadSideRepositoryReader<InterviewSummary> CreateInterviewReadSide(string url, string databaseName)
+        private static IQueryableReadSideRepositoryReader<T> CreateInterviewReadSide<T>(string url, string databaseName) where T : class, IReadSideRepositoryEntity
         {
-            return new RavenReadSideRepositoryReader<InterviewSummary>(CreateServerStorage(url, databaseName),
+            return new RavenReadSideRepositoryReader<T>(CreateServerStorage(url, databaseName),
                 Mock.Of<IReadSideStatusService>(_ => _.AreViewsBeingRebuiltNow() == false));
         }
 
