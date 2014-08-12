@@ -253,7 +253,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
 
-            return this.View();
+            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
+            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
+            return this.View(this.Filters());
         }
 
         public ActionResult Status()

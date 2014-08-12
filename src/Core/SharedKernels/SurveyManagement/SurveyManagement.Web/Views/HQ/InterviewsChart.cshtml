@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using Newtonsoft.Json
 @{
     ViewBag.Title = "Interview Chart";
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
@@ -6,110 +7,129 @@
 
 @section scripts
 {
-@Scripts.Render("~/Scripts/jqPlot/jquery.jqplot.js")
-@Scripts.Render("~/Scripts/jqPlot/plugins/jqplot.categoryAxisRenderer.min.js")
-@Scripts.Render("~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js")
-@Scripts.Render("~/Scripts/jqPlot/plugins/jqplot.canvasTextRenderer.min.js")
-@Scripts.Render("~/Scripts/jqPlot/plugins/jqplot.canvasAxisTickRenderer.min.js")
+    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/chart.js")
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        var l6 = [11, 9, 5, 12, 14, 8, 7, 9, 6, 11, 9, 3, 4];
-        var l7 = [4, 8, 5, 3, 6, 5, 3, 2, 6, 7, 4, 3, 2];
-        var l8 = [12, 6, 13, 11, 2, 3, 4, 2, 1, 5, 7, 4, 8];
+    @Scripts.Render("~/Scripts/jqPlot/jquery.jqplot.js",
+        "~/Scripts/jqPlot/plugins/jqplot.categoryAxisRenderer.min.js",
+        "~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js",
+        "~/Scripts/jqPlot/plugins/jqplot.canvasTextRenderer.min.js",
+        "~/Scripts/jqPlot/plugins/jqplot.canvasAxisTickRenderer.min.js")
 
-        var ticks = [[1, 'Dec 10'], [2, 'Jan 11'], [3, 'Feb 11'], [4, 'Mar 11'], [5, 'Apr 11'], [6, 'May 11'], [7, 'Jun 11'], [8, 'Jul 11'], [9, 'Aug 11'], [10, 'Sep 11'], [11, 'Oct 11'], [12, 'Nov 11'], [13, 'Dec 11']];
-
-
-        plot2 = $.jqplot('chart2', [l6, l7, l8], {
-            stackSeries: true,
-            showMarker: false,
-            highlighter: {
-                show: true,
-                showTooltip: false
-            },
-            seriesDefaults: {
-                fill: true,
-            },
-            series: [
-                { label: 'Beans' },
-                { label: 'Oranges' },
-                { label: 'Crackers' }
-            ],
-            legend: {
-                show: true,
-                placement: 'outsideGrid'
-            },
-            grid: {
-                drawBorder: false,
-                shadow: false
-            },
-            axes: {
-                xaxis: {
-                    ticks: ticks,
-                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                    tickOptions: {
-                        angle: -90
-                    },
-                    drawMajorGridlines: false
-                }
-            }
+    <script type="text/javascript">
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme))';
+        var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
+        var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
+        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
+        var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "AllInterviews" })';
+        $(function () {
+            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
+            var model = new Supervisor.VM.ChartPage(interviewsListUrl, $interviewsPageUrl, users, commandExecutionUrl);
+            ko.applyBindings(model);
+            model.load();
         });
+    </script>
 
-        // capture the highlighters highlight event and show a custom tooltip.
-        $('#chart2').bind('jqplotHighlighterHighlight',
-            function(ev, seriesIndex, pointIndex, data, plot) {
-                // create some content for the tooltip.  Here we want the label of the tick,
-                // which is not supplied to the highlighters standard tooltip.
-                var content = plot.series[seriesIndex].label + ', ' + plot.series[seriesIndex]._xaxis.ticks[pointIndex][1] + ', ' + data[1];
-                // get a handle on our custom tooltip element, which was previously created
-                // and styled.  Be sure it is initiallly hidden!
-                var elem = $('#customTooltipDiv');
-                elem.html(content);
-                // Figure out where to position the tooltip.
-                var h = elem.outerHeight();
-                var w = elem.outerWidth();
-                var left = ev.pageX - w - 10;
-                var top = ev.pageY - h - 10;
-                // now stop any currently running animation, position the tooltip, and fade in.
-                elem.stop(true, true).css({ left: left, top: top }).fadeIn(200);
-            }
-        );
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var l6 = [11, 9, 5, 12, 14, 8, 7, 9, 6, 11, 9, 3, 4];
+            var l7 = [4, 8, 5, 3, 6, 5, 3, 2, 6, 7, 4, 3, 2];
+            var l8 = [12, 6, 13, 11, 2, 3, 4, 2, 1, 5, 7, 4, 8];
 
-        // Hide the tooltip when unhighliting.
-        $('#chart2').bind('jqplotHighlighterUnhighlight',
-            function(ev) {
-                $('#customTooltipDiv').fadeOut(300);
-            }
-        );
-    });
+            var ticks = [[1, 'Dec 10'], [2, 'Jan 11'], [3, 'Feb 11'], [4, 'Mar 11'], [5, 'Apr 11'], [6, 'May 11'], [7, 'Jun 11'], [8, 'Jul 11'], [9, 'Aug 11'], [10, 'Sep 11'], [11, 'Oct 11'], [12, 'Nov 11'], [13, 'Dec 11']];
+
+
+            plot2 = $.jqplot('chart2', [l6, l7, l8], {
+                stackSeries: true,
+                showMarker: false,
+                highlighter: {
+                    show: true,
+                    showTooltip: true
+                },
+                seriesDefaults: {
+                    fill: true,
+                },
+                series: [
+                    { label: 'Beans' },
+                    { label: 'Oranges' },
+                    { label: 'Crackers' }
+                ],
+                legend: {
+                    show: true,
+                    placement: 'outsideGrid'
+                },
+                grid: {
+                    drawBorder: false,
+                    shadow: false
+                },
+                axes: {
+                    xaxis: {
+                        ticks: ticks,
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickOptions: {
+                            angle: -90
+                        },
+                        drawMajorGridlines: false
+                    }
+                }
+            });
+
+            // capture the highlighters highlight event and show a custom tooltip.
+            $('#chart2').bind('jqplotHighlighterHighlight',
+                function(ev, seriesIndex, pointIndex, data, plot) {
+                    // create some content for the tooltip.  Here we want the label of the tick,
+                    // which is not supplied to the highlighters standard tooltip.
+                    var content = plot.series[seriesIndex].label + ', ' + plot.series[seriesIndex]._xaxis.ticks[pointIndex][1] + ', ' + data[1];
+                    // get a handle on our custom tooltip element, which was previously created
+                    // and styled.  Be sure it is initiallly hidden!
+                    var elem = $('#customTooltipDiv');
+                    elem.html(content);
+                    // Figure out where to position the tooltip.
+                    var h = elem.outerHeight();
+                    var w = elem.outerWidth();
+                    var left = ev.pageX - w - 10;
+                    var top = ev.pageY - h - 10;
+                    // now stop any currently running animation, position the tooltip, and fade in.
+                    elem.stop(true, true).css({ left: left, top: top }).fadeIn(200);
+                }
+            );
+
+            // Hide the tooltip when unhighliting.
+            $('#chart2').bind('jqplotHighlighterUnhighlight',
+                function(ev) {
+                    $('#customTooltipDiv').fadeOut(300);
+                }
+            );
+        });
     </script>
 }
 
 @section styles
 {
-@Styles.Render("~/Scripts/jqPlot/jquery.jqplot.min.css")
+    @Styles.Render("~/Scripts/jqPlot/jquery.jqplot.min.css")
 }
 
 @section header
 {
-<h3>Cumalative Chart</h3>
+    <h3>Cumulative Chart</h3>
+}
+
+@section  actionbar{
+    actionbar
 }
 
 @section filters
 {
-<ul class="list-group">
-    <li class="list-group-item">
-        <h4 class="list-group-item-heading">Supervisors</h4>
-        <p class="list-group-item-text">
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Supervisors</h4>
+            <p class="list-group-item-text">
 
-        </p>
-    </li>
-</ul>
+            </p>
+        </li>
+    </ul>
 }
 
-@section grid
-{
+@section chart{
     <h3>Chart</h3>
     
     <div id="chart2" style="width: 1000px; height: 600px; position: relative;"></div>
