@@ -6270,6 +6270,8 @@ textarea {
   list-style: none;
   padding: 0;
   margin: 0;
+  overflow-y: auto;
+  max-height: 450px;
 }
 .chapter-menu.dropdown-menu > ul > li {
   margin-top: 15px;
