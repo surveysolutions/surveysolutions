@@ -29,7 +29,7 @@
     @RenderSection("header", false)
     <div class="panel panel-default">
         <div class="panel-body">
-            
+
             <span data-bind="visible: !IsFilterOpen()">
                 <button data-bind="click: ToggleFilter" class="btn btn-default"><span class="glyphicon glyphicon-arrow-right"></span> Show filter</button>
             </span>
@@ -38,6 +38,8 @@
     </div>
 
     @RenderSection("gridnavigation", false)
+    
+    @RenderSection("chart", false)
 
     <div id="list">
         <!-- ko if:IsPageLoaded()  -->
@@ -46,10 +48,10 @@
         </p>
         <!-- /ko -->
         <div class="horizontal-scroll" data-bind="visible: Pager().TotalItemCount() > 0">
-                @RenderSection("grid", true)
+            @RenderSection("grid", false)
         </div>
         <!-- ko if:Pager().LastPage() > 1 -->
-            <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
+        <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
         <!-- /ko -->
     </div>
     @this.RenderBody()
