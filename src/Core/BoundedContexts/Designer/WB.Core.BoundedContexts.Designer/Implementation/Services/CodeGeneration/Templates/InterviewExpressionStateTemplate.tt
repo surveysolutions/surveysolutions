@@ -260,8 +260,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                 <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
                 {#>
                 {<#= r.GeneratedIdName#>, <#= r.GeneratedRosterScopeName#>},
-                <# }#>
-                //{ groupId, hhMemberScopeIds },                        
+                <# }#>                                        
             };
         }
     }

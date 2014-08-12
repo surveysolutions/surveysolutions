@@ -84,5 +84,10 @@ namespace WB.UI.Designer
         {
             get { return ConfigurationManager.AppSettings.GetBool("IsNewDesignerEditPageEnabled", false); }
         }
+
+        public bool IsApiSslVerificationEnabled
+        {
+            get { return ConfigurationManager.AppSettings.GetBool("IsApiSSLVerificationEnabled", true); }
+        }
     }
 }

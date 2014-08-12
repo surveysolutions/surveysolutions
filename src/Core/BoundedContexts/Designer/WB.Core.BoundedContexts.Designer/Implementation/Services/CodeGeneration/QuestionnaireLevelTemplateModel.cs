@@ -38,12 +38,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return GeneratedTypeName;
         }
 
-        public IEnumerable<QuestionTemplateModel> GetQuestions()
+        public IEnumerable<QuestionTemplateModel> GetAllQuestionsToTop()
         {
             return this.Questions;
         }
 
-        public IEnumerable<RosterTemplateModel> GetRosters()
+        public IEnumerable<RosterTemplateModel> GetAllRostersToTop()
         {
             return this.Rosters;
         }

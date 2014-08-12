@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         private It should_result_errors_count = () =>
             emitResult.Diagnostics.Count.ShouldEqual(0);
 
-        private It should_ = () =>
+        private It should_assembly_length_greate_0 = () =>
             resultAssembly.Length.ShouldBeGreaterThan(0);
         
         private static Guid id = Guid.Parse("11111111111111111111111111111111");

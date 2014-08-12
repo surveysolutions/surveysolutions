@@ -389,11 +389,11 @@ namespace WB.Core.SharedKernels.DataCollection
             public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
-                this.ValidationExpressions.Add(new Identity(IdOf.name, this.RosterVector), new Func<bool>[] { this.name_IsMandatory });
-                this.ValidationExpressions.Add(new Identity(IdOf.age, this.RosterVector), new Func<bool>[] { this.age_IsValid });
-                this.ValidationExpressions.Add(new Identity(IdOf.food, this.RosterVector), new Func<bool>[] { this.food_IsValid });
-                this.ValidationExpressions.Add(new Identity(IdOf.role, this.RosterVector), new Func<bool>[] { this.role_IsValid, this.role2_IsValid });
-                this.ValidationExpressions.Add(new Identity(IdOf.married_with, this.RosterVector), new Func<bool>[] { this.married_with_IsValid });
+                this.ValidationExpressions.Add(new Identity(IdOf.name, rosterVector), new Func<bool>[] { this.name_IsMandatory });
+                this.ValidationExpressions.Add(new Identity(IdOf.age, rosterVector), new Func<bool>[] { this.age_IsValid });
+                this.ValidationExpressions.Add(new Identity(IdOf.food, rosterVector), new Func<bool>[] { this.food_IsValid });
+                this.ValidationExpressions.Add(new Identity(IdOf.role, rosterVector), new Func<bool>[] { this.role_IsValid, this.role2_IsValid });
+                this.ValidationExpressions.Add(new Identity(IdOf.married_with, rosterVector), new Func<bool>[] { this.married_with_IsValid });
 
                 this.EnablementStates.Add(this.age_state.ItemId, this.age_state);
                 this.EnablementStates.Add(this.married_with_state.ItemId, this.married_with_state);
@@ -654,7 +654,7 @@ namespace WB.Core.SharedKernels.DataCollection
             public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
             {
-                this.ValidationExpressions.Add(new Identity(IdOf.times_per_week, this.RosterVector), new Func<bool>[] { this.times_per_week_validation });
+                this.ValidationExpressions.Add(new Identity(IdOf.times_per_week, rosterVector), new Func<bool>[] { this.times_per_week_validation });
 
                 this.EnablementStates.Add(this.price_for_food_state.ItemId, this.price_for_food_state);
             }
