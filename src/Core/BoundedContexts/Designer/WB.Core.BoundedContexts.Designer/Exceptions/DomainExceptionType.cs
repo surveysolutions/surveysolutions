@@ -123,5 +123,7 @@
         MaxAnswerCountNotInRange,
 
         StaticTextIsEmpty,
+
+        TitleIsTooLarge
     }
 }
