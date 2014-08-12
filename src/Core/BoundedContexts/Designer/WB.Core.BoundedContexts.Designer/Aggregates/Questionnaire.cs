@@ -1231,7 +1231,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(group);
                 this.ThrowIfRosterCantBecomeAGroupBecauseContainsLinkedSourceQuestions(group);
-                this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(group);
+                this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(group, wasRosterAndBecomeAGroup: true);
             }
 
             this.ApplyEvent(new GroupUpdated
@@ -3583,10 +3583,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Join(Environment.NewLine, questionVariables)));
         }
 
-        private void ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(IGroup group)
+        private void ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(IGroup group, bool wasRosterAndBecomeAGroup = false)
         {
             var hasAnyQuestionsWithRosterTitleInSubstitutions =
                 this.innerDocument.GetEntitiesByType<AbstractQuestion>(@group)
+                    .Where(x => wasRosterAndBecomeAGroup || GetFirstRosterParentGroupOrNull(x, group) == null)
                     .Any(
                         question =>
                             SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
@@ -3764,17 +3765,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return this.GetFirstRosterParentGroupOrNull(item) != null;
         }
 
-        private IGroup GetFirstRosterParentGroupOrNull(IComposite item)
+        private IGroup GetFirstRosterParentGroupOrNull(IComposite item, IGroup stopGroup = null)
         {
             while (item != null)
             {
                 var parentGroup = item as IGroup;
+                if (stopGroup != null && parentGroup != null && parentGroup == stopGroup)
+                {
+                    return parentGroup.IsRoster ? parentGroup : (IGroup) null;
+                }
                 if (parentGroup != null && parentGroup.IsRoster)
                     return parentGroup;
 
                 item = item.GetParent();
             }
-
             return null;
         }
 
