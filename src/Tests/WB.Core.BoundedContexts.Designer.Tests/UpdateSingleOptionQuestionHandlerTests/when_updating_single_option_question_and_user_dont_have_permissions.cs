@@ -43,8 +43,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     validationMessage: validationMessage,
                     instructions: instructions,
                     responsibleId: notExistinigUserId
-                    ,options:options, 
-                    linkedToQuestionId: linkedToQuestionId 
+                    ,options:options,
+                    linkedToQuestionId: linkedToQuestionId,
+                    isFilteredCombobox: isFilteredCombobox
                     ));
 
         It should_throw_QuestionnaireException = () =>
@@ -72,5 +73,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static string validationMessage = "";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
+        private static bool isFilteredCombobox = false;
     }
 }

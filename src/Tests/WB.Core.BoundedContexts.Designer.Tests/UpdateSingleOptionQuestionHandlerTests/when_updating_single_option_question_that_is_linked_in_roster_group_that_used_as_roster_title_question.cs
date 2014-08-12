@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     instructions: instructions,
                     responsibleId: responsibleId,
                     options: options,
-                    linkedToQuestionId: linkedToQuestionId));
+                    linkedToQuestionId: linkedToQuestionId,
+                    isFilteredCombobox: isFilteredCombobox));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -78,5 +79,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static string validationExpression = "some validation";
         private static string validationMessage = "validation message";
         private static Option[] options = null;
+        private static bool isFilteredCombobox = false;
     }
 }
