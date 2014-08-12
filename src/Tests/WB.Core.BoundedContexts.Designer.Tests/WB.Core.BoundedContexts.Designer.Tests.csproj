@@ -130,6 +130,7 @@
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_contains_substitution_to_self.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_is_empty.cs" />
+    <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_title_is_too_long.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_user_dont_have_permissions.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_contains_invalid_characters.cs" />
     <Compile Include="AddDateTimeQuestionHandlerTests\when_adding_datetime_question_and_variable_name_contains_keyword.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view.cs" />
     <Compile Include="QuestionnaireTests\GetChapterOfTests\when_finding_group_that_exists_in_questionnaire.cs" />
+    <Compile Include="QuestionnaireTests\when_adding_roster_group_by_fixed_titles_with_too_long_title.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_question_and_roster_size_question_is_empty.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
     <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
@@ -885,6 +887,7 @@
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_self.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_is_empty.cs" />
+    <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_is_too_long.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_user_dont_have_permissions.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="UpdateTextQuestionHandlerTests\when_updating_text_question_and_variable_name_contains_invalid_characters.cs" />
