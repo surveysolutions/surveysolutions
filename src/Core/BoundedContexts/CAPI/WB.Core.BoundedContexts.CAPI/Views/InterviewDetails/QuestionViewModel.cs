@@ -72,7 +72,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public virtual string AnswerString
         {
-            get { return (this.AnswerObject ?? "").ToString(); }
+            get
+            {
+                return (this.AnswerObject ?? "").ToString();
+            }
         }
 
         public object AnswerObject { get; private set; }

@@ -80,10 +80,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public Questionnaire() {}
 
-        public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
+        public Questionnaire(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode)
             : base(source.PublicKey)
         {
-            this.ImportFromDesigner(createdBy, source);
+            this.ImportFromDesigner(createdBy, source, allowCensusMode);
         }
 
         public Questionnaire(IQuestionnaireDocument source)
@@ -92,10 +92,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ImportFromQuestionnaireDocument(source);
         }
 
-        public Questionnaire(Guid id, long version)
+        public Questionnaire(Guid id, long version, bool allowCensusMode)
             : base(id)
         {
-            this.RegisterPlainQuestionnaire(id, version);
+            this.RegisterPlainQuestionnaire(id, version, allowCensusMode);
         }
 
 
@@ -108,14 +108,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new TemplateImported { Source = document });
         }
 
-        public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source)
+        public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             ThrowIfVerifierFindsErrors(document);
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
 
-            this.ApplyEvent(new TemplateImported { Source = document });
+            this.ApplyEvent(new TemplateImported { Source = document, AllowCensusMode = allowCensusMode });
         }
 
         public void ImportFromSupervisor(IQuestionnaireDocument source)
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ImportFromQuestionnaireDocument(source);
         }
 
-        public void RegisterPlainQuestionnaire(Guid id, long version)
+        public void RegisterPlainQuestionnaire(Guid id, long version, bool allowCensusMode)
         {
             QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
                     this.EventSourceId.FormatGuid(), version));
 
-            this.ApplyEvent(new PlainQuestionnaireRegistered(version));
+            this.ApplyEvent(new PlainQuestionnaireRegistered(version, allowCensusMode));
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)

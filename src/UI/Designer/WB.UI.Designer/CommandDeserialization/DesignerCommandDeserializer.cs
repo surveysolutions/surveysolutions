@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.QRBarcode
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.TextList;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.CommandDeserialization
@@ -35,6 +36,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "AddNumericQuestion", typeof (AddNumericQuestionCommand) },
                     { "AddTextListQuestion", typeof (AddTextListQuestionCommand) },
                     { "CloneQuestion", typeof (CloneQuestionCommand) },
+                    { "CloneQuestionById", typeof(CloneQuestionByIdCommand) },
                     { "CloneNumericQuestion", typeof (CloneNumericQuestionCommand) },
                     { "CloneTextListQuestion", typeof (CloneTextListQuestionCommand) },
                     { "DeleteQuestion", typeof (DeleteQuestionCommand) },
@@ -52,6 +54,12 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateMultiOptionQuestion", typeof (UpdateMultiOptionQuestionCommand) },
                     { "UpdateSingleOptionQuestion", typeof (UpdateSingleOptionQuestionCommand) },
                     { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestionCommand) },
+                    //Static text commands
+                    { "AddStaticText", typeof (AddStaticTextCommand) },
+                    { "UpdateStaticText", typeof (UpdateStaticTextCommand) },
+                    { "CloneStaticText", typeof (CloneStaticTextCommand) },
+                    { "DeleteStaticText", typeof (DeleteStaticTextCommand) },
+                    { "MoveStaticText", typeof (MoveStaticTextCommand) },
                 };
             }
 

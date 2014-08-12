@@ -40,6 +40,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                 {
                     PublicKey = rosterGroupId,
                     IsRoster = true,
+                    VariableName = "a",
                     RosterSizeQuestionId = rosterQuestionId,
                     Children = new List<IComposite>
                     {
@@ -54,6 +55,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                         {
                             PublicKey = rosterChildGroup1Id,
                             IsRoster = true,
+                            VariableName = "b",
                             RosterSizeQuestionId = rosterInsideRosterQuestionId,
                             ConditionExpression = "some random expression",
                             Children = new List<IComposite>
@@ -64,6 +66,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                         {
                             PublicKey = rosterChildGroup2Id,
                             IsRoster = true,
+                            VariableName = "c",
                             RosterSizeQuestionId = rosterInsideRosterQuestionId,
                             Children = new List<IComposite>
                             {

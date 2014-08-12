@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddNumericQuestionHandlerTests
             eventContext = new EventContext();
         };
 
-        Because of = () => questionnaire.AddNumericQuestion(questionId, rosterId, questionTitle, "var", false, false, QuestionScope.Interviewer, null, null, null, null,
+        Because of = () => questionnaire.AddNumericQuestion(questionId, rosterId, questionTitle, "var",null, false, false, QuestionScope.Interviewer, null, null, null, null,
                 responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null,
                 maxValue: null);
 

@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
                     questionId: questionId,
                     title: title,
                     variableName: variableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
@@ -53,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__answer_value_only_number_characters__ = () =>
-            new[] { "answer option value should have unique in options scope" }.ShouldEachConformTo(
+            new[] { "option values must be unique for categorical question" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;

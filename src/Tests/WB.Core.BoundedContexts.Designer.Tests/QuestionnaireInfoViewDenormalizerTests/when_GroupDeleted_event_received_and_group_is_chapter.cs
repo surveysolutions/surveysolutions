@@ -18,9 +18,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoViewDenormaliz
         It should_questionnnaireInfoView_Chapters_not_be_null = () =>
             viewState.Chapters.ShouldBeEmpty();
 
-        It should_questionnnaireInfoView_GroupsCount_be_equal_0 = () =>
-            viewState.GroupsCount.ShouldEqual(0);
-
         private static string chapterId = "33333333333333333333333333333333";
         
         private static QuestionnaireInfoViewDenormalizer denormalizer;

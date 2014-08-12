@@ -38,12 +38,17 @@ namespace WB.UI.Supervisor.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult Index()
+        {
+            return this.View();
+        }
+
+        [AllowAnonymous]
         public ActionResult NConfig()
         {
             return this.View();
         }
 
-        
         public ActionResult Settings()
         {
             return View();

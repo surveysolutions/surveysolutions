@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddMultiOptionQuestionHandlerTe
                     parentGroupId: chapterId,
                     title: title,
                     variableName: notUniqueVariableName,
+                variableLabel: null,
                     isMandatory: isMandatory,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,

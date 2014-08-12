@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
@@ -66,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
         {
             #warning: we shouldn't use CompleteQuestionFactory here?
-            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, new QuestionFactory(), Mock.Of<ILogger>(), Mock.Of<IQuestionnaireDocumentUpgrader>());
+            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, new QuestionnaireEntityFactory(), Mock.Of<ILogger>(), Mock.Of<IQuestionnaireDocumentUpgrader>());
 
             return denormalizer;
         }

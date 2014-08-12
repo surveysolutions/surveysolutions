@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         It should_throw_exception_with_message_containting___can_move___roster_title_question___roster_size_question__ =
             () =>
-                new[] { "can move", "roster title question", "roster size question" }.ShouldEachConformTo(
+                new[] { "can move", "roster title question", "roster source question" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 
 

@@ -93,11 +93,13 @@
 
             groups = new LocalEntitySet(modelmapper.group, model.Group.Nullo),
             questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, { groups: groups }),
+            staticTexts = new LocalEntitySet(modelmapper.staticText, model.StaticText.Nullo, { groups: groups }),
             questionnaire = modelmapper.questionnaire.fromDto(input.questionnaire);
 
 
         groups.parse(input.questionnaire.Groups);
         questions.parse(input.questionnaire.Questions);
+        staticTexts.parse(input.questionnaire.StaticTexts);
 
         //input.questionnaire = null;
 
@@ -243,6 +245,9 @@
                 if (item.type() == "QuestionView")
                     return item;
 
+                if (item.type() == "StaticTextView")
+                    return null;
+
                 return getAllQuestionsFromGroup(item);
             });
         };
@@ -326,6 +331,9 @@
         var getChildItemByIdAndType = function (item) {
             if (item.type === "GroupView")
                 return groups.getLocalById(item.id);
+            else if (item.type === "StaticTextView") {
+                return staticTexts.getLocalById(item.id);
+            }
             return questions.getLocalById(item.id);
         };
 
@@ -430,6 +438,7 @@
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
                 title: group.title(),
+                variableName: group.variableName(),
                 description: group.description(),
                 condition: group.condition(),
                 isRoster: group.isRoster(),
@@ -545,6 +554,8 @@
                 questionId: question.id(),
                 title: question.title(),
                 variableName: question.alias(),
+                variableLabel: question.variableLabel(),
+                mask: question.mask(),
                 isMandatory: question.isMandatory(),
                 enablementCondition: question.condition(),
                 instructions: question.instruction()
@@ -556,6 +567,8 @@
             delete command.isFeatured;
             delete command.type;
             delete command.alias;
+            delete command.variableLabel;
+            delete command.mask;
             delete command.scope;
             delete command.validationExpression;
             delete command.validationMessage;
@@ -569,6 +582,7 @@
                 title: question.title(),
                 type: question.qtype(),
                 variableName: question.alias(),
+                variableLabel: question.variableLabel(),
                 isPreFilled: question.isFeatured(),
                 isMandatory: question.isMandatory(),
                 scope: question.scope(),
@@ -601,6 +615,7 @@
                 case "DateTime":
                 case "GpsCoordinates":
                 case "Text":
+                    command.mask = question.mask();
                     break;
                 case "TextList":
                     command.maxAnswerCount = question.maxAnswerCount();
@@ -658,6 +673,7 @@
         var datacontext = {
             groups: groups,
             questions: questions,
+            staticTexts: staticTexts,
             questionnaire: questionnaire,
             sendCommand: sendCommand,
             runRemoteVerification: runRemoteVerification

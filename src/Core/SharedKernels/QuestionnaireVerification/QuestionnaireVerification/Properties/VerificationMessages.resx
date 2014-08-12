@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="WB0001_NoQuestions" xml:space="preserve">
-    <value>Questionnaire should contain at least one question.</value>
+    <value>Questionnaire must contain at least one question.</value>
   </data>
   <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Custom validation expression syntax is incorrect.</value>
+    <value>Validation expression has syntax error.</value>
   </data>
   <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
-    <value>Custom enablement condition syntax is incorrect.</value>
+    <value>Condition expression has syntax error.</value>
   </data>
   <data name="WB0004_CustomValidationExpressionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Custom validation expression references not existing question.</value>
+    <value>Validation expression references nonexistent question.</value>
   </data>
   <data name="WB0005_CustomEnablementConditionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Custom enablement condition references not existing question.</value>
+    <value>Condition expression references nonexistent question.</value>
   </data>
   <data name="WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion" xml:space="preserve">
-    <value>Group where roster size source is question has no roster size question.</value>
+    <value>Roster size question is missing.</value>
   </data>
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Linked question references not existing question.</value>
+    <value>Linked question references nonexistent question.</value>
   </data>
   <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
     <value>Linked question references question of not supported type.</value>
@@ -145,22 +145,22 @@
     <value>Linked question references question not under roster group.</value>
   </data>
   <data name="WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Question has custom validation referencing question with deeper roster level.</value>
+    <value>Question has validation expression referencing question from deeper roster level.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
-    <value>Question with title substitution can't be marked as pre-filled.</value>
+    <value>Question with title substitution cannot be marked as prefilled.</value>
   </data>
   <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>Question with title substitution can't reference itself.</value>
+    <value>Question with title substitution cannot reference itself.</value>
   </data>
   <data name="WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Question with title substitution references not existing question.</value>
+    <value>Question with title substitution references nonexistent question.</value>
   </data>
   <data name="WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType" xml:space="preserve">
     <value>Question with title substitution references question of not supported type.</value>
   </data>
   <data name="WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question with title substitution can't have reference questions with deeper roster level.</value>
+    <value>Question with title substitution cannot reference questions from deeper roster level.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
     <value>Question has options count less than max allowed answers count.</value>
@@ -172,28 +172,28 @@
     <value>Roster size source question is incorrect. Only numeric, categorical with multiple answers or text list questions can be used.</value>
   </data>
   <data name="WB0025_RosterSizeQuestionMaxValueCouldNotBeEmpty" xml:space="preserve">
-    <value>Max value for roster size question could not be empty.</value>
+    <value>Max value for roster size question cannot be empty.</value>
   </data>
   <data name="WB0026_RosterSizeQuestionMaxValueCouldBeInRange1And40" xml:space="preserve">
-    <value>Max value for roster size question could be in range [1, 40].</value>
+    <value>Max value for roster size question must be in range [1, 40].</value>
   </data>
   <data name="WB0027_QuestionnaireHaveAutopropagatedGroups" xml:space="preserve">
-    <value>Questionnaire have autopropagated groups.</value>
+    <value>Questionnaire has autopropagated groups.</value>
   </data>
   <data name="WB0028_QuestionnaireHaveAutopropagatedQuestions" xml:space="preserve">
-    <value>Questionnaire have autopropagated questions.</value>
+    <value>Questionnaire has autopropagated questions.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
-    <value>Pre-filled questions can't be inside of roster.</value>
+    <value>Prefilled questions cannot be inside of roster.</value>
   </data>
   <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
     <value>Group where roster size source is question could not have fixed titles.</value>
   </data>
   <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
-    <value>Group where roster size source is fixed titles could not have roster size question.</value>
+    <value>Fixed titles roster cannot have roster size question.</value>
   </data>
   <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
-    <value>Group where roster size source is fixed titles could not have roster title question.</value>
+    <value>Fixed titles roster cannot have roster title question.</value>
   </data>
   <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
     <value>Group where roster size source is question has invalid roster title question.</value>
@@ -202,10 +202,10 @@
     <value>Group where roster size question is categorical multy answers question could not have roster title question.</value>
   </data>
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
-    <value>Group where roster size source is fixed titles could not have empty titles.</value>
+    <value>Fixed titles roster cannot have empty titles.</value>
   </data>
   <data name="WB0038_RosterFixedTitlesHaveMoreThan250Items" xml:space="preserve">
-    <value>Number of fixed roster titles could not be more than 250.</value>
+    <value>Fixed titles roster cannot have more than 250 rows.</value>
   </data>
   <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
     <value>List question cannot be prefilled.</value>
@@ -214,16 +214,16 @@
     <value>List  question cannot be filled by supervisor.</value>
   </data>
   <data name="WB0041_TextListQuestionCannotCustomValidation" xml:space="preserve">
-    <value>List question cannot contain validation expression.</value>
+    <value>List question cannot have validation expression.</value>
   </data>
   <data name="WB0042_TextListQuestionMaxAnswerInRange1And40" xml:space="preserve">
-    <value>Max answer count could be in range [1, 40].</value>
+    <value>Max answer count must be in range [1, 40].</value>
   </data>
   <data name="WB0043_TextListQuestionCannotBeUsedInValidationExpressions" xml:space="preserve">
-    <value>List question cannot be used in validation expressions.</value>
+    <value>List question cannot be used in validation expression.</value>
   </data>
   <data name="WB0044_TextListQuestionCannotBeUsedInEnablementConditions" xml:space="preserve">
-    <value>List question cannot be used in enablement conditions.</value>
+    <value>List question cannot be used in condition expression.</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
     <value>Question has option(s) with empty value.</value>
@@ -232,63 +232,87 @@
     <value>Condition expression cannot refer to a question from a deeper roster level.</value>
   </data>
   <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
-    <value>Groups cannot have custom condition expression referencing child question</value>
+    <value>Groups cannot have condition expression referencing child question.</value>
   </data>
   <data name="WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression" xml:space="preserve">
-    <value>QR Barcode question should not have a validation expression.</value>
+    <value>QR Barcode question cannot have a validation expression.</value>
   </data>
   <data name="WB0048_QRBarcodeQuestionShouldNotHaveValidationMessage" xml:space="preserve">
-    <value>QR Barcode question should not have a validation message.</value>
+    <value>QR Barcode question cannot have a validation message.</value>
   </data>
   <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
-    <value>QR Barcode question used as supervisor question.</value>
+    <value>QR Barcode question cannot be filled by supervisor.</value>
   </data>
   <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
-    <value>QR Barcode question used as prefilled question.</value>
+    <value>QR Barcode question cannot be prefilled.</value>
   </data>
   <data name="WB0052_QRBarcodeQuestionsCannotBeUsedInValidationExpression" xml:space="preserve">
     <value>QR Barcode questions cannot be used in validation expression.</value>
   </data>
   <data name="WB0053_QRBarcodeQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
-    <value>QR Barcode questions cannot be used in enablement condition.</value>
+    <value>QR Barcode questions cannot be used in condition expression.</value>
   </data>
   <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
     <value>Roster should have deeper or the same roster level as it's roster size question.</value>
   </data>
   <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
-    <value>Roster can have no more than 3 parent rosters</value>
+    <value>Roster can have no more than 3 parent rosters.</value>
   </data>
   <data name="WB0056_QuestionShouldNotHaveCircularReferences" xml:space="preserve">
-    <value>Circular references are not allowed</value>
+    <value>Circular references are not allowed.</value>
   </data>
   <data name="WB0057_QuestionHasEmptyVariableName" xml:space="preserve">
-    <value>Question has empty variable name.</value>
+    <value>Question cannot have empty variable name.</value>
   </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
-    <value>Question has variable name reserved for service needs.</value>
+    <value>Variable name cannot be a reserved word.</value>
   </data>
   <data name="WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster" xml:space="preserve">
-    <value>If question uses %rostertitle% in title it need to be placed inside roster</value>
+    <value>If question uses %rostertitle% in title it need to be placed inside roster.</value>
   </data>
   <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
-    <value>Question has less than 2 options</value>
+    <value>Question has less than 2 options.</value>
   </data>
   <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
-    <value>Question has max allowed answers less than 2</value>
+    <value>Question has max allowed answers less than 2.</value>
   </data>
   <data name="WB0062_VariableNameForQuestionIsNotUnique" xml:space="preserve">
-    <value>Question has not unique variable name </value>
+    <value>Another question with the same variable name already exists.</value>
   </data>
   <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
     <value>Categorical linked question cannot be used in validation expressions.</value>
   </data>
   <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
-    <value>Categorical linked question cannot be used in enablement conditions.</value>
+    <value>Categorical linked question cannot be used in condition expressions.</value>
   </data>
   <data name="WB0065_QuestionHasValidationExpressionWithoutValidationMessage" xml:space="preserve">
-    <value>Validation message is required if question has validation expression</value>
+    <value>Validation message is required if question has validation expression.</value>
   </data>
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
-    <value>Question of this type is not supported</value>
+    <value>Question of this type is not supported.</value>
+  </data>
+  <data name="WB0067_RosterHasEmptyVariableName" xml:space="preserve">
+    <value>Roster cannot have empty variable name.</value>
+  </data>
+  <data name="WB0068_RosterHasNotUniqueVariableName" xml:space="preserve">
+    <value>Another roster with the same variable name already exists.</value>
+  </data>
+  <data name="WB0069_RosterHasInvalidVariableName" xml:space="preserve">
+    <value>Roster has invalid variable name.</value>
+  </data>
+  <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+    <value>Roster has variable name equal to questionnaire title.</value>
+  </data>
+  <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+    <value>Static text cannot be empty.</value>
+  </data>
+  <data name="WB0072_ChapterItemsLimit" xml:space="preserve">
+    <value>Chapter cannot contain more than 500 child items.</value>
+  </data>
+  <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Option titles must be unique</value>
+  </data>
+  <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Option values must be unique</value>
   </data>
 </root>

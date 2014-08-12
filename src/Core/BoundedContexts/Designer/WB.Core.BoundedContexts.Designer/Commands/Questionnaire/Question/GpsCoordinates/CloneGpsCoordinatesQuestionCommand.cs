@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.GpsCo
             Guid sourceQuestionId,
             int targetIndex,
             string title,
-            string variableName,
+            string variableName, string variableLabel,
             bool isMandatory,
             string enablementCondition,
             string instructions,
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.GpsCo
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,
                 parentGroupId: parentGroupId,
-                sourceQuestionId: sourceQuestionId, targetIndex: targetIndex)
+                sourceQuestionId: sourceQuestionId, targetIndex: targetIndex,variableLabel:variableLabel)
         {
             this.Scope = scope;
         }

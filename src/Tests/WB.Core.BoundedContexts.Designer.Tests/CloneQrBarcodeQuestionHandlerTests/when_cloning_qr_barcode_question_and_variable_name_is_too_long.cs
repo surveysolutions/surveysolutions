@@ -30,7 +30,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneQrBarcodeQuestionHandlerTe
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.CloneQRBarcodeQuestion(questionId: questionId, title: "title",
-                    variableName: longVariableName, isMandatory: false, enablementCondition: null, instructions: null,
+                    variableName: longVariableName,
+                variableLabel: null, isMandatory: false, enablementCondition: null, instructions: null,
                     responsibleId: responsibleId, sourceQuestionId:sourceQuestionId, parentGroupId:chapterId, targetIndex: 1));
 
         It should_throw_QuestionnaireException = () =>

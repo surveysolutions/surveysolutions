@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateNumericQuestion(questionId, "title",
-                    "var1", false, isPrefilled, QuestionScope.Interviewer, null, null, null, null,
+                    "var1",null, false, isPrefilled, QuestionScope.Interviewer, null, null, null, null,
                     responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null,
                     maxValue: null));
 

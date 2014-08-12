@@ -76,11 +76,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Merger
         {
             var interviewGroupView =
                 interviewDetailsView.Groups.FirstOrDefault(
-                    g => g.Questions.Any(q => q.Id == questionId) && g.RosterVector.SequenceEqual(questionRosterVector));
+                    g => g.Entities.Any(q => q.Id == questionId) && g.RosterVector.SequenceEqual(questionRosterVector));
             if (
                 interviewGroupView != null)
                 return interviewGroupView
-                    .Questions.FirstOrDefault(q => q.Id == questionId);
+                    .Entities.OfType<InterviewQuestionView>().FirstOrDefault(q => q.Id == questionId);
             return null;
         }
 

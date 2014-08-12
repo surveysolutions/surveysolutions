@@ -1,4 +1,5 @@
 ﻿using WB.Core.SharedKernel.Utils.Serialization;
+using WB.UI.Designer.Controllers;
 
 namespace WB.UI.Designer.App_Start
 {

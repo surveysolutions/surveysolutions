@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 StataExportCaption = rosterQuestionId2.ToString()
             });
 
-            var rosterGroup1 = new Group() { PublicKey = rosterGroupId1, IsRoster = true, RosterSizeQuestionId = rosterQuestionId1 };
+            var rosterGroup1 = new Group() { PublicKey = rosterGroupId1, IsRoster = true, VariableName = "b", RosterSizeQuestionId = rosterQuestionId1 };
             rosterGroup1.Children.Add(new NumericQuestion()
             {
                 PublicKey = questionWithSubstitutionsIdFromLevel1,
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             });
             questionnaire.Children.Add(rosterGroup1);
 
-            var rosterGroup2 = new Group() { PublicKey = rosterGroupId2, IsRoster = true, RosterSizeQuestionId = rosterQuestionId2 };
+            var rosterGroup2 = new Group() { PublicKey = rosterGroupId2, IsRoster = true, VariableName = "a", RosterSizeQuestionId = rosterQuestionId2 };
             rosterGroup2.Children.Add(new SingleQuestion()
             {
                 PublicKey = questionFromLevel2,

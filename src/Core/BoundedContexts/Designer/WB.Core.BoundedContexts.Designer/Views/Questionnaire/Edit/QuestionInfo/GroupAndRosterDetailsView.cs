@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public RosterSizeSourceType RosterSizeSourceType { get; set; }
         public string[] RosterFixedTitles { get; set; }
         public Guid? RosterTitleQuestionId { get; set; }
+        public string VariableName { get; set; }
     }
 }

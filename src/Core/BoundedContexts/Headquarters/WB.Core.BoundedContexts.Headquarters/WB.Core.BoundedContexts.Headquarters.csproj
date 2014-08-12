@@ -84,10 +84,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs.Spec\Ncqrs.Spec.csproj">
-      <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
-      <Name>Ncqrs.Spec</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
@@ -95,10 +91,6 @@
     <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
-      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
-      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
       <Project>{b9af365d-f3c9-423a-86e2-9c3e0c1ac402}</Project>
@@ -108,10 +100,6 @@
       <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Core.Infrastructure.Raven</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -120,21 +108,9 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
-      <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
-      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
-      <Name>WB.Core.SharedKernel.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
-      <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
-      <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

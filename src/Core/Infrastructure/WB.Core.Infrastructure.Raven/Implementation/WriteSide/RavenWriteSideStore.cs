@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Abstractions.Json;
 using Raven.Client.Document;
@@ -8,10 +9,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 {
     internal class RavenWriteSideStore
     {
-        protected internal static DocumentConvention CreateStoreConventions(string ravenCollectionName)
+        protected internal static DocumentConvention CreateStoreConventions(string ravenCollectionName, FailoverBehavior failoverBehavior = FailoverBehavior.FailImmediately)
         {
             return new DocumentConvention
             {
+                FailoverBehavior = failoverBehavior,
                 JsonContractResolver = new PropertiesOnlyContractResolver(),
                 FindTypeTagName = x => ravenCollectionName,
                 CustomizeJsonSerializer = CustomizeJsonSerializer,
