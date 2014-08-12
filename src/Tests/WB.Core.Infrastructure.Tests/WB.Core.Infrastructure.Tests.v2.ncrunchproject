@@ -23,6 +23,14 @@
   <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
   <IgnoredTests>
-    <AllTestsSelector />
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.Infrastructure.Tests.ReadSideRepositoryReaderExtensionsTests.when_getting_view_by_guid_id</FixtureName>
+    </FixtureTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.Infrastructure.Tests.ReadSideRepositoryWriterExtensionsTests.when_getting_view_by_guid_id</FixtureName>
+    </FixtureTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.Infrastructure.Tests.ReadSideRepositoryWriterExtensionsTests.when_removing_view_by_guid_id</FixtureName>
+    </FixtureTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>
