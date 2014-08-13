@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands
                 AllowedAttributes = new[] { "color" }
             };
 
-            return sanitizer.Sanitize(html);
+            return System.Web.HttpUtility.HtmlDecode(sanitizer.Sanitize(html));
         }
     }
 }

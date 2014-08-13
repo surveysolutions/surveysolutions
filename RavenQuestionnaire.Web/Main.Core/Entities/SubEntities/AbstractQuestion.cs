@@ -99,6 +99,7 @@ namespace Main.Core.Entities.SubEntities
         public bool Mandatory { get; set; }
 
         private IComposite parent;
+        private string questionText;
 
         public IComposite GetParent()
         {
@@ -114,7 +115,11 @@ namespace Main.Core.Entities.SubEntities
 
         public QuestionScope QuestionScope { get; set; }
 
-        public string QuestionText { get; set; }
+        public string QuestionText
+        {
+            get { return this.questionText; }
+            set { this.questionText = System.Web.HttpUtility.HtmlDecode(value); }
+        }
 
         public virtual QuestionType QuestionType { get; set; }
 
