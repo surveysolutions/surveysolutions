@@ -12,7 +12,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.Children = new List<PdfEntityView>();
         }
 
-        public string Title { get; set; }
+        public string Title
+        {
+            get { return this.title; }
+            set { this.title = System.Web.HttpUtility.HtmlDecode(value);  }
+        }
 
         public Guid PublicId { get; set; }
 
@@ -51,6 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         private PdfEntityView parent;
+        private string title;
 
         private void SetParent(PdfEntityView value)
         {
