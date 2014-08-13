@@ -11,11 +11,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class QuestionnaireExecutorTemplateModel
     {
+        private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+
         public Guid Id { private set; get; }
 
         public List<QuestionTemplateModel> AllQuestions { private set; get; }
         public List<RosterTemplateModel> AllRosters { private set; get; }
         public List<GroupTemplateModel> AllGroups { private set; get; }
+
+        public string GeneratedClassName { private set; get; }
 
         public Dictionary<string, string> GeneratedScopesTypeNames { private set; get; }
 
@@ -25,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<Guid, Guid[]> RostersIdToScopeMap { private set; get; }
         public Dictionary<Guid, List<Guid>> ConditionalDependencies { private set; get; }
         public Dictionary<Guid, List<Guid>> StructuralDependencies { private set; get; }
-        
+
         public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { private set; get; }
 
 
@@ -40,13 +44,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel();
 
             this.Id = questionnaireDocument.PublicKey;
-            this.ConditionalDependencies = this.BuildDependencyTree(questionnaireDocument);
 
-            this.StructuralDependencies = questionnaireDocument 
+            this.GeneratedClassName = String.Format("{0}_{1}", InterviewExpressionStatePrefix, Guid.NewGuid().FormatGuid());
+
+            this.ConditionalDependencies = this.BuildDependencyTree(questionnaireDocument);
+            this.BuildStructures(questionnaireDocument);
+
+            this.StructuralDependencies = questionnaireDocument
                 .GetAllGroups()
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
-
-            this.BuildStructures(questionnaireDocument);
         }
 
         private void BuildStructures(QuestionnaireDocument questionnaireDoc)
@@ -183,7 +189,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private Dictionary<Guid, List<Guid>> BuildDependencyTree(QuestionnaireDocument questionnaireDocument)
         {
-            Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument 
+            Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument
                 .GetAllGroups()
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
 
@@ -254,19 +260,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        public static List<Tuple<string,string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions, List<GroupTemplateModel> groups,
+        public static List<Tuple<string, string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions,
+            List<GroupTemplateModel> groups,
             Dictionary<Guid, Guid[]> conditionalDependencies)
         {
+            var sortedList = (from groupTemplateModel
+                in groups
+                where !string.IsNullOrWhiteSpace(groupTemplateModel.Conditions)
+                select new Tuple<string, string>(groupTemplateModel.GeneratedConditionsMethodName, groupTemplateModel.GeneratedStateName))
+                .ToList();
 
-            var sortedList = (from groupTemplateModel 
-                                in groups 
-                             where !string.IsNullOrWhiteSpace(groupTemplateModel.Conditions) 
-                            select new Tuple<string, string>(groupTemplateModel.GeneratedConditionsMethodName, groupTemplateModel.GeneratedStateName)).ToList();
-            
-            sortedList.AddRange(from questionTemplateModel 
-                                  in questions 
-                               where !string.IsNullOrWhiteSpace(questionTemplateModel.Conditions) 
-                              select new Tuple<string, string>(questionTemplateModel.GeneratedConditionsMethodName, questionTemplateModel.GeneratedStateName));
+            sortedList.AddRange(from questionTemplateModel
+                in questions
+                where !string.IsNullOrWhiteSpace(questionTemplateModel.Conditions)
+                select
+                    new Tuple<string, string>(questionTemplateModel.GeneratedConditionsMethodName, questionTemplateModel.GeneratedStateName));
 
 
             return sortedList;

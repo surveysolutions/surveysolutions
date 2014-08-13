@@ -5,8 +5,9 @@
 <#@ import namespace="System.Collections.Generic" #>
     private class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
     {
-        public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
-            : base(rosterVector, rosterKey, getInstances, conditionalDependencies)
+        public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, 
+                Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
+            : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
         {
         //TODO: generate mandatory 
         <#foreach (var @group in Model.Groups) 
@@ -25,13 +26,13 @@
         <# }#>
         <#foreach (var @roster in Model.Rosters) 
         {#>    
-            RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(rosterVector, identities, this, this.GetInstances, this.ConditionalDependencies));
+            RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(rosterVector, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies));
         <# }#>
         }                                 
 
         public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
         {
-            var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies)
+            var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies)
             {
                 ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -42,6 +43,7 @@
             };
                  
             ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
+            StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);
 
             foreach (var state in level.EnablementStates)
             {
@@ -81,12 +83,12 @@
                 
         <#foreach (var @roster in Model.Rosters) 
         {#>
-        public <#=@roster.GeneratedTypeName#>[] <#=@roster.VariableName#>
+        public IEnumerable<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
         {
             get 
             {
                 var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
-                return rosters == null ? new <#=@roster.GeneratedTypeName#>[0] : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToArray();
+                return rosters == null ? new List<<#=@roster.GeneratedTypeName#>>() : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToList();
             }
         }
         <# }#>
