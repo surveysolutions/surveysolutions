@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 interviewsFeedUri ?? new Uri("http://localhost/"),
                 questionnaireDetailsEndpoint,
                 accessToken,
-                interviewsPushUrl ?? new Uri("http://localhost"));
+                interviewsPushUrl ?? new Uri("http://localhost"), new Uri("http://localhost"));
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null,
@@ -125,6 +125,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 Mock.Of<IUserChangedFeedReader>(),
                 Mock.Of<ILocalUserFeedProcessor>(),
                 interviewsSynchronizer ?? Mock.Of<IInterviewsSynchronizer>(),
+                Mock.Of<IQuestionnaireSynchronizer>(),
                 HeadquartersPullContext(),
                 HeadquartersPushContext());
         }

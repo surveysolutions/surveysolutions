@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVersionerTests
             version.Major.ShouldEqual(2);
 
         It should_set_Minor_property_to_1 = () =>
-            version.Minor.ShouldEqual(1);
+            version.Minor.ShouldEqual(2);
 
         It should_set_Patch_property_to_0 = () =>
             version.Patch.ShouldEqual(0);

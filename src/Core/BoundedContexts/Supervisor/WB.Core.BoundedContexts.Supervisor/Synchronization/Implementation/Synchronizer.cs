@@ -7,9 +7,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
     internal class Synchronizer : ISynchronizer, IJob
     {
         private readonly ILocalFeedStorage localFeedStorage;
-        private readonly IUserChangedFeedReader feedReader;
         private readonly ILocalUserFeedProcessor localUserFeedProcessor;
+        private readonly IUserChangedFeedReader feedReader;
+
+        
         private readonly IInterviewsSynchronizer interviewsSynchronizer;
+        private readonly IQuestionnaireSynchronizer questionnaireSynchronizer;
+        
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly HeadquartersPushContext headquartersPushContext;
         private bool isSynchronizationRunning;
@@ -18,8 +22,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         public Synchronizer(
             ILocalFeedStorage localFeedStorage,
             IUserChangedFeedReader feedReader,
-            ILocalUserFeedProcessor localUserFeedProcessor,
-            IInterviewsSynchronizer interviewsSynchronizer,
+            ILocalUserFeedProcessor localUserFeedProcessor, 
+            IInterviewsSynchronizer interviewsSynchronizer, IQuestionnaireSynchronizer questionnaireSynchronizer,
             HeadquartersPullContext headquartersPullContext,
             HeadquartersPushContext headquartersPushContext)
         {
@@ -36,6 +40,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.interviewsSynchronizer = interviewsSynchronizer;
             this.headquartersPullContext = headquartersPullContext;
             this.headquartersPushContext = headquartersPushContext;
+            this.questionnaireSynchronizer = questionnaireSynchronizer;
         }
 
         public void Pull()
@@ -73,6 +78,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 this.localUserFeedProcessor.Process();
 
+                this.questionnaireSynchronizer.Pull();
                 this.interviewsSynchronizer.Pull();
             }
             finally

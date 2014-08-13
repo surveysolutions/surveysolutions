@@ -74,6 +74,7 @@
     <Compile Include="Interviews\Denormalizers\InterviewsFeedDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
+    <Compile Include="Questionnaires\Denormalizers\QuestionnaireFeedDenormalizer.cs" />
     <Compile Include="Questionnaires\Denormalizers\VersionedQustionnaireDocumentDenormalizer.cs" />
     <Compile Include="Questionnaires\Implementation\VersionedQustionnaireDocumentViewFactory.cs" />
     <Compile Include="Questionnaires\IVersionedQuestionnaireReader.cs" />

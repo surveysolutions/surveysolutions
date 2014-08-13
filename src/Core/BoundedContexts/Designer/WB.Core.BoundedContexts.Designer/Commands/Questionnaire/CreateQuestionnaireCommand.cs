@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
             : base(questionnaireId)
         {
             this.PublicKey = questionnaireId;
-            this.Title = text;
+            this.Title = CommandUtils.SanitizeHtml(text);
             this.CreatedBy = createdBy;
             this.IsPublic = isPublic;
         }
