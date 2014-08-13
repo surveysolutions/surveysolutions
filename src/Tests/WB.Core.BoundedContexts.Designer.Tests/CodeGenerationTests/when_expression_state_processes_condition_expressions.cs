@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 {
     //[Ignore("bulk test run failed on server build")]
-    internal class when_expression_state_processes_validation_expressions : CodeGenerationTestsContext
+    internal class when_expression_state_processes_condition_expressions : CodeGenerationTestsContext
     {
         private Establish context = () =>
         {
@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
-            questionnaireDocument = CreateQuestionnairDocumenteWithOneNumericIntegerQuestionWithValidationAndTwoRosters(questionnaireId, questionId);
+            questionnaireDocument = CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(questionnaireId, questionId);
 
             IInterviewExpressionStateProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
 
@@ -31,23 +31,25 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();
 
-            state.UpdateIntAnswer(questionId, new decimal[0], 4);
+            state.UpdateIntAnswer(questionId, new decimal[0], 2);
         };
 
         private Because of = () =>
-            state.ProcessValidationExpressions(out questionsToBeValid, out questionsToBeInvalid);
+            state.ProcessConditionExpressions(out questionsToBeEnabled, out questionsToBeDisabled, out groupsToBeEnabled, out groupsToBeDisabled);
 
         private It should_valid_question_count_equal_1 = () =>
-            questionsToBeValid.Count.ShouldEqual(1);
+            questionsToBeDisabled.Count.ShouldEqual(1);
 
-        private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid questionnaireId = Guid.Parse("21111111111111111111111111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111112");
         private static QuestionnaireDocument questionnaireDocument;
 
         private static IInterviewExpressionState state;
-        private static List<Identity> questionsToBeValid;
+        private static List<Identity> questionsToBeEnabled;
+        private static List<Identity> questionsToBeDisabled;
+        private static List<Identity> groupsToBeEnabled;
+        private static List<Identity> groupsToBeDisabled;
 
-        private static List<Identity> questionsToBeInvalid;
         private static EventContext eventContext;
     }
 }
