@@ -105,6 +105,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             Guid roster1Id = Guid.Parse("23232323232323232323232323232311");
             Guid roster2Id = Guid.Parse("23232323232323232323232323232111");
 
+            Guid question1Id = Guid.Parse("13232323232323232323232323232111");
+
             questionnaireDocument.AddChapter(chapterId);
 
             questionnaireDocument.Add(new NumericQuestion()
@@ -137,9 +139,63 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             }, chapterId, null);
 
+            questionnaireDocument.Add(new NumericQuestion()
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = question1Id,
+                StataExportCaption = "test_in_r",
+                IsInteger = true,
+                ValidationExpression = "test > 3"
+
+            }, roster2Id, null);
+
             return questionnaireDocument;
         }
 
+
+        public static QuestionnaireDocument CreateQuestionnairDocumenteWithOneNumericIntegerQuestionAndRosters(Guid questionnaireId,
+            Guid questionId, Guid rosterId)
+        {
+            QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
+
+            Guid chapterId = Guid.Parse("23232323232323232323232323232323");
+            Guid question1Id = Guid.Parse("13232323232323232323232323232111");
+
+            questionnaireDocument.AddChapter(chapterId);
+
+            questionnaireDocument.Add(new NumericQuestion()
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = questionId,
+                StataExportCaption = "test",
+                IsInteger = true,
+                ValidationExpression = "test >= 1"
+
+            }, chapterId, null);
+
+            questionnaireDocument.Add(new Group()
+            {
+                PublicKey = rosterId,
+                VariableName = "roster1",
+                IsRoster = true,
+                RosterSizeQuestionId = questionId,
+                RosterSizeSource = RosterSizeSourceType.Question
+
+            }, chapterId, null);
+
+            
+            questionnaireDocument.Add(new NumericQuestion()
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = question1Id,
+                StataExportCaption = "test_in_roster",
+                IsInteger = true,
+                ValidationExpression = "test >= 1"
+
+            }, rosterId, null);
+
+            return questionnaireDocument;
+        }
 
         public static QuestionnaireDocument CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(Guid questionnaireId, Guid questionId)
         {
