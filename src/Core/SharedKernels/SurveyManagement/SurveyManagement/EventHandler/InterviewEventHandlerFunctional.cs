@@ -371,11 +371,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             if (this.IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
             {
-                this.ResendInterviewInNewStatus(currentState.Document, newStatus, evnt.Payload.Comment);
+                this.ResendInterviewInNewStatus(currentState.Document, newStatus, evnt.Payload.Comment, evnt.EventTimeStamp);
             }
             else if (this.IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
             {
-                this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
+                this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null, evnt.EventTimeStamp);
             }
         
             return currentState;
@@ -391,17 +391,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
         }
 
-        public void ResendInterviewInNewStatus(InterviewData interview, InterviewStatus newStatus, string comments)
+        public void ResendInterviewInNewStatus(InterviewData interview, InterviewStatus newStatus, string comments, DateTime timestamp)
         {
             var interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, newStatus, comments);
 
-            this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+            this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp);
         }
 
-        public void ResendInterviewForPerson(InterviewData interview, Guid responsibleId)
+        public void ResendInterviewForPerson(InterviewData interview, Guid responsibleId, DateTime timestamp)
         {
             InterviewSynchronizationDto interviewSyncData = this.BuildSynchronizationDtoWhichIsAssignedToUser(interview, responsibleId, InterviewStatus.InterviewerAssigned, null);
-            this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+            this.syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp);
         }
 
         public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<SupervisorAssigned> evnt)
@@ -421,7 +421,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             if (currentState.Document.Status != InterviewStatus.RejectedByHeadquarters)
             {
-                this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId);
+                this.ResendInterviewForPerson(currentState.Document, evnt.Payload.InterviewerId, evnt.EventTimeStamp);
             }
 
             return currentState;
@@ -817,7 +817,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public ViewWithSequence<InterviewData> Delete(ViewWithSequence<InterviewData> currentState, IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, currentState.Document.ResponsibleId);
+            this.syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, currentState.Document.ResponsibleId, evnt.EventTimeStamp);
             return currentState;
         }
     }

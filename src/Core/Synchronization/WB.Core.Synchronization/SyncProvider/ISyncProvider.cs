@@ -8,11 +8,11 @@ namespace WB.Core.Synchronization.SyncProvider
 
     internal interface ISyncProvider
     {
-        SyncItem GetSyncItem(Guid syncId, Guid id, long sequence);
-        
-        IEnumerable<SyncItem> GetSyncItemBulk(Guid userId, Guid clientRegistrationKey, long sequence);
+        SyncItem GetSyncItem(Guid syncId, Guid id, DateTime timestamp);
 
-        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence);
+        IEnumerable<SyncItem> GetSyncItemBulk(Guid userId, Guid clientRegistrationKey, DateTime timestamp);
+
+        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, DateTime timestamp);
 
         HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier);
 

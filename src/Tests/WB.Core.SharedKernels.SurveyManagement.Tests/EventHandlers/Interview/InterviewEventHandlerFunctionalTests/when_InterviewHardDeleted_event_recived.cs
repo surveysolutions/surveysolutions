@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             viewState = interviewEventHandlerFunctional.Delete(viewState,interviewHardDeletedEvent);
 
         It should_interview_amrked_as_deleted_in_sync_storage_once = () =>
-            synchronizationDataStorageMock.Verify(x => x.MarkInterviewForClientDeleting(interviewHardDeletedEvent.EventSourceId,viewState.Document.ResponsibleId), Times.Once);
+            synchronizationDataStorageMock.Verify(x => x.MarkInterviewForClientDeleting(interviewHardDeletedEvent.EventSourceId,viewState.Document.ResponsibleId, Moq.It.IsAny<DateTime>()), Times.Once);
 
         private static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
         private static ViewWithSequence<InterviewData> viewState;

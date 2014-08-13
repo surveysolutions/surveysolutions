@@ -4,13 +4,13 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 {
     public class SynchronizationChunkMeta
     {
-        public SynchronizationChunkMeta(Guid id, long sequence)
+        public SynchronizationChunkMeta(Guid id, long timestamp)
         {
             Id = id;
-            Sequence = sequence;
+            Timestamp = timestamp;
         }
 
         public Guid Id { get; private set; }
-        public long Sequence { get; private set; }
+        public long Timestamp { get; private set; }
     }
 }

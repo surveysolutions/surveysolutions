@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 };
             this.users.Store(doc, evnt.Payload.PublicKey);
 
-            this.syncStorage.SaveUser(doc);
+            this.syncStorage.SaveUser(doc, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<UserChanged> evnt)
@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             item.Roles = evnt.Payload.Roles.ToList();
             item.Password = evnt.Payload.PasswordHash;
             this.users.Store(item, item.PublicKey);
-            this.syncStorage.SaveUser(item);
+            this.syncStorage.SaveUser(item, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<UserLocked> @event)
@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             item.IsLockedByHQ = true;
             this.users.Store(item, item.PublicKey);
-            this.syncStorage.SaveUser(item);
+            this.syncStorage.SaveUser(item, @event.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<UserUnlocked> @event)
@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             item.IsLockedByHQ = false;
             this.users.Store(item, item.PublicKey);
-            this.syncStorage.SaveUser(item);
+            this.syncStorage.SaveUser(item, @event.EventTimeStamp);
         }
 
         public override Type[] BuildsViews
@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             item.IsLockedBySupervisor = true;
             this.users.Store(item, item.PublicKey);
-            this.syncStorage.SaveUser(item);
+            this.syncStorage.SaveUser(item, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<UserUnlockedBySupervisor> evnt)
@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             item.IsLockedBySupervisor = false;
             this.users.Store(item, item.PublicKey);
-            this.syncStorage.SaveUser(item);
+            this.syncStorage.SaveUser(item, evnt.EventTimeStamp);
         }
     }
 }

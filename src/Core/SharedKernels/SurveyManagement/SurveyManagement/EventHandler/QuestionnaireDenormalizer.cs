@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode);
+            this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -47,16 +47,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version;
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode);
+            this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
             this.documentStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
-            this.synchronizationDataStorage.DeleteQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            this.synchronizationDataStorage.DeleteQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion, evnt.EventTimeStamp);
         }
 
-        private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode)
+        private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode, DateTime timestamp)
         {
             var document = questionnaireDocument.Clone() as QuestionnaireDocument;
             if (document == null)
@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 new QuestionnaireDocumentVersioned() { Questionnaire = document, Version = version },
                 id);
 
-            this.synchronizationDataStorage.SaveQuestionnaire(document, version, allowCensusMode);
+            this.synchronizationDataStorage.SaveQuestionnaire(document, version, allowCensusMode, timestamp);
             
         }
 
