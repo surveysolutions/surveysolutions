@@ -26,7 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
                 Instructions = instructions,
                 QuestionScope = scope,
                 LinkedToQuestionId = linkedToQuestionId,
-                Answers = options
+                Answers = options,
+                IsFilteredCombobox = isFilteredCombobox
             };
 
             viewMapper = CreateQuestionDetailsFactory();
@@ -86,6 +87,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
         It should_set_ValidationMessaget_in_validationMessage = () =>
             questionView.ValidationMessage.ShouldEqual(validationMessage);
 
+        It should_set_IsFilteredCombobox_to_true = () =>
+           questionView.IsFilteredCombobox.ShouldEqual(isFilteredCombobox);
+
         private static IQuestion question;
         private static Guid parentGroupId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionId = Guid.Parse("22222222222222222222222222222222");
@@ -105,6 +109,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
             new Answer{ AnswerValue = "1", AnswerText = "1"},
             new Answer{ AnswerValue = "2", AnswerText = "2"}
         };
+
+        private static bool isFilteredCombobox = false;
 
         private static QuestionDetailsViewMapper viewMapper;
         private static SingleOptionDetailsView questionView;
