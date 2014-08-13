@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection
         void SetParent(IExpressionExecutable parentLevel);
         IExpressionExecutable GetParent();
 
-        IExpressionExecutable CreateChildRosterInstance(Guid rosterId,decimal[] rosterVector, Identity[] rosterIdentityKey);
+        IExpressionExecutable CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector, Identity[] rosterIdentityKey);
 
         void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid);
 
@@ -38,6 +38,5 @@ namespace WB.Core.SharedKernels.DataCollection
         void UpdateTextListAnswer(Guid questionId, Tuple<decimal, string>[] answers);
         void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] selectedPropagationVector);
         void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[][] selectedPropagationVectors);
-
     }
 }
