@@ -64,7 +64,8 @@ namespace Main.Core.Entities.SubEntities
         public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
 
         private IComposite parent;
-        
+        private string title;
+
         public Propagate Propagated { get; set; }
 
         public IComposite GetParent()
@@ -79,7 +80,11 @@ namespace Main.Core.Entities.SubEntities
 
         public Guid PublicKey { get; set; }
 
-        public string Title { get; set; }
+        public string Title
+        {
+            get { return this.title; }
+            set { this.title = System.Web.HttpUtility.HtmlDecode(value); }
+        }
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {

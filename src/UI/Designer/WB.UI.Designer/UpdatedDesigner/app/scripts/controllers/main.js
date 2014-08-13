@@ -33,6 +33,11 @@
                                 backdrop: false,
                                 show: true
                             });
+
+                            verificationModal.on('shown.bs.modal', function () {
+                                $(document).off('focusin.modal');
+                            });
+
                             $('#verification-modal .modal-dialog .arrow').css({
                                 left: $('#verification-btn').offset().left - 10
                             });
