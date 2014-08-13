@@ -19,7 +19,6 @@ namespace Main.Core.Entities.SubEntities
         }
 
         private IComposite parent;
-        private string text;
 
         public IComposite GetParent()
         {
@@ -61,10 +60,6 @@ namespace Main.Core.Entities.SubEntities
 
         public Guid PublicKey { get; private set; }
 
-        public string Text
-        {
-            get { return this.text; }
-            set { this.text = System.Web.HttpUtility.HtmlDecode(value); }
-        }
+        public string Text { get; set; }
     }
 }
