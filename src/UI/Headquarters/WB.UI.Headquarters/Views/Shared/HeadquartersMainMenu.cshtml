@@ -2,7 +2,7 @@
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
-<li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
+s<li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
         <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
     </a>
@@ -17,7 +17,7 @@
             <a href="@Url.Action("MapReport", "HQ")">Map Report</a>
         </li>
         <li class="@(page == MenuItem.InterviewsChart ? "active" : "")">
-            <a href="@Url.Action("InterviewsChart", "HQ")">Cumulative chart</a>
+            <a href="@Url.Action("InterviewsChart", "HQ")">Cumulative Interview Chart</a>
         </li>
     </ul>
 </li>
