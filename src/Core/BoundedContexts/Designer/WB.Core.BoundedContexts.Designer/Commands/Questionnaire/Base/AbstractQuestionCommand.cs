@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             : base(questionnaireId, questionId, responsibleId)
         {
             this.VariableLabel = variableLabel;
-            this.Title = title;
+            this.Title = CommandUtils.SanitizeHtml(title);
             this.VariableName = variableName;
             this.IsMandatory = isMandatory;
             this.IsPreFilled = isPreFilled;

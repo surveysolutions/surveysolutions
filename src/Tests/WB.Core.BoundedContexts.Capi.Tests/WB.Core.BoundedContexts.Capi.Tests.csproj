@@ -91,6 +91,11 @@
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_PlainQuestionnaireRegistered_event_arrived.cs" />
     <Compile Include="QuestionnaireBrowseItemDenormalizerTests\when_TemplateImported_event_arrived.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_1_and_mask_with_any_sumbol_and_lower_dashes.cs" />
+    <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_full_masked_text_and_one_symbol_is_replaced.cs" />
+    <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_full_masked_without_one_symbol.cs" />
+    <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_text_with_deleted_symbol_before_literal.cs" />
+    <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_text_with_valid_symbol_before_dash.cs" />
+    <Compile Include="UI\MaskedFormatterTests\when_FormatValue_called_for_text__ab___and_mask_with_any_char_and_dashes.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_IsTextMaskMatched_called_for_invalid_text.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_IsTextMaskMatched_called_for_valid_text.cs" />
     <Compile Include="UI\MaskedFormatterTests\when_creating_mask_formatter_with_variety_of_symbols.cs" />

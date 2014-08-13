@@ -10,11 +10,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             : base(questionnaireId, questionId, responsibleId)
         {
             this.VariableLabel = variableLabel;
-            Title = title;
-            VariableName = variableName;
-            IsMandatory = isMandatory;
+            this.Title = CommandUtils.SanitizeHtml(title);
+            this.VariableName = variableName;
+            this.IsMandatory = isMandatory;
             this.EnablementCondition = enablementCondition;
-            Instructions = instructions;
+            this.Instructions = instructions;
         }
 
         public string Title { get; private set; }
