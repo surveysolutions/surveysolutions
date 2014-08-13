@@ -124,6 +124,12 @@
 
         StaticTextIsEmpty,
 
-        TitleIsTooLarge
+        TitleIsTooLarge,
+
+        FilteredComboboxQuestionNotFound,
+
+        QuestionIsNotAFilteredCombobox,
+
+        FilteredComboboxQuestionOptionsMaxLength
     }
 }
