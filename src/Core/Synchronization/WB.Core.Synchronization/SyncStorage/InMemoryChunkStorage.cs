@@ -20,7 +20,7 @@ namespace WB.Core.Synchronization.SyncStorage
             : this(new Dictionary<Guid, SyncItem>())
         {
         }
-        public void StoreChunk(SyncItem syncItem, Guid? userId)
+        public void StoreChunk(SyncItem syncItem, Guid? userId, DateTime timestamp)
         {
             this.container[syncItem.Id] = syncItem;
         }
@@ -35,17 +35,17 @@ namespace WB.Core.Synchronization.SyncStorage
             return container[id];
         }
 
-        public IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users)
+        public IEnumerable<Guid> GetChunksCreatedAfterForUsers(DateTime timestamp, IEnumerable<Guid> users)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(long sequence, IEnumerable<Guid> users)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(DateTime timestamp, IEnumerable<Guid> users)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence)
+        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(DateTime timestamp)
         {
             throw new NotImplementedException();
         }

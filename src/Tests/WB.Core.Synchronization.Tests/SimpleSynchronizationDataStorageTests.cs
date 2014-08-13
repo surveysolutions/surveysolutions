@@ -33,7 +33,7 @@ namespace WB.Core.Synchronization.Tests
             // act
             target.SaveInterview(
                 new InterviewSynchronizationDto(questionnarieId, InterviewStatus.Created, null, userId, Guid.NewGuid(),1, null, null, null,null,
-                                                null, null, null, false), userId);
+                                                null, null, null, false), userId, DateTime.Now);
 
             // assert
             var result = target.GetLatestVersion(questionnarieId);
@@ -61,7 +61,7 @@ namespace WB.Core.Synchronization.Tests
                     Password = testpassword,
                     Roles = new List<UserRoles>() {UserRoles.Operator},
                     Supervisor = new UserLight(supervisorId, "")
-                });
+                }, DateTime.Now);
 
             // assert
             var result = target.GetLatestVersion(userId);
@@ -80,7 +80,7 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
             
             // act
-            target.MarkInterviewForClientDeleting(questionnarieId, userId);
+            target.MarkInterviewForClientDeleting(questionnarieId, userId, DateTime.Now);
 
             // assert
             var result = target.GetLatestVersion(questionnarieId);
@@ -104,7 +104,7 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
 
             // act
-            target.SaveQuestionnaire(new QuestionnaireDocument() { PublicKey = questionnarieId }, 1, true);
+            target.SaveQuestionnaire(new QuestionnaireDocument() { PublicKey = questionnarieId }, 1, true, DateTime.Now);
 
             // assert
             var packageId = questionnarieId.Combine(1);
@@ -131,7 +131,7 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
 
             // act
-            target.DeleteQuestionnaire(questionnarieId, 1);
+            target.DeleteQuestionnaire(questionnarieId, 1, DateTime.Now);
 
             // assert
             var packageId = questionnarieId.Combine(1);
@@ -156,7 +156,7 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
 
             // act
-            target.SaveQuestionnaire(new QuestionnaireDocument() { PublicKey = questionnarieId }, 1, false);
+            target.SaveQuestionnaire(new QuestionnaireDocument() { PublicKey = questionnarieId }, 1, false, DateTime.Now);
 
             // assert
             var packageId = questionnarieId.Combine(1);
@@ -190,12 +190,12 @@ namespace WB.Core.Synchronization.Tests
                 PublicKey = userId,
                 Roles = new List<UserRoles>() { UserRoles.Operator },
                 Supervisor = new UserLight(supervisorId, "")
-            });
+            }, DateTime.Now);
             retval.SaveUser(new UserDocument()
             {
                 PublicKey = supervisorId,
                 Roles = new List<UserRoles>() { UserRoles.Supervisor }
-            });
+            }, DateTime.Now);
             return retval;
 
         }

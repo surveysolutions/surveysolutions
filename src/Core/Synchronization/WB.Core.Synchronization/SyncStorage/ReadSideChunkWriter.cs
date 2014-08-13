@@ -9,54 +9,20 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    internal class ReadSideChunkWriter : IChunkWriter, IReadSideRepositoryCleaner
+    internal class ReadSideChunkWriter : IChunkWriter
     {
         private IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage;
-        private readonly object myLock = new object();
-        private long? currentSequence;
 
-        public ReadSideChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage, IReadSideRepositoryCleanerRegistry cleanerRegistry)
+        public ReadSideChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage)
         {
             this.storage = storage;
-            cleanerRegistry.Register(this);
         }
 
-        private void DefineCurrentSequence()
+        public void StoreChunk(SyncItem syncItem, Guid? userId, DateTime timestamp)
         {
-            currentSequence = 1;
+            storage.Store(new SynchronizationDelta(syncItem.Id, syncItem.Content, timestamp, userId, syncItem.IsCompressed,
+                syncItem.ItemType, syncItem.MetaInfo), syncItem.Id);
 
-            var sequences =
-                storage.Query(
-                    _ => _.OrderByDescending(d => d.Sequence).Select(d => d.Sequence).Take(1).ToList());
-            if (sequences.Any())
-                currentSequence = sequences.First() + 1;
-
-        }
-
-        public void StoreChunk(SyncItem syncItem, Guid? userId)
-        {
-            lock (myLock)
-            {
-                storage.Store(new SynchronizationDelta(syncItem.Id, syncItem.Content, CurrentSequence, userId, syncItem.IsCompressed,
-                                                    syncItem.ItemType, syncItem.MetaInfo), syncItem.Id);
-                CurrentSequence++;
-            }
-        }
-
-        protected long CurrentSequence
-        {
-            get
-            {
-                if (!currentSequence.HasValue)
-                    DefineCurrentSequence();
-                return currentSequence.Value;
-            }
-            set { currentSequence = value; }
-        }
-
-        public void Clear()
-        {
-            currentSequence = null;
         }
     }
 }
