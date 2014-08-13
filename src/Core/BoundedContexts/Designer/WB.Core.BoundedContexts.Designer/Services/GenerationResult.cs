@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
     public class GenerationResult
     {
         private readonly bool success;
-        private readonly List<GenerationDiagnostic> diagnostics;
+        private List<GenerationDiagnostic> diagnostics;
         
         public bool Success
         {
@@ -24,6 +24,10 @@ namespace WB.Core.BoundedContexts.Designer.Services
             get
             {
                 return this.diagnostics;
+            }
+            set
+            {
+                this.diagnostics = value;
             }
         }
 
@@ -70,7 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             }
         }
 
-        internal GenerationDiagnostic(string message, string category, GenerationDiagnosticSeverity severity)
+        public GenerationDiagnostic(string message, string category, GenerationDiagnosticSeverity severity)
         {
             this.message = message;
             this.severity = severity;

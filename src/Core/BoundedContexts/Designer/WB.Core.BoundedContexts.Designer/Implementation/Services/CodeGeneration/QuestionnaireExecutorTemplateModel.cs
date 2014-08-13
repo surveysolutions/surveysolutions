@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<Guid, Guid[]> ParentsMap { private set; get; }
         public Dictionary<Guid, Guid[]> RostersIdToScopeMap { private set; get; }
         public Dictionary<Guid, List<Guid>> ConditionalDependencies { private set; get; }
+        public Dictionary<Guid, List<Guid>> StructuralDependencies { private set; get; }
+        
         public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { private set; get; }
 
 
@@ -40,6 +42,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Id = questionnaireDocument.PublicKey;
             this.ConditionalDependencies = this.BuildDependencyTree(questionnaireDocument);
 
+            this.StructuralDependencies = questionnaireDocument 
+                .GetAllGroups()
+                .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
 
             this.BuildStructures(questionnaireDocument);
         }
@@ -173,12 +178,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static bool IsRosterGroup(IGroup group)
         {
-            return group.Propagated == Propagate.AutoPropagated || group.IsRoster;
+            return group.IsRoster || group.Propagated == Propagate.AutoPropagated;
         }
 
         private Dictionary<Guid, List<Guid>> BuildDependencyTree(QuestionnaireDocument questionnaireDocument)
         {
-            Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument
+            Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument 
                 .GetAllGroups()
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
 
@@ -252,6 +257,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public static List<Tuple<string,string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions, List<GroupTemplateModel> groups,
             Dictionary<Guid, Guid[]> conditionalDependencies)
         {
+
             var sortedList = (from groupTemplateModel 
                                 in groups 
                              where !string.IsNullOrWhiteSpace(groupTemplateModel.Conditions) 
@@ -261,7 +267,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                   in questions 
                                where !string.IsNullOrWhiteSpace(questionTemplateModel.Conditions) 
                               select new Tuple<string, string>(questionTemplateModel.GeneratedConditionsMethodName, questionTemplateModel.GeneratedStateName));
-            
+
+
             return sortedList;
         }
     }
