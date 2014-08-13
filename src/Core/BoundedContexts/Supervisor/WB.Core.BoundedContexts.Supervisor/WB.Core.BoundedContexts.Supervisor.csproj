@@ -102,9 +102,12 @@
     <Compile Include="Synchronization\Implementation\InterviewsSynchronizer.cs" />
     <Compile Include="Synchronization\Implementation\LocalFeedStorage.cs" />
     <Compile Include="Synchronization\Implementation\LocalInterviewFeedEntry.cs" />
+    <Compile Include="Synchronization\Implementation\LocalQuestionnaireFeedEntry.cs" />
     <Compile Include="Synchronization\Implementation\LocalUserFeedProcessor.cs" />
+    <Compile Include="Synchronization\Implementation\QuestionnaireSynchronizer.cs" />
     <Compile Include="Synchronization\Implementation\UserChangedFeedReader.cs" />
     <Compile Include="Synchronization\IInterviewsSynchronizer.cs" />
+    <Compile Include="Synchronization\IQuestionnaireSynchronizer.cs" />
     <Compile Include="Synchronization\IUserChangedFeedReader.cs" />
     <Compile Include="Synchronization\Implementation\Synchronizer.cs" />
     <Compile Include="Synchronization\ISynchronizer.cs" />
