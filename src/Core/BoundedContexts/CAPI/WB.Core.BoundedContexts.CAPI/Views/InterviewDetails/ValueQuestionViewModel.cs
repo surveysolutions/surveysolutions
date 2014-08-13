@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Security.Cryptography;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -50,7 +51,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 if (this.AnswerObject is int)
                     return string.Format(CultureInfo.CurrentCulture, "{0:n0}", (int)this.AnswerObject);
                 if (this.AnswerObject is decimal)
-                    return ((decimal)this.AnswerObject).ToString("##,###.############################", CultureInfo.CurrentCulture);
+                    return QuestionUtils.FormatDecimalAnswer((decimal)this.AnswerObject);
                 return this.AnswerObject.ToString();
             }
         }
