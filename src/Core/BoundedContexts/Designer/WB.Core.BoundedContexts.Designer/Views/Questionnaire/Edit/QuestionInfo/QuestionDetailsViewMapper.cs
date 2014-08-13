@@ -55,6 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             {
                 var singleoptionQuestionView = ((SingleOptionDetailsView)questionView);
                 singleoptionQuestionView.LinkedToQuestionId = singleoptionQuestion.LinkedToQuestionId;
+                singleoptionQuestionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
                 singleoptionQuestionView.Options = this.CreateCategoricalOptions(singleoptionQuestion.Answers);
                 return singleoptionQuestionView;
             }
