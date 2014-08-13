@@ -39,21 +39,30 @@
 
     @RenderSection("gridnavigation", false)
     
-    @RenderSection("chart", false)
-
-    <div id="list">
-        <!-- ko if:IsPageLoaded()  -->
-        <p class="text-center" data-bind="visible: Pager().TotalItemCount() == 0">
-            No results found
-        </p>
-        <!-- /ko -->
-        <div class="horizontal-scroll" data-bind="visible: Pager().TotalItemCount() > 0">
-            @RenderSection("grid", false)
+    @if (IsSectionDefined("grid"))
+    {
+        <div id="list">
+            <!-- ko if:IsPageLoaded()  -->
+            <p class="text-center" data-bind="visible: Pager().TotalItemCount() == 0">
+                No results found
+            </p>
+            <!-- /ko -->
+            <div class="horizontal-scroll" data-bind="visible: Pager().TotalItemCount() > 0">
+                @RenderSection("grid", false)
+            </div>
+            <!-- ko if:Pager().LastPage() > 1 -->
+            <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
+            <!-- /ko -->
         </div>
-        <!-- ko if:Pager().LastPage() > 1 -->
-        <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
-        <!-- /ko -->
-    </div>
+    }
+    
+    @if (IsSectionDefined("chart"))
+    {
+        <div id="list">
+            @RenderSection("chart", false)
+        </div>
+    }
+
     @this.RenderBody()
 
     @Html.Partial("_ListViewPagingScript")
