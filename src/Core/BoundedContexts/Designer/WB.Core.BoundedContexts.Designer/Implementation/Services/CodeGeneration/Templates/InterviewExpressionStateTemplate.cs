@@ -29,122 +29,142 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write(@"using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace WB.Core.SharedKernels.DataCollection.Generated
-{
-    public class InterviewExpressionState : AbstractInterviewExpressionState 
-    {
-        public InterviewExpressionState() 
-        {
-            var questionnaireLevelScope = new[] { IdOf.@__questionnaire };
-            var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
-            var questionnaireLevel = new ");
+            this.Write("using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\n\r\nnamespace" +
+                    " WB.Core.SharedKernels.DataCollection.Generated\r\n{\r\n    public class ");
+            
+            #line 13 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.GeneratedClassName));
+            
+            #line default
+            #line hidden
+            this.Write(" : AbstractInterviewExpressionState \r\n    {\r\n        public ");
+            
+            #line 15 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.GeneratedClassName));
+            
+            #line default
+            #line hidden
+            this.Write("() \r\n        {\r\n            var questionnaireLevelScope = new[] { IdOf.@__questio" +
+                    "nnaire };\r\n            var questionnaireIdentityKey = Util.GetRosterKey(question" +
+                    "naireLevelScope, Util.EmptyRosterVector);\r\n            var questionnaireLevel = " +
+                    "new ");
             
             #line 19 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.QuestionnaireLevelModel.GetTypeName()));
             
             #line default
             #line hidden
-            this.Write("(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf." +
-                    "conditionalDependencies);\r\n            this.InterviewScopes.Add(Util.GetRosterSt" +
-                    "ringKey(questionnaireIdentityKey), questionnaireLevel);\r\n        }\r\n\r\n        pr" +
-                    "ivate InterviewExpressionState(Dictionary<string, IExpressionExecutable> intervi" +
-                    "ewScopes, Dictionary<string, List<string>> siblingRosters)\r\n        {\r\n         " +
-                    "   var newScopes = interviewScopes.ToDictionary(interviewScope => interviewScope" +
-                    ".Key, interviewScope => interviewScope.Value.CopyMembers(this.GetRosterInstances" +
-                    "));\r\n\r\n            var newSiblingRosters = siblingRosters\r\n                .ToDi" +
-                    "ctionary(\r\n                    interviewScope => interviewScope.Key,\r\n          " +
-                    "          interviewScope => new List<string>(interviewScope.Value));\r\n\r\n        " +
-                    "    //set parents\r\n            foreach (var interviewScope in interviewScopes)\r\n" +
-                    "            {\r\n                var parent = interviewScope.Value.GetParent();\r\n " +
-                    "               if (parent != null)\r\n                    newScopes[interviewScope" +
-                    ".Key].SetParent(newScopes[Util.GetRosterStringKey(parent.GetRosterKey())]);\r\n   " +
-                    "         }\r\n\r\n            this.InterviewScopes = newScopes;\r\n            this.Si" +
-                    "blingRosters = newSiblingRosters;\r\n        }\r\n\r\n        public override void Add" +
-                    "Roster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int" +
-                    "? sortIndex)\r\n        {\r\n            if (!IdOf.parentScopeMap.ContainsKey(roster" +
-                    "Id))\r\n            {\r\n                return;\r\n            }\r\n\r\n            decim" +
-                    "al[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);\r\n" +
-                    "            Guid[] rosterScopeIds = IdOf.parentScopeMap[rosterId];\r\n            " +
-                    "var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);\r\n      " +
-                    "      string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);\r\n\r\n  " +
-                    "          if (this.InterviewScopes.ContainsKey(rosterStringKey))\r\n            {\r" +
-                    "\n                return;\r\n            }\r\n                        \r\n            v" +
-                    "ar rosterParentIdentityKey = outerRosterVector.Length == 0\r\n                ? Ut" +
-                    "il.GetRosterKey(new[] { IdOf.@__questionnaire }, new decimal[0])\r\n              " +
-                    "  : Util.GetRosterKey(rosterScopeIds.Shrink(), outerRosterVector);\r\n\r\n          " +
-                    "  var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentity" +
-                    "Key)];\r\n\r\n            var rosterLevel = parent.CreateChildRosterInstance(rosterI" +
-                    "d, rosterVector, rosterIdentityKey);\r\n\r\n            this.InterviewScopes.Add(ros" +
-                    "terStringKey, rosterLevel);\r\n            this.SetSiblings(rosterIdentityKey, ros" +
-                    "terStringKey);\r\n        }\r\n\r\n        public override void RemoveRoster(Guid rost" +
-                    "erId, decimal[] outerRosterVector, decimal rosterInstanceId)\r\n        {\r\n       " +
-                    "     if (!IdOf.parentScopeMap.ContainsKey(rosterId))\r\n            {\r\n           " +
-                    "     return;\r\n            }\r\n\r\n            decimal[] rosterVector = Util.GetRost" +
-                    "erVector(outerRosterVector, rosterInstanceId);\r\n            var rosterIdentityKe" +
-                    "y = Util.GetRosterKey(IdOf.parentScopeMap[rosterId], rosterVector);\r\n           " +
-                    " \r\n            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.Sta" +
-                    "rtsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();\r\n            \r" +
-                    "\n            foreach (var rosterKey in dependentRosters)\r\n            {\r\n       " +
-                    "         this.InterviewScopes.Remove(rosterKey);\r\n                foreach (var s" +
-                    "iblings in this.SiblingRosters.Values)\r\n                {\r\n                    s" +
-                    "iblings.Remove(rosterKey);\r\n                }\r\n            }\r\n        }\r\n\r\n     " +
-                    "   public override void UpdateIntAnswer(Guid questionId, decimal[] rosterVector," +
-                    " long answer)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVec" +
-                    "tor(questionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n\r\n" +
-                    "            targetLevel.UpdateIntAnswer(questionId, answer);\r\n        }\r\n\r\n     " +
-                    "   public override void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVec" +
-                    "tor, decimal answer)\r\n        {\r\n            var targetLevel = this.GetRosterByI" +
-                    "dAndVector(questionId, rosterVector);\r\n            if (targetLevel == null) retu" +
-                    "rn;\r\n\r\n            targetLevel.UpdateDecimalAnswer(questionId, answer);\r\n       " +
-                    " }\r\n\r\n        public override void UpdateDateAnswer(Guid questionId, decimal[] r" +
-                    "osterVector, DateTime answer)\r\n        {\r\n            var targetLevel = this.Get" +
-                    "RosterByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel == n" +
-                    "ull) return;\r\n\r\n            targetLevel.UpdateDateTimeAnswer(questionId, answer)" +
-                    ";\r\n        }\r\n\r\n        public override void UpdateTextAnswer(Guid questionId, d" +
-                    "ecimal[] rosterVector, string answer)\r\n        {\r\n            var targetLevel = " +
-                    "this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetLe" +
-                    "vel == null) return;\r\n\r\n            targetLevel.UpdateTextAnswer(questionId, ans" +
-                    "wer);\r\n        }\r\n        \r\n        public override void UpdateQrBarcodeAnswer(G" +
-                    "uid questionId, decimal[] rosterVector, string answer)\r\n        {\r\n            v" +
-                    "ar targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n       " +
-                    "     if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateQrBarcode" +
-                    "Answer(questionId, answer);\r\n        }\r\n\r\n        public override void UpdateSin" +
-                    "gleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)\r\n      " +
-                    "  {\r\n            var targetLevel = this.GetRosterByIdAndVector(questionId, roste" +
-                    "rVector);\r\n            if (targetLevel == null) return;\r\n\r\n            targetLev" +
-                    "el.UpdateSingleOptionAnswer(questionId, answer);\r\n        }\r\n\r\n        public ov" +
-                    "erride void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, dec" +
-                    "imal[] answer)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVe" +
-                    "ctor(questionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n\r" +
-                    "\n            targetLevel.UpdateMultiOptionAnswer(questionId, answer);\r\n        }" +
-                    "\r\n\r\n        public override void UpdateGeoLocationAnswer(Guid questionId, decima" +
-                    "l[] rosterVector, double latitude, double longitude, double accuracy)\r\n        {" +
+            this.Write(@"(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies);
+            this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
+        }
+
+        private ");
+            
+            #line 23 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.GeneratedClassName));
+            
+            #line default
+            #line hidden
+            this.Write("(Dictionary<string, IExpressionExecutable> interviewScopes, Dictionary<string, Li" +
+                    "st<string>> siblingRosters)\r\n        {\r\n            var newScopes = interviewSco" +
+                    "pes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => intervi" +
+                    "ewScope.Value.CopyMembers(this.GetRosterInstances));\r\n\r\n            var newSibli" +
+                    "ngRosters = siblingRosters\r\n                .ToDictionary(\r\n                    " +
+                    "interviewScope => interviewScope.Key,\r\n                    interviewScope => new" +
+                    " List<string>(interviewScope.Value));\r\n\r\n            //set parents\r\n            " +
+                    "foreach (var interviewScope in interviewScopes)\r\n            {\r\n                " +
+                    "var parent = interviewScope.Value.GetParent();\r\n                if (parent != nu" +
+                    "ll)\r\n                    newScopes[interviewScope.Key].SetParent(newScopes[Util." +
+                    "GetRosterStringKey(parent.GetRosterKey())]);\r\n            }\r\n\r\n            this." +
+                    "InterviewScopes = newScopes;\r\n            this.SiblingRosters = newSiblingRoster" +
+                    "s;\r\n        }\r\n\r\n        public override void AddRoster(Guid rosterId, decimal[]" +
+                    " outerRosterVector, decimal rosterInstanceId, int? sortIndex)\r\n        {\r\n      " +
+                    "      if (!IdOf.parentScopeMap.ContainsKey(rosterId))\r\n            {\r\n          " +
+                    "      return;\r\n            }\r\n\r\n            decimal[] rosterVector = Util.GetRos" +
+                    "terVector(outerRosterVector, rosterInstanceId);\r\n            Guid[] rosterScopeI" +
+                    "ds = IdOf.parentScopeMap[rosterId];\r\n            var rosterIdentityKey = Util.Ge" +
+                    "tRosterKey(rosterScopeIds, rosterVector);\r\n            string rosterStringKey = " +
+                    "Util.GetRosterStringKey(rosterIdentityKey);\r\n\r\n            if (this.InterviewSco" +
+                    "pes.ContainsKey(rosterStringKey))\r\n            {\r\n                return;\r\n     " +
+                    "       }\r\n                        \r\n            var rosterParentIdentityKey = ou" +
+                    "terRosterVector.Length == 0\r\n                ? Util.GetRosterKey(new[] { IdOf.@_" +
+                    "_questionnaire }, new decimal[0])\r\n                : Util.GetRosterKey(rosterSco" +
+                    "peIds.Shrink(), outerRosterVector);\r\n\r\n            var parent = this.InterviewSc" +
+                    "opes[Util.GetRosterStringKey(rosterParentIdentityKey)];\r\n\r\n            var roste" +
+                    "rLevel = parent.CreateChildRosterInstance(rosterId, rosterVector, rosterIdentity" +
+                    "Key);\r\n\r\n            this.InterviewScopes.Add(rosterStringKey, rosterLevel);\r\n  " +
+                    "          this.SetSiblings(rosterIdentityKey, rosterStringKey);\r\n        }\r\n\r\n  " +
+                    "      public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVect" +
+                    "or, decimal rosterInstanceId)\r\n        {\r\n            if (!IdOf.parentScopeMap.C" +
+                    "ontainsKey(rosterId))\r\n            {\r\n                return;\r\n            }\r\n\r\n" +
+                    "            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, ros" +
+                    "terInstanceId);\r\n            var rosterIdentityKey = Util.GetRosterKey(IdOf.pare" +
+                    "ntScopeMap[rosterId], rosterVector);\r\n            \r\n            var dependentRos" +
+                    "ters = this.InterviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey" +
+                    "((rosterIdentityKey)))).ToArray();\r\n            \r\n            foreach (var roste" +
+                    "rKey in dependentRosters)\r\n            {\r\n                this.InterviewScopes.R" +
+                    "emove(rosterKey);\r\n                foreach (var siblings in this.SiblingRosters." +
+                    "Values)\r\n                {\r\n                    siblings.Remove(rosterKey);\r\n   " +
+                    "             }\r\n            }\r\n        }\r\n\r\n        public override void UpdateI" +
+                    "ntAnswer(Guid questionId, decimal[] rosterVector, long answer)\r\n        {\r\n     " +
+                    "       var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r" +
+                    "\n            if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateI" +
+                    "ntAnswer(questionId, answer);\r\n        }\r\n\r\n        public override void UpdateD" +
+                    "ecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)\r\n        {" +
                     "\r\n            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVe" +
                     "ctor);\r\n            if (targetLevel == null) return;\r\n\r\n            targetLevel." +
-                    "UpdateGeoLocationAnswer(questionId, latitude,  longitude,  accuracy);\r\n        }" +
-                    "\r\n\r\n        public override void UpdateTextListAnswer(Guid questionId, decimal[]" +
-                    " rosterVector, Tuple<decimal, string>[] answers)\r\n        {\r\n            var tar" +
-                    "getLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            i" +
-                    "f (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateTextListAnswer(" +
-                    "questionId, answers);\r\n        }\r\n\r\n        public override void UpdateLinkedSin" +
-                    "gleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropa" +
-                    "gationVector)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVec" +
-                    "tor(questionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n  " +
-                    "          \r\n            targetLevel.UpdateLinkedSingleOptionAnswer(questionId, s" +
-                    "electedPropagationVector);\r\n        }\r\n\r\n        public override void UpdateLink" +
-                    "edMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] answer)" +
-                    "\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVector(questionI" +
-                    "d, rosterVector);\r\n            if (targetLevel == null) return;\r\n\r\n            t" +
-                    "argetLevel.UpdateLinkedMultiOptionAnswer(questionId, answer);\r\n        }\r\n      " +
-                    "  \r\n        public override Dictionary<Guid, Guid[]> GetParentsMap()\r\n        {\r" +
-                    "\n            return IdOf.parentScopeMap;\r\n        }\r\n\r\n        public override I" +
-                    "InterviewExpressionState Clone()\r\n        {\r\n            return new InterviewExp" +
-                    "ressionState(this.InterviewScopes, this.SiblingRosters);\r\n        }\r\n\r\n        /" +
-                    "/generate QuestionnaireLevel\r\n        ");
+                    "UpdateDecimalAnswer(questionId, answer);\r\n        }\r\n\r\n        public override v" +
+                    "oid UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)\r\n" +
+                    "        {\r\n            var targetLevel = this.GetRosterByIdAndVector(questionId," +
+                    " rosterVector);\r\n            if (targetLevel == null) return;\r\n\r\n            tar" +
+                    "getLevel.UpdateDateTimeAnswer(questionId, answer);\r\n        }\r\n\r\n        public " +
+                    "override void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string a" +
+                    "nswer)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVector(que" +
+                    "stionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n\r\n       " +
+                    "     targetLevel.UpdateTextAnswer(questionId, answer);\r\n        }\r\n        \r\n   " +
+                    "     public override void UpdateQrBarcodeAnswer(Guid questionId, decimal[] roste" +
+                    "rVector, string answer)\r\n        {\r\n            var targetLevel = this.GetRoster" +
+                    "ByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel == null) r" +
+                    "eturn;\r\n\r\n            targetLevel.UpdateQrBarcodeAnswer(questionId, answer);\r\n  " +
+                    "      }\r\n\r\n        public override void UpdateSingleOptionAnswer(Guid questionId" +
+                    ", decimal[] rosterVector, decimal answer)\r\n        {\r\n            var targetLeve" +
+                    "l = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targ" +
+                    "etLevel == null) return;\r\n\r\n            targetLevel.UpdateSingleOptionAnswer(que" +
+                    "stionId, answer);\r\n        }\r\n\r\n        public override void UpdateMultiOptionAn" +
+                    "swer(Guid questionId, decimal[] rosterVector, decimal[] answer)\r\n        {\r\n    " +
+                    "        var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);" +
+                    "\r\n            if (targetLevel == null) return;\r\n\r\n            targetLevel.Update" +
+                    "MultiOptionAnswer(questionId, answer);\r\n        }\r\n\r\n        public override voi" +
+                    "d UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitu" +
+                    "de, double longitude, double accuracy)\r\n        {\r\n            var targetLevel =" +
+                    " this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetL" +
+                    "evel == null) return;\r\n\r\n            targetLevel.UpdateGeoLocationAnswer(questio" +
+                    "nId, latitude,  longitude,  accuracy);\r\n        }\r\n\r\n        public override voi" +
+                    "d UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, s" +
+                    "tring>[] answers)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAn" +
+                    "dVector(questionId, rosterVector);\r\n            if (targetLevel == null) return;" +
+                    "\r\n\r\n            targetLevel.UpdateTextListAnswer(questionId, answers);\r\n        " +
+                    "}\r\n\r\n        public override void UpdateLinkedSingleOptionAnswer(Guid questionId" +
+                    ", decimal[] rosterVector, decimal[] selectedPropagationVector)\r\n        {\r\n     " +
+                    "       var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r" +
+                    "\n            if (targetLevel == null) return;\r\n            \r\n            targetL" +
+                    "evel.UpdateLinkedSingleOptionAnswer(questionId, selectedPropagationVector);\r\n   " +
+                    "     }\r\n\r\n        public override void UpdateLinkedMultiOptionAnswer(Guid questi" +
+                    "onId, decimal[] rosterVector, decimal[][] answer)\r\n        {\r\n            var ta" +
+                    "rgetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            " +
+                    "if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateLinkedMultiOpt" +
+                    "ionAnswer(questionId, answer);\r\n        }\r\n        \r\n        public override Dic" +
+                    "tionary<Guid, Guid[]> GetParentsMap()\r\n        {\r\n            return IdOf.parent" +
+                    "ScopeMap;\r\n        }\r\n\r\n        public override IInterviewExpressionState Clone(" +
+                    ")\r\n        {\r\n            return new ");
+            
+            #line 190 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.GeneratedClassName));
+            
+            #line default
+            #line hidden
+            this.Write("(this.InterviewScopes, this.SiblingRosters);\r\n        }\r\n\r\n        //generate Que" +
+                    "stionnaireLevel\r\n        ");
             
             #line 194 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
            
@@ -343,11 +363,56 @@ foreach (var d in dependency.Value)
             
             #line default
             #line hidden
+            this.Write("            };\r\n\r\n            public static Dictionary<Guid, Guid[]> structuralDe" +
+                    "pendencies = new Dictionary<Guid, Guid[]>()\r\n            {\r\n                ");
+            
+            #line 249 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+foreach (var dependency in QuestionnaireTemplateStructure.StructuralDependencies) 
+                {
+            
+            #line default
+            #line hidden
+            this.Write("                { Guid.Parse(\"");
+            
+            #line 251 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.Key));
+            
+            #line default
+            #line hidden
+            this.Write("\"), new Guid[]{\r\n                ");
+            
+            #line 252 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+foreach (var d in dependency.Value)
+                {
+            
+            #line default
+            #line hidden
+            this.Write("                    Guid.Parse(\"");
+            
+            #line 254 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(d));
+            
+            #line default
+            #line hidden
+            this.Write("\"),\r\n                ");
+            
+            #line 255 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+ }
+            
+            #line default
+            #line hidden
+            this.Write("                }},\r\n                ");
+            
+            #line 257 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+ }
+            
+            #line default
+            #line hidden
             this.Write("            };\r\n\r\n            public static Dictionary<Guid, Guid[]> parentScopeM" +
                     "ap = new Dictionary<Guid, Guid[]>\r\n            {\r\n                //questions\r\n " +
                     "               ");
             
-            #line 250 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 263 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
 foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
                 {
             
@@ -355,28 +420,28 @@ foreach (var q in QuestionnaireTemplateStructure.AllQuestions)
             #line hidden
             this.Write("                {");
             
-            #line 252 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 265 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 252 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 265 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(q.RosterScopeName));
             
             #line default
             #line hidden
             this.Write("},            \r\n                ");
             
-            #line 253 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 266 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("                //groups\r\n                ");
             
-            #line 255 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 268 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
 foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
                 {
             
@@ -384,28 +449,28 @@ foreach (var g in QuestionnaireTemplateStructure.AllGroups)
             #line hidden
             this.Write("                {");
             
-            #line 257 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 270 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(g.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 257 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 270 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(g.RosterScopeName));
             
             #line default
             #line hidden
             this.Write("},\r\n                ");
             
-            #line 258 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 271 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
  }
             
             #line default
             #line hidden
             this.Write("                //rosters\r\n                ");
             
-            #line 260 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 273 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
 foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
                 {
             
@@ -413,21 +478,21 @@ foreach (var r in QuestionnaireTemplateStructure.AllRosters)
             #line hidden
             this.Write("                {");
             
-            #line 262 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 275 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(r.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 262 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 275 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(r.GeneratedRosterScopeName));
             
             #line default
             #line hidden
             this.Write("},\r\n                ");
             
-            #line 263 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
+            #line 276 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
  }
             
             #line default

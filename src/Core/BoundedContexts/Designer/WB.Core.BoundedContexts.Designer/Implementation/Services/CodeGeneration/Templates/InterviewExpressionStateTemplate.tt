@@ -10,17 +10,17 @@ using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class InterviewExpressionState : AbstractInterviewExpressionState 
+    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState 
     {
-        public InterviewExpressionState() 
+        public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() 
         {
             var questionnaireLevelScope = new[] { IdOf.@__questionnaire };
             var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
-            var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GetTypeName()#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies);
+            var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GetTypeName()#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies);
             this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
         }
 
-        private InterviewExpressionState(Dictionary<string, IExpressionExecutable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
+        private <#=QuestionnaireTemplateStructure.GeneratedClassName#>(Dictionary<string, IExpressionExecutable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
         {
             var newScopes = interviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers(this.GetRosterInstances));
 
@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
         public override IInterviewExpressionState Clone()
         {
-            return new InterviewExpressionState(this.InterviewScopes, this.SiblingRosters);
+            return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters);
         }
 
         //generate QuestionnaireLevel
@@ -234,6 +234,19 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
             {
                 <#foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies) 
+                {#>
+                { Guid.Parse("<#= dependency.Key #>"), new Guid[]{
+                <#foreach (var d in dependency.Value)
+                {#>
+                    Guid.Parse("<#= d #>"),
+                <# }#>
+                }},
+                <# }#>
+            };
+
+            public static Dictionary<Guid, Guid[]> structuralDependencies = new Dictionary<Guid, Guid[]>()
+            {
+                <#foreach (var dependency in QuestionnaireTemplateStructure.StructuralDependencies) 
                 {#>
                 { Guid.Parse("<#= dependency.Key #>"), new Guid[]{
                 <#foreach (var d in dependency.Value)

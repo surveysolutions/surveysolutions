@@ -35,18 +35,19 @@ namespace WB.Core.SharedKernels.DataCollection
         protected Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> GetInstances { get; private set; }
 
         protected Dictionary<Guid, Guid[]> ConditionalDependencies { get; set; }
-
+        protected Dictionary<Guid, Guid[]> StructuralDependencies { get; set; }
 
         protected abstract IEnumerable<Action> ConditionExpressions { get; }
 
         protected AbstractConditionalLevel(decimal[] rosterVector, Identity[] rosterKey,
-            Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies)
+            Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structuralDependencies)
         {
             this.GetInstances = getInstances;
             this.RosterVector = rosterVector;
             this.RosterKey = rosterKey;
             this.EnablementStates = new Dictionary<Guid, ConditionalState>();
             this.ConditionalDependencies = conditionalDependencies;
+            this.StructuralDependencies = structuralDependencies;
 
             this.QuestionStringUpdateMap = new Dictionary<Guid, Action<string>>();
             this.QuestionLongUpdateMap = new Dictionary<Guid, Action<long?>>();
@@ -94,6 +95,30 @@ namespace WB.Core.SharedKernels.DataCollection
                 if (conditionalDependencies.ContainsKey(id) && conditionalDependencies[id].Any())
                 {
                     foreach (var dependentQuestionId in conditionalDependencies[id])
+                    {
+                        stack.Enqueue(dependentQuestionId);
+                    }
+                }
+            }
+        }
+
+        protected void UpdateAllNestedItemsState(Guid itemId, Dictionary<Guid, Guid[]> structureDependencies, State state)
+        {
+            if (!structureDependencies.ContainsKey(itemId) || !structureDependencies[itemId].Any()) return;
+
+            var stack = new Queue<Guid>(structureDependencies[itemId]);
+            while (stack.Any())
+            {
+                var id = stack.Dequeue();
+
+                if (this.EnablementStates.ContainsKey(id))
+                {
+                    this.EnablementStates[id].State = state;
+                }
+
+                if (structureDependencies.ContainsKey(id) && structureDependencies[id].Any())
+                {
+                    foreach (var dependentQuestionId in structureDependencies[id])
                     {
                         stack.Enqueue(dependentQuestionId);
                     }
@@ -152,10 +177,8 @@ namespace WB.Core.SharedKernels.DataCollection
 
                 questionState.State = this.RunConditionExpression(isEnabled);
 
-                if (questionState.State == State.Disabled)
-                {
-                    this.DisableAllDependentQuestions(questionId, this.ConditionalDependencies);
-                }
+                this.UpdateAllNestedItemsState(questionId, this.StructuralDependencies,
+                    questionState.State == State.Disabled ? State.Disabled : State.Unknown);
             };
         }
 
