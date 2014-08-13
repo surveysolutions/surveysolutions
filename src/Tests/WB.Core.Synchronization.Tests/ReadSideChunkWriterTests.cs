@@ -21,37 +21,6 @@ namespace WB.Core.Synchronization.Tests
         }
 
         [Test]
-        public void ctor_When_chunks_are_presented_in_storage_Then_new_chunck_is_created_with_sequence_after_stored()
-        {
-            // arrange
-            Guid chunkId = Guid.NewGuid();
-            Guid userId = Guid.NewGuid();
-            var someContent = "some content";
-
-            int count = 5;
-            IQueryableReadSideRepositoryWriter<SynchronizationDelta> querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
-
-            for (int i = 1; i <= count; i++)
-            {
-                var id = Guid.NewGuid();
-                querableStorageMock.Store(new SynchronizationDelta(id, "t", i, Guid.NewGuid()), id);
-            }
-
-
-
-            ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock);
-
-            // act
-            target.StoreChunk(new SyncItem() {Id = chunkId, Content = someContent}, userId);
-
-            // assert
-
-            var result = querableStorageMock.GetById(chunkId);
-            Assert.That((object) result.Sequence, Is.EqualTo(count + 1));
-
-        }
-
-        [Test]
         public void StoreChunk_When_content_is_not_empty_Then_content_is_Saved()
         {
             // arrange
@@ -62,7 +31,7 @@ namespace WB.Core.Synchronization.Tests
             ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock);
 
             // act
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent, IsCompressed = false }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent, IsCompressed = false }, userId, DateTime.Now);
 
             // assert
             var storedChunck = querableStorageMock.GetById(chunkId);
@@ -81,11 +50,11 @@ namespace WB.Core.Synchronization.Tests
             var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             ReadSideChunkWriter target = CreateRavenChunkWriter(querableStorageMock);
 
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1, IsCompressed = false }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1, IsCompressed = false }, userId, DateTime.Now);
 
             // act
 
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2, IsCompressed = false }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2, IsCompressed = false }, userId, DateTime.Now);
 
             // assert
             var storedChunck = ((IQueryableReadSideRepositoryWriter<SynchronizationDelta>) querableStorageMock).GetById(chunkId);
@@ -96,7 +65,7 @@ namespace WB.Core.Synchronization.Tests
 
         private ReadSideChunkWriter CreateRavenChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> writeStorage)
         {
-            return new ReadSideChunkWriter(writeStorage, new Mock<IReadSideRepositoryCleanerRegistry>().Object);
+            return new ReadSideChunkWriter(writeStorage);
         }
 
     }

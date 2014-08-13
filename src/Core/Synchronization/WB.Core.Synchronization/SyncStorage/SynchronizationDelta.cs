@@ -11,16 +11,16 @@ namespace WB.Core.Synchronization.SyncStorage
         }
 
 
-        public SynchronizationDelta(Guid publicKey, string content, long sequence, Guid userId)
-            : this(publicKey, content, sequence, userId, false, "temp", "")
+        public SynchronizationDelta(Guid publicKey, string content, DateTime timestamp, Guid userId)
+            : this(publicKey, content, timestamp, userId, false, "temp", "")
         {
         }
 
-        public SynchronizationDelta(Guid publicKey, string content, long sequence, Guid? userId, bool isCompressed, string itemType, string metaInfo)
+        public SynchronizationDelta(Guid publicKey, string content, DateTime timestamp, Guid? userId, bool isCompressed, string itemType, string metaInfo)
         {
             PublicKey = publicKey;
             Content = isCompressed ? PackageHelper.CompressString(content) : content;
-            Sequence = sequence;
+            Timestamp = timestamp;
             UserId = userId;
             IsCompressed = isCompressed;
             ItemType = itemType;
@@ -29,7 +29,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public Guid PublicKey { get; private set; }
         public string Content { get; private set; }
-        public long Sequence { get; private set; }
+        public DateTime Timestamp { get; private set; }
         public Guid? UserId { get; private set; }
         public bool IsCompressed { get; private set; }
         public string ItemType { get; private set; }
