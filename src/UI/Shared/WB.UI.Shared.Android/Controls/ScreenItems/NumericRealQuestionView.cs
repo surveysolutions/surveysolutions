@@ -1,10 +1,12 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Android.Content;
 using Android.Text;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Capi;
+using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -31,10 +33,15 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             if (s.EndsWith(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator))
                 return s;
+
+            if (s.Contains(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator) && s.EndsWith("0"))
+                return s;
+
             decimal parsedAnswer;
             if (!IsParseAnswerStringSucceeded(s, out parsedAnswer))
                 return s;
-            return parsedAnswer.ToString("##,###.############################", CultureInfo.CurrentCulture);
+
+            return QuestionUtils.FormatDecimalAnswer(parsedAnswer);
         }
 
         protected override void Initialize()
