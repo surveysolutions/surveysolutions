@@ -139,6 +139,7 @@ namespace WB.Core.SharedKernels.DataCollection
             groupsToBeDisabled = new List<Identity>();
 
             //order by scope depth starting from top
+            //conditionally lower could depend only from upper scope
             foreach (var interviewScopeKvp in this.InterviewScopes)
             {
                 List<Identity> questionsToBeEnabledArray;

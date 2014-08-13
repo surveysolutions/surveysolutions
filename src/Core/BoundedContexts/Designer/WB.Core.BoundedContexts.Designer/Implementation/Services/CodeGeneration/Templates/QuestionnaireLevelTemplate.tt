@@ -78,8 +78,7 @@
         <# }#>
 
         <# }#>
-
-        
+                
         <#foreach (var @roster in Model.Rosters) 
         {#>
         public <#=@roster.GeneratedTypeName#>[] <#=@roster.VariableName#>
@@ -95,9 +94,15 @@
         <#foreach (var @group in Model.Groups) 
         {#>
         private ConditionalState <#= @group.GeneratedStateName#> = new ConditionalState(IdOf.<#=@group.GeneratedIdName#>, ItemType.Group);
+        <#if(!string.IsNullOrWhiteSpace(@group.Conditions))
+        {#>      
+        private bool <#=@group.GeneratedConditionsMethodName#>()
+        {
+            return <#=@group.Conditions#>;
+        }      
         <# }#>
-        //
-
+        <# }#>
+        
         protected override IEnumerable<Action> ConditionExpressions
         {
             get
@@ -106,7 +111,7 @@
                 {
                     <#foreach (var tuple in QuestionnaireExecutorTemplateModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, null)) 
                     {#>                    
-                    Verifier(<#= tuple.Item1#>, <#=tuple.Item1#>.ItemId, <#= tuple.Item1#>),                        
+                    Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>),                        
                     <#}#>
                 };
             }

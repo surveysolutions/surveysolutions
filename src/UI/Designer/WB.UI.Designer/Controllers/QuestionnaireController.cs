@@ -1,4 +1,5 @@
-﻿using Main.Core.View;
+﻿using System.Collections.Generic;
+using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using System;
 using System.Linq;
@@ -8,7 +9,6 @@ using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -20,7 +20,6 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
-using WB.UI.Designer.Utils;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
@@ -47,7 +46,8 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            ILogger logger, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory)
+            ILogger logger, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory,
+            IExpressionProcessorGenerator expressionProcessorGenerator)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -58,7 +58,7 @@ namespace WB.UI.Designer.Controllers
             this.logger = logger;
             this.editQuestionnaireViewFactory = editQuestionnaireViewFactory;
             //inject it
-            this.expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
 
         public ActionResult Clone(Guid id)
@@ -92,12 +92,14 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception)
             {
-                generationResult = new GenerationResult(false);
-                //throw;
+                generationResult = new GenerationResult(false)
+                {
+                    Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                };
             }
 
-            var generationErrors = generationResult.Success == true
-                ? new QuestionnaireVerificationError[0]
+            var generationErrors = generationResult.Success 
+                ? new QuestionnaireVerificationError[0] 
                 : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
 
             return this.Json(new VerificationResult

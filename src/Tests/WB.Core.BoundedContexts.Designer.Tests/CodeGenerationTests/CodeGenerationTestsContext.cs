@@ -140,6 +140,48 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             return questionnaireDocument;
         }
 
+
+        public static QuestionnaireDocument CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(Guid questionnaireId, Guid questionId)
+        {
+            QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
+
+            Guid chapterId = Guid.Parse("23232323232323232323232323232323");
+            Guid question1Id = Guid.Parse("23232323232323232323232323232311");
+            Guid group1Id = Guid.Parse("23232323232323232323232323232111");
+
+            questionnaireDocument.AddChapter(chapterId);
+
+            questionnaireDocument.Add(new NumericQuestion()
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = questionId,
+                StataExportCaption = "q1",
+                IsInteger = true,
+
+            }, chapterId, null);
+
+            questionnaireDocument.Add(new NumericQuestion()
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = question1Id,
+                StataExportCaption = "q2",
+                IsInteger = true,
+                ConditionExpression = "q1 > 3"
+
+            }, chapterId, null);
+
+            questionnaireDocument.Add(new Group()
+            {
+                PublicKey = group1Id,
+                ConditionExpression = "q2 > 5"
+
+            }, chapterId, null);
+
+            
+
+            return questionnaireDocument;
+        }
+
         public static IInterviewExpressionStateProvider GetInterviewExpressionStateProvider(QuestionnaireDocument questionnaireDocument)
         {
             return new InterviewExpressionStateTestingProvider(questionnaireDocument);

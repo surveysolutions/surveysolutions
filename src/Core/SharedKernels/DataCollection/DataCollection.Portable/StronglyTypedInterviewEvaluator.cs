@@ -946,6 +946,33 @@ namespace WB.Core.SharedKernels.DataCollection
                 { fixedId, new Guid[] { edu } },
             };
 
+            public static Dictionary<Guid, Guid[]> structuralDependencies = new Dictionary<Guid, Guid[]>()
+            {
+                { id, new Guid[] { } },
+                { persons_count, new Guid[] { married_with } },
+                { edu_visit, new Guid[] { fixedId } },
+
+                { name, new Guid[] { age } },
+                { age, new Guid[] { groupId, has_job } },
+                { groupId, new Guid[] { person_id, marital_status, married_with } },
+            
+                { person_id, new Guid[] { } },
+                { marital_status, new Guid[] { married_with } },
+                { married_with, new Guid[] { } },
+                { has_job, new Guid[] { job_title, best_job_owner } },
+                { job_title, new Guid[] { } },
+                { best_job_owner, new Guid[] { } },
+
+                { sex, new Guid[] { food } },
+                { role, new Guid[] { food, edu_visit } },
+                { food, new Guid[] { } },
+
+                { times_per_week, new Guid[] { price_for_food } },
+                { price_for_food, new Guid[] { } },
+
+                { fixedId, new Guid[] { edu } },
+            };
+
         public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
         {
             { id, new []{questionnaire} },

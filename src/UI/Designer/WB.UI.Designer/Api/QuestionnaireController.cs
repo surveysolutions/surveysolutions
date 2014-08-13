@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Main.Core.View;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
@@ -21,6 +24,7 @@ namespace WB.UI.Designer.Api
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
@@ -31,7 +35,8 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IVerificationErrorsMapper verificationErrorsMapper,
-            IQuestionnaireInfoFactory questionnaireInfoFactory)
+            IQuestionnaireInfoFactory questionnaireInfoFactory,
+            IExpressionProcessorGenerator expressionProcessorGenerator)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
@@ -39,6 +44,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.verificationErrorsMapper = verificationErrorsMapper;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
 
         [HttpGet]
@@ -130,14 +136,41 @@ namespace WB.UI.Designer.Api
         public VerificationErrors Verify(Guid id)
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
-
             QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
             VerificationError[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
-            var verificationResult = new VerificationErrors
+
+            if (errors.Any())
             {
-                Errors = errors
+                return new VerificationErrors
+                {
+                    Errors = errors
+                };
+            }
+
+            GenerationResult generationResult;
+            try
+            {
+                string resultAssembly;
+                generationResult = this.expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
+            }
+            catch (Exception)
+            {
+                generationResult = new GenerationResult(false)
+                {
+                    Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                };
+            }
+
+            var processorGenerationErrors = generationResult.Success
+                ? new QuestionnaireVerificationError[0]
+                : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
+
+            VerificationError[] generationErrors = verificationErrorsMapper.EnrichVerificationErrors(processorGenerationErrors, questionnaireDocument);
+
+            return new VerificationErrors
+            {
+                Errors = generationErrors
             };
-            return verificationResult;
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)

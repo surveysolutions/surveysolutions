@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.View;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -22,7 +23,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IVerificationErrorsMapper verificationErrorsMapper = null,
-            IQuestionnaireInfoFactory questionnaireInfoFactory = null)
+            IQuestionnaireInfoFactory questionnaireInfoFactory = null,
+            IExpressionProcessorGenerator expressionProcessorGenerator = null)
         {
             var questionnaireController = new QuestionnaireController(
                 chapterInfoViewFactory ?? Mock.Of<IChapterInfoViewFactory>(),
@@ -30,8 +32,9 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
-                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>()
-                );
+                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
+                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>());
+
             return questionnaireController;
         }
 
