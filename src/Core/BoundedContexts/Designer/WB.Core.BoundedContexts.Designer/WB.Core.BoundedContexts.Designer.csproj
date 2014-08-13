@@ -124,6 +124,7 @@
     <Compile Include="Commands\Questionnaire\Question\MultiOption\UpdateMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\AddSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\CloneSingleOptionQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateFilteredComboboxOptionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\TextList\CloneTextListQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\QRBarcode\AddQRBarcodeQuestionCommand.cs" />
