@@ -184,8 +184,8 @@ foreach (var @roster in Model.Rosters)
             
             #line default
             #line hidden
-            this.Write("(rosterVector, identities, this, this.GetInstances, this.ConditionalDependencies," +
-                    " this.StructuralDependencies));\r\n        ");
+            this.Write("(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, thi" +
+                    "s.StructuralDependencies));\r\n        ");
             
             #line 30 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
  }

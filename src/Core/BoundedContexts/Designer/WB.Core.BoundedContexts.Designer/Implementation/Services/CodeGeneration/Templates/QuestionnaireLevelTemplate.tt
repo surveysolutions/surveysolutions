@@ -26,7 +26,7 @@
         <# }#>
         <#foreach (var @roster in Model.Rosters) 
         {#>    
-            RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(rosterVector, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies));
+            RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies));
         <# }#>
         }                                 
 

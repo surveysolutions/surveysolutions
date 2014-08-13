@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
-            questionnaireDocument = CreateQuestionnairDocumenteWithOneNumericIntegerQuestionWithValidationAndTwoRosters(questionnaireId, questionId);
+            questionnaireDocument = CreateQuestionnairDocumenteWithOneNumericIntegerQuestionAndRosters(questionnaireId, questionId, rosterId);
 
             IInterviewExpressionStateProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
 
@@ -32,22 +32,27 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();
 
             state.UpdateIntAnswer(questionId, new decimal[0], 4);
+            state.AddRoster(rosterId, new decimal[0], 1, null);
         };
 
         private Because of = () =>
             state.ProcessValidationExpressions(out questionsToBeValid, out questionsToBeInvalid);
 
-        private It should_valid_question_count_equal_1 = () =>
-            questionsToBeValid.Count.ShouldEqual(1);
+        private It should_valid_question_count_equal_2 = () =>
+            questionsToBeValid.Count.ShouldEqual(2);
+
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111112");
+        private static Guid rosterId = Guid.Parse("21111111111111111111111111111112");
+
         private static QuestionnaireDocument questionnaireDocument;
 
         private static IInterviewExpressionState state;
-        private static List<Identity> questionsToBeValid;
 
+        private static List<Identity> questionsToBeValid;
         private static List<Identity> questionsToBeInvalid;
+        
         private static EventContext eventContext;
     }
 }
