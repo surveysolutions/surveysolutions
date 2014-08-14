@@ -24,12 +24,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
                 && publishedEvent.EventSequence == 1);
         }
 
-        protected static IPublishedEvent<TemplateImported> CreateTemplateImportedEvent(QuestionnaireDocument questionnaire = null)
+        protected static IPublishedEvent<TemplateImported> CreateTemplateImportedEvent(QuestionnaireDocument questionnaire = null, long? version=null)
         {
             var questionnaireDocument = questionnaire ?? new QuestionnaireDocument();
             return ToPublishedEvent(new TemplateImported
             {
-                Source = questionnaireDocument
+                Source = questionnaireDocument,
+                Version = version
             }, questionnaireDocument.PublicKey);
         }
 

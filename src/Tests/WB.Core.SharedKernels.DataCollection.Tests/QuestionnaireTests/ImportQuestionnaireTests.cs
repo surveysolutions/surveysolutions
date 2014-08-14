@@ -146,6 +146,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         }
 
         [Test]
+        public void DeleteQuestionnaire_When_Valid_Questionnaire_Version_is_invalid_Imported_Then_QuestionnaireException_sould_be_thrown()
+        {
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaire();
+
+            // act
+
+            Assert.Throws<QuestionnaireException>(() => questionnaire.DeleteQuestionnaire(2));
+        }
+
+        [Test]
         public void QuestionnaireCtor_When_ArgumentIsNotNull_Then_Correct_Event_is_Published()
         {
             using (var eventContext = new EventContext())

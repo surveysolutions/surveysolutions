@@ -17,24 +17,24 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.QuestionnaireQuestionsInfoDenormalizerTests
 {
-    internal class when_questionnaire_deleted_event_recived : QuestionnaireQuestionsInfoDenormalizerTestContext
+    internal class when_template_imported_event_recived_with_version_set : QuestionnaireQuestionsInfoDenormalizerTestContext
     {
         Establish context = () =>
         {
             questionnaireQuestionsInfoWriter = new Mock<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>();
             denormalizer = CreateQuestionnaireQuestionsInfoDenormalizer(questionnaireQuestionsInfoWriter.Object);
-            evnt = CreateQuestionnaireDeletedEvent(questionnaireId,2);
+            evnt = CreateTemplateImportedEvent(new QuestionnaireDocument(), 2);
         };
 
         Because of = () =>
             denormalizer.Handle(evnt);
 
-        It should_view_with_id_equal_to_combination_of_questionnaireid_and_version_be_removed = () =>
-            questionnaireQuestionsInfoWriter.Verify(x => x.Remove(RepositoryKeysHelper.GetVersionedKey(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion)));
+        It should_view_with_id_equal_to_combination_of_questionnaireid_and_version_be_stored = () =>
+            questionnaireQuestionsInfoWriter.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireQuestionsInfo>(), RepositoryKeysHelper.GetVersionedKey(evnt.EventSourceId, 2)));
 
         private static Guid questionnaireId = Guid.Parse("33332222111100000000111122223333");
         private static QuestionnaireQuestionsInfoDenormalizer denormalizer;
-        private static IPublishedEvent<QuestionnaireDeleted> evnt;
+        private static IPublishedEvent<TemplateImported> evnt;
         private static Mock<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>> questionnaireQuestionsInfoWriter;
     }
 }
