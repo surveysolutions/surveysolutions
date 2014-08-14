@@ -29,22 +29,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private PlainQuestionnaire plainQuestionnaire;
         private bool isProxyToPlainQuestionnaireRepository;
+        private HashSet<long> availableVersions = new HashSet<long>() { 0 };
 
 
         protected internal void Apply(TemplateImported e)
         {
-            this.plainQuestionnaire = new PlainQuestionnaire(e.Source, () => this.Version);
+            var templateVersion = e.Version ?? (this.Version+1);
+            this.plainQuestionnaire = new PlainQuestionnaire(e.Source, () => templateVersion);
+            availableVersions.Add(templateVersion);
         }
 
         protected internal void Apply(QuestionnaireDeleted e)
         {
-            
         }
 
         private void Apply(PlainQuestionnaireRegistered e)
         {
             this.isProxyToPlainQuestionnaireRepository = true;
             this.plainQuestionnaire = null;
+            availableVersions.Add(e.Version);
         }
 
         public QuestionnaireState CreateSnapshot()
@@ -54,12 +57,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     null,
                     null,
                     null,
-                    isProxyToPlainQuestionnaireRepository: true)
+                    isProxyToPlainQuestionnaireRepository: true, availableVersions: this.availableVersions)
                 : new QuestionnaireState(
                     this.plainQuestionnaire.QuestionnaireDocument,
                     this.plainQuestionnaire.QuestionCache,
                     this.plainQuestionnaire.GroupCache,
-                    isProxyToPlainQuestionnaireRepository: false);
+                    isProxyToPlainQuestionnaireRepository: false, availableVersions: this.availableVersions);
         }
 
         public void RestoreFromSnapshot(QuestionnaireState snapshot)
@@ -69,6 +72,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.plainQuestionnaire = snapshot.IsProxyToPlainQuestionnaireRepository
                 ? null
                 : new PlainQuestionnaire(snapshot.Document, () => this.Version, snapshot.GroupCache, snapshot.QuestionCache);
+            this.availableVersions = snapshot.AvailableVersions;
         }
 
         #endregion
@@ -115,7 +119,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
 
-            this.ApplyEvent(new TemplateImported { Source = document });
+            this.ApplyEvent(new TemplateImported { Source = document, Version = this.availableVersions.Max() + 1 });
         }
 
         public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode)
@@ -125,7 +129,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
 
-            this.ApplyEvent(new TemplateImported { Source = document, AllowCensusMode = allowCensusMode });
+            this.ApplyEvent(new TemplateImported { Source = document, AllowCensusMode = allowCensusMode, Version = this.availableVersions.Max() + 1 });
         }
 
         public void ImportFromSupervisor(IQuestionnaireDocument source)
@@ -140,6 +144,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void DeleteQuestionnaire(long questionnaireVersion)
         {
+            if(!availableVersions.Contains(questionnaireVersion))
+                throw new QuestionnaireException(string.Format(
+                    "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
+                    this.EventSourceId.FormatGuid(), questionnaireVersion));
             this.ApplyEvent(new QuestionnaireDeleted() { QuestionnaireVersion = questionnaireVersion });
         }
 

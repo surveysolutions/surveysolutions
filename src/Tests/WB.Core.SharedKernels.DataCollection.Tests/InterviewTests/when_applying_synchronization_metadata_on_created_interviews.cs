@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     interview.Apply(new InterviewStatusChanged(originalInterviewStatus, ""));
                     try
                     {
-                        interview.ApplySynchronizationMetadata(interview.EventSourceId, userId, questionnaireId, interviewStatus, null, "",
+                        interview.ApplySynchronizationMetadata(interview.EventSourceId, userId, questionnaireId,1, interviewStatus, null, "",
                             false, false);
                         exceptionByStatuses.Add(interviewStatus);
                     }

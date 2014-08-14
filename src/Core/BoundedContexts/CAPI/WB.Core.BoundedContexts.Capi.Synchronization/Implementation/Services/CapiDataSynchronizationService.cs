@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             {
                 bool createdOnClient = metaInfo.CreatedOnClient.HasValue && metaInfo.CreatedOnClient.Value;
 
-                this.commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId,
+                this.commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId, metaInfo.TemplateVersion,
                     (InterviewStatus)metaInfo.Status,
                     metaInfo.FeaturedQuestionsMeta.Select(
                         q =>
