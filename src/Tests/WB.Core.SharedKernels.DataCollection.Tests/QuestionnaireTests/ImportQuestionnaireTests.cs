@@ -122,8 +122,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
+                Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(2));
             }
         }
+
 
         [Test]
         public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported_Then_QuestionnaireDeleted_Event_is_Published()
@@ -205,6 +207,46 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(document));
+                Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        public void RegisterPlainQuestionnaire_When_Valid_Questionnaire_Imported_Then_Correct_Event_is_Published()
+        {
+
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Questionnaire questionnaire = CreateQuestionnaire();
+                var document = CreateQuestionnaireDocumentWithOneChapter();
+
+                // act
+                questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false);
+
+                // assert
+                Assert.That(GetLastEvent<PlainQuestionnaireRegistered>(eventContext).AllowCensusMode, Is.EqualTo(false));
+                Assert.That(GetLastEvent<PlainQuestionnaireRegistered>(eventContext).Version, Is.EqualTo(3));
+            }
+        }
+
+        [Test]
+        public void ImportFromDesigner_When_Valid_Questionnaire_but_previouse_version_was_deleted_Imported_Then_Correct_Event_is_Published()
+        {
+
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Questionnaire questionnaire = CreateQuestionnaire();
+                var document = CreateQuestionnaireDocumentWithOneChapter();
+
+                // act
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
+                questionnaire.DeleteQuestionnaire(2);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
+
+                // assert
+                Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(3));
             }
         }
 
