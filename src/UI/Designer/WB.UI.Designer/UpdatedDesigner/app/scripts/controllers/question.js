@@ -13,7 +13,7 @@
 
                     $scope.activeQuestion.itemId = $state.params.itemId;
                     
-                    $scope.activeQuestion.variable = result.variableName;
+                    $scope.activeQuestion.variable = result.variableName || result.variable;
                     $scope.activeQuestion.variableLabel = result.variableLabel;
                     $scope.activeQuestion.mask = result.mask;
                     $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
@@ -49,17 +49,21 @@
                     $scope.questionForm.$setPristine();
                 };
 
+                var isQuestionSaving = false;
+
                 $scope.loadQuestion = function() {
                     questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
-                        .success(function(result) {
+                        .success(function (result) {
                             $scope.initialQuestion = angular.copy(result);
                             dataBind(result);
+
                         });
                 };
 
                 $scope.saveQuestion = function () {
                     if ($scope.questionForm.$valid) {
                         commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function(result) {
+
                             $scope.initialQuestion = angular.copy($scope.activeQuestion);
                             $rootScope.$emit('questionUpdated', {
                                 itemId: $scope.activeQuestion.itemId,
@@ -84,7 +88,7 @@
                     }
                 };
 
-                $scope.cancelQuestion = function() {
+                $scope.cancelQuestion = function () {
                     var temp = angular.copy($scope.initialQuestion);
                     dataBind(temp);
                     $scope.questionForm.$setPristine();
