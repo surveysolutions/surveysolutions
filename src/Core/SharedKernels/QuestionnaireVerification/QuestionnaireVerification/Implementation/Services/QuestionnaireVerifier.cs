@@ -141,6 +141,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
                     Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
+                    Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
+                    Verifier<IQuestion>(FilteredComboboxContainsMoreThan5000Options, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
+                    Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThan20, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan20),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -151,6 +154,22 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByRostersWithDuplicateVariableName
                 };
             }
+        }
+
+        private bool CategoricalOneAnswerOptionsCountMoreThan20(IQuestion question)
+        {
+            return IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
+                   question.Answers != null && question.Answers.Count > 20;
+        }
+
+        private bool FilteredComboboxContainsMoreThan5000Options(IQuestion question)
+        {
+            return IsFilteredComboboxQuestion(question) && question.Answers != null && question.Answers.Count > 5000;
+        }
+
+        private bool FilteredComboboxIsLinked(IQuestion question)
+        {
+            return IsFilteredComboboxQuestion(question) && question.LinkedToQuestionId.HasValue;
         }
 
         private bool StaticTextIsEmpty(IStaticText staticText)
@@ -1322,6 +1341,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             return (IsCategoricalMultiAnswersQuestion(question) || IsCategoricalSingleAnswerQuestion(question)) &&
                    question.LinkedToQuestionId.HasValue;
+        }
+
+        private static bool IsFilteredComboboxQuestion(IQuestion question)
+        {
+            return IsCategoricalSingleAnswerQuestion(question) && question.IsFilteredCombobox.HasValue &&
+                   question.IsFilteredCombobox.Value;
         }
     }
 }
