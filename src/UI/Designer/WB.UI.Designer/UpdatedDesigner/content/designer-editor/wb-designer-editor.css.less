@@ -345,20 +345,38 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
           line-height: @left-column-width;
           box-shadow: -5px 5px 10px rgba(0, 0, 0, .25);
           z-index: 5;
-
+          overflow: hidden;
           > span {
             .questionnarie-chapter-title-span-fontstyle();
+          }
+
+          .chapter-title-text{
+              white-space: nowrap;
           }
 
           ul.controls-right {
             display: block;
             position: absolute;
             top: 7px;
-            right: 5px;
+            right: 0;
             margin: 0;
             padding: 0;
+            padding-right: 5px;
             list-style: none;
             .clearfix();
+            background-color: @designer-editor-lightblue-bg-color;
+
+             &:before {
+                @w: 45px;
+                display: block;
+                position: absolute;
+                height: 100%;
+                content: '';
+                width: @w;
+                top: 0px;
+                left: -@w;
+                #gradient > .horizontal(rgba(219, 223, 226, 0.0), rgba(219, 223, 226, 1.0));
+              }
 
             li {
               float: left;

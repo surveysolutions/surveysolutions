@@ -7063,6 +7063,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   line-height: 55px;
   box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.25);
   z-index: 5;
+  overflow: hidden;
 }
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title > span {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -7070,14 +7071,19 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   color: #9ca4aa;
   font-weight: normal;
 }
+#designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title .chapter-title-text {
+  white-space: nowrap;
+}
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title ul.controls-right {
   display: block;
   position: absolute;
   top: 7px;
-  right: 5px;
+  right: 0;
   margin: 0;
   padding: 0;
+  padding-right: 5px;
   list-style: none;
+  background-color: #dbdfe2;
 }
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title ul.controls-right:before,
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title ul.controls-right:after {
@@ -7094,6 +7100,19 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title ul.controls-right:after {
   clear: both;
+}
+#designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title ul.controls-right:before {
+  display: block;
+  position: absolute;
+  height: 100%;
+  content: '';
+  width: 45px;
+  top: 0px;
+  left: -45px;
+  background-image: -webkit-linear-gradient(left, color-stop(rgba(219, 223, 226, 0) 0%), color-stop(#dbdfe2 100%));
+  background-image: linear-gradient(to right, rgba(219, 223, 226, 0) 0%, #dbdfe2 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00dbdfe2', endColorstr='#ffdbdfe2', GradientType=1);
 }
 #designer-editor.container section#main > .questionnaire-tree > .questionnaire-tree-holder > .chapter-title ul.controls-right li {
   float: left;
