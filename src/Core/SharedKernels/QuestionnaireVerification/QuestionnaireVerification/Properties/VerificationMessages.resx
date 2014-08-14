@@ -315,4 +315,13 @@
   <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
     <value>Option values must be unique</value>
   </data>
+  <data name="WB0074_FilteredComboboxIsLinked" xml:space="preserve">
+    <value>Filtered combobox cannot be linked to another question.</value>
+  </data>
+  <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+    <value>Contains more than 5000 options.</value>
+  </data>
+  <data name="WB0076_CategoricalOneAnswerOptionsCountMoreThan20" xml:space="preserve">
+    <value>Contains more than 20 options.</value>
+  </data>
 </root>
