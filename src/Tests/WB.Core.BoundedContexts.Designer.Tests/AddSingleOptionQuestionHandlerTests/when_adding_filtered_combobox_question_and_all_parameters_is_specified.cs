@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -9,7 +8,7 @@ using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerTests
 {
-    internal class when_adding_single_option_question_and_all_parameters_is_specified : QuestionnaireTestsContext
+    internal class when_adding_filtered_combobox_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -79,17 +78,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .Instructions.ShouldEqual(instructions);
 
-        It should_raise_NewQuestionAdded_event_with_same_options_count_as_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
-                .Answers.Length.ShouldEqual(options.Length);
-
-        It should_raise_NewQuestionAdded_event_with_same_option_titles_as_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
-                .Answers.Select(x => x.AnswerText).ShouldContainOnly(options.Select(x => x.Title));
-
-        It should_raise_NewQuestionAdded_event_with_same_option_values_as_specified = () =>
-           eventContext.GetSingleEvent<NewQuestionAdded>()
-               .Answers.Select(x => x.AnswerValue).ShouldContainOnly(options.Select(x => x.Value));
+        It should_raise_NewQuestionAdded_event_with_nullable_answers = () =>
+            eventContext.GetSingleEvent<NewQuestionAdded>().Answers.ShouldBeNull();
 
         It should_raise_NewQuestionAdded_event_with_linkedToQuestionId_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
@@ -114,6 +104,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
         private static string validationMessage = "validationMessage";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
-        private static bool isFilteredCombobox = false;
+        private static bool isFilteredCombobox = true;
     }
 }
