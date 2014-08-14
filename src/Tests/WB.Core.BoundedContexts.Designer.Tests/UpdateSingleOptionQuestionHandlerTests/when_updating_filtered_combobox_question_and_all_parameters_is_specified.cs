@@ -10,23 +10,29 @@ using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandlerTests
 {
-    internal class when_updating_single_option_question_and_all_parameters_is_specified : QuestionnaireTestsContext
+    internal class when_updating_filtered_combobox_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                IsMandatory = false,
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.AddSingleOptionQuestion(
+                questionId: questionId,
+                parentGroupId: chapterId,
+                title: title,
+                variableName: "old_variable_name",
+                variableLabel: null,
+                isMandatory: false,
+                isPreFilled: false,
+                scope: QuestionScope.Supervisor,
+                enablementCondition: "",
+                validationExpression: "",
+                validationMessage: "",
+                instructions: "",
+                responsibleId: responsibleId,
+                options: old_options,
+                linkedToQuestionId: null,
+                isFilteredCombobox: false);
             eventContext = new EventContext();
         };
 
@@ -44,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                 validationMessage: validationMessage,
                 instructions: instructions,
                 responsibleId: responsibleId,
-                options:options,
+                options: new_options,
                 linkedToQuestionId: linkedToQuestionId,
                 isFilteredCombobox: isFilteredCombobox);
 
@@ -103,15 +109,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
 
         It should_raise_NewQuestionAdded_event_with_same_options_count_as_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .Answers.Length.ShouldEqual(options.Length);
+                .Answers.Length.ShouldEqual(old_options.Length);
 
         It should_raise_NewQuestionAdded_event_with_same_option_titles_as_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .Answers.Select(x => x.AnswerText).ShouldContainOnly(options.Select(x => x.Title));
+                .Answers.Select(x => x.AnswerText).ShouldContainOnly(old_options.Select(x => x.Title));
 
         It should_raise_NewQuestionAdded_event_with_same_option_values_as_specified = () =>
            eventContext.GetSingleEvent<QuestionChanged>()
-               .Answers.Select(x => x.AnswerValue).ShouldContainOnly(options.Select(x => x.Value));
+               .Answers.Select(x => x.AnswerValue).ShouldContainOnly(old_options.Select(x => x.Value));
 
 
         private static EventContext eventContext;
@@ -128,8 +134,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static string enablementCondition = "some condition";
         private static string validationExpression = "some validation";
         private static string validationMessage = "validation message";
-        private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
+        private static Option[] old_options = new Option[] { new Option(Guid.NewGuid(), "1", "Option old 1"), new Option(Guid.NewGuid(), "2", "Option old 2"), };
+        private static Option[] new_options = new Option[] { new Option(Guid.NewGuid(), "3", "Option 1"), new Option(Guid.NewGuid(), "4", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
-        private static bool isFilteredCombobox = false;
+        private static bool isFilteredCombobox = true;
     }
 }

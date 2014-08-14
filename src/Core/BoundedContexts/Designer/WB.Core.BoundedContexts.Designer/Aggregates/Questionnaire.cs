@@ -2130,7 +2130,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isFilteredCombobox)
             {
                 var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
-                answers = categoricalOneAnswerQuestion.Answers.ToArray();
+                answers = categoricalOneAnswerQuestion != null ? categoricalOneAnswerQuestion.Answers.ToArray() : null;
             }
 
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
@@ -3746,7 +3746,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("Question {0} is not a filtered combobox", FormatQuestionForException(questionId, this.innerDocument)));
             }
 
-            if (options.Length > maxFilteredComboboxOptionsCount)
+            if (options != null && options.Length > maxFilteredComboboxOptionsCount)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.FilteredComboboxQuestionOptionsMaxLength,
