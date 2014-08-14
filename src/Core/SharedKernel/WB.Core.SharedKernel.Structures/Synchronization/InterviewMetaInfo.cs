@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public Guid TemplateId { get; set; }
 
-        public long? TemplateVersion { get; set; }
+        public long TemplateVersion { get; set; }
 
         public string Title { get; set; }
 

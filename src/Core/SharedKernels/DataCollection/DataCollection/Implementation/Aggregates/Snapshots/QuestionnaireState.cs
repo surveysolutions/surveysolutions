@@ -8,8 +8,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
     public class QuestionnaireState
     {
         public QuestionnaireState(QuestionnaireDocument document, Dictionary<Guid, IQuestion> questionCache, Dictionary<Guid, IGroup> groupCache,
-            bool isProxyToPlainQuestionnaireRepository)
+            bool isProxyToPlainQuestionnaireRepository, HashSet<long> availableVersions)
         {
+            this.AvailableVersions = availableVersions;
             this.Document = document;
             this.QuestionCache = questionCache;
             this.GroupCache = groupCache;
@@ -20,5 +21,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public Dictionary<Guid, IQuestion> QuestionCache { get; private set; }
         public Dictionary<Guid, IGroup> GroupCache { get; private set; }
         public bool IsProxyToPlainQuestionnaireRepository { get; private set; }
+        public HashSet<long> AvailableVersions { get; private set; }
     }
 }

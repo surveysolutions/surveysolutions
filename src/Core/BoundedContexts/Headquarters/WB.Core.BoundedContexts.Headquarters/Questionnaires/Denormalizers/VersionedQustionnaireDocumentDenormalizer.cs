@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
 
             this.questionnaireCacheInitializer.InitializeQuestionnaireDocumentWithCaches(document);
 
-            this.documentStorage.Store(document, CreateDocumentId(document.PublicKey, evnt.EventSequence));
+            this.documentStorage.Store(document, CreateDocumentId(document.PublicKey, evnt.Payload.Version ?? evnt.EventSequence));
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)

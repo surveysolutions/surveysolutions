@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             return new Interview(
                 interviewId ?? new Guid("A0A0A0A0B0B0B0B0A0A0A0A0B0B0B0B0"),
                 userId ?? new Guid("F000F000F000F000F000F000F000F000"),
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),1,
                 answersToFeaturedQuestions ?? new Dictionary<Guid, object>(),
                 answersTime ?? new DateTime(2012, 12, 20),
                 supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"));
@@ -61,7 +61,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             return Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire);
+                && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire
+                && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
         }
 
         protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)

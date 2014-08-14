@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
         {
             return
                 ToPublishedEvent(new SynchronizationMetadataApplied(userId: GetGuidIdByStringId(userId), status: status,
-                    questionnaireId: GetGuidIdByStringId(questionnaireId), featuredQuestionsMeta: featuredQuestionsMeta,
+                    questionnaireId: GetGuidIdByStringId(questionnaireId),questionnaireVersion:1, featuredQuestionsMeta: featuredQuestionsMeta,
                     createdOnClient: createdOnClient, comments:null));
         }
 

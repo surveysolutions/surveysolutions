@@ -214,11 +214,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
 
-        public ActionResult TakeNew(Guid id)
+        public ActionResult TakeNew(Guid id, long? version)
         {
             Guid key = id;
             UserLight user = this.GlobalInfo.GetCurrentUser();
-            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, user.Id));
+            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, version, user.Id));
             return this.View(model);
         }
 

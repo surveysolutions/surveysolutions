@@ -658,7 +658,7 @@ namespace CapiDataGenerator
                             supervisorId: SelectedSupervisor.UserId,
                             userId: interviewer.Id,
                             answersTime: DateTime.UtcNow,
-                            answersToFeaturedQuestions: this.GetAnswersByFeaturedQuestions(featuredQuestions)));
+                            answersToFeaturedQuestions: this.GetAnswersByFeaturedQuestions(featuredQuestions), questionnaireVersion: 1));
 
                         commandService.Execute(new AssignInterviewerCommand(interviewId: interviewId, userId: SelectedSupervisor.UserId, interviewerId: interviewer.Id));
 

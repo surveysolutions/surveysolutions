@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
             var entityType = evnt.Payload.AllowCensusMode
                 ? QuestionnaireEntryType.CreateQuestionnaireInCensusMode
                 : QuestionnaireEntryType.CreateQuestionnaire;
-            questionnaireFeed.Store(new QuestionnaireFeedEntry(evnt.EventSourceId, evnt.EventSequence, eventId, entityType, evnt.EventTimeStamp), eventId);
+            questionnaireFeed.Store(new QuestionnaireFeedEntry(evnt.EventSourceId, evnt.Payload.Version ?? evnt.EventSequence, eventId, entityType, evnt.EventTimeStamp), eventId);
         }
     }
 }
