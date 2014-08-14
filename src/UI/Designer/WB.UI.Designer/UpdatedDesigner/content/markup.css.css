@@ -6708,20 +6708,17 @@ textarea#edit-group-description {
 li.chapter-panel-item {
   position: relative;
   display: block;
-  height: 70px;
   border-bottom: 1px #d7dbde solid;
   cursor: pointer;
 }
 li.chapter-panel-item > .holder {
-  display: inline-table;
-  width: 100%;
-  height: 100%;
+  display: block;
   min-width: 336px;
 }
 li.chapter-panel-item > .holder > .inner {
-  display: table-cell;
-  vertical-align: middle;
+  display: block;
   padding-left: 18px;
+  padding-right: 55px;
 }
 li.chapter-panel-item > .holder > .inner > .handler {
   position: absolute;
@@ -6732,6 +6729,7 @@ li.chapter-panel-item > .holder > .inner > .handler {
 }
 li.chapter-panel-item > .holder > .inner > h1 {
   margin: 0;
+  padding: 18px 0 22px;
 }
 li.chapter-panel-item > .holder > .inner > h1,
 li.chapter-panel-item > .holder > .inner > h1 > a {
@@ -6750,7 +6748,7 @@ li.chapter-panel-item > .holder > .inner > span {
 }
 li.chapter-panel-item > .holder > .inner > .btn-group {
   position: absolute;
-  top: 20px;
+  top: 15px;
   right: 8px;
 }
 li.chapter-panel-item > .holder > .inner > .btn-group.open > .dropdown-toggle {

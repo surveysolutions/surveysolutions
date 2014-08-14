@@ -14,21 +14,18 @@
 li.chapter-panel-item {
   position: relative;
   display: block;
-  height: 70px;
   border-bottom: 1px #d7dbde solid;
   cursor: pointer;
 
   > .holder {
-    display: inline-table;
-    width: 100%;
-    height: 100%;
+    display: block;
     min-width: 336px;
 
     > .inner {
       //position: relative;
-      display: table-cell;
-      vertical-align: middle;
+      display: block;
       padding-left: 18px;
+      padding-right: 55px;
 
       > .handler {
         position: absolute;
@@ -41,9 +38,11 @@ li.chapter-panel-item {
       > h1 {
         margin: 0;
         .questionnarie-chapter-list-fontstyle();
+        padding: 18px 0 22px;
 
         > a, a:hover {
           text-decoration: none;
+          
         }
       }
 
@@ -53,7 +52,7 @@ li.chapter-panel-item {
 
       > .btn-group {
         position: absolute;
-        top: 20px;
+        top: 15px;
         right: 8px;
 
         &.open > .dropdown-toggle {
