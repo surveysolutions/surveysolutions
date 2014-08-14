@@ -181,6 +181,7 @@ namespace WB.UI.QuestionnaireTester
                 this.kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
+            bus.RegisterHandler(templateDenoramalizer, typeof(QuestionnaireDeleted));
             bus.RegisterHandler(templateDenoramalizer, typeof(PlainQuestionnaireRegistered));
             
             var propagationStructureDenormalizer = new QuestionnaireRosterStructureDenormalizer(
@@ -189,6 +190,7 @@ namespace WB.UI.QuestionnaireTester
                 this.kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
+            bus.RegisterHandler(propagationStructureDenormalizer, typeof(QuestionnaireDeleted));
             bus.RegisterHandler(propagationStructureDenormalizer, typeof(PlainQuestionnaireRegistered));
         }
 

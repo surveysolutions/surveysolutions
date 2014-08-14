@@ -5,7 +5,9 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -28,6 +30,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<InterviewDeclaredInvalid>,
                                       IEventHandler<InterviewStatusChanged>, 
                                       IEventHandler<TemplateImported>,
+                                      IEventHandler<QuestionnaireDeleted>,
                                       IEventHandler<PlainQuestionnaireRegistered>,
 
                                       IEventHandler<TextQuestionAnswered>,
@@ -65,23 +68,23 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status, evnt.Payload.Comments,
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status, evnt.Payload.Comments,
                 evnt.Payload.FeaturedQuestionsMeta, evnt.Payload.CreatedOnClient, false);
         }
 
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, InterviewStatus.InterviewerAssigned, null,
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.Payload.UserId, InterviewStatus.InterviewerAssigned, null,
                 new AnsweredQuestionSynchronizationDto[0], true, true);
         }
 
 
-        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, Guid interviewId, Guid responsibleId,
+        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId,
                                                      InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions, 
                                                      bool createdOnClient, bool canBeDeleted)
         {
-            var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId);
+            var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId, questionnaireVersion);
             if (questionnaireTemplate == null)
                 return;
 
@@ -121,7 +124,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId,
+            AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId,evnt.Payload.InterviewData.QuestionnaireVersion, evnt.EventSourceId, evnt.Payload.UserId,
                                             evnt.Payload.InterviewData.Status,evnt.Payload.InterviewData.Comments, evnt.Payload.InterviewData.Answers, 
                                             evnt.Payload.InterviewData.CreatedOnClient, false);
         }
@@ -133,6 +136,12 @@ namespace CAPI.Android.Core.Model.EventHandlers
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
             this.StoreSurveyDto(id, questionnaireDocument, version, evnt.Payload.AllowCensusMode);
+        }
+
+
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            this.surveyDtoDocumentStorage.Remove(evnt.EventSourceId.Combine(evnt.Payload.QuestionnaireVersion).FormatGuid());
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
