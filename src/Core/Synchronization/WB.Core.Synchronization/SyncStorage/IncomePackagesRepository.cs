@@ -75,12 +75,12 @@ namespace WB.Core.Synchronization.SyncStorage
 
                     commandService.Execute(new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
                         userId: meta.ResponsibleId, questionnaireId: meta.TemplateId,
-                        questionnaireVersion: meta.TemplateVersion.Value, status: (InterviewStatus) meta.Status,
+                        questionnaireVersion: meta.TemplateVersion, status: (InterviewStatus) meta.Status,
                         featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid));
 
                 }
                 else
-                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,meta.TemplateVersion,
                         (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false));
 
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
