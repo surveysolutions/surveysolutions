@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core;
 using Moq;
@@ -13,12 +8,12 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.Synchronization.SyncStorage;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
 {
-    internal class when_StoreIncomingItem_called_and_item_wasnt_created_on_tablet : IncomePackagesRepositoryTestContext
+    internal class when_StoreIncomingItem_called_and_item_was_created_on_tablet : IncomePackagesRepositoryTestContext
     {
         Establish context = () =>
         {
@@ -35,7 +30,7 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
 
             jsonMock.Setup(x => x.GetItemAsContent(syncItem)).Returns(contentOfSyncItem);
 
-            commandServiceMock=new Mock<ICommandService>();
+            commandServiceMock = new Mock<ICommandService>();
 
             fileSystemAccessorMock = CreateDefaultFileSystemAccessorMock();
 
@@ -48,17 +43,15 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
         It should_write_text_file_to_sync_package_folder = () =>
           fileSystemAccessorMock.Verify(x => x.WriteAllText(GetPathToSynchItemInSyncPackageFolder(interviewMetaInfo.PublicKey), syncItem.Content), Times.Once);
 
-        It should_call_ApplySynchronizationMetadata_command_with_metadata_arguments = () =>
+        It should_call_CreateInterviewCreatedOnClientCommand_command_with_metadata_arguments = () =>
             commandServiceMock.Verify(
                 x =>
                     x.Execute(
-                        Moq.It.Is<ApplySynchronizationMetadata>(
-                            (passedCommand) =>
-                                passedCommand.Id == interviewMetaInfo.PublicKey && passedCommand.UserId == interviewMetaInfo.ResponsibleId &&
-                                    passedCommand.QuestionnaireId == interviewMetaInfo.TemplateId
-                                    && passedCommand.InterviewStatus == InterviewStatus.Completed &&
-                                    passedCommand.FeaturedQuestionsMeta == null && passedCommand.Comments == interviewMetaInfo.Comments
-                                    && passedCommand.Valid == false && passedCommand.CreatedOnClient == false),
+                        Moq.It.Is<CreateInterviewCreatedOnClientCommand>(passedCommand => passedCommand.Id == interviewMetaInfo.PublicKey && passedCommand.UserId == interviewMetaInfo.ResponsibleId &&
+                passedCommand.QuestionnaireId == interviewMetaInfo.TemplateId
+                && passedCommand.InterviewStatus == InterviewStatus.Completed && passedCommand.IsValid == interviewMetaInfo.Valid
+                && passedCommand.FeaturedQuestionsMeta.Length == 2
+                                   /* && passedCommand.Valid == true*/),
                         null), Times.Once);
 
         private static IncomePackagesRepository incomePackagesRepository;
@@ -68,14 +61,19 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
 
         private static InterviewMetaInfo interviewMetaInfo = new InterviewMetaInfo()
         {
-            CreatedOnClient = false,
+            CreatedOnClient = true,
             ResponsibleId = Guid.NewGuid(),
             Comments = "my comment",
             PublicKey = Guid.NewGuid(),
             Status = (int) InterviewStatus.Completed,
             TemplateId = Guid.NewGuid(),
             TemplateVersion = 2,
-            Valid = false
+            FeaturedQuestionsMeta = new[]
+            {
+                new FeaturedQuestionMeta(Guid.NewGuid(), "1", "a"),
+                new FeaturedQuestionMeta(Guid.NewGuid(), "2", "b")
+            },
+            Valid = true
         };
         private static Mock<IJsonUtils> jsonMock;
         private static string contentOfSyncItem = "content of sync item";
