@@ -48,11 +48,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
+            string supervisorId = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document.SupervisorId.FormatGuid());
 
             this.writer.Store(new InterviewFeedEntry
             {
-                SupervisorId = interviewData.SupervisorId.GetValueOrDefault().FormatGuid(),
+                SupervisorId = supervisorId,
                 EntryType = EntryType.InterviewUnassigned,
                 Timestamp = evnt.EventTimeStamp,
                 InterviewId = evnt.EventSourceId.FormatGuid(),
@@ -63,11 +63,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
+            string supervisorId = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document.SupervisorId.FormatGuid());
 
             this.writer.Store(new InterviewFeedEntry
             {
-                SupervisorId = interviewData.SupervisorId.GetValueOrDefault().FormatGuid(),
+                SupervisorId = supervisorId,
                 EntryType = EntryType.InterviewDeleted,
                 Timestamp = evnt.EventTimeStamp,
                 InterviewId = evnt.EventSourceId.FormatGuid(),
