@@ -10,32 +10,36 @@ namespace WB.Core.Infrastructure.Compilation
 {
     public class RoslynCompiler : IDynamicCompiler
     {
-        private const string ProfileToBuild = "Profile24";
-
-        //private readonly string portableAttribute;
         private readonly string portableAssembliesPath;
-
-        //private readonly string[] usingItems = new[] { "System.Runtime.Versioning", "WB.Core.SharedKernels.ExpressionProcessing" };
-
         private readonly string[] defaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll" };
-
 
         public RoslynCompiler()
         {
             //should be resolve outside
             this.portableAssembliesPath =
-                String.Format("C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.0\\Profile\\{0}",
-                    ProfileToBuild);
+                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.0\\Profile\\Profile24";
         }
 
-        public EmitResult GenerateAssemblyAsString(Guid templateId, string classCode, string[] referencedPortableAssemblies, out string generatedAssembly)
+        public RoslynCompiler(string pathToAssemblies)
+        {
+            this.portableAssembliesPath = pathToAssemblies;
+        }
+
+        public EmitResult GenerateAssemblyAsString(Guid templateId, string classCode, string[] referencedPortableAssemblies,
+            out string generatedAssembly)
         {
             var tree = SyntaxFactory.ParseSyntaxTree(classCode);
 
-            var metadataFileReference = this.defaultReferencedPortableAssemblies.Select(defaultReferencedPortableAssembly => new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly))).ToList();
-            metadataFileReference.AddRange(referencedPortableAssemblies.Select(defaultReferencedPortableAssembly => new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly))));
+            var metadataFileReference =
+                this.defaultReferencedPortableAssemblies.Select(
+                    defaultReferencedPortableAssembly =>
+                        new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly))).ToList();
+            metadataFileReference.AddRange(
+                referencedPortableAssemblies.Select(
+                    defaultReferencedPortableAssembly =>
+                        new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly))));
             metadataFileReference.Add(new MetadataFileReference(typeof (IInterviewEvaluator).Assembly.Location));
-            
+
             var compilation = CSharpCompilation.Create(
                 String.Format("rules-{0}.dll", templateId),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
@@ -58,6 +62,5 @@ namespace WB.Core.Infrastructure.Compilation
 
             return compileResult;
         }
-
     }
 }

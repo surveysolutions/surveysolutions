@@ -139,37 +139,33 @@ namespace WB.UI.Designer.Api
             QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
             VerificationError[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
 
-            if (errors.Any())
+            if (!errors.Any())
             {
-                return new VerificationErrors
+                GenerationResult generationResult;
+                try
                 {
-                    Errors = errors
-                };
-            }
-
-            GenerationResult generationResult;
-            try
-            {
-                string resultAssembly;
-                generationResult = this.expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
-            }
-            catch (Exception)
-            {
-                generationResult = new GenerationResult(false)
+                    string resultAssembly;
+                    generationResult = this.expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
+                }
+                catch (Exception)
                 {
-                    Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
-                };
+                    generationResult = new GenerationResult()
+                    {
+                        Success = false,
+                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                    };
+                }
+
+                var processorGenerationErrors = generationResult.Success
+                    ? new QuestionnaireVerificationError[0]
+                    : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
+
+                errors = verificationErrorsMapper.EnrichVerificationErrors(processorGenerationErrors, questionnaireDocument);
             }
-
-            var processorGenerationErrors = generationResult.Success
-                ? new QuestionnaireVerificationError[0]
-                : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
-
-            VerificationError[] generationErrors = verificationErrorsMapper.EnrichVerificationErrors(processorGenerationErrors, questionnaireDocument);
 
             return new VerificationErrors
             {
-                Errors = generationErrors
+                Errors = errors
             };
         }
 

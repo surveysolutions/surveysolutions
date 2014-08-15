@@ -140,14 +140,17 @@ namespace WB.UI.Designer.Api
             }
             else
             {
-
                 try
                 {
                     generationResult = this.expressionProcessorGenerator.GenerateProcessor(questionnaireView.Source, out resultAssembly);
                 }
                 catch (Exception)
                 {
-                    generationResult = new GenerationResult(false);
+                    generationResult = new GenerationResult()
+                    {
+                        Success = false,
+                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                    };
                     resultAssembly = string.Empty;
                 }
 

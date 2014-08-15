@@ -74,37 +74,32 @@ namespace WB.UI.Designer.Controllers
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
             var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
-
             
-            if (questoinnaireErrors.Any())
+            if (!questoinnaireErrors.Any())
             {
-                return this.Json(new VerificationResult
+                GenerationResult generationResult;
+                try
                 {
-                    Errors = questoinnaireErrors
-                });
-            }
-
-            GenerationResult generationResult;
-            try
-            {
-                string resultAssembly;
-                generationResult = this.expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
-            }
-            catch (Exception)
-            {
-                generationResult = new GenerationResult(false)
+                    string resultAssembly;
+                    generationResult = this.expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
+                }
+                catch (Exception)
                 {
-                    Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
-                };
-            }
+                    generationResult = new GenerationResult()
+                    {
+                        Success = false,
+                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                    };
+                }
 
-            var generationErrors = generationResult.Success 
-                ? new QuestionnaireVerificationError[0] 
-                : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
+                questoinnaireErrors = generationResult.Success
+                    ? new QuestionnaireVerificationError[0]
+                    : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
+            }
 
             return this.Json(new VerificationResult
             {
-                Errors = generationErrors
+                Errors = questoinnaireErrors
             });
         }
 
