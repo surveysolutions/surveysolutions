@@ -106,6 +106,7 @@
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
+    <Compile Include="Implementation\Synchronization\IncomePackagesRepository\IncomePackagesRepository.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoader.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataProcessor.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\CompleteInterviewsWithErrorsIndex.cs" />
@@ -326,6 +327,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
