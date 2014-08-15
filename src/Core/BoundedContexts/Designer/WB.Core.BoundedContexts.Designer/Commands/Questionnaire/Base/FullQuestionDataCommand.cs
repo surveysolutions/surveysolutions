@@ -14,9 +14,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
                 questionnaireId, questionId, title, variableName, mask, isMandatory, isPreFilled, scope, enablementCondition,
                 validationExpression, validationMessage, instructions, responsibleId, variableLabel)
         {
-            options
-               .ToList()
-               .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
+            if (options != null)
+                options
+                    .ToList()
+                    .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
             this.Type = type;
