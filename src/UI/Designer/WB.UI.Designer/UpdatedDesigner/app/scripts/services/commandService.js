@@ -82,6 +82,12 @@
 
                     switch (question.type) {
                     case "SingleOption":
+                        command.areAnswersOrdered = question.areAnswersOrdered;
+                        command.maxAllowedAnswers = question.maxAllowedAnswers;
+                        command.options = question.options;
+                        command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.isFilteredCombobox = question.isFilteredCombobox;
+                        break;
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;

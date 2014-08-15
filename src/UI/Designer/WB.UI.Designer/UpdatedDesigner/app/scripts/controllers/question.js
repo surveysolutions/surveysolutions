@@ -28,7 +28,8 @@
                     $scope.activeQuestion.maxAnswerCount = result.maxAnswerCount;
                     $scope.activeQuestion.maxAllowedAnswers = result.maxAllowedAnswers;
                     $scope.activeQuestion.areAnswersOrdered = result.areAnswersOrdered;
-                    
+                    $scope.activeQuestion.isFilteredCombobox = result.isFilteredCombobox;
+
                     var options = result.options || [];
                     _.each(options, function(option) {
                         option.id = utilityService.guid();
@@ -100,6 +101,10 @@
                         "title": '',
                         "id": utilityService.guid()
                     });
+                };
+
+                $scope.editFilteredComboboxOptions = function () {
+                    var a = window.open("../../questionnaire/editoptions/" + $scope.activeQuestion.itemId, "Edit options", "resizable: no;center : yes; modal:yes");
                 };
 
                 $scope.removeOption = function(index) {
