@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
@@ -11,12 +7,12 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.Synchronization.SyncStorage;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
 {
-    internal class when_StoreIncomingItem_called_and_item_wasnt_created_on_tablet_and_store_command_rise_exception : IncomePackagesRepositoryTestContext
+    internal class when_StoreIncomingItem_called_and_item_was_created_on_tablet_and_store_command_rise_exception : IncomePackagesRepositoryTestContext
     {
         Establish context = () =>
         {
@@ -27,7 +23,7 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
             jsonMock.Setup(x => x.GetItemAsContent(syncItem)).Returns(contentOfSyncItem);
 
             commandServiceMock = new Mock<ICommandService>();
-            commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<ApplySynchronizationMetadata>(), null))
+            commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<CreateInterviewCreatedOnClientCommand>(), null))
                 .Throws<NullReferenceException>();
 
             fileSystemAccessorMock = CreateDefaultFileSystemAccessorMock();
@@ -50,7 +46,7 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
 
         private static InterviewMetaInfo interviewMetaInfo = new InterviewMetaInfo()
         {
-            CreatedOnClient = false,
+            CreatedOnClient = true,
             ResponsibleId = Guid.NewGuid(),
             Comments = "my comment",
             PublicKey = Guid.NewGuid(),

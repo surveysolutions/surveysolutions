@@ -11,19 +11,22 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.FunctionalDenormalization;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.Synchronization;
 
-namespace WB.Core.Synchronization.SyncStorage
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository
 {
     internal class IncomePackagesRepository : IIncomePackagesRepository
     {
         private string incomingCapiPackagesDirectory;
         private string incomingCapiPackagesWithErrorsDirectory;
-
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
         private readonly SyncSettings syncSettings;
@@ -31,30 +34,31 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly IJsonUtils jsonUtils;
 
         public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
-            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils)
+            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter)
         {
             this.logger = logger;
             this.syncSettings = syncSettings;
             this.commandService = commandService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.jsonUtils = jsonUtils;
+            this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
 
-            InitializeDirectoriesForCapiIncomePackages();
+            this.InitializeDirectoriesForCapiIncomePackages();
         }
 
         private void InitializeDirectoriesForCapiIncomePackages()
         {
-            this.incomingCapiPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
-                syncSettings.IncomingCapiPackagesDirectoryName);
+            this.incomingCapiPackagesDirectory = this.fileSystemAccessor.CombinePath(this.syncSettings.AppDataDirectory,
+                this.syncSettings.IncomingCapiPackagesDirectoryName);
 
-            this.incomingCapiPackagesWithErrorsDirectory = fileSystemAccessor.CombinePath(this.incomingCapiPackagesDirectory,
+            this.incomingCapiPackagesWithErrorsDirectory = this.fileSystemAccessor.CombinePath(this.incomingCapiPackagesDirectory,
                 this.syncSettings.IncomingCapiPackagesWithErrorsDirectoryName);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(this.incomingCapiPackagesDirectory))
                 this.fileSystemAccessor.CreateDirectory(this.incomingCapiPackagesDirectory);
 
-            if (!this.fileSystemAccessor.IsDirectoryExists(incomingCapiPackagesWithErrorsDirectory))
-                this.fileSystemAccessor.CreateDirectory(incomingCapiPackagesWithErrorsDirectory);
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.incomingCapiPackagesWithErrorsDirectory))
+                this.fileSystemAccessor.CreateDirectory(this.incomingCapiPackagesWithErrorsDirectory);
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -64,8 +68,8 @@ namespace WB.Core.Synchronization.SyncStorage
 
             try
             { 
-                var meta = jsonUtils.Deserrialize<InterviewMetaInfo>(PackageHelper.DecompressString(item.MetaInfo));
-                if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value)
+                var meta = this.jsonUtils.Deserrialize<InterviewMetaInfo>(PackageHelper.DecompressString(item.MetaInfo));
+                if (meta.CreatedOnClient.HasValue && meta.CreatedOnClient.Value && this.interviewSummaryRepositoryWriter.GetById(meta.PublicKey)==null)
                 {
                     AnsweredQuestionSynchronizationDto[] prefilledQuestions = null;
                     if (meta.FeaturedQuestionsMeta != null)
@@ -73,14 +77,14 @@ namespace WB.Core.Synchronization.SyncStorage
                             .Select(q => new AnsweredQuestionSynchronizationDto(q.PublicKey, new decimal[0], q.Value, string.Empty))
                             .ToArray();
 
-                    commandService.Execute(new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
+                    this.commandService.Execute(new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
                         userId: meta.ResponsibleId, questionnaireId: meta.TemplateId,
                         questionnaireVersion: meta.TemplateVersion.Value, status: (InterviewStatus) meta.Status,
                         featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid));
 
                 }
                 else
-                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                    this.commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
                         (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false));
 
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
@@ -88,7 +92,7 @@ namespace WB.Core.Synchronization.SyncStorage
             catch (Exception ex)
             {
                 this.logger.Error("error on handling incoming package,", ex);
-                fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.Id),jsonUtils.GetItemAsContent(item));
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.Id),this.jsonUtils.GetItemAsContent(item));
             }
         }
 
@@ -112,7 +116,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
 
-            var items = jsonUtils.Deserrialize<AggregateRootEvent[]>(PackageHelper.DecompressString(fileContent));
+            var items = this.jsonUtils.Deserrialize<AggregateRootEvent[]>(PackageHelper.DecompressString(fileContent));
             if (items.Length > 0)
             {
                 var eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
@@ -131,7 +135,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 bus.Publish(incomeEvents);
                 if (this.syncSettings.ReevaluateInterviewWhenSynchronized)
                 {
-                    commandService.Execute(new ReevaluateSynchronizedInterview(id));
+                    this.commandService.Execute(new ReevaluateSynchronizedInterview(id));
                 }
             }
             else

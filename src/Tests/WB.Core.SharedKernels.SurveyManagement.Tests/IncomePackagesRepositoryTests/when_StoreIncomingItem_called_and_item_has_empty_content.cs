@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 
-namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
 {
     internal class when_StoreIncomingItem_called_and_item_has_empty_content : IncomePackagesRepositoryTestContext
     {
