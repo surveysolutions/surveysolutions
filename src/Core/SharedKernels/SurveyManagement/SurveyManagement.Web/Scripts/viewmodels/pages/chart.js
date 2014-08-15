@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ChartPage = function(serviceUrl, interviewDetailsUrl, users, commandExecutionUrl) {
+﻿Supervisor.VM.ChartPage = function(serviceUrl, interviewDetailsUrl, commandExecutionUrl) {
     Supervisor.VM.ChartPage.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
 
     var self = this;

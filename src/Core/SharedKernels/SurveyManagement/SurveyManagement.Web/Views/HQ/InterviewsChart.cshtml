@@ -19,14 +19,11 @@
         "~/Scripts/jqPlot/plugins/jqplot.canvasAxisTickRenderer.min.js")
 
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new { }, Request.Url.Scheme))';
-        var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
-        var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
+        var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterInterviewsStatistics" })';
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("InterviewsChart", "HQ", new { }, Request.Url.Scheme))';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
-        var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "AllInterviews" })';
-        $(function() {
-            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new Supervisor.VM.ChartPage(interviewsListUrl, $interviewsPageUrl, users, commandExecutionUrl);
+        $(function () {
+            var model = new Supervisor.VM.ChartPage(interviewsListUrl, $interviewsPageUrl, commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });

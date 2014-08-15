@@ -81,8 +81,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(model);
         }
 
-
-
         public ActionResult Delete(Guid id, long version)
         {
             var interviewByQuestionnaire =

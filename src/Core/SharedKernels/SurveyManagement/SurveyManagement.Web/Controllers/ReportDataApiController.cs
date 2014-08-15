@@ -167,5 +167,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             return this.headquarterSurveysAndStatusesReport.Load(input);
         }
+
+        [HttpPost]
+        public HeadquarterSurveysAndStatusesReportView HeadquarterInterviewsStatistics(SurveyListViewModel data)
+        {
+            var input = new HeadquarterSurveysAndStatusesReportInputModel();
+
+            return this.headquarterSurveysAndStatusesReport.Load(input);
+        }
     }
 }
