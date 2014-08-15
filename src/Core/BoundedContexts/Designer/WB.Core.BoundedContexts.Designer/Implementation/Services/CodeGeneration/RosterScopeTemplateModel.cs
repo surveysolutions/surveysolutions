@@ -6,6 +6,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class RosterScopeTemplateModel : IRosterScope
     {
+
+        public RosterScopeTemplateModel(KeyValuePair<string, List<RosterTemplateModel>> rosterScope)
+        {
+            GeneratedTypeName = rosterScope.Key;
+            RostersInScope = rosterScope.Value;
+
+            ParentTypeName = rosterScope.Value[0].GetParentScope().GetTypeName();
+
+            Questions = rosterScope.Value.SelectMany(r => r.Questions).ToList();
+            Groups = rosterScope.Value.SelectMany(r => r.Groups).ToList();
+            Rosters = rosterScope.Value.SelectMany(r => r.Rosters).ToList();
+        }
+
         public string GeneratedRosterScopeName { get; set; }
         public string GeneratedTypeName { set; get; }
 

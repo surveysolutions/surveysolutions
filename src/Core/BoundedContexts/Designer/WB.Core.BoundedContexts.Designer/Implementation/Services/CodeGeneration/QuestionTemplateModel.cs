@@ -3,7 +3,7 @@ using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    public class QuestionTemplateModel
+    public class QuestionTemplateModel : ITemplateModel
     {
         public Guid Id { set; get; }
         public string VariableName { set; get; }

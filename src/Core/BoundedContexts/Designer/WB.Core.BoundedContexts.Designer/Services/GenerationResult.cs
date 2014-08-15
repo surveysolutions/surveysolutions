@@ -2,49 +2,27 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Emit;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
     public class GenerationResult
     {
-        private readonly bool success;
-        private List<GenerationDiagnostic> diagnostics;
-        
-        public bool Success
-        {
-            get
-            {
-                return this.success;
-            }
-        }
+        public bool Success { get; set; }
 
-        public List<GenerationDiagnostic> Diagnostics
-        {
-            get
-            {
-                return this.diagnostics;
-            }
-            set
-            {
-                this.diagnostics = value;
-            }
-        }
+        public List<GenerationDiagnostic> Diagnostics { get; set; }
 
-        public GenerationResult(bool success)
-        {
-            this.success = success;
-            this.diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Invalid operation", "Generation", GenerationDiagnosticSeverity.Error)};
-        }
+        public GenerationResult() {}
 
         public GenerationResult(bool success, ImmutableArray<Diagnostic> diagnostics)
         {
-            this.success = success;
-            this.diagnostics = diagnostics.Select(d => new GenerationDiagnostic(d.GetMessage(), d.Category, (GenerationDiagnosticSeverity)d.Severity)).ToList();
+            this.Success = success;
+            this.Diagnostics =
+                diagnostics.Select(d => new GenerationDiagnostic(d.GetMessage(), d.Category, (GenerationDiagnosticSeverity) d.Severity))
+                    .ToList();
         }
     }
 
-    public class GenerationDiagnostic 
+    public class GenerationDiagnostic
     {
         private readonly string message;
         private readonly GenerationDiagnosticSeverity severity;
@@ -52,26 +30,17 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public string Message
         {
-            get
-            {
-                return this.message;
-            }
+            get { return this.message; }
         }
 
         public string Category
         {
-            get
-            {
-                return this.category;
-            }
+            get { return this.category; }
         }
 
         public GenerationDiagnosticSeverity Severity
         {
-            get
-            {
-                return this.severity;
-            }
+            get { return this.severity; }
         }
 
         public GenerationDiagnostic(string message, string category, GenerationDiagnosticSeverity severity)
@@ -89,5 +58,4 @@ namespace WB.Core.BoundedContexts.Designer.Services
         Warning,
         Error,
     }
-
 }
