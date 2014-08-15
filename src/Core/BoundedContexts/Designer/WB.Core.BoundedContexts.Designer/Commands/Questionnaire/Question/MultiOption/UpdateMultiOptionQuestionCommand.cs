@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -32,6 +33,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Multi
             this.Scope = scope;
             this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
             this.ValidationExpression = validationExpression;
+            if (options != null)
+                options
+                    .ToList()
+                    .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
             this.AreAnswersOrdered = areAnswersOrdered;
