@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private Dictionary<Guid, List<Guid>> BuildDependencyTree(QuestionnaireDocument questionnaireDocument)
         {
-            Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument
+            /*Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument
                 .GetAllGroups()
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
 
@@ -222,7 +222,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             foreach (KeyValuePair<Guid, List<Guid>> dependency in invertedDependencies)
             {
                 dependency.Value.ForEach(x => dependencies[x].Add(dependency.Key));
-            }
+            }*/
+
+            Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument.GetAllGroups()
+                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
+                .ToDictionary(x => x.PublicKey,
+                    x => this.GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression));
+
+            questionnaireDocument.GetEntitiesByType<IQuestion>()
+                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
+                .ToDictionary(x => x.PublicKey,
+                    x => this.GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression))
+                .ToList()
+                .ForEach(x => dependencies.Add(x.Key, x.Value));
 
             return dependencies;
         }
@@ -231,7 +243,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression)
         {
             //totally not the best way to do this
-            char[] separators = { '.', ')', '(' , ' ', '=' };
+            char[] separators = { '.', ')', '(' , ' ', '=' , '!', '[', ']'};
+
             string[] expressionStrings = conditionExpression.Split(separators);
 
             return VariableNames.Where(v => expressionStrings.Contains(v.Key, StringComparer.Ordinal)).Select(d => d.Value).ToList();
