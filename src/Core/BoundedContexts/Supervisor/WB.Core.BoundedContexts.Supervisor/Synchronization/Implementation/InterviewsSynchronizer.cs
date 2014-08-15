@@ -184,6 +184,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             var supervisorIdGuid = Guid.Parse(feedEntry.SupervisorId);
 
             this.headquartersPullContext.PushMessage(string.Format("Applying interview rejected by HQ on {0} interview", feedEntry.InterviewId));
+
+            InterviewSummary interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewDetails.Id);
+            if (interviewSummary == null)
+
+            {
+                var interviewerId = feedEntry.InterviewerId != null ? Guid.Parse(feedEntry.InterviewerId) : supervisorIdGuid;
+                this.executeCommand(new CreateInterviewCreatedOnClientCommand(interviewId: interviewDetails.Id,
+                       userId: interviewerId, questionnaireId: interviewDetails.QuestionnaireId,
+                       questionnaireVersion: interviewDetails.QuestionnaireVersion, status: interviewDetails.Status,
+                       featuredQuestionsMeta: new AnsweredQuestionSynchronizationDto[0], isValid: true));
+            }
+            
             this.executeCommand(new RejectInterviewFromHeadquartersCommand(interviewDetails.Id, 
                 userIdGuid, 
                 supervisorIdGuid, 

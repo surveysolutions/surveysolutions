@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
@@ -13,6 +14,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
                 questionnaireId, questionId, title, variableName, mask, isMandatory, isPreFilled, scope, enablementCondition,
                 validationExpression, validationMessage, instructions, responsibleId, variableLabel, isFilteredCombobox)
         {
+            if (options != null)
+                options
+                    .ToList()
+                    .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
             this.Type = type;
