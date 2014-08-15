@@ -2,7 +2,13 @@ using System;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    public class GroupTemplateModel
+    public interface ITemplateModel {
+        Guid Id { set; get; }
+        string VariableName { set; get; }
+        string Conditions { set; get; }
+    }
+
+    public class GroupTemplateModel : ITemplateModel
     {
         public Guid Id { set; get; }
         public string VariableName { set; get; }

@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 questionState.State = this.RunConditionExpression(isEnabled);
 
                 this.UpdateAllNestedItemsState(questionId, this.StructuralDependencies,
-                    questionState.State == State.Disabled ? State.Disabled : State.Unknown);
+                    questionState.State);
             };
         }
 
@@ -188,7 +188,7 @@ namespace WB.Core.SharedKernels.DataCollection
             foreach (var state in this.EnablementStates.Values)
             {
                 state.PreviousState = state.State;
-                //state.State = State.Unknown;
+                state.State = State.Unknown;
             }
             
             foreach (Action verifier in this.ConditionExpressions)
@@ -197,7 +197,7 @@ namespace WB.Core.SharedKernels.DataCollection
             }
 
             questionsToBeEnabled = this.EnablementStates.Values
-                .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Question)
+                .Where(x => (x.State == State.Enabled || x.State == State.Unknown) && x.State != x.PreviousState && x.Type == ItemType.Question)
                 .Select(x => new Identity(x.ItemId, this.RosterVector))
                 .ToList();
 
@@ -207,7 +207,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 .ToList();
 
             groupsToBeEnabled = this.EnablementStates.Values
-                .Where(x => x.State == State.Enabled && x.State != x.PreviousState && x.Type == ItemType.Group)
+                .Where(x => (x.State == State.Enabled || x.State == State.Unknown) && x.State != x.PreviousState && x.Type == ItemType.Group)
                 .Select(x => new Identity(x.ItemId, this.RosterVector))
                 .ToList();
 
@@ -356,8 +356,7 @@ namespace WB.Core.SharedKernels.DataCollection
                     
                     if (isValid && !this.ValidAnsweredQuestions.Contains(questionId))
                         questionsToBeValid.Add(validationExpression.Key);
-
-                    if (!isValid && !this.InvalidAnsweredQuestions.Contains(questionId))
+                    else if (!isValid && !this.InvalidAnsweredQuestions.Contains(questionId))
                         questionsToBeInvalid.Add(validationExpression.Key);
                 }
 #pragma warning disable
