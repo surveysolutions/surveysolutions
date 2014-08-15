@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             commandType = "UpdateQuestionnaire";
 
             title = @"<b width='7'>MA</b><font color='red'>IN</font><img /><script>alert('hello world!')</script><script/> привет! :)";
+            
             questionnaireId = "11111111-1111-1111-1111-111111111111";
 
             command = string.Format(@"{{
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
         private static CommandDeserializer deserializer;
         private static string command;
         private static string title;
-        private static string sanitizedTitle = "<b>MA</b><font color=\"red\">IN</font> привет! :)";
+        private static string sanitizedTitle = "<b>MA</b><font color=\"red\">IN</font>alert('hello world!') привет! :)";
         private static string questionnaireId;
         private static string commandType;
     }

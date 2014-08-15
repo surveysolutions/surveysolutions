@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numer
             this.CountOfDecimalPlaces = countOfDecimalPlaces;
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
-            this.ValidationMessage = validationMessage;
+            this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
             this.ValidationExpression = validationExpression;
         }
 
