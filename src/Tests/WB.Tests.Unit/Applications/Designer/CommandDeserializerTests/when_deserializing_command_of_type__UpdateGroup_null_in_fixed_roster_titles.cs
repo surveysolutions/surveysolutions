@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Ncqrs.Commanding;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
@@ -6,7 +7,7 @@ using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
 {
-    internal class when_deserializing_command_of_type__UpdateGroup__with_questionnaire_id_and_group_id_and_title_and_propogation_kind_and_description_and_condition : CommandDeserializerTestsContext
+    internal class when_deserializing_command_of_type__UpdateGroup_null_in_fixed_roster_titles : CommandDeserializerTestsContext
     {
         Establish context = () =>
         {
@@ -16,8 +17,8 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             questionnaireId = "11111111-1111-1111-1111-111111111111";
             groupId = "22222222-2222-2222-2222-222222222222";
             propagationKind = "AutoPropagated";
-            description = "Some description";
-            condition = "1 == 2";
+            description = "<i><s>Some</s> <u>description</u></i>";
+            rosterFixedTitles = "[]";
 
             command = string.Format(@"{{
                 ""questionnaireId"": ""{0}"",
@@ -25,8 +26,9 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
                 ""title"": ""{2}"",
                 ""propagationKind"": ""{3}"",
                 ""description"": ""{4}"",
-                ""condition"": ""{5}""
-            }}", questionnaireId, groupId, title, propagationKind, description, condition);
+                ""rosterSizeSource"":""FixedTitles"",
+                ""rosterFixedTitles"": {5}
+            }}", questionnaireId, groupId, title, propagationKind, description, rosterFixedTitles);
 
             deserializer = CreateCommandDeserializer();
         };
@@ -47,21 +49,21 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             ((UpdateGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
         It should_return_same_description_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).Description.ShouldEqual(description);
+            ((UpdateGroupCommand)result).Description.ShouldEqual("Some description");
 
-        It should_return_same_condition_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).Condition.ShouldEqual(condition);
+        It should_return_0_fixed_roster_titles = () =>
+            ((UpdateGroupCommand)result).RosterFixedTitles.Count().ShouldEqual(0);
 
         private static ICommand result;
         private static CommandDeserializer deserializer;
         private static string command;
         private static string title;
-        private static string sanitizedTitle = "<b>MA<font color=\"red\">IN</font></b>alert('hello world!')"; 
+        private static string sanitizedTitle = "<b>MA<font color=\"red\">IN</font></b>alert('hello world!')";
         private static string questionnaireId;
         private static string groupId;
         private static string propagationKind;
         private static string description;
-        private static string condition;
+        private static string rosterFixedTitles;
         private static string type;
     }
 }

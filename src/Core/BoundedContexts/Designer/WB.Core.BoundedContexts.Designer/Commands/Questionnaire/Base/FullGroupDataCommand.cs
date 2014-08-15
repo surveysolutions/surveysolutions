@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
@@ -10,15 +11,18 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
             : base(questionnaireId, groupId, responsibleId)
         {
-            this.VariableName = variableName;
+            this.VariableName = CommandUtils.SanitizeHtml(variableName, removeAllTags: true);
             this.Title = CommandUtils.SanitizeHtml(title);
-
             this.IsRoster = isRoster;
             this.RosterSizeQuestionId = rosterSizeQuestionId;
             this.RosterSizeSource = rosterSizeSource;
-            this.Description = description;
+            this.Description = CommandUtils.SanitizeHtml(description, removeAllTags: true);
             this.Condition = condition;
-            this.RosterFixedTitles = rosterFixedTitles;
+            this.RosterFixedTitles = rosterFixedTitles == null
+                ? null
+                : rosterFixedTitles
+                    .Select(x => CommandUtils.SanitizeHtml(x, removeAllTags: true))
+                    .ToArray();
             this.RosterTitleQuestionId = rosterTitleQuestionId;
         }
 

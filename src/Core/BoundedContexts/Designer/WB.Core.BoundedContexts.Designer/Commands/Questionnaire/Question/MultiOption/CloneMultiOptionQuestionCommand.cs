@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Multi
                 sourceQuestionId: sourceQuestionId, targetIndex: targetIndex,variableLabel:variableLabel)
         {
             this.Scope = scope;
-            this.ValidationMessage = validationMessage;
+            this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
             this.ValidationExpression = validationExpression;
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
