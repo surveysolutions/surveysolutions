@@ -1289,6 +1289,7 @@
     <Content Include="UpdatedDesigner\vendor\angular-resource\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\README.md" />
     <Content Include="UpdatedDesigner\fonts\OpenSans300.woff" />
+    <Content Include="Views\Questionnaire\EditOptions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
