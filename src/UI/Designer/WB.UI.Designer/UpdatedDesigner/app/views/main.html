@@ -121,7 +121,7 @@
         <div role="menu" class="chapter-menu dropdown-menu dropdown-menu-right">
             <h1>Move to another chapter:</h1>
             <ul>
-                <li ng-repeat="chapter in questionnaire.chapters">
+                <li ng-repeat="chapter in $parent.questionnaire.chapters">
                     <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId" unsaved-warning-clear>
                         {{chapter.title}}
                     </a>

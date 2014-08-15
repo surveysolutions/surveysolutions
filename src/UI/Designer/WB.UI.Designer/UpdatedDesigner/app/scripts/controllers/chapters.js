@@ -75,7 +75,10 @@
                                 }
 
                                 questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (questionnaire) {
-                                    $scope.questionnaire = questionnaire;
+                                    _.remove($scope.questionnaire.chapters);
+                                    _.forEach(questionnaire.chapters, function(c) {
+                                         $scope.questionnaire.chapters.push(c);
+                                    });
                                     if (questionnaire.chapters.length > 0) {
                                         var defaultChapter = _.first(questionnaire.chapters);
                                         var itemId = defaultChapter.itemId;
