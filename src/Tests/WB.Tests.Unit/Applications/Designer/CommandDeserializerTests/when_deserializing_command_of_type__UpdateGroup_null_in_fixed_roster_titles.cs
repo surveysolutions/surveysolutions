@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
         private static CommandDeserializer deserializer;
         private static string command;
         private static string title;
-        private static string sanitizedTitle = "<b>MA<font color=\"red\">IN</font></b>alert('hello world!')";
+        private static string sanitizedTitle = "MAIN alert('hello world!')";
         private static string questionnaireId;
         private static string groupId;
         private static string propagationKind;
