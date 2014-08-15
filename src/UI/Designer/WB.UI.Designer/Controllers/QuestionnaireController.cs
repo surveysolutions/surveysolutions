@@ -193,6 +193,11 @@ namespace WB.UI.Designer.Controllers
             return this.View(this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
         }
 
+        public ActionResult EditOptions(Guid id)
+        {
+            return this.View();
+        }
+
         private IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
             int? pageIndex, string sortBy, int? sortOrder, string filter)
         {
