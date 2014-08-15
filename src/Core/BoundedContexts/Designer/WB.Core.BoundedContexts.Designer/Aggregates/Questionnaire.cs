@@ -1439,7 +1439,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                Mask = mask
+                Mask = mask,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
@@ -1487,7 +1488,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = linkedToQuestionId,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                Mask = mask
+                Mask = mask,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
@@ -1535,7 +1537,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = linkedToQuestionId,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                Mask = mask
+                Mask = mask,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
