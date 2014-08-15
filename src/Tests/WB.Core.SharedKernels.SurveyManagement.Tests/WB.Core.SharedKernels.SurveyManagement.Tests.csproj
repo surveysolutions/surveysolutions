@@ -67,6 +67,10 @@
     <Reference Include="Moq">
       <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -203,6 +207,14 @@
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_and_version_is_set.cs" />
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_questions_one_with_var_lable_other_without.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\IncomePackagesRepositoryTestContext.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_empty_content.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_metainfo_which_cant_be_desirialized.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_wasnt_created_on_tablet.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_wasnt_created_on_tablet_and_store_command_rise_exception.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_was_created_on_tablet.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_was_created_on_tablet_and_store_command_rise_exception.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_was_created_on_tablet_but_existed_befoure.cs" />
     <Compile Include="InterviewSynchronizationDtoFactoryTests\when_build_from_interview_created_onclient.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_static_text.cs" />
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_question_which_uses_roster_title_in_substitution_and_placed_in_nested_group.cs" />
@@ -438,6 +450,14 @@
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29a132b5-a573-40d2-9e8f-2871e95d7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>

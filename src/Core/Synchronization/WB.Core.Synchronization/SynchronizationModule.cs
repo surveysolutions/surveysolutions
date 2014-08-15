@@ -26,7 +26,6 @@ namespace WB.Core.Synchronization
             this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
             this.Bind<IChunkWriter>().To<ReadSideChunkWriter>().InSingletonScope();
             this.Bind<IChunkReader>().To<ReadSideChunkReader>();
-            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope();
             this.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
         }
     }
