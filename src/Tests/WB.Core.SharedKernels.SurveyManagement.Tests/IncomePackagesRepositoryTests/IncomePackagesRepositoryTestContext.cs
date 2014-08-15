@@ -2,14 +2,17 @@
 using System.IO;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
-using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.Synchronization.SyncStorage;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.Synchronization;
+using Newtonsoft.Json;
 
-namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
 {
     internal class IncomePackagesRepositoryTestContext
     {
@@ -19,7 +22,7 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
         const string incomingCapiPackageFileNameExtension = "sync";
 
         protected static IncomePackagesRepository CreateIncomePackagesRepository(IJsonUtils jsonUtils = null,
-            IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService = null)
+            IFileSystemAccessor fileSystemAccessor = null, ICommandService commandService = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage=null)
         {
             return new IncomePackagesRepository(logger: Mock.Of<ILogger>(),
                 syncSettings:
@@ -27,7 +30,8 @@ namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
                         incomingCapiPackagesWithErrorsDirectoryName, incomingCapiPackageFileNameExtension),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 fileSystemAccessor: fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object,
-                jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>());
+                jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
+                interviewSummaryRepositoryWriter: interviewSummaryStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>());
         }
 
         protected static string GetPathToSynchItemInErrorFolder(Guid syncItemId)

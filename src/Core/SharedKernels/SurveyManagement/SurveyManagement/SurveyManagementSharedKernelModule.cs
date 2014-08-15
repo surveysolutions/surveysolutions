@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
@@ -96,6 +97,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
+
+
+            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope();
         }
 
         protected void AdditionalEventChecker(Guid interviewId)
