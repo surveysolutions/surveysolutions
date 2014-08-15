@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.VariableName = CommandUtils.SanitizeHtml(variableName, removeAllTags: true);
             this.IsMandatory = isMandatory;
             this.EnablementCondition = enablementCondition;
-            this.Instructions = instructions;
+            this.Instructions = CommandUtils.SanitizeHtml(instructions, removeAllTags: true);
         }
 
         public string Title { get; private set; }
