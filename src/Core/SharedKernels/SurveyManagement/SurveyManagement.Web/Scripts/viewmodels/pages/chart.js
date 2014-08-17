@@ -8,53 +8,53 @@
     self.SelectedTemplate = ko.observable('');
     self.Stats = ko.observable(null);
 
-    self.initChart = function () {
-        self.SendRequest(self.ServiceUrl, {}, function (data) {
+    self.initChart = function() {
+        self.SendRequest(self.ServiceUrl, {}, function(data) {
             self.Stats(data);
             self.drawChart();
         });
     };
 
-    self.drawChart = function () {
+    self.drawChart = function() {
         var plot = $.jqplot('interviewChart',
-        self.Stats().Stats, {
-            stackSeries: true,
-            showMarker: false,
-            highlighter: {
-                show: true,
-                showTooltip: true
-            },
-            seriesDefaults: {
-                fill: true,
-            },
-            series: [
-                { label: 'Supervisor assigned' },
-                { label: 'Interviewer assigned' },
-                { label: 'Completed' },
-                { label: 'Rejected by Supervisor' },
-                { label: 'Approved by Supervisor' },
-                { label: 'Rejected by Headquarters' },
-                { label: 'Approved by Headquarters' }
-            ],
-            legend: {
-                show: true,
-                placement: 'outsideGrid'
-            },
-            grid: {
-                drawBorder: false,
-                shadow: false
-            },
-            axes: {
-                xaxis: {
-                    ticks: self.Stats().Ticks,
-                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                    tickOptions: {
-                        angle: -90
-                    },
-                    drawMajorGridlines: false
+            self.Stats().Stats, {
+                stackSeries: true,
+                showMarker: false,
+                highlighter: {
+                    show: true,
+                    showTooltip: true
+                },
+                seriesDefaults: {
+                    fill: true,
+                },
+                series: [
+                    { label: 'Supervisor assigned' },
+                    { label: 'Interviewer assigned' },
+                    { label: 'Completed' },
+                    { label: 'Rejected by Supervisor' },
+                    { label: 'Approved by Supervisor' },
+                    { label: 'Rejected by Headquarters' },
+                    { label: 'Approved by Headquarters' }
+                ],
+                legend: {
+                    show: true,
+                    placement: 'outsideGrid'
+                },
+                grid: {
+                    drawBorder: false,
+                    shadow: false
+                },
+                axes: {
+                    xaxis: {
+                        ticks: self.Stats().Ticks,
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickOptions: {
+                            angle: -90
+                        },
+                        drawMajorGridlines: false
+                    }
                 }
-            }
-        });
+            });
 
         $('#interviewChart').bind('jqplotHighlighterHighlight',
             function(ev, seriesIndex, pointIndex, data, plot) {
