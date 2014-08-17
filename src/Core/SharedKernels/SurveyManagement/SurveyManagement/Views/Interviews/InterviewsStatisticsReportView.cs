@@ -2,7 +2,7 @@
 {
     public class InterviewsStatisticsReportView
     {
-        public int[,] Stats { get; set; }
-        public int[,] Ticks { get; set; }
+        public int[][] Stats { get; set; }
+        public string[,] Ticks { get; set; }
     }
 }

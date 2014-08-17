@@ -197,6 +197,7 @@
     <Compile Include="Views\Interviewer\InterviewerStatisticsInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewersView.cs" />
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
+    <Compile Include="Views\Interviews\InterviewsStatisticsReportFactory.cs" />
     <Compile Include="Views\Interviews\InterviewsStatisticsReportView.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />
