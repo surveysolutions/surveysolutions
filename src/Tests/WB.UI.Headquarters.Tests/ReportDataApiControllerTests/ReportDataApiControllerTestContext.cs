@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.View;
+﻿using Main.Core.View;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using WB.UI.Headquarters.Controllers;
 
 namespace WB.UI.Headquarters.Tests.ReportDataApiControllerTests
 {
@@ -33,7 +27,9 @@ namespace WB.UI.Headquarters.Tests.ReportDataApiControllerTests
                 supervisorSurveysAndStatusesReport = null,
             IViewFactory<MapReportInputModel, MapReportView> mapReport = null,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory = null,
-            IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory = null)
+            IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory = null,
+            IViewFactory<InterviewsStatisticsReportInputModel, InterviewsStatisticsReportView> interviewsStatisticsFactory = null
+            )
         {
             return new ReportDataApiController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -49,7 +45,8 @@ namespace WB.UI.Headquarters.Tests.ReportDataApiControllerTests
                     Mock.Of<IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>>(),
                 mapReport ?? Mock.Of<IViewFactory<MapReportInputModel, MapReportView>>(),
                 questionnaireBrowseViewFactory ?? Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView>>(),
-                questionInforFactory ?? Mock.Of<IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView>>()
+                questionInforFactory ?? Mock.Of<IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView>>(),
+                interviewsStatisticsFactory ?? Mock.Of<IViewFactory<InterviewsStatisticsReportInputModel, InterviewsStatisticsReportView>>()
                 );
         }
     }

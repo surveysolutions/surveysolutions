@@ -4,6 +4,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -18,6 +19,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         private readonly IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView>
             headquarterSurveysAndStatusesReport;
+
+        private readonly IViewFactory<InterviewsStatisticsReportInputModel, InterviewsStatisticsReportView>
+            interviewsStatisticsFactory;
 
         private readonly IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
             supervisorSurveysAndStatusesReport;
@@ -41,10 +45,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 headquarterSupervisorsAndStatusesReport,
             IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
                 supervisorTeamMembersAndStatusesReport,
-            IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
-                supervisorSurveysAndStatusesReport, IViewFactory<MapReportInputModel, MapReportView> mapReport,
+            IViewFactory<SupervisorSurveysAndStatusesReportInputModel,
+            SupervisorSurveysAndStatusesReportView>
+                supervisorSurveysAndStatusesReport,
+            IViewFactory<MapReportInputModel, MapReportView> mapReport,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory, 
-            IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory)
+            IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
+            IViewFactory<InterviewsStatisticsReportInputModel, InterviewsStatisticsReportView> interviewsStatisticsFactory)
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
@@ -54,6 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.mapReport = mapReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionInforFactory = questionInforFactory;
+            this.interviewsStatisticsFactory = interviewsStatisticsFactory;
         }
 
         [HttpPost]
@@ -169,11 +177,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
-        public HeadquarterSurveysAndStatusesReportView HeadquarterInterviewsStatistics(SurveyListViewModel data)
+        public InterviewsStatisticsReportView HeadquarterInterviewsStatistics(InterviewsStatisticsViewModel data)
         {
-            var input = new HeadquarterSurveysAndStatusesReportInputModel();
+            var input = new InterviewsStatisticsReportInputModel();
 
-            return this.headquarterSurveysAndStatusesReport.Load(input);
+            return this.interviewsStatisticsFactory.Load(input);
         }
     }
 }
