@@ -6,26 +6,18 @@
     self.Url = new Url(interviewDetailsUrl);
     self.Templates = ko.observableArray([]);
     self.SelectedTemplate = ko.observable('');
+    self.Stats = ko.observable(null);
 
-    self.getChartData = function () {
-        var supervisorAssignedData = [30, 9, 5, 12, 14, 8, 7, 9, 6, 11, 3, 2, 0];
-        var interviewerAssignedData = [0, 5, 5, 3, 6, 5, 3, 2, 6, 7, 4, 3, 0];
-        var completedData = [0, 6, 5, 8, 2, 3, 4, 2, 1, 5, 7, 4, 0];
-        var rejectedBySupervisor = [0, 6, 8, 8, 2, 3, 4, 2, 1, 4, 6, 5, 0];
-        var approvedBySupervisor = [0, 6, 8, 8, 2, 3, 4, 3, 2, 5, 7, 6, 0];
-        var rejectedByHeadquarters = [0, 6, 8, 8, 2, 3, 4, 3, 2, 5, 7, 6, 0];
-        var approvedByHeadquarters = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 30];
-
-        var stats = [supervisorAssignedData, interviewerAssignedData, completedData, rejectedBySupervisor, approvedBySupervisor, rejectedByHeadquarters, approvedByHeadquarters];
-
-        var ticks = [[1, 'Aug 3'], [2, 'Aug 4'], [3, 'Aug 5'], [4, 'Aug 6'], [5, 'Aug 7'], [6, 'Aug 8'], [7, 'Aug 9'], [8, 'Aug 10'], [9, 'Aug 11'], [10, 'Aug 12'], [11, 'Aug 13'], [12, 'Aug 14'], [13, 'Aug 15']];
-
-        return { stats: stats, ticks: ticks };
+    self.initChart = function () {
+        self.SendRequest(self.ServiceUrl, {}, function (data) {
+            self.Stats(data);
+            self.drawChart();
+        });
     };
 
-    self.initChart = function() {
+    self.drawChart = function () {
         var plot = $.jqplot('interviewChart',
-        self.getChartData().stats, {
+        self.Stats().Stats, {
             stackSeries: true,
             showMarker: false,
             highlighter: {
@@ -54,7 +46,7 @@
             },
             axes: {
                 xaxis: {
-                    ticks: self.getChartData().ticks,
+                    ticks: self.Stats().Ticks,
                     tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                     tickOptions: {
                         angle: -90
@@ -94,7 +86,6 @@
 
         self.SelectedTemplate.subscribe(self.filter);
 
-        self.search();
         self.initChart();
     };
 };
