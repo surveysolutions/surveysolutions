@@ -22,12 +22,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                                           IEventHandler<InterviewerAssigned>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IReadSideRepositoryWriter<StatisticsLineGroupedByUserAndTemplate> statisticsStorage;
+        private readonly IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate> statisticsStorage;
         private readonly IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires;
 
         public InterviewsChartDenormalizer(
-            IReadSideRepositoryWriter<StatisticsLineGroupedByUserAndTemplate> statisticsStorage,
+            IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate> statisticsStorage,
             IReadSideRepositoryWriter<UserDocument> users, 
             IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage,
             IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires)
