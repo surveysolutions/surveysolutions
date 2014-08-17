@@ -197,6 +197,7 @@
     <Compile Include="Views\Interviewer\InterviewerStatisticsInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewersView.cs" />
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
+    <Compile Include="Views\Interviews\InterviewsStatisticsReportView.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsView.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Views\Reposts\Factories\SupervisorTeamMembersAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\HeadquarterSurveysAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Interviews\InterviewsStatisticsReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\MapReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuestionnaireQuestionInfoInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SupervisorSurveysAndStatusesReportInputModel.cs" />

@@ -184,6 +184,7 @@
     <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\IGridRequest.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
+    <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
     <Compile Include="Models\InterviewSummaryViewModel.cs" />
     <Compile Include="Models\InterviewDetailsViewModel.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
