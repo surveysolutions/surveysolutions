@@ -131,28 +131,20 @@
         }
         <# }#>
         
+
+        private readonly List<Action> __conditionExpressions = new List<Action>
+        {
+            <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups)) 
+            {#>                    
+            Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>),                        
+            <#}#>
+        }; 
+
         protected override IEnumerable<Action> ConditionExpressions
         {
             get
             {
-                return new List<Action>
-                {                
-                <#foreach (var q in Model.Questions) 
-                {#>
-                <#if(!string.IsNullOrWhiteSpace(q.Conditions))
-                    {#>
-                    Verifier(<#= q.GeneratedConditionsMethodName#>, <#= q.GeneratedStateName#>.ItemId, <#= q.GeneratedStateName#>),                        
-                <# }#>
-                <#}#>
-
-                <#foreach (var g in Model.Groups) 
-                {#>
-                <#if(!string.IsNullOrWhiteSpace(g.Conditions))
-                {#>
-                    Verifier(<#= g.GeneratedConditionsMethodName#>, <#= g.GeneratedStateName#>.ItemId, <#= g.GeneratedStateName#>),                        
-                <# }#>
-                <#}#>                
-                };
+                return __conditionExpressions;
             }
         }
 

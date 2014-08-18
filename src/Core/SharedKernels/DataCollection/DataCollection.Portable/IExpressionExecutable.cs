@@ -6,12 +6,12 @@ namespace WB.Core.SharedKernels.DataCollection
     public interface IExpressionExecutable
     {
         IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances);
-
         Identity[] GetRosterKey();
         void SetParent(IExpressionExecutable parentLevel);
         IExpressionExecutable GetParent();
-
         IExpressionExecutable CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector, Identity[] rosterIdentityKey);
+
+        int GetLevel();
 
         void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid);
 

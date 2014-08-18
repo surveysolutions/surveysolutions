@@ -200,7 +200,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         <#foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
            {
 
-                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup);
+                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure);
                 this.Write(template.TransformText());                
            }
          #>
