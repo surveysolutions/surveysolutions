@@ -13,7 +13,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.ReadSide;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 {
     internal class RavenReadSideService : IReadSideStatusService, IReadSideAdministrationService
     {

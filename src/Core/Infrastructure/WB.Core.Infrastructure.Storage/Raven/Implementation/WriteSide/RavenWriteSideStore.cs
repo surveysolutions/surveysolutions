@@ -3,7 +3,7 @@ using Raven.Abstractions.Json;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 {
     internal class RavenWriteSideStore
     {

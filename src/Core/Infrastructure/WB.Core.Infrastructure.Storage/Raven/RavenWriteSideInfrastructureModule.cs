@@ -2,10 +2,10 @@
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Raven.Client.Document;
-using WB.Core.Infrastructure.Raven.Raven.Implementation;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Storage.Raven.Implementation;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 
-namespace WB.Core.Infrastructure.Raven.Raven
+namespace WB.Core.Infrastructure.Storage.Raven
 {
     public class RavenWriteSideInfrastructureModule : RavenInfrastructureModule
     {

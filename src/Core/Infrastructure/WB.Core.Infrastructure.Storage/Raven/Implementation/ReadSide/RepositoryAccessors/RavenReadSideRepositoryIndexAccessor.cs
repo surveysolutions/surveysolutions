@@ -7,7 +7,7 @@ using Raven.Client.Document;
 using Raven.Client.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide.RepositoryAccessors
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
     internal class RavenReadSideRepositoryIndexAccessor : IReadSideRepositoryIndexAccessor
     {
