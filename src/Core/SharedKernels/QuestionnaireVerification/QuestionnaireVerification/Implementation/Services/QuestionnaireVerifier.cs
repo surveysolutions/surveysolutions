@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(RosterFixedTitlesHaveMoreThan250Items, "WB0038", VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan250Items),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
                     Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
-                    //Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041", VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
+                    Verifier<ITextListQuestion>(TextListQuestionCannotHaveCustomValidation, "WB0041", VerificationMessages.WB0041_TextListQuestionCannotCustomValidation),
                     Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And40, "WB0042", VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And40),
                     Verifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
                     //Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionShouldNotHaveValidationExpression, "WB0047", VerificationMessages.WB0047_QRBarcodeQuestionShouldNotHaveValidationExpression),

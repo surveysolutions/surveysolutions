@@ -91,7 +91,7 @@ namespace WB.UI.Designer.Controllers
                         Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
                     };
                 }
-
+                //errors shouldn't be displayed as is 
                 questoinnaireErrors = generationResult.Success
                     ? new QuestionnaireVerificationError[0]
                     : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();

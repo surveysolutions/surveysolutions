@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { private set; get; }
 
         private Dictionary<string, Guid> VariableNames { set; get; }
+        private List<Guid> ConditionExecutionOrder { set; get; }
 
 
         public QuestionnaireExecutorTemplateModel(QuestionnaireDocument questionnaireDocument)
@@ -44,24 +46,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             this.GeneratedScopesTypeNames = new Dictionary<string, string>();
 
-            this.QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel();
+            this.QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel(this);
 
             this.Id = questionnaireDocument.PublicKey;
 
             this.GeneratedClassName = String.Format("{0}_{1}", InterviewExpressionStatePrefix, Guid.NewGuid().FormatGuid());
 
             this.BuildStructures(questionnaireDocument);
+            
             this.StructuralDependencies = questionnaireDocument
                 .GetAllGroups()
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
 
-
             this.VariableNames = AllQuestions.ToDictionary(q => q.VariableName, q => q.Id);
             AllRosters.ForEach(r => this.VariableNames.Add(r.VariableName, Id));
 
-            this.ConditionalDependencies = this.BuildDependencyTree(questionnaireDocument);
+            this.BuildConditionalDependencies(questionnaireDocument);
+
 
             }
+
 
         private void BuildStructures(QuestionnaireDocument questionnaireDoc)
         {
@@ -195,35 +199,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return group.IsRoster || group.Propagated == Propagate.AutoPropagated;
         }
 
-        private Dictionary<Guid, List<Guid>> BuildDependencyTree(QuestionnaireDocument questionnaireDocument)
+        private void BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument)
         {
-            /*Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument
-                .GetAllGroups()
-                .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
-
-            questionnaireDocument
-                .GetEntitiesByType<IQuestion>()
-                .ToDictionary(group => @group.PublicKey, group => new List<Guid>())
-                .ToList()
-                .ForEach(x => dependencies.Add(x.Key, x.Value));
-
-            Dictionary<Guid, List<Guid>> invertedDependencies = questionnaireDocument.GetAllGroups()
-                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
-                .ToDictionary(x => x.PublicKey,
-                    x => this.GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression));
-
-            questionnaireDocument.GetEntitiesByType<IQuestion>()
-                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
-                .ToDictionary(x => x.PublicKey,
-                    x => this.GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression))
-                .ToList()
-                .ForEach(x => invertedDependencies.Add(x.Key, x.Value));
-
-            foreach (KeyValuePair<Guid, List<Guid>> dependency in invertedDependencies)
-            {
-                dependency.Value.ForEach(x => dependencies[x].Add(dependency.Key));
-            }*/
-
             Dictionary<Guid, List<Guid>> dependencies = questionnaireDocument.GetAllGroups()
                 .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression))
                 .ToDictionary(x => x.PublicKey,
@@ -236,18 +213,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .ToList()
                 .ForEach(x => dependencies.Add(x.Key, x.Value));
 
-            return dependencies;
+            this.ConditionalDependencies = dependencies;
         }
 
 
         private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression)
         {
-            //totally not the best way to do this
-            char[] separators = { '.', ')', '(' , ' ', '=' , '!', '[', ']'};
-
-            string[] expressionStrings = conditionExpression.Split(separators);
-
-            return VariableNames.Where(v => expressionStrings.Contains(v.Key, StringComparer.Ordinal)).Select(d => d.Value).ToList();
+            //char[] separators = { '.', ')', '(' , ' ', '=' , '!', '[', ']', ',', '<', '>', '?', ':', '+', '-'};
+            //string[] expressionStrings = conditionExpression.Split(separators);
+            //return VariableNames.Where(v => expressionStrings.Contains(v.Key, StringComparer.Ordinal)).Select(d => d.Value).ToList();
+            
+            return VariableNames.Where(v => conditionExpression.IndexOf(v.Key, StringComparison.Ordinal) > -1).Select(d => d.Value).ToList();
         }
 
         private string GenerateQuestionTypeName(IQuestion question)
@@ -286,24 +262,76 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        public static List<Tuple<string, string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions,
-            List<GroupTemplateModel> groups,
-            Dictionary<Guid, Guid[]> conditionalDependencies)
+        public List<Tuple<string, string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions, List<GroupTemplateModel> groups)
         {
-            var sortedList = (from groupTemplateModel
-                in groups
-                where !string.IsNullOrWhiteSpace(groupTemplateModel.Conditions)
-                select new Tuple<string, string>(groupTemplateModel.GeneratedConditionsMethodName, groupTemplateModel.GeneratedStateName))
-                .ToList();
+            List<GroupTemplateModel> groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Conditions)).Reverse().ToList();
+            var questionsWithConditions = questions.Where(q => !string.IsNullOrWhiteSpace(q.Conditions)).ToList();
 
-            sortedList.AddRange(from questionTemplateModel
-                in questions
-                where !string.IsNullOrWhiteSpace(questionTemplateModel.Conditions)
-                select
-                    new Tuple<string, string>(questionTemplateModel.GeneratedConditionsMethodName, questionTemplateModel.GeneratedStateName));
+            Dictionary<Guid, Tuple<string, string>> itemsToSort = 
+                groupsWithConditions.ToDictionary(g => g.Id, g => new Tuple<string, string>(g.GeneratedConditionsMethodName, g.GeneratedStateName));
+            questionsWithConditions.ForEach(q => itemsToSort.Add(q.Id, new Tuple<string, string>(q.GeneratedConditionsMethodName, q.GeneratedStateName)));
+
+            HashSet<Guid> processedQuestion = new HashSet<Guid>();
+            List<Guid> orderedList = new List<Guid>();
+            var conditionalStack = new Stack<Guid>();
+            
+            foreach (var item in questionsWithConditions)
+            {
+                conditionalStack.Push(item.Id);
+            }
+
+            foreach (var item in groupsWithConditions)
+            {
+                conditionalStack.Push(item.Id);
+            }
+
+            while (conditionalStack.Any())
+            {
+                var currentNode = conditionalStack.Peek();
+
+                if (!orderedList.Contains(currentNode))
+                {
+                    var dependencies = GetQuestionsInvolvedInConditionsFromCurrentScope(currentNode, questions, processedQuestion).ToList();
+                    if (dependencies.Any())
+                    {
+                        foreach (var dependency in dependencies)
+                        {
+                            conditionalStack.Push(dependency);
+                            processedQuestion.Add(dependency);
+                        }
+                    }
+                    else
+                    {
+                        orderedList.Add(currentNode);
+                        conditionalStack.Pop();
+                    }
+                    
+                }
+                else
+                {
+                    conditionalStack.Pop();
+                }
+            }
 
 
-            return sortedList;
+            List< Tuple<string, string>> itemsSorted = new List<Tuple<string, string>>();
+            foreach (var id in orderedList)
+            {
+                if (itemsToSort.ContainsKey(id))
+                    itemsSorted.Add(itemsToSort[id]);
+            }
+
+            return itemsSorted;
+        }
+
+        private IEnumerable<Guid> GetQuestionsInvolvedInConditionsFromCurrentScope(Guid currentNode, IEnumerable<QuestionTemplateModel> questions, HashSet<Guid> processedQuestion)
+        {
+            if (!ConditionalDependencies.ContainsKey(currentNode) || (ConditionalDependencies.ContainsKey(currentNode) && ConditionalDependencies[currentNode].Count == 0))
+                return new List<Guid>();
+                
+            var dependencies = ConditionalDependencies[currentNode];
+
+            return dependencies.Intersect(questions.Select(q => q.Id)).Where(g => !processedQuestion.Contains(g));
         }
     }
 }

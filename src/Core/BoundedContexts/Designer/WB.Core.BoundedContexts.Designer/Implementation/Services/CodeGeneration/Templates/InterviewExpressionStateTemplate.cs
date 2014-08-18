@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
            {
 
-                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup);
+                RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure);
                 this.Write(template.TransformText());                
            }
          

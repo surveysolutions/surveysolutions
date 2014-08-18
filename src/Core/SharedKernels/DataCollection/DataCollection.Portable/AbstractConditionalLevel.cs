@@ -29,6 +29,11 @@ namespace WB.Core.SharedKernels.DataCollection
             get { return this.RosterVector; }
         }
 
+        public int GetLevel()
+        {
+            return RosterVector.Length;
+        }
+
         protected HashSet<Guid> ValidAnsweredQuestions = new HashSet<Guid>();
         protected HashSet<Guid> InvalidAnsweredQuestions = new HashSet<Guid>();
 
