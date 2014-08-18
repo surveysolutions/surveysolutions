@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
+namespace WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide
 {
     /// <summary>
     /// Interface which is implemented by each Raven-specific read side repository writer.

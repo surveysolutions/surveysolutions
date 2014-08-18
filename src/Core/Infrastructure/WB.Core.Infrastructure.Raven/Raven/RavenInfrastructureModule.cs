@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Ninject.Modules;
 using Raven.Client.Document;
-using WB.Core.Infrastructure.Raven.Implementation;
+using WB.Core.Infrastructure.Raven.Raven.Implementation;
 
-namespace WB.Core.Infrastructure.Raven
+namespace WB.Core.Infrastructure.Raven.Raven
 {
     public abstract class RavenInfrastructureModule : NinjectModule
     {

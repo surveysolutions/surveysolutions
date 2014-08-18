@@ -35,8 +35,9 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispa
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Raven;
-using WB.Core.Infrastructure.Raven.Implementation;
-using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Raven.Raven;
+using WB.Core.Infrastructure.Raven.Raven.Implementation;
+using WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;

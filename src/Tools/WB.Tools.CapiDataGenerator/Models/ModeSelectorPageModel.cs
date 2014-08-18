@@ -7,6 +7,7 @@ using Ninject;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;

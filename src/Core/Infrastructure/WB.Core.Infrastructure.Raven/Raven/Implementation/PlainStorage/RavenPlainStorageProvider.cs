@@ -1,8 +1,8 @@
 ﻿using Raven.Client;
 using Raven.Client.Document;
-using WB.Core.Infrastructure.Raven.PlainStorage;
+using WB.Core.Infrastructure.Raven.Raven.PlainStorage;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.PlainStorage
+namespace WB.Core.Infrastructure.Raven.Raven.Implementation.PlainStorage
 {
     internal class RavenPlainStorageProvider : IRavenPlainStorageProvider
     {
@@ -15,7 +15,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.PlainStorage
 
         public IDocumentStore GetDocumentStore()
         {
-            return documentStore;
+            return this.documentStore;
         }
     }
 }

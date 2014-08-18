@@ -4,7 +4,7 @@ using log4net.Config;
 using NUnit.Framework;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
-using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide;
 
 namespace WB.Core.Infrastructure.Raven.Tests
 {
