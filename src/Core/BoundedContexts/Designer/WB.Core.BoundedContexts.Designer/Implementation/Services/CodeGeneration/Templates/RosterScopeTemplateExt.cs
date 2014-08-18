@@ -6,11 +6,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         protected RosterScopeTemplateModel Model { private set; get; }
 
-        public RosterScopeTemplate(KeyValuePair<string, List<RosterTemplateModel>> rosterScope)
+        public RosterScopeTemplate(KeyValuePair<string, List<RosterTemplateModel>> rosterScope, QuestionnaireExecutorTemplateModel executorModel)
         {
-            //todo: move logic from template to model and merge rosters
-
-            this.Model = new RosterScopeTemplateModel(rosterScope);
+            this.Model = new RosterScopeTemplateModel(rosterScope, executorModel);
         }
     }
 }

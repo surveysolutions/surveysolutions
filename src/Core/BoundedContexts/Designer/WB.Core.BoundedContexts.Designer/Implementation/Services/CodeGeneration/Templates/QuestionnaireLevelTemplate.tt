@@ -105,17 +105,19 @@
         <# }#>
         <# }#>
         
+        private readonly List<Action> __conditionExpressions = new List<Action>
+        {
+            <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups)) 
+            {#>                    
+            Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>),                        
+            <#}#>
+        }; 
+
         protected override IEnumerable<Action> ConditionExpressions
         {
             get
             {
-                return new List<Action>
-                {
-                    <#foreach (var tuple in QuestionnaireExecutorTemplateModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, null)) 
-                    {#>                    
-                    Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>),                        
-                    <#}#>
-                };
+                return __conditionExpressions;
             }
         }
 

@@ -118,12 +118,12 @@ namespace WB.Core.SharedKernels.DataCollection
             questionsToBeValid = new List<Identity>();
             questionsToBeInvalid = new List<Identity>();
 
-            foreach (var interviewScopeKvp in this.InterviewScopes)
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
             {
                 List<Identity> questionsToBeValidByScope;
                 List<Identity> questionsToBeInvalidByScope;
 
-                interviewScopeKvp.Value.CalculateValidationChanges(out questionsToBeValidByScope,out questionsToBeInvalidByScope);
+                interviewScopeKvpValue.CalculateValidationChanges(out questionsToBeValidByScope, out questionsToBeInvalidByScope);
 
                 questionsToBeValid.AddRange(questionsToBeValidByScope);
                 questionsToBeInvalid.AddRange(questionsToBeInvalidByScope);
@@ -139,15 +139,15 @@ namespace WB.Core.SharedKernels.DataCollection
             groupsToBeDisabled = new List<Identity>();
 
             //order by scope depth starting from top
-            //conditionally lower could depend only from upper scope
-            foreach (var interviewScopeKvp in this.InterviewScopes)
+            //conditionally lower scope could depend only from upper scope
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
             {
                 List<Identity> questionsToBeEnabledArray;
                 List<Identity> questionsToBeDisabledArray;
                 List<Identity> groupsToBeEnabledArray;
                 List<Identity> groupsToBeDisabledArray;
 
-                interviewScopeKvp.Value.CalculateConditionChanges(out questionsToBeEnabledArray, out questionsToBeDisabledArray, out groupsToBeEnabledArray,
+                interviewScopeKvpValue.CalculateConditionChanges(out questionsToBeEnabledArray, out questionsToBeDisabledArray, out groupsToBeEnabledArray,
                     out groupsToBeDisabledArray);
 
                 questionsToBeEnabled.AddRange(questionsToBeEnabledArray);
