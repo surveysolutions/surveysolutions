@@ -3,10 +3,9 @@ using System.Linq;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Connection;
-using Raven.Client.Document;
 using Raven.Client.Extensions;
 
-namespace WB.Core.Infrastructure.Raven
+namespace WB.Core.Infrastructure.Raven.Raven
 {
     public static class RavenExtensions
     {

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Reflection;
 using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Extensions;
 using Raven.Client.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors
+namespace WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide.RepositoryAccessors
 {
     internal class RavenReadSideRepositoryIndexAccessor : IReadSideRepositoryIndexAccessor
     {

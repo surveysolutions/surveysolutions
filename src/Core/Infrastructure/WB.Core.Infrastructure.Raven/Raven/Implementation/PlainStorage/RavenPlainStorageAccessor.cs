@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Raven.Client;
-using Raven.Client.Linq;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Raven.PlainStorage;
+using WB.Core.Infrastructure.Raven.Raven.PlainStorage;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.PlainStorage
+namespace WB.Core.Infrastructure.Raven.Raven.Implementation.PlainStorage
 {
     public class RavenPlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity>
         where TEntity : class

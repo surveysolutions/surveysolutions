@@ -1,7 +1,7 @@
 ﻿using System;
 using Raven.Client.Document;
 
-namespace WB.Core.Infrastructure.Raven
+namespace WB.Core.Infrastructure.Raven.Raven
 {
     public class RavenConnectionSettings
     {
@@ -21,8 +21,8 @@ namespace WB.Core.Infrastructure.Raven
             if (string.IsNullOrEmpty(failoverBehavior) || !Enum.TryParse(failoverBehavior, out failoverBehaviorValue))
                 failoverBehaviorValue = FailoverBehavior.FailImmediately;
 
-            FailoverBehavior = failoverBehaviorValue;
-            ActiveBundles = activeBundles;
+            this.FailoverBehavior = failoverBehaviorValue;
+            this.ActiveBundles = activeBundles;
         }
 
         public bool IsEmbedded { get; private set; }

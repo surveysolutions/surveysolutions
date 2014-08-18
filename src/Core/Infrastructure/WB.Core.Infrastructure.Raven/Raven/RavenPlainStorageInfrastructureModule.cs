@@ -1,11 +1,10 @@
 ﻿using Ninject;
-using Ninject.Activation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Raven.Implementation;
-using WB.Core.Infrastructure.Raven.Implementation.PlainStorage;
-using WB.Core.Infrastructure.Raven.PlainStorage;
+using WB.Core.Infrastructure.Raven.Raven.Implementation;
+using WB.Core.Infrastructure.Raven.Raven.Implementation.PlainStorage;
+using WB.Core.Infrastructure.Raven.Raven.PlainStorage;
 
-namespace WB.Core.Infrastructure.Raven
+namespace WB.Core.Infrastructure.Raven.Raven
 {
     public class RavenPlainStorageInfrastructureModule : RavenInfrastructureModule
     {
