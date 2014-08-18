@@ -24,12 +24,12 @@ using Raven.Client.Indexes;
 using Raven.Imports.Newtonsoft.Json;
 using Raven.Json.Linq;
 using Raven.Smuggler;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide.Indexes;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 

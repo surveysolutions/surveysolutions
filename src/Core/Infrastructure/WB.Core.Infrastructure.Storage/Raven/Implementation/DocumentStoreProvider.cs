@@ -5,9 +5,9 @@ using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Client.Extensions;
 using Raven.Imports.Newtonsoft.Json;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation
 {
     internal class DocumentStoreProvider : Provider<DocumentStore>
     {

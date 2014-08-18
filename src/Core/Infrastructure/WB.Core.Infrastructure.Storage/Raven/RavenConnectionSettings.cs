@@ -1,7 +1,7 @@
 ﻿using System;
 using Raven.Client.Document;
 
-namespace WB.Core.Infrastructure.Raven.Raven
+namespace WB.Core.Infrastructure.Storage.Raven
 {
     public class RavenConnectionSettings
     {

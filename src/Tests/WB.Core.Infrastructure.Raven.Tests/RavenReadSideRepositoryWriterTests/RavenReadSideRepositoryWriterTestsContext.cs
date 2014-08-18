@@ -3,10 +3,9 @@
 using Moq;
 
 using Raven.Client.Document;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository;
-
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using it = Moq.It;
 
 namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryWriterTests

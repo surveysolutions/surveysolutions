@@ -14,10 +14,10 @@ using Raven.Abstractions.Json;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 using WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 

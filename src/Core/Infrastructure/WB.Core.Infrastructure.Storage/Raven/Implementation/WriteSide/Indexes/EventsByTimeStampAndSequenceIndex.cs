@@ -3,7 +3,7 @@ using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide.Indexes
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes
 {
     internal class EventsByTimeStampAndSequenceIndex : AbstractIndexCreationTask<StoredEvent>
     {

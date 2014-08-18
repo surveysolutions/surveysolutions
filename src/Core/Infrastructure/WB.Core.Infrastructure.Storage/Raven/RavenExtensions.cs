@@ -5,7 +5,7 @@ using Raven.Client;
 using Raven.Client.Connection;
 using Raven.Client.Extensions;
 
-namespace WB.Core.Infrastructure.Raven.Raven
+namespace WB.Core.Infrastructure.Storage.Raven
 {
     public static class RavenExtensions
     {

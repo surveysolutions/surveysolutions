@@ -8,10 +8,10 @@ using Ncqrs.Eventing.Storage;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide.Indexes;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes;
 using StoredEvent = Ncqrs.Eventing.Storage.RavenDB.StoredEvent;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 {
     internal class RavenDBEventStore : RavenWriteSideStore, IStreamableEventStore
     {

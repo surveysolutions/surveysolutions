@@ -1,8 +1,8 @@
 ﻿using Raven.Client;
 using Raven.Client.Document;
-using WB.Core.Infrastructure.Raven.Raven.PlainStorage;
+using WB.Core.Infrastructure.Storage.Raven.PlainStorage;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation.PlainStorage
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation.PlainStorage
 {
     internal class RavenPlainStorageProvider : IRavenPlainStorageProvider
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Raven.Imports.Newtonsoft.Json.Serialization;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 {
     internal class PropertiesOnlyContractResolver : DefaultContractResolver
     {

@@ -19,7 +19,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
