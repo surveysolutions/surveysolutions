@@ -5,7 +5,6 @@ using Moq;
 using Raven.Client.Document;
 using WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 
 using it = Moq.It;

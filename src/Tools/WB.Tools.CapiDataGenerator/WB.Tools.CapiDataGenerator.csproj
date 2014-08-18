@@ -261,9 +261,9 @@
       <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Core.Infrastructure.Raven</Name>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Core.Infrastructure.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
