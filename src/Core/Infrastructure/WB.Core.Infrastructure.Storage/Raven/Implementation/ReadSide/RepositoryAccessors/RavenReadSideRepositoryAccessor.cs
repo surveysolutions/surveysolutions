@@ -7,7 +7,7 @@ using Raven.Client.Document;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide.RepositoryAccessors
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
     #warning TLK: make string identifiers here after switch to new storage
     public abstract class RavenReadSideRepositoryAccessor<TEntity>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide
+namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
 {
     internal class RavenReadSideRepositoryWriterRegistry : IRavenReadSideRepositoryWriterRegistry
     {

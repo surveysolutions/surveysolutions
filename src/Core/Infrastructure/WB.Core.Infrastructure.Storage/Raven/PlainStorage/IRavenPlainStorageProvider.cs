@@ -1,6 +1,6 @@
 ﻿using Raven.Client;
 
-namespace WB.Core.Infrastructure.Raven.Raven.PlainStorage
+namespace WB.Core.Infrastructure.Storage.Raven.PlainStorage
 {
     public interface IRavenPlainStorageProvider
     {
