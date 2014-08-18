@@ -7,8 +7,8 @@
     <ProjectGuid>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.Infrastructure.Raven</RootNamespace>
-    <AssemblyName>WB.Core.Infrastructure.Raven</AssemblyName>
+    <RootNamespace>WB.Core.Infrastructure.Storage</RootNamespace>
+    <AssemblyName>WB.Core.Infrastructure.Storage</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
