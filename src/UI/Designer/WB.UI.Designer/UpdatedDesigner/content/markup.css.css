@@ -6907,6 +6907,32 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   color: #3f3f3f;
+  vertical-align: top;
+}
+#designer-editor.container section#header > .questionnarie-title > .title .questionnarie-title-text {
+  max-width: 1000px;
+  max-height: 25px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: top;
+}
+#designer-editor.container section#header > .questionnarie-title > .title .questionnarie-title-buttons {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+}
+#designer-editor.container section#header > .questionnarie-title > .title .questionnarie-title-buttons:before {
+  display: block;
+  position: absolute;
+  height: 100%;
+  content: '';
+  width: 85px;
+  top: 0px;
+  left: -85px;
+  background-image: -webkit-linear-gradient(left, color-stop(rgba(255, 255, 255, 0) 0%), color-stop(#ffffff 100%));
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
 }
 #designer-editor.container section#header > .questionnarie-title > .title #verification-button {
   margin-left: 5px;

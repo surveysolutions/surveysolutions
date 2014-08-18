@@ -178,6 +178,34 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 
       > .title {
         .questionnarie-title-fontstyle();
+        vertical-align: top;
+
+        .questionnarie-title-text{
+            max-width: 1000px;
+            max-height: 25px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .questionnarie-title-buttons{
+             display: inline-block;
+            vertical-align: top;
+            position: relative;
+
+             &:before {
+                @w: 85px;
+                display: block;
+                position: absolute;
+                height: 100%;
+                content: '';
+                width: @w;
+                top: 0px;
+                left: -@w;
+                #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
+              }
+
+        }
 
         #verification-button {
           margin-left: 5px;
