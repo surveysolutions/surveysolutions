@@ -20,6 +20,7 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Raven;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireUpgrader;
 using WB.Core.SharedKernels.QuestionnaireVerification;

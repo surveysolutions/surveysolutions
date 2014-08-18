@@ -2,7 +2,7 @@
 using Ncqrs;
 using Raven.Imports.Newtonsoft.Json.Serialization;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
+namespace WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide
 {
     internal class IgnoreAssemblyNameForEventsSerializationBinder : DefaultSerializationBinder
     {

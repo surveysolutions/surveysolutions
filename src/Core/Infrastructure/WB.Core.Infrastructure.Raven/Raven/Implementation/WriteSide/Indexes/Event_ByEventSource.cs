@@ -3,13 +3,13 @@ using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes
+namespace WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide.Indexes
 {
     internal class Event_ByEventSource : AbstractIndexCreationTask<StoredEvent>
     {
         public Event_ByEventSource()
         {
-            Map = sEvents => from sEvent in sEvents
+            this.Map = sEvents => from sEvent in sEvents
                              select
                                  new
                                      {
@@ -18,10 +18,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes
                                          sEvent.EventIdentifier
                                      };
          
-            Sort(x => x.EventSequence, SortOptions.Long);
+            this.Sort(x => x.EventSequence, SortOptions.Long);
 
-            Index(x => x.EventSourceId, FieldIndexing.NotAnalyzed);
-            Index(x => x.EventIdentifier, FieldIndexing.NotAnalyzed);
+            this.Index(x => x.EventSourceId, FieldIndexing.NotAnalyzed);
+            this.Index(x => x.EventIdentifier, FieldIndexing.NotAnalyzed);
           //  Index(x => x.EventSequence, FieldIndexing.Analyzed);
 
         }

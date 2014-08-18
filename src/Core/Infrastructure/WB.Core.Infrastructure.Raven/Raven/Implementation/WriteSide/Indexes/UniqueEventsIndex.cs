@@ -4,13 +4,13 @@ using System.Linq;
 using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Client.Indexes;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes
+namespace WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide.Indexes
 {
     internal class UniqueEventsIndex : AbstractIndexCreationTask<StoredEvent, UniqueEventsResults>
     {
         public UniqueEventsIndex()
         {
-            Map = docs => from doc in docs
+            this.Map = docs => from doc in docs
                           // where doc.IsSnapshot
                           select new
                               {
@@ -18,7 +18,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes
                                   LastSnapshot = 1,
                                   EventTimeStamp = doc.EventTimeStamp
                               };
-            Reduce = results => from result in results
+            this.Reduce = results => from result in results
                                 group result by result.EventSourceId
                                 into g
                                 select new

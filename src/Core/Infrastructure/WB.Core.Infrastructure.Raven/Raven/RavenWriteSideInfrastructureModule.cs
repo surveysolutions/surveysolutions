@@ -2,10 +2,10 @@
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Raven.Client.Document;
-using WB.Core.Infrastructure.Raven.Implementation;
-using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Raven.Raven.Implementation;
+using WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide;
 
-namespace WB.Core.Infrastructure.Raven
+namespace WB.Core.Infrastructure.Raven.Raven
 {
     public class RavenWriteSideInfrastructureModule : RavenInfrastructureModule
     {
@@ -37,7 +37,7 @@ namespace WB.Core.Infrastructure.Raven
             return this.singleEventStore ?? (this.singleEventStore =
                 new RavenDBEventStore(
                     this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(),
-                    this.pageSize, failoverBehavior, useStreamingForAllEvents));
+                    this.pageSize, this.failoverBehavior, this.useStreamingForAllEvents));
         }
     }
 }

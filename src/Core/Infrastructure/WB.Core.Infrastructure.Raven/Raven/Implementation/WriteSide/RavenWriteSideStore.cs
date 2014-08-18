@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
-using Ncqrs.Eventing.Storage.RavenDB;
+﻿using System.Linq;
 using Raven.Abstractions.Json;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
+namespace WB.Core.Infrastructure.Raven.Raven.Implementation.WriteSide
 {
     internal class RavenWriteSideStore
     {

@@ -2,13 +2,12 @@
 using Ninject;
 using Ninject.Activation;
 using WB.Core.Infrastructure.Implementation;
-using WB.Core.Infrastructure.Raven.Implementation;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.Infrastructure.Raven
+namespace WB.Core.Infrastructure.Raven.Raven
 {
     public class RavenReadSideInfrastructureModule : RavenInfrastructureModule
     {

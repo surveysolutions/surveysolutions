@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-
 using Raven.Abstractions.Data;
-using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Extensions;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
-using WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers;
 using WB.Core.Infrastructure.ReadSide;
 
-namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
+namespace WB.Core.Infrastructure.Raven.Raven.Implementation.ReadSide
 {
     internal class RavenReadSideService : IReadSideStatusService, IReadSideAdministrationService
     {
@@ -145,13 +139,13 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             {
                 areViewsBeingRebuiltNow = true;
 
-                var handlers = GetListOfEventHandlersForRebuild(handlerNames);
+                var handlers = this.GetListOfEventHandlersForRebuild(handlerNames);
 
-                var viewTypes = GetAllViewsBuildByHandlers(handlers);
+                var viewTypes = this.GetAllViewsBuildByHandlers(handlers);
 
                 this.DeleteViews(viewTypes);
 
-                var writers = GetListOfWritersForEnableCache(viewTypes);
+                var writers = this.GetListOfWritersForEnableCache(viewTypes);
 
                 string republishDetails = "<<NO DETAILS>>";
 
@@ -292,8 +286,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
             const string defaultIndexName = "Raven/DocumentsByEntityName";
 
-            if (ravenStore.DatabaseCommands.GetIndex(defaultIndexName) != null)
-                ravenStore.DatabaseCommands.DeleteByIndex(defaultIndexName, new IndexQuery(), false).WaitForCompletion();
+            if (this.ravenStore.DatabaseCommands.GetIndex(defaultIndexName) != null)
+                this.ravenStore.DatabaseCommands.DeleteByIndex(defaultIndexName, new IndexQuery(), false).WaitForCompletion();
 
             UpdateStatusMessage("All views were deleted.");
         }
@@ -325,12 +319,12 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
         private void EnableCacheInAllRepositoryWriters()
         {
-            EnableCacheInRepositoryWriters(this.writerRegistry.GetAll());
+            this.EnableCacheInRepositoryWriters(this.writerRegistry.GetAll());
         }
 
         private void DisableCacheInAllRepositoryWriters()
         {
-            DisableCacheInRepositoryWriters(this.writerRegistry.GetAll());
+            this.DisableCacheInRepositoryWriters(this.writerRegistry.GetAll());
         }
 
         private void DisableCacheInRepositoryWriters(IEnumerable<IRavenReadSideRepositoryWriter> writers)
@@ -366,7 +360,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
             ThrowIfShouldStopViewsRebuilding();
 
-            logger.Info("Starting rebuild Read Layer");
+            this.logger.Info("Starting rebuild Read Layer");
 
             UpdateStatusMessage("Determining count of events to be republished.");
 
@@ -412,7 +406,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                     + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount));
             }
 
-            logger.Info(String.Format("Processed {0} events, failed {1}", processedEventsCount, failedEventsCount));
+            this.logger.Info(String.Format("Processed {0} events, failed {1}", processedEventsCount, failedEventsCount));
 
             UpdateStatusMessage(string.Format("All events were republished. "
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount, skipEventsCount)));
