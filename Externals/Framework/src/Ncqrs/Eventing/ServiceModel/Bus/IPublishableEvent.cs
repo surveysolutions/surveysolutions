@@ -25,7 +25,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// An sequence of events always starts with <c>1</c>. So the first event in a sequence has the <see cref="EventSequence"/> value of <c>1</c>.
         /// </remarks>
         /// <value>A number that represents the order of where this events occurred in the sequence.</value>
-        long EventSequence { get; }
+        int EventSequence { get; }
 
         /// <summary>
         /// Id of the commit this event belongs to (usually corresponds to command id).

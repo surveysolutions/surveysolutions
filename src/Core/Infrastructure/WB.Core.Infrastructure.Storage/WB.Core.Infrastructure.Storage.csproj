@@ -34,6 +34,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EventStore.ClientAPI">
+      <HintPath>..\..\..\..\packages\EventStore.Client.3.0.0-rc2\lib\net40\EventStore.ClientAPI.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Data.Edm, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.Data.Edm.5.2.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
@@ -47,6 +50,10 @@
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage">
       <HintPath>..\..\..\..\packages\WindowsAzure.Storage.2.0.6.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -79,6 +86,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventStore\EventStoreConnectionSettings.cs" />
+    <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
+    <Compile Include="EventStore\Implementation\EventMetada.cs" />
+    <Compile Include="EventStore\Implementation\EventStoreLogger.cs" />
+    <Compile Include="EventStore\Implementation\EventStoreWriteSide.cs" />
     <Compile Include="Raven\Implementation\DocumentStoreProvider.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageAccessor.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageProvider.cs" />
@@ -108,6 +120,7 @@
     <Compile Include="Raven\RavenWriteSideInfrastructureModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

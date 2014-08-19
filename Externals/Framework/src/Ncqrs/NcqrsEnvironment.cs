@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Reflection;
 
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Config;
 using Ncqrs.Domain;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Domain.Storage;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs
@@ -208,6 +211,11 @@ namespace Ncqrs
         public static Type GetEventDataType(string typeFullName)
         {
             return KnownEventDataTypes[typeFullName];
+        }
+
+        public static Type GetEventDataTypeByName(string typeName)
+        {
+            return KnownEventDataTypes.Single(x => x.Key.EndsWith("." + typeName)).Value;
         }
 
         private static void ThrowIfThereIsAnotherEventWithSameFullName(Type @event)
