@@ -1393,7 +1393,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid sourceQuestionId, int targetIndex, Guid responsibleId,
-            Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers, bool isFilteredCombobox)
+            Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers, bool? isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1449,7 +1449,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered,
-            int? maxAllowedAnswers, bool isFilteredCombobox)
+            int? maxAllowedAnswers, bool? isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1498,7 +1498,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId,
-            bool areAnswersOrdered, int? maxAllowedAnswers, bool isFilteredCombobox)
+            bool areAnswersOrdered, int? maxAllowedAnswers, bool? isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1939,7 +1939,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, false);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
@@ -1988,7 +1988,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, false);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
@@ -2037,7 +2037,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, false);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
@@ -3051,7 +3051,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowIfCategoricalQuestionIsInvalid(Guid questionId, Option[] options, Guid? linkedToQuestionId,
-            bool isFeatured, bool isFilteredCombobox)
+            bool isFeatured, bool? isFilteredCombobox)
         {
             bool questionIsLinked = linkedToQuestionId.HasValue;
             bool questionHasOptions = options != null && options.Any();
@@ -3068,7 +3068,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 //this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId);
                 this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured);
             }
-            else if (!isFilteredCombobox)
+            else if (!isFilteredCombobox.HasValue || !isFilteredCombobox.Value)
             {
                 ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
             }
