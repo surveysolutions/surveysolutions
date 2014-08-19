@@ -44,3 +44,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Tools.InterviewExtractor")]
 [assembly: InternalsVisibleTo("WB.Tools.DatabaseCleaner")]
 [assembly: InternalsVisibleTo("WB.Tools.QuestionnaireDocumentsConverter")]
+[assembly: InternalsVisibleTo("WB.Tools.EventsMigrator")]
