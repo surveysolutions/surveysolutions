@@ -132,7 +132,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             Guid id = evnt.EventSourceId;
-            long version = evnt.EventSequence;
+            long version = evnt.Payload.Version ?? evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
             this.StoreSurveyDto(id, questionnaireDocument, version, evnt.Payload.AllowCensusMode);
@@ -141,7 +141,10 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            this.surveyDtoDocumentStorage.Remove(evnt.EventSourceId.Combine(evnt.Payload.QuestionnaireVersion).FormatGuid());
+            Guid id = evnt.EventSourceId;
+            long version = evnt.Payload.QuestionnaireVersion;
+
+            this.RemoveSurveyDto(id, version);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -151,12 +154,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
             this.StoreSurveyDto(id, questionnaireDocument, evnt.Payload.Version, evnt.Payload.AllowCensusMode);
-        }
-
-        private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode)
-        {
-            var surveyDto = new SurveyDto(id, questionnaireDocument.Title, version, allowCensusMode);
-            this.surveyDtoDocumentStorage.Store(surveyDto, surveyDto.Id);
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
@@ -303,6 +300,18 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<AnswerRemoved> evnt)
         {
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Empty);
+        }
+
+
+        private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode)
+        {
+            var surveyDto = new SurveyDto(id, questionnaireDocument.Title, version, allowCensusMode);
+            this.surveyDtoDocumentStorage.Store(surveyDto, surveyDto.Id);
+        }
+
+        private void RemoveSurveyDto(Guid id, long version)
+        {
+            this.surveyDtoDocumentStorage.Remove(SurveyDto.GetStorageId(id, version));
         }
     }
 }
