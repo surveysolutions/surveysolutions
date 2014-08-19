@@ -174,6 +174,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Quest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Storage", "Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj", "{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tools.EventsMigrator", "Tools\WB.Tools.EventsMigrator\WB.Tools.EventsMigrator.csproj", "{C9A435AB-C89C-4166-8AB2-E9EA86D2B80D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -493,6 +495,12 @@ Global
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9A435AB-C89C-4166-8AB2-E9EA86D2B80D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9A435AB-C89C-4166-8AB2-E9EA86D2B80D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9A435AB-C89C-4166-8AB2-E9EA86D2B80D}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9A435AB-C89C-4166-8AB2-E9EA86D2B80D}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{C9A435AB-C89C-4166-8AB2-E9EA86D2B80D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9A435AB-C89C-4166-8AB2-E9EA86D2B80D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -573,5 +581,6 @@ Global
 		{8C95D293-C45B-4F2B-B0AD-B2BF4A14E44E} = {14B7074A-492F-485E-8DEE-F1997AB95D95}
 		{8C4B0E67-8C0A-4222-8646-3CF3131CADE5} = {8C95D293-C45B-4F2B-B0AD-B2BF4A14E44E}
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF} = {CA9E537B-E2ED-4A63-B936-834C9A8C194B}
+		{C9A435AB-C89C-4166-8AB2-E9EA86D2B80D} = {B7280D2A-26B0-466E-8DFB-C1642E2B7E1F}
 	EndGlobalSection
 EndGlobal
