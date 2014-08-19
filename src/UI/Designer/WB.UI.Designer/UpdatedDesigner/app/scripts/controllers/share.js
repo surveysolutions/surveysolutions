@@ -9,7 +9,8 @@
 
             $scope.viewModel = {
                 shareWith: '',
-                shareForm: {}
+                shareForm: {},
+                isUserExist: true
             };
 
             $scope.cancel = function () {
@@ -20,7 +21,7 @@
             $scope.invite = function() {
                 var request = shareService.findUserByEmail($scope.viewModel.shareWith);
                 request.success(function(data) {
-                    $scope.viewModel.shareForm.shareWithInput.$setValidity('', data.isUserExist);
+                    $scope.viewModel.isUserExist = data.isUserExist;
 
                     if (data.isUserExist) {
                         var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId);
@@ -30,7 +31,7 @@
                             }
 
                             $scope.viewModel.shareWith = '';
-                            $scope.viewModel.shareForm.shareWithInput.$setValidity('', true);
+                            $scope.viewModel.isUserExist = true;
                         });
                     }
                 });

@@ -6180,9 +6180,7 @@ textarea {
 }
 .modal-body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
   color: #000;
-  font-weight: bold;
 }
 .modal-footer {
   text-align: left;
@@ -7919,6 +7917,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 .share-question-dialog .form-group .invite-button {
   line-height: 0px;
+}
+.share-question-dialog .form-group p {
+  color: #a94442;
 }
 .share-question-dialog a.owner {
   color: #2fc507;
