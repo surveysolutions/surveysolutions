@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="form-group" ng-hide="activeQuestion.questionScope == 'Headquarter'" ng-class="{'has-error': !questionForm.enablementCondition.$valid}">
+        <div class="form-group" ng-hide="activeQuestion.questionScope == 'Prefilled'" ng-class="{'has-error': !questionForm.enablementCondition.$valid}">
             <label for="edit-question-enablement-condition">Condition expression <help key="conditionExpression" /></label>
             <textarea id="edit-question-enablement-condition"
                       name="enablementCondition"
