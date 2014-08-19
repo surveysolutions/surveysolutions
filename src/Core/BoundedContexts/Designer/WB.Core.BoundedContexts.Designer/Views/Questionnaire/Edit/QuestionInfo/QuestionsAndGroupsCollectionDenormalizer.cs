@@ -359,7 +359,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 return currentState;
 
             group.Title = evnt.Payload.GroupText;
-            group.Description = evnt.Payload.Description;
             group.EnablementCondition = evnt.Payload.ConditionExpression;
             group.VariableName = evnt.Payload.VariableName;
 
@@ -454,7 +453,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 {
                     Id = g.PublicKey,
                     Title = g.Title,
-                    Description = g.Description,
                     IsRoster = g.IsRoster,
                     RosterFixedTitles = g.RosterFixedTitles,
                     RosterSizeQuestionId = g.RosterSizeQuestionId,
@@ -502,7 +500,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 Title = title,
                 ParentGroupId = parentGroupId,
                 IsRoster = false,
-                Description = description,
                 EnablementCondition = enablementCondition,
                 ParentGroupsIds = new Guid[0],
                 RosterScopeIds = new Guid[0],

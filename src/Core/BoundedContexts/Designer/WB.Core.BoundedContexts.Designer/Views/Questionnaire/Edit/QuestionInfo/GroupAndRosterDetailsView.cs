@@ -13,7 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             set { this.title = System.Web.HttpUtility.HtmlDecode(value); }
         }
 
-        public string Description { get; set; }
         public string EnablementCondition { get; set; }
         public Guid? RosterSizeQuestionId { get; set; }
         public bool IsRoster { get; set; }
