@@ -137,6 +137,8 @@ namespace WB.UI.Headquarters
             eventStoreConnectionSettings.ServerIP = "127.0.0.1";
             eventStoreConnectionSettings.ServerTcpPort = 1113;
             eventStoreConnectionSettings.ServerHttpPort = 2113;
+            eventStoreConnectionSettings.Login = "admin";
+            eventStoreConnectionSettings.Password = "changeit";
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
