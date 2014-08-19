@@ -24,6 +24,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
+using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
@@ -132,6 +133,11 @@ namespace WB.UI.Headquarters
                     LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
+            var eventStoreConnectionSettings = new EventStoreConnectionSettings();
+            eventStoreConnectionSettings.ServerIP = "127.0.0.1";
+            eventStoreConnectionSettings.ServerTcpPort = 1113;
+            eventStoreConnectionSettings.ServerHttpPort = 2113;
+
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -140,9 +146,10 @@ namespace WB.UI.Headquarters
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 new QuestionnaireUpgraderModule(),
-                pageSize.HasValue
-                    ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, pageSize.Value)
-                    : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents),
+                new EventStoreWriteSideModule(eventStoreConnectionSettings),
+                //pageSize.HasValue
+                //    ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, pageSize.Value)
+                //    : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
