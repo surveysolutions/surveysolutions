@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Exceptions;
+using EventStore.ClientAPI.SystemData;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
@@ -17,6 +18,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
 
         public EventStoreWriteSideModule(EventStoreConnectionSettings settings)
         {
+            if (settings == null) throw new ArgumentNullException("settings");
             this.settings = settings;
         }
 
@@ -43,9 +45,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore
 
             try
             {
-                manager.GetStatus("ToAllEvents");
+                manager.GetStatus("ToAllEvents", new UserCredentials(this.settings.Login, this.settings.Password));
             }
-            catch (ProjectionCommandFailedException)
+            catch (AggregateException)
             {
                 const string ProjectionQuery = @"fromCategory('" + EventStoreWriteSide.EventsCategory + @"') 
     .when({        
@@ -54,7 +56,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         }
     })
   ";
-                manager.CreateContinuous("ToAllEvents", ProjectionQuery);
+                manager.CreateContinuous("ToAllEvents", ProjectionQuery, new UserCredentials(this.settings.Login, this.settings.Password));
             }
         }
     }
