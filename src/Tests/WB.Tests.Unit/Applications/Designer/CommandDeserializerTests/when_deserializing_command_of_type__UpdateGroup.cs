@@ -16,7 +16,6 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             questionnaireId = "11111111-1111-1111-1111-111111111111";
             groupId = "22222222-2222-2222-2222-222222222222";
             propagationKind = "AutoPropagated";
-            description = "Some description";
             condition = "1 == 2";
 
             command = string.Format(@"{{
@@ -24,9 +23,8 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
                 ""groupId"": ""{1}"",
                 ""title"": ""{2}"",
                 ""propagationKind"": ""{3}"",
-                ""description"": ""{4}"",
-                ""condition"": ""{5}""
-            }}", questionnaireId, groupId, title, propagationKind, description, condition);
+                ""condition"": ""{4}""
+            }}", questionnaireId, groupId, title, propagationKind, condition);
 
             deserializer = CreateCommandDeserializer();
         };
@@ -46,9 +44,6 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
         It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
             ((UpdateGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
-        It should_return_same_description_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).Description.ShouldEqual(description);
-
         It should_return_same_condition_in_NewUpdateGroupCommand = () =>
             ((UpdateGroupCommand)result).Condition.ShouldEqual(condition);
 
@@ -60,7 +55,6 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
         private static string questionnaireId;
         private static string groupId;
         private static string propagationKind;
-        private static string description;
         private static string condition;
         private static string type;
     }

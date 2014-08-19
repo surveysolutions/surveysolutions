@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class FullGroupDataCommand : GroupCommand
     {
         protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
-            string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
+            string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool isRoster,
             RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
             : base(questionnaireId, groupId, responsibleId)
         {
@@ -16,7 +16,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.IsRoster = isRoster;
             this.RosterSizeQuestionId = rosterSizeQuestionId;
             this.RosterSizeSource = rosterSizeSource;
-            this.Description = CommandUtils.SanitizeHtml(description, removeAllTags: true);
             this.Condition = condition;
             this.RosterFixedTitles = rosterFixedTitles == null
                 ? null

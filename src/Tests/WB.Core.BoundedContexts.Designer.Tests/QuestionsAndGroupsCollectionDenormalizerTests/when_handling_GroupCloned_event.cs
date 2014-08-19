@@ -43,9 +43,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
         It should_return_group_N6_with_enablement_condition_equals_enablementCondition = () =>
             newState.Groups.Single(x => x.Id == groupId).EnablementCondition.ShouldEqual(enablementCondition);
 
-        It should_return_group_N6_with_description_equals_description = () =>
-            newState.Groups.Single(x => x.Id == groupId).Description.ShouldEqual(description);
-
         It should_return_group_N6_with_title_equals_title = () =>
             newState.Groups.Single(x => x.Id == groupId).Title.ShouldEqual(title);
 
