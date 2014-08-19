@@ -104,7 +104,8 @@
                 };
 
                 $scope.editFilteredComboboxOptions = function () {
-                    var a = window.open("../../questionnaire/editoptions/" + $scope.activeQuestion.itemId, "Edit options", "resizable: no;center : yes; modal:yes");
+                    window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
+                        "Edit options", "resizable: no;center : yes; modal:yes");
                 };
 
                 $scope.removeOption = function(index) {

@@ -1,14 +1,23 @@
-﻿using Main.Core.View;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Web.Routing;
+using CsvHelper;
+using Main.Core.Entities.SubEntities;
+using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using System;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json.Schema;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
@@ -19,6 +28,7 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Utils;
 using WB.UI.Shared.Web.Membership;
+using WebGrease.Css.Extensions;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -32,6 +42,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
+        private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
 
         private readonly ILogger logger;
 
@@ -42,7 +53,8 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            ILogger logger, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory)
+            ILogger logger, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory,
+            IQuestionnaireInfoFactory questionnaireInfoFactory)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -52,6 +64,7 @@ namespace WB.UI.Designer.Controllers
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
             this.editQuestionnaireViewFactory = editQuestionnaireViewFactory;
+            this.questionnaireInfoFactory = questionnaireInfoFactory;
         }
 
         public ActionResult Clone(Guid id)
@@ -193,10 +206,143 @@ namespace WB.UI.Designer.Controllers
             return this.View(this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
         }
 
-        public ActionResult EditOptions(Guid id)
+        #region [Edit options]
+        private const string OptionsSessionParameterName = "options";
+
+        private EditOptionsViewModel questionWithOptionsViewModel
         {
-            return this.View();
+            get { return (EditOptionsViewModel) this.Session[OptionsSessionParameterName]; }
+            set { this.Session[OptionsSessionParameterName] = value; }
         }
+
+        public ActionResult EditOptions(string id, Guid questionId)
+        {
+            var editQuestionView = questionnaireInfoFactory.GetQuestionEditView(id, questionId);
+
+            var options = editQuestionView != null ? editQuestionView.Options.Select(
+                option => new Option(value: option.Value.ToString(), title: option.Title, id: Guid.Empty)) : new Option[0];
+
+            this.questionWithOptionsViewModel = new EditOptionsViewModel()
+            {
+                QuestionnaireId = id,
+                QuestionId = questionId,
+                QuestionTitle = editQuestionView.Title, 
+                Options = options,
+                SourceOptions = options
+            };
+
+            return this.View(this.questionWithOptionsViewModel.Options);
+        }
+
+        public ActionResult ResetOptions()
+        {
+            return RedirectToAction("EditOptions",
+                new
+                {
+                    id = this.questionWithOptionsViewModel.QuestionnaireId,
+                    questionId = this.questionWithOptionsViewModel.QuestionId
+                });
+        }
+
+        [HttpPost]
+        public ActionResult EditOptions(HttpPostedFileBase csvFile)
+        {
+            this.questionWithOptionsViewModel.Options = ExtractOptionsFromStream(csvFile.InputStream);
+            
+            return this.View(this.questionWithOptionsViewModel.Options);
+        }
+
+        public JsonResult ApplyOptions()
+        {
+            var commandResult = new JsonQuestionnaireResult() {IsSuccess = true};
+            try
+            {
+                this.commandService.Execute(
+                    new UpdateFilteredComboboxOptionsCommand(Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
+                        this.questionWithOptionsViewModel.QuestionId, this.UserHelper.WebUser.UserId,
+                        this.questionWithOptionsViewModel.Options.ToArray()));
+            }
+            catch (Exception e)
+            {
+                var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
+                if (domainEx == null)
+                {
+                    this.logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(UpdateFilteredComboboxOptionsCommand)), e);
+                    throw;
+                }
+
+                commandResult = new JsonQuestionnaireResult
+                {
+                    IsSuccess = false,
+                    HasPermissions = domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit,
+                    Error = domainEx.Message
+                };
+            }
+
+            return Json(commandResult);
+        }
+
+        public FileResult ExportOptions()
+        {
+            return
+                File( SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions), "text/csv",
+                    string.Format("Options-in-question-{0}.csv",
+                        this.questionWithOptionsViewModel.QuestionTitle.Length > 50
+                            ? this.questionWithOptionsViewModel.QuestionTitle.Substring(0, 50)
+                            : this.questionWithOptionsViewModel.QuestionTitle));
+        }
+
+        public class EditOptionsViewModel
+        {
+            public string QuestionnaireId { get; set; }
+            public Guid QuestionId { get; set; }
+            public IEnumerable<Option> Options { get; set; }
+            public IEnumerable<Option> SourceOptions { get; set; }
+            public string QuestionTitle { get; set; }
+        }
+
+        private IEnumerable<Option> ExtractOptionsFromStream(Stream inputStream)
+        {
+            var importedOptions = new List<Option>();
+
+            var csvReader = new CsvReader(new StreamReader(inputStream));
+            csvReader.Configuration.HasHeaderRecord = false;
+            csvReader.Configuration.TrimFields = true;
+            csvReader.Configuration.IgnoreQuotes = true;
+
+            using (csvReader)
+            {
+                while (csvReader.Read())
+                {
+                    importedOptions.Add(new Option(value: csvReader.GetField(0), title: csvReader.GetField(1),
+                        id: Guid.NewGuid()));
+                }
+            }
+
+            return importedOptions;
+        }
+
+        private Stream SaveOptionsToStream(IEnumerable<Option> options)
+        {
+            var sb = new StringBuilder();
+            using (var csvWriter = new CsvWriter(new StringWriter(sb)))
+            {
+                foreach (var option in options)
+                {
+                    csvWriter.WriteRecord(new {key = option.Value, value = option.Title});
+                }
+            }
+
+            var memoryStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memoryStream);
+            streamWriter.Write(sb.ToString());
+            streamWriter.Flush();
+            memoryStream.Position = 0;
+
+            return memoryStream;
+        }
+
+        #endregion
 
         private IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
             int? pageIndex, string sortBy, int? sortOrder, string filter)
