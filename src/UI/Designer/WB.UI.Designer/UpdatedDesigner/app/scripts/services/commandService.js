@@ -86,7 +86,7 @@
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.options = question.options;
                         command.linkedToQuestionId = question.linkedToQuestionId;
-                        command.isFilteredCombobox = question.isFilteredCombobox;
+                        command.isFilteredCombobox = question.isFilteredCombobox || false;
                         break;
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;

@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid? linkedToQuestionId,
             bool areAnswersOrdered,
             int? maxAllowedAnswers, 
-            bool isFilteredCombobox)
+            bool? isFilteredCombobox)
 
             : base(questionnaireId, questionId, title, type, variableName, variableLabel,mask, isMandatory, isPreFilled,
                 scope, enablementCondition, validationExpression, validationMessage, instructions, options, responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, isFilteredCombobox)
