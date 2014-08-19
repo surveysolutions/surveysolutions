@@ -1,8 +1,69 @@
-﻿@model WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.NewEditQuestionView
+﻿@model IEnumerable<Main.Core.Entities.SubEntities.Option>
 
 @{
     ViewBag.Title = "Edit options";
-    Layout = "~/Views/Shared/Layout.empty.cshtml";
+    Layout = null;
 }
 
-<h2>Edit options</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="@Styles.Url("~/content/css")" rel="stylesheet" />
+    @Scripts.Render("~/simplepage")
+    <script type="text/javascript">
+        function close_window() {
+            if (confirm("Close Window?")) {
+                close();
+            }
+        }
+        function apply() {
+            $.post("@Url.Action("ApplyOptions", "Questionnaire")", function(response) {
+                if (response.IsSuccess) {
+                    close();
+                } else {
+                    $(".error").html(response.Error);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("EditOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="container-fluid">
+            <div class="row">
+                <div class="span6"><input type="file" title="Import" accept=".csv" name="csvFile" onchange=" this.form.submit() "></div>
+                <div class="span1"><a class="btn" href="@Url.Action("ExportOptions", "Questionnaire")">Export</a></div>
+                <div class="span1"><a class="btn" href="@Url.Action("ResetOptions", "Questionnaire")">Reset</a></div>
+            </div>
+            <div class="row" style="min-height: 100px; text-align: center; vertical-align: central; margin-top: 20px">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var option in Model)
+                     {
+                         <div class="row">
+                             <div class="span1">@option.Value</div>
+                             <div class="span8">@option.Title</div>
+                         </div>
+                     }
+                }
+                else
+                {
+                    <text>No options</text>
+                }
+            </div>
+
+            <div class="row">
+                <div class="span1"><a class="btn btn-success" href="javascript:apply();">Apply</a></div>
+                <div class="span1"><a class="btn btn-danger" href="javascript:close_window();">Cancel</a></div>
+            </div>
+            
+            <div class="error"></div>
+        </div>
+    }
+</body>
+</html>
