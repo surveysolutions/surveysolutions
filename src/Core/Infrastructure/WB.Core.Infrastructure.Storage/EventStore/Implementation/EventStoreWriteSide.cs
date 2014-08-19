@@ -87,15 +87,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void Store(UncommittedEventStream eventStream)
         {
-            if (eventStream.Select(x => x.EventSourceId).Distinct().Count() > 1)
-            {
-                var eventSourceIds = eventStream.Select(x => x.EventSourceId).Distinct();
-                var message = string.Format("Cant save event stream for different aggregate roots in single transaction. Passed AR ids: {0}", string.Join(", ", eventSourceIds));
-                throw new ArgumentException(message, "eventStream");
-            }
-
-            var firstEventToWrite = eventStream.First();
-            using (var transaction = connection.StartTransaction(EventsPrefix + firstEventToWrite.EventSourceId.FormatGuid(), (int)firstEventToWrite.EventSequence - 2))
+            using (var transaction = connection.StartTransaction(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any))
             {
                 foreach (var @event in eventStream)
                 {

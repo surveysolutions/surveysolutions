@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Shared.Web.Modules;
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -75,7 +76,8 @@ namespace WB.UI.Designer.App_Start
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new RavenWriteSideInfrastructureModule(ravenSettings, AppSettings.Instance.UseStreamingForAllEvents),
+
+                ModulesFactory.GetEventStoreModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(),
