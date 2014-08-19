@@ -30,6 +30,7 @@
                             }
 
                             $scope.viewModel.shareWith = '';
+                            $scope.viewModel.shareForm.shareWithInput.$setValidity('', true);
                         });
                     }
                 });

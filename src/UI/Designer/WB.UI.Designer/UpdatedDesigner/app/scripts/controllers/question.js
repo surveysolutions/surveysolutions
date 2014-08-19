@@ -7,8 +7,6 @@
             function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log) {
                 $scope.currentChapterId = $state.params.chapterId;
 
-                var isIE9 = (navigator.appVersion.indexOf("MSIE 9.") != -1);
-
                 var dataBind = function (result) {
                     $scope.activeQuestion = $scope.activeQuestion || {};
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
@@ -52,9 +50,7 @@
                 };
 
                 $scope.loadQuestion = function () {
-                    if (isIE9 && $('#verification-modal').length > 0) {
-                        $('#verification-modal').modal('hide');
-                    }
+                    
                     questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
                         .success(function (result) {
                             $scope.initialQuestion = angular.copy(result);
@@ -66,7 +62,6 @@
                 $scope.saveQuestion = function () {
                     if ($scope.questionForm.$valid) {
                         commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function(result) {
-
                             $scope.initialQuestion = angular.copy($scope.activeQuestion);
                             $rootScope.$emit('questionUpdated', {
                                 itemId: $scope.activeQuestion.itemId,
