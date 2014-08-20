@@ -33,12 +33,6 @@
 
         </div>
 
-       
-        <div class="form-group">
-            <label for="edit-group-description" class="wb-label">Description</label><br>
-            <textarea id="edit-group-description" class="form-control" ng-model="activeRoster.description" msd-elastic></textarea>
-        </div>
-
         <div class="form-group" ng-class="{'has-error': !editRosterForm.enablementCondition.$valid}">
             <label for="edit-group-condition" class="wb-label">Condition expression <help key="conditionExpression" /></label><br>
             <textarea name="enablementCondition"

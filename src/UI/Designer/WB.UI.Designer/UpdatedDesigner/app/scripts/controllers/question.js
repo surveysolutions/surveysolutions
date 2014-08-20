@@ -50,9 +50,8 @@
                     $scope.questionForm.$setPristine();
                 };
 
-                var isQuestionSaving = false;
-
-                $scope.loadQuestion = function() {
+                $scope.loadQuestion = function () {
+                    
                     questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
                         .success(function (result) {
                             $scope.initialQuestion = angular.copy(result);
@@ -64,7 +63,6 @@
                 $scope.saveQuestion = function () {
                     if ($scope.questionForm.$valid) {
                         commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function(result) {
-
                             $scope.initialQuestion = angular.copy($scope.activeQuestion);
                             $rootScope.$emit('questionUpdated', {
                                 itemId: $scope.activeQuestion.itemId,
