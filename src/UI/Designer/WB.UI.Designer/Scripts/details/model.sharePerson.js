@@ -43,7 +43,7 @@ ko.validation.rules['validateUserEmailAsync'] = {
         };
         
         $.ajax(options).done(function (data) {
-            if (data.isUserExist) {
+            if (data.doesUserExist) {
                 callback(true);
             } else {
                 callback(false);
