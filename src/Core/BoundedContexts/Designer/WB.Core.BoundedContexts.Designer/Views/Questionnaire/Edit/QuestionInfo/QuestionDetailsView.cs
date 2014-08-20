@@ -6,7 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     public abstract class QuestionDetailsView : DescendantItemView
     {
-        private string title;
         public string EnablementCondition { get; set; }
 
         public bool IsPreFilled { get; set; }
@@ -21,11 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public string VariableLabel { get; set; }
 
-        public string Title
-        {
-            get { return this.title; }
-            set { this.title = System.Web.HttpUtility.HtmlDecode(value); }
-        }
+        public string Title { get; set; }
 
         public string ValidationExpression { get; set; }
 
