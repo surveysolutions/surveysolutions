@@ -1,5 +1,5 @@
 .wb-question-item(@purpose) {
-  @line-height: 35px;
+  @line-height: 36px;
 
   .item, .buttons-item {
     position: relative;
@@ -8,13 +8,12 @@
     border-radius: 4px;
     padding-left: 50px;
     padding-right: 10px;
-    //margin-right: 28px;
-    //overflow: hidden;
     white-space: nowrap;
     .questionnarie-question-list-item-fontstyle();
 
     > a, > a:hover {
       text-decoration: none;
+      display: block;
     }
   }
 
@@ -24,7 +23,7 @@
 
   .item {
     &:first-child {
-      margin-top: 5px;
+      
     }
 
     & when (@purpose = 'verify') {
@@ -44,7 +43,7 @@
          z-index: 5;
       }
 
-      &:hover {
+      .item-body:hover {
         > .handler {
           background-image: url(../i/question-item-dots.png);
           background-position: 5px center;
@@ -137,6 +136,9 @@
 
     .item-text {
       overflow: hidden;
+      border-bottom: 2px solid @tree-item-border-color;
+      display: inline-block;
+      width: 100%;
     }
 
     > .qname-block {

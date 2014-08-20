@@ -1,8 +1,9 @@
-@content-padding-left: 65px;
-@left-column-width: 55px;
+@chapter-menu-panel-width: 52px;
+@chapter-title-height: 52px;
 @header-height: 75px;
 @spacer-height: 2px;
 @main-height: calc(~"100%" - (@header-height + @spacer-height));
+
 
 .ui-match{
     background-color: #FFCC00;
@@ -122,6 +123,11 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
     }
   }
 }
+.scroller {
+    height: 100%;
+    overflow-y: hidden;
+    position: relative;
+}
 
 #designer-editor.container {
   width: 100%;
@@ -132,13 +138,13 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
   section#header {
     position: relative;
     height: @header-height;
-    padding-left: @content-padding-left;
+    padding-left: @chapter-menu-panel-width;
 
     > .designer-logo {
       position: absolute;
       left: 0;
       top: 0;
-      width: @left-column-width;
+      width: @chapter-menu-panel-width;
       height: 100%;
       background: @designer-editor-lightblue-bg-color url(../i/designer-logo.png) center no-repeat;
     }
@@ -232,7 +238,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
     height: @spacer-height;
     > .left {
       float: left;
-      width: @left-column-width;
+      width: @chapter-menu-panel-width;
       height: 100%;
       border-top: #a4aaaf 1px solid;
       border-bottom: #999fa4 1px solid;
@@ -240,7 +246,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 
     > .right {
       float: left;
-      width: calc(~"100%" - 55px);
+      width: calc(~"100%" - @chapter-menu-panel-width);
       height: 100%;
       border-top: #c5c8ca 1px solid;
       border-bottom: #a7acaf 1px solid;
@@ -252,13 +258,13 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
     height: @main-height;
     //overflow: hidden;
 
-    > .chapter-panel {
+     .chapter-panel {
       @unfolded_width: 354px;
       position: absolute;
       left: 0;
       top: 0;
       z-index: 10;
-      width: @left-column-width;
+      width: @chapter-menu-panel-width;
       height: 100%;
       background: @designer-editor-mediumblue-bg-color url(../i/chapter-panel-btn.png) 0 19px no-repeat;
       cursor: pointer;
@@ -355,24 +361,25 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 
       > .questionnaire-tree-holder {
         height: 100%;
-        padding-left: @content-padding-left;
-        padding-top: 55px;
+        padding-left: @chapter-menu-panel-width;
         padding-right: 0;
+        padding-top: @chapter-title-height;
         background: @designer-editor-lightblue-bg-color;
 
-        > .chapter-title {
+        .chapter-title {
+             padding-left: @chapter-menu-panel-width + 22px;
+            padding-right:24px;
           position: absolute;
           left: 0;
           top: 0;
           width: 100%;
-          height: @left-column-width;
-          padding-left: @content-padding-left;
+          height: @chapter-title-height;
           background: @designer-editor-lightblue-bg-color;
           .questionnarie-chapter-title-fontstyle();
-          line-height: @left-column-width;
-          box-shadow: -5px 5px 10px rgba(0, 0, 0, .25);
-          z-index: 5;
+          line-height: @chapter-title-height;
           overflow: hidden;
+          z-index: 5;
+          border-bottom: 2px solid @tree-item-border-color;
           > span {
             .questionnarie-chapter-title-span-fontstyle();
           }
@@ -478,12 +485,11 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
           }
         }
 
-        > .question-list {
+       .question-list {
           position: relative;
           width: 100%;
           height: 100%;
-          padding-right: 10px;
-          overflow: auto;
+          padding-left: 4px;
 
           .angular-ui-tree-placeholder {
             outline: 2px dashed #BCC3C8;

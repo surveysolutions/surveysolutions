@@ -36,25 +36,26 @@
     "angular-unsavedChanges": "0.2.3-alpha.1",
     "console-shim": "*",
     "angular-elastic": "~2.3.5",
-    "angular-bootstrap": "~0.11.0"
+    "angular-bootstrap": "~0.11.0",
+    "angular-perfect-scrollbar": "~0.1.4"
   },
   "resolutions": {
     "angular": "1.3.0-build.3002+sha.9a2f8e1"
   },
   "overrides": {
-      "angular-unsavedChanges": {
-          "main": [
-            "dist/unsavedChanges.js"
-          ]
-      },
-      "angular-block-ui": {
-        "main": [
-          "angular-block-ui.js",
-          "angular-block-ui.css"
-          ]
-      },
-      "angular": {
-        "main": "angular.min.js"
-      }
+    "angular-unsavedChanges": {
+      "main": [
+        "dist/unsavedChanges.js"
+      ]
+    },
+    "angular-block-ui": {
+      "main": [
+        "angular-block-ui.js",
+        "angular-block-ui.css"
+      ]
+    },
+    "angular": {
+      "main": "angular.min.js"
+    }
   }
 }

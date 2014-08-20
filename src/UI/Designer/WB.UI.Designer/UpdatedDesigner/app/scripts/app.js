@@ -17,7 +17,8 @@
         'cfp.hotkeys',
         'blockUI',
         'unsavedChanges',
-        'monospaced.elastic'
+        'monospaced.elastic',
+        'perfect_scrollbar'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
