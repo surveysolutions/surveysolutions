@@ -41,7 +41,7 @@
       <HintPath>..\..\..\packages\Caliburn.Micro.2.0.0\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
     </Reference>
     <Reference Include="EventStore.ClientAPI">
-      <HintPath>..\..\..\packages\EventStore.Client.3.0.0-rc2\lib\net40\EventStore.ClientAPI.dll</HintPath>
+      <HintPath>..\..\..\packages\EventStore.Client.3.0.0-rc9\lib\net40\EventStore.ClientAPI.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>

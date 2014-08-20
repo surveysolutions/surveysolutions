@@ -52,9 +52,7 @@ namespace WB.Tools.EventsMigrator
 
             using (var connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(settings.EventStoreIP), settings.EventStoreTcpPort)))
             {
-                connection.Connect();
-
-                CreateProjection(settings);
+                connection.ConnectAsync().Wait();
 
                 foreach (CommittedEvent[] @event in ravenStore.GetAllEvents(50, 0))
                 {
@@ -78,26 +76,6 @@ namespace WB.Tools.EventsMigrator
 
             this.status = "Done writing events";
             watch.Stop();
-        }
-
-        private static void CreateProjection(IShell settings)
-        {
-            try
-            {
-                var manager = new ProjectionsManager(Mock.Of<ILogger>(),
-                new IPEndPoint(IPAddress.Parse(settings.EventStoreIP), settings.EventStoreHttpPort));
-                manager.CreateContinuous("ToAllEvents", @"fromCategory('Event') 
-    .when({        
-        $any: function (s, e) {
-            linkTo('all_events', e)
-        }
-    })
-  ", new UserCredentials(settings.EventStoreLogin, settings.EventStorePassword));
-            }
-            catch (AggregateException)
-            {
-            }
-            
         }
 
         private static EventStoreWriteSide GetEventStoreStore(IShell settings)
