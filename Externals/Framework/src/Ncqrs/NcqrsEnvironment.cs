@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -215,7 +216,9 @@ namespace Ncqrs
 
         public static Type GetEventDataTypeByName(string typeName)
         {
-            return KnownEventDataTypes.Single(x => x.Key.EndsWith("." + typeName)).Value;
+            var type = typeName.Substring(0, 1).ToUpper() + typeName.Substring(1, typeName.Length - 1);
+
+            return KnownEventDataTypes.Single(x => x.Key.EndsWith("." + type)).Value;
         }
 
         private static void ThrowIfThereIsAnotherEventWithSameFullName(Type @event)
