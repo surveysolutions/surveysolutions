@@ -110,7 +110,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Id = group.Id,
                     Title = group.Title,
                     EnablementCondition = group.EnablementCondition,
-                    Description = group.Description,
                     VariableName = group.VariableName
                 }, questionnaire, questionnaireId),
                 Breadcrumbs = this.GetBreadcrumbs(questionnaire, group)
@@ -145,7 +144,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 ItemId = roster.Id.FormatGuid(),
                 Title = roster.Title,
                 EnablementCondition = roster.EnablementCondition,
-                Description = roster.Description,
                 VariableName = roster.VariableName,
 
                 Type = rosterType,

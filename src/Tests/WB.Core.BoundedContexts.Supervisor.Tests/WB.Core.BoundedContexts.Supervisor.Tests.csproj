@@ -126,6 +126,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceHelper.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\InterviewsSynchronizerTestsContext.cs" />
+    <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_rejected_by_hq_interview_created_on_client.cs" />
+    <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_rejected_by_hq_interview_created_on_client_and_interview_were_present_before_at_supervisor.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interviews_and_no_interviews_are_ready.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interviews_and_one_interview_is_ready_and_has_different_events.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interview_and_interview_has_prefilled_question_and_was_client_created.cs" />

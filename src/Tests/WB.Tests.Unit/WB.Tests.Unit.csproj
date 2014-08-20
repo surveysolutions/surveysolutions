@@ -117,6 +117,8 @@
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__DeleteQuestion__with_questionnaire_id_and_question_id.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup.cs" />
+    <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup_fixed_roster_titles.cs" />
+    <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup_null_in_fixed_roster_titles.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__UpdateQuestionnaire__with_title.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__UpdateQuestion__with_title.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
