@@ -41,11 +41,11 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         {
             var logger = Kernel.Get<GenericSubdomains.Logging.ILogger>();
             var httpEndPoint = new IPEndPoint(IPAddress.Parse(settings.ServerIP), settings.ServerHttpPort);
-            var manager = new ProjectionsManager(new EventStoreLogger(logger), httpEndPoint);
+            var manager = new ProjectionsManager(new EventStoreLogger(logger), httpEndPoint, TimeSpan.FromSeconds(2));
 
             try
             {
-                manager.GetStatus("ToAllEvents", new UserCredentials(this.settings.Login, this.settings.Password));
+                string result = manager.GetStatusAsync("ToAllEvents", new UserCredentials(this.settings.Login, this.settings.Password)).Result;
             }
             catch (AggregateException)
             {
@@ -56,7 +56,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         }
     })
   ";
-                manager.CreateContinuous("ToAllEvents", ProjectionQuery, new UserCredentials(this.settings.Login, this.settings.Password));
+                manager.CreateContinuousAsync("ToAllEvents", ProjectionQuery, new UserCredentials(this.settings.Login, this.settings.Password));
             }
         }
     }
