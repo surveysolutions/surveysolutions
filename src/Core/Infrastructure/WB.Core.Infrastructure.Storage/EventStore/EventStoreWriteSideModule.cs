@@ -6,6 +6,7 @@ using EventStore.ClientAPI.Exceptions;
 using EventStore.ClientAPI.SystemData;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
+using Newtonsoft.Json;
 using Ninject;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
@@ -43,9 +44,17 @@ namespace WB.Core.Infrastructure.Storage.EventStore
             var httpEndPoint = new IPEndPoint(IPAddress.Parse(settings.ServerIP), settings.ServerHttpPort);
             var manager = new ProjectionsManager(new EventStoreLogger(logger), httpEndPoint, TimeSpan.FromSeconds(2));
 
+            var userCredentials = new UserCredentials(this.settings.Login, this.settings.Password);
             try
             {
-                string result = manager.GetStatusAsync("ToAllEvents", new UserCredentials(this.settings.Login, this.settings.Password)).Result;
+                
+
+                var status = JsonConvert.DeserializeAnonymousType(manager.GetStatusAsync("$by_category").Result, new { status = "" });
+                if (status.status != "Running")
+                {
+                    manager.EnableAsync("$by_category", userCredentials);
+                }
+                manager.GetStatusAsync("ToAllEvents", userCredentials).Wait();
             }
             catch (AggregateException)
             {
@@ -56,7 +65,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         }
     })
   ";
-                manager.CreateContinuousAsync("ToAllEvents", ProjectionQuery, new UserCredentials(this.settings.Login, this.settings.Password));
+                manager.CreateContinuousAsync("ToAllEvents", ProjectionQuery, userCredentials);
             }
         }
     }
