@@ -5,13 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     public class GroupAndRosterDetailsView : DescendantItemView
     {
-        private string title;
-
-        public string Title
-        {
-            get { return this.title; }
-            set { this.title = System.Web.HttpUtility.HtmlDecode(value); }
-        }
+        public string Title { get; set; }
 
         public string EnablementCondition { get; set; }
         public Guid? RosterSizeQuestionId { get; set; }
