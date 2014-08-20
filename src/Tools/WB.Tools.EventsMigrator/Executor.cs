@@ -85,6 +85,8 @@ namespace WB.Tools.EventsMigrator
                 ServerIP = settings.EventStoreIP,
                 ServerHttpPort = settings.EventStoreHttpPort,
                 ServerTcpPort = settings.EventStoreTcpPort,
+                Login = settings.EventStoreLogin,
+                Password = settings.EventStorePassword
             });
             return instance;
         }
