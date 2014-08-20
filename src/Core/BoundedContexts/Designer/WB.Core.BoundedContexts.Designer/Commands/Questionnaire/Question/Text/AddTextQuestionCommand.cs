@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Text
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
-            this.ValidationMessage = validationMessage;
+            this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
             this.ValidationExpression = validationExpression;
             this.Mask = mask;
         }

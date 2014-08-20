@@ -34,9 +34,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         It should_return_group_with_Title_equals_g4_title = () =>
             result.Group.Title.ShouldEqual(GetGroup(g4Id).Title);
 
-        It should_return_group_with_Description_equals_g4_description = () =>
-            result.Group.Description.ShouldEqual(GetGroup(g4Id).Description);
-
         It should_replace_guids_in_enablement_conditions = () => result.Group.EnablementCondition.ShouldEqual("[q1] > 40");
 
         private static GroupAndRosterDetailsView GetGroup(Guid groupId)

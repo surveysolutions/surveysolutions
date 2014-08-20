@@ -13,7 +13,7 @@
 
                     $scope.activeQuestion.itemId = $state.params.itemId;
                     
-                    $scope.activeQuestion.variable = result.variableName;
+                    $scope.activeQuestion.variable = result.variableName || result.variable;
                     $scope.activeQuestion.variableLabel = result.variableLabel;
                     $scope.activeQuestion.mask = result.mask;
                     $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
@@ -49,11 +49,13 @@
                     $scope.questionForm.$setPristine();
                 };
 
-                $scope.loadQuestion = function() {
+                $scope.loadQuestion = function () {
+                    
                     questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
-                        .success(function(result) {
+                        .success(function (result) {
                             $scope.initialQuestion = angular.copy(result);
                             dataBind(result);
+
                         });
                 };
 
@@ -84,7 +86,7 @@
                     }
                 };
 
-                $scope.cancelQuestion = function() {
+                $scope.cancelQuestion = function () {
                     var temp = angular.copy($scope.initialQuestion);
                     dataBind(temp);
                     $scope.questionForm.$setPristine();

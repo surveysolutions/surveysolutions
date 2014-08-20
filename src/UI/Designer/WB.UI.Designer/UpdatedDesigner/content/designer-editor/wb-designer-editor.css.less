@@ -14,21 +14,18 @@
 li.chapter-panel-item {
   position: relative;
   display: block;
-  height: 70px;
   border-bottom: 1px #d7dbde solid;
   cursor: pointer;
 
   > .holder {
-    display: inline-table;
-    width: 100%;
-    height: 100%;
+    display: block;
     min-width: 336px;
 
     > .inner {
       //position: relative;
-      display: table-cell;
-      vertical-align: middle;
+      display: block;
       padding-left: 18px;
+      padding-right: 55px;
 
       > .handler {
         position: absolute;
@@ -41,9 +38,11 @@ li.chapter-panel-item {
       > h1 {
         margin: 0;
         .questionnarie-chapter-list-fontstyle();
+        padding: 18px 0 22px;
 
         > a, a:hover {
           text-decoration: none;
+          
         }
       }
 
@@ -53,7 +52,7 @@ li.chapter-panel-item {
 
       > .btn-group {
         position: absolute;
-        top: 20px;
+        top: 15px;
         right: 8px;
 
         &.open > .dropdown-toggle {
@@ -179,6 +178,34 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 
       > .title {
         .questionnarie-title-fontstyle();
+        vertical-align: top;
+
+        .questionnarie-title-text{
+            max-width: 1000px;
+            max-height: 25px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .questionnarie-title-buttons{
+             display: inline-block;
+            vertical-align: top;
+            position: relative;
+
+             &:before {
+                @w: 85px;
+                display: block;
+                position: absolute;
+                height: 100%;
+                content: '';
+                width: @w;
+                top: 0px;
+                left: -@w;
+                #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
+              }
+
+        }
 
         #verification-button {
           margin-left: 5px;
@@ -188,12 +215,12 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
           .questionnarie-title-span-gray-fontstyle();
         }
 
-        > span.error-message {
+        span.error-message {
           margin-left: 5px;
           .questionnarie-title-span-error-fontstyle();
         }
 
-        > span.text-success {
+        span.text-success {
           margin-left: 5px;
           .questionnarie-title-span-success-fontstyle()
         }
@@ -345,20 +372,38 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
           line-height: @left-column-width;
           box-shadow: -5px 5px 10px rgba(0, 0, 0, .25);
           z-index: 5;
-
+          overflow: hidden;
           > span {
             .questionnarie-chapter-title-span-fontstyle();
+          }
+
+          .chapter-title-text{
+              white-space: nowrap;
           }
 
           ul.controls-right {
             display: block;
             position: absolute;
             top: 7px;
-            right: 5px;
+            right: 0;
             margin: 0;
             padding: 0;
+            padding-right: 5px;
             list-style: none;
             .clearfix();
+            background-color: @designer-editor-lightblue-bg-color;
+
+             &:before {
+                @w: 45px;
+                display: block;
+                position: absolute;
+                height: 100%;
+                content: '';
+                width: @w;
+                top: 0px;
+                left: -@w;
+                #gradient > .horizontal(rgba(219, 223, 226, 0.0), rgba(219, 223, 226, 1.0));
+              }
 
             li {
               float: left;

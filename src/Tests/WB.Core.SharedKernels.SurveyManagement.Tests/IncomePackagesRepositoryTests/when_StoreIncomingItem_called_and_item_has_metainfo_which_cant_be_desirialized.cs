@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.Synchronization.SyncStorage;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.Synchronization.Tests.IncomePackagesRepositoryTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
 {
     internal class when_StoreIncomingItem_called_and_item_has_metainfo_which_cant_be_desirialized : IncomePackagesRepositoryTestContext
     {

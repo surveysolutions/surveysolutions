@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             var item = new QuestionnaireDocument();
 
-            item.Title = evnt.Payload.Title;
+            item.Title = System.Web.HttpUtility.HtmlDecode(evnt.Payload.Title);
             item.IsPublic = evnt.Payload.IsPublic;
             item.PublicKey = evnt.Payload.PublicKey;
             item.CreationDate = evnt.Payload.CreationDate;
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             }
             
             var group = new Group();
-            group.Title = evnt.Payload.GroupText;
+            group.Title = System.Web.HttpUtility.HtmlDecode(evnt.Payload.GroupText);
             group.VariableName = evnt.Payload.VariableName;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             var group = new Group();
-            group.Title = evnt.Payload.GroupText;
+            group.Title = System.Web.HttpUtility.HtmlDecode(evnt.Payload.GroupText);
             group.VariableName = evnt.Payload.VariableName;
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
@@ -457,7 +457,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
-            document.Title = evnt.Payload.Title;
+            document.Title = System.Web.HttpUtility.HtmlDecode(evnt.Payload.Title);
             document.IsPublic = evnt.Payload.IsPublic;
             this.UpdateQuestionnaire(evnt, document);
         }

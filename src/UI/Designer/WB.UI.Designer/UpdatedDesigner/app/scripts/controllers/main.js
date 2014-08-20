@@ -5,6 +5,9 @@
         .controller('MainCtrl', [
             '$rootScope', '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$modal', '$log',
             function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, $log) {
+
+                var isIE9 = (navigator.appVersion.indexOf("MSIE 9.") != -1);
+
                 $scope.verificationStatus = {
                     errorsCount: null,
                     errors: [],
@@ -33,6 +36,7 @@
                                 backdrop: false,
                                 show: true
                             });
+
                             $('#verification-modal .modal-dialog .arrow').css({
                                 left: $('#verification-btn').offset().left - 10
                             });
@@ -90,6 +94,9 @@
                 };
 
                 $scope.navigateTo = function (reference) {
+                    if (isIE9) {
+                        $('#verification-modal').modal('hide');
+                    }
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,
                         itemId: reference.itemId

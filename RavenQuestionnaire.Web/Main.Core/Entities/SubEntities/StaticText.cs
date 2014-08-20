@@ -59,6 +59,7 @@ namespace Main.Core.Entities.SubEntities
         }
 
         public Guid PublicKey { get; private set; }
+
         public string Text { get; set; }
     }
 }

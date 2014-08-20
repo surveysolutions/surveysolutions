@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
@@ -6,19 +7,21 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class FullGroupDataCommand : GroupCommand
     {
         protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
-            string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
+            string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool isRoster,
             RosterSizeSourceType rosterSizeSource, string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
             : base(questionnaireId, groupId, responsibleId)
         {
-            this.VariableName = variableName;
-            this.Title = CommandUtils.SanitizeHtml(title);
-
+            this.VariableName = CommandUtils.SanitizeHtml(variableName, removeAllTags: true);
+            this.Title = CommandUtils.SanitizeHtml(title, removeAllTags: true);
             this.IsRoster = isRoster;
             this.RosterSizeQuestionId = rosterSizeQuestionId;
             this.RosterSizeSource = rosterSizeSource;
-            this.Description = description;
             this.Condition = condition;
-            this.RosterFixedTitles = rosterFixedTitles;
+            this.RosterFixedTitles = rosterFixedTitles == null
+                ? null
+                : rosterFixedTitles
+                    .Select(x => CommandUtils.SanitizeHtml(x, removeAllTags: true))
+                    .ToArray();
             this.RosterTitleQuestionId = rosterTitleQuestionId;
         }
 

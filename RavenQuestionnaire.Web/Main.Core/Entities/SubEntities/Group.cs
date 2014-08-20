@@ -64,7 +64,7 @@ namespace Main.Core.Entities.SubEntities
         public List<QuestionIdAndVariableName> QuestionsInvolvedInCustomEnablementConditionOfGroup { get; set; }
 
         private IComposite parent;
-        
+
         public Propagate Propagated { get; set; }
 
         public IComposite GetParent()

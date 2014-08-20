@@ -11,16 +11,16 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             string validationMessage, string instructions,Guid responsibleId, string variableLabel)
             : base(questionnaireId, questionId, responsibleId)
         {
-            this.VariableLabel = variableLabel;
+            this.VariableLabel = CommandUtils.SanitizeHtml(variableLabel, removeAllTags: true);
             this.Title = CommandUtils.SanitizeHtml(title);
-            this.VariableName = variableName;
+            this.VariableName = CommandUtils.SanitizeHtml(variableName, removeAllTags: true);
             this.IsMandatory = isMandatory;
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
             this.EnablementCondition = enablementCondition;
             this.ValidationExpression = validationExpression;
-            this.ValidationMessage = validationMessage;
-            this.Instructions = instructions;
+            this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
+            this.Instructions = CommandUtils.SanitizeHtml(instructions, removeAllTags: true);
             this.Mask = mask;
         }
         public string Title { get; private set; }
