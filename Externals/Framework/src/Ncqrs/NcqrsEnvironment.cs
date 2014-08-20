@@ -218,7 +218,15 @@ namespace Ncqrs
         {
             var type = typeName.Substring(0, 1).ToUpper() + typeName.Substring(1, typeName.Length - 1);
 
-            return KnownEventDataTypes.Single(x => x.Key.EndsWith("." + type)).Value;
+            try
+            {
+                return KnownEventDataTypes.SingleOrDefault(x => x.Key.EndsWith("." + type)).Value;
+            }
+            catch (InvalidOperationException ex)
+            {
+                var message = string.Format("Failed to get type for the {0}. Check that there is no duplicate events registered in KnownEventDataTypes with only namespaces that are different", type);
+                throw new ArgumentException(message, "typeName", ex);
+            }
         }
 
         private static void ThrowIfThereIsAnotherEventWithSameFullName(Type @event)
