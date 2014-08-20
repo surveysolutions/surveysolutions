@@ -63,18 +63,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             ILogger logger = null,
             IJsonUtils jsonUtils = null,
             ICommandService commandService = null,
-            HeadquartersPushContext headquartersPushContext = null)
+            HeadquartersPushContext headquartersPushContext = null,
+            IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage=null,
+            IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage=null,
+            IHeadquartersInterviewReader headquartersInterviewReader=null)
         {
             return new InterviewsSynchronizer(
                 Mock.Of<IAtomFeedReader>(),
                 HeadquartersSettings(),
                 logger ?? Mock.Of<ILogger>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                Mock.Of<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
+                plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>(),
+                userDocumentStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
                 Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IHeadquartersQuestionnaireReader>(),
-                Mock.Of<IHeadquartersInterviewReader>(),
+                headquartersInterviewReader ?? Mock.Of<IHeadquartersInterviewReader>(),
                 HeadquartersPullContext(),
                 headquartersPushContext ?? HeadquartersPushContext(),
                 eventStore ?? Mock.Of<IEventStore>(),
