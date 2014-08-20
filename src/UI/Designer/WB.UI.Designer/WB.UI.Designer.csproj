@@ -707,6 +707,12 @@
     <Content Include="UpdatedDesigner\vendor\angular-mocks\angular-mocks.js" />
     <Content Include="UpdatedDesigner\vendor\angular-mocks\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-mocks\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\dependencies\jquery.mousewheel.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\dependencies\perfect-scrollbar.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\dependencies\perfect-scrollbar.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\examples\loremipsum.html" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\src\angular-perfect-scrollbar.js" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\app\demo.html" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\src\pnotify.js" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.js" />
@@ -1061,6 +1067,24 @@
     <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\sinon-ie-1.7.1.js" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\tests\mousetrap.html" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\tests\test.mousetrap.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\azusa.jpg" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-default.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-minScrollbarLength.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-suppressScrollAxis.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-useBothWheelAxes.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-wheelPropagation.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-wheelSpeed.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\reach-the-end-callback.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\rtl.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\scrollbars-on-the-opposite-side.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\text-content.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\Gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\min\perfect-scrollbar.min.css" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\min\perfect-scrollbar.min.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\min\perfect-scrollbar.with-mousewheel.min.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\src\jquery.mousewheel.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\src\perfect-scrollbar.css" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\src\perfect-scrollbar.js" />
     <Content Include="UpdatedDesigner\vendor\pines-notify\.gitignore" />
     <Content Include="UpdatedDesigner\vendor\pines-notify\pnotify.buttons.css" />
     <Content Include="UpdatedDesigner\vendor\pines-notify\pnotify.buttons.js" />
@@ -1289,6 +1313,15 @@
     <Content Include="UpdatedDesigner\vendor\angular-resource\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\README.md" />
     <Content Include="UpdatedDesigner\fonts\OpenSans300.woff" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\package.json" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\perfect-scrollbar.jquery.json" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\package.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
