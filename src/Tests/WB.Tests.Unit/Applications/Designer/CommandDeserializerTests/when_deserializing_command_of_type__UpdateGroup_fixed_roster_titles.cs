@@ -17,7 +17,6 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             questionnaireId = "11111111-1111-1111-1111-111111111111";
             groupId = "22222222-2222-2222-2222-222222222222";
             propagationKind = "AutoPropagated";
-            description = "Some description";
             rosterFixedTitles = @"[""привет, <style>Мир!</script>"",""<span>hi, <b><i>Hello!</b></span>""]";
 
             command = string.Format(@"{{
@@ -25,10 +24,9 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
                 ""groupId"": ""{1}"",
                 ""title"": ""{2}"",
                 ""propagationKind"": ""{3}"",
-                ""description"": ""{4}"",
                 ""rosterSizeSource"":""FixedTitles"",
-                ""rosterFixedTitles"": {5}
-            }}", questionnaireId, groupId, title, propagationKind, description, rosterFixedTitles);
+                ""rosterFixedTitles"": {4}
+            }}", questionnaireId, groupId, title, propagationKind, rosterFixedTitles);
 
             deserializer = CreateCommandDeserializer();
         };
@@ -48,9 +46,6 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
         It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
             ((UpdateGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
-        It should_return_same_description_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).Description.ShouldEqual(description);
-
         It should_return_2_fixed_roster_titles = () =>
             ((UpdateGroupCommand)result).RosterFixedTitles.Count().ShouldEqual(2);
 
@@ -68,7 +63,6 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
         private static string questionnaireId;
         private static string groupId;
         private static string propagationKind;
-        private static string description;
         private static string rosterFixedTitles;
         private static string type;
     }
