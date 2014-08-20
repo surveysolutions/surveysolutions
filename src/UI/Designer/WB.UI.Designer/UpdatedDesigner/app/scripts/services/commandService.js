@@ -85,8 +85,8 @@
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
-                        command.options = question.options;
                         command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.options = _.isEmpty(command.linkedToQuestionId) ? question.options : null ;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;
