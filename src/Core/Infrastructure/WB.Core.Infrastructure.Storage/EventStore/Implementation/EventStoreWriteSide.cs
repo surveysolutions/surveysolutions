@@ -5,6 +5,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.SystemData;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -17,6 +18,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
     internal class EventStoreWriteSide : IStreamableEventStore, IDisposable
     {
+        private readonly EventStoreConnectionSettings connectionSettings;
         private readonly IEventStoreConnection connection;
         private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings {
             NullValueHandling = NullValueHandling.Ignore,
@@ -27,13 +29,16 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
         private readonly Encoding encoding = Encoding.UTF8;
-        internal const string EventsCategory = "Event";
+        private UserCredentials credentials;
+        internal const string EventsCategory = "WBEvent";
         private const string EventsPrefix = EventsCategory + "-";
 
-        internal const string AllEventsStream = "all_events";
+        internal const string AllEventsStream = "all_wb_events";
 
         public EventStoreWriteSide(EventStoreConnectionSettings connectionSettings)
         {
+            this.connectionSettings = connectionSettings;
+            this.credentials = new UserCredentials(this.connectionSettings.Login, this.connectionSettings.Password);
             this.connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(connectionSettings.ServerIP), connectionSettings.ServerTcpPort));
             this.connection.Connect();
         }
@@ -63,7 +68,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             var nextPosition = skipEvents;
             do
             {
-                currentSlice = this.connection.ReadStreamEventsForward(AllEventsStream, nextPosition, bulkSize, false);
+                currentSlice = this.connection.ReadStreamEventsForward(AllEventsStream, nextPosition, bulkSize, true, credentials);
                 nextPosition = currentSlice.NextEventNumber;
 
                 yield return currentSlice.Events.Select(this.ToCommittedEvent).ToArray();
@@ -76,7 +81,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             var nextPosition = 0;
             do
             {
-                currentSlice = this.connection.ReadStreamEventsForward(AllEventsStream, nextPosition, 200, false);
+                currentSlice = this.connection.ReadStreamEventsForward(AllEventsStream, nextPosition, 200, false, credentials);
                 nextPosition = currentSlice.NextEventNumber;
                 foreach (var resolvedEvent in currentSlice.Events)
                 {
@@ -87,14 +92,14 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void Store(UncommittedEventStream eventStream)
         {
-            using (var transaction = connection.StartTransaction(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any))
+            using (var transaction = connection.StartTransaction(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, credentials))
             {
                 foreach (var @event in eventStream)
                 {
                     var eventData = BuildEventData(@event);
 
                     int expected = (int) (@event.EventSequence == 1 ? ExpectedVersion.NoStream : @event.EventSequence - 2);
-                    this.connection.AppendToStream(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, eventData);
+                    this.connection.AppendToStream(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, credentials, eventData);
                 }
 
                 transaction.Commit();
@@ -103,13 +108,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public int CountOfAllEvents()
         {
-            StreamEventsSlice slice = this.connection.ReadStreamEventsBackward(AllEventsStream, int.MaxValue, 1, false);
-            return slice.LastEventNumber;
+            StreamEventsSlice slice = this.connection.ReadStreamEventsForward(AllEventsStream, 0, 1, false, credentials);
+            return slice.LastEventNumber + 1;
         }
 
         public long GetLastEventSequence(Guid id)
         {
-            var streamMetadataResult = this.connection.GetStreamMetadata(id.FormatGuid());
+            var streamMetadataResult = this.connection.GetStreamMetadata(id.FormatGuid(), credentials);
             return streamMetadataResult.MetastreamVersion;
         }
 
