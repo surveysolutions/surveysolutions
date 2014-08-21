@@ -44,6 +44,8 @@ namespace WB.Tools.EventsMigrator
             this.status = "Counting number of events to process";
             this.totalEvents = ravenStore.CountOfAllEvents();
 
+            this.processed = settings.SkipEvents;
+
             RegisterEvents(settings);
 
             Stopwatch watch = Stopwatch.StartNew();
