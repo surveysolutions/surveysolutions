@@ -213,6 +213,7 @@
     <Compile Include="Views\Interview\IInterviewSummaryViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewBrief.cs" />
     <Compile Include="Views\Interview\InterviewData.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsForChart.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
     <Compile Include="Views\Interview\InterviewStaticTextView.cs" />

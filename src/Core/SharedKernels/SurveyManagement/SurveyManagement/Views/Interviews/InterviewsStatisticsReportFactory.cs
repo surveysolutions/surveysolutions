@@ -1,24 +1,49 @@
-﻿using Main.Core.View;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using Main.Core.View;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 {
     public class InterviewsStatisticsReportFactory : IViewFactory<InterviewsStatisticsReportInputModel, InterviewsStatisticsReportView>
     {
+        private readonly IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> interviewSummaryReader;
+
+        public InterviewsStatisticsReportFactory(
+            IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> interviewSummaryReader)
+        {
+            this.interviewSummaryReader = interviewSummaryReader;
+        }
+
         public InterviewsStatisticsReportView Load(InterviewsStatisticsReportInputModel input)
         {
-            int[] supervisorAssignedData = {30, 9, 5, 12, 14, 8, 7, 9, 6, 6, 3, 2, 0};
-            int[] interviewerAssignedData = {0, 5, 5, 3, 6, 5, 3, 2, 6, 7, 4, 3, 0};
-            int[] completedData = {0, 6, 5, 5, 2, 3, 4, 2, 1, 5, 7, 4, 0};
-            int[] rejectedBySupervisor = {0, 6, 8, 3, 2, 3, 4, 2, 1, 4, 6, 5, 0};
-            int[] approvedBySupervisor = {0, 6, 8, 3, 2, 3, 4, 3, 2, 5, 7, 6, 0};
-            int[] rejectedByHeadquarters = {0, 6, 8, 3, 2, 3, 4, 3, 2, 5, 7, 6, 0};
-            int[] approvedByHeadquarters = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 30};
+            Expression<Func<StatisticsLineGroupedByDateAndTemplate, bool>> predicate = (s) => (s.QuestionnaireId == input.QuestionnaireId);
 
-            int[][] stats = {supervisorAssignedData, interviewerAssignedData, completedData, rejectedBySupervisor, approvedBySupervisor, rejectedByHeadquarters, approvedByHeadquarters};
+            if (input.QuestionnaireVersion.HasValue)
+            {
+                predicate = predicate.AndCondition(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
+            }
 
-            string[,] ticks = {{"1", "Aug 3"}, {"2", "Aug 4"}, {"3", "Aug 5"}, {"4", "Aug 6"}, {"5", "Aug 7"}, {"6", "Aug 8"}, {"7", "Aug 9"}, {"8", "Aug 10"}, {"9", "Aug 11"}, {"10", "Aug 12"}, {"11", "Aug 13"}, {"12", "Aug 14"}, {"13", "Aug 15"}};
+            var stat = this.interviewSummaryReader.Query(_ => _.Where(predicate)).OrderBy(_ => _.Date);
 
-            return new InterviewsStatisticsReportView() { Stats = stats, Ticks = ticks};
+            var r = new InterviewsStatisticsReportView();
+
+            var firstDate = stat.First().Date;
+            var lastDate = input.CurrentDate;
+
+            var daysCount = (lastDate - firstDate).TotalDays;
+
+            //for (var i = 0; i < daysCount; i++)
+            //{
+            //    var dateTick = firstDate.AddDays(i);
+            //    if (dateTick)
+            //        r.Stats[]
+            //}
+
+            return r;
         }
     }
 }
