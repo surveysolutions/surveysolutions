@@ -106,17 +106,22 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             using (var connection = this.GetConnection()) {
                 using (var transaction = connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials).Result)
                 {
-                    foreach (var @event in eventStream)
-                    {
-                        var eventData = this.BuildEventData(@event);
-
-                        int expected = (int) (@event.EventSequence == 1 ? ExpectedVersion.NoStream : @event.EventSequence - 2);
-                        connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
-                            .Wait(TimeSpan.FromSeconds(2));
-                    }
+                    this.SaveStream(eventStream, connection);
 
                     transaction.Commit();
                 }
+            }
+        }
+
+        internal void SaveStream(UncommittedEventStream eventStream, IEventStoreConnection connection)
+        {
+            foreach (var @event in eventStream)
+            {
+                var eventData = this.BuildEventData(@event);
+
+                int expected = (int) (@event.EventSequence == 1 ? ExpectedVersion.NoStream : @event.EventSequence - 2);
+                connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
+                    .Wait(TimeSpan.FromSeconds(2));
             }
         }
 

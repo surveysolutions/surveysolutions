@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,9 +14,11 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Raven.Client;
 using Raven.Client.Document;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;
@@ -68,7 +71,9 @@ namespace WB.Tools.EventsMigrator
                             committedEvent.EventTimeStamp,
                             committedEvent.Payload,
                             committedEvent.EventVersion));
-                        eventStore.Store(stream);
+                        
+                        
+                        eventStore.SaveStream(stream, connection);
 
                         Interlocked.Increment(ref processed);
                         this.elapsed = watch.Elapsed;
@@ -108,21 +113,53 @@ namespace WB.Tools.EventsMigrator
 
         private static void RegisterEvents(IShell settings)
         {
-            IEnumerable<Type> typesInAssembly = typeof (AggregateRootEvent).Assembly.GetTypes();
+            var assemblies = new List<Assembly> { typeof (AggregateRootEvent).Assembly };
 
             if (settings.SelectedAppName == "Designer")
             {
-                typesInAssembly = typesInAssembly.Concat(typeof(QuestionnaireCloned).Assembly.GetTypes())
-                                                 .Concat(typeof(UserLoggedIn).Assembly.GetTypes());
+                assemblies.Add(typeof(DesignerBoundedContextModule).Assembly);
+                assemblies.Add(typeof(UserLoggedIn).Assembly);
             }
             else
             {
-                typesInAssembly = typesInAssembly.Concat(typeof (DataCollectionSharedKernelModule).Assembly.GetTypes());
+                assemblies.Add(typeof (DataCollectionSharedKernelModule).Assembly);
             }
-            var q = from t in typesInAssembly
-                    where t.IsClass && !t.IsAbstract && t.Namespace != null && (t.Namespace.Contains("Events"))
-                    select t;
-            q.ToList().ForEach(NcqrsEnvironment.RegisterEventDataType);
+
+            var types = GetAllEventTypes(assemblies).ToList();
+            types.ForEach(NcqrsEnvironment.RegisterEventDataType);
+        }
+
+        private static IEnumerable<Type> GetAllEventTypes(IEnumerable<Assembly> assemblies)
+        {
+            return (from assembly in assemblies 
+                   from type in assembly.GetTypes() 
+                   where IsEventHandler(type) 
+                        from handledEventType in GetHandledEventTypes(type) 
+                   select handledEventType).Distinct();
+        }
+
+        private static IEnumerable<Type> GetHandledEventTypes(Type type)
+        {
+            foreach (var handlerInterfaceType in type.GetInterfaces().Where(IsIEventHandlerInterface))
+            {
+                var eventDataType = handlerInterfaceType.GetGenericArguments().First();
+                yield return eventDataType;
+            }
+        }
+
+        private static bool IsIEventHandlerInterface(Type type)
+        {
+            var isIEventHandlerInterface = type.IsInterface &&
+                type.IsGenericType &&
+                type.GetGenericTypeDefinition() == typeof(IEventHandler<>);
+            return isIEventHandlerInterface;
+        }
+
+        private static bool IsEventHandler(Type type)
+        {
+            return type.GetInterfaces().Any(x =>
+                                      x.IsGenericType &&
+                                      x.GetGenericTypeDefinition() == typeof(IEventHandler<>));
         }
 
 
