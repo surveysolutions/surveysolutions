@@ -31,11 +31,17 @@
 
                         var verificationModal = $('#verification-modal');
 
+                        if (isIE9) {
+                            verificationModal.addClass("ie9-backdrop");
+                        }
+
                         if ($scope.verificationStatus.errorsCount > 0) {
                             verificationModal.modal({
-                                backdrop: false,
+                                backdrop: isIE9,
                                 show: true
                             });
+
+
 
                             $('#verification-modal .modal-dialog .arrow').css({
                                 left: $('#verification-btn').offset().left - 10
