@@ -29,6 +29,7 @@ namespace WB.Tools.EventsMigrator
         private string eventStorePassword;
         private string appName;
         private ObservableCollection<string> appNames;
+        private int skipEvents;
 
         public ShellViewModel()
         {
@@ -212,6 +213,16 @@ namespace WB.Tools.EventsMigrator
             {
                 this.appNames = value; 
                 this.NotifyOfPropertyChange(() => AppNames);
+            }
+        }
+
+        public int SkipEvents
+        {
+            get { return this.skipEvents; }
+            set
+            {
+                this.skipEvents = value; 
+                this.NotifyOfPropertyChange(() => SkipEvents);
             }
         }
 

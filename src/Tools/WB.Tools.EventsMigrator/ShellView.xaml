@@ -37,6 +37,7 @@
                 <RowDefinition SharedSizeGroup="A"></RowDefinition>
                 <RowDefinition SharedSizeGroup="A"></RowDefinition>
                 <RowDefinition SharedSizeGroup="A"></RowDefinition>
+                <RowDefinition SharedSizeGroup="A"></RowDefinition>
             </Grid.RowDefinitions>
 
 
@@ -52,22 +53,27 @@
             <Label Grid.Column="0" Grid.Row="2" Content="Database name:"></Label>
             <TextBox Grid.Column="1" Grid.Row="2" x:Name="RavenDatabaseName" VerticalAlignment="Center"></TextBox>
 
-            <Label Grid.Column="0" Grid.Row="3" Content="Event store IP:"></Label>
-            <TextBox Grid.Column="1" Grid.Row="3" x:Name="EventStoreIP" VerticalAlignment="Center"></TextBox>
+            <Label Grid.Column="0" Grid.Row="3" Content="Skip events:"></Label>
+            <TextBox Grid.Column="1" Grid.Row="3" x:Name="SkipEvents" VerticalAlignment="Center"></TextBox>
 
-            <Label Grid.Column="0" Grid.Row="4" Content="Event store TCP port:"></Label>
-            <TextBox Grid.Column="1" Grid.Row="4" x:Name="EventStoreTcpPort" VerticalAlignment="Center"></TextBox>
+            <Label Grid.Column="0" Grid.Row="4" Content="Event store IP:"></Label>
+            <TextBox Grid.Column="1" Grid.Row="4" x:Name="EventStoreIP" VerticalAlignment="Center"></TextBox>
 
-            <Label Grid.Column="0" Grid.Row="5" Content="Event store HTTP port:"></Label>
-            <TextBox Grid.Column="1" Grid.Row="5" x:Name="EventStoreHttpPort" VerticalAlignment="Center"></TextBox>
+            <Label Grid.Column="0" Grid.Row="5" Content="Event store TCP port:"></Label>
+            <TextBox Grid.Column="1" Grid.Row="5" x:Name="EventStoreTcpPort" VerticalAlignment="Center"></TextBox>
 
-            <Label Grid.Column="0" Grid.Row="6" Content="Event store login:"></Label>
-            <TextBox Grid.Column="1" Grid.Row="6" x:Name="EventStoreLogin" VerticalAlignment="Center"></TextBox>
+            <Label Grid.Column="0" Grid.Row="6" Content="Event store HTTP port:"></Label>
+            <TextBox Grid.Column="1" Grid.Row="6" x:Name="EventStoreHttpPort" VerticalAlignment="Center"></TextBox>
 
-            <Label Grid.Column="0" Grid.Row="7" Content="Event store password:"></Label>
-            <TextBox Grid.Column="1" Grid.Row="7" x:Name="EventStorePassword" VerticalAlignment="Center"></TextBox>
-            
-            <Button Grid.Column="0" Grid.Row="8" 
+            <Label Grid.Column="0" Grid.Row="7" Content="Event store login:"></Label>
+            <TextBox Grid.Column="1" Grid.Row="7" x:Name="EventStoreLogin" VerticalAlignment="Center"></TextBox>
+
+            <Label Grid.Column="0" Grid.Row="8" Content="Event store password:"></Label>
+            <TextBox Grid.Column="1" Grid.Row="8" x:Name="EventStorePassword" VerticalAlignment="Center"></TextBox>
+
+           
+
+            <Button Grid.Column="0" Grid.Row="9" 
                     Grid.ColumnSpan="2" 
                     x:Name="Transfer" Content="Start" Margin="0,10,0,0" 
                     Width="50"></Button>

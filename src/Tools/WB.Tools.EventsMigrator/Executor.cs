@@ -54,7 +54,7 @@ namespace WB.Tools.EventsMigrator
             {
                 connection.ConnectAsync().Wait();
 
-                foreach (CommittedEvent[] @event in ravenStore.GetAllEvents(50, 0))
+                foreach (CommittedEvent[] @event in ravenStore.GetAllEvents(50, settings.SkipEvents))
                 {
                     foreach (var committedEvent in @event)
                     {
