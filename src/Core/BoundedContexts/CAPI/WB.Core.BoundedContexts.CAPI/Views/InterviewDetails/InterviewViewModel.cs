@@ -972,11 +972,22 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private QuestionViewModel CreateQuestionView(IQuestion question)
         {
             var questionViewType = this.CalculateViewType(question.QuestionType);
-            if (this.selectableQuestionTypes.Contains(question.QuestionType))
+            if (this.selectableQuestionTypes.Contains(questionViewType))
             {
+                if (questionViewType == QuestionType.SingleOption && question.IsFilteredCombobox.HasValue &&
+                    question.IsFilteredCombobox.Value)
+                {
+                    return this.CreateFilteredComboboxQuestion(question);
+                }
+
                 if (question.LinkedToQuestionId.HasValue)
+                {
                     return this.CreateLinkedQuestion(question, questionViewType);
-                return this.CreateSelectableQuestion(question, questionViewType);
+                }
+                else
+                {
+                    return this.CreateSelectableQuestion(question, questionViewType);
+                }
             }
             else if (this.listQuestionTypes.Contains(question.QuestionType))
             {
@@ -1071,6 +1082,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
                 multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
+        }
+
+        private FilteredComboboxQuestionViewModel CreateFilteredComboboxQuestion(IQuestion question)
+        {
+            return new FilteredComboboxQuestionViewModel(
+                new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText, question.Answers.Select(
+                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage)).ToList(),
+                true, question.Instructions, null,
+                true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle());
         }
 
         private ValueVector<Guid> GetQuestionRosterScope(IQuestion question)
