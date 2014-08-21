@@ -42,13 +42,20 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
+            int normalMin = (int) Math.Max(1, minVersion);
+            int normalMax = (int) Math.Min(int.MaxValue, maxVersion);
+            
+
             var streamEvents = new List<ResolvedEvent>();
+            int batchSize = normalMax - normalMin + 1;
+
             using (var connection = this.GetConnection()) {
                 StreamEventsSlice currentSlice;
-                var nextSliceStart = StreamPosition.Start;
+                int nextSliceStart = StreamPosition.Start + normalMin - 1;
+                
                 do
                 {
-                    currentSlice = connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, 200, false).Result;
+                    currentSlice = connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false).Result;
                     nextSliceStart = currentSlice.NextEventNumber;
 
                     streamEvents.AddRange(currentSlice.Events);
