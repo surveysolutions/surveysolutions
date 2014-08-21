@@ -140,7 +140,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                     metadata.Origin,
                     resolvedEvent.Event.EventId,
                     metadata.EventSourceId,
-                    resolvedEvent.Event.EventNumber + 1,
+                    resolvedEvent.OriginalEventNumber + 1,
                     metadata.Timestamp,
                     eventData,
                     new Version());
