@@ -2,7 +2,7 @@
   width: 20px;
   height: 20px;
   background: url(../i/icons.png);
-  background-position-x: -90px;
+  background-position-x: 0px;
   overflow: hidden;
 }
 .icon.icon-error {
@@ -36,9 +36,9 @@
   background-position-y: -210px;
 }
 .icon-photo {
-  background-position-y: -240px;
+  background-position-y: -270px;
 }
 .icon-statictext {
-  background-position-y: -270px;
+  background-position-y: -300px;
 }
 /*# sourceMappingURL=wb-question-list.css.css.map */

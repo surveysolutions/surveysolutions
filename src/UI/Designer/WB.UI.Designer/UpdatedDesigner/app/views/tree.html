@@ -1,5 +1,6 @@
 ﻿<div class="questionnaire-tree-holder col-xs-6">
-    <div class="chapter-title" ng-switch on="filtersBoxMode">
+    <div class="chapter-title" ng-switch on="filtersBoxMode" ui-sref-active="selected"
+         ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
         <div class="search-box" ng-switch-when="search">
             <div class="input-group">
                 <input type="text" ng-model="search.searchText" ng-model-options="{debounce: 300}" focus-on="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
@@ -9,14 +10,17 @@
         </div>
 
         <div ng-switch-when="default">
-            <div class="chapter-title-text">{{currentChapter.title }}</div>
+            <a class="chapter-title-text" ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
+                <span ng-bind-html="currentChapter.title "></span>
+            </a>
             <ul class="controls-right">
                 <li>
                     <a href="javascript:void(0);" ng-click="showSearch()" class="search" title="Toggle Search"></a>
                 </li>
             </ul>
         </div>
-    </div><perfect-scrollbar class="scroller">
+    </div>
+    <perfect-scrollbar class="scroller">
         <div class="question-list" ui-tree="groupsTree" data-empty-place-holder-enabled="false">
 
             <div ui-tree-nodes ng-model="items">
@@ -30,7 +34,7 @@
                         <span>Nothing found</span>
                     </div>
                 </div>
-                <div class="buttons-item" ng-show="!search.searchText">
+                <div class="chapter-level-buttons" ng-show="!search.searchText">
                     <input type="button" class="btn lighter-hover" value="ADD QUESTION" ng-click="addQuestion(currentChapter)" />
                     <input type="button" class="btn lighter-hover" value="ADD SUBGROUP" ng-click="addGroup(currentChapter)" />
                     <input type="button" class="btn lighter-hover" value="ADD ROSTER" ng-click="addRoster(currentChapter)" />

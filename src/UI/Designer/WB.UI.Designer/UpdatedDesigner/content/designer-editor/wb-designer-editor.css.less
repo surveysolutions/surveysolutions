@@ -413,6 +413,12 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
                 }
             }
 
+            .chapter-level-buttons {
+                border-top: 2px solid @tree-item-border-color;
+                margin-top: 2px;
+                padding: 8px 24px 0 18px;
+            }
+
             > .question-editor {
                 position: relative;
                 height: 100%;
@@ -507,12 +513,26 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
     z-index: 5;
     border-bottom: 2px solid @tree-item-border-color;
 
+    &.selected {
+        background: @questionnarie-question-list-item-selected-color;
+
+        ul.controls-right {
+            background: @questionnarie-question-list-item-selected-color;
+
+            &:before {
+                #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
+            }
+        }
+    }
+
     > span {
         .questionnarie-chapter-title-span-fontstyle();
     }
 
     .chapter-title-text {
         white-space: nowrap;
+        color: @designer-editor-chapter-list-color;
+        text-decoration: none;
     }
 
     ul.controls-right {
@@ -622,6 +642,20 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 
 
 .questionnaire-tree-holder {
+    .roster-items {
+        .item {
+            .item-body {
+                .icon {
+                    background-position-x: -60px;
+                }
+
+                .item-text {
+                    color: @questionnaire-tree-roster-color;
+                }
+            }
+        }
+    }
+
     .item {
         position: static;
         .border-left-radius(4px);
@@ -709,16 +743,26 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             }
         }
 
-        &.group{
-            > .item-body{
+        &.group {
+            > .item-body {
                 text-transform: uppercase;
                 font-weight: bold;
             }
         }
 
-        &.roster{
+        &.roster {
+            .item-text {
+                color: @questionnaire-tree-roster-color;
 
+                .roster-marker {
+                    text-transform: capitalize;
+                    font-weight: normal;
+                    font-style: italic;
+                    .georgia-font();
+                }
+            }
         }
+
         .handler {
             position: absolute;
             top: 0;
@@ -743,7 +787,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             &:hover {
                 background-color: @questionnarie-question-list-item-selected-color;
 
-                 .handler {
+                .handler {
                     background-color: @questionnarie-question-list-item-selected-color;
                 }
 
@@ -756,7 +800,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
                 }
             }
 
-           
+
 
             .item-body {
                 border-bottom: none;
@@ -816,9 +860,10 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 }
 
 .ps-scrollbar-x-rail,
-.ps-scrollbar-y-rail{
+.ps-scrollbar-y-rail {
     z-index: 200;
 }
-.ps-scrollbar-y-rail{
+
+.ps-scrollbar-y-rail {
     margin-right: 5px;
 }
