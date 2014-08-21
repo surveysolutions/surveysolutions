@@ -41,8 +41,6 @@
                                 show: true
                             });
 
-
-
                             $('#verification-modal .modal-dialog .arrow').css({
                                 left: $('#verification-btn').offset().left - 10
                             });
@@ -54,17 +52,17 @@
                 };
 
                 $scope.answerTypeClass = {
-                    YesNo: 'icon-singleanswer',
-                    DropDownList: 'icon-singleanswer',
-                    MultyOption: 'icon-multianswer',
-                    Numeric: 'icon-intedit',
+                    YesNo: 'icon-singleoption',
+                    DropDownList: 'icon-singleoption',
+                    MultyOption: 'icon-multyoption',
+                    Numeric: 'icon-numeric',
                     DateTime: 'icon-datetime',
-                    GpsCoordinates: 'icon-geoloc',
+                    GpsCoordinates: 'icon-gpscoordinates',
                     AutoPropagate: 'icon-textedit',
-                    TextList: 'icon-textarea',
-                    QRBarcode: 'icon-multimedia',
-                    Text: 'icon-textedit',
-                    SingleOption: 'icon-singleanswer'
+                    TextList: 'icon-textlist',
+                    QRBarcode: 'icon-qrbarcode',
+                    Text: 'icon-text',
+                    SingleOption: 'icon-singleoption'
                 };
 
                 $scope.chapters = [];

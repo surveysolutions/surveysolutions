@@ -1,4 +1,4 @@
-<div class="question item"
+<div class="question item statictext"
      ui-sref-active="selected">
     <a class="handler" ui-tree-handle></a>
     <a class="item-body" ui-sref="questionnaire.chapter.statictext({itemId: item.itemId})">
@@ -7,7 +7,7 @@
             <span ng-bind-html="item.text | escape | highlight:search.searchText"></span>
         </div>
     </a>
-    <div class="qname-block">
+    <!--<div class="qname-block">
         <div class="btn-group dropdown">
             <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
             <ul class="dropdown-menu">
@@ -19,5 +19,5 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div>-->
 </div>
