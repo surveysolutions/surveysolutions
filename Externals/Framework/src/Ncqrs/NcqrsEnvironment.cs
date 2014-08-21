@@ -200,8 +200,10 @@ namespace Ncqrs
         public static void RegisterEventDataType(Type eventDataType)
         {
             ThrowIfThereIsAnotherEventWithSameFullName(eventDataType);
+            ThrowIfThereIsAnotherEventWithSameName(eventDataType);
 
             KnownEventDataTypes[eventDataType.FullName] = eventDataType;
+            KnownEventDataTypes[eventDataType.Name] = eventDataType;
         }
 
         public static bool IsEventDataType(string typeFullName)
@@ -216,15 +218,17 @@ namespace Ncqrs
 
         public static Type GetEventDataTypeByName(string typeName)
         {
-            try
-            {
-                return KnownEventDataTypes.SingleOrDefault(x => x.Key.EndsWith("." + typeName)).Value;
-            }
-            catch (InvalidOperationException ex)
-            {
-                var message = string.Format("Failed to get type for the {0}. Check that there is no duplicate events registered in KnownEventDataTypes with only namespaces that are different", typeName);
-                throw new ArgumentException(message, "typeName", ex);
-            }
+            return KnownEventDataTypes[typeName];
+        }
+
+        private static void ThrowIfThereIsAnotherEventWithSameName(Type @event)
+        {
+            Type anotherEventWithSameName;
+            KnownEventDataTypes.TryGetValue(@event.Name, out anotherEventWithSameName);
+
+            if (anotherEventWithSameName != null && anotherEventWithSameName != @event)
+                throw new ArgumentException(string.Format("Two different events share same type name:{0}{1}{0}{2}",
+                    Environment.NewLine, @event.AssemblyQualifiedName, anotherEventWithSameName.AssemblyQualifiedName));
         }
 
         private static void ThrowIfThereIsAnotherEventWithSameFullName(Type @event)
