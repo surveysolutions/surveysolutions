@@ -55,6 +55,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                     if (model is LinkedQuestionViewModel)
                         itemView = new SingleOptionLinkedQuestionView(context, bindingActivity, model, questionnairePublicKey,
                             this.commandService, this.answerCommandService, this.membership);
+                    else if(model is FilteredComboboxQuestionViewModel)
+                        itemView = new FilteredComboboxQuestionView(context, bindingActivity, model, questionnairePublicKey,
+                            this.commandService, this.answerCommandService, this.membership);
                     else
                         itemView = new SingleOptionQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService, this.answerCommandService, this.membership);
                     break;

@@ -229,25 +229,28 @@ namespace WB.UI.Shared.Android
 			public static int Details = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public static int list_navigation_item = 2130903042;
+			public static int FilteredComboboxRowLayout = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public static int RosterQuestion = 2130903043;
+			public static int list_navigation_item = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public static int ScreenContentFragment = 2130903044;
+			public static int RosterQuestion = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public static int StaticTextView = 2130903045;
+			public static int ScreenContentFragment = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public static int StatisticsContent = 2130903046;
+			public static int StaticTextView = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public static int zxingscanneractivitylayout = 2130903047;
+			public static int StatisticsContent = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public static int zxingscannerfragmentlayout = 2130903048;
+			public static int zxingscanneractivitylayout = 2130903048;
+			
+			// aapt resource value: 0x7f030009
+			public static int zxingscannerfragmentlayout = 2130903049;
 			
 			static Layout()
 			{
