@@ -18,7 +18,8 @@
         'blockUI',
         'unsavedChanges',
         'monospaced.elastic',
-        'perfect_scrollbar'
+        'perfect_scrollbar',
+        'ng-context-menu'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {

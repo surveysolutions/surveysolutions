@@ -7583,6 +7583,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .ps-scrollbar-y-rail {
   margin-right: 5px;
 }
+.position-fixed {
+  position: fixed;
+}
 #verify-popover {
   display: none;
 }
