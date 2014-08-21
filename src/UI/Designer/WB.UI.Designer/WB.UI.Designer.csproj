@@ -669,6 +669,7 @@
     <Content Include="UpdatedDesigner\app\views\main.html" />
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
+    <Content Include="UpdatedDesigner\gulpfile.js" />
     <Content Include="UpdatedDesigner\test.html" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
