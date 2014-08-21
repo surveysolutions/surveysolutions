@@ -216,11 +216,9 @@ namespace Ncqrs
 
         public static Type GetEventDataTypeByName(string typeName)
         {
-            var type = typeName.Substring(0, 1).ToUpper() + typeName.Substring(1, typeName.Length - 1);
-
             try
             {
-                return KnownEventDataTypes.SingleOrDefault(x => x.Key.EndsWith("." + type)).Value;
+                return KnownEventDataTypes.SingleOrDefault(x => x.Key.EndsWith("." + typeName)).Value;
             }
             catch (InvalidOperationException ex)
             {
