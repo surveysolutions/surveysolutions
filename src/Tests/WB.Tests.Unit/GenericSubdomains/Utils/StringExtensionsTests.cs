@@ -9,11 +9,13 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
         [Test]
         public void WhenCalledForMultiwordString()
         {
-            var somepascalcased = "SomePascalCased";
+            Assert.That("SomePascalCased".ToCamelCase(), Is.EqualTo("somePascalCased"));
+        }
 
-            var camelCase = somepascalcased.ToCamelCase();
-
-            Assert.That(camelCase, Is.EqualTo("somePascalCased"));
+        [Test]
+        public void When_PascalCasing_CamelCased()
+        {
+            Assert.That("someCamelCase".ToPascalCase(), Is.EqualTo("SomeCamelCase"));
         }
     }
 }
