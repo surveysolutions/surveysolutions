@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
         private readonly Encoding encoding = Encoding.UTF8;
-        private UserCredentials credentials;
+        private readonly UserCredentials credentials;
         internal const string EventsCategory = "WBEvent";
         private const string EventsPrefix = EventsCategory + "-";
 
@@ -133,7 +133,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, this.jsonSerializerSettings);
                 var eventData = JsonConvert.DeserializeObject(value, 
-                                    NcqrsEnvironment.GetEventDataTypeByName(resolvedEvent.Event.EventType), 
+                                    NcqrsEnvironment.GetEventDataTypeByName(resolvedEvent.Event.EventType.ToPascalCase()), 
                                     this.jsonSerializerSettings);
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),

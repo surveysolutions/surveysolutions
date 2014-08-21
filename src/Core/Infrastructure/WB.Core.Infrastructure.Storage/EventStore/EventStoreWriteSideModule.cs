@@ -47,8 +47,6 @@ namespace WB.Core.Infrastructure.Storage.EventStore
             var userCredentials = new UserCredentials(this.settings.Login, this.settings.Password);
             try
             {
-                
-
                 var status = JsonConvert.DeserializeAnonymousType(manager.GetStatusAsync("$by_category").Result, new { status = "" });
                 if (status.status != "Running")
                 {
@@ -59,12 +57,11 @@ namespace WB.Core.Infrastructure.Storage.EventStore
             catch (AggregateException)
             {
                 const string ProjectionQuery = @"fromCategory('" + EventStoreWriteSide.EventsCategory + @"') 
-    .when({        
-        $any: function (s, e) {
-            linkTo('" + EventStoreWriteSide.AllEventsStream + @"', e)
-        }
-    })
-  ";
+                                                .when({        
+                                                    $any: function (s, e) {
+                                                        linkTo('" + EventStoreWriteSide.AllEventsStream + @"', e)
+                                                    }
+                                                })";
                 manager.CreateContinuousAsync("ToAllEvents", ProjectionQuery, userCredentials);
             }
         }
