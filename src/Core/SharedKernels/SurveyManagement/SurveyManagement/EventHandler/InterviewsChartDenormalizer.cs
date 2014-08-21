@@ -1,13 +1,10 @@
 ﻿using System;
 using Main.Core.Documents;
-using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -18,84 +15,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewOnClientCreated>,
         IEventHandler<InterviewStatusChanged>,
         IEventHandler<SupervisorAssigned>,
-        IEventHandler<InterviewDeleted>,
-        IEventHandler<InterviewHardDeleted>,
-        IEventHandler<InterviewRestored>,
         IEventHandler<InterviewerAssigned>
     {
         private readonly IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate> statisticsStorage;
-        private readonly IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires;
+        private readonly IReadSideRepositoryWriter<InterviewDetailsForChart> interviewBriefStorage;
 
         public InterviewsChartDenormalizer(
             IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate> statisticsStorage,
-            IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage,
-            IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires)
+            IReadSideRepositoryWriter<InterviewDetailsForChart> interviewBriefStorage)
         {
             this.statisticsStorage = statisticsStorage;
             this.interviewBriefStorage = interviewBriefStorage;
-            this.questionnaires = questionnaires;
         }
 
-        private void HandleCreation(Guid eventSourceId, Guid responsibleId, Guid questionnaireId, long questionnaireVersion, DateTime dateTime)
+        private void HandleCreation(Guid eventSourceId, Guid questionnaireId, long questionnaireVersion, DateTime dateTime)
         {
-            var interviewBriefItem = this.interviewBriefStorage.GetById(eventSourceId);
-
-            if (interviewBriefItem != null)
+            var statisticsLineGroupedByDateAndTemplate = CreateNewStatisticsLine(questionnaireId, questionnaireVersion, dateTime.Date);
+            var interviewDetailsForChart = new InterviewDetailsForChart
             {
-                this.DecreaseStatisticsByStatus(this.GetStatisticItem(interviewBriefItem, dateTime), interviewBriefItem.Status);
-            }
-            else
-            {
-                interviewBriefItem = new InterviewBrief
-                {
-                    InterviewId = eventSourceId,
-                    IsDeleted = false,
-                    ResponsibleId = responsibleId,
-                    Status = InterviewStatus.Created,
-                    QuestionnaireId = questionnaireId,
-                    QuestionnaireVersion = questionnaireVersion
-                };
-            }
-
-            var statistics = this.GetStatisticItem(interviewBriefItem, dateTime) ?? this.CreateNewStatisticsLine(interviewBriefItem, dateTime);
-
-            this.IncreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
-            //this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
-            this.StoreStatisticsItem(interviewBriefItem, statistics, dateTime);
-        }
-
-        private StatisticsLineGroupedByDateAndTemplate GetStatisticItem(InterviewBrief interviewBriefItem, DateTime dateTime)
-        {
-            var key = GetCombinedStatisticKey(interviewBriefItem, dateTime);
-            return this.statisticsStorage.GetById(key);
-        }
-
-        private StatisticsLineGroupedByDateAndTemplate CreateNewStatisticsLine(InterviewBrief interviewBriefItem, DateTime dateTime)
-        {
-            var questionnaire = this.questionnaires.GetById(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion);
-            var questionnaireTitle = questionnaire != null ? questionnaire.Title : "<UNKNOWN QUESTIONNAIRE>";
-
-            return new StatisticsLineGroupedByDateAndTemplate
-            {
-                QuestionnaireId = interviewBriefItem.QuestionnaireId,
-                QuestionnaireVersion = interviewBriefItem.QuestionnaireVersion,
-                QuestionnaireTitle = questionnaireTitle,
-                Date = dateTime
+                InterviewId = eventSourceId,
+                QuestionnaireId =  questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                Status = InterviewStatus.Created
             };
-        }
 
-        private void StoreStatisticsItem(InterviewBrief interviewBriefItem, StatisticsLineGroupedByDateAndTemplate statistics, DateTime dateTime)
-        {
-            var key = GetCombinedStatisticKey(interviewBriefItem, dateTime);
-            this.statisticsStorage.Store(statistics, key);
-        }
-
-        private static Guid GetCombinedStatisticKey(InterviewBrief interviewBriefItem, DateTime dateTime)
-        {
-            return interviewBriefItem.QuestionnaireId
-                .Combine(interviewBriefItem.QuestionnaireVersion)
-                .Combine(dateTime.Date.Ticks);
+            this.interviewBriefStorage.Store(interviewDetailsForChart, eventSourceId);
+            this.statisticsStorage.Store(statisticsLineGroupedByDateAndTemplate, GetCombinedStatisticKey(statisticsLineGroupedByDateAndTemplate));
         }
 
         private void DecreaseStatisticsByStatus(StatisticsLineGroupedByDateAndTemplate statistics, InterviewStatus status)
@@ -122,90 +67,127 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             summary.RejectedByHeadquartersCount += status == InterviewStatus.RejectedByHeadquarters ? incCount : 0;
         }
 
-        private void AssignToOtherUser(Guid interviewId, Guid interviewerId)
-        {
-            //var interviewBriefItem = this.interviewBriefStorage.GetById(interviewId);
-            ////update old statistics
-            //var oldStatistics = this.GetStatisticItem(interviewBriefItem);
-            //this.DecreaseStatisticsByStatus(oldStatistics, interviewBriefItem.Status);
-
-            //this.StoreStatisticsItem(interviewBriefItem, oldStatistics);
-
-            //interviewBriefItem.ResponsibleId = interviewerId;
-            //var statistics = this.GetStatisticItem(interviewBriefItem) ?? this.CreateNewStatisticsLine(interviewBriefItem);
-            //this.IncreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
-
-            ////this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
-            //this.StoreStatisticsItem(interviewBriefItem, statistics);
-        }
-
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
-            this.HandleCreation(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion, evnt.EventTimeStamp);
+            this.HandleCreation(evnt.EventSourceId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
         {
-            this.HandleCreation(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion, evnt.EventTimeStamp);
+            this.HandleCreation(evnt.EventSourceId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            this.HandleCreation(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion, evnt.EventTimeStamp);
+            this.HandleCreation(evnt.EventSourceId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
-        {
-            //var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
-            //var statistics = this.GetStatisticItem(interviewBriefItem);
+        {            
+            var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
+            var key = GetCombinedStatisticKey(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+            var statistics = this.statisticsStorage.GetById(key);
 
-            //this.DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
-            //this.IncreaseStatisticsByStatus(statistics, evnt.Payload.Status);
+            if (statistics != null)
+            {
+                this.DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+            }
+            else
+            {
+                statistics = this.CreateNewStatisticsLine(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+            }
 
-            //interviewBriefItem.Status = evnt.Payload.Status;
-            ////this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
-            //this.StoreStatisticsItem(interviewBriefItem, statistics);
+            this.IncreaseStatisticsByStatus(statistics, evnt.Payload.Status);
+
+            interviewBriefItem.Status = evnt.Payload.Status;
+            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            this.StoreStatisticsItem(statistics);
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            this.AssignToOtherUser(evnt.EventSourceId, evnt.Payload.SupervisorId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
-        {
             var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
-            var statistics = this.GetStatisticItem(interviewBriefItem, evnt.EventTimeStamp);
+            var key = GetCombinedStatisticKey(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+            var statistics = this.statisticsStorage.GetById(key);
 
-            interviewBriefItem.IsDeleted = true;
-            //this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
-            this.StoreStatisticsItem(interviewBriefItem, statistics, evnt.EventTimeStamp);
-        }
+            if (statistics != null)
+            {
+                this.DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+            }
+            else
+            {
+                statistics = this.CreateNewStatisticsLine(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+            }
 
-        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
-        {
-            var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
-            //this.interviewBriefStorage.Remove(evnt.EventSourceId);
+            this.IncreaseStatisticsByStatus(statistics, InterviewStatus.SupervisorAssigned);
 
-            var statistics = this.GetStatisticItem(interviewBriefItem, evnt.EventTimeStamp);
-            this.DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
-            this.DecreaseStatisticsByStatus(statistics, InterviewStatus.Deleted);
-            this.StoreStatisticsItem(interviewBriefItem, statistics, evnt.EventTimeStamp);
-        }
-
-        public void Handle(IPublishedEvent<InterviewRestored> evnt)
-        {
-            var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
-            var statistics = this.GetStatisticItem(interviewBriefItem, evnt.EventTimeStamp);
-
-            interviewBriefItem.IsDeleted = false;
-            //this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
-            this.StoreStatisticsItem(interviewBriefItem, statistics, evnt.EventTimeStamp);
+            interviewBriefItem.Status = InterviewStatus.SupervisorAssigned;
+            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            this.StoreStatisticsItem(statistics);
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            this.AssignToOtherUser(evnt.EventSourceId, evnt.Payload.InterviewerId);
+            var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
+            var key = GetCombinedStatisticKey(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+            var statistics = this.statisticsStorage.GetById(key);
+
+            if (statistics != null)
+            {
+                this.DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+            }
+            else
+            {
+                statistics = this.CreateNewStatisticsLine(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+            }
+
+            this.IncreaseStatisticsByStatus(statistics, InterviewStatus.InterviewerAssigned);
+
+            interviewBriefItem.Status = InterviewStatus.InterviewerAssigned;
+            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            this.StoreStatisticsItem(statistics);
+        }
+
+        private StatisticsLineGroupedByDateAndTemplate GetStatisticItem(StatisticsLineGroupedByDateAndTemplate interviewBriefItem)
+        {
+            var key = GetCombinedStatisticKey(interviewBriefItem);
+            return this.statisticsStorage.GetById(key);
+        }
+        
+        private void StoreStatisticsItem(StatisticsLineGroupedByDateAndTemplate statistics)
+        {
+            var key = GetCombinedStatisticKey(statistics);
+            this.statisticsStorage.Store(statistics, key);
+        }
+
+        private static string GetCombinedStatisticKey(StatisticsLineGroupedByDateAndTemplate statisticsLineGroupedByDateAndTemplate)
+        {
+            return String.Format("{0}${1}${2}-{3}-{4}",
+                statisticsLineGroupedByDateAndTemplate.QuestionnaireId,
+                statisticsLineGroupedByDateAndTemplate.QuestionnaireVersion,
+                statisticsLineGroupedByDateAndTemplate.Date.Date.Year,
+                statisticsLineGroupedByDateAndTemplate.Date.Date.Month,
+                statisticsLineGroupedByDateAndTemplate.Date.Date.Day);
+        }
+
+        private static string GetCombinedStatisticKey(Guid questionnaireId, long questionnaireVersion, DateTime dateTime)
+        {
+            return String.Format("{0}${1}${2}-{3}-{4}",
+                questionnaireId,
+                questionnaireVersion,
+                dateTime.Date.Year,
+                dateTime.Date.Month,
+                dateTime.Date.Day);
+        }
+
+        private StatisticsLineGroupedByDateAndTemplate CreateNewStatisticsLine(Guid questionnaireId, long questionnaireVersion, DateTime dateTime)
+        {
+            return new StatisticsLineGroupedByDateAndTemplate
+            {
+                Date = dateTime.Date,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion
+            };
         }
 
         public string Name
@@ -215,12 +197,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public Type[] UsesViews
         {
-            get { return new[] { typeof (UserDocument), typeof (QuestionnaireBrowseItem), typeof (InterviewBrief) }; }
+            get { return new[] { typeof(UserDocument), typeof(InterviewDetailsForChart) }; }
         }
 
         public Type[] BuildsViews
         {
-            get { return new[] { typeof (StatisticsLineGroupedByDateAndTemplate) }; }
+            get { return new[] { typeof(StatisticsLineGroupedByDateAndTemplate), typeof(InterviewDetailsForChart) }; }
         }
     }
 }

@@ -9,8 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public Guid QuestionnaireId { get; set; }
 
-        public string QuestionnaireTitle { get; set; }
-
         public long QuestionnaireVersion { get; set; }
 
         public int SupervisorAssignedCount { get; set; }
