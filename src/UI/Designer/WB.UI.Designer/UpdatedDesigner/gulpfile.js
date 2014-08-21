@@ -41,7 +41,7 @@ gulp.task('devJs', function () {
       //.pipe(plugins.jshint())
       //.pipe(plugins.jshint.reporter('default'))
       .pipe(plugins.ngAnnotate())
-      .pipe(plugins.uglify())
+      //.pipe(plugins.uglify())
       .pipe(plugins.concat('app.js'))
       .pipe(plugins.rev())
       .pipe(gulp.dest('build'));
