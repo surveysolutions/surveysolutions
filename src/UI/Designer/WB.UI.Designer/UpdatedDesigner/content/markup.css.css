@@ -6119,6 +6119,12 @@ textarea {
   margin-right: 2%;
   margin-top: 20px;
 }
+#verification-modal.ie9-backdrop {
+  right: 0;
+}
+#verification-modal.ie9-backdrop .arrow {
+  display: none;
+}
 .share-window.modal {
   overflow: auto;
 }
