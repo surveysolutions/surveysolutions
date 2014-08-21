@@ -1077,6 +1077,8 @@
     <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\sinon-ie-1.7.1.js" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\tests\mousetrap.html" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\tests\test.mousetrap.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\azusa.jpg" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-default.html" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-minScrollbarLength.html" />
@@ -1332,6 +1334,12 @@
     <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\README.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\CHANGES.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\CONTRIBUTING.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
