@@ -222,7 +222,7 @@ namespace Ncqrs
             }
             catch (InvalidOperationException ex)
             {
-                var message = string.Format("Failed to get type for the {0}. Check that there is no duplicate events registered in KnownEventDataTypes with only namespaces that are different", type);
+                var message = string.Format("Failed to get type for the {0}. Check that there is no duplicate events registered in KnownEventDataTypes with only namespaces that are different", typeName);
                 throw new ArgumentException(message, "typeName", ex);
             }
         }
