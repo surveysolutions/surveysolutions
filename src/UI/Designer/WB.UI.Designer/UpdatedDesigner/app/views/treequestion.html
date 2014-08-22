@@ -1,4 +1,4 @@
-<div class="question item question" ui-sref-active="selected">
+<div class="question item question" ui-sref-active="selected" context-menu data-target="context-menu-{{ item.itemId }}">
     <a class="handler" ui-tree-handle></a>
     <a class="item-body" ui-sref="questionnaire.chapter.question({itemId: item.itemId})">
         <div class="item-text">
@@ -7,17 +7,16 @@
         </div>
         <span class="qname-block">
             <span ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
-            <!--<div class="btn-group dropdown">
-            <a href="javascript:void(0);" ng-click="$event.stopPropagation()" data-toggle="dropdown" class="dropdown-toggle"></a>
-            <ul class="dropdown-menu">
-                <li>
-                    <a ng-click="deleteQuestion(item)">Delete</a>
-                </li>
-                <li>
-                    <a ng-click="cloneQuestion(item.itemId)">Clone</a>
-                </li>
-            </ul>
-        </div>-->
         </span>
     </a>
+    <div class="dropdown position-fixed" id="context-menu-{{ item.itemId }}">
+        <ul class="dropdown-menu" role="menu">
+            <li>
+                <a ng-click="deleteQuestion(item)">Delete</a>
+            </li>
+            <li>
+                <a ng-click="cloneQuestion(item.itemId)">Clone</a>
+            </li>
+        </ul>
+    </div>
 </div>
