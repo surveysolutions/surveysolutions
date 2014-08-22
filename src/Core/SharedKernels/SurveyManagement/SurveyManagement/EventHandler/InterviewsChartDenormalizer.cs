@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
-        {            
+        {
             var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
             var key = GetCombinedStatisticKey(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
             var statistics = this.statisticsStorage.GetById(key);
