@@ -4,6 +4,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -18,53 +19,53 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewerAssigned>
     {
         private readonly IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate> statisticsStorage;
-        private readonly IReadSideRepositoryWriter<InterviewDetailsForChart> interviewBriefStorage;
+        private readonly IReadSideRepositoryWriter<InterviewDetailsForChart> interviewDetailsStorage;
 
         public InterviewsChartDenormalizer(
             IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate> statisticsStorage,
-            IReadSideRepositoryWriter<InterviewDetailsForChart> interviewBriefStorage)
+            IReadSideRepositoryWriter<InterviewDetailsForChart> interviewDetailsStorage)
         {
             this.statisticsStorage = statisticsStorage;
-            this.interviewBriefStorage = interviewBriefStorage;
+            this.interviewDetailsStorage = interviewDetailsStorage;
         }
 
         private void HandleCreation(Guid eventSourceId, Guid questionnaireId, long questionnaireVersion, DateTime dateTime)
         {
-            var statisticsLineGroupedByDateAndTemplate = CreateNewStatisticsLine(questionnaireId, questionnaireVersion, dateTime.Date);
+            var statisticsLineGroupedByDateAndTemplate = this.CreateEmptyStatisticsLine(questionnaireId, questionnaireVersion, dateTime.Date);
             var interviewDetailsForChart = new InterviewDetailsForChart
             {
                 InterviewId = eventSourceId,
-                QuestionnaireId =  questionnaireId,
+                QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
                 Status = InterviewStatus.Created
             };
 
-            this.interviewBriefStorage.Store(interviewDetailsForChart, eventSourceId);
-            this.statisticsStorage.Store(statisticsLineGroupedByDateAndTemplate, GetCombinedStatisticKey(statisticsLineGroupedByDateAndTemplate));
+            this.interviewDetailsStorage.Store(interviewDetailsForChart, eventSourceId);
+            this.statisticsStorage.Store(statisticsLineGroupedByDateAndTemplate,
+                GetCombinedStatisticKey(statisticsLineGroupedByDateAndTemplate));
         }
 
-        private void DecreaseStatisticsByStatus(StatisticsLineGroupedByDateAndTemplate statistics, InterviewStatus status)
+        private void DecreaseStatisticsByStatus(StatisticsLineGroupedByDateAndTemplate statistics, InterviewDetailsForChart detailsForChart, InterviewStatus status)
         {
-            this.ChangeByStatus(statistics, status, false);
+            this.ChangeByStatus(statistics, detailsForChart, status, false);
         }
 
-        private void IncreaseStatisticsByStatus(StatisticsLineGroupedByDateAndTemplate statistics, InterviewStatus status)
+        private void IncreaseStatisticsByStatus(StatisticsLineGroupedByDateAndTemplate statistics, InterviewDetailsForChart detailsForChart, InterviewStatus status)
         {
-            this.ChangeByStatus(statistics, status, true);
+            this.ChangeByStatus(statistics, detailsForChart, status, true);
         }
 
-        private void ChangeByStatus(StatisticsLineGroupedByDateAndTemplate summary, InterviewStatus status, bool isIncrease)
+        private void ChangeByStatus(StatisticsLineGroupedByDateAndTemplate summary, InterviewDetailsForChart detailsForChart, InterviewStatus status, bool isIncrease)
         {
             var incCount = isIncrease ? 1 : -1;
 
-            summary.SupervisorAssignedCount += status == InterviewStatus.SupervisorAssigned ? incCount : 0;
-            summary.InterviewerAssignedCount += status == InterviewStatus.InterviewerAssigned ? incCount : 0;
-            summary.CompletedCount += status == InterviewStatus.Completed ? incCount : 0;
-            summary.ApprovedBySupervisorCount += status == InterviewStatus.ApprovedBySupervisor ? incCount : 0;
-            summary.RejectedBySupervisorCount += status == InterviewStatus.RejectedBySupervisor ? incCount : 0;
-
-            summary.ApprovedByHeadquartersCount += status == InterviewStatus.ApprovedByHeadquarters ? incCount : 0;
-            summary.RejectedByHeadquartersCount += status == InterviewStatus.RejectedByHeadquarters ? incCount : 0;
+            detailsForChart.SupervisorAssignedCount = summary.SupervisorAssignedCount += status == InterviewStatus.SupervisorAssigned ? incCount : 0;
+            detailsForChart.InterviewerAssignedCount = summary.InterviewerAssignedCount += status == InterviewStatus.InterviewerAssigned ? incCount : 0;
+            detailsForChart.CompletedCount = summary.CompletedCount += status == InterviewStatus.Completed ? incCount : 0;
+            detailsForChart.ApprovedBySupervisorCount = summary.ApprovedBySupervisorCount += status == InterviewStatus.ApprovedBySupervisor ? incCount : 0;
+            detailsForChart.RejectedBySupervisorCount = summary.RejectedBySupervisorCount += status == InterviewStatus.RejectedBySupervisor ? incCount : 0;
+            detailsForChart.ApprovedByHeadquartersCount = summary.ApprovedByHeadquartersCount += status == InterviewStatus.ApprovedByHeadquarters ? incCount : 0;
+            detailsForChart.RejectedByHeadquartersCount = summary.RejectedByHeadquartersCount += status == InterviewStatus.RejectedByHeadquarters ? incCount : 0;
         }
 
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
@@ -84,74 +85,70 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
-            var key = GetCombinedStatisticKey(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+            var details = this.interviewDetailsStorage.GetById(evnt.EventSourceId);
+            var key = GetCombinedStatisticKey(details.QuestionnaireId, details.QuestionnaireVersion, evnt.EventTimeStamp.Date);
             var statistics = this.statisticsStorage.GetById(key);
 
             if (statistics != null)
             {
-                this.DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+                //this.DecreaseStatisticsByStatus(statistics, details, details.Status);
             }
             else
             {
-                statistics = this.CreateNewStatisticsLine(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+                statistics = this.CreateNewStatisticsLine(details, evnt.EventTimeStamp.Date);
             }
 
-            this.IncreaseStatisticsByStatus(statistics, evnt.Payload.Status);
+            this.IncreaseStatisticsByStatus(statistics, details, evnt.Payload.Status);
 
-            interviewBriefItem.Status = evnt.Payload.Status;
-            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            details.Status = evnt.Payload.Status;
+            this.interviewDetailsStorage.Store(details, details.InterviewId);
             this.StoreStatisticsItem(statistics);
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
-            var key = GetCombinedStatisticKey(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+            var interviewBriefItem = this.interviewDetailsStorage.GetById(evnt.EventSourceId);
+            var key = GetCombinedStatisticKey(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion,
+                evnt.EventTimeStamp.Date);
             var statistics = this.statisticsStorage.GetById(key);
 
             if (statistics != null)
             {
-                this.DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+                //this.DecreaseStatisticsByStatus(statistics, interviewBriefItem, interviewBriefItem.Status);
             }
             else
             {
-                statistics = this.CreateNewStatisticsLine(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+                statistics = this.CreateNewStatisticsLine(interviewBriefItem, evnt.EventTimeStamp.Date);
             }
 
-            this.IncreaseStatisticsByStatus(statistics, InterviewStatus.SupervisorAssigned);
+            this.IncreaseStatisticsByStatus(statistics, interviewBriefItem, InterviewStatus.SupervisorAssigned);
 
             interviewBriefItem.Status = InterviewStatus.SupervisorAssigned;
-            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            this.interviewDetailsStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             this.StoreStatisticsItem(statistics);
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            var interviewBriefItem = this.interviewBriefStorage.GetById(evnt.EventSourceId);
-            var key = GetCombinedStatisticKey(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+            var interviewBriefItem = this.interviewDetailsStorage.GetById(evnt.EventSourceId);
+            var key = GetCombinedStatisticKey(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion,
+                evnt.EventTimeStamp.Date);
             var statistics = this.statisticsStorage.GetById(key);
 
             if (statistics != null)
             {
-                this.DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+                //this.DecreaseStatisticsByStatus(statistics, interviewBriefItem, interviewBriefItem.Status);
             }
             else
             {
-                statistics = this.CreateNewStatisticsLine(interviewBriefItem.QuestionnaireId, interviewBriefItem.QuestionnaireVersion, evnt.EventTimeStamp.Date);
+                statistics = this.CreateNewStatisticsLine(interviewBriefItem, evnt.EventTimeStamp.Date);
             }
 
-            this.IncreaseStatisticsByStatus(statistics, InterviewStatus.InterviewerAssigned);
+            this.IncreaseStatisticsByStatus(statistics, interviewBriefItem, InterviewStatus.InterviewerAssigned);
 
             interviewBriefItem.Status = InterviewStatus.InterviewerAssigned;
-            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            this.interviewDetailsStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             this.StoreStatisticsItem(statistics);
-        }
-
-        private StatisticsLineGroupedByDateAndTemplate GetStatisticItem(StatisticsLineGroupedByDateAndTemplate interviewBriefItem)
-        {
-            var key = GetCombinedStatisticKey(interviewBriefItem);
-            return this.statisticsStorage.GetById(key);
         }
         
         private void StoreStatisticsItem(StatisticsLineGroupedByDateAndTemplate statistics)
@@ -180,7 +177,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 dateTime.Date.Day);
         }
 
-        private StatisticsLineGroupedByDateAndTemplate CreateNewStatisticsLine(Guid questionnaireId, long questionnaireVersion, DateTime dateTime)
+        private StatisticsLineGroupedByDateAndTemplate CreateEmptyStatisticsLine(Guid questionnaireId, long questionnaireVersion, DateTime dateTime)
         {
             return new StatisticsLineGroupedByDateAndTemplate
             {
@@ -190,6 +187,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             };
         }
 
+        private StatisticsLineGroupedByDateAndTemplate CreateNewStatisticsLine(InterviewDetailsForChart interviewDetailsForChart, DateTime date)
+        {
+            var statisticsLine = this.CreateEmptyStatisticsLine(interviewDetailsForChart.QuestionnaireId, interviewDetailsForChart.QuestionnaireVersion, date);
+            
+            statisticsLine.SupervisorAssignedCount = interviewDetailsForChart.SupervisorAssignedCount;
+            statisticsLine.InterviewerAssignedCount = interviewDetailsForChart.InterviewerAssignedCount;
+            statisticsLine.CompletedCount = interviewDetailsForChart.CompletedCount;
+            statisticsLine.ApprovedBySupervisorCount = interviewDetailsForChart.ApprovedBySupervisorCount;
+            statisticsLine.RejectedBySupervisorCount = interviewDetailsForChart.RejectedBySupervisorCount;
+            statisticsLine.ApprovedByHeadquartersCount = interviewDetailsForChart.ApprovedByHeadquartersCount;
+            statisticsLine.RejectedByHeadquartersCount = interviewDetailsForChart.RejectedByHeadquartersCount;
+
+            return statisticsLine;
+        }
+
         public string Name
         {
             get { return this.GetType().Name; }
@@ -197,12 +209,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public Type[] UsesViews
         {
-            get { return new[] { typeof(UserDocument), typeof(InterviewDetailsForChart) }; }
+            get { return new[] { typeof (UserDocument), typeof (InterviewDetailsForChart) }; }
         }
 
         public Type[] BuildsViews
         {
-            get { return new[] { typeof(StatisticsLineGroupedByDateAndTemplate), typeof(InterviewDetailsForChart) }; }
+            get { return new[] { typeof (StatisticsLineGroupedByDateAndTemplate), typeof (InterviewDetailsForChart) }; }
         }
     }
 }
