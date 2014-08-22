@@ -44,11 +44,7 @@
         "angular": "1.3.0-build.3002+sha.9a2f8e1"
     },
     "overrides": {
-        "perfect-scrollbar": {
-            "main": [
-                "src/perfect-scrollbar.js"
-            ]
-        }, "angular-unsavedChanges": {
+        "angular-unsavedChanges": {
             "main": [
                 "dist/unsavedChanges.js"
             ]
