@@ -5899,7 +5899,8 @@ button#questionSelectBtn {
 }
 button#questionTypeBtn > i,
 button#questionSelectBtn > i {
-  left: 7px;
+  left: 10px;
+    position: absolute;
 }
 button#questionTypeBtn > span.vertical-line,
 button#questionSelectBtn > span.vertical-line {

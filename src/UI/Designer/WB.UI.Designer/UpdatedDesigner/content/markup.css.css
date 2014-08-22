@@ -5943,7 +5943,9 @@ button#questionSelectBtn {
 }
 button#questionTypeBtn > i,
 button#questionSelectBtn > i {
-  left: 7px;
+  left: 10px;
+  top: 7px;
+  position: absolute;
 }
 button#questionTypeBtn > span.vertical-line,
 button#questionSelectBtn > span.vertical-line {
@@ -5986,7 +5988,8 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
   text-transform: none;
 }
 ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
-  left: 7px;
+  left: 10px;
+  position: absolute;
 }
 .instructions-cross {
   margin-top: 20px;
