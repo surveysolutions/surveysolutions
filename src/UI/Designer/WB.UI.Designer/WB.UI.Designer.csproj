@@ -1340,6 +1340,9 @@
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\CONTRIBUTING.md" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\README.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js.map">
+      <DependentUpon>ng-context-menu.min.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
