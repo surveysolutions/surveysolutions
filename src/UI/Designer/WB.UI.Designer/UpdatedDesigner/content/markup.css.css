@@ -6724,7 +6724,7 @@ textarea#edit-group-description {
 #designer-editor.container section#header {
   position: relative;
   height: 75px;
-  padding-left: 52px;
+  padding-left: 70px;
 }
 #designer-editor.container section#header > .designer-logo {
   position: absolute;
@@ -6893,7 +6893,7 @@ textarea#edit-group-description {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 1300;
+  z-index: 800;
   width: 52px;
   height: 100%;
   background: #bcc3c8 url(i/chapter-panel-btn.png) 0 19px no-repeat;
@@ -6958,6 +6958,7 @@ textarea#edit-group-description {
   margin-left: 18px;
   margin-right: 24px;
   margin-bottom: 0;
+  margin-top: 29px;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   color: #fff;
   text-transform: uppercase;
@@ -7017,7 +7018,7 @@ textarea#edit-group-description {
 #designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item.current {
   position: relative;
   top: -2px;
-  z-index: 10;
+  z-index: 9;
   min-height: 48px;
 }
 #designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item.current .holder .inner a.chapter-panel-item-body {
@@ -7498,7 +7499,7 @@ textarea#edit-group-description {
   padding-top: 2px;
   top: -2px;
   height: 36px;
-  z-index: 998;
+  z-index: 498;
 }
 .questionnaire-tree-holder .item.selected:hover {
   background-color: #ffffff;
@@ -7516,7 +7517,7 @@ textarea#edit-group-description {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
 }
 .questionnaire-tree-holder .item.selected .dropdown {
-  z-index: 1001;
+  z-index: 501;
 }
 .questionnaire-tree-holder .item.selected .item-body {
   border-bottom: none;
@@ -7535,7 +7536,7 @@ textarea#edit-group-description {
   padding-top: 2px;
   top: -2px;
   height: 36px;
-  z-index: 999;
+  z-index: 499;
   background-color: #edeff1;
 }
 .questionnaire-tree-holder .item:hover .handler {
@@ -7548,7 +7549,7 @@ textarea#edit-group-description {
   border-bottom: none;
 }
 .questionnaire-tree-holder .item:hover .dropdown {
-  z-index: 1000;
+  z-index: 500;
 }
 .questionnaire-tree-holder .item:hover .qname-block {
   background-color: #edeff1;
@@ -7572,14 +7573,14 @@ textarea#edit-group-description {
 }
 .ps-scrollbar-x-rail,
 .ps-scrollbar-y-rail {
-  z-index: 200;
+  z-index: 700;
 }
 .ps-scrollbar-y-rail {
   margin-right: 5px;
 }
 .position-fixed {
   position: fixed;
-  z-index: 1000;
+  z-index: 500;
 }
 .dropdown ul.dropdown-menu > li > a {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
