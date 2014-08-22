@@ -18,106 +18,8 @@
     border-radius: 3px;
 }
 
-li.chapter-panel-item {
-    position: relative;
-    display: block;
-    border-bottom: 1px #d7dbde solid;
-    cursor: pointer;
 
-    > .holder {
-        display: block;
-        min-width: 336px;
-
-        > .inner {
-            //position: relative;
-            display: block;
-            padding-left: 18px;
-            padding-right: 55px;
-
-            > .handler {
-                position: absolute;
-                left: 0;
-                top: 0;
-                height: 100%;
-                width: 18px;
-            }
-
-            > h1 {
-                margin: 0;
-                .questionnarie-chapter-list-fontstyle();
-                padding: 18px 0 22px;
-
-                > a, a:hover {
-                    text-decoration: none;
-                }
-            }
-
-            > span {
-                .questionnarie-chapter-list-span-fontstyle();
-            }
-
-            > .btn-group {
-                position: absolute;
-                top: 15px;
-                right: 8px;
-
-                &.open > .dropdown-toggle {
-                    display: inline-block;
-                    box-shadow: none;
-                }
-
-                > .dropdown-toggle {
-                    display: none;
-                    //position: absolute;
-                    //top: 11px;
-                    //right: 8px;
-                    .wb-dropdown-button();
-                }
-
-                > ul.dropdown-menu {
-                    list-style: none;
-                    margin: 6px 0;
-                    padding: 0;
-                    .context-menu-fontstyle();
-
-                    li {
-                        a {
-                            letter-spacing: inherit;
-                            color: inherit;
-                            display: block;
-                            padding: 0 12px;
-                            width: 100%;
-                            height: 100%;
-                            text-decoration: none;
-                            line-height: inherit;
-
-                            &:hover {
-                                color: #fff;
-                                background-color: @common-blue-color;
-                            }
-                        }
-                    }
-                }
-            }
-
-            &:hover {
-                > .btn-group > .dropdown-toggle {
-                    display: inline-block;
-                }
-                /*background-color: #dbdfe2;
-        > .handler {
-          background: #dbdfe2 url(../i/chapter-list-li-dots.png) center no-repeat;
-        } */
-            }
-        }
-    }
-
-    &.current > .holder > .inner > h1 {
-        font-weight: bold;
-    }
-}
-
-ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:hover {
+.chapters.angular-ui-tree-drag > li.chapter-panel-item {
     > .holder {
         > .inner {
             background-color: #dbdfe2;
@@ -271,7 +173,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             position: absolute;
             left: 0;
             top: 0;
-            z-index: 300;
+            z-index: 1300;
             width: @chapter-menu-panel-width;
             height: 100%;
             background: @designer-editor-mediumblue-bg-color url(../i/chapter-panel-btn.png) 0 19px no-repeat;
@@ -283,7 +185,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             }
 
             > .foldback-button {
-                @side: 55px;
+                @side: 50px;
                 display: none;
                 position: absolute;
                 cursor: pointer;
@@ -295,7 +197,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
                 background: #dbdfe2 url(../i/arrow-left.png) center 0 no-repeat;
                 //.box-shadow(50px 0 50px -15px rgba(0, 0, 0, 0.25));
                 &:hover {
-                    background-position: 0 -@side;
+                    background-position: -3px -55px;
                 }
             }
 
@@ -321,11 +223,11 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
                 }
 
                 > .ul-holder {
-                    > ul.chapters {
+                    .chapters {
                         display: block;
                     }
 
-                    > .button-holder {
+                    .button-holder {
                         display: block;
                     }
                 }
@@ -334,15 +236,25 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             > .ul-holder {
                 width: 100%;
                 height: 100%;
-                overflow-x: hidden;
-                overflow-y: auto;
 
-                > ul.chapters {
+                .chapters {
+                    width: 100%;
+                    height: 100%;
                     display: none;
                     list-style: none;
                     margin: 0;
                     padding: 0;
+                    padding-left: 8px;
                     //overflow: hidden;
+                    h3 {
+                        margin-left: 18px;
+                        margin-right: 24px;
+                        margin-bottom: 0;
+                        .chapters-title-fontstyle();
+                        padding-bottom: 8px;
+                        border-bottom: 2px solid @tree-item-border-color;
+                    }
+
                     .angular-ui-tree-placeholder {
                         outline: 2px dashed white;
                     }
@@ -351,12 +263,97 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
                         left: inherit;
                         right: 0;
                     }
+
+                    li.chapter-panel-item {
+                        position: relative;
+                        display: block;
+                        cursor: pointer;
+
+
+                        > .holder {
+                            display: block;
+
+                            > .inner {
+                                //position: relative;
+                                display: block;
+                                padding-left: 18px;
+                                padding-right: 24px;
+                                .border-left-radius(4px);
+
+                                > .handler {
+                                    position: absolute;
+                                    left: 0;
+                                    top: 0;
+                                    height: 100%;
+                                    width: 18px;
+                                    .border-left-radius(4px);
+                                }
+
+                                > a.chapter-panel-item-body {
+                                    text-decoration: none;
+                                    margin: 0;
+                                    .questionnarie-chapter-list-fontstyle();
+                                    padding: 14px 0 16px;
+                                    border-bottom: 2px solid @tree-item-border-color;
+                                    display: block;
+                                    min-height: @chapter-item-height;
+                                    font-weight: bold;
+                                }
+                            }
+                        }
+
+                        &.current {
+                            position: relative;
+                            top: -2px;
+                            z-index: 10;
+                            min-height: @chapter-item-height;
+
+                            .holder .inner a.chapter-panel-item-body {
+                                border-bottom: none;
+                                padding-top: 16px;
+                            }
+
+                             > .holder {
+                                > .inner {
+                                    background-color: @chapter-item-selected-color;
+
+                                    > .handler {
+                                        background:@chapter-item-selected-color url(../i/chapter-list-li-dots.png) center no-repeat;
+                                    }
+                                }
+                            }
+                        }
+
+                        &:hover {
+                            position: relative;
+                            top: -2px;
+                            z-index: 10;
+                            min-height: @chapter-item-height;
+
+                            .holder .inner a.chapter-panel-item-body {
+                                border-bottom: none;
+                                padding-top: 16px;
+                            }
+
+                            > .holder {
+                                > .inner {
+                                    background-color: @chapter-item-hover-color;
+
+                                    > .handler {
+                                        background: @chapter-item-hover-color url(../i/chapter-list-li-dots.png) center no-repeat;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 .button-holder {
-                    display: none;
-                    width: 100%;
-                    margin: 10px 0 0 10px;
+                    margin-top: 2px;
+                    margin-left: 18px;
+                    margin-right: 24px;
+                    border-top: 2px solid @tree-item-border-color;
+                    padding: 8px 0 20px 0;
                     overflow: hidden;
                 }
             }
@@ -799,7 +796,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
                 }
             }
 
-            .dropdown{
+            .dropdown {
                 z-index: 1001;
             }
 
@@ -836,7 +833,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
                 border-bottom: none;
             }
 
-            .dropdown{
+            .dropdown {
                 z-index: 1000;
             }
 
@@ -873,15 +870,16 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 .ps-scrollbar-y-rail {
     margin-right: 5px;
 }
-.position-fixed{
+
+.position-fixed {
     position: fixed;
     z-index: 1000;
 }
 
-.dropdown  ul.dropdown-menu > li > a{
+.dropdown ul.dropdown-menu > li > a {
     .context-menu-fontstyle();
 
-    &:hover{
+    &:hover {
         background: @context-menu-hover-color;
     }
 }

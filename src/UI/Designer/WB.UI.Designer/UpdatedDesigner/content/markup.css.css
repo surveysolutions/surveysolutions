@@ -6704,110 +6704,10 @@ textarea#edit-group-description {
   border-bottom: solid 1px #FAD540;
   border-radius: 3px;
 }
-li.chapter-panel-item {
-  position: relative;
-  display: block;
-  border-bottom: 1px #d7dbde solid;
-  cursor: pointer;
-}
-li.chapter-panel-item > .holder {
-  display: block;
-  min-width: 336px;
-}
-li.chapter-panel-item > .holder > .inner {
-  display: block;
-  padding-left: 18px;
-  padding-right: 55px;
-}
-li.chapter-panel-item > .holder > .inner > .handler {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 18px;
-}
-li.chapter-panel-item > .holder > .inner > h1 {
-  margin: 0;
-  padding: 18px 0 22px;
-}
-li.chapter-panel-item > .holder > .inner > h1,
-li.chapter-panel-item > .holder > .inner > h1 > a {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  color: #3f3f3f;
-}
-li.chapter-panel-item > .holder > .inner > h1 > a,
-li.chapter-panel-item > .holder > .inner > h1 a:hover {
-  text-decoration: none;
-}
-li.chapter-panel-item > .holder > .inner > span {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 12px;
-  color: #64686d;
-}
-li.chapter-panel-item > .holder > .inner > .btn-group {
-  position: absolute;
-  top: 15px;
-  right: 8px;
-}
-li.chapter-panel-item > .holder > .inner > .btn-group.open > .dropdown-toggle {
-  display: inline-block;
-  box-shadow: none;
-}
-li.chapter-panel-item > .holder > .inner > .btn-group > .dropdown-toggle {
-  display: none;
-  vertical-align: middle;
-  width: 37px;
-  height: 30px;
-  background: url(i/btn-dropdown-blue.png) 0px -5px no-repeat;
-}
-li.chapter-panel-item > .holder > .inner > .btn-group > .dropdown-toggle:hover {
-  background-position: center -42px;
-}
-li.chapter-panel-item > .holder > .inner > .btn-group > ul.dropdown-menu {
-  list-style: none;
-  margin: 6px 0;
-  padding: 0;
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 30px;
-  color: #2a81cb;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-li.chapter-panel-item > .holder > .inner > .btn-group > ul.dropdown-menu li a {
-  letter-spacing: inherit;
-  color: inherit;
-  display: block;
-  padding: 0 12px;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  line-height: inherit;
-}
-li.chapter-panel-item > .holder > .inner > .btn-group > ul.dropdown-menu li a:hover {
-  color: #fff;
-  background-color: #2a81cb;
-}
-li.chapter-panel-item > .holder > .inner:hover {
-  /*background-color: #dbdfe2;
-        > .handler {
-          background: #dbdfe2 url(../i/chapter-list-li-dots.png) center no-repeat;
-        } */
-}
-li.chapter-panel-item > .holder > .inner:hover > .btn-group > .dropdown-toggle {
-  display: inline-block;
-}
-li.chapter-panel-item.current > .holder > .inner > h1 {
-  font-weight: bold;
-}
-ul.chapters.angular-ui-tree-drag > li.chapter-panel-item > .holder > .inner,
-li.chapter-panel-item:hover > .holder > .inner {
+.chapters.angular-ui-tree-drag > li.chapter-panel-item > .holder > .inner {
   background-color: #dbdfe2;
 }
-ul.chapters.angular-ui-tree-drag > li.chapter-panel-item > .holder > .inner > .handler,
-li.chapter-panel-item:hover > .holder > .inner > .handler {
+.chapters.angular-ui-tree-drag > li.chapter-panel-item > .holder > .inner > .handler {
   background: #dbdfe2 url(i/chapter-list-li-dots.png) center no-repeat;
 }
 .scroller {
@@ -6993,7 +6893,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 300;
+  z-index: 1300;
   width: 52px;
   height: 100%;
   background: #bcc3c8 url(i/chapter-panel-btn.png) 0 19px no-repeat;
@@ -7009,14 +6909,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   position: absolute;
   cursor: pointer;
   top: 0;
-  right: -55px;
+  right: -50px;
   z-index: 15;
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   background: #dbdfe2 url(i/arrow-left.png) center 0 no-repeat;
 }
 #designer-editor.container section#main .chapter-panel > .foldback-button:hover {
-  background-position: 0 -55px;
+  background-position: -3px -55px;
 }
 #designer-editor.container section#main .chapter-panel.unfolded {
   width: 354px;
@@ -7035,35 +6935,123 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 #designer-editor.container section#main .chapter-panel.unfolded > .foldback-button {
   display: block;
 }
-#designer-editor.container section#main .chapter-panel.unfolded > .ul-holder > ul.chapters {
+#designer-editor.container section#main .chapter-panel.unfolded > .ul-holder .chapters {
   display: block;
 }
-#designer-editor.container section#main .chapter-panel.unfolded > .ul-holder > .button-holder {
+#designer-editor.container section#main .chapter-panel.unfolded > .ul-holder .button-holder {
   display: block;
 }
 #designer-editor.container section#main .chapter-panel > .ul-holder {
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
 }
-#designer-editor.container section#main .chapter-panel > .ul-holder > ul.chapters {
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters {
+  width: 100%;
+  height: 100%;
   display: none;
   list-style: none;
   margin: 0;
   padding: 0;
+  padding-left: 8px;
 }
-#designer-editor.container section#main .chapter-panel > .ul-holder > ul.chapters .angular-ui-tree-placeholder {
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters h3 {
+  margin-left: 18px;
+  margin-right: 24px;
+  margin-bottom: 0;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 1px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #edeff1;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters .angular-ui-tree-placeholder {
   outline: 2px dashed white;
 }
-#designer-editor.container section#main .chapter-panel > .ul-holder > ul.chapters .btn-group ul.dropdown-menu {
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters .btn-group ul.dropdown-menu {
   left: inherit;
   right: 0;
 }
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item > .holder {
+  display: block;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item > .holder > .inner {
+  display: block;
+  padding-left: 18px;
+  padding-right: 24px;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item > .holder > .inner > .handler {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 18px;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item > .holder > .inner > a.chapter-panel-item-body {
+  text-decoration: none;
+  margin: 0;
+  padding: 14px 0 16px;
+  border-bottom: 2px solid #edeff1;
+  display: block;
+  min-height: 48px;
+  font-weight: bold;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item > .holder > .inner > a.chapter-panel-item-body,
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item > .holder > .inner > a.chapter-panel-item-body > a {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #3f3f3f;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item.current {
+  position: relative;
+  top: -2px;
+  z-index: 10;
+  min-height: 48px;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item.current .holder .inner a.chapter-panel-item-body {
+  border-bottom: none;
+  padding-top: 16px;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item.current > .holder > .inner {
+  background-color: #ffffff;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item.current > .holder > .inner > .handler {
+  background: #ffffff url(i/chapter-list-li-dots.png) center no-repeat;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item:hover {
+  position: relative;
+  top: -2px;
+  z-index: 10;
+  min-height: 48px;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item:hover .holder .inner a.chapter-panel-item-body {
+  border-bottom: none;
+  padding-top: 16px;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item:hover > .holder > .inner {
+  background-color: #dbdfe2;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item:hover > .holder > .inner > .handler {
+  background: #dbdfe2 url(i/chapter-list-li-dots.png) center no-repeat;
+}
 #designer-editor.container section#main .chapter-panel > .ul-holder .button-holder {
-  display: none;
-  width: 100%;
-  margin: 10px 0 0 10px;
+  margin-top: 2px;
+  margin-left: 18px;
+  margin-right: 24px;
+  border-top: 2px solid #edeff1;
+  padding: 8px 0 20px 0;
   overflow: hidden;
 }
 #designer-editor.container section#main > .questionnaire-tree {

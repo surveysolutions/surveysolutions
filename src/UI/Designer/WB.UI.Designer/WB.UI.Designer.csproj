@@ -481,6 +481,7 @@
     <Content Include="UpdatedDesigner\content\i\chapter-panel-btn-small.png" />
     <Content Include="UpdatedDesigner\content\i\cross-red.png" />
     <Content Include="UpdatedDesigner\content\i\cross.png" />
+    <Content Include="UpdatedDesigner\content\i\icons.png" />
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.css" />
@@ -655,15 +656,6 @@
     <Content Include="UpdatedDesigner\content\i\dropdown-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\dropup-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\filter-glyph.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-datetime-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-floatedit-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-geoloc-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-intedit-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-multianswer-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-multimedia-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-singleanswer-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-textarea-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-textedit-sm.png" />
     <Content Include="UpdatedDesigner\content\i\icon-qname-block-link.png" />
     <Content Include="UpdatedDesigner\content\i\left-panel-shadow.png" />
     <Content Include="UpdatedDesigner\content\i\pretty-checkable-sprites-org.png" />
