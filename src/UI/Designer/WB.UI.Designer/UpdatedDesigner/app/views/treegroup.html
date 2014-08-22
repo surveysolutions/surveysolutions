@@ -2,7 +2,8 @@
      ng-class="{ 'highlighted': is_highlighted, 'roster':item.isRoster }"
      ui-sref-active="selected"
      ui-sref="{{ item.isRoster ? 'questionnaire.chapter.roster({itemId: item.itemId})' :
-                                         'questionnaire.chapter.group({itemId: item.itemId})' }}">
+                                         'questionnaire.chapter.group({itemId: item.itemId})' }}"
+     context-menu-hide-on-mouse-leave="true">
     <a class="handler" ui-tree-handle></a>
     <a class="item-body" ui-sref="{{!item.isRoster ? 'questionnaire.chapter.group({itemId: item.itemId})' : 'questionnaire.chapter.roster({itemId: item.itemId})'}}">
         <div class="item-text">
@@ -15,7 +16,7 @@
             <span ng-if="item.isRoster" ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
 
         </span>
-        
+
     </a>
     <div class="dropdown position-fixed" id="context-menu-{{ item.itemId }}">
         <ul class="dropdown-menu" role="menu">

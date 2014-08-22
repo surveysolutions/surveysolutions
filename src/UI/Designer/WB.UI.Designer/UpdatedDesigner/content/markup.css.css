@@ -7393,7 +7393,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   color: #2075bf;
 }
 .questionnaire-tree-holder .item {
-  position: static;
+  position: relative;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
   padding-left: 18px;
@@ -7510,7 +7510,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding-top: 2px;
   top: -2px;
   height: 36px;
-  z-index: 100;
+  z-index: 998;
 }
 .questionnaire-tree-holder .item.selected:hover {
   background-color: #ffffff;
@@ -7526,6 +7526,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
+}
+.questionnaire-tree-holder .item.selected .dropdown {
+  z-index: 1001;
 }
 .questionnaire-tree-holder .item.selected .item-body {
   border-bottom: none;
@@ -7544,7 +7547,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding-top: 2px;
   top: -2px;
   height: 36px;
-  z-index: 99;
+  z-index: 999;
   background-color: #edeff1;
 }
 .questionnaire-tree-holder .item:hover .handler {
@@ -7555,6 +7558,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 .questionnaire-tree-holder .item:hover .item-body {
   border-bottom: none;
+}
+.questionnaire-tree-holder .item:hover .dropdown {
+  z-index: 1000;
 }
 .questionnaire-tree-holder .item:hover .qname-block {
   background-color: #edeff1;
@@ -7585,6 +7591,19 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 .position-fixed {
   position: fixed;
+  z-index: 1000;
+}
+.dropdown ul.dropdown-menu > li > a {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 30px;
+  color: #2a81cb;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.dropdown ul.dropdown-menu > li > a:hover {
+  background: #edeff1;
 }
 #verify-popover {
   display: none;

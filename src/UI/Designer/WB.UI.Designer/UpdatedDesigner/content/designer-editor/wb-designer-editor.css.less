@@ -656,7 +656,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
     }
 
     .item {
-        position: static;
+        position: relative;
         .border-left-radius(4px);
         padding-left: 18px;
         padding-right: 24px;
@@ -781,7 +781,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             padding-top: 2px;
             top: -2px;
             height: @questionnaire-tree-item-height;
-            z-index: 100;
+            z-index: 998;
 
             &:hover {
                 background-color: @questionnarie-question-list-item-selected-color;
@@ -799,6 +799,9 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
                 }
             }
 
+            .dropdown{
+                z-index: 1001;
+            }
 
 
             .item-body {
@@ -819,7 +822,7 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
             padding-top: 2px;
             top: -2px;
             height: @questionnaire-tree-item-height;
-            z-index: 99;
+            z-index: 999;
             background-color: @questionnarie-question-list-item-hover-color;
 
             .handler {
@@ -831,6 +834,10 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 
             .item-body {
                 border-bottom: none;
+            }
+
+            .dropdown{
+                z-index: 1000;
             }
 
             .qname-block {
@@ -868,4 +875,13 @@ ul.chapters.angular-ui-tree-drag > li.chapter-panel-item, li.chapter-panel-item:
 }
 .position-fixed{
     position: fixed;
+    z-index: 1000;
+}
+
+.dropdown  ul.dropdown-menu > li > a{
+    .context-menu-fontstyle();
+
+    &:hover{
+        background: @context-menu-hover-color;
+    }
 }

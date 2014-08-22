@@ -16,7 +16,8 @@ angular
       restrict: 'A',
       scope: {
         'callback': '&contextMenu',
-        'disabled': '&contextMenuDisabled'
+        'disabled': '&contextMenuDisabled',
+        'hideOnMouseLeave': '&contextMenuHideOnMouseLeave'
       },
       link: function($scope, $element, $attrs) {
         var opened = false;
@@ -26,7 +27,7 @@ angular
 
           var doc = $document[0].documentElement;
           var docLeft = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0),
-            docTop = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0),
+            docTop = (window.pageYangulOffset || doc.scrollTop)  - (doc.clientTop || 0),
             elementWidth = menuElement[0].scrollWidth,
             elementHeight = menuElement[0].scrollHeight;
           var docWidth = doc.clientWidth + docLeft,
@@ -81,7 +82,15 @@ angular
           }
         }
 
-        function handleClickEvent(event) {
+        function handleHideEvent() {
+            if (!$scope.disabled() && opened) {
+                $scope.$apply(function () {
+                    close(ContextMenuService.menuElement);
+                });
+            }
+          }
+
+          function handleClickEvent(event) {
           if (!$scope.disabled() &&
             opened &&
             (event.button !== 2 || event.target !== ContextMenuService.element)) {
@@ -96,12 +105,16 @@ angular
         // just treat it as a contextmenu event
         $document.bind('click', handleClickEvent);
         $document.bind('contextmenu', handleClickEvent);
+        if ($scope.hideOnMouseLeave) {
+            $element.bind('mouseleave', handleHideEvent);
+        }
 
         $scope.$on('$destroy', function() {
           //console.log('destroy');
           $document.unbind('keyup', handleKeyUpEvent);
           $document.unbind('click', handleClickEvent);
           $document.unbind('contextmenu', handleClickEvent);
+          $element.unbind('mouseleave', handleHideEvent);
         });
       }
     };
