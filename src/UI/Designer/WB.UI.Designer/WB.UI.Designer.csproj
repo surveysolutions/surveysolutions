@@ -481,6 +481,8 @@
     <Content Include="UpdatedDesigner\content\i\chapter-panel-btn-small.png" />
     <Content Include="UpdatedDesigner\content\i\cross-red.png" />
     <Content Include="UpdatedDesigner\content\i\cross.png" />
+    <Content Include="UpdatedDesigner\content\i\d-loading.gif" />
+    <Content Include="UpdatedDesigner\content\i\d-normal.gif" />
     <Content Include="UpdatedDesigner\content\i\icons.png" />
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
