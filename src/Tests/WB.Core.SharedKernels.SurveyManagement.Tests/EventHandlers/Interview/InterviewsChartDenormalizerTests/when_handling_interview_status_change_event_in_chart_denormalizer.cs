@@ -48,8 +48,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         It should_statistics_approved_by_headquarters_count_equals_1 = () =>
             statistics.ApprovedByHeadquartersCount.ShouldEqual(1);
 
-        It should_statistics_approved_by_supervisor_count_equals_0 = () =>
-            statistics.ApprovedBySupervisorCount.ShouldEqual(0);
+        It should_statistics_approved_by_supervisor_count_equals_1 = () =>
+            statistics.ApprovedBySupervisorCount.ShouldEqual(1);
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");
