@@ -20,7 +20,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
         public InterviewsStatisticsReportView Load(InterviewsStatisticsReportInputModel input)
         {
             var stat = this.interviewSummaryReader.Query(
-                _ => _.Where(s => (s.QuestionnaireId == input.QuestionnaireId && s.QuestionnaireVersion == input.QuestionnaireVersion)).OrderBy(o => o.Date).ToList());
+                _ => _.Where(s => (s.QuestionnaireId == input.QuestionnaireId && s.QuestionnaireVersion == input.QuestionnaireVersion))
+                    .OrderBy(o => o.Date)
+                    .ToList()
+            );
 
             var result = new InterviewsStatisticsReportView();
 
@@ -65,11 +68,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                     result.Ticks[i, 0] = rowNumber;
                     result.Ticks[i, 1] = internalDate;
 
-                    supervisorAssignedData[i] = supervisorAssignedData[i -1];
-                    interviewerAssignedData[i] = interviewerAssignedData[i -1];
-                    completedData[i] = completedData[i -1];
-                    rejectedBySupervisor[i] = rejectedBySupervisor[i -1];
-                    approvedBySupervisor[i] = approvedBySupervisor[i -1];
+                    supervisorAssignedData[i] = supervisorAssignedData[i - 1];
+                    interviewerAssignedData[i] = interviewerAssignedData[i - 1];
+                    completedData[i] = completedData[i - 1];
+                    rejectedBySupervisor[i] = rejectedBySupervisor[i - 1];
+                    approvedBySupervisor[i] = approvedBySupervisor[i - 1];
                     rejectedByHeadquarters[i] = rejectedByHeadquarters[i - 1];
                     approvedByHeadquarters[i] = approvedByHeadquarters[i - 1];
                 }

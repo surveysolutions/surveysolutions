@@ -8,8 +8,15 @@
     self.SelectedTemplate = ko.observable('');
     self.Stats = ko.observable(null);
 
-    self.initChart = function() {
-        self.SendRequest(self.ServiceUrl, {}, function(data) {
+    self.initChart = function () {
+        var selectedTemplate = JSON.parse(self.SelectedTemplate());
+
+        var params = {
+            templateId: selectedTemplate.templateId,
+            templateVersion: selectedTemplate.version
+        };
+
+        self.SendRequest(self.ServiceUrl, params, function(data) {
             self.Stats(data);
             self.drawChart();
         });
@@ -79,12 +86,7 @@
     self.load = function() {
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
-        self.Url.query['templateId'] = self.QueryString['templateId'] || "";
-        self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
-        self.Url.query['status'] = self.QueryString['status'] || "";
-        self.Url.query['interviewerId'] = self.QueryString['interviewerId'] || "";
-
-        self.SelectedTemplate.subscribe(self.filter);
+        //self.SelectedTemplate.subscribe(self.initChart());
 
         self.initChart();
     };

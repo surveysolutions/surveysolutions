@@ -1,9 +1,11 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
@@ -180,6 +182,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public InterviewsStatisticsReportView HeadquarterInterviewsStatistics(InterviewsStatisticsViewModel data)
         {
             var input = new InterviewsStatisticsReportInputModel();
+
+            input.QuestionnaireId = data.TemplateId;
+            input.QuestionnaireVersion = data.TemplateVersion;
+            input.CurrentDate = DateTime.Now;
 
             return this.interviewsStatisticsFactory.Load(input);
         }
