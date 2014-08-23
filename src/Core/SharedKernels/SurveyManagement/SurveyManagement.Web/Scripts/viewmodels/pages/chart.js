@@ -52,6 +52,14 @@
                     drawBorder: false,
                     shadow: false
                 },
+                axesDefaults:
+                {
+                    min: 0,
+                    tickInterval: 1,
+                    tickOptions: {
+                        formatString: '%d'
+                    }
+                },
                 axes: {
                     xaxis: {
                         ticks: self.Stats().Ticks,
