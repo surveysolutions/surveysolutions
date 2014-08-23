@@ -7,8 +7,9 @@
     self.Templates = ko.observableArray([]);
     self.SelectedTemplate = ko.observable('');
     self.Stats = ko.observable(null);
+    self.Plot = null;
 
-    self.initChart = function () {
+    self.initChart = function() {
         var selectedTemplate = JSON.parse(self.SelectedTemplate());
 
         var params = {
@@ -23,7 +24,7 @@
     };
 
     self.drawChart = function() {
-        var plot = $.jqplot('interviewChart',
+        self.Plot = $.jqplot('interviewChart',
             self.Stats().Stats, {
                 stackSeries: true,
                 showMarker: false,
@@ -61,7 +62,7 @@
                         drawMajorGridlines: false
                     }
                 }
-            });
+            }).replot();
 
         $('#interviewChart').bind('jqplotHighlighterHighlight',
             function(ev, seriesIndex, pointIndex, data, plot) {
@@ -86,7 +87,7 @@
     self.load = function() {
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
-        //self.SelectedTemplate.subscribe(self.initChart());
+        self.SelectedTemplate.subscribe(function() { self.initChart(); });
 
         self.initChart();
     };
