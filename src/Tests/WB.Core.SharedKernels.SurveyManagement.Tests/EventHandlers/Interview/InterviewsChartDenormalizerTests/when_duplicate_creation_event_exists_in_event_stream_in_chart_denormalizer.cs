@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 {
     internal class when_duplicate_creation_event_exists_in_event_stream_in_chart_denormalizer : InterviewsChartDenormalizerTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             statisticsStorage = new TestInMemoryWriter<StatisticsLineGroupedByDateAndTemplate>();
             interviewBriefStorage = new TestInMemoryWriter<InterviewDetailsForChart>();
