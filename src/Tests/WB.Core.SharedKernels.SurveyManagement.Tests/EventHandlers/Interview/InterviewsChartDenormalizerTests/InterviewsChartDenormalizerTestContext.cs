@@ -12,8 +12,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
     internal class InterviewsChartDenormalizerTestContext
     {
         protected static InterviewsChartDenormalizer CreateStatisticsDenormalizer(
-                                IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate> statisticsStorage = null,
-                                IReadSideRepositoryWriter<InterviewDetailsForChart> interviewBriefStorage = null)
+            IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate> statisticsStorage = null,
+            IReadSideRepositoryWriter<InterviewDetailsForChart> interviewBriefStorage = null)
         {
             return new InterviewsChartDenormalizer(
                 statisticsStorage ?? Mock.Of<IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate>>(),
@@ -26,12 +26,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent
                 => publishedEvent.Payload == @event
-                && publishedEvent.EventSourceId == eventSourceId);
+                    && publishedEvent.EventSourceId == eventSourceId);
         }
 
-        protected static IPublishedEvent<InterviewStatusChanged> CreateInterviewStatusChangedEvent(InterviewStatus status, Guid eventSourceId)
+        protected static IPublishedEvent<InterviewStatusChanged> CreateInterviewStatusChangedEvent(InterviewStatus status,
+            Guid eventSourceId)
         {
             var evnt = ToPublishedEvent(new InterviewStatusChanged(status, String.Empty), eventSourceId);
+            return evnt;
+        }
+
+        protected static IPublishedEvent<InterviewCreated> CreateInterviewCreatedEvent(Guid userId, Guid questionnaireId,
+            long questionnaireVersion, Guid eventSourceId)
+        {
+            var evnt = ToPublishedEvent(new InterviewCreated(userId, questionnaireId, questionnaireVersion), eventSourceId);
             return evnt;
         }
     }

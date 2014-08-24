@@ -4,7 +4,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -31,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void HandleCreation(Guid eventSourceId, Guid questionnaireId, long questionnaireVersion, DateTime dateTime)
         {
-            var statisticsLineGroupedByDateAndTemplate = this.CreateEmptyStatisticsLine(questionnaireId, questionnaireVersion, dateTime.Date);
+            var statisticsLine = this.CreateEmptyStatisticsLine(questionnaireId, questionnaireVersion, dateTime.Date);
             var interviewDetailsForChart = new InterviewDetailsForChart
             {
                 InterviewId = eventSourceId,
@@ -41,8 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             };
 
             this.interviewDetailsStorage.Store(interviewDetailsForChart, eventSourceId);
-            this.statisticsStorage.Store(statisticsLineGroupedByDateAndTemplate,
-                GetCombinedStatisticKey(statisticsLineGroupedByDateAndTemplate));
+            this.statisticsStorage.Store(statisticsLine, GetCombinedStatisticKey(statisticsLine));
         }
 
         private void DecreaseStatisticsByStatus(StatisticsLineGroupedByDateAndTemplate statistics, InterviewDetailsForChart detailsForChart, InterviewStatus status)
@@ -87,17 +85,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var details = this.interviewDetailsStorage.GetById(evnt.EventSourceId);
             var key = GetCombinedStatisticKey(details.QuestionnaireId, details.QuestionnaireVersion, evnt.EventTimeStamp.Date);
-            var statistics = this.statisticsStorage.GetById(key);
+            var statistics = this.statisticsStorage.GetById(key) ?? this.CreateNewStatisticsLine(details, evnt.EventTimeStamp.Date);
 
-            if (statistics != null)
-            {
-                //this.DecreaseStatisticsByStatus(statistics, details, details.Status);
-            }
-            else
-            {
-                statistics = this.CreateNewStatisticsLine(details, evnt.EventTimeStamp.Date);
-            }
-
+            this.DecreaseStatisticsByStatus(statistics, details, details.Status);
             this.IncreaseStatisticsByStatus(statistics, details, evnt.Payload.Status);
 
             details.Status = evnt.Payload.Status;

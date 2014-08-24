@@ -170,7 +170,9 @@
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_user_who_gave_answer_is_supervisor.cs" />
     <Compile Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\InterviewsChartDenormalizerTestContext.cs" />
     <Compile Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\when_duplicate_creation_event_exists_in_event_stream_in_chart_denormalizer.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\when_handling_interview_created_event_in_chart_denormalizer.cs" />
     <Compile Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\when_handling_interview_status_change_event_in_chart_denormalizer.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\when_handling_series_of_events_in_chart_denormalizer.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerFunctionalTestsContext.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApprovedByHQ_event_and_responsible_user_not_found.cs" />

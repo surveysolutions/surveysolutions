@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewsChartDenormalizerTests
 {
-    internal class when_handling_interview_status_change_event_in_chart_denormalizer : InterviewsChartDenormalizerTestContext
+    internal class when_handling_interview_created_event_in_chart_denormalizer : InterviewsChartDenormalizerTestContext
     {
         Establish context = () =>
         {
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
             denormalizer = CreateStatisticsDenormalizer(statisticsStorage.Object, interviewDetailsStorage);
 
-            evnt = CreateInterviewStatusChangedEvent(InterviewStatus.ApprovedByHeadquarters, interviewId);
+            evnt = CreateInterviewCreatedEvent(questionnaireId, questionnaireId, 1, interviewId);
         };
 
         Because of = () =>
@@ -49,18 +49,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             statisticsStorage.Verify(x => x.Store(Moq.It.IsAny<StatisticsLineGroupedByDateAndTemplate>(), Moq.It.IsAny<string>()),
                 Times.Once);
 
-        It should_statistics_approved_by_headquarters_count_equals_1 = () =>
-            statistics.ApprovedByHeadquartersCount.ShouldEqual(1);
-
-        It should_statistics_approved_by_supervisor_count_equals_0 = () =>
-            statistics.ApprovedBySupervisorCount.ShouldEqual(0);
-
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");
 
         private static StatisticsLineGroupedByDateAndTemplate statistics;
         private static Mock<IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate>> statisticsStorage;
         private static InterviewsChartDenormalizer denormalizer;
-        private static IPublishedEvent<InterviewStatusChanged> evnt;
+        private static IPublishedEvent<InterviewCreated> evnt;
+
     }
 }
