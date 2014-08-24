@@ -12,9 +12,9 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewsChartDenormalizerTests
 {
-    internal class when_handling_interview_status_change_event_in_chart_denormalizer : InterviewsChartDenormalizerTestContext
+    internal class when_handling_series_of_events_in_chart_denormalizer : InterviewsChartDenormalizerTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var interviewDetailsForChart = new InterviewDetailsForChart
             {
@@ -24,7 +24,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             };
 
             var interviewDetailsStorage =
-                Mock.Of<IReadSideRepositoryWriter<InterviewDetailsForChart>>(x => x.GetById(interviewId.FormatGuid()) == interviewDetailsForChart);
+                Mock.Of<IReadSideRepositoryWriter<InterviewDetailsForChart>>(
+                    x => x.GetById(interviewId.FormatGuid()) == interviewDetailsForChart);
 
             var statisticsMock = new StatisticsLineGroupedByDateAndTemplate
             {
@@ -39,21 +40,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
             denormalizer = CreateStatisticsDenormalizer(statisticsStorage.Object, interviewDetailsStorage);
 
-            evnt = CreateInterviewStatusChangedEvent(InterviewStatus.ApprovedByHeadquarters, interviewId);
+            evnt1 = CreateInterviewCreatedEvent(questionnaireId, questionnaireId, 1, interviewId);
+            evnt2 = CreateInterviewStatusChangedEvent(InterviewStatus.InterviewerAssigned, interviewId);
+            evnt3 = CreateInterviewStatusChangedEvent(InterviewStatus.ApprovedByHeadquarters, interviewId);
         };
 
         Because of = () =>
-            denormalizer.Handle(evnt);
+            HandleAll(evnt1, evnt2, evnt3);
 
         It should_statistics_storage_stores_new_state = () =>
             statisticsStorage.Verify(x => x.Store(Moq.It.IsAny<StatisticsLineGroupedByDateAndTemplate>(), Moq.It.IsAny<string>()),
-                Times.Once);
+                Times.Exactly(3));
 
         It should_statistics_approved_by_headquarters_count_equals_1 = () =>
+            statistics.InterviewerAssignedCount.ShouldEqual(0);
+
+        It should_statistics_approved_by_supervisor_count_equals_1 = () =>
             statistics.ApprovedByHeadquartersCount.ShouldEqual(1);
 
-        It should_statistics_approved_by_supervisor_count_equals_0 = () =>
-            statistics.ApprovedBySupervisorCount.ShouldEqual(0);
+        private static void HandleAll(IPublishedEvent<InterviewCreated> evnt1,
+            IPublishedEvent<InterviewStatusChanged> evnt2,
+            IPublishedEvent<InterviewStatusChanged> evnt3)
+        {
+            denormalizer.Handle(evnt1);
+            denormalizer.Handle(evnt2);
+            denormalizer.Handle(evnt3);
+        }
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");
@@ -61,6 +73,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static StatisticsLineGroupedByDateAndTemplate statistics;
         private static Mock<IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate>> statisticsStorage;
         private static InterviewsChartDenormalizer denormalizer;
-        private static IPublishedEvent<InterviewStatusChanged> evnt;
+
+        private static IPublishedEvent<InterviewCreated> evnt1;
+        private static IPublishedEvent<InterviewStatusChanged> evnt2;
+        private static IPublishedEvent<InterviewStatusChanged> evnt3;
     }
 }
