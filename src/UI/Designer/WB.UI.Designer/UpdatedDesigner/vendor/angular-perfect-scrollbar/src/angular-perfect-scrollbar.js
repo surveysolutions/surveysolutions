@@ -20,7 +20,7 @@ angular.module('perfect_scrollbar', []).directive('perfectScrollbar', ['$parse',
         }
       }
       
-      $elem.perfectScrollbar(options);
+     $($elem).perfectScrollbar(options);
 
       if ($attr.refreshOnChange) {
         $scope.$watchCollection($attr.refreshOnChange, function() {

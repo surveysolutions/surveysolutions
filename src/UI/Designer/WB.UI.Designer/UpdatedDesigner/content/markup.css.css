@@ -7021,6 +7021,12 @@ textarea#edit-group-description {
 #designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item.current > .holder > .inner > .handler {
   background: #ffffff url(i/chapter-list-li-dots.png) center no-repeat;
 }
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item.current:hover > .holder > .inner {
+  background-color: #ffffff;
+}
+#designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item.current:hover > .holder > .inner > .handler {
+  background-color: #ffffff;
+}
 #designer-editor.container section#main .chapter-panel > .ul-holder .chapters li.chapter-panel-item:hover {
   position: relative;
   top: -2px;
