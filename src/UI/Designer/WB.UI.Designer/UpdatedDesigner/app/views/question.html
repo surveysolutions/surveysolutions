@@ -138,7 +138,7 @@
                     </div>
                 </div>
                 <p>
-                    <input ng-if="!activeQuestion.isFilteredCombobox" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
+                    <input ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
                     <input ng-if="activeQuestion.isFilteredCombobox" class="btn btn-link" type="button" value="Edit Options" ng-click="editFilteredComboboxOptions()">
                 </p>
                 <div class="table-holder">
@@ -215,7 +215,7 @@
                         </div>
                     </div>
                     <p>
-                        <input class="btn btn-link" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
+                        <input ng-if="!activeQuestion.isLinked" class="btn btn-link" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
                     </p>
                 </div>
                 <div class="row">
