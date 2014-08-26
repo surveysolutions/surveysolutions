@@ -6420,12 +6420,14 @@ input#edit-group-title {
 }
 .dropdown-icon {
   display: inline-block;
+  position: absolute;
+  left: 0;
   background: transparent center center no-repeat;
   vertical-align: middle;
   width: 20px;
   height: 20px;
   background: url(i/icons.png);
-  background-position-x: -60px;
+  background-position-x: 0;
   overflow: hidden;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons label,
@@ -6452,11 +6454,20 @@ input#edit-group-title {
   display: block;
   text-transform: uppercase;
   font-size: 10px;
+  font-weight: normal;
+  margin-bottom: 10px;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .chosen-item,
 #sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .chosen-item {
   color: #555555;
   line-height: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  position: relative;
+  padding-left: 29px;
+  display: block;
+  letter-spacing: normal;
+  font-weight: normal;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow,
 #sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow {
@@ -6468,6 +6479,7 @@ input#edit-group-title {
   overflow-y: auto;
   max-height: 500px;
   font-family: Arial, Helvetica, sans-serif;
+  border: none;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a,
 #sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a {
@@ -6475,6 +6487,9 @@ input#edit-group-title {
   padding-top: 1px;
   padding-bottom: 1px;
   color: #555555;
+  position: relative;
+  padding-left: 29px;
+  margin-left: 10px;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after,
 #sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after {
