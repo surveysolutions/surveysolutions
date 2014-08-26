@@ -47,10 +47,6 @@
             <h4 class="list-group-item-heading">Template</h4>
             <p class="list-group-item-text">
                 <select data-bind="value: SelectedTemplate" class="form-control">
-                    @*@if (Model.Templates.Count() > 1)
-                    {
-                        <option value="">Any</option>
-                    }*@
                     @foreach (var item in Model.Templates)
                     {
                         <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
@@ -64,7 +60,7 @@
 @section  actionbar
 {
     <div class="btn-group">
-        <button type="button" class="btn btn-default" data-bind="click: $root.refresh">Refresh</button>
+        <button type="button" class="btn btn-default" data-bind="click: $root.initChart">Refresh</button>
     </div>
 }
 
