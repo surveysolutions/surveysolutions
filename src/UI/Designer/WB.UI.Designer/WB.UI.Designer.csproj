@@ -474,6 +474,12 @@
     <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.min.css">
       <DependentUpon>wb-designer-editor.css.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.css">
+      <DependentUpon>wb-designer-verify-popover.css.less</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.min.css">
+      <DependentUpon>wb-designer-verify-popover.css.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.min.css">
       <DependentUpon>wb-question-list.css.css</DependentUpon>
     </Content>
@@ -518,6 +524,9 @@
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.css.map" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.css.map">
       <DependentUpon>wb-designer-editor.css.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.css.map">
+      <DependentUpon>wb-designer-verify-popover.css.css</DependentUpon>
     </Content>
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />

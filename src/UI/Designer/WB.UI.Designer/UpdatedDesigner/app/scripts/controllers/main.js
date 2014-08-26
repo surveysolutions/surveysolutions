@@ -40,10 +40,6 @@
                                 backdrop: isIE9,
                                 show: true
                             });
-
-                            $('#verification-modal .modal-dialog .arrow').css({
-                                left: $('#verification-btn').offset().left - 10
-                            });
                         } else {
                             if (verificationModal.hasClass('in'))
                                 verificationModal.modal('toggle');

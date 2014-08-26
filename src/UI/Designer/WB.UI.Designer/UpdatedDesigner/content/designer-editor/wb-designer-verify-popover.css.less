@@ -1,60 +1,144 @@
 //
 
 #verify-popover {
-  display: none;
+    display: none;
 }
 
 #verify-popover-content {
-  //max-height: 600px;
-  overflow: auto;
-  //width: 900px;
-
-  .question-list {
-    .wb-question-item('verify');
-    //.wb-question-list('verify');
-
-    .breadcrumbs {
-      .wb-breadcrumbs('gray');
-      margin: 10px 0;
-    }
-
-    ul.error-list {
-      margin-top: 5px;
-      list-style: none;
-      margin-bottom: 20px;
-      .wb-question-verify-error-li-fontstyle();
-
-      > li:before {
-        position: relative;
-        top: -0.3em;
-        width: 1.2em;
-        display: inline-block;
-        content:'';
-        margin-left:-2em;
-        margin-right: 1em;
-        border-bottom: 1px @verify-popup-color solid;
-      }
-      a {
-         .wb-question-verify-error-li-fontstyle();
-      }
-      > li > span.var {
-        .wb-question-verify-error-li-var-fontstyle();
-      }
-    }
-
-    .question {
-        height: auto;
-        white-space: normal;
-        min-height: 25px;
-        padding-right: 80px;
-        padding-left: 15px;
-        color: @verify-popup-error-color;
-        line-height: 1.6;
-    }
-
-    .item{
-        cursor: auto;
-    }
-  }
+    padding-left: 4px;
+    padding-right: 24px;
 }
 
+#verification-modal {
+    right: auto;
+    top: @header-height;
+    left: 0;
+    width: 50%;
+    bottom: 0;
+    position: fixed;
+    padding: @chapter-title-height/2 24px @chapter-title-height/2 @chapter-menu-panel-width+24px;
+
+    .modal-dialog {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        position: relative;
+
+        .modal-content {
+            height: 100%;
+            border: none;
+
+            .modal-header {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                left: 0;
+                height: @verification-modal-header-hight;
+                .opensanslight-font();
+                font-size: 36px;
+                font-weight: 300;
+                border-bottom: 2px solid @verification-modal-content-border-color;
+                border-top-color: @verification-modal-error-color;
+                padding: 0 22px;
+
+                h3 {
+                    span {
+                        color: @verification-modal-error-color;
+                    }
+                    line-height: @verification-modal-header-hight - 8px;
+                }
+            }
+
+            .modal-body {
+                padding: @verification-modal-header-hight 0 @verification-modal-footer-hight;
+                height: 100%;
+
+                .error-message {
+                    .georgia-font();
+                    font-size: 16px;
+                    padding-left: 18px;
+                    font-style: italic;
+                    margin-top: 10px;
+                    margin-bottom: 4px;
+                }
+
+                .error-code {
+                    .lucida-console-font();
+                    font-style: normal;
+                }
+
+                .verification-items {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    margin-bottom: 20px;
+
+                    .verification-item {
+                        margin-top: 2px;
+                        border-radius: 4px;
+                        padding-left: 18px;
+                        white-space: nowrap;
+                        height: @verification-item-height;
+                        .arial-font();
+                        font-size: 16px;
+                        background: @verification-item-bg-color;
+                        position: relative;
+                        display: block;
+                        color: @verify-popup-error-color;
+
+                        span {
+                            display: inline-block;
+                        }
+
+                        .icon {
+                            position: absolute;
+                            left: 18px;
+                            top: 7px;
+                        }
+
+                        .title {
+                            display: block;
+                            padding-left: 29px;
+                            line-height: @verification-item-height - 2px;
+                            overflow: hidden;
+                        }
+
+                        .variable {
+                            position: absolute;
+                            right: 0;
+                            padding-right: 8px;
+                            top: 6px;
+                            color: @qname-color;
+                            background: @verification-item-bg-color;
+
+                            &:before {
+                                @w: 55px;
+                                display: block;
+                                position: absolute;
+                                height: 100%;
+                                content: '';
+                                width: @w;
+                                top: 0px;
+                                left: -@w;
+                                #gradient > .horizontal(rgba(242, 243, 245, 0.0), rgba(242, 243, 245, 1.0));
+                            }
+                        }
+                    }
+                }
+            }
+
+            .modal-footer {
+                border-top: 2px solid @verification-modal-content-border-color;
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                left: 0;
+                height: @verification-modal-footer-hight;
+            }
+        }
+    }
+}
+
+#verification-modal.ie9-backdrop {
+    right: 0;
+}
