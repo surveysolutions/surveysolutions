@@ -101,7 +101,7 @@ namespace WB.Tools.CapiDataGenerator.Models
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 new FileInfrastructureModule(),
-                new MainModelModule(ravenHeadquartersSettings));
+                new MainModelModule(ravenHeadquartersSettings, ravenSupervisorSettings));
         }
 
     }

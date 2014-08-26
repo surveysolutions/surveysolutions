@@ -186,10 +186,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Configuration\ANK.WB.Tools.CapiDataGenerator.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Configuration\TLK.WB.Tools.CapiDataGenerator.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

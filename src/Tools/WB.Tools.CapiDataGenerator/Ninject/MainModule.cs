@@ -59,12 +59,14 @@ namespace CapiDataGenerator
         private const string PlainStoreName = "PlainStore";
 
         private readonly RavenConnectionSettings headquartersSettings;
+        private readonly RavenConnectionSettings supervisorSettings;
 
         private IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> capiTemplateVersionedWriter;
 
-        public MainModelModule(RavenConnectionSettings headquartersSettings)
+        public MainModelModule(RavenConnectionSettings headquartersSettings, RavenConnectionSettings supervisorSettings)
         {
             this.headquartersSettings = headquartersSettings;
+            this.supervisorSettings = supervisorSettings;
         }
 
         public override void Load()
@@ -88,8 +90,10 @@ namespace CapiDataGenerator
             
             ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore, capiTemplateWriter);
 
-            var supervisorEventStore = new RavenDBEventStore(
-                this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), 50);
+
+            //manual creation of supervisor event store
+            var supervisorStoreProvider = new DocumentStoreProvider(this.supervisorSettings);
+            var supervisorEventStore = new RavenDBEventStore(supervisorStoreProvider.CreateSeparateInstanceForEventStore(), 50);
 
             //manual creation of hq event store
             var storeProvider = new DocumentStoreProvider(this.headquartersSettings);
