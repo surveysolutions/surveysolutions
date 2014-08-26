@@ -17,5 +17,7 @@ namespace WB.UI.Designer.Models
         public string ItemId { get; set; }
         public string Title { get; set; }
         public string ChapterId { get; set; }
+        public string Variable { get; set; }
+        public string QuestionType { get; set; }
     }
 }

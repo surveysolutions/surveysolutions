@@ -5,7 +5,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
-using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Code
@@ -19,14 +18,25 @@ namespace WB.UI.Designer.Code
     {
         public VerificationError[] EnrichVerificationErrors(QuestionnaireVerificationError[] verificationErrors, QuestionnaireDocument questionnaireDocument)
         {
-            var errors = verificationErrors.Select(x => new VerificationError
-            {
-                Code = x.Code,
-                Message = x.Message,
-                References = GetEnrichedReferences(x.References, questionnaireDocument).ToList()
-            }).ToArray();
+            var errors = verificationErrors
+                .Where(x => x.References.Count() == 1)
+                .GroupBy(x => new { x.Code, x.Message })
+                .Select(x => new VerificationError
+                {
+                    Code = x.Key.Code,
+                    Message = x.Key.Message,
+                    References = x.SelectMany(g => GetEnrichedReferences(g.References, questionnaireDocument)).ToList()
+                }).ToList();
 
-            return errors;
+            errors.AddRange(verificationErrors
+                .Where(x => x.References.Count() != 1).Select(x => new VerificationError
+                {
+                    Code = x.Code,
+                    Message = x.Message,
+                    References = GetEnrichedReferences(x.References, questionnaireDocument).ToList()
+                }));
+
+            return errors.OrderBy(x => x.Code).ToArray();
         }
 
         private IEnumerable<VerificationReference> GetEnrichedReferences(
@@ -58,6 +68,7 @@ namespace WB.UI.Designer.Code
                     {
                         ItemId = reference.Id.FormatGuid(),
                         Type = group.IsRoster ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
+                        Variable = group.IsRoster ? group.VariableName : null,
                         Title = group.Title,
                         ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
                     };
@@ -82,6 +93,8 @@ namespace WB.UI.Designer.Code
                     {
                         ItemId = reference.Id.FormatGuid(),
                         Type = reference.Type,
+                        Variable = question.StataExportCaption,
+                        QuestionType = "icon-" + question.QuestionType.ToString().ToLower(),
                         Title = question.QuestionText,
                         ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
                     };
