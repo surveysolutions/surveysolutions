@@ -33,7 +33,9 @@
 
 @section styles
 {
-    @Styles.Render("~/Scripts/jqPlot/jquery.jqplot.min.css")
+    @Styles.Render(
+        "~/Scripts/jqPlot/jquery.jqplot.min.css",
+        "~/Content/datepicker3.css")
 }
 
 @section header
@@ -54,13 +56,17 @@
                     }
                 </select>
             </p>
+        </li>
+        <li class="list-group-item">
             <h4 class="list-group-item-heading">From</h4>
             <div class="input-group date">
-                <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-            </div>
+                <input type="text" class="form-control" data-bind="value: FromDate"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+            </div>            
+        </li>
+        <li class="list-group-item">
             <h4 class="list-group-item-heading">To</h4>
             <div class="input-group date">
-                <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                <input type="text" class="form-control" data-bind="value: ToDate"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
             </div>
         </li>
     </ul>
