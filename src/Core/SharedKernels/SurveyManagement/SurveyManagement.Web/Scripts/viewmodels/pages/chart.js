@@ -8,13 +8,17 @@
     self.SelectedTemplate = ko.observable('');
     self.Stats = ko.observable(null);
     self.Plot = null;
+    self.FromDate = ko.observable(null);
+    self.ToDate = ko.observable(null);
 
     self.initChart = function() {
         var selectedTemplate = JSON.parse(self.SelectedTemplate());
 
         var params = {
             templateId: selectedTemplate.templateId,
-            templateVersion: selectedTemplate.version
+            templateVersion: selectedTemplate.version,
+            from: self.FromDate(),
+            to: self.ToDate()
         };
 
         self.SendRequest(self.ServiceUrl, params, function(data) {
@@ -92,14 +96,45 @@
         );
     };
 
+    self.formatDate = function(today) {
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+        return  mm + '/' + dd + '/' + yyyy;
+    };
+
     self.load = function() {
+        var today = new Date();
+        today = self.formatDate(today);
+
+        var oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        oneWeekAgo = self.formatDate(oneWeekAgo);
+
+        $('.list-group .input-group.date').datepicker({
+            format: "mm/dd/yyyy",
+            keyboardNavigation: false,
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        self.FromDate(oneWeekAgo);
+        self.ToDate(today);
+
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
-        self.SelectedTemplate.subscribe(function() { self.initChart(); });
+        self.SelectedTemplate.subscribe(function () { self.initChart(); });
 
         self.initChart();
-
-        $('.list-group .input-group.date').datepicker({});
     };
 };
 

@@ -186,6 +186,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             input.QuestionnaireId = data.TemplateId;
             input.QuestionnaireVersion = data.TemplateVersion;
             input.CurrentDate = DateTime.Now;
+            input.From = data.From;
+            input.To = data.To;
 
             return this.interviewsStatisticsFactory.Load(input);
         }
