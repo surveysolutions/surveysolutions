@@ -3,9 +3,9 @@
     <h3 class="modal-title">Confirmation</h3>
 </div>
 <div class="modal-body">
-    Are you sure you want to delete "{{ item.title }}"?
+    {{ item.title }}"
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-lg" ng-click="ok()">DELETE</button>
-    <button class="btn btn-warning btn-link" ng-click="cancel()">BACK TO DESIGNER</button>
+    <button class="btn btn-primary btn-lg" ng-click="ok()">{{item.okButtonTitle}}</button>
+    <button class="btn btn-warning btn-link" ng-click="cancel()">{{item.cancelButtonTitle}}</button>
 </div>

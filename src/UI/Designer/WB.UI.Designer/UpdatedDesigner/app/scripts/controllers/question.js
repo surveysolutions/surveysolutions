@@ -1,10 +1,10 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     angular.module('designerApp')
         .controller('QuestionCtrl', [
-            '$rootScope', '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log',
-            function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log) {
+            '$rootScope', '$scope', '$state', 'utilityService', 'questionnaireService', 'commandService', '$log', 'confirmService',
+            function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService) {
                 $scope.currentChapterId = $state.params.chapterId;
 
                 var dataBind = function (result) {
@@ -12,7 +12,7 @@
                     $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
 
                     $scope.activeQuestion.itemId = $state.params.itemId;
-                    
+
                     $scope.activeQuestion.variable = result.variableName || result.variable;
                     $scope.activeQuestion.variableLabel = result.variableLabel;
                     $scope.activeQuestion.mask = result.mask;
@@ -31,7 +31,7 @@
                     $scope.activeQuestion.isFilteredCombobox = result.isFilteredCombobox;
 
                     var options = result.options || [];
-                    _.each(options, function(option) {
+                    _.each(options, function (option) {
                         option.id = utilityService.guid();
                     });
 
@@ -51,7 +51,7 @@
                 };
 
                 $scope.loadQuestion = function () {
-                    
+
                     questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
                         .success(function (result) {
                             $scope.initialQuestion = angular.copy(result);
@@ -60,9 +60,10 @@
                         });
                 };
 
-                $scope.saveQuestion = function () {
+                $scope.saveQuestion = function (callback) {
+                    console.log(callback);
                     if ($scope.questionForm.$valid) {
-                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function(result) {
+                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function (result) {
                             $scope.initialQuestion = angular.copy($scope.activeQuestion);
                             $rootScope.$emit('questionUpdated', {
                                 itemId: $scope.activeQuestion.itemId,
@@ -72,11 +73,14 @@
                                 linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
                             });
                             $scope.questionForm.$setPristine();
+                            if (_.isFunction(callback)) {
+                                callback();
+                            }
                         });
                     }
                 };
 
-                $scope.setQuestionType = function(type) {
+                $scope.setQuestionType = function (type) {
                     $scope.activeQuestion.type = type;
                     $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
                     if (type == 'GpsCoordinates' && $scope.activeQuestion.questionScope == 'Prefilled') {
@@ -93,7 +97,7 @@
                     $scope.questionForm.$setPristine();
                 };
 
-                $scope.addOption = function() {
+                $scope.addOption = function () {
                     $scope.activeQuestion.options.push({
                         "value": null,
                         "title": '',
@@ -102,22 +106,42 @@
                 };
 
                 $scope.editFilteredComboboxOptions = function () {
-                    window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
-                        "Edit options", "resizable: no;center : yes; modal:yes");
+                    if ($scope.questionForm.$dirty) {
+                        var modalInstance = confirmService.open({
+                            title: "To open options editor all unsaved changes must be saved. Should we save them now?",
+                            okButtonTitle: "Save",
+                            cancelButtonTitle: "No, later"
+                        });
+
+                        modalInstance.result.then(function (confirmResult) {
+                            if (confirmResult === 'ok') {
+                                $scope.saveQuestion(function() {
+                                    openOptionsEditor();
+                                });
+                            }
+                        });
+                    } else {
+                        openOptionsEditor();
+                    }
                 };
 
-                $scope.removeOption = function(index) {
+                var openOptionsEditor = function () {
+                    window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
+                      "Edit options", "resizable: no;center : yes; modal:yes");
+                }
+
+                $scope.removeOption = function (index) {
                     $scope.activeQuestion.options.splice(index, 1);
                 };
 
-                $scope.changeQuestionScope = function(scope) {
+                $scope.changeQuestionScope = function (scope) {
                     $scope.activeQuestion.questionScope = scope.text;
                     if ($scope.activeQuestion.questionScope == 'Prefilled') {
                         $scope.activeQuestion.enablementCondition = '';
                     }
                 };
 
-                $scope.$watch('activeQuestion.isLinked', function(newValue) {
+                $scope.$watch('activeQuestion.isLinked', function (newValue) {
                     if (!newValue && $scope.activeQuestion) {
                         $scope.activeQuestion.linkedToQuestionId = null;
                     }
