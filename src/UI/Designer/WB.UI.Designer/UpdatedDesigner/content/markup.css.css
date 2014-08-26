@@ -7650,7 +7650,7 @@ textarea#edit-group-description {
   color: #dd2c2c;
 }
 #verification-modal .modal-dialog .modal-content .modal-body {
-  padding: 70px 0 70px;
+  padding: 70px 0 44px;
   height: 100%;
 }
 #verification-modal .modal-dialog .modal-content .modal-body .error-message {
@@ -7725,7 +7725,12 @@ textarea#edit-group-description {
   bottom: 0;
   width: 100%;
   left: 0;
-  height: 70px;
+  height: 44px;
+  padding: 0 24px;
+  line-height: 42px;
+}
+#verification-modal .modal-dialog .modal-content .modal-footer .btn-link {
+  padding-left: 0;
 }
 #verification-modal.ie9-backdrop {
   right: 0;
