@@ -12,7 +12,9 @@ angular.module('perfect_scrollbar', []).directive('perfectScrollbar', ['$parse',
     replace: true,
     link: function($scope, $elem, $attr) {
       var options = {};
-      
+
+      $elem = $($elem);
+
       for (var i=0, l=psOptions.length; i<l; i++) {
         var opt = psOptions[i];
         if ($attr[opt] != undefined) {
@@ -20,7 +22,7 @@ angular.module('perfect_scrollbar', []).directive('perfectScrollbar', ['$parse',
         }
       }
       
-     $($elem).perfectScrollbar(options);
+     $elem.perfectScrollbar(options);
 
       if ($attr.refreshOnChange) {
         $scope.$watchCollection($attr.refreshOnChange, function() {
