@@ -1050,11 +1050,6 @@
     <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.js" />
     <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.min.js" />
     <Content Include="UpdatedDesigner\vendor\lodash\LICENSE.txt" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.concat.min.js" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.css" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.js" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\mCSB_buttons.png" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\.gitignore" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\Gruntfile.js" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\mousetrap.js" />
