@@ -16,7 +16,8 @@
         "~/Scripts/jqPlot/plugins/jqplot.categoryAxisRenderer.min.js",
         "~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js",
         "~/Scripts/jqPlot/plugins/jqplot.canvasTextRenderer.min.js",
-        "~/Scripts/jqPlot/plugins/jqplot.canvasAxisTickRenderer.min.js")
+        "~/Scripts/jqPlot/plugins/jqplot.canvasAxisTickRenderer.min.js",
+        "~/Scripts/bootstrap-datepicker.js")
 
     <script type="text/javascript">
         var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterInterviewsStatistics" })';
@@ -54,13 +55,13 @@
                 </select>
             </p>
             <h4 class="list-group-item-heading">From</h4>
-            <p class="list-group-item-text">
-                <input type="text" type="text" class="form-control">
-            </p>
+            <div class="input-group date">
+                <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+            </div>
             <h4 class="list-group-item-heading">To</h4>
-            <p class="list-group-item-text">
-                <input type="text" type="text" class="form-control">
-            </p>
+            <div class="input-group date">
+                <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+            </div>
         </li>
     </ul>
 }
