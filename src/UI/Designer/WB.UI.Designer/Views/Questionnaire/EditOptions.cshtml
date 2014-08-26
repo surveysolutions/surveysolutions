@@ -12,7 +12,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="@Styles.Url("~/content/css")" rel="stylesheet" />
+
+    <link href="~/UpdatedDesigner/vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            padding-top: 70px;
+            padding-bottom: 70px;
+        }
+    </style>
     @Scripts.Render("~/simplepage")
     <script type="text/javascript">
         function close_window() {
@@ -21,7 +28,7 @@
             }
         }
         function apply() {
-            $.post("@Url.Action("ApplyOptions", "Questionnaire")", function(response) {
+            $.post("@Url.Action("ApplyOptions", "Questionnaire")", function (response) {
                 if (response.IsSuccess) {
                     close();
                 } else {
@@ -32,38 +39,50 @@
     </script>
 </head>
 <body>
-    @using (Html.BeginForm("EditOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <div class="container-fluid">
-            <div class="row">
-                <div class="span6"><input type="file" title="Import" accept=".csv" name="csvFile" onchange=" this.form.submit() "></div>
-                <div class="span1"><a class="btn" href="@Url.Action("ExportOptions", "Questionnaire")">Export</a></div>
-                <div class="span1"><a class="btn" href="@Url.Action("ResetOptions", "Questionnaire")">Reset</a></div>
-            </div>
-            <div class="row" style="min-height: 100px; text-align: center; vertical-align: central; margin-top: 20px">
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var option in Model)
-                     {
-                         <div class="row">
-                             <div class="span1">@option.Value</div>
-                             <div class="span8">@option.Title</div>
-                         </div>
-                     }
-                }
-                else
-                {
-                    <text>No options</text>
-                }
-            </div>
-
-            <div class="row">
-                <div class="span1"><a class="btn btn-success" href="javascript:apply();">Apply</a></div>
-                <div class="span1"><a class="btn btn-danger" href="javascript:close_window();">Cancel</a></div>
-            </div>
-            
-            <div class="error"></div>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            @using (Html.BeginForm("EditOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data", @class = "navbar-left navbar-form" }))
+            {
+                <input type="file" title="Import" accept=".csv" name="csvFile" onchange=" this.form.submit() ">
+            }
+            <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">Export</a>
+            <a class="btn btn-default navbar-btn" href="@Url.Action("ResetOptions", "Questionnaire")">Reset</a>
         </div>
-    }
+    </nav>
+    <div class="container-fluid">
+        <div class="error"></div>
+        <div class="row" style="min-height: 100px; text-align: center; vertical-align: central; margin-top: 20px">
+            @if (Model != null && Model.Any())
+            {
+                <table class="table table-striped table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <td>Value</td>
+                            <td>Title</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var option in Model)
+                        {
+                            <tr>
+                                <td>@option.Value</td>
+                                <td>@option.Title</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <text>No options</text>
+            }
+        </div>
+    </div>
+    <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <div class="container">
+            <a class="btn btn-success navbar-btn" href="javascript:apply();">Apply</a>
+            <a class="btn btn-danger navbar-btn" href="javascript:close_window();">Cancel</a>
+        </div>
+    </nav>
 </body>
 </html>
