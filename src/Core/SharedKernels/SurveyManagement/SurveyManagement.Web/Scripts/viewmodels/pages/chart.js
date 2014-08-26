@@ -98,6 +98,8 @@
         self.SelectedTemplate.subscribe(function() { self.initChart(); });
 
         self.initChart();
+
+        $('.list-group .input-group.date').datepicker({});
     };
 };
 
