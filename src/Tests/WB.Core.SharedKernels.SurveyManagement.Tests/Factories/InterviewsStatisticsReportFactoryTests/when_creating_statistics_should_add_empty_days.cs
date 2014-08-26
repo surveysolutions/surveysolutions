@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
             var stats = Mock.Of<IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate>>();
 
             var questionnaireId = Guid.NewGuid();
-            var baseDate = Convert.ToDateTime("8/22/2014");
+            var baseDate = new DateTime(2014, 8, 22);
             var questionnaireVersion = 1;
 
             var data = new List<StatisticsLineGroupedByDateAndTemplate>
@@ -76,13 +76,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
         It should_have_days_count_muliply_two_records = () => view.Ticks.Length.ShouldEqual(3*2);
 
         It should_have_0_rownumber_equals_1 = () => view.Ticks[0, 0].ShouldEqual("1");
-        It should_have_0_date_correct = () => view.Ticks[0, 1].ShouldEqual("8/20/2014");
+        It should_have_0_date_correct = () => view.Ticks[0, 1].ShouldEqual(new DateTime(2014, 8, 20).ToShortDateString());
 
         It should_have_1_rownumber_equals_2 = () => view.Ticks[1, 0].ShouldEqual("2");
-        It should_have_1_date_correct = () => view.Ticks[1, 1].ShouldEqual("8/21/2014");
+        It should_have_1_date_correct = () => view.Ticks[1, 1].ShouldEqual(new DateTime(2014, 8, 21).ToShortDateString());
 
         It should_have_2_rownumber_equals_3 = () => view.Ticks[2, 0].ShouldEqual("3");
-        It should_have_2_date_correct = () => view.Ticks[2, 1].ShouldEqual("8/22/2014");
+        It should_have_2_date_correct = () => view.Ticks[2, 1].ShouldEqual(new DateTime(2014, 8, 22).ToShortDateString());
 
         It should_have_supervisorAssignedData_correct = () => view.Stats[0].ShouldEqual(new[] { 1, 1, 2 });
         It should_have_interviewerAssignedData_correct = () => view.Stats[1].ShouldEqual(new[] { 1, 1, 2 });
