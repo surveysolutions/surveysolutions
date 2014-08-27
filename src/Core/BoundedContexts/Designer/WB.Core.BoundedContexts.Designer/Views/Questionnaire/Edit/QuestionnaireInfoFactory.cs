@@ -255,12 +255,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                                                               .GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
                                                               .Map(singleOptionDetailsView);
                     editQuestionView.LinkedToQuestionId = Monads.Maybe(() => singleOptionDetailsView.LinkedToQuestionId.FormatGuid());
-                    if (editQuestionView.IsFilteredCombobox.HasValue
-                        && editQuestionView.IsFilteredCombobox.Value
-                        && editQuestionView.Options != null)
-                    {
-                        editQuestionView.Options = editQuestionView.Options.Take(20).ToArray();
-                    }
                     return editQuestionView;
                 case QuestionType.Text:
                     return
