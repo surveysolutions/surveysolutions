@@ -401,7 +401,7 @@
                     > .start-box {
                         .questionnarie-startbox-fontstyle();
                         text-align: center;
-                        position: absolute;
+                        position: static;
                         width: 100%;
                         top: 30%;
 
@@ -603,13 +603,19 @@
 
     > .search-box {
         @h: 40px;
+        position: absolute;
+        top: 0;
+        left: @chapter-menu-panel-width;
+        right: 0;
+        height: @chapter-title-height;
         .clearfix();
 
         > .input-group {
-            margin-top: 7px;
+            margin-top: (@chapter-menu-panel-width - @h)/2;
             line-height: @h;
             //width: ~"calc(100% - 50px)";
-            margin-right: 50px;
+            padding-right: 50px;
+            margin-left: 22px;
             float: left;
 
             > input {

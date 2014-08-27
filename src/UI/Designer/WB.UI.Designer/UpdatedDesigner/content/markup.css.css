@@ -7089,7 +7089,7 @@ textarea#edit-group-description {
   font-size: 18px;
   color: #919ba1;
   text-align: center;
-  position: absolute;
+  position: static;
   width: 100%;
   top: 30%;
 }
@@ -7329,6 +7329,13 @@ textarea#edit-group-description {
 .chapter-title ul.controls-right li a.search {
   background-image: url(i/search-glyph.png);
 }
+.chapter-title > .search-box {
+  position: absolute;
+  top: 0;
+  left: 52px;
+  right: 0;
+  height: 52px;
+}
 .chapter-title > .search-box:before,
 .chapter-title > .search-box:after {
   content: " ";
@@ -7346,9 +7353,10 @@ textarea#edit-group-description {
   clear: both;
 }
 .chapter-title > .search-box > .input-group {
-  margin-top: 7px;
+  margin-top: 6px;
   line-height: 40px;
-  margin-right: 50px;
+  padding-right: 50px;
+  margin-left: 22px;
   float: left;
 }
 .chapter-title > .search-box > .input-group > input {
