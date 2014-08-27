@@ -19,6 +19,9 @@
         #uploadForm input {
             display: inline-block;
         }
+        #applyOptionsError {
+            display: none;
+        }
     </style>
     @Scripts.Render("~/simplepage")
     <script type="text/javascript">
@@ -32,7 +35,8 @@
                 if (response.IsSuccess) {
                     close();
                 } else {
-                    $(".error").html(response.Error);
+                    $("#applyOptionsErrorContent").html(response.Error);
+                    $('#applyOptionsError').show();
                 }
             });
         }
@@ -46,7 +50,7 @@
             ajustNavPanels();
         });
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             ajustNavPanels();
         });
     </script>
@@ -68,6 +72,10 @@
         </nav>
     }
     <div id="content" class="container-fluid">
+        <div id="applyOptionsError" class="alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <div id="applyOptionsErrorContent"></div>
+        </div>
         @foreach (string key in Alerts.ALL.Except(new[] { Alerts.ATTENTION }))
         {
             if (TempData.ContainsKey(key))
