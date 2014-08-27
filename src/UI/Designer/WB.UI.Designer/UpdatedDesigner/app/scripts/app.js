@@ -87,7 +87,6 @@
         unsavedWarningsConfigProvider.routeEvent = '$stateChangeStart';
     }])
     .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
-        cfpLoadingBarProvider.parentSelector = '#header > .designer-logo';
         cfpLoadingBarProvider.spinnerTemplate = '<div id="loading-logo"></div>';
     }]);
 }(jQuery));
