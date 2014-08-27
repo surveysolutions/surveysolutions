@@ -247,8 +247,22 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public ActionResult EditOptions(HttpPostedFileBase csvFile)
         {
-            this.questionWithOptionsViewModel.Options = ExtractOptionsFromStream(csvFile.InputStream);
-            
+            try
+            {
+                this.questionWithOptionsViewModel.Options = ExtractOptionsFromStream(csvFile.InputStream);
+            }
+            catch (Exception e)
+            {
+                if (csvFile.FileName.EndsWith(".csv"))
+                {
+                    this.Error("CSV-file has wrong format or file is corrupted. " + e.Message);
+                }
+                else
+                {
+                    this.Error("Only .csv (comma-separated values) files are accepted");
+                }
+            }
+
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
