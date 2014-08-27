@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Main.Core.Entities.SubEntities.Option>
+﻿@using WB.UI.Designer.BootstrapSupport
+@model IEnumerable<Main.Core.Entities.SubEntities.Option>
 
 @{
     ViewBag.Title = "Edit options";
@@ -15,9 +16,8 @@
 
     <link href="~/UpdatedDesigner/vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <style type="text/css">
-        body {
-            padding-top: 70px;
-            padding-bottom: 70px;
+        #uploadForm input {
+            display: inline-block;
         }
     </style>
     @Scripts.Render("~/simplepage")
@@ -36,21 +36,48 @@
                 }
             });
         }
+
+        var ajustNavPanels = function () {
+            $("body").css("paddingTop", $("#topNav").outerHeight() + 3);
+            $("body").css("paddingBottom", $("#bottomNav").outerHeight() + 3);
+        }
+
+        $(window).resize(function () {
+            ajustNavPanels();
+        });
+
+        $(document).ready(function() {
+            ajustNavPanels();
+        });
     </script>
 </head>
 <body>
-    @using (Html.BeginForm("EditOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data", @class = "navbar-left navbar-form" }))
+    @using (Html.BeginForm("EditOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <nav id="topNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
-                <input type="file" title="Import" accept=".csv" name="csvFile" onchange="this.form.submit()">
-                <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">Export</a>
-                <a class="btn btn-default navbar-btn" href="@Url.Action("ResetOptions", "Questionnaire")">Reset</a>
+                <div id="uploadForm" class="navbar-form navbar-left">
+                    <input type="file" title="Import" accept=".csv" name="csvFile">
+                    <button class="btn btn-default" type="submit">Upload</button>
+                </div>
+                <div class="pull-right">
+                    <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">Export</a>
+                    <a class="btn btn-default navbar-btn" href="@Url.Action("ResetOptions", "Questionnaire")">Reset</a>
+                </div>
             </div>
         </nav>
     }
-    <div class="container-fluid">
-        <div class="error"></div>
+    <div id="content" class="container-fluid">
+        @foreach (string key in Alerts.ALL.Except(new[] { Alerts.ATTENTION }))
+        {
+            if (TempData.ContainsKey(key))
+            {
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    @Html.Raw(@TempData[key])
+                </div>
+            }
+        }
         <div class="row" style="min-height: 100px; text-align: center; vertical-align: central; margin-top: 20px">
             @if (Model != null && Model.Any())
             {
@@ -78,7 +105,7 @@
             }
         </div>
     </div>
-    <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+    <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="container">
             <a class="btn btn-success navbar-btn" href="javascript:apply();">Apply</a>
             <a class="btn btn-danger navbar-btn" href="javascript:close_window();">Cancel</a>
