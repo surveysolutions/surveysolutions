@@ -17,7 +17,9 @@
         'cfp.hotkeys',
         'blockUI',
         'unsavedChanges',
-        'monospaced.elastic'
+        'monospaced.elastic',
+        'perfect_scrollbar',
+        'ng-context-menu'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -83,5 +85,8 @@
     }])
     .config(['unsavedWarningsConfigProvider', function(unsavedWarningsConfigProvider) {
         unsavedWarningsConfigProvider.routeEvent = '$stateChangeStart';
+    }])
+    .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
+        cfpLoadingBarProvider.spinnerTemplate = '<div id="loading-logo"></div>';
     }]);
 }(jQuery));

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
@@ -78,6 +79,14 @@ namespace WB.UI.Designer.Api
             if (editQuestionView == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            if (editQuestionView.Type == QuestionType.SingleOption
+                && editQuestionView.IsFilteredCombobox.HasValue
+                && editQuestionView.IsFilteredCombobox.Value
+                && editQuestionView.Options != null)
+            {
+                editQuestionView.Options = editQuestionView.Options.Take(20).ToArray();
             }
 
             return editQuestionView;
