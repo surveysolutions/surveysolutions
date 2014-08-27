@@ -271,10 +271,11 @@ namespace WB.UI.Designer.Controllers
             var commandResult = new JsonQuestionnaireResult() {IsSuccess = true};
             try
             {
-                this.commandService.Execute(
-                    new UpdateFilteredComboboxOptionsCommand(Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId, this.UserHelper.WebUser.UserId,
-                        this.questionWithOptionsViewModel.Options.ToArray()));
+                throw new Exception("Hello!");
+                //this.commandService.Execute(
+                //    new UpdateFilteredComboboxOptionsCommand(Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
+                //        this.questionWithOptionsViewModel.QuestionId, this.UserHelper.WebUser.UserId,
+                //        this.questionWithOptionsViewModel.Options.ToArray()));
             }
             catch (Exception e)
             {
