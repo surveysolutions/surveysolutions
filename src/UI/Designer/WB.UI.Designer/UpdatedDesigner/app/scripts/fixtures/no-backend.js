@@ -99,6 +99,6 @@
 
             // Validation
             $httpBackend.whenPOST('../../account/findbyemail', { email: 'test@test.com' })
-                .respond({ "isUserExist": false });
+                .respond({ "doesUserExist": false });
         });
 }());

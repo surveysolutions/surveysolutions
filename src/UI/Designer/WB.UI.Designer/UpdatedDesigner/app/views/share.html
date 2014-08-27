@@ -34,10 +34,10 @@
         </div>
         <form role="form" class="form-inline row" name="viewModel.shareForm" novalidate>
             <h3>Invite collaborators by e-mail:</h3>
-            <div class="form-group" ng-class="{'has-error': !viewModel.shareForm.shareWithInput.$valid && viewModel.isUserExist  }">
+            <div class="form-group" ng-class="{'has-error': !viewModel.shareForm.shareWithInput.$valid && viewModel.doesUserExist  }">
                 <input type="text" ng-pattern="/^([a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)$/" class="form-control share-with-email" placeholder="Email to share with"
                        name="shareWithInput" ng-model="viewModel.shareWith" />
-                <p class="help-block ng-cloak" ng-show="viewModel.isUserExist == false">
+                <p class="help-block ng-cloak" ng-show="viewModel.doesUserExist == false">
                     Provide email of existing user
                 </p>
                 <p class="help-block ng-cloak" ng-show="viewModel.shareForm.shareWithInput.$error.pattern">
