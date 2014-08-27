@@ -158,6 +158,7 @@
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractNumericQuestionDataEvent.cs" />
