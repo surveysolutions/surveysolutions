@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
@@ -35,6 +36,8 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispa
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.EventStore;
+using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
@@ -48,6 +51,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Tools.CapiDataGenerator.Ninject;
+using WB.UI.Shared.Web.Settings;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CapiDataGenerator
@@ -91,13 +95,8 @@ namespace CapiDataGenerator
             ClearCapiDb(capiEvenStore, denormalizerStore, plainStore, changeLogStore, capiTemplateWriter);
 
 
-            //manual creation of supervisor event store
-            var supervisorStoreProvider = new DocumentStoreProvider(this.supervisorSettings);
-            var supervisorEventStore = new RavenDBEventStore(supervisorStoreProvider.CreateSeparateInstanceForEventStore(), 50);
-
-            //manual creation of hq event store
-            var storeProvider = new DocumentStoreProvider(this.headquartersSettings);
-            var headquartersEventStore = new RavenDBEventStore(storeProvider.CreateSeparateInstanceForEventStore(), 50);
+            var supervisorEventStore = this.GetSupervisorEventStore();
+            var headquartersEventStore = this.GetHeadquartersEventStore();
 
             var eventStore = new CapiDataGeneratorEventStore(capiEvenStore, supervisorEventStore, headquartersEventStore);
 
@@ -167,6 +166,60 @@ namespace CapiDataGenerator
             var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
             this.Bind<IDomainRepository>().ToConstant(repository);
             this.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
+        }
+
+        private IEventStore GetHeadquartersEventStore()
+        {
+            var storeSetting = (StoreProviders) Enum.Parse(typeof(StoreProviders), ConfigurationManager.AppSettings["Core.Headquarters.EventStoreProvider"]);
+
+            if (storeSetting == StoreProviders.Raven)
+            {
+                var storeProvider = new DocumentStoreProvider(this.headquartersSettings);
+                var headquartersEventStore = new RavenDBEventStore(storeProvider.CreateSeparateInstanceForEventStore(), 50);
+                return headquartersEventStore;
+            }
+            else if (storeSetting == StoreProviders.EventStore)
+            {
+                var eventStoreConnectionSettings = new EventStoreConnectionSettings();
+                eventStoreConnectionSettings.ServerIP = ConfigurationManager.AppSettings["EventStore.Headquarters.ServerIP"];
+                eventStoreConnectionSettings.ServerTcpPort = Convert.ToInt32(ConfigurationManager.AppSettings["EventStore.Headquarters.ServerTcpPort"]);
+                eventStoreConnectionSettings.ServerHttpPort = Convert.ToInt32(ConfigurationManager.AppSettings["EventStore.Headquarters.ServerHttpPort"]);
+                eventStoreConnectionSettings.Login = ConfigurationManager.AppSettings["EventStore.Headquarters.Login"];
+                eventStoreConnectionSettings.Password = ConfigurationManager.AppSettings["EventStore.Headquarters.Password"];
+
+                return new EventStoreWriteSide(eventStoreConnectionSettings);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private IEventStore GetSupervisorEventStore()
+        {
+            var storeSetting = (StoreProviders)Enum.Parse(typeof(StoreProviders), ConfigurationManager.AppSettings["Core.Supervisor.EventStoreProvider"]);
+
+            if (storeSetting == StoreProviders.Raven)
+            {
+                var supervisorStoreProvider = new DocumentStoreProvider(this.supervisorSettings);
+                var supervisorEventStore = new RavenDBEventStore(supervisorStoreProvider.CreateSeparateInstanceForEventStore(), 50);
+                return supervisorEventStore;
+            }
+            else if (storeSetting == StoreProviders.EventStore)
+            {
+                var eventStoreConnectionSettings = new EventStoreConnectionSettings();
+                eventStoreConnectionSettings.ServerIP = ConfigurationManager.AppSettings["EventStore.Supervisor.ServerIP"];
+                eventStoreConnectionSettings.ServerTcpPort = Convert.ToInt32(ConfigurationManager.AppSettings["EventStore.Supervisor.ServerTcpPort"]);
+                eventStoreConnectionSettings.ServerHttpPort = Convert.ToInt32(ConfigurationManager.AppSettings["EventStore.Supervisor.ServerHttpPort"]);
+                eventStoreConnectionSettings.Login = ConfigurationManager.AppSettings["EventStore.Supervisor.Login"];
+                eventStoreConnectionSettings.Password = ConfigurationManager.AppSettings["EventStore.Supervisor.Password"];
+
+                return new EventStoreWriteSide(eventStoreConnectionSettings);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private void ClearCapiDb(params IBackupable[] stores)
