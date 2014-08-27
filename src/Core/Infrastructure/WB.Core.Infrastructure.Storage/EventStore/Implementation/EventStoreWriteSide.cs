@@ -29,7 +29,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         };
         private readonly Encoding encoding = Encoding.UTF8;
         private readonly UserCredentials credentials;
-        internal const string EventsCategory = "WBEvent";
+        internal const string EventsCategory = "WB";
         private const string EventsPrefix = EventsCategory + "-";
 
         internal const string AllEventsStream = "all_wb_events";
@@ -119,7 +119,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 var eventData = this.BuildEventData(@event);
 
-                int expected = (int) (@event.EventSequence == 1 ? ExpectedVersion.NoStream : @event.EventSequence - 2);
+                int expected = (int) (@event.EventSequence == 1 ? ExpectedVersion.Any : @event.EventSequence - 2);
                 connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
                     .Wait(TimeSpan.FromSeconds(2));
             }
