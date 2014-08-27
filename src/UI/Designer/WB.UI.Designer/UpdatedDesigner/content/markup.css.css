@@ -6421,11 +6421,10 @@ input#edit-group-title {
   display: inline-block;
   position: absolute;
   left: 0;
-  background: transparent center center no-repeat;
   vertical-align: middle;
   width: 20px;
   height: 20px;
-  background: url(i/icons.png);
+  background-image: url(i/icons.png);
   background-position-x: 0;
   overflow: hidden;
 }
