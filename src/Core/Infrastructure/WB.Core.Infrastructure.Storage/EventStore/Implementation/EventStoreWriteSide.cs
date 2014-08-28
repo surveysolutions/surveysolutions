@@ -32,7 +32,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         internal const string EventsCategory = "WB";
         private const string EventsPrefix = EventsCategory + "-";
 
-        internal const string AllEventsStream = "all_wb_events";
+        internal const string AllEventsStream = "all_wb";
 
         public EventStoreWriteSide(EventStoreConnectionSettings connectionSettings)
         {
