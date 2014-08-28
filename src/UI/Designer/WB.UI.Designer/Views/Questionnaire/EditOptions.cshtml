@@ -1,11 +1,9 @@
 ﻿@using WB.UI.Designer.BootstrapSupport
 @model IEnumerable<Main.Core.Entities.SubEntities.Option>
-
 @{
     ViewBag.Title = "Edit options";
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +17,7 @@
         #uploadForm input {
             display: inline-block;
         }
+
         #applyOptionsError {
             display: none;
         }
@@ -35,6 +34,7 @@
                 if (response.IsSuccess) {
                     close();
                 } else {
+                    $("body").scrollTop(0);
                     $("#applyOptionsErrorContent").html(response.Error);
                     $('#applyOptionsError').show();
                 }
@@ -71,7 +71,7 @@
             </div>
         </nav>
     }
-    <div id="content" class="container-fluid">
+    <div id="content" class="container">
         <div id="applyOptionsError" class="alert alert-dismissible alert-danger">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <div id="applyOptionsErrorContent"></div>
@@ -86,32 +86,30 @@
                 </div>
             }
         }
-        <div class="row" style="min-height: 100px; text-align: center; vertical-align: central; margin-top: 20px">
-            @if (Model != null && Model.Any())
-            {
-                <table class="table table-striped table-hover table-condensed">
-                    <thead>
+        @if (Model != null && Model.Any())
+        {
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <td>Value</td>
+                        <td>Title</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var option in Model)
+                    {
                         <tr>
-                            <td>Value</td>
-                            <td>Title</td>
+                            <td>@option.Value</td>
+                            <td>@option.Title</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var option in Model)
-                        {
-                            <tr>
-                                <td>@option.Value</td>
-                                <td>@option.Title</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <text>No options</text>
-            }
-        </div>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <text>No options. Choose .csv file</text>
+        }
     </div>
     <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="container">
