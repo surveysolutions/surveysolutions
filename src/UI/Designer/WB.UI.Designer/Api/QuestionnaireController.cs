@@ -81,12 +81,14 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            if (editQuestionView.Type == QuestionType.SingleOption
-                && editQuestionView.IsFilteredCombobox.HasValue
-                && editQuestionView.IsFilteredCombobox.Value
-                && editQuestionView.Options != null)
+            bool isFilteredComboboxWithOptions = editQuestionView.Type == QuestionType.SingleOption
+                && editQuestionView.IsFilteredCombobox == true
+                && editQuestionView.Options != null;
+
+            if (isFilteredComboboxWithOptions)
             {
                 editQuestionView.Options = editQuestionView.Options.Take(20).ToArray();
+                editQuestionView.OptionsWasTruncated = true;
             }
 
             return editQuestionView;
