@@ -18,6 +18,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Raven.Client;
 using Raven.Client.Document;
+using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.Infrastructure.Storage.EventStore;
@@ -26,6 +27,7 @@ using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.Infrastructure.Storage.Raven.Implementation;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveyManagement;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Tools.EventsMigrator
@@ -123,6 +125,8 @@ namespace WB.Tools.EventsMigrator
             else
             {
                 assemblies.Add(typeof (DataCollectionSharedKernelModule).Assembly);
+                assemblies.Add(typeof(CapiBoundedContextModule).Assembly);
+                assemblies.Add(typeof(SurveyManagementSharedKernelModule).Assembly);
             }
 
             var types = GetAllEventTypes(assemblies).ToList();

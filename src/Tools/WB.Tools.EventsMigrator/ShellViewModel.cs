@@ -34,15 +34,15 @@ namespace WB.Tools.EventsMigrator
         public ShellViewModel()
         {
             ServerAddress = "http://localhost:8080";
-            RavenDatabaseName = "bigProd";
+            RavenDatabaseName = "hq-dev";
             EventStoreIP = "127.0.0.1";
-            EventStoreHttpPort = 2113;
-            EventStoreTcpPort = 1113;
+            EventStoreHttpPort = 3213;
+            EventStoreTcpPort = 3215;
             eventStoreLogin = "admin";
             eventStorePassword = "changeit";
             CanTransfer = true;
             AppNames = new ObservableCollection<string>(new List<string>(){"Designer", "HQ/SV"});
-            SelectedAppName = "Designer";
+            SelectedAppName = "HQ/SV";
             ErrorMessages = new ObservableCollection<string>();
         }
 
