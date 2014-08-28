@@ -148,7 +148,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                     metadata.Origin,
                     resolvedEvent.Event.EventId,
                     metadata.EventSourceId,
-                    resolvedEvent.OriginalEventNumber + 1,
+                    resolvedEvent.Event.EventNumber + 1,
                     metadata.Timestamp,
                     eventData,
                     new Version());
@@ -193,35 +193,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return this.connection;
         }
 
-        bool _disposed;
-
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            this.connection.Close();
         }
-
-        ~EventStoreWriteSide()
-        {
-            Dispose(false);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-                return;
-
-            if (disposing)
-            {
-                this.connection.Close();
-            }
-
-            this.connection.Dispose();
-            this.connection = null;
-
-            _disposed = true;
-        }
-
-
     }
 }
