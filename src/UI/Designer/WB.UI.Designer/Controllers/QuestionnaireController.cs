@@ -276,8 +276,10 @@ namespace WB.UI.Designer.Controllers
             try
             {
                 this.commandService.Execute(
-                    new UpdateFilteredComboboxOptionsCommand(Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId, this.UserHelper.WebUser.UserId,
+                    new UpdateFilteredComboboxOptionsCommand(
+                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
+                        this.questionWithOptionsViewModel.QuestionId, 
+                        this.UserHelper.WebUser.UserId,
                         this.questionWithOptionsViewModel.Options.ToArray()));
             }
             catch (Exception e)
