@@ -16,10 +16,11 @@ using Newtonsoft.Json.Converters;
 
 namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
-    internal class EventStoreWriteSide : IStreamableEventStore
+    internal class EventStoreWriteSide : IStreamableEventStore, IDisposable
     {
         private readonly EventStoreConnectionSettings connectionSettings;
-        private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings {
+        private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
+        {
             NullValueHandling = NullValueHandling.Ignore,
             DefaultValueHandling = DefaultValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore,
@@ -31,6 +32,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         private readonly UserCredentials credentials;
         internal static readonly string EventsCategory = "WB";
         private static readonly string EventsPrefix = EventsCategory + "-";
+        private IEventStoreConnection connection;
 
         internal const string AllEventsStream = "all_wb";
 
@@ -38,12 +40,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         {
             this.connectionSettings = connectionSettings;
             this.credentials = new UserCredentials(this.connectionSettings.Login, this.connectionSettings.Password);
+            this.connection = this.GetConnection();
         }
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            int normalMin = (int) Math.Max(1, minVersion);
-            int normalMax = (int) Math.Min(int.MaxValue, maxVersion);
+            int normalMin = (int)Math.Max(1, minVersion);
+            int normalMax = (int)Math.Min(int.MaxValue, maxVersion);
             if (minVersion > maxVersion)
             {
                 return new CommittedEventStream(id);
@@ -52,18 +55,16 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             var streamEvents = new List<ResolvedEvent>();
             int batchSize = normalMax - normalMin + 1;
 
-            using (var connection = this.GetConnection()) {
-                StreamEventsSlice currentSlice;
-                int nextSliceStart = StreamPosition.Start + normalMin - 1;
-                
-                do
-                {
-                    currentSlice = connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false).Result;
-                    nextSliceStart = currentSlice.NextEventNumber;
+            StreamEventsSlice currentSlice;
+            int nextSliceStart = StreamPosition.Start + normalMin - 1;
 
-                    streamEvents.AddRange(currentSlice.Events);
-                } while (!currentSlice.IsEndOfStream);
-            }
+            do
+            {
+                currentSlice = connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), nextSliceStart, batchSize, false).Result;
+                nextSliceStart = currentSlice.NextEventNumber;
+
+                streamEvents.AddRange(currentSlice.Events);
+            } while (!currentSlice.IsEndOfStream);
 
             var storedEvents = streamEvents.Select(this.ToCommittedEvent).ToList();
 
@@ -73,46 +74,38 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize = 200, int skipEvents = 0)
         {
             var nextPosition = skipEvents;
-            using (var connection = this.GetConnection())
+            StreamEventsSlice currentSlice;
+            do
             {
-                StreamEventsSlice currentSlice;
-                do
-                {
-                    currentSlice = connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true, this.credentials).Result;
-                    nextPosition = currentSlice.NextEventNumber;
+                currentSlice = connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, bulkSize, true, this.credentials).Result;
+                nextPosition = currentSlice.NextEventNumber;
 
-                    yield return currentSlice.Events.Select(this.ToCommittedEvent).ToArray();
-                } while (!currentSlice.IsEndOfStream);
-            }
+                yield return currentSlice.Events.Select(this.ToCommittedEvent).ToArray();
+            } while (!currentSlice.IsEndOfStream);
         }
 
         public IEnumerable<CommittedEvent> GetEventStream()
         {
             var nextPosition = 0;
-            using (var connection = this.GetConnection())
+            StreamEventsSlice currentSlice;
+            do
             {
-                StreamEventsSlice currentSlice;
-                do
+                currentSlice = connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false, this.credentials).Result;
+                nextPosition = currentSlice.NextEventNumber;
+                foreach (var resolvedEvent in currentSlice.Events)
                 {
-                    currentSlice = connection.ReadStreamEventsForwardAsync(AllEventsStream, nextPosition, 200, false, this.credentials).Result;
-                    nextPosition = currentSlice.NextEventNumber;
-                    foreach (var resolvedEvent in currentSlice.Events)
-                    {
-                        yield return this.ToCommittedEvent(resolvedEvent);
-                    }
-                } while (!currentSlice.IsEndOfStream);
-            }
+                    yield return this.ToCommittedEvent(resolvedEvent);
+                }
+            } while (!currentSlice.IsEndOfStream);
         }
 
         public void Store(UncommittedEventStream eventStream)
         {
-            using (var connection = this.GetConnection()) {
-                using (var transaction = connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials).Result)
-                {
-                    this.SaveStream(eventStream, connection);
+            using (var transaction = connection.StartTransactionAsync(EventsPrefix + eventStream.SourceId, ExpectedVersion.Any, this.credentials).Result)
+            {
+                this.SaveStream(eventStream, connection);
 
-                    transaction.Commit();
-                }
+                transaction.Commit();
             }
         }
 
@@ -122,7 +115,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 var eventData = this.BuildEventData(@event);
 
-                int expected = (int) (@event.EventSequence == 1 ? ExpectedVersion.Any : @event.EventSequence - 2);
+                int expected = (int)(@event.EventSequence == 1 ? ExpectedVersion.Any : @event.EventSequence - 2);
                 connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
                     .Wait(TimeSpan.FromSeconds(2));
             }
@@ -130,19 +123,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public int CountOfAllEvents()
         {
-            StreamEventsSlice slice;
-            using (var connection = this.GetConnection()) {
-                slice = connection.ReadStreamEventsForwardAsync(AllEventsStream, 0, 1, false, this.credentials).Result;
-            }
+            StreamEventsSlice slice = this.connection.ReadStreamEventsForwardAsync(AllEventsStream, 0, 1, false, this.credentials).Result;
             return slice.LastEventNumber + 1;
         }
 
         public long GetLastEventSequence(Guid id)
         {
-            StreamMetadataResult streamMetadataResult;
-            using (var connection = this.GetConnection()) {
-                streamMetadataResult = connection.GetStreamMetadataAsync(id.FormatGuid(), this.credentials).Result;
-            }
+            StreamMetadataResult streamMetadataResult = this.connection.GetStreamMetadataAsync(id.FormatGuid(), this.credentials).Result;
             return streamMetadataResult.MetastreamVersion;
         }
 
@@ -153,8 +140,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             try
             {
                 var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, this.jsonSerializerSettings);
-                var eventData = JsonConvert.DeserializeObject(value, 
-                                    NcqrsEnvironment.GetEventDataTypeByName(resolvedEvent.Event.EventType.ToPascalCase()), 
+                var eventData = JsonConvert.DeserializeObject(value,
+                                    NcqrsEnvironment.GetEventDataTypeByName(resolvedEvent.Event.EventType.ToPascalCase()),
                                     this.jsonSerializerSettings);
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
@@ -176,7 +163,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         private EventData BuildEventData(UncommittedEvent @event)
         {
-         
+
             string eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, this.jsonSerializerSettings);
             string metaData = JsonConvert.SerializeObject(new EventMetada
             {
@@ -195,9 +182,20 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         private IEventStoreConnection GetConnection()
         {
-            var eventStoreConnection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(this.connectionSettings.ServerIP), this.connectionSettings.ServerTcpPort));
-            eventStoreConnection.ConnectAsync().Wait(TimeSpan.FromSeconds(5));
-            return eventStoreConnection;
+            if (this.connection == null)
+            {
+                var eventStoreConnection =
+                    EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(this.connectionSettings.ServerIP),
+                        this.connectionSettings.ServerTcpPort));
+                eventStoreConnection.ConnectAsync().Wait(TimeSpan.FromSeconds(5));
+                return eventStoreConnection;
+            }
+            return this.connection;
+        }
+
+        public void Dispose()
+        {
+            this.connection.Close();
         }
     }
 }
