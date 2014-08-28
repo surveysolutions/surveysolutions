@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Web.Routing;
 using CsvHelper;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
@@ -11,13 +10,11 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json.Schema;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
@@ -26,9 +23,7 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
-using WB.UI.Designer.Utils;
 using WB.UI.Shared.Web.Membership;
-using WebGrease.Css.Extensions;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -251,7 +246,7 @@ namespace WB.UI.Designer.Controllers
             {
                 this.questionWithOptionsViewModel.Options = ExtractOptionsFromStream(csvFile.InputStream);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 if (csvFile == null)
                 {
@@ -259,7 +254,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 else if (csvFile.FileName.EndsWith(".csv"))
                 {
-                    this.Error("CSV-file has wrong format or file is corrupted. " + e.Message);
+                    this.Error("CSV-file has wrong format or file is corrupted.");
                 }
                 else
                 {
