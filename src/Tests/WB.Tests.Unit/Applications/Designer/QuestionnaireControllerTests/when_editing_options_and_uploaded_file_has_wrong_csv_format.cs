@@ -29,12 +29,10 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
         Cleanup stuff = () =>
         {
             stream.Dispose();
-            bmp.Dispose();
         };
 
         private static QuestionnaireController controller;
         private static HttpPostedFileBase postedFile;
         private static Stream stream = new MemoryStream();
-        private static Bitmap bmp;
     }
 }
