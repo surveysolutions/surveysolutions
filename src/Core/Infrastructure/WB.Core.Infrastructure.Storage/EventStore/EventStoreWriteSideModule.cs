@@ -56,13 +56,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore
             }
             catch (AggregateException)
             {
-                const string ProjectionQuery = @"fromCategory('" + EventStoreWriteSide.EventsCategory + @"') 
+                string projectionQuery = @"fromCategory('" + EventStoreWriteSide.EventsCategory + @"') 
                                                 .when({        
                                                     $any: function (s, e) {
                                                         linkTo('" + EventStoreWriteSide.AllEventsStream + @"', e)
                                                     }
                                                 })";
-                manager.CreateContinuousAsync("ToAllEvents", ProjectionQuery, userCredentials);
+                manager.CreateContinuousAsync("ToAllEvents", projectionQuery, userCredentials);
             }
         }
     }

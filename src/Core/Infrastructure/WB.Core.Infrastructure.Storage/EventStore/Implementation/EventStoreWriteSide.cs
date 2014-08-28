@@ -29,8 +29,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         };
         private readonly Encoding encoding = Encoding.UTF8;
         private readonly UserCredentials credentials;
-        internal const string EventsCategory = "WB";
-        private const string EventsPrefix = EventsCategory + "-";
+        internal static readonly string EventsCategory = "WB";
+        private static readonly string EventsPrefix = EventsCategory + "-";
 
         internal const string AllEventsStream = "all_wb";
 
