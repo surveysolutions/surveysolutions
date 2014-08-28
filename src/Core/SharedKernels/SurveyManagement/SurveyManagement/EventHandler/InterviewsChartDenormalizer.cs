@@ -172,6 +172,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return new StatisticsLineGroupedByDateAndTemplate
             {
                 Date = dateTime.Date,
+                DateTicks = dateTime.Date.Ticks,
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion
             };

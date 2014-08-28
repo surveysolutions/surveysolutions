@@ -11,7 +11,7 @@
     self.FromDate = ko.observable(null);
     self.ToDate = ko.observable(null);
 
-    self.initChart = function() {
+    self.initChart = function () {
         var selectedTemplate = JSON.parse(self.SelectedTemplate());
 
         var params = {
@@ -28,6 +28,9 @@
     };
 
     self.drawChart = function() {
+        if (self.Stats().Ticks.length === 0)
+            return;
+
         self.Plot = $.jqplot('interviewChart',
             self.Stats().Stats, {
                 stackSeries: true,
@@ -133,6 +136,10 @@
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
         self.SelectedTemplate.subscribe(function () { self.initChart(); });
+
+        self.FromDate.subscribe(function () { self.initChart(); });
+
+        self.ToDate.subscribe(function () { self.initChart(); });
 
         self.initChart();
     };

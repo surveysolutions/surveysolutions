@@ -24,5 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public int ApprovedByHeadquartersCount { get; set; }
 
         public int RejectedByHeadquartersCount { get; set; }
+        
+        public long DateTicks { get; set; }
     }
 }
