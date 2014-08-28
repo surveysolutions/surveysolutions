@@ -53,7 +53,7 @@ namespace WB.UI.Headquarters.Tests.HQControllerTests
                 Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(),
                 Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(), Mock.Of<IPreloadedDataVerifier>(),
                 Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
+                Mock.Of<IQueryableReadSideRepositoryWriter<InterviewSummary>>());
         }
     }
 }

@@ -55,7 +55,7 @@ namespace WB.UI.Supervisor.Tests.HQControllerTests
                 Mock.Of<IPreloadedDataRepository>(),
                 Mock.Of<IPreloadedDataVerifier>(),
                 Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
+                Mock.Of<IQueryableReadSideRepositoryWriter<InterviewSummary>>());
         }
     }
 }
