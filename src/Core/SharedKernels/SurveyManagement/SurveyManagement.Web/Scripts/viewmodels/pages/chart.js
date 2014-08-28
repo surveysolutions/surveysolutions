@@ -37,7 +37,7 @@
                 showMarker: false,
                 highlighter: {
                     show: true,
-                    showTooltip: true
+                    showTooltip: false
                 },
                 seriesDefaults: {
                     fill: true,
@@ -78,25 +78,6 @@
                     }
                 }
             }).replot();
-
-        $('#interviewChart').bind('jqplotHighlighterHighlight',
-            function(ev, seriesIndex, pointIndex, data, plot) {
-                var content = plot.series[seriesIndex].label + ', ' + plot.series[seriesIndex]._xaxis.ticks[pointIndex][1] + ', ' + data[1];
-                var elem = $('#customTooltipDiv');
-                elem.html(content);
-                var h = elem.outerHeight();
-                var w = elem.outerWidth();
-                var left = ev.pageX - w - 10;
-                var top = ev.pageY - h - 10;
-                elem.stop(true, true).css({ left: left, top: top }).fadeIn(200);
-            }
-        );
-
-        $('#interviewChart').bind('jqplotHighlighterUnhighlight',
-            function() {
-                $('#customTooltipDiv').fadeOut(300);
-            }
-        );
     };
 
     self.formatDate = function(today) {
