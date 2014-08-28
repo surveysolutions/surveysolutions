@@ -28,11 +28,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
+
         private readonly Encoding encoding = Encoding.UTF8;
         private readonly UserCredentials credentials;
         internal static readonly string EventsCategory = "WB";
         private static readonly string EventsPrefix = EventsCategory + "-";
         private IEventStoreConnection connection;
+        bool disposed;
 
         internal const string AllEventsStream = "all_wb";
 
@@ -195,7 +197,27 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void Dispose()
         {
-            this.connection.Close();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        ~EventStoreWriteSide()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+
+            if (disposing)
+            {
+                this.connection.Close();
+            }
+
+            this.disposed = true;
+        }
+
     }
 }
