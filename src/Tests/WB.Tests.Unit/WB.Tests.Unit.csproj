@@ -133,6 +133,9 @@
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_chapter.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_more_than_18_options.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_more_than_20_options.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_question_info_with_25_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
     <Compile Include="Applications\Designer\QuestionnaireHelper\when_getting_questionnaire_data_deleted_questionnaires_should_not_be_editable_.cs" />
