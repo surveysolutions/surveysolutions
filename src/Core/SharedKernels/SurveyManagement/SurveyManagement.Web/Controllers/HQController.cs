@@ -8,6 +8,7 @@ using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -35,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
+        private readonly IQueryableReadSideRepositoryWriter<InterviewSummary> interviews;
         private readonly ISampleImportService sampleImportService;
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
@@ -54,7 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
+            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -86,7 +87,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var interviewByQuestionnaire =
               interviews.QueryAll(i => !i.IsDeleted && i.QuestionnaireId == id && i.QuestionnaireVersion == version);
 
-            CommandService.Execute(new DeleteQuestionnaire(id, version));
+            var interviewDeletionErrors = new List<Exception>();
 
             foreach (var interviewSummary in interviewByQuestionnaire)
             {
@@ -97,8 +98,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 catch (Exception e)
                 {
                     Logger.Error(e.Message, e);
+                    interviewDeletionErrors.Add(e);
                 }
             }
+
+            if (interviewDeletionErrors.Any())
+                throw new AggregateException(string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.", id.FormatGuid(), version));
+
+            CommandService.Execute(new DeleteQuestionnaire(id, version));
 
             return RedirectToAction("Index");
         }
