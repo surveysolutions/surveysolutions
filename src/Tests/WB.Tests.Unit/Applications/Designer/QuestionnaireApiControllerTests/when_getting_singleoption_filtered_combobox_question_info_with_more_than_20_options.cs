@@ -1,5 +1,4 @@
 using System;
-using System.Web.Http;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -29,6 +28,9 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
 
         It should_return_edit_question_details_with_20_options = () =>
             result.Options.Length.ShouldEqual(20);
+
+        It should_return_edit_question_details_with_WasOptionsTruncated_set_in_true = () =>
+            result.WasOptionsTruncated.ShouldBeTrue();
 
         private static QuestionnaireController controller;
         private static string questionnaireId = "22222222222222222222222222222222";
