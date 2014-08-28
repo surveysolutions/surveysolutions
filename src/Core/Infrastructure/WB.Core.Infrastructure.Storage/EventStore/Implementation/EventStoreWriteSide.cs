@@ -44,7 +44,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         {
             int normalMin = (int) Math.Max(1, minVersion);
             int normalMax = (int) Math.Min(int.MaxValue, maxVersion);
-            
+            if (minVersion > maxVersion)
+            {
+                return new CommittedEventStream(id);
+            }
 
             var streamEvents = new List<ResolvedEvent>();
             int batchSize = normalMax - normalMin + 1;
