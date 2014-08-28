@@ -65,10 +65,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     switch (questionnaireFeedEntry.EntryType)
                     {
                         case QuestionnaireEntryType.DeleteQuestionnaire:
-                            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireFeedEntry.QuestionnaireId,
-                                questionnaireFeedEntry.QuestionnaireVersion);
                             this.executeCommand(new DeleteQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion));
+                            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireFeedEntry.QuestionnaireId,
+                                questionnaireFeedEntry.QuestionnaireVersion);
                             break;
                         case QuestionnaireEntryType.CreateQuestionnaire:
                         case QuestionnaireEntryType.CreateQuestionnaireInCensusMode:
