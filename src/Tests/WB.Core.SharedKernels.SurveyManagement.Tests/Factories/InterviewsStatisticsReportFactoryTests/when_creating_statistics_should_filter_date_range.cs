@@ -80,18 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
                 }
             }.AsQueryable();
 
-            Mock.Get(stats)
-                .Setup(
-                    _ =>
-                        _.Query(
-                            Moq.It
-                                .IsAny
-                                <Func<IQueryable<StatisticsLineGroupedByDateAndTemplate>, List<StatisticsLineGroupedByDateAndTemplate>>>()))
-                .Returns<Func<IQueryable<StatisticsLineGroupedByDateAndTemplate>, List<StatisticsLineGroupedByDateAndTemplate>>>(
-                    query => query.Invoke(data)
-                );
-
-            interviewsStatisticsReportFactory = CreateInterviewsStatisticsReportFactory(stats);
+            interviewsStatisticsReportFactory = CreateInterviewsStatisticsReportFactory(data);
 
             input = new InterviewsStatisticsReportInputModel
             {
