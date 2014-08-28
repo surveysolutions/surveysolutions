@@ -14,8 +14,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
     {
         Establish context = () =>
         {
-            var stats = Mock.Of<IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate>>();
-
             var questionnaireId = Guid.NewGuid();
             var baseDate = new DateTime(2014, 8, 22);
             var questionnaireVersion = 1;
@@ -37,19 +35,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
                     SupervisorAssignedCount = 0
                 }
             }.AsQueryable();
-
-            Mock.Get(stats)
-                .Setup(
-                    _ =>
-                        _.Query(
-                            Moq.It
-                                .IsAny
-                                <Func<IQueryable<StatisticsLineGroupedByDateAndTemplate>, List<StatisticsLineGroupedByDateAndTemplate>>>()))
-                .Returns<Func<IQueryable<StatisticsLineGroupedByDateAndTemplate>, List<StatisticsLineGroupedByDateAndTemplate>>>(
-                    query => query.Invoke(data)
-                );
-
-            interviewsStatisticsReportFactory = CreateInterviewsStatisticsReportFactory(stats);
+            
+            interviewsStatisticsReportFactory = CreateInterviewsStatisticsReportFactory(data);
 
             input = new InterviewsStatisticsReportInputModel
             {
