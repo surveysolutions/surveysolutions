@@ -7,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
 {
-    internal class when_getting_singleoption_filtered_combobox_question_info_with_more_than_18_options : QuestionnaireApiControllerTestContext
+    internal class when_getting_singleoption_filtered_combobox_question_info_with_18_options : QuestionnaireApiControllerTestContext
     {
         Establish context = () =>
         {
@@ -28,6 +28,9 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
 
         It should_return_edit_question_details_with_18_options = () =>
             result.Options.Length.ShouldEqual(18);
+
+        It should_return_edit_question_details_with_WasOptionsTruncated_set_in_false = () =>
+            result.WasOptionsTruncated.ShouldBeFalse();
 
         private static QuestionnaireController controller;
         private static string questionnaireId = "22222222222222222222222222222222";

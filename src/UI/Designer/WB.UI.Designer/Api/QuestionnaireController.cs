@@ -26,6 +26,7 @@ namespace WB.UI.Designer.Api
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
+        private const int MaxCountOfOptionForFileredCombobox = 20;
 
         public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
@@ -87,8 +88,9 @@ namespace WB.UI.Designer.Api
 
             if (isFilteredComboboxWithOptions)
             {
-                editQuestionView.Options = editQuestionView.Options.Take(20).ToArray();
-                editQuestionView.OptionsWasTruncated = true;
+                editQuestionView.WasOptionsTruncated = editQuestionView.Options.Length > MaxCountOfOptionForFileredCombobox;
+                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();
+                
             }
 
             return editQuestionView;
