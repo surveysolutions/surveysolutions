@@ -36,6 +36,7 @@
                     });
 
                     $scope.activeQuestion.options = options;
+                    $scope.activeQuestion.wasOptionsTruncated = result.wasOptionsTruncated || false;
                     $scope.activeQuestion.isInteger = result.isInteger;
                     $scope.activeQuestion.maxValue = result.maxValue;
                     $scope.activeQuestion.countOfDecimalPlaces = result.countOfDecimalPlaces;
