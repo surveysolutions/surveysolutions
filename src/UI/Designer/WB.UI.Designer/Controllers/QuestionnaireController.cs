@@ -253,7 +253,11 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                if (csvFile.FileName.EndsWith(".csv"))
+                if (csvFile == null)
+                {
+                    this.Error("Choose .csv (comma-separated values) file to upload, please");
+                }
+                else if (csvFile.FileName.EndsWith(".csv"))
                 {
                     this.Error("CSV-file has wrong format or file is corrupted. " + e.Message);
                 }
@@ -271,11 +275,10 @@ namespace WB.UI.Designer.Controllers
             var commandResult = new JsonQuestionnaireResult() {IsSuccess = true};
             try
             {
-                throw new Exception("Hello!");
-                //this.commandService.Execute(
-                //    new UpdateFilteredComboboxOptionsCommand(Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                //        this.questionWithOptionsViewModel.QuestionId, this.UserHelper.WebUser.UserId,
-                //        this.questionWithOptionsViewModel.Options.ToArray()));
+                this.commandService.Execute(
+                    new UpdateFilteredComboboxOptionsCommand(Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
+                        this.questionWithOptionsViewModel.QuestionId, this.UserHelper.WebUser.UserId,
+                        this.questionWithOptionsViewModel.Options.ToArray()));
             }
             catch (Exception e)
             {
@@ -283,14 +286,13 @@ namespace WB.UI.Designer.Controllers
                 if (domainEx == null)
                 {
                     this.logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(UpdateFilteredComboboxOptionsCommand)), e);
-                    throw;
                 }
 
                 commandResult = new JsonQuestionnaireResult
                 {
                     IsSuccess = false,
-                    HasPermissions = domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit,
-                    Error = domainEx.Message
+                    HasPermissions = domainEx!=null && ( domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit),
+                    Error = domainEx!=null ? domainEx.Message : "Something goes wrong"
                 };
             }
 

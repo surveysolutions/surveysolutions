@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -20,6 +21,8 @@ namespace WB.UI.Designer
         {
             SetupNConfig();
         }
+
+        const int TimedOutExceptionCode = -2147467259;
 
         protected void Application_Start()
         {
@@ -56,6 +59,15 @@ namespace WB.UI.Designer
                 return;
             }
 
+            var currentController = string.Empty;
+            var currentAction = string.Empty;
+            var currRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
+            if (currRouteData != null)
+            {
+                currentController = (string)currRouteData.Values["controller"] ?? string.Empty;
+                currentAction = (string)currRouteData.Values["action"] ?? string.Empty;
+            }
+
             if (ex is HttpException)
             {
                 var httpEx = ex as HttpException;
@@ -71,22 +83,21 @@ namespace WB.UI.Designer
                     case 401:
                         action = "AccessDenied";
                         break;
+                    case 500:
+                        if (httpEx.ErrorCode == TimedOutExceptionCode && httpEx.StackTrace.Contains("GetEntireRawContent"))
+                        {
+                            action = "RequestLengthExceeded";
+                        }
+                        break;
                 }
-            }
-
-            var currentController = string.Empty;
-            var currentAction = string.Empty;
-            var currRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
-            if (currRouteData != null)
-            {
-                currentController = (string)currRouteData.Values["controller"] ?? string.Empty;
-                currentAction = (string)currRouteData.Values["action"] ?? string.Empty;
             }
 
             httpContext.ClearError();
             httpContext.Response.Clear();
             httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
             httpContext.Response.TrySkipIisCustomErrors = true;
+            httpContext.Response.ContentType = "text/html; charset=utf-8";
+            httpContext.Response.ContentEncoding = Encoding.UTF8;
 
             routeData.Values["controller"] = "Error";
             routeData.Values["action"] = action;
