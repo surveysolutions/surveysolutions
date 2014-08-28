@@ -193,9 +193,35 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return this.connection;
         }
 
+        bool _disposed;
+
         public void Dispose()
         {
-            this.connection.Close();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        ~EventStoreWriteSide()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                this.connection.Close();
+            }
+
+            this.connection.Dispose();
+            this.connection = null;
+
+            _disposed = true;
+        }
+
+
     }
 }
