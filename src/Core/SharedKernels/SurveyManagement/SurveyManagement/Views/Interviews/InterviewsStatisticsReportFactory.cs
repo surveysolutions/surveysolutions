@@ -19,66 +19,104 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 
         public InterviewsStatisticsReportView Load(InterviewsStatisticsReportInputModel input)
         {
-            var stat = this.interviewSummaryReader.Query(
-                _ => _.Where(s => (s.QuestionnaireId == input.QuestionnaireId && s.QuestionnaireVersion == input.QuestionnaireVersion))
+            int daysCount = 0;
+            DateTime firstDate = DateTime.Now;
+
+            var stat = this.interviewSummaryReader
+                .Query(
+                _ => _.Where(
+                        s => (
+                            s.QuestionnaireId == input.QuestionnaireId &&
+                            s.QuestionnaireVersion == input.QuestionnaireVersion
+                        )
+                    )
                     .OrderBy(o => o.Date)
                     .ToList()
             );
 
+            if (stat.Count != 0)
+            {
+                firstDate = stat.First().Date;
+                var lastDate = input.CurrentDate;
+
+                daysCount = Convert.ToInt32((lastDate - firstDate).TotalDays) + 1;
+            }
+
+            var filterRangeInDays = Convert.ToInt32((input.To - input.From).TotalDays) + 1;
+            var resultArrayLength = daysCount >= filterRangeInDays ? filterRangeInDays : daysCount;
+
             var result = new InterviewsStatisticsReportView();
 
-            var firstDate = stat.First().Date;
-            var lastDate = input.CurrentDate;
-
-            var daysCount = Convert.ToInt32((lastDate - firstDate).TotalDays) + 1;
-
-            result.Ticks = new string[daysCount, 2];
-
-            var supervisorAssignedData = new int[daysCount];
-            var interviewerAssignedData = new int[daysCount];
-            var completedData = new int[daysCount];
-            var rejectedBySupervisor = new int[daysCount];
-            var approvedBySupervisor = new int[daysCount];
-            var rejectedByHeadquarters = new int[daysCount];
-            var approvedByHeadquarters = new int[daysCount];
+            var supervisorAssignedData = new int[resultArrayLength];
+            var interviewerAssignedData = new int[resultArrayLength];
+            var completedData = new int[resultArrayLength];
+            var rejectedBySupervisor = new int[resultArrayLength];
+            var approvedBySupervisor = new int[resultArrayLength];
+            var rejectedByHeadquarters = new int[resultArrayLength];
+            var approvedByHeadquarters = new int[resultArrayLength];
 
             int[][] stats = {supervisorAssignedData, interviewerAssignedData, completedData, rejectedBySupervisor, approvedBySupervisor, rejectedByHeadquarters, approvedByHeadquarters};
-            
+            var ticks = new string[resultArrayLength, 2];
+
+            var j = 0;
             for (var i = 0; i < daysCount; i++)
             {
-                var internalDate = firstDate.AddDays(i).ToShortDateString();
-                var dayStats = stat.Find( _ => _.Date.ToShortDateString().Equals(internalDate));
-                var rowNumber = (i + 1).ToString(CultureInfo.InvariantCulture);
+                var internalDate = firstDate.AddDays(i);
+                var internalDateKey = internalDate.ToShortDateString();
+                
+                var dayStats = stat.Find( _ => _.Date.ToShortDateString().Equals(internalDateKey));
+                var rowNumber = (j + 1).ToString(CultureInfo.InvariantCulture);
 
                 if (dayStats != null)
                 {
-                    result.Ticks[i, 0] = rowNumber;
-                    result.Ticks[i, 1] = dayStats.Date.ToShortDateString();
+                    ticks[j, 0] = rowNumber;
+                    ticks[j, 1] = dayStats.Date.ToShortDateString();
 
-                    supervisorAssignedData[i] = dayStats.SupervisorAssignedCount;
-                    interviewerAssignedData[i] = dayStats.InterviewerAssignedCount;
-                    completedData[i] = dayStats.CompletedCount;
-                    rejectedBySupervisor[i] = dayStats.RejectedBySupervisorCount;
-                    approvedBySupervisor[i] = dayStats.ApprovedBySupervisorCount;
-                    rejectedByHeadquarters[i] = dayStats.RejectedByHeadquartersCount;
-                    approvedByHeadquarters[i] = dayStats.ApprovedByHeadquartersCount;
+                    supervisorAssignedData[j] = dayStats.SupervisorAssignedCount;
+                    interviewerAssignedData[j] = dayStats.InterviewerAssignedCount;
+                    completedData[j] = dayStats.CompletedCount;
+                    rejectedBySupervisor[j] = dayStats.RejectedBySupervisorCount;
+                    approvedBySupervisor[j] = dayStats.ApprovedBySupervisorCount;
+                    rejectedByHeadquarters[j] = dayStats.RejectedByHeadquartersCount;
+                    approvedByHeadquarters[j] = dayStats.ApprovedByHeadquartersCount;
                 }
                 else
                 {
-                    result.Ticks[i, 0] = rowNumber;
-                    result.Ticks[i, 1] = internalDate;
+                    ticks[j, 0] = rowNumber;
+                    ticks[j, 1] = internalDateKey;
 
-                    supervisorAssignedData[i] = supervisorAssignedData[i - 1];
-                    interviewerAssignedData[i] = interviewerAssignedData[i - 1];
-                    completedData[i] = completedData[i - 1];
-                    rejectedBySupervisor[i] = rejectedBySupervisor[i - 1];
-                    approvedBySupervisor[i] = approvedBySupervisor[i - 1];
-                    rejectedByHeadquarters[i] = rejectedByHeadquarters[i - 1];
-                    approvedByHeadquarters[i] = approvedByHeadquarters[i - 1];
+                    if (j > 0)
+                    {
+                        supervisorAssignedData[j] = supervisorAssignedData[j - 1];
+                        interviewerAssignedData[j] = interviewerAssignedData[j - 1];
+                        completedData[j] = completedData[j - 1];
+                        rejectedBySupervisor[j] = rejectedBySupervisor[j - 1];
+                        approvedBySupervisor[j] = approvedBySupervisor[j - 1];
+                        rejectedByHeadquarters[j] = rejectedByHeadquarters[j - 1];
+                        approvedByHeadquarters[j] = approvedByHeadquarters[j - 1];                        
+                    }
+                }
+
+                if (internalDate < input.From)
+                {
+                    continue;
+                }
+
+                if (input.To < internalDate)
+                {
+                    break;
+                }
+
+                j++;
+                
+                if (j >= resultArrayLength)
+                {
+                    break;
                 }
             }
-
+            
             result.Stats = stats;
+            result.Ticks = ticks;
 
             return result;
         }
