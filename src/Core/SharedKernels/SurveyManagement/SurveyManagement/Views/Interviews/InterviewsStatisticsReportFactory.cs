@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
         {
             int daysCount = 0;
             DateTime firstDate = DateTime.Now;
+            var result = new InterviewsStatisticsReportView();
 
             var stat = this.interviewSummaryReader
                 .Query(
@@ -45,7 +46,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
             var filterRangeInDays = Convert.ToInt32((input.To - input.From).TotalDays) + 1;
             var resultArrayLength = daysCount >= filterRangeInDays ? filterRangeInDays : daysCount;
 
-            var result = new InterviewsStatisticsReportView();
+            if (resultArrayLength <= 0)
+                return new InterviewsStatisticsReportView { Ticks = new string[,]{}, Stats = new int[][]{}};
 
             var supervisorAssignedData = new int[resultArrayLength];
             var interviewerAssignedData = new int[resultArrayLength];
