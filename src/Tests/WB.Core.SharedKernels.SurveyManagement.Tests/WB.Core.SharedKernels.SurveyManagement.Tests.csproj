@@ -219,6 +219,7 @@
     <Compile Include="Factories\InterviewsStatisticsReportFactoryTests\when_creating_statistics_should_add_empty_days.cs" />
     <Compile Include="Factories\InterviewsStatisticsReportFactoryTests\when_creating_statistics_should_allow_date_range_with_no_data.cs" />
     <Compile Include="Factories\InterviewsStatisticsReportFactoryTests\when_creating_statistics_should_filter_date_range.cs" />
+    <Compile Include="Factories\InterviewsStatisticsReportFactoryTests\when_creating_statistics_should__do_allow_from_date_bigger_then_to_date.cs" />
     <Compile Include="IncomePackagesRepositoryTests\IncomePackagesRepositoryTestContext.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_empty_content.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_metainfo_which_cant_be_desirialized.cs" />
