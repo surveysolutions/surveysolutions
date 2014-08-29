@@ -233,26 +233,46 @@ Supervisor.VM.InterviewDetails = function (settings) {
                                 entity.answer.extend({ numericValidator: true });
                             }
                             break;
-                        case config.questionTypes.SingleOption:
-                            entity.selectedOption = ko.observable(entity.selectedOption).extend({
-                                validation: [
-                                    {
-                                        validator: function(val) {
-                                            if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
-                                                return false;
-                                            return true;
+                            case config.questionTypes.SingleOption:
+                                if (entity.isFilteredCombobox) {
+                                    var o = _.find(entity.options, function (option) {
+                                        return entity.selectedOption == option.value;
+                                    });
+                                    entity.selectedOption = ko.observable(entity.selectedOption);
+                                    entity.answer = ko.computed(function () {
+                                        var o = _.find(entity.options, function (option) {
+                                            return entity.selectedOption() == option.value;
+                                        });
+                                        return _.isEmpty(o) ? "" : o.label;
+                                    });
+                                    entity.value = ko.observable(_.isEmpty(o) ? "" : o.label).extend({
+                                        equal: {
+                                            params: entity.answer,
+                                            message: "Choose one of suggested values"
                                         },
-                                        message: 'At least one option should be checked'
-                                    }
-                                ]
-                            });
-                            entity.answer = ko.computed(function() {
-                                var o = _.find(entity.options, function(option) {
-                                    return entity.selectedOption() == option.value;
-                                });
-                                return _.isEmpty(o) ? "" : o.label;
-                            });
-                            break;
+                                        required: true
+                                    });
+                                } else {
+                                    entity.selectedOption = ko.observable(entity.selectedOption).extend({
+                                        validation: [
+                                            {
+                                                validator: function(val) {
+                                                    if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
+                                                        return false;
+                                                    return true;
+                                                },
+                                                message: 'At least one option should be checked'
+                                            }
+                                        ]
+                                    });
+                                    entity.answer = ko.computed(function() {
+                                        var o = _.find(entity.options, function(option) {
+                                            return entity.selectedOption() == option.value;
+                                        });
+                                        return _.isEmpty(o) ? "" : o.label;
+                                    });
+                                }
+                                break;
                         case config.questionTypes.MultyOption:
                             var selectedOptionsSource = entity.selectedOptions;
                             entity.selectedOptions = ko.observableArray().extend({

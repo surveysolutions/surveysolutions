@@ -94,6 +94,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/knockout.validation.js",
                     "~/Scripts/bootstrap-datepicker.js",
                     "~/Scripts/Math.uuid.js",
+                    "~/Scripts/typeahead.js",
                     "~/Scripts/viewmodels/pages/interview/custom.js",
                     "~/Scripts/lodash.underscore.js",
                     "~/Scripts/jquery.maskedinput.js"
