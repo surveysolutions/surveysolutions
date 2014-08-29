@@ -61,13 +61,17 @@
             <h4 class="list-group-item-heading">From</h4>
             <div class="input-group date">
                 <input id="date-picker-from" type="text" class="form-control" data-bind="value: FromDate" readonly="readonly"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-            </div>            
+            </div>
         </li>
         <li class="list-group-item">
             <h4 class="list-group-item-heading">To</h4>
             <div class="input-group date">
                 <input id="date-picker-to" type="text" class="form-control" data-bind="value: ToDate" readonly="readonly"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
             </div>
+            <br />
+            <p class="bg-danger" data-bind="visible: SelectedTemplatehouldShowDateValidationMessage">
+                From Date can't be bigger then From date
+            </p>
         </li>
     </ul>
 }
