@@ -79,7 +79,7 @@ ko.bindingHandlers.typeahead = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var $element = $(element);
         var allBindings = allBindingsAccessor();
-        var source = ko.utils.unwrapObservable(valueAccessor());
+        var source = ko.toJS(ko.utils.unwrapObservable(valueAccessor()));
 
         var states = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('label'),
@@ -103,6 +103,7 @@ ko.bindingHandlers.typeahead = {
                 source: states.ttAdapter()
             }).on('typeahead:selected', function(obj, datum) {
                 allBindings.id(datum.value);
+                $element.change();
             })
             .val(allBindings.value());
     }

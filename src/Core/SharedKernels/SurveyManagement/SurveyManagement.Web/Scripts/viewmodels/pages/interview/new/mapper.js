@@ -9,7 +9,7 @@
             item.variable(dto.StataExportCaption);
             item.instructions(dto.Instructions);
             item.selectedOption(dto.Answer);
-            
+
             if (!Supervisor.Framework.Objects.isNull(dto.Answers)) {
                 item.options($.map(dto.Answers, function (dtoOption) {
                     var o = option.fromDto(dtoOption);
@@ -23,39 +23,53 @@
                 }));
             }
             switch (item.type()) {
-            case "SingleOption":
-                item.selectedOption.extend({ required: true });
-                break;
-            case "MultyOption":
-                item.selectedOptions.extend({ notempty: true });
-                break;
-            case "AutoPropagate":
-            case "Numeric":
-                item.settings(dto.Settings);
-                var isSettingsEmpty = _.isEmpty(dto.Settings);
-                var isInteger = isSettingsEmpty || dto.Settings.IsInteger;
-                item.selectedOption.extend({ required: true });
-                if (isInteger) {
-                    item.selectedOption.extend({ numericValidator: -1 });
-                }
-                else if (!isSettingsEmpty) {
-                    if(_.isNumber(dto.Settings.CountOfDecimalPlaces))
-                        item.selectedOption.extend({ numericValidator: dto.Settings.CountOfDecimalPlaces });
-                    else
-                        item.selectedOption.extend({ numericValidator: true });
-                }
-                if (!isSettingsEmpty && _.isNumber(dto.Settings.MaxValue)) {
-                    item.selectedOption.extend({ max: dto.Settings.MaxValue });
-                }
-                break;
-            case "DateTime":
-                item.selectedOption(new Date());
-                item.selectedOption.extend({ required: true, date: true });
+                case "SingleOption":
+                    item.isFilteredCombobox = ko.observable(dto.Settings.IsFilteredCombobox || false);
+                    item.selectedOption.extend({ required: true });
+                    item.answer = ko.computed(function () {
+                        var o = _.find(item.options(), function (option) {
+                            return item.selectedOption() == option.value();
+                        });
+                        return _.isEmpty(o) ? "" : o.label();
+                    });
+                    item.value = ko.observable().extend({
+                        equal: {
+                            params: item.answer,
+                            message: "Choose one of suggested values"
+                        },
+                        required: true
+                    });
+                    break;
+                case "MultyOption":
+                    item.selectedOptions.extend({ notempty: true });
+                    break;
+                case "AutoPropagate":
+                case "Numeric":
+                    item.settings(dto.Settings);
+                    var isSettingsEmpty = _.isEmpty(dto.Settings);
+                    var isInteger = isSettingsEmpty || dto.Settings.IsInteger;
+                    item.selectedOption.extend({ required: true });
+                    if (isInteger) {
+                        item.selectedOption.extend({ numericValidator: -1 });
+                    }
+                    else if (!isSettingsEmpty) {
+                        if (_.isNumber(dto.Settings.CountOfDecimalPlaces))
+                            item.selectedOption.extend({ numericValidator: dto.Settings.CountOfDecimalPlaces });
+                        else
+                            item.selectedOption.extend({ numericValidator: true });
+                    }
+                    if (!isSettingsEmpty && _.isNumber(dto.Settings.MaxValue)) {
+                        item.selectedOption.extend({ max: dto.Settings.MaxValue });
+                    }
+                    break;
+                case "DateTime":
+                    item.selectedOption(new Date());
+                    item.selectedOption.extend({ required: true, date: true });
                 case "Text":
                     item.settings(dto.Settings);
                     var isTextSettingsEmpty = _.isEmpty(dto.Settings);
                     if (!isTextSettingsEmpty) {
-                        if(!_.isEmpty(dto.Settings.Mask))
+                        if (!_.isEmpty(dto.Settings.Mask))
                             item.mask(dto.Settings.Mask);
                     }
                     item.selectedOption.extend({ required: true });
@@ -70,7 +84,7 @@
                 var item = new model.Option();
                 item.id(dto.AnswerValue);
                 item.questionId(dto.Id);
-                item.title(dto.Title);
+                item.label(dto.Title);
                 item.value(dto.AnswerValue);
                 item.isSelected(dto.Selected || false);
                 return item;
