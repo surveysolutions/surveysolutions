@@ -399,6 +399,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                             isLinked
                                 ? string.Join(", ", answersAsDecimalOnLinkedQuestion)
                                 : answerAsDecimal.ToString(),
+                        isFilteredCombobox = questionDto.Settings == null
+                                ? false
+                                : questionDto.Settings.GetType().GetProperty("IsFilteredCombobox").GetValue(questionDto.Settings, null),
                         answer = answerLabel
                     };
                     break;
@@ -548,6 +551,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     }
     public class SingleQuestionModel : CategoricalQuestionModel
     {
+        public bool isFilteredCombobox;
         public string selectedOption { get; set; }
     }
     public class MultiQuestionModel : CategoricalQuestionModel

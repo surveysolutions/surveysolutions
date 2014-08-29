@@ -43,11 +43,16 @@
     <script type="text/html" id="SingleOptionReadOnly">
         <div class="form-group">
             <div class="controls">
-                <div data-bind="foreach: options">
-                    <label class="radio" data-bind='attr: { "for": optionFor }'>
-                        <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption" disabled="disabled">
-                        <span data-bind="html: label"></span>
-                    </label>
+                <div data-bind="ifnot: isFilteredCombobox">
+                    <div data-bind="foreach: options">
+                        <label class="radio" data-bind='attr: { "for": optionFor }'>
+                            <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption" disabled="disabled">
+                            <span data-bind="html: label"></span>
+                        </label>
+                    </div>
+                </div>
+                <div data-bind="if: isFilteredCombobox">
+                    <input class="form-control" type="text" data-bind="value: answer" disabled="disabled" />
                 </div>
             </div>
         </div>
@@ -112,6 +117,15 @@
     </script>
 
     <script type="text/html" id="SingleOptionFull">
+        <!-- ko ifnot: isFilteredCombobox -->
+        <div data-bind="template: { name: 'SingleOptionRegularFull' }"></div>
+        <!-- /ko -->
+        <!-- ko if: isFilteredCombobox -->
+        <div data-bind="template: { name: 'SingleOptionFilteredFull' }"></div>
+        <!-- /ko -->
+    </script>
+
+    <script type="text/html" id="SingleOptionRegularFull">
         <div class="form-group" data-bind="validationElement: selectedOption">
             <div class="controls">
                 <div data-bind="foreach: options">
@@ -121,6 +135,16 @@
                     </label>
                 </div>
                 <span class="help-inline" data-bind="validationMessage: selectedOption"></span>
+            </div>
+        </div>
+        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly==false, enable: errors().length == 0">Save answer</button>
+    </script>
+
+    <script type="text/html" id="SingleOptionFilteredFull">
+        <div class="form-group" data-bind="validationElement: value">
+            <div class="controls">
+                <input class="form-control" type="text" data-bind="typeahead: options,  id: selectedOption, value: value, valueUpdate: 'afterkeydown'" />
+                <span class="help-inline" data-bind="validationMessage: value"></span>
             </div>
         </div>
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly==false, enable: errors().length == 0">Save answer</button>
