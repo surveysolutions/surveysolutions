@@ -66,6 +66,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
                 };
             }
 
+            var singleoptionQuestion = doc as SingleQuestion;
+            if (singleoptionQuestion != null)
+            {
+                this.Settings = new
+                {
+                    IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox
+                };
+            }
+
             var textQuestion = doc as TextQuestion;
             if (textQuestion != null)
             {

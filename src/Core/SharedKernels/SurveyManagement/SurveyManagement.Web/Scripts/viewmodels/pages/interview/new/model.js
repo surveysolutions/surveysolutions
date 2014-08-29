@@ -35,7 +35,7 @@
             var self = this;
             self.id = ko.observable();
             self.questionId = ko.observable();
-            self.title = ko.observable();
+            self.label = ko.observable();
             self.value = ko.observable();
             self.isSelected = ko.observable(false);
             self.optionFor = ko.computed(function () {
