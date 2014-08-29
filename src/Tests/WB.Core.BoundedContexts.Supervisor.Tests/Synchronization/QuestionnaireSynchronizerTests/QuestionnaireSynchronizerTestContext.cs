@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
             return new AtomFeedEntry<T>(){Content = entry};
         }
 
-        protected static LocalQuestionnaireFeedEntry CreateLocalQuestionnaireFeedEntry(Guid? entryId = null, QuestionnaireEntryType questionnaireEntryType = QuestionnaireEntryType.CreateQuestionnaire,
+        protected static LocalQuestionnaireFeedEntry CreateLocalQuestionnaireFeedEntry(Guid? entryId = null, QuestionnaireEntryType questionnaireEntryType = QuestionnaireEntryType.QuestionnaireCreated,
             Guid? questionnaireId = null, long? questionnaireVersion = null)
         {
             return new LocalQuestionnaireFeedEntry(questionnaireId ?? Guid.NewGuid(), questionnaireVersion ?? 1,

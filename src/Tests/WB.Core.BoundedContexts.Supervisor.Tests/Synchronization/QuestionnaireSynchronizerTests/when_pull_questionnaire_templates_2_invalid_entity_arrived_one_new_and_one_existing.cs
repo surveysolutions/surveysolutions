@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
             withALotOfExceptionsLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry();
             newLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry(Guid.NewGuid());
             existingLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry(Guid.NewGuid());
-            deleteLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry(Guid.NewGuid(), QuestionnaireEntryType.DeleteQuestionnaire,
+            deleteLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry(Guid.NewGuid(), QuestionnaireEntryType.QuestionnaireDeleted,
                 Guid.NewGuid(), 1);
 
             IEnumerable<AtomFeedEntry<LocalQuestionnaireFeedEntry>> localQuestionnaireFeedEntres = new[]

@@ -64,14 +64,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 {
                     switch (questionnaireFeedEntry.EntryType)
                     {
-                        case QuestionnaireEntryType.DeleteQuestionnaire:
+                        case QuestionnaireEntryType.QuestionnaireDeleted:
                             this.executeCommand(new DeleteQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion));
                             this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion);
                             break;
-                        case QuestionnaireEntryType.CreateQuestionnaire:
-                        case QuestionnaireEntryType.CreateQuestionnaireInCensusMode:
+                        case QuestionnaireEntryType.QuestionnaireCreated:
+                        case QuestionnaireEntryType.QuestionnaireCreatedInCensusMode:
 
                             if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion))
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                 questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
                             this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion,
-                                questionnaireFeedEntry.EntryType == QuestionnaireEntryType.CreateQuestionnaireInCensusMode));
+                                questionnaireFeedEntry.EntryType == QuestionnaireEntryType.QuestionnaireCreatedInCensusMode));
                             break;
                     }
                 }

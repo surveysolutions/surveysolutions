@@ -8,13 +8,16 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
 {
     internal class QuestionnaireFeedDenormalizer : BaseDenormalizer,
-                                    IEventHandler<TemplateImported>
+                                    IEventHandler<TemplateImported>,
+                                    IEventHandler<QuestionnaireDeleted>,
+                                    IEventHandler
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireFeedEntry> questionnaireFeed;
 
@@ -32,9 +35,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
         {
             var eventId = evnt.EventIdentifier.FormatGuid();
             var entityType = evnt.Payload.AllowCensusMode
-                ? QuestionnaireEntryType.CreateQuestionnaireInCensusMode
-                : QuestionnaireEntryType.CreateQuestionnaire;
+                ? QuestionnaireEntryType.QuestionnaireCreatedInCensusMode
+                : QuestionnaireEntryType.QuestionnaireCreated;
             questionnaireFeed.Store(new QuestionnaireFeedEntry(evnt.EventSourceId, evnt.Payload.Version ?? evnt.EventSequence, eventId, entityType, evnt.EventTimeStamp), eventId);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            var eventId = evnt.EventIdentifier.FormatGuid();
+            questionnaireFeed.Store(new QuestionnaireFeedEntry(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion, eventId, QuestionnaireEntryType.QuestionnaireDeleted, evnt.EventTimeStamp), eventId);
         }
     }
 }
