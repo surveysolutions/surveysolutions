@@ -280,3 +280,7 @@ box-shadow:         0px -5px 25px 0px rgba(255, 255, 255, 0.75);
     height: 600px;
     position: relative;
 }
+
+#dateValidationError {
+    padding: 5px;
+}
