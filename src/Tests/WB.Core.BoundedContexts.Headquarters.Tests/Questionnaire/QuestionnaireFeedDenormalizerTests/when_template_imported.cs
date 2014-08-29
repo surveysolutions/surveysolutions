@@ -34,9 +34,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests.Questionnaire.Questionnaire
             writer.Received().Store(
                 Arg.Is<QuestionnaireFeedEntry>(x => 
                     x.QuestionnaireId == templateImportedEvent.EventSourceId &&
-                    x.QuestionnaireVersion==templateImportedEvent.EventSequence &&
+                    x.QuestionnaireVersion == templateImportedEvent.EventSequence &&
                     x.Timestamp == templateImportedEvent.EventTimeStamp &&
-                    x.EntryType == QuestionnaireEntryType.CreateQuestionnaireInCensusMode &&
+                    x.EntryType == QuestionnaireEntryType.QuestionnaireCreatedInCensusMode &&
                     x.EntryId == templateImportedEvent.EventIdentifier.FormatGuid()),
                 templateImportedEvent.EventIdentifier.FormatGuid());
 

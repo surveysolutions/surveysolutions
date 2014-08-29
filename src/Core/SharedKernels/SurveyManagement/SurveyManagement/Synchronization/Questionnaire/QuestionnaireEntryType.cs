@@ -2,8 +2,8 @@
 {
     public enum QuestionnaireEntryType
     {
-        CreateQuestionnaire = 1,
-        CreateQuestionnaireInCensusMode = 2,
-        DeleteQuestionnaire = 3
+        QuestionnaireCreated = 1,
+        QuestionnaireCreatedInCensusMode = 2,
+        QuestionnaireDeleted = 3
     }
 }
