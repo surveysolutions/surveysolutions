@@ -69,9 +69,9 @@
                 <input id="date-picker-to" type="text" class="form-control" data-bind="value: ToDate" readonly="readonly"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
             </div>
             <br />
-            <p class="bg-danger" data-bind="visible: SelectedTemplatehouldShowDateValidationMessage">
-                From Date can't be bigger then From date
-            </p>
+            <div id="dateValidationError" class="bg-danger" data-bind="visible: ShouldShowDateValidationMessage">
+                From date can't be bigger then To date
+            </div>
         </li>
     </ul>
 }

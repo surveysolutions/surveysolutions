@@ -10,13 +10,15 @@
     self.Plot = null;
     self.FromDate = ko.observable(null);
     self.ToDate = ko.observable(null);
-    self.SelectedTemplatehouldShowDateValidationMessage = ko.observable(false);
+    self.ShouldShowDateValidationMessage = ko.observable(false);
 
     self.initChart = function () {
         var selectedTemplate = JSON.parse(self.SelectedTemplate());
 
         if (self.FromDate() > self.ToDate()) {
-            self.SelectedTemplatehouldShowDateValidationMessage(true);
+            self.ShouldShowDateValidationMessage(true);
+        } else {
+            self.ShouldShowDateValidationMessage(false);
         }
 
         var params = {
