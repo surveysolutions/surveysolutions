@@ -4,7 +4,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
 {
-    internal class when_editing_options_was_no_uploaded_file : QuestionnaireControllerTestContext
+    internal class when_editing_options_and_was_no_uploaded_file : QuestionnaireControllerTestContext
     {
         Establish context = () =>
         {
