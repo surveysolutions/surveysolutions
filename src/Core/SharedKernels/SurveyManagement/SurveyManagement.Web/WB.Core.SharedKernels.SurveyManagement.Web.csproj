@@ -149,7 +149,7 @@
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewerController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
-    <Compile Include="Controllers\ReportDataApiController.cs" />
+    <Compile Include="Api\ReportDataApiController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
