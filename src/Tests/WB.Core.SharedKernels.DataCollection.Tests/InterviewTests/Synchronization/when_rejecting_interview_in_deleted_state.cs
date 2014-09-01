@@ -1,10 +1,14 @@
 ﻿using System;
 using Machine.Specifications;
+using Moq;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronization
 {
@@ -14,6 +18,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
         {
             interview = CreateInterview();
             interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, null));
+            var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
+            questionnaireRepositoryMock.Setup(x => x.GetHistoricalQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
+                .Returns(Mock.Of<IQuestionnaire>());
+
+            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepositoryMock.Object);
+
             eventContext = new EventContext();
         };
 
