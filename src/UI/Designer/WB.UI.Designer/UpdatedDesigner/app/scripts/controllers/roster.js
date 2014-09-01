@@ -2,8 +2,7 @@
     'use strict';
 
     angular.module('designerApp')
-        .controller('RosterCtrl', [
-            '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'confirmService', '$log','utilityService',
+        .controller('RosterCtrl', 
             function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService) {
                 $scope.currentChapterId = $stateParams.chapterId;
                 $scope.selectedNumericQuestion = null;
@@ -110,5 +109,5 @@
 
                 $scope.loadRoster();
             }
-        ]);
+        );
 }());

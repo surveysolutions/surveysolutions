@@ -62,7 +62,6 @@
                 };
 
                 $scope.saveQuestion = function (callback) {
-                    console.log(callback);
                     if ($scope.questionForm.$valid) {
                         commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function (result) {
                             $scope.initialQuestion = angular.copy($scope.activeQuestion);
