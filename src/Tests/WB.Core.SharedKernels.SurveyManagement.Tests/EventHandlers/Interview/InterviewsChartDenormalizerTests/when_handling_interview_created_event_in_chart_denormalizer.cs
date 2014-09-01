@@ -26,6 +26,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             var interviewDetailsStorage =
                 Mock.Of<IReadSideRepositoryWriter<InterviewDetailsForChart>>(x => x.GetById(interviewId.FormatGuid()) == interviewDetailsForChart);
 
+            var questionnaireDetailsForChart = new QuestionnaireDetailsForChart
+            {
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = 1
+            };
+
+            var questionnaireDetailsStorage =
+                Mock.Of<IReadSideRepositoryWriter<QuestionnaireDetailsForChart>>(x => x.GetById(Moq.It.IsAny<string>()) == questionnaireDetailsForChart);
+
             var statisticsMock = new StatisticsLineGroupedByDateAndTemplate
             {
                 QuestionnaireId = questionnaireId,
@@ -37,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             statisticsStorage.Setup(x => x.Store(Moq.It.IsAny<StatisticsLineGroupedByDateAndTemplate>(), Moq.It.IsAny<string>()))
                 .Callback((StatisticsLineGroupedByDateAndTemplate stats, string id) => statistics = stats);
 
-            denormalizer = CreateStatisticsDenormalizer(statisticsStorage.Object, interviewDetailsStorage);
+            denormalizer = CreateStatisticsDenormalizer(statisticsStorage.Object, interviewDetailsStorage, questionnaireDetailsStorage);
 
             evnt = CreateInterviewCreatedEvent(questionnaireId, questionnaireId, 1, interviewId);
         };
@@ -47,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
         It should_statistics_storage_stores_new_state = () =>
             statisticsStorage.Verify(x => x.Store(Moq.It.IsAny<StatisticsLineGroupedByDateAndTemplate>(), Moq.It.IsAny<string>()),
-                Times.Once);
+                Times.Never);
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");

@@ -27,6 +27,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                 Mock.Of<IReadSideRepositoryWriter<InterviewDetailsForChart>>(
                     x => x.GetById(interviewId.FormatGuid()) == interviewDetailsForChart);
 
+            var questionnaireDetailsForChart = new QuestionnaireDetailsForChart
+            {
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = 1
+            };
+
+            var questionnaireDetailsStorage =
+                Mock.Of<IReadSideRepositoryWriter<QuestionnaireDetailsForChart>>(x => x.GetById(Moq.It.IsAny<string>()) == questionnaireDetailsForChart);
+
             var statisticsMock = new StatisticsLineGroupedByDateAndTemplate
             {
                 QuestionnaireId = questionnaireId,
@@ -38,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             statisticsStorage.Setup(x => x.Store(Moq.It.IsAny<StatisticsLineGroupedByDateAndTemplate>(), Moq.It.IsAny<string>()))
                 .Callback((StatisticsLineGroupedByDateAndTemplate stats, string id) => statistics = stats);
 
-            denormalizer = CreateStatisticsDenormalizer(statisticsStorage.Object, interviewDetailsStorage);
+            denormalizer = CreateStatisticsDenormalizer(statisticsStorage.Object, interviewDetailsStorage, questionnaireDetailsStorage);
 
             evnt1 = CreateInterviewCreatedEvent(questionnaireId, questionnaireId, 1, interviewId);
             evnt2 = CreateInterviewStatusChangedEvent(InterviewStatus.InterviewerAssigned, interviewId);
@@ -50,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
         It should_statistics_storage_stores_new_state = () =>
             statisticsStorage.Verify(x => x.Store(Moq.It.IsAny<StatisticsLineGroupedByDateAndTemplate>(), Moq.It.IsAny<string>()),
-                Times.Exactly(3));
+                Times.Exactly(2));
 
         It should_statistics_approved_by_headquarters_count_equals_1 = () =>
             statistics.InterviewerAssignedCount.ShouldEqual(0);
