@@ -23,7 +23,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
         {
             if (NcqrsEnvironment.IsEventDataType(typeName))
             {
-                return NcqrsEnvironment.GetEventDataType(typeName);
+                return NcqrsEnvironment.GetEventDataTypeByFullName(typeName);
             }
             else
             {

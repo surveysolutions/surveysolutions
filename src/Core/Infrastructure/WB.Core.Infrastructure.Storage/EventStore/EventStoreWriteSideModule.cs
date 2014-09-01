@@ -35,7 +35,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
 
         private IStreamableEventStore GetEventStore()
         {
-            return new EventStoreWriteSide(this.settings);
+            return new WriteSideEventStore(this.settings);
         }
 
         private void AddEventStoreProjections()
@@ -56,10 +56,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore
             }
             catch (AggregateException)
             {
-                string projectionQuery = @"fromCategory('" + EventStoreWriteSide.EventsCategory + @"') 
+                string projectionQuery = @"fromCategory('" + WriteSideEventStore.EventsCategory + @"') 
                                                 .when({        
                                                     $any: function (s, e) {
-                                                        linkTo('" + EventStoreWriteSide.AllEventsStream + @"', e)
+                                                        linkTo('" + WriteSideEventStore.AllEventsStream + @"', e)
                                                     }
                                                 })";
                 manager.CreateContinuousAsync("ToAllEvents", projectionQuery, userCredentials);
