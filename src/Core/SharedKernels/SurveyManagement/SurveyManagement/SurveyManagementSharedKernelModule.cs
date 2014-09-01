@@ -100,6 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
 
             this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope();
+            this.Bind<IChartStatisticsFactory>().To<ChartStatisticsFactory>();
         }
 
         protected void AdditionalEventChecker(Guid interviewId)

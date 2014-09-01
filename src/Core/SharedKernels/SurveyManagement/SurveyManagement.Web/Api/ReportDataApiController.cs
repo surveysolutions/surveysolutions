@@ -5,6 +5,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
@@ -22,8 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView>
             headquarterSurveysAndStatusesReport;
 
-        private readonly IViewFactory<InterviewsStatisticsReportInputModel, InterviewsStatisticsReportView>
-            interviewsStatisticsFactory;
+        private readonly IChartStatisticsFactory chartStatisticsFactory;
 
         private readonly IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
             supervisorSurveysAndStatusesReport;
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IViewFactory<MapReportInputModel, MapReportView> mapReport,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory, 
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
-            IViewFactory<InterviewsStatisticsReportInputModel, InterviewsStatisticsReportView> interviewsStatisticsFactory)
+            IChartStatisticsFactory chartStatisticsFactory)
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.mapReport = mapReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionInforFactory = questionInforFactory;
-            this.interviewsStatisticsFactory = interviewsStatisticsFactory;
+            this.chartStatisticsFactory = chartStatisticsFactory;
         }
 
         [HttpPost]
@@ -179,17 +179,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public InterviewsStatisticsReportView HeadquarterInterviewsStatistics(InterviewsStatisticsViewModel data)
+        public ChartStatisticsView ChartStatistics(InterviewsStatisticsViewModel data)
         {
-            var input = new InterviewsStatisticsReportInputModel();
+            var input = new ChartStatisticsInputModel
+            {
+                QuestionnaireId = data.TemplateId,
+                QuestionnaireVersion = data.TemplateVersion,
+                CurrentDate = DateTime.Now,
+                From = data.From,
+                To = data.To
+            };
 
-            input.QuestionnaireId = data.TemplateId;
-            input.QuestionnaireVersion = data.TemplateVersion;
-            input.CurrentDate = DateTime.Now;
-            input.From = data.From;
-            input.To = data.To;
-
-            return this.interviewsStatisticsFactory.Load(input);
+            return this.chartStatisticsFactory.Load(input);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 {
-    public class InterviewsStatisticsReportInputModel
+    public class ChartStatisticsInputModel
     {
         public DateTime CurrentDate { get; set; }
         public Guid QuestionnaireId { get; set; }

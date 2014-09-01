@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using It = Machine.Specifications.It;
@@ -36,9 +37,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
                 }
             }.AsQueryable();
             
-            interviewsStatisticsReportFactory = CreateInterviewsStatisticsReportFactory(data);
+            chartStatisticsFactory = CreateInterviewsStatisticsReportFactory(data);
 
-            input = new InterviewsStatisticsReportInputModel
+            input = new ChartStatisticsInputModel
             {
                 CurrentDate = baseDate,
                 QuestionnaireId = questionnaireId,
@@ -48,13 +49,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
             };
         };
 
-        Because of = () => view = interviewsStatisticsReportFactory.Load(input);
+        Because of = () => view = chartStatisticsFactory.Load(input);
 
         It should_have_days_count_muliply_two_records = () => view.Ticks.Length.ShouldEqual(0);
 
-        private static InterviewsStatisticsReportFactory interviewsStatisticsReportFactory;
-        private static InterviewsStatisticsReportInputModel input;
-        private static InterviewsStatisticsReportView view;
+        private static ChartStatisticsFactory chartStatisticsFactory;
+        private static ChartStatisticsInputModel input;
+        private static ChartStatisticsView view;
 
     }
 }
