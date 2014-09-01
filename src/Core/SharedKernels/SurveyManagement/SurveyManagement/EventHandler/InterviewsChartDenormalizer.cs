@@ -49,53 +49,44 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void DecreaseStatisticsByStatus(StatisticsLineGroupedByDateAndTemplate statistics, QuestionnaireDetailsForChart questionnaireDetails, InterviewStatus status)
         {
-            this.ChangeByStatus(statistics, questionnaireDetails, status, false);
+            this.ChangeByStatus(statistics, questionnaireDetails, status, -1);
         }
 
         private void IncreaseStatisticsByStatus(StatisticsLineGroupedByDateAndTemplate statistics, QuestionnaireDetailsForChart questionnaireDetails, InterviewStatus status)
         {
-            this.ChangeByStatus(statistics, questionnaireDetails, status, true);
+            this.ChangeByStatus(statistics, questionnaireDetails, status, +1);
         }
 
-        private void ChangeByStatus(StatisticsLineGroupedByDateAndTemplate summary, QuestionnaireDetailsForChart questionnaireDetails, InterviewStatus status, bool isIncrease)
+        private void ChangeByStatus(StatisticsLineGroupedByDateAndTemplate summary, QuestionnaireDetailsForChart questionnaireDetails, InterviewStatus status, int delta)
         {
-            var incCount = isIncrease ? 1 : -1;
-
             switch (status)
             {
                 case InterviewStatus.SupervisorAssigned:
-                    summary.SupervisorAssignedCount += incCount;
-                    questionnaireDetails.SupervisorAssignedCount = summary.SupervisorAssignedCount;
+                    questionnaireDetails.SupervisorAssignedCount = summary.SupervisorAssignedCount += delta;
                     break;
 
                 case InterviewStatus.InterviewerAssigned:
-                    summary.InterviewerAssignedCount += incCount;
-                    questionnaireDetails.InterviewerAssignedCount = summary.InterviewerAssignedCount;
+                    questionnaireDetails.InterviewerAssignedCount = summary.InterviewerAssignedCount += delta;
                     break;
 
                 case InterviewStatus.Completed:
-                    summary.CompletedCount += incCount;
-                    questionnaireDetails.CompletedCount = summary.CompletedCount;
+                    questionnaireDetails.CompletedCount = summary.CompletedCount += delta;
                     break;
 
                 case InterviewStatus.ApprovedBySupervisor:
-                    summary.ApprovedBySupervisorCount += incCount;
-                    questionnaireDetails.ApprovedBySupervisorCount = summary.ApprovedBySupervisorCount;
+                    questionnaireDetails.ApprovedBySupervisorCount = summary.ApprovedBySupervisorCount += delta;
                     break;
 
                 case InterviewStatus.RejectedBySupervisor:
-                    summary.RejectedBySupervisorCount += incCount;
-                    questionnaireDetails.RejectedBySupervisorCount = summary.RejectedBySupervisorCount;
+                    questionnaireDetails.RejectedBySupervisorCount = summary.RejectedBySupervisorCount += delta;
                     break;
 
                 case InterviewStatus.ApprovedByHeadquarters:
-                    summary.ApprovedByHeadquartersCount += incCount;
-                    questionnaireDetails.ApprovedByHeadquartersCount = summary.ApprovedByHeadquartersCount;
+                    questionnaireDetails.ApprovedByHeadquartersCount = summary.ApprovedByHeadquartersCount += delta;
                     break;
 
                 case InterviewStatus.RejectedByHeadquarters:
-                    summary.RejectedByHeadquartersCount += incCount;
-                    questionnaireDetails.RejectedByHeadquartersCount = summary.RejectedByHeadquartersCount;
+                    questionnaireDetails.RejectedByHeadquartersCount = summary.RejectedByHeadquartersCount += delta;
                     break;
             }
         }
@@ -202,7 +193,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public Type[] UsesViews
         {
-            get { return new[] { typeof (InterviewDetailsForChart) }; }
+            get { return new Type[]{}; }
         }
 
         public Type[] BuildsViews
