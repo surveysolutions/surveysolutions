@@ -103,9 +103,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
 
             if (interviewDeletionErrors.Any())
-                throw new AggregateException(
-                    string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.", id.FormatGuid(), version),
-                    interviewDeletionErrors);
+                throw new AggregateException(string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.", id.FormatGuid(), version));
 
             CommandService.Execute(new DeleteQuestionnaire(id, version));
 
