@@ -4,14 +4,14 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStatisticsReportFactoryTests
+namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
 {
-    internal class when_creating_statistics_should_allow_date_range_with_no_data : InterviewsStatisticsReportFactoryTestsContext
+    internal class when_creating_statistics_should_allow_date_range_with_no_data : ChartStatisticsFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
                 }
             }.AsQueryable();
 
-            chartStatisticsFactory = CreateInterviewsStatisticsReportFactory(data);
+            chartStatisticsFactory = CreateChartStatisticsFactory(data);
 
             input = new ChartStatisticsInputModel
             {
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
 
         It should_have_supervisorAssignedData_correct = () => view.Stats[0].ShouldEqual(new[] { 1, 1 });
 
-        private static ChartStatisticsFactory chartStatisticsFactory;
+        private static IChartStatisticsFactory chartStatisticsFactory;
         private static ChartStatisticsInputModel input;
         private static ChartStatisticsView view;
     }

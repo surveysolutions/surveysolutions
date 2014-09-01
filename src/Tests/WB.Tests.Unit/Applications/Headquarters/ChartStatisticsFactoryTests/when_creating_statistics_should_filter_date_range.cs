@@ -4,14 +4,14 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStatisticsReportFactoryTests
+namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
 {
-    internal class when_creating_statistics_should_filter_date_range : InterviewsStatisticsReportFactoryTestsContext
+    internal class when_creating_statistics_should_filter_date_range : ChartStatisticsFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
                 }
             }.AsQueryable();
 
-            chartStatisticsFactory = CreateInterviewsStatisticsReportFactory(data);
+            chartStatisticsFactory = CreateChartStatisticsFactory(data);
 
             input = new ChartStatisticsInputModel
             {
@@ -95,11 +95,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
 
         Because of = () => view = chartStatisticsFactory.Load(input);
 
-        It should_have_days_count_muliply_two_records_1111 = () => view.Ticks.Length.ShouldEqual(3 * 2);
+        It should_have_days_count_three_muliply_two_records = () => view.Ticks.Length.ShouldEqual(3 * 2);
 
         It should_have_supervisorAssignedData_correct = () => view.Stats[0].ShouldEqual(new[] { 1, 1, 3 });
 
-        private static ChartStatisticsFactory chartStatisticsFactory;
+        private static IChartStatisticsFactory chartStatisticsFactory;
         private static ChartStatisticsInputModel input;
         private static ChartStatisticsView view;
     }
