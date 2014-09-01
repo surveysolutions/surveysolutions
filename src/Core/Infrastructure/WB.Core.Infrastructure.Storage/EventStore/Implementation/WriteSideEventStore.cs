@@ -16,7 +16,7 @@ using Newtonsoft.Json.Converters;
 
 namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
-    internal class EventStoreWriteSide : IStreamableEventStore, IDisposable
+    internal class WriteSideEventStore : IStreamableEventStore, IDisposable
     {
         private readonly EventStoreConnectionSettings connectionSettings;
         private readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
@@ -38,7 +38,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         internal const string AllEventsStream = "all_wb";
 
-        public EventStoreWriteSide(EventStoreConnectionSettings connectionSettings)
+        public WriteSideEventStore(EventStoreConnectionSettings connectionSettings)
         {
             this.connectionSettings = connectionSettings;
             this.credentials = new UserCredentials(this.connectionSettings.Login, this.connectionSettings.Password);
@@ -201,7 +201,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             GC.SuppressFinalize(this);
         }
 
-        ~EventStoreWriteSide()
+        ~WriteSideEventStore()
         {
             Dispose(false);
         }
