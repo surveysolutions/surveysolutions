@@ -26,11 +26,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         public override void Load()
         {
             this.AddEventStoreProjections();
-            NcqrsEnvironment.SetGetter<IStreamableEventStore>(this.GetEventStore);
-            NcqrsEnvironment.SetGetter<IEventStore>(this.GetEventStore);
             this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore()).InSingletonScope();
-            this.Kernel.Bind<IEventStore>().ToMethod(_ => this.GetEventStore()).InSingletonScope();
-           
+            this.Kernel.Bind<IEventStore>().To<IStreamableEventStore>();
+            NcqrsEnvironment.SetGetter<IStreamableEventStore>(() => this.Kernel.Get<IStreamableEventStore>());
+            NcqrsEnvironment.SetGetter<IEventStore>(() => this.Kernel.Get<IEventStore>());
         }
 
         private IStreamableEventStore GetEventStore()
