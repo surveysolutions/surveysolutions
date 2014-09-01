@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 
@@ -10,7 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
 {
     internal class InterviewsStatisticsReportFactoryTestsContext
     {
-        protected static InterviewsStatisticsReportFactory CreateInterviewsStatisticsReportFactory(IQueryable<StatisticsLineGroupedByDateAndTemplate> data)
+        protected static ChartStatisticsFactory CreateInterviewsStatisticsReportFactory(IQueryable<StatisticsLineGroupedByDateAndTemplate> data)
         {
             var stats = Mock.Of<IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate>>();
 
@@ -25,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStati
                     query => query.Invoke(data)
                 );
 
-            return new InterviewsStatisticsReportFactory(stats);
+            return new ChartStatisticsFactory(stats);
         }
     }
 }

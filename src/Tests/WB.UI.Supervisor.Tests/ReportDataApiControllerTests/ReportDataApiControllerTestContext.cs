@@ -4,11 +4,10 @@ using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 
 namespace WB.UI.Supervisor.Tests.ReportDataApiControllerTests
 {
@@ -29,7 +28,7 @@ namespace WB.UI.Supervisor.Tests.ReportDataApiControllerTests
             IViewFactory<MapReportInputModel, MapReportView> mapReport = null,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory = null,
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory = null,
-            IViewFactory<InterviewsStatisticsReportInputModel, InterviewsStatisticsReportView> interviewsStatisticsFactory = null)
+            IChartStatisticsFactory chartStatisticsFactory = null)
         {
             return new ReportDataApiController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -46,8 +45,8 @@ namespace WB.UI.Supervisor.Tests.ReportDataApiControllerTests
                 mapReport ?? Mock.Of<IViewFactory<MapReportInputModel, MapReportView>>(),
                 questionnaireBrowseViewFactory ?? Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView>>(),
                 questionInforFactory ?? Mock.Of<IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView>>(),
-                interviewsStatisticsFactory ?? Mock.Of<IViewFactory<InterviewsStatisticsReportInputModel, InterviewsStatisticsReportView>>()
-                );
+                chartStatisticsFactory ?? Mock.Of<IChartStatisticsFactory>()
+            );
         }
     }
 }
