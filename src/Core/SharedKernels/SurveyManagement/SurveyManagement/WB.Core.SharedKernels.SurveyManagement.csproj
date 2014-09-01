@@ -88,6 +88,7 @@
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Factories\CsvWriterFactory.cs" />

@@ -26,6 +26,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             var interviewDetailsStorage =
                 Mock.Of<IReadSideRepositoryWriter<InterviewDetailsForChart>>(x => x.GetById(interviewId.FormatGuid()) == interviewDetailsForChart);
 
+            var questionnaireDetailsForChart = new QuestionnaireDetailsForChart
+            {
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = 1
+            };
+
+            var questionnaireDetailsStorage =
+                Mock.Of<IReadSideRepositoryWriter<QuestionnaireDetailsForChart>>(x => x.GetById(Moq.It.IsAny<string>()) == questionnaireDetailsForChart);
+
             var statisticsMock = new StatisticsLineGroupedByDateAndTemplate
             {
                 QuestionnaireId = questionnaireId,
@@ -37,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             statisticsStorage.Setup(x => x.Store(Moq.It.IsAny<StatisticsLineGroupedByDateAndTemplate>(), Moq.It.IsAny<string>()))
                 .Callback((StatisticsLineGroupedByDateAndTemplate stats, string id) => statistics = stats);
 
-            denormalizer = CreateStatisticsDenormalizer(statisticsStorage.Object, interviewDetailsStorage);
+            denormalizer = CreateStatisticsDenormalizer(statisticsStorage.Object, interviewDetailsStorage, questionnaireDetailsStorage);
 
             evnt = CreateInterviewStatusChangedEvent(InterviewStatus.ApprovedByHeadquarters, interviewId);
         };

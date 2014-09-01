@@ -13,13 +13,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
     {
         protected static InterviewsChartDenormalizer CreateStatisticsDenormalizer(
             IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate> statisticsStorage = null,
-            IReadSideRepositoryWriter<InterviewDetailsForChart> interviewBriefStorage = null)
+            IReadSideRepositoryWriter<InterviewDetailsForChart> interviewBriefStorage = null,
+            IReadSideRepositoryWriter<QuestionnaireDetailsForChart> questionnaireDetailsForChart = null)
         {
             return new InterviewsChartDenormalizer(
                 statisticsStorage ?? Mock.Of<IReadSideRepositoryWriter<StatisticsLineGroupedByDateAndTemplate>>(),
-                interviewBriefStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewDetailsForChart>>());
+                interviewBriefStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewDetailsForChart>>(),
+                questionnaireDetailsForChart ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDetailsForChart>>()
+            );
         }
-
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId)
             where T : class
