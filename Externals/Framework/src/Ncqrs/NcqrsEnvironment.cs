@@ -211,7 +211,7 @@ namespace Ncqrs
             return KnownEventDataTypes.ContainsKey(typeFullName);
         }
 
-        public static Type GetEventDataType(string typeFullName)
+        public static Type GetEventDataTypeByFullName(string typeFullName)
         {
             return KnownEventDataTypes[typeFullName];
         }

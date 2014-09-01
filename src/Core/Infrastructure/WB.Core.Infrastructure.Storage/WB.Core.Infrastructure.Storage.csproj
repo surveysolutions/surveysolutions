@@ -95,7 +95,7 @@
     <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
     <Compile Include="EventStore\Implementation\EventMetada.cs" />
     <Compile Include="EventStore\Implementation\EventStoreLogger.cs" />
-    <Compile Include="EventStore\Implementation\EventStoreWriteSide.cs" />
+    <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="Raven\Implementation\DocumentStoreProvider.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageAccessor.cs" />
     <Compile Include="Raven\Implementation\PlainStorage\RavenPlainStorageProvider.cs" />

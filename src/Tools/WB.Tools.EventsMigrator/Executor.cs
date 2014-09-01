@@ -87,9 +87,9 @@ namespace WB.Tools.EventsMigrator
             watch.Stop();
         }
 
-        private static EventStoreWriteSide GetEventStoreStore(IShell settings)
+        private static WriteSideEventStore GetEventStoreStore(IShell settings)
         {
-            var instance = new EventStoreWriteSide(new EventStoreConnectionSettings
+            var instance = new WriteSideEventStore(new EventStoreConnectionSettings
             {
                 ServerIP = settings.EventStoreIP,
                 ServerHttpPort = settings.EventStoreHttpPort,
