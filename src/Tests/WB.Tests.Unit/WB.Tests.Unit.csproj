@@ -150,6 +150,11 @@
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
+    <Compile Include="Applications\Headquarters\ChartStatisticsFactoryTests\ChartStatisticsFactoryTestsContext.cs" />
+    <Compile Include="Applications\Headquarters\ChartStatisticsFactoryTests\when_creating_statistics_should_add_empty_days.cs" />
+    <Compile Include="Applications\Headquarters\ChartStatisticsFactoryTests\when_creating_statistics_should_allow_date_range_with_no_data.cs" />
+    <Compile Include="Applications\Headquarters\ChartStatisticsFactoryTests\when_creating_statistics_should_filter_date_range.cs" />
+    <Compile Include="Applications\Headquarters\ChartStatisticsFactoryTests\when_creating_statistics_should__do_allow_from_date_bigger_then_to_date.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\PdfQuestionnaireViewTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_entity_and_root_id_is_used_as_parent_group_id.cs" />
@@ -174,7 +179,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
-    <Folder Include="Applications\Headquarters\" />
     <Folder Include="Applications\Supervisor\" />
     <Folder Include="BoundedContexts\Headquarters\" />
     <Folder Include="BoundedContexts\Supervisor\" />

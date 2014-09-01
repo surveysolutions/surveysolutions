@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.InterviewsStatisticsReportFactoryTests
+namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
 {
-    internal class InterviewsStatisticsReportFactoryTestsContext
+    internal class ChartStatisticsFactoryTestsContext
     {
-        protected static ChartStatisticsFactory CreateInterviewsStatisticsReportFactory(IQueryable<StatisticsLineGroupedByDateAndTemplate> data)
+        protected static IChartStatisticsFactory CreateChartStatisticsFactory(IQueryable<StatisticsLineGroupedByDateAndTemplate> data)
         {
             var stats = Mock.Of<IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate>>();
 
