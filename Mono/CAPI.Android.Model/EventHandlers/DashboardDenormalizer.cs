@@ -53,7 +53,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtoDocumentStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
+        private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.DropDownList, QuestionType.YesNo };
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
                                      IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, 
@@ -68,21 +68,41 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status, evnt.Payload.Comments,
-                evnt.Payload.FeaturedQuestionsMeta, evnt.Payload.CreatedOnClient, false);
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, 
+                evnt.Payload.QuestionnaireVersion, 
+                evnt.EventSourceId, 
+                evnt.Payload.UserId, 
+                evnt.Payload.Status, 
+                evnt.Payload.Comments,
+                evnt.Payload.FeaturedQuestionsMeta, 
+                evnt.Payload.CreatedOnClient, 
+                false);
         }
 
 
         public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.Payload.UserId, InterviewStatus.InterviewerAssigned, null,
-                new AnsweredQuestionSynchronizationDto[0], true, true);
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,
+                evnt.Payload.QuestionnaireVersion, 
+                evnt.EventSourceId, 
+                evnt.Payload.UserId, 
+                InterviewStatus.InterviewerAssigned, 
+                null,
+                new AnsweredQuestionSynchronizationDto[0], 
+                true, 
+                true);
         }
 
 
-        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId,
-                                                     InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions, 
-                                                     bool createdOnClient, bool canBeDeleted)
+        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, 
+            long questionnaireVersion, 
+            Guid interviewId, 
+            Guid responsibleId,
+            InterviewStatus status, 
+            string comments, 
+            IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions,
+            bool createdOnClient, 
+            bool canBeDeleted)
         {
             var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId, questionnaireVersion);
             if (questionnaireTemplate == null)
@@ -109,10 +129,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
                         new FeaturedCategoricalOption()
                         {
                             OptionValue = decimal.Parse(option.AnswerValue),
-                            OptionText = option.AnswerText
+                            OptionText = option.AnswerText,
                         });
 
-                return new FeaturedCategoricalItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
+                return new FeaturedCategoricalItem(featuredQuestion.PublicKey, 
+                    featuredQuestion.QuestionText,
                     AnswerUtils.AnswerToString(answer,
                         (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalOptions, optionValue)),
                     featuredCategoricalOptions);
@@ -124,9 +145,15 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId,evnt.Payload.InterviewData.QuestionnaireVersion, evnt.EventSourceId, evnt.Payload.UserId,
-                                            evnt.Payload.InterviewData.Status,evnt.Payload.InterviewData.Comments, evnt.Payload.InterviewData.Answers, 
-                                            evnt.Payload.InterviewData.CreatedOnClient, false);
+            AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId,
+                evnt.Payload.InterviewData.QuestionnaireVersion, 
+                evnt.EventSourceId, 
+                evnt.Payload.UserId,
+                evnt.Payload.InterviewData.Status,
+                evnt.Payload.InterviewData.Comments, 
+                evnt.Payload.InterviewData.Answers, 
+                evnt.Payload.InterviewData.CreatedOnClient, 
+                canBeDeleted: false);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)

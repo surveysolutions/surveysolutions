@@ -52,7 +52,6 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             return (InterviewStatus) this.Status;
         }
 
-
         public FeaturedItem[] GetProperties()
         {
             if (string.IsNullOrEmpty(this.Properties))
