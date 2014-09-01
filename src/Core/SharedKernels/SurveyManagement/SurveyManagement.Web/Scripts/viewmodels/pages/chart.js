@@ -1,9 +1,8 @@
-﻿Supervisor.VM.ChartPage = function(serviceUrl, interviewDetailsUrl, commandExecutionUrl) {
+﻿Supervisor.VM.ChartPage = function(serviceUrl, commandExecutionUrl) {
     Supervisor.VM.ChartPage.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
 
     var self = this;
 
-    self.Url = new Url(interviewDetailsUrl);
     self.Templates = ko.observableArray([]);
     self.SelectedTemplate = ko.observable('');
     self.Stats = ko.observable(null);
