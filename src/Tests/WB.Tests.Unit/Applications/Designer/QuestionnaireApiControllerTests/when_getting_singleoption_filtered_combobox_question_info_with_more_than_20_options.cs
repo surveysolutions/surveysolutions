@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             result.Options.Length.ShouldEqual(20);
 
         It should_return_edit_question_details_with_WasOptionsTruncated_set_in_true = () =>
-            result.WasOptionsTruncated.ShouldBeTrue();
+            result.WereOptionsTruncated.ShouldBeTrue();
 
         private static QuestionnaireController controller;
         private static string questionnaireId = "22222222222222222222222222222222";
