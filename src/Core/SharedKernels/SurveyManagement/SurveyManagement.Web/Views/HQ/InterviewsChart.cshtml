@@ -20,11 +20,10 @@
         "~/Scripts/bootstrap-datepicker.js")
 
     <script type="text/javascript">
-        var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterInterviewsStatistics" })';
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("InterviewsChart", "HQ", new { }, Request.Url.Scheme))';
+        var chartApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "ChartStatistics" })';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
-            var model = new Supervisor.VM.ChartPage(interviewsListUrl, $interviewsPageUrl, commandExecutionUrl);
+            var model = new Supervisor.VM.ChartPage(chartApiUrl, commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -70,7 +69,7 @@
             </div>
             <br />
             <div id="dateValidationError" class="bg-danger" data-bind="visible: ShouldShowDateValidationMessage">
-                From date can't be bigger then To date
+                <strong>"From"</strong> date can't be bigger then <strong>"To"</strong> date
             </div>
         </li>
     </ul>
