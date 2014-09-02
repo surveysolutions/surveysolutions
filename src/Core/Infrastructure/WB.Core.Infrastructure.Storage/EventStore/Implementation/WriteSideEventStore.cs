@@ -132,7 +132,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         public long GetLastEventSequence(Guid id)
         {
             StreamEventsSlice slice = this.connection.ReadStreamEventsForwardAsync(EventsPrefix + id.FormatGuid(), 0, 1, false, this.credentials).Result;
-            return slice.LastEventNumber;
+            return slice.LastEventNumber + 1;
         }
 
         private CommittedEvent ToCommittedEvent(ResolvedEvent resolvedEvent)
