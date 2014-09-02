@@ -298,6 +298,11 @@
     padding: 5px;
 }
 
+.twitter-typeahead {
+    display: block;
+    width: 100%;
+}
+
 .typeahead,
 .tt-query,
 .tt-hint,
