@@ -241,13 +241,14 @@ Supervisor.VM.InterviewDetails = function (settings) {
                                 entity.answer.extend({ numericValidator: true });
                             }
                             break;
-                            case config.questionTypes.SingleOption:
+                        case config.questionTypes.SingleOption:
                                 if (entity.isFilteredCombobox) {
+                                    var serverAnswer = getOptionLabelByItValue(entity.options, entity.selectedOption);
                                     entity.selectedOption = ko.observable(entity.selectedOption);
                                     entity.answer = ko.computed(function () {
                                         return getOptionLabelByItValue(entity.options, entity.selectedOption());
                                     });
-                                    entity.value = ko.observable(getOptionLabelByItValue(entity.options, entity.selectedOption)).extend({
+                                    entity.value = ko.observable(serverAnswer).extend({
                                         equal: {
                                             params: entity.answer,
                                             message: "Choose one of suggested values"
