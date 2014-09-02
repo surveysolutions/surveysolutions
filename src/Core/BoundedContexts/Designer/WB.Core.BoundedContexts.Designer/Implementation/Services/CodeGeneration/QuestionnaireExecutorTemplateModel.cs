@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
@@ -63,13 +62,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             this.BuildConditionalDependencies(questionnaireDocument);
 
-
-            }
+        }
 
 
         private void BuildStructures(QuestionnaireDocument questionnaireDoc)
         {
-            Queue<Tuple<IGroup, IRosterScope>> rostersToProcess = new Queue<Tuple<IGroup, IRosterScope>>();
+            var rostersToProcess = new Queue<Tuple<IGroup, IRosterScope>>();
             rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(questionnaireDoc, this.QuestionnaireLevelModel));
 
             while (rostersToProcess.Count != 0)
@@ -153,8 +151,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(childAsIGroup, roster));
                             this.AllRosters.Add(roster);
                             currentScope.Rosters.Add(roster);
-
-                            continue;
                         }
                         else
                         {
@@ -313,8 +309,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 }
             }
 
-
-            List< Tuple<string, string>> itemsSorted = new List<Tuple<string, string>>();
+            var itemsSorted = new List<Tuple<string, string>>();
             foreach (var id in orderedList)
             {
                 if (itemsToSort.ContainsKey(id))
