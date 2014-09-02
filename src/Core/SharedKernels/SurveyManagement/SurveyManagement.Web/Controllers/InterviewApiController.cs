@@ -401,7 +401,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                 : answerAsDecimal.ToString(),
                         isFilteredCombobox = questionDto.Settings == null
                                 ? false
-                                : questionDto.Settings.GetType().GetProperty("IsFilteredCombobox").GetValue(questionDto.Settings, null),
+                                : questionDto.Settings.GetType().GetProperty("IsFilteredCombobox").GetValue(questionDto.Settings, null)??false,
                         answer = answerLabel
                     };
                     break;
