@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
-    public class ChartStatisticsFactory : IChartStatisticsFactory
+    internal class ChartStatisticsFactory : IChartStatisticsFactory
     {
         private readonly IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> statisticsReader;
 
