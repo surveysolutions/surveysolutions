@@ -14,14 +14,14 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests
 {
-    internal class when_pulling_rejected_by_hq_interview_created_on_client_and_interview_were_present_before_at_supervisor : InterviewsSynchronizerTestsContext
+    internal class when_pulling_new_interview : InterviewsSynchronizerTestsContext
     {
         private Establish context = () =>
         {
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                     {
                         new LocalInterviewFeedEntry()
                         {
-                            EntryType = EntryType.InterviewRejected,
+                            EntryType = EntryType.SupervisorAssigned,
                             UserId = userId.FormatGuid(),
                             SupervisorId = supervisorId.FormatGuid(),
                             InterviewId = interviewId.FormatGuid(),
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                         }
                     }.AsQueryable());
 
-            iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.RejectedByHeadquarters, "",
+            iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.SupervisorAssigned, "",
                         userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
                         new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                         new Dictionary<InterviewItemId, int>(), new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
@@ -52,30 +52,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 .Returns(
                     Task.FromResult(iInterviewSynchronizationDto));
 
-            interviewSummaryStorageMock.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary());
-
-            interviewsSynchronizer = Create.InterviewsSynchronizer(interviewSummaryRepositoryWriter: interviewSummaryStorageMock.Object,
-                commandService: commandServiceMock.Object, userDocumentStorage: userDocumentStorageMock.Object, plainStorage: plainStorageMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object);
+            interviewsSynchronizer = Create.InterviewsSynchronizer(
+                commandService: commandServiceMock.Object, userDocumentStorage: userDocumentStorageMock.Object,
+                plainStorage: plainStorageMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object);
         };
 
         Because of = () =>
             interviewsSynchronizer.Pull();
 
 
-        It should_CreateInterviewCreatedOnClientCommand_be_never_called = () =>
+        It should_SynchronizeInterviewFromHeadquarters_be_called_once = () =>
             commandServiceMock.Verify(
                 x =>
                     x.Execute(
-                        Moq.It.IsAny<CreateInterviewCreatedOnClientCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Never);
-
-        It should_RejectInterviewFromHeadquartersCommand_be_called_once = () =>
-            commandServiceMock.Verify(
-                x =>
-                    x.Execute(
-                        Moq.It.Is<RejectInterviewFromHeadquartersCommand>(
+                        Moq.It.Is<SynchronizeInterviewFromHeadquarters>(
                             _ =>
-                                _.InterviewDto == iInterviewSynchronizationDto && _.InterviewerId == userId &&
-                                    _.SupervisorId == supervisorId), Constants.HeadquartersSynchronizationOrigin), Times.Once);
+                                _.Id == interviewId && _.UserId == userId && _.InterviewDto == iInterviewSynchronizationDto), Constants.HeadquartersSynchronizationOrigin), Times.Once);
+
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;
@@ -89,10 +82,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc");
         private static InterviewSynchronizationDto iInterviewSynchronizationDto;
 
-
         private static Mock<IQueryableReadSideRepositoryReader<UserDocument>> userDocumentStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
         private static Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>> plainStorageMock = new Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>();
         private static Mock<IHeadquartersInterviewReader> headquartersInterviewReaderMock = new Mock<IHeadquartersInterviewReader>();
-        private static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryStorageMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
     }
 }
