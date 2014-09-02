@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -10,6 +11,64 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class ChartStatisticsFactory : IChartStatisticsFactory
     {
+        private class IntermediateCalculationsData
+        {
+            public IntermediateCalculationsData(int length)
+            {
+                this.Ticks = new string[length, 2];
+                this.SupervisorAssigned = new int[length];
+                this.InterviewerAssigned = new int[length];
+                this.Completed = new int[length];
+                this.RejectedBySupervisor = new int[length];
+                this.ApprovedBySupervisor = new int[length];
+                this.RejectedByHeadquarters = new int[length];
+                this.ApprovedByHeadquarters = new int[length];
+            }
+
+            public string[,] Ticks { get; private set; }
+            public int[] SupervisorAssigned { get; private set; }
+            public int[] InterviewerAssigned { get; private set; }
+            public int[] Completed { get; private set; }
+            public int[] RejectedBySupervisor { get; private set; }
+            public int[] ApprovedBySupervisor { get; private set; }
+            public int[] RejectedByHeadquarters { get; private set; }
+            public int[] ApprovedByHeadquarters { get; private set; }
+
+            public void FillDayWithStatistics(int dayIndex, StatisticsLineGroupedByDateAndTemplate statistics, DateTime date)
+            {
+                this.Ticks[dayIndex, 0] = (dayIndex + 1).ToString(CultureInfo.InvariantCulture);
+                this.Ticks[dayIndex, 1] = date.ToShortDateString();
+
+                if (statistics != null)
+                {
+                    this.SupervisorAssigned[dayIndex] = statistics.SupervisorAssignedCount;
+                    this.InterviewerAssigned[dayIndex] = statistics.InterviewerAssignedCount;
+                    this.Completed[dayIndex] = statistics.CompletedCount;
+                    this.RejectedBySupervisor[dayIndex] = statistics.RejectedBySupervisorCount;
+                    this.ApprovedBySupervisor[dayIndex] = statistics.ApprovedBySupervisorCount;
+                    this.RejectedByHeadquarters[dayIndex] = statistics.RejectedByHeadquartersCount;
+                    this.ApprovedByHeadquarters[dayIndex] = statistics.ApprovedByHeadquartersCount;
+                }
+            }
+
+            public void FillDayWithPreviousDayData(int dayIndex, DateTime date)
+            {
+                this.Ticks[dayIndex, 0] = (dayIndex + 1).ToString(CultureInfo.InvariantCulture);
+                this.Ticks[dayIndex, 1] = date.ToShortDateString();
+
+                if (dayIndex > 0)
+                {
+                    this.SupervisorAssigned[dayIndex] = this.SupervisorAssigned[dayIndex - 1];
+                    this.InterviewerAssigned[dayIndex] = this.InterviewerAssigned[dayIndex - 1];
+                    this.Completed[dayIndex] = this.Completed[dayIndex - 1];
+                    this.RejectedBySupervisor[dayIndex] = this.RejectedBySupervisor[dayIndex - 1];
+                    this.ApprovedBySupervisor[dayIndex] = this.ApprovedBySupervisor[dayIndex - 1];
+                    this.RejectedByHeadquarters[dayIndex] = this.RejectedByHeadquarters[dayIndex - 1];
+                    this.ApprovedByHeadquarters[dayIndex] = this.ApprovedByHeadquarters[dayIndex - 1];
+                }
+            }
+        }
+
         private readonly IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> statisticsReader;
 
         public ChartStatisticsFactory(IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> statisticsReader)
@@ -19,121 +78,100 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
-            var daysCount = 0;
-            var firstDate = DateTime.Now;
-            var statisticsView = new ChartStatisticsView();
+            List<StatisticsLineGroupedByDateAndTemplate> collectedStatistics = this.GetOrderedQuestionnaireStatistics(input.QuestionnaireId, input.QuestionnaireVersion);
 
-            var questionnaireStats = this.statisticsReader
-                .Query(
-                _ => _.Where(
-                        s => (
-                            s.QuestionnaireId == input.QuestionnaireId &&
-                            s.QuestionnaireVersion == input.QuestionnaireVersion
-                        )
-                    )
-                    .OrderBy(o => o.Date)
-                    .ToList()
+            if (collectedStatistics.Count == 0)
+                return new ChartStatisticsView { Ticks = new string[,] { }, Stats = new int[][] { } };
+
+            DateTime firstDate = collectedStatistics.First().Date;
+            DateTime lastDate = input.CurrentDate;
+            int totalDaysCount = Convert.ToInt32((lastDate - firstDate).TotalDays) + 1;
+
+            int filterRangeDaysCount = Convert.ToInt32((input.To - input.From).TotalDays) + 1;
+            int resultDaysCount = Math.Min(totalDaysCount, filterRangeDaysCount);
+
+            if (resultDaysCount <= 0)
+                return new ChartStatisticsView { Ticks = new string[,] { }, Stats = new int[][] { } };
+
+            var firstDayOnChart = Max(input.From, firstDate);
+
+
+            var intermediateData = new IntermediateCalculationsData(resultDaysCount);
+
+            FillFirstDayWithStatisticsCollectedUpToThatDay(intermediateData, firstDayOnChart, collectedStatistics);
+
+            for (int dayIndex = 0; dayIndex < resultDaysCount; dayIndex++)
+            {
+                var date = firstDayOnChart.AddDays(dayIndex);
+
+                FillDayWithStatisticsOrPreviousDayData(intermediateData, dayIndex, date, collectedStatistics);
+            }
+
+
+            return ToChartStatisticsView(intermediateData);
+        }
+
+        private static void FillDayWithStatisticsOrPreviousDayData(IntermediateCalculationsData intermediateData, int dayIndex, DateTime date, List<StatisticsLineGroupedByDateAndTemplate> questionnaireStats)
+        {
+            StatisticsLineGroupedByDateAndTemplate statistics = questionnaireStats.Find(_ => AreDayKeysEqual(_.Date, date));
+
+            if (statistics != null)
+            {
+                intermediateData.FillDayWithStatistics(dayIndex, statistics, date);
+            }
+            else
+            {
+                intermediateData.FillDayWithPreviousDayData(dayIndex, date);
+            }
+        }
+
+        private static void FillFirstDayWithStatisticsCollectedUpToThatDay(IntermediateCalculationsData intermediateData, DateTime day, List<StatisticsLineGroupedByDateAndTemplate> questionnaireStats)
+        {
+            var statistics = GetLastExistingStatisticsForDay(day, questionnaireStats);
+
+            intermediateData.FillDayWithStatistics(0, statistics, day);
+        }
+
+        private static StatisticsLineGroupedByDateAndTemplate GetLastExistingStatisticsForDay(DateTime day, List<StatisticsLineGroupedByDateAndTemplate> questionnaireStats)
+        {
+            return questionnaireStats.LastOrDefault(stats => stats.Date < day || AreDayKeysEqual(stats.Date, day));
+        }
+
+        private List<StatisticsLineGroupedByDateAndTemplate> GetOrderedQuestionnaireStatistics(Guid questionnaireId, long? questionnaireVersion)
+        {
+            return this.statisticsReader.Query(_ => _
+                .Where(s => s.QuestionnaireId == questionnaireId && s.QuestionnaireVersion == questionnaireVersion)
+                .OrderBy(o => o.Date)
+                .ToList()
             );
-
-            if (questionnaireStats.Count != 0)
-            {
-                firstDate = questionnaireStats.First().Date;
-                var lastDate = input.CurrentDate;
-
-                daysCount = Convert.ToInt32((lastDate - firstDate).TotalDays) + 1;
-            }
-
-            var filterRangeInDays = Convert.ToInt32((input.To - input.From).TotalDays) + 1;
-            var resultArrayLength = daysCount >= filterRangeInDays ? filterRangeInDays : daysCount;
-
-            if (resultArrayLength <= 0)
-                return new ChartStatisticsView { Ticks = new string[,]{}, Stats = new int[][]{}};
-
-            var supervisorAssignedData = new int[resultArrayLength];
-            var interviewerAssignedData = new int[resultArrayLength];
-            var completedData = new int[resultArrayLength];
-            var rejectedBySupervisor = new int[resultArrayLength];
-            var approvedBySupervisor = new int[resultArrayLength];
-            var rejectedByHeadquarters = new int[resultArrayLength];
-            var approvedByHeadquarters = new int[resultArrayLength];
-
-            int[][] stats = {supervisorAssignedData, interviewerAssignedData, completedData, rejectedBySupervisor, approvedBySupervisor, rejectedByHeadquarters, approvedByHeadquarters};
-            var ticks = new string[resultArrayLength, 2];
-
-            var j = 0;
-            for (var i = 0; i < daysCount; i++)
-            {
-                var internalDate = firstDate.AddDays(i);
-                var internalDateKey = internalDate.ToShortDateString();
-                
-                var dayStats = questionnaireStats.Find( _ => _.Date.ToShortDateString().Equals(internalDateKey));
-                var rowNumber = (j + 1).ToString(CultureInfo.InvariantCulture);
-
-                if (dayStats != null)
-                {
-                    ticks[j, 0] = rowNumber;
-                    ticks[j, 1] = dayStats.Date.ToShortDateString();
-
-                    CopyStats(j, supervisorAssignedData, dayStats, interviewerAssignedData, completedData, rejectedBySupervisor, approvedBySupervisor, rejectedByHeadquarters, approvedByHeadquarters);
-                }
-                else
-                {
-                    ticks[j, 0] = rowNumber;
-                    ticks[j, 1] = internalDateKey;
-
-                    if (j > 0)
-                    {
-                        CopyStatsFromPreviousDay(j, supervisorAssignedData, interviewerAssignedData, completedData, rejectedBySupervisor, approvedBySupervisor, rejectedByHeadquarters, approvedByHeadquarters);
-                    }
-                }
-
-                if (internalDate < input.From)
-                {
-                    continue;
-                }
-
-                if (input.To < internalDate)
-                {
-                    break;
-                }
-
-                j++;
-                
-                if (j >= resultArrayLength)
-                {
-                    break;
-                }
-            }
-            
-            statisticsView.Stats = stats;
-            statisticsView.Ticks = ticks;
-
-            return statisticsView;
         }
 
-        private static void CopyStats(int j, int[] supervisorAssignedData, StatisticsLineGroupedByDateAndTemplate dayStats,
-            int[] interviewerAssignedData, int[] completedData, int[] rejectedBySupervisor, int[] approvedBySupervisor, int[] rejectedByHeadquarters,
-            int[] approvedByHeadquarters)
+        private static ChartStatisticsView ToChartStatisticsView(IntermediateCalculationsData intermediateData)
         {
-            supervisorAssignedData[j] = dayStats.SupervisorAssignedCount;
-            interviewerAssignedData[j] = dayStats.InterviewerAssignedCount;
-            completedData[j] = dayStats.CompletedCount;
-            rejectedBySupervisor[j] = dayStats.RejectedBySupervisorCount;
-            approvedBySupervisor[j] = dayStats.ApprovedBySupervisorCount;
-            rejectedByHeadquarters[j] = dayStats.RejectedByHeadquartersCount;
-            approvedByHeadquarters[j] = dayStats.ApprovedByHeadquartersCount;
+            return new ChartStatisticsView
+            {
+                Stats = new[]
+                {
+                    intermediateData.SupervisorAssigned,
+                    intermediateData.InterviewerAssigned,
+                    intermediateData.Completed,
+                    intermediateData.RejectedBySupervisor,
+                    intermediateData.ApprovedBySupervisor,
+                    intermediateData.RejectedByHeadquarters,
+                    intermediateData.ApprovedByHeadquarters,
+                },
+                Ticks = intermediateData.Ticks,
+            };
         }
 
-        private static void CopyStatsFromPreviousDay(int j, int[] supervisorAssignedData, int[] interviewerAssignedData, int[] completedData,
-            int[] rejectedBySupervisor, int[] approvedBySupervisor, int[] rejectedByHeadquarters, int[] approvedByHeadquarters)
+        private static DateTime Max(DateTime first, DateTime second)
         {
-            supervisorAssignedData[j] = supervisorAssignedData[j - 1];
-            interviewerAssignedData[j] = interviewerAssignedData[j - 1];
-            completedData[j] = completedData[j - 1];
-            rejectedBySupervisor[j] = rejectedBySupervisor[j - 1];
-            approvedBySupervisor[j] = approvedBySupervisor[j - 1];
-            rejectedByHeadquarters[j] = rejectedByHeadquarters[j - 1];
-            approvedByHeadquarters[j] = approvedByHeadquarters[j - 1];
+            return first > second ? first : second;
+        }
+
+        private static bool AreDayKeysEqual(DateTime first, DateTime second)
+        {
+            return first.ToShortDateString() == second.ToShortDateString();
         }
     }
 }
