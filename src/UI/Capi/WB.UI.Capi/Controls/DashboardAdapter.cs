@@ -69,16 +69,6 @@ namespace WB.UI.Capi.Controls
             foreach (var featuredItem in dataItem.Properties)
             {
                 var answerValue = featuredItem.Value;
-
-                var categoricalFeaturedItem = featuredItem as FeaturedCategoricalItem;
-                if (categoricalFeaturedItem != null)
-                {
-                    var featuredCategoricalOption =
-                            categoricalFeaturedItem.Options.FirstOrDefault(option => option.OptionValue == decimal.Parse(categoricalFeaturedItem.Value));
-
-                    answerValue = featuredCategoricalOption.OptionText;
-                }
-
                 AddPropertyToContainer(llQuestionnairie, featuredItem.Title + ": " + answerValue);
             }
             
