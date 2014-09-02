@@ -92,6 +92,7 @@ ko.bindingHandlers.typeahead = {
 
         $element
             .attr('autocomplete', 'off')
+            .attr("value", allBindings.value()) // for IE, i love you!
             .typeahead({
                 hint: true,
                 highlight: true,
