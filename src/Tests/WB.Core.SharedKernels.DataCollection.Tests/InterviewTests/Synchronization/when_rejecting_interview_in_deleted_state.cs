@@ -16,13 +16,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
     {
         Establish context = () =>
         {
-            interview = CreateInterview();
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, null));
             var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.GetHistoricalQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Returns(Mock.Of<IQuestionnaire>());
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepositoryMock.Object);
+
+            interview = CreateInterview();
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, null));
 
             eventContext = new EventContext();
         };
