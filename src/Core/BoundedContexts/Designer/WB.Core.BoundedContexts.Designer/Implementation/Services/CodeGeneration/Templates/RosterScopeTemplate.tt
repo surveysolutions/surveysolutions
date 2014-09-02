@@ -37,6 +37,10 @@
             RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies));
         <# }#> 
 
+        <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups)) 
+            {#> 
+            __conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
+            <#}#>
         }
     
         private <#= Model.ParentTypeName#> @__parent;
@@ -132,14 +136,8 @@
         <# }#>
         
 
-        private readonly List<Action> __conditionExpressions = new List<Action>
-        {
-            <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups)) 
-            {#>                    
-            Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>),                        
-            <#}#>
-        }; 
-
+        private readonly List<Action> __conditionExpressions = new List<Action>();
+        
         protected override IEnumerable<Action> ConditionExpressions
         {
             get
