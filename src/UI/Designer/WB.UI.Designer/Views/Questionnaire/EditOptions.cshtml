@@ -21,6 +21,10 @@
         #applyOptionsError {
             display: none;
         }
+
+        .table.table-striped.table-hover.table-condensed tr > td {
+            word-break: break-all;
+        }
     </style>
     @Scripts.Render("~/simplepage")
     <script type="text/javascript">
@@ -66,7 +70,7 @@
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">Export</a>
-                    <a class="btn btn-default navbar-btn" href="@Url.Action("ResetOptions", "Questionnaire")">Reset</a>
+                   
                 </div>
             </div>
         </nav>
@@ -114,7 +118,8 @@
     <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="container">
             <a class="btn btn-success navbar-btn" href="javascript:apply();">Apply</a>
-            <a class="btn btn-danger navbar-btn" href="javascript:close_window();">Cancel</a>
+            <a class="btn btn-link navbar-btn" href="@Url.Action("ResetOptions", "Questionnaire")">Cancel</a>
+            <a class="btn btn-link navbar-btn pull-right" href="javascript:close_window();">Close</a>
         </div>
     </nav>
 </body>

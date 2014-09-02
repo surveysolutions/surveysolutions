@@ -215,7 +215,7 @@ namespace WB.UI.Designer.Controllers
             var editQuestionView = questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
             var options = editQuestionView != null ? editQuestionView.Options.Select(
-                option => new Option(value: option.Value.ToString(), title: option.Title, id: Guid.Empty)) : new Option[0];
+                option => new Option(value: option.Value.ToString(), title: option.Title, id: Guid.NewGuid())) : new Option[0];
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel()
             {

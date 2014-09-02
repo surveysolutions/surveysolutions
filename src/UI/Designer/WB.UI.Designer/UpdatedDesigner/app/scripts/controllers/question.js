@@ -127,7 +127,7 @@
 
                 var openOptionsEditor = function () {
                     window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
-                      "Edit options", "scrollbars=yes, center=yes,0 modal=yes", true);
+                      "Edit options", "scrollbars=yes, center=yes,0 modal=yes, width=960", true);
                 }
 
                 $scope.removeOption = function (index) {
