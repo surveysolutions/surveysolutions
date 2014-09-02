@@ -35,7 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             {
                 PublicKey = rosterId,
                 IsRoster = true,
-                RosterSizeQuestionId = questionId
+                RosterSizeQuestionId = questionId,
+                VariableName = "r1"
 
             }, chapterId, null);
 
@@ -44,7 +45,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             {
                 PublicKey = rosterId1,
                 IsRoster = true,
-                RosterSizeQuestionId = questionId
+                RosterSizeQuestionId = questionId,
+                VariableName = "r2"
 
             }, chapterId, null);
 
