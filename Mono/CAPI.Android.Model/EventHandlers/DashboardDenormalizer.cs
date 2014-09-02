@@ -134,7 +134,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
                 return new FeaturedCategoricalItem(featuredQuestion.PublicKey, 
                     featuredQuestion.QuestionText,
-                    AnswerUtils.AnswerToString(answer,
+                    AnswerUtils.AnswerToString(Convert.ToDecimal(answer),
                         (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalOptions, optionValue)),
                     featuredCategoricalOptions);
             }
