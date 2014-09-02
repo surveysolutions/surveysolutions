@@ -162,6 +162,14 @@ Supervisor.VM.InterviewDetails = function (settings) {
     
     self.prepareGroupsAndQuestionsAndReturnAllEntities = function (groups) {
         var allEntities = [];
+
+        var getOptionLabelByItValue = function (options, value) {
+            var findedOption = _.find(options, function (option) {
+                return value == option.value;
+            });
+            return _.isEmpty(findedOption) ? "" : findedOption.label;
+        };
+
         $.each(groups, function(i, group) {
 
             $.each(group.entities, function(j, entity) {
@@ -235,17 +243,11 @@ Supervisor.VM.InterviewDetails = function (settings) {
                             break;
                             case config.questionTypes.SingleOption:
                                 if (entity.isFilteredCombobox) {
-                                    var o = _.find(entity.options, function (option) {
-                                        return entity.selectedOption == option.value;
-                                    });
                                     entity.selectedOption = ko.observable(entity.selectedOption);
                                     entity.answer = ko.computed(function () {
-                                        var o = _.find(entity.options, function (option) {
-                                            return entity.selectedOption() == option.value;
-                                        });
-                                        return _.isEmpty(o) ? "" : o.label;
+                                        return getOptionLabelByItValue(entity.options, entity.selectedOption());
                                     });
-                                    entity.value = ko.observable(_.isEmpty(o) ? "" : o.label).extend({
+                                    entity.value = ko.observable(getOptionLabelByItValue(entity.options, entity.selectedOption)).extend({
                                         equal: {
                                             params: entity.answer,
                                             message: "Choose one of suggested values"
@@ -266,10 +268,7 @@ Supervisor.VM.InterviewDetails = function (settings) {
                                         ]
                                     });
                                     entity.answer = ko.computed(function() {
-                                        var o = _.find(entity.options, function(option) {
-                                            return entity.selectedOption() == option.value;
-                                        });
-                                        return _.isEmpty(o) ? "" : o.label;
+                                        return getOptionLabelByItValue(entity.options, entity.selectedOption());
                                     });
                                 }
                                 break;
