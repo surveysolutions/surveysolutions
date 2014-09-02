@@ -6,7 +6,11 @@ namespace WB.UI.Shared.Web.Settings
 {
     public class SettingsProvider
     {
-        private static List<string> settingsToSkip = new List<string>() { "Headquarters.AccessToken" };
+        private static List<string> settingsToSkip = new List<string>()
+        {
+            "Headquarters.AccessToken",
+            "EventStore.Password"
+        };
 
         public static IEnumerable<ApplicationSetting> GetSettings()
         {
