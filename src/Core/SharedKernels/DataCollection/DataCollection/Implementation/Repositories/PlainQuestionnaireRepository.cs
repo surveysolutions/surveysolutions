@@ -26,6 +26,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             QuestionnaireDocument questionnaireDocument = this.repository.GetById(GetRepositoryId(id, version));
 
+            if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
+                return null;
+
             return new PlainQuestionnaire(questionnaireDocument, version);
         }
 
@@ -41,7 +44,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public void DeleteQuestionnaireDocument(Guid id, long version)
         {
-            this.repository.Remove(GetRepositoryId(id, version));
+            var document = GetQuestionnaireDocument(id, version);
+            
+            if(document==null)
+                return;
+            document.IsDeleted = true;
+
+            StoreQuestionnaire(id, version, document);
         }
 
         private static string GetRepositoryId(Guid id, long version)
