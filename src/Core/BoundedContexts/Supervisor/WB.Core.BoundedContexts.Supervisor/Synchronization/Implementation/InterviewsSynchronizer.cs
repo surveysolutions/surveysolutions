@@ -124,27 +124,30 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     try
                     {
                         var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
-
-                        switch (interviewFeedEntry.EntryType)
+                        if (interviewDetails.Id != Guid.Empty)
                         {
-                            case EntryType.SupervisorAssigned:
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId, interviewFeedEntry.UserId);
-                                break;
+                            switch (interviewFeedEntry.EntryType)
+                            {
+                                case EntryType.SupervisorAssigned:
+                                    this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId,
+                                        interviewFeedEntry.UserId);
+                                    break;
 
-                            case EntryType.InterviewUnassigned:
-                                this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
-                                break;
-                            case EntryType.InterviewDeleted:
-                                this.HardDeleteInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
-                                break;
-                            case EntryType.InterviewRejected:
-                                this.RejectInterview(interviewFeedEntry, interviewDetails);
-                                break;
-                            default:
-                                this.logger.Warn(string.Format(
-                                    "Unknown event of type {0} received in interviews feed. It was skipped and marked as processed with error. EventId: {1}",
-                                    interviewFeedEntry.EntryType, interviewFeedEntry.EntryId));
-                                break;
+                                case EntryType.InterviewUnassigned:
+                                    this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                    break;
+                                case EntryType.InterviewDeleted:
+                                    this.HardDeleteInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                    break;
+                                case EntryType.InterviewRejected:
+                                    this.RejectInterview(interviewFeedEntry, interviewDetails);
+                                    break;
+                                default:
+                                    this.logger.Warn(string.Format(
+                                        "Unknown event of type {0} received in interviews feed. It was skipped and marked as processed with error. EventId: {1}",
+                                        interviewFeedEntry.EntryType, interviewFeedEntry.EntryId));
+                                    break;
+                            }
                         }
 
                         interviewFeedEntry.Processed = true;
@@ -180,13 +183,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void RejectInterview(LocalInterviewFeedEntry feedEntry, InterviewSynchronizationDto interviewDetails)
         {
+            if (IsQuestionnaireDeleted(interviewDetails.QuestionnaireId, interviewDetails.QuestionnaireVersion))
+                return;
+
             var userIdGuid = Guid.Parse(feedEntry.UserId);
             var supervisorIdGuid = Guid.Parse(feedEntry.SupervisorId);
 
             this.headquartersPullContext.PushMessage(string.Format("Applying interview rejected by HQ on {0} interview", feedEntry.InterviewId));
 
-            InterviewSummary interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewDetails.Id);
-            if (interviewSummary == null)
+            if (!IsInterviewPresent(interviewDetails.Id))
 
             {
                 var interviewerId = feedEntry.InterviewerId != null ? Guid.Parse(feedEntry.InterviewerId) : supervisorIdGuid;
@@ -229,8 +234,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
+        private bool IsQuestionnaireDeleted(Guid id, long version)
+        {
+            var questionnaire = plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+            return questionnaire == null || questionnaire.IsDeleted;
+        }
+
+        private bool IsInterviewPresent(Guid interviewId)
+        {
+             return this.interviewSummaryRepositoryWriter.GetById(interviewId)!=null;
+        }
         private void CreateOrUpdateInterviewFromHeadquarters(InterviewSynchronizationDto interviewDetails, string supervisorId, string userId)
         {
+            if(IsQuestionnaireDeleted(interviewDetails.QuestionnaireId,interviewDetails.QuestionnaireVersion))
+                return;
+            
             var userIdGuid = Guid.Parse(userId);
             var supervisorIdGuid = Guid.Parse(supervisorId);
 
@@ -240,6 +258,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void CancelInterview(string interviewId, string userId)
         {
             Guid interviewIdGuid = Guid.Parse(interviewId);
+
+            if (!IsInterviewPresent(interviewIdGuid))
+                return;
+
             Guid userIdGuid = Guid.Parse(userId);
 
             this.executeCommand(new CancelInterviewByHQSynchronizationCommand(interviewId: interviewIdGuid, userId: userIdGuid));
@@ -249,6 +271,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void HardDeleteInterview(string interviewId, string userId)
         {
             Guid interviewIdGuid = Guid.Parse(interviewId);
+            if (!IsInterviewPresent(interviewIdGuid))
+                return;
+
             Guid userIdGuid = Guid.Parse(userId);
             this.executeCommand(new HardDeleteInterview(interviewId: interviewIdGuid, userId: userIdGuid));
         }

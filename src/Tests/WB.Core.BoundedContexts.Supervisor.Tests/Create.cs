@@ -66,7 +66,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             HeadquartersPushContext headquartersPushContext = null,
             IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage=null,
             IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage=null,
-            IHeadquartersInterviewReader headquartersInterviewReader=null)
+            IHeadquartersInterviewReader headquartersInterviewReader=null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository=null)
         {
             return new InterviewsSynchronizer(
                 Mock.Of<IAtomFeedReader>(),
@@ -75,7 +76,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 commandService ?? Mock.Of<ICommandService>(),
                 plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>(),
                 userDocumentStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
-                Mock.Of<IPlainQuestionnaireRepository>(),
+                plainQuestionnaireRepository?? Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())==new QuestionnaireDocument()),
                 Mock.Of<IHeadquartersQuestionnaireReader>(),
                 headquartersInterviewReader ?? Mock.Of<IHeadquartersInterviewReader>(),
                 HeadquartersPullContext(),
