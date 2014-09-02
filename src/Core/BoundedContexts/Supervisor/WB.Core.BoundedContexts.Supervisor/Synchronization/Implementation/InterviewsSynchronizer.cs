@@ -132,7 +132,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                     this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId,
                                         interviewFeedEntry.UserId);
                                     break;
-
                                 case EntryType.InterviewUnassigned:
                                     this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
                                     break;
@@ -244,6 +243,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         {
              return this.interviewSummaryRepositoryWriter.GetById(interviewId)!=null;
         }
+
         private void CreateOrUpdateInterviewFromHeadquarters(InterviewSynchronizationDto interviewDetails, string supervisorId, string userId)
         {
             if(IsQuestionnaireDeleted(interviewDetails.QuestionnaireId,interviewDetails.QuestionnaireVersion))

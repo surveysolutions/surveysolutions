@@ -21,7 +21,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests
 {
-    internal class when_pulling_rejected_by_hq_interview_created_on_client_and_interview_were_present_before_at_supervisor : InterviewsSynchronizerTestsContext
+    internal class when_pulling_deleted_interview_which_is_present_on_supervisor : InterviewsSynchronizerTestsContext
     {
         private Establish context = () =>
         {
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                     {
                         new LocalInterviewFeedEntry()
                         {
-                            EntryType = EntryType.InterviewRejected,
+                            EntryType = EntryType.InterviewDeleted,
                             UserId = userId.FormatGuid(),
                             SupervisorId = supervisorId.FormatGuid(),
                             InterviewId = interviewId.FormatGuid(),
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                         }
                     }.AsQueryable());
 
-            iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.RejectedByHeadquarters, "",
+            iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.Deleted, "",
                         userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
                         new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                         new Dictionary<InterviewItemId, int>(), new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
@@ -62,20 +62,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             interviewsSynchronizer.Pull();
 
 
-        It should_CreateInterviewCreatedOnClientCommand_be_never_called = () =>
+        It should_HardDeleteInterview_be_called_once = () =>
             commandServiceMock.Verify(
                 x =>
                     x.Execute(
-                        Moq.It.IsAny<CreateInterviewCreatedOnClientCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Never);
-
-        It should_RejectInterviewFromHeadquartersCommand_be_called_once = () =>
-            commandServiceMock.Verify(
-                x =>
-                    x.Execute(
-                        Moq.It.Is<RejectInterviewFromHeadquartersCommand>(
-                            _ =>
-                                _.InterviewDto == iInterviewSynchronizationDto && _.InterviewerId == userId &&
-                                    _.SupervisorId == supervisorId), Constants.HeadquartersSynchronizationOrigin), Times.Once);
+                        Moq.It.IsAny<HardDeleteInterview>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;
