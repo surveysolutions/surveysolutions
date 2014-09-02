@@ -26,8 +26,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         public override void Load()
         {
             this.AddEventStoreProjections();
-            this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore()).InSingletonScope();
-            this.Kernel.Bind<IEventStore>().To<IStreamableEventStore>();
+            this.Kernel.Bind<IEventStore, IStreamableEventStore>().ToMethod(_ => this.GetEventStore()).InSingletonScope();
+            //this.Kernel.Bind<IEventStore>().To<IStreamableEventStore>();
             NcqrsEnvironment.SetGetter<IStreamableEventStore>(() => this.Kernel.Get<IStreamableEventStore>());
             NcqrsEnvironment.SetGetter<IEventStore>(() => this.Kernel.Get<IEventStore>());
         }
