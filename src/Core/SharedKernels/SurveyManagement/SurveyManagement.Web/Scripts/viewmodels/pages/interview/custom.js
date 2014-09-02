@@ -76,7 +76,7 @@ ko.bindingHandlers.maskFormatter = {
     }
 };
 ko.bindingHandlers.typeahead = {
-    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    init: function (element, valueAccessor, allBindingsAccessor) {
         var $element = $(element);
         var allBindings = allBindingsAccessor();
         var source = ko.toJS(ko.utils.unwrapObservable(valueAccessor()));
