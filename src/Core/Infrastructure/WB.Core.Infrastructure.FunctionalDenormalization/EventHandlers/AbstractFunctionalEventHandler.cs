@@ -59,10 +59,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             if (this.IsCreator(evt))
             {
                 var newObject =
-                    (T)this.GetType()
+                    (T) this.GetType()
                         .GetMethod("Create", new[] { eventType })
                         .Invoke(this, new object[] { this.CreatePublishedEvent(evt) });
-                this.SaveView(evt.EventSourceId, newObject, storage);
+                if (newObject != null)
+                    this.SaveView(evt.EventSourceId, newObject, storage);
                 return;
             }
 

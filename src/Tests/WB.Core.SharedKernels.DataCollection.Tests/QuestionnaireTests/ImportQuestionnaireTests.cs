@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
@@ -228,6 +229,27 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 Assert.That(GetLastEvent<PlainQuestionnaireRegistered>(eventContext).AllowCensusMode, Is.EqualTo(false));
                 Assert.That(GetLastEvent<PlainQuestionnaireRegistered>(eventContext).Version, Is.EqualTo(3));
             }
+        }
+
+
+        [Test]
+        public void
+            RegisterPlainQuestionnaire_When_Valid_Questionnaire_Is_Deleted_From_Plain_Storage_Imported_Then_Correct_Event_is_Published()
+        {
+            // arrange
+            var document = CreateQuestionnaireDocumentWithOneChapter();
+            document.IsDeleted = true;
+
+            var plainQuestionnaireRepository =
+                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(document.PublicKey, 3) == document);
+
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            serviceLocatorMock.Setup(x => x.GetInstance<IPlainQuestionnaireRepository>()).Returns(plainQuestionnaireRepository);
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+            Questionnaire questionnaire = CreateQuestionnaire();
+
+            // act and assert
+            Assert.Throws<QuestionnaireException>(() => questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false));
         }
 
         [Test]

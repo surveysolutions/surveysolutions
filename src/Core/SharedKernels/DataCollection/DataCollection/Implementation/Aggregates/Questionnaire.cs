@@ -155,7 +155,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            if (questionnaireDocument == null)
+            if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 throw new QuestionnaireException(string.Format(
                     "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
                     this.EventSourceId.FormatGuid(), version));
