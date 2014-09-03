@@ -1764,6 +1764,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 QuestionType = QuestionType.GpsCoordinates,
                 StataExportCaption = variableName,
+                VariableLabel = variableLabel,
                 Mandatory = isMandatory,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
