@@ -1,5 +1,6 @@
-﻿@using WB.UI.Designer.BootstrapSupport
-@model IEnumerable<Main.Core.Entities.SubEntities.Option>
+﻿@using System.Linq
+@using WB.UI.Designer.BootstrapSupport
+@model System.Collections.Generic.IEnumerable<Main.Core.Entities.SubEntities.Option>
 @{
     ViewBag.Title = "Edit options";
     Layout = null;
@@ -40,7 +41,7 @@
                 } else {
                     $("body").scrollTop(0);
                     $("#applyOptionsErrorContent").html(response.Error);
-                    $('#applyOptionsError').show();
+                    $('#applyOptionsError').fadeIn().delay(10000).fadeOut();
                 }
             });
         }
@@ -76,8 +77,7 @@
         </nav>
     }
     <div id="content" class="container">
-        <div id="applyOptionsError" class="alert alert-dismissible alert-danger">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <div id="applyOptionsError" class="alert alert-danger">
             <div id="applyOptionsErrorContent"></div>
         </div>
         @foreach (string key in Alerts.ALL.Except(new[] { Alerts.ATTENTION }))
