@@ -2,7 +2,6 @@
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Raven.Abstractions.Extensions;
-using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -32,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region Constants
 
         private const int MaxCountOfDecimalPlaces = 15;
-        private const int maxChapterItemsCount = 200;
+        private const int MaxChapterItemsCount = 200;
 
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
@@ -59,39 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.Numeric,
             QuestionType.AutoPropagate,
         };
-
-        //TODO: move out to a separate service
-        private static readonly string[] CSharpKeyWords = new[]
-            {
-                "abstract", "as", "base", "bool", "break", "byte", "case",
-                "catch", "char", "checked", "class", "const", "continue", "decimal",
-                "default", "delegate", "do", "double", "else", "enum", "event",
-                "explicit", "extern", "false", "finally", "fixed", "float", "for",
-                "foreach", "goto", "if", "implicit", "in", "int", "interface",
-                "internal", "is", "lock", "long", "namespace", "new", "null",
-                "object", "operator", "out", "override", "params", "private", "protected",
-                "public", "readonly", "ref", "return", "sbyte", "sealed", "short",
-                "sizeof", "stackalloc", "static", "string", "struct", "switch", "this",
-                "throw", "true", "try", "typeof", "uint", "ulong", "unchecked",
-                "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"
-            };
-
-        private static readonly string[] StataVariableRestrictions = new[]
-            {
-                "_all", "_b", "byte", "_coef", "_cons", "double", "float", "if", "in", "int", "long", "_n", "_pi",
-                "_pred", "_rc", "_skip", "strl", "using", "with"
-                //str#,
-            };
-
-        private static readonly string[] SpssReservedKeywords = new[]
-            {
-                "all", "and", "by", "eq", "ge", "gt", "le", "lt", "ne", "not", "or", "to", "with"
-            };
-
-        private static readonly string[] ReservedKeywords =
-            CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).ToArray();
-            
-
+        
         #endregion
 
         #region State
@@ -822,6 +789,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             get { return ServiceLocator.Current.GetInstance<IQuestionnaireDocumentUpgrader>(); }
         }
 
+        protected IVariableNameValidator VariableNameValidator
+        {
+            get { return ServiceLocator.Current.GetInstance<IVariableNameValidator>(); }
+        }
+
         #endregion
 
 
@@ -1039,9 +1011,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                                                            .TreeToEnumerable(x => x.Children)
                                                            .Count();
             
-            if ((numberOfCopiedItems + numberOfItemsInChapter) >= maxChapterItemsCount)
+            if ((numberOfCopiedItems + numberOfItemsInChapter) >= MaxChapterItemsCount)
             {
-                throw new QuestionnaireException(string.Format("Chapter cannot have more than {0} elements", maxChapterItemsCount));
+                throw new QuestionnaireException(string.Format("Chapter cannot have more than {0} elements", MaxChapterItemsCount));
             }
 
             var parentGroupId = sourceGroup.GetParent() == null ? (Guid?)null : sourceGroup.GetParent().PublicKey;
@@ -1332,9 +1304,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         .TreeToEnumerable(x => x.Children)
                         .Count();
 
-                    if ((numberOfMovedItems + numberOfItemsInChapter) >= maxChapterItemsCount)
+                    if ((numberOfMovedItems + numberOfItemsInChapter) >= MaxChapterItemsCount)
                     {
-                        throw new QuestionnaireException(string.Format("Chapter cannot have more than {0} elements", maxChapterItemsCount));
+                        throw new QuestionnaireException(string.Format("Chapter cannot have more than {0} elements", MaxChapterItemsCount));
                     }
                 }
             }
@@ -2729,9 +2701,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowIfChapterHasMoreThanAllowedLimit(Guid itemId)
         {
             var chapter = this.innerDocument.GetChapterOfItemById(itemId);
-            if (chapter.Children.TreeToEnumerable(x => x.Children).Count() >= maxChapterItemsCount)
+            if (chapter.Children.TreeToEnumerable(x => x.Children).Count() >= MaxChapterItemsCount)
             {
-                throw new QuestionnaireException(string.Format("Chapter cannot have more than {0} child items", maxChapterItemsCount));
+                throw new QuestionnaireException(string.Format("Chapter cannot have more than {0} child items", MaxChapterItemsCount));
             }
         }
 
@@ -2964,7 +2936,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var keywords = new[] { "this", SubstitutionService.RosterTitleSubstitutionReference };
 
-            keywords = ReservedKeywords.Union(keywords).ToArray();
+            keywords = VariableNameValidator.GetAllReservedKeywords().Union(keywords).ToArray();
+
             foreach (var keyword in keywords.Where(keyword => stataCaption.ToLower() == keyword)) {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameShouldNotMatchWithKeywords,
