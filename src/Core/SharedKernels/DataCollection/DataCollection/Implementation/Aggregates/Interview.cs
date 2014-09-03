@@ -382,7 +382,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewDeleted @event) { }
 
-        private void Apply(InterviewHardDeleted @event)
+        internal void Apply(InterviewHardDeleted @event)
         {
             wasHardDeleted = true;
         }
@@ -1896,9 +1896,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void MarkInterviewAsSentToHeadquarters(Guid userId)
         {
-            ThrowIfInterviewHardDeleted();
-            this.ApplyEvent(new InterviewDeleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+            if (!this.wasHardDeleted)
+            {
+                this.ApplyEvent(new InterviewDeleted(userId));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+            }
             this.ApplyEvent(new InterviewSentToHeadquarters());
         }
 

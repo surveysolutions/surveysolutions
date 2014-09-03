@@ -241,7 +241,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private bool IsInterviewPresent(Guid interviewId)
         {
-             return this.interviewSummaryRepositoryWriter.GetById(interviewId)!=null;
+            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            return interviewSummary != null && !interviewSummary.IsDeleted;
         }
 
         private void CreateOrUpdateInterviewFromHeadquarters(InterviewSynchronizationDto interviewDetails, string supervisorId, string userId)

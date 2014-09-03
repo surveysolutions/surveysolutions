@@ -196,6 +196,7 @@
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_question_marked_as_mandatory.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_question_marked_as_mandatory_inside_initially_disabled_group.cs" />
     <Compile Include="InterviewTests\when_marking_interview_as_sent_to_headquarters_and_interview_is_approved_by_supervisor.cs" />
+    <Compile Include="InterviewTests\when_marking_interview_as_sent_to_headquarters_and_interview_is_hard_deleted.cs" />
     <Compile Include="InterviewTests\when_propagated_group_is_conditionally_disabled.cs" />
     <Compile Include="InterviewTests\when_reevaluating_interview_with_group_depending_on_recently_enabled_question.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_group_with_custom_enablement_condition.cs" />
