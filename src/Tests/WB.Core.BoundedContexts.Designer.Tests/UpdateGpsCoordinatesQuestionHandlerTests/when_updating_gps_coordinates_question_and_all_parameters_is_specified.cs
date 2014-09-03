@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateGpsCoordinatesQuestionHan
 
         It should_raise_QuestionChanged_event_with_variable_label_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .StataExportCaption.ShouldEqual(variableName);
+                .VariableLabel.ShouldEqual(variableLabel);
 
         It should_raise_QuestionChanged_event_with_title_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
