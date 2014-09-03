@@ -4,7 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using It = Machine.Specifications.It;
@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
         It should_have_rejectedByHeadquarters_correct = () => view.Stats[5].ShouldEqual(new[] { 1, 1, 2 });
         It should_have_approvedByHeadquarters_correct = () => view.Stats[6].ShouldEqual(new[] { 1, 1, 2 });
 
-        private static IChartStatisticsFactory chartStatisticsFactory;
+        private static ChartStatisticsFactory chartStatisticsFactory;
         private static ChartStatisticsInputModel input;
         private static ChartStatisticsView view;
     }
