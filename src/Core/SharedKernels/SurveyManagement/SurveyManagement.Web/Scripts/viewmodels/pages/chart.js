@@ -8,7 +8,9 @@
     self.Stats = ko.observable(null);
     self.Plot = null;
     self.FromDate = ko.observable(null);
+    self.FromDateInput = ko.observable(null);
     self.ToDate = ko.observable(null);
+    self.ToDateInput = ko.observable(null);
     self.ShouldShowDateValidationMessage = ko.observable(false);
 
     self.initChart = function () {
@@ -114,20 +116,30 @@
             format: "mm/dd/yyyy",
             keyboardNavigation: false,
             autoclose: true,
-            todayHighlight: true
-        });
+            todayHighlight: true,
+            forseParse: false
+        }).on("hide", function (e) {
+            if (e.date !== undefined) {
+                self.FromDate(self.FromDateInput());
+                self.ToDate(self.ToDateInput());
 
+                self.initChart();
+            } else {
+                self.FromDateInput(self.FromDate());
+                self.ToDateInput(self.ToDate());
+            }
+        });
+        
         self.FromDate(oneWeekAgo);
+        self.FromDateInput(oneWeekAgo);
+
         self.ToDate(today);
+        self.ToDateInput(today);
 
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
         self.SelectedTemplate.subscribe(function () { self.initChart(); });
-
-        self.FromDate.subscribe(function () { self.initChart(); });
-
-        self.ToDate.subscribe(function () { self.initChart(); });
-
+        
         self.initChart();
     };
 };
