@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
 {
     internal class ChartStatisticsFactoryTestsContext
     {
-        protected static ChartStatisticsFactory CreateChartStatisticsFactory(IQueryable<StatisticsLineGroupedByDateAndTemplate> data)
+        protected static ChartStatisticsViewFactory CreateChartStatisticsFactory(IQueryable<StatisticsLineGroupedByDateAndTemplate> data)
         {
             var stats = Mock.Of<IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate>>();
 
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
                     query => query.Invoke(data)
                 );
 
-            return new ChartStatisticsFactory(stats);
+            return new ChartStatisticsViewFactory(stats);
         }
     }
 }
