@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
                 }
             }.AsQueryable();
 
-            chartStatisticsFactory = CreateChartStatisticsFactory(data);
+            chartStatisticsViewFactory = CreateChartStatisticsFactory(data);
 
             input = new ChartStatisticsInputModel
             {
@@ -93,13 +93,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
             };
         };
 
-        Because of = () => view = chartStatisticsFactory.Load(input);
+        Because of = () => view = chartStatisticsViewFactory.Load(input);
 
         It should_have_days_count_three_muliply_two_records = () => view.Ticks.Length.ShouldEqual(3 * 2);
 
         It should_have_supervisorAssignedData_correct = () => view.Stats[0].ShouldEqual(new[] { 1, 1, 3 });
 
-        private static ChartStatisticsFactory chartStatisticsFactory;
+        private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;
         private static ChartStatisticsView view;
     }

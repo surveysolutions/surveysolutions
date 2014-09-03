@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.SurveyManagement.Factories
 {
-    public interface IChartStatisticsFactory
+    public interface IChartStatisticsViewFactory
     {
         ChartStatisticsView Load(ChartStatisticsInputModel input);
     }

@@ -90,7 +90,7 @@
     <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="Factories\ICsvWriterFactory.cs" />
-    <Compile Include="Factories\IChartStatisticsFactory.cs" />
+    <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Factories\CsvWriterFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
@@ -202,7 +202,7 @@
     <Compile Include="Views\Interviewer\InterviewerStatisticsInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewersView.cs" />
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
-    <Compile Include="Implementation\Factories\ChartStatisticsFactory.cs" />
+    <Compile Include="Implementation\Factories\ChartStatisticsViewFactory.cs" />
     <Compile Include="Views\Interviews\ChartStatisticsView.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />

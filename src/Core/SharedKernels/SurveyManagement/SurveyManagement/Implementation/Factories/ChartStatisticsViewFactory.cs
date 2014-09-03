@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
-    internal class ChartStatisticsFactory : IChartStatisticsFactory
+    internal class ChartStatisticsViewFactory : IChartStatisticsViewFactory
     {
         private class IntermediateCalculationsData
         {
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         private readonly IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> statisticsReader;
 
-        public ChartStatisticsFactory(IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> statisticsReader)
+        public ChartStatisticsViewFactory(IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> statisticsReader)
         {
             this.statisticsReader = statisticsReader;
         }

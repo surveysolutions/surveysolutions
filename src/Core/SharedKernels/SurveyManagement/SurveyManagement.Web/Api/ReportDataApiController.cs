@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView>
             headquarterSurveysAndStatusesReport;
 
-        private readonly IChartStatisticsFactory chartStatisticsFactory;
+        private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
 
         private readonly IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
             supervisorSurveysAndStatusesReport;
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IViewFactory<MapReportInputModel, MapReportView> mapReport,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory, 
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
-            IChartStatisticsFactory chartStatisticsFactory)
+            IChartStatisticsViewFactory chartStatisticsViewFactory)
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.mapReport = mapReport;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionInforFactory = questionInforFactory;
-            this.chartStatisticsFactory = chartStatisticsFactory;
+            this.chartStatisticsViewFactory = chartStatisticsViewFactory;
         }
 
         [HttpPost]
@@ -190,7 +190,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 To = data.To
             };
 
-            return this.chartStatisticsFactory.Load(input);
+            return this.chartStatisticsViewFactory.Load(input);
         }
     }
 }
