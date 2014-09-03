@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             FillFirstDayWithStatisticsCollectedUpToThatDay(intermediateData, firstDayOnChart, collectedStatistics);
 
-            for (int dayIndex = 0; dayIndex < resultDaysCount; dayIndex++)
+            for (int dayIndex = 1; dayIndex < resultDaysCount; dayIndex++)
             {
                 var date = firstDayOnChart.AddDays(dayIndex);
 
