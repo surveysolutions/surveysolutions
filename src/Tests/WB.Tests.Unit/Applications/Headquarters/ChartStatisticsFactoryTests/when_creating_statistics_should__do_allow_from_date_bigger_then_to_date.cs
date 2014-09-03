@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
 
         It should_have_days_count_muliply_two_records = () => view.Ticks.Length.ShouldEqual(0);
 
-        private static IChartStatisticsFactory chartStatisticsFactory;
+        private static ChartStatisticsFactory chartStatisticsFactory;
         private static ChartStatisticsInputModel input;
         private static ChartStatisticsView view;
     }
