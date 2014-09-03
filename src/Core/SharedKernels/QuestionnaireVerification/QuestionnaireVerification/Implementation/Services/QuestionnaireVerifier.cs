@@ -78,6 +78,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
         }
 
+        protected static IVariableNameValidator VariableNameValidator
+        {
+            get { return ServiceLocator.Current.GetInstance<IVariableNameValidator>(); }
+        }
+
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor)
         {
             this.expressionProcessor = expressionProcessor;
@@ -136,6 +141,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
                     Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
                     Verifier<IGroup>(RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
+                    Verifier<IGroup>(RosterHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
                     Verifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
                     Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
@@ -197,7 +203,19 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
         {
-            return question.StataExportCaption == SubstitutionService.RosterTitleSubstitutionReference;
+            var keywords = VariableNameValidator.GetAllReservedKeywords();
+            bool isReservedKeyword = keywords.Contains(question.StataExportCaption);
+
+            return isReservedKeyword || question.StataExportCaption == SubstitutionService.RosterTitleSubstitutionReference;
+        }
+
+        private bool RosterHasVariableNameReservedForServiceNeeds(IGroup roster)
+        {
+            if (!IsRosterGroup(roster))
+                return false;
+
+            var keywords = VariableNameValidator.GetAllReservedKeywords();
+            return keywords.Contains(roster.VariableName);
         }
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
