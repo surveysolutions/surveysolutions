@@ -118,6 +118,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_empty_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level_and__.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_inside_roster_that_has_substitutions_references_with_deeper_roster_level.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_with_illegal_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_validation_expression_and_without_validation_meassage.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_illegal_variable_name.cs" />
