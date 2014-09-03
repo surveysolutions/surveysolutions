@@ -16,7 +16,10 @@
     self.initChart = function () {
         var selectedTemplate = JSON.parse(self.SelectedTemplate());
 
-        if (self.FromDate() > self.ToDate()) {
+        var startDate = moment(self.FromDate(), "MM/DD/YYYY");
+        var endDate = moment(self.ToDate(), "MM/DD/YYYY");
+
+        if (startDate.isAfter(endDate)) {
             self.ShouldShowDateValidationMessage(true);
         } else {
             self.ShouldShowDateValidationMessage(false);
