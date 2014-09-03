@@ -28,7 +28,7 @@ namespace WB.UI.Supervisor.Tests.ReportDataApiControllerTests
             IViewFactory<MapReportInputModel, MapReportView> mapReport = null,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView> questionnaireBrowseViewFactory = null,
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory = null,
-            IChartStatisticsFactory chartStatisticsFactory = null)
+            IChartStatisticsViewFactory chartStatisticsViewFactory = null)
         {
             return new ReportDataApiController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -45,7 +45,7 @@ namespace WB.UI.Supervisor.Tests.ReportDataApiControllerTests
                 mapReport ?? Mock.Of<IViewFactory<MapReportInputModel, MapReportView>>(),
                 questionnaireBrowseViewFactory ?? Mock.Of<IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireAndVersionsView>>(),
                 questionInforFactory ?? Mock.Of<IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView>>(),
-                chartStatisticsFactory ?? Mock.Of<IChartStatisticsFactory>()
+                chartStatisticsViewFactory ?? Mock.Of<IChartStatisticsViewFactory>()
             );
         }
     }
