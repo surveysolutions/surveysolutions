@@ -20,10 +20,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         };
 
         Because of = () =>
-            updatedModel = denormalizer.Delete(viewModel, Create.InterviewHardDeletedEvent(userId: responsibleId));
+            updatedModel = denormalizer.Update(viewModel, Create.InterviewHardDeletedEvent(userId: responsibleId));
 
-        It should_updatedModel_be_equal_to_base_view_model = () =>
-            updatedModel.ShouldEqual(viewModel);
+        It should_updatedModel_be_marked_as_deleted = () =>
+            updatedModel.IsDeleted.ShouldEqual(true);
 
         private static InterviewSummaryEventHandlerFunctional denormalizer;
         private static InterviewSummary viewModel;
