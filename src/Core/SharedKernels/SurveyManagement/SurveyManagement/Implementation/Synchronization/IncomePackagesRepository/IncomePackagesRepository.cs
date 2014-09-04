@@ -173,7 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             var i = sequence + 1;
             foreach (var aggregateRootEvent in stream)
             {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0, DateTime.UtcNow));
+                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0));
                 i++;
             }
             return uncommitedStream;
