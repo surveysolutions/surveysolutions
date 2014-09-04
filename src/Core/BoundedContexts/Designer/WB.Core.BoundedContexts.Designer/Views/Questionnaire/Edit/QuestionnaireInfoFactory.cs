@@ -202,6 +202,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             NewEditQuestionView result = MapQuestionFields(question);
             result.Options = result.Options ?? new CategoricalOption[0];
+            result.OptionsCount = result.Options.Length;
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
             result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire);
             result.QuestionTypeOptions = QuestionTypeOptions;

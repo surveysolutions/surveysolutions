@@ -140,7 +140,16 @@
                 </div>
                 <p>
                     <input ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
-                    <input ng-if="activeQuestion.isFilteredCombobox" class="btn btn-link" type="button" value="Edit Options" ng-click="editFilteredComboboxOptions()">
+                    <a ng-if="activeQuestion.isFilteredCombobox"
+                       href="javascript:void(0);"
+                       class="btn btn-link"
+                       ng-click="editFilteredComboboxOptions()">
+                        <ng-pluralize count="activeQuestion.optionsCount"
+                                      when="{'0': 'Add options',
+                                     'one': 'Edit 1 option',
+                                     'other': 'Edit {} options'}">
+                        </ng-pluralize>
+                    </a>
                 </p>
                 <div class="table-holder">
                     <div class="row">
@@ -159,7 +168,7 @@
 
                     </div>
                 </div>
-                <div ng-if="!activeQuestion.isFilteredCombobox" class="form-group" 
+                <div ng-if="!activeQuestion.isFilteredCombobox" class="form-group"
                      ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
         </script>
 

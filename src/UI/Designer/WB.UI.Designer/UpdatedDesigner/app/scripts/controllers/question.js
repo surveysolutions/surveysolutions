@@ -36,6 +36,8 @@
                     });
 
                     $scope.activeQuestion.options = options;
+                    $scope.activeQuestion.optionsCount = result.optionsCount || 0;
+                    
                     $scope.activeQuestion.wereOptionsTruncated = result.wereOptionsTruncated || false;
                     $scope.activeQuestion.isInteger = result.isInteger;
                     $scope.activeQuestion.maxValue = result.maxValue;
@@ -72,6 +74,9 @@
                                 type: $scope.activeQuestion.type,
                                 linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
                             });
+                            if ($scope.activeQuestion.type == "SingleOption" && !$scope.activeQuestion.isFilteredCombobox) {
+                                $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                            }
                             $scope.questionForm.$setPristine();
                             if (_.isFunction(callback)) {
                                 callback();
