@@ -47,15 +47,15 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            int normalMin = (int)Math.Max(0, minVersion);
-            int normalMax = (int)Math.Min(int.MaxValue, maxVersion-1);
+            int normalMin = minVersion > 0 ? (int) Math.Max(0, minVersion - 1) : 0;
+            int normalMax = (int) Math.Min(int.MaxValue, maxVersion - 1);
             if (minVersion > maxVersion)
             {
                 return new CommittedEventStream(id);
             }
 
             var streamEvents = new List<ResolvedEvent>();
-            int batchSize = normalMax - normalMin + 1;
+            int batchSize = normalMax - normalMin;
 
             StreamEventsSlice currentSlice;
             int nextSliceStart = StreamPosition.Start + normalMin;
