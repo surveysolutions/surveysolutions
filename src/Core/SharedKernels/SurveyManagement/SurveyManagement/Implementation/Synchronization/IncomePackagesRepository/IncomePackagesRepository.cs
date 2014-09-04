@@ -32,6 +32,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
         private readonly SyncSettings syncSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IJsonUtils jsonUtils;
+        private IStreamableEventStore eventStore;
+        private IEventDispatcher eventBus;
 
         public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
             IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter)
@@ -44,6 +46,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
 
             this.InitializeDirectoriesForCapiIncomePackages();
+        }
+
+        internal IStreamableEventStore EventStore
+        {
+            get { return this.eventStore ?? NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore; }
+            set { this.eventStore = value; }
+        }
+
+        internal IEventDispatcher EventBus
+        {
+            get { return this.eventBus ?? NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher; }
+            set { this.eventBus = value; }
         }
 
         private void InitializeDirectoriesForCapiIncomePackages()
@@ -119,20 +133,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             var items = this.jsonUtils.Deserrialize<AggregateRootEvent[]>(PackageHelper.DecompressString(fileContent));
             if (items.Length > 0)
             {
-                var eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
-                if (eventStore == null)
+                if (this.EventStore == null)
                     return;
 
-                var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
-                if (bus == null)
+                if (this.EventBus == null)
                     return;
 
-                var incomeEvents = this.BuildEventStreams(items, eventStore.GetLastEventSequence(id));
+                var incomeEvents = this.BuildEventStreams(items, this.EventStore.GetLastEventSequence(id));
 
-                eventStore.Store(incomeEvents);
+                this.EventStore.Store(incomeEvents);
                 this.fileSystemAccessor.DeleteFile(fileName);
 
-                bus.Publish(incomeEvents);
+                this.EventBus.Publish(incomeEvents);
                 if (this.syncSettings.ReevaluateInterviewWhenSynchronized)
                 {
                     this.commandService.Execute(new ReevaluateSynchronizedInterview(id));
