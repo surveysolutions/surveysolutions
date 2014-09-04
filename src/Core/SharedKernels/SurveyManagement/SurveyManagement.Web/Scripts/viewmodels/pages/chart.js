@@ -91,29 +91,9 @@
             }).replot();
     };
 
-    self.formatDate = function(today) {
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-        var yyyy = today.getFullYear();
-
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-
-        return  mm + '/' + dd + '/' + yyyy;
-    };
-
     self.load = function() {
-        var today = new Date();
-        today = self.formatDate(today);
-
-        var oneWeekAgo = new Date();
-        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-        oneWeekAgo = self.formatDate(oneWeekAgo);
+        var today = moment().format("MM/DD/YYYY");
+        var oneWeekAgo = moment().add("weeks", -1).format("MM/DD/YYYY");
 
         $('.list-group .input-group.date').datepicker({
             format: "mm/dd/yyyy",
