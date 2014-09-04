@@ -9,9 +9,9 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    internal class when_creating_statistics_with_specific_date_range : ChartStatisticsFactoryTestsContext
+    internal class when_creating_statistics_with_specific_date_range : ChartStatisticsViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
                 }
             }.AsQueryable();
 
-            chartStatisticsViewFactory = CreateChartStatisticsFactory(data);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(data);
 
             input = new ChartStatisticsInputModel
             {
