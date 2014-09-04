@@ -7145,6 +7145,31 @@ textarea#edit-group-description {
   line-height: 12px;
   letter-spacing: 1px;
 }
+.highlighted-add {
+  border-radius: 4px 4px 0 0;
+  background-color: #edeff1;
+}
+.highlighted-add .item .item-body {
+  border-bottom-color: #f8f9fa;
+}
+.highlighted-add .item .item-body .qname-block {
+  background-color: #edeff1;
+}
+.highlighted-add .item .item-body .qname-block:before {
+  background-image: -webkit-linear-gradient(left, color-stop(rgba(237, 239, 241, 0) 0%), color-stop(#edeff1 100%));
+  background-image: linear-gradient(to right, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
+}
+.highlighted-add .item.selected .qname-block {
+  background-color: #ffffff;
+}
+.highlighted-add .item.selected .qname-block:before {
+  background-image: -webkit-linear-gradient(left, color-stop(rgba(255, 255, 255, 0) 0%), color-stop(#ffffff 100%));
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
+}
 li.chapter-panel-item {
   position: relative;
   display: block;
