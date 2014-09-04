@@ -175,7 +175,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             {
                 uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0));
                 i++;
-            }
+            } 
             return uncommitedStream;
         }
     }

@@ -477,7 +477,7 @@ namespace CapiDataGenerator
                     try
                     {
                         var users = CreateInterviewers(interviewersCount);
-                        var questionnaire = new Questionnaire(questionnaireDocument);
+                        var questionnaire = new Questionnaire(questionnaireDocument).GetQuestionnaire();
                         var state = new State(questionnaire.GetFixedRosterGroups());
 
                         this.ImportTemplate(questionnaireDocument);

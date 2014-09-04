@@ -663,6 +663,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid)
             : base(id)
         {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId,questionnaireVersion, interviewStatus, featuredQuestionsMeta, true, null));
             this.ApplyValidationEvent(isValid);
