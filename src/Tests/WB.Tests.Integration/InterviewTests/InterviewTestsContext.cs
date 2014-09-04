@@ -11,6 +11,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -25,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests
         {
             var questionnaireId = Guid.Parse("10000010000100100100100001000001");
 
-            Questionnaire questionnaire = CreateQuestionnaire(questionnaireDocument);
+            PlainQuestionnaire questionnaire = CreateQuestionnaire(questionnaireDocument);
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
@@ -48,11 +49,9 @@ namespace WB.Tests.Integration.InterviewTests
                 supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"));
         }
 
-        protected static Questionnaire CreateQuestionnaire(QuestionnaireDocument questionnaireDocument, Guid? userId = null)
+        protected static PlainQuestionnaire CreateQuestionnaire(QuestionnaireDocument questionnaireDocument, Guid? userId = null)
         {
-            return new Questionnaire(
-                userId ?? new Guid("E333E333E333E333E333E333E333E333"),
-                questionnaireDocument, false);
+            return new PlainQuestionnaire(questionnaireDocument, 1);
         }
 
         protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)

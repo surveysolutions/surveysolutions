@@ -6,7 +6,9 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
@@ -28,9 +30,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             return new Questionnaire(new Guid(), new QuestionnaireDocument(), false);
         }
 
-        public static Questionnaire CreateQuestionnaire(Guid creatorId, IQuestionnaireDocument document)
+        public static Questionnaire CreateQuestionnaire(Guid creatorId, QuestionnaireDocument document)
         {
-            return new Questionnaire(creatorId, document, false);
+            return new Questionnaire(new Guid(), document, false);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

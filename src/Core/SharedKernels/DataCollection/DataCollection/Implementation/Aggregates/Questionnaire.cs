@@ -23,45 +23,52 @@ using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire, ISnapshotable<QuestionnaireState>
+    internal class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
     {
         #region State
 
-        private PlainQuestionnaire plainQuestionnaire;
         private bool isProxyToPlainQuestionnaireRepository;
-        private HashSet<long> availableVersions = new HashSet<long>() { 0 };
+        private Dictionary<long, IQuestionnaire> availableVersions = new Dictionary <long, IQuestionnaire>();
 
+        public IQuestionnaire GetQuestionnaire()
+        {
+            var presentVersions = availableVersions.Where(v => v.Value != null).ToList();
+            if (!presentVersions.Any())
+                return null;
+            var maxVersion = presentVersions.Max(k => k.Key);
+            return presentVersions.FirstOrDefault(v => v.Key == maxVersion).Value;
+        }
+
+        public IQuestionnaire GetHistoricalQuestionnaire(long version)
+        {
+            if (availableVersions.ContainsKey(version))
+                return availableVersions[version];
+            return null;
+        }
 
         protected internal void Apply(TemplateImported e)
         {
             var templateVersion = e.Version ?? (this.Version+1);
-            this.plainQuestionnaire = new PlainQuestionnaire(e.Source, () => templateVersion);
-            availableVersions.Add(templateVersion);
+            availableVersions[templateVersion]= new PlainQuestionnaire(e.Source, () => templateVersion);
         }
 
         protected internal void Apply(QuestionnaireDeleted e)
         {
+            availableVersions[e.QuestionnaireVersion] = null;
         }
 
         private void Apply(PlainQuestionnaireRegistered e)
         {
             this.isProxyToPlainQuestionnaireRepository = true;
-            this.plainQuestionnaire = null;
-            availableVersions.Add(e.Version);
+            availableVersions[e.Version] = null;
         }
 
         public QuestionnaireState CreateSnapshot()
         {
             return this.isProxyToPlainQuestionnaireRepository
                 ? new QuestionnaireState(
-                    null,
-                    null,
-                    null,
                     isProxyToPlainQuestionnaireRepository: true, availableVersions: this.availableVersions)
                 : new QuestionnaireState(
-                    this.plainQuestionnaire.QuestionnaireDocument,
-                    this.plainQuestionnaire.QuestionCache,
-                    this.plainQuestionnaire.GroupCache,
                     isProxyToPlainQuestionnaireRepository: false, availableVersions: this.availableVersions);
         }
 
@@ -69,9 +76,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.isProxyToPlainQuestionnaireRepository = snapshot.IsProxyToPlainQuestionnaireRepository;
 
-            this.plainQuestionnaire = snapshot.IsProxyToPlainQuestionnaireRepository
-                ? null
-                : new PlainQuestionnaire(snapshot.Document, () => this.Version, snapshot.GroupCache, snapshot.QuestionCache);
             this.availableVersions = snapshot.AvailableVersions;
         }
 
@@ -112,14 +116,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.RegisterPlainQuestionnaire(id, version, allowCensusMode);
         }
 
-
         private void ImportFromQuestionnaireDocument(IQuestionnaireDocument source)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
 
-            this.ApplyEvent(new TemplateImported { Source = document, Version = this.availableVersions.Max() + 1 });
+            this.ApplyEvent(new TemplateImported { Source = document, Version = GetNextVersion() });
         }
 
         public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode)
@@ -129,7 +132,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
 
-            this.ApplyEvent(new TemplateImported { Source = document, AllowCensusMode = allowCensusMode, Version = this.availableVersions.Max() + 1 });
+            this.ApplyEvent(new TemplateImported { Source = document, AllowCensusMode = allowCensusMode, Version = GetNextVersion() });
+        }
+
+        private long GetNextVersion()
+        {
+            if (!availableVersions.Any())
+                return 1;
+            return this.availableVersions.Keys.Max() + 1;
         }
 
         public void ImportFromSupervisor(IQuestionnaireDocument source)
@@ -144,7 +154,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void DeleteQuestionnaire(long questionnaireVersion)
         {
-            if(!availableVersions.Contains(questionnaireVersion))
+            if(!availableVersions.ContainsKey(questionnaireVersion))
                 throw new QuestionnaireException(string.Format(
                     "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
                     this.EventSourceId.FormatGuid(), questionnaireVersion));
@@ -186,261 +196,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (this.isProxyToPlainQuestionnaireRepository)
                 throw new QuestionnaireException("This aggregate instance only supports sending of plain questionnaire repository events and it is not intended to be used separately.");
-        }
-
-        public void InitializeQuestionnaireDocument()
-        {
-            ((IQuestionnaire) this.plainQuestionnaire).InitializeQuestionnaireDocument();
-        }
-
-        public IQuestion GetQuestionByStataCaption(string stataCaption)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionByStataCaption(stataCaption);
-        }
-
-        public bool HasQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).HasQuestion(questionId);
-        }
-
-        public bool HasGroup(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).HasGroup(groupId);
-        }
-
-        public QuestionType GetQuestionType(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionType(questionId);
-        }
-
-        public bool IsQuestionLinked(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).IsQuestionLinked(questionId);
-        }
-
-        public string GetQuestionTitle(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionTitle(questionId);
-        }
-
-        public string GetQuestionVariableName(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionVariableName(questionId);
-        }
-
-        public string GetGroupTitle(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetGroupTitle(groupId);
-        }
-
-        public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAnswerOptionsAsValues(questionId);
-        }
-
-        public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAnswerOptionTitle(questionId, answerOptionValue);
-        }
-
-        public int? GetMaxSelectedAnswerOptions(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetMaxSelectedAnswerOptions(questionId);
-        }
-
-        public bool IsCustomValidationDefined(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).IsCustomValidationDefined(questionId);
-        }
-
-        public IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsInvolvedInCustomValidation(questionId);
-        }
-
-        public string GetCustomValidationExpression(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetCustomValidationExpression(questionId);
-        }
-
-        public IEnumerable<Guid> GetAllQuestionsWithNotEmptyValidationExpressions()
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAllQuestionsWithNotEmptyValidationExpressions();
-        }
-
-        public IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questionId);
-        }
-
-        public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAllParentGroupsForQuestion(questionId);
-        }
-
-        public string GetCustomEnablementConditionForQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetCustomEnablementConditionForQuestion(questionId);
-        }
-
-        public string GetCustomEnablementConditionForGroup(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetCustomEnablementConditionForGroup(groupId);
-        }
-
-        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupId);
-        }
-
-        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionId);
-        }
-
-        public IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionId);
-        }
-
-        public IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionId);
-        }
-
-        public bool ShouldQuestionSpecifyRosterSize(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).ShouldQuestionSpecifyRosterSize(questionId);
-        }
-
-        public IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetRosterGroupsByRosterSizeQuestion(questionId);
-        }
-
-        public int? GetMaxValueForNumericQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetMaxValueForNumericQuestion(questionId);
-        }
-
-        public int? GetListSizeForListQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetListSizeForListQuestion(questionId);
-        }
-
-        public IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetRostersFromTopToSpecifiedQuestion(questionId);
-        }
-
-        public IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetRostersFromTopToSpecifiedGroup(groupId);
-        }
-
-        public IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetFixedRosterGroups(parentRosterId);
-        }
-
-        public int GetRosterLevelForQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetRosterLevelForQuestion(questionId);
-        }
-
-        public int GetRosterLevelForGroup(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetRosterLevelForGroup(groupId);
-        }
-
-        public IEnumerable<Guid> GetAllMandatoryQuestions()
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAllMandatoryQuestions();
-        }
-
-        public IEnumerable<Guid> GetAllQuestionsWithNotEmptyCustomEnablementConditions()
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAllQuestionsWithNotEmptyCustomEnablementConditions();
-        }
-
-        public IEnumerable<Guid> GetAllGroupsWithNotEmptyCustomEnablementConditions()
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAllGroupsWithNotEmptyCustomEnablementConditions();
-        }
-
-        public bool IsRosterGroup(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).IsRosterGroup(groupId);
-        }
-
-        public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetAllUnderlyingQuestions(groupId);
-        }
-
-        public IEnumerable<Guid> GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(groupId);
-        }
-
-        public IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(groupId);
-        }
-
-        public IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(groupId);
-        }
-
-        public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetUnderlyingMandatoryQuestions(groupId);
-        }
-
-        public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetQuestionReferencedByLinkedQuestion(linkedQuestionId);
-        }
-
-        public bool IsQuestionMandatory(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).IsQuestionMandatory(questionId);
-        }
-
-        public bool IsQuestionInteger(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).IsQuestionInteger(questionId);
-        }
-
-        public int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetCountOfDecimalPlacesAllowedByQuestion(questionId);
-        }
-
-        public IEnumerable<string> GetFixedRosterTitles(Guid groupId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetFixedRosterTitles(groupId);
-        }
-
-        public bool DoesQuestionSpecifyRosterTitle(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).DoesQuestionSpecifyRosterTitle(questionId);
-        }
-
-        public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetRostersAffectedByRosterTitleQuestion(questionId);
-        }
-
-        public IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetNestedRostersOfGroupById(rosterId);
-        }
-
-        public Guid? GetRosterSizeQuestion(Guid rosterId)
-        {
-            return ((IQuestionnaire) this.plainQuestionnaire).GetRosterSizeQuestion(rosterId);
         }
     }
 }
