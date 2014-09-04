@@ -2,6 +2,7 @@
     Supervisor.VM.ChartPage.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
 
     var self = this;
+    var dateFormat = "MM/DD/YYYY";
 
     self.Templates = ko.observableArray([]);
     self.SelectedTemplate = ko.observable('');
@@ -16,14 +17,10 @@
     self.initChart = function () {
         var selectedTemplate = JSON.parse(self.SelectedTemplate());
 
-        var startDate = moment(self.FromDate(), "MM/DD/YYYY");
-        var endDate = moment(self.ToDate(), "MM/DD/YYYY");
+        var startDate = moment(self.FromDate(), dateFormat);
+        var endDate = moment(self.ToDate(), dateFormat);
 
-        if (startDate.isAfter(endDate)) {
-            self.ShouldShowDateValidationMessage(true);
-        } else {
-            self.ShouldShowDateValidationMessage(false);
-        }
+        self.ShouldShowDateValidationMessage(startDate.isAfter(endDate));
 
         var params = {
             templateId: selectedTemplate.templateId,
@@ -92,8 +89,8 @@
     };
 
     self.load = function() {
-        var today = moment().format("MM/DD/YYYY");
-        var oneWeekAgo = moment().add("weeks", -1).format("MM/DD/YYYY");
+        var today = moment().format(dateFormat);
+        var oneWeekAgo = moment().add("weeks", -1).format(dateFormat);
 
         $('.list-group .input-group.date').datepicker({
             format: "mm/dd/yyyy",
