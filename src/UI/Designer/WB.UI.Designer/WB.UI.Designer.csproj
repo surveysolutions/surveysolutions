@@ -1344,6 +1344,7 @@
       <DependentUpon>ng-context-menu.min.js</DependentUpon>
     </Content>
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
