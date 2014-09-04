@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
         {
             var temporaryInstance = new Questionnaire();
             temporaryInstance.Apply(new TemplateImported { Source = document });
-            return temporaryInstance;
+            return temporaryInstance.GetQuestionnaire();
         }
     }
 }
