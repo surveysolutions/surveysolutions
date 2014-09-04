@@ -8,8 +8,9 @@
                 var commandService = {};
 
                 function commandCall(type, command) {
-                    blockUI.start();
-
+                    if (type.indexOf('Move') < 0) {
+                        blockUI.start();
+                    }
                     return $http({
                         method: 'POST',
                         url: urlBase,
