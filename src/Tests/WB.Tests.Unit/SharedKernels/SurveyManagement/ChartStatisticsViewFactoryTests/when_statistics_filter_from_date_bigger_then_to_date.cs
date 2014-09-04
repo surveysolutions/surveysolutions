@@ -6,9 +6,9 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 
-namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    internal class when_statistics_filter_from_date_bigger_then_to_date : ChartStatisticsFactoryTestsContext
+    internal class when_statistics_filter_from_date_bigger_then_to_date : ChartStatisticsViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
                 }
             }.AsQueryable();
             
-            chartStatisticsViewFactory = CreateChartStatisticsFactory(data);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(data);
 
             input = new ChartStatisticsInputModel
             {
