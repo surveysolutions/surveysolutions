@@ -4,7 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
@@ -12,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
 {
-    internal class when_creating_statistics_should_allow_date_range_with_no_data : ChartStatisticsFactoryTestsContext
+    internal class when_statistics_filter_without_data : ChartStatisticsFactoryTestsContext
     {
         Establish context = () =>
         {
