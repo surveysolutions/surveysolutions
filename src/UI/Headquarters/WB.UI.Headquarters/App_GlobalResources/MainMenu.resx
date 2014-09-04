@@ -135,6 +135,9 @@
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisors</value>
   </data>
