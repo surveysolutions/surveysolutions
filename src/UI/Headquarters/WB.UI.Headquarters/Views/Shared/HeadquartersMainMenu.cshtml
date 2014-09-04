@@ -2,9 +2,9 @@
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
-s<li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
+<li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-        <i class="glyphicon glyphicon-th"></i> Reports <b class="caret"></b>
+        <i class="glyphicon glyphicon-th"></i> @MainMenu.Reports <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
         <li class="@(page == MenuItem.Surveys ? "active" : "")">
