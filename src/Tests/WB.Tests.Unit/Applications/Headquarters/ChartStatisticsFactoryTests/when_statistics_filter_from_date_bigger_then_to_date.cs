@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
 {
-    internal class when_creating_statistics_should__do_allow_from_date_bigger_then_to_date : ChartStatisticsFactoryTestsContext
+    internal class when_statistics_filter_from_date_bigger_then_to_date : ChartStatisticsFactoryTestsContext
     {
         Establish context = () =>
         {
