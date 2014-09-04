@@ -47,8 +47,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            int normalMin = (int)Math.Max(1, minVersion);
-            int normalMax = (int)Math.Min(int.MaxValue, maxVersion);
+            int normalMin = (int)Math.Max(0, minVersion);
+            int normalMax = (int)Math.Min(int.MaxValue, maxVersion-1);
             if (minVersion > maxVersion)
             {
                 return new CommittedEventStream(id);
@@ -58,7 +58,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             int batchSize = normalMax - normalMin + 1;
 
             StreamEventsSlice currentSlice;
-            int nextSliceStart = StreamPosition.Start + normalMin - 1;
+            int nextSliceStart = StreamPosition.Start + normalMin;
 
             do
             {
@@ -66,7 +66,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 nextSliceStart = currentSlice.NextEventNumber;
 
                 streamEvents.AddRange(currentSlice.Events);
-            } while (!currentSlice.IsEndOfStream);
+            } while (!currentSlice.IsEndOfStream && streamEvents.Count < batchSize);
 
             var storedEvents = streamEvents.Select(this.ToCommittedEvent).ToList();
 
