@@ -6,11 +6,11 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Tests.Unit.Applications.Headquarters.ChartStatisticsFactoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    internal class ChartStatisticsFactoryTestsContext
+    internal class ChartStatisticsViewFactoryTestsContext
     {
-        protected static ChartStatisticsViewFactory CreateChartStatisticsFactory(IQueryable<StatisticsLineGroupedByDateAndTemplate> data)
+        protected static ChartStatisticsViewFactory CreateChartStatisticsViewFactory(IQueryable<StatisticsLineGroupedByDateAndTemplate> data)
         {
             var stats = Mock.Of<IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate>>();
 
