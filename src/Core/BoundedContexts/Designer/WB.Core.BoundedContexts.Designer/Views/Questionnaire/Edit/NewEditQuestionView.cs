@@ -45,5 +45,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public QuestionnaireInfoFactory.SelectOption[] NotPrefilledQuestionScopeOptions { get; set; }
         public Breadcrumb[] Breadcrumbs { get; set; }
         public bool WereOptionsTruncated { get; set; }
+        public int OptionsCount { get; set; }
     }
 }
