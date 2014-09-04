@@ -1,4 +1,4 @@
-﻿
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +54,7 @@
                       <label class="sr-only" for="categoryName">Category name</label>
                       <input type="text" class="form-control" ng-model="group.newCategoryName" placeholder="Category name">
                     </div>
-                    <button class="btn btn-default" ng-click="addCategory(group)">Add Category</button>
+                    <button type="submit" class="btn btn-default" ng-click="addCategory(group)">Add Category</button>
                   </form>
                 </div>
               </li>
@@ -69,7 +69,7 @@
                   <label class="sr-only" for="groupName">Group name</label>
                   <input type="text" class="form-control" id="groupName" placeholder="Group name">
                 </div>
-                <button class="btn btn-default" ng-click="addGroup()">Add Group</button>
+                <button type="submit" class="btn btn-default" ng-click="addGroup()">Add Group</button>
               </form>
             </div>
           </li>
@@ -87,6 +87,10 @@
 
   </div>
 
+  <!--[if IE 8]>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
+  <![endif]-->
   <script src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/firebase/firebase.js"></script>
   <script src="bower_components/angularfire/angularfire.min.js"></script>
