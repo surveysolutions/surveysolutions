@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = rosterQuestionId,
-                        StataExportCaption = rosterQuestionId.ToString(),
+                        StataExportCaption = "var1",
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
-                                StataExportCaption = questionIdFromRoster.ToString(),
+                                StataExportCaption = "var2",
                                 PublicKey = questionIdFromRoster
                             }
                         }
@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = numId, 
-                        StataExportCaption = numId.ToString(),
+                        StataExportCaption = "var1",
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
-                                StataExportCaption = questionIdFromOtherRosterWithSameLevel.ToString(),
+                                StataExportCaption = "var2",
                                 PublicKey = questionIdFromOtherRosterWithSameLevel
                             }
                         }
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = rosterGroupId, 
-                        StataExportCaption = rosterGroupId.ToString(),
+                        StataExportCaption = "var1",
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
-                                StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
+                                StataExportCaption = "var2",
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
                         }
@@ -197,7 +197,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new NumericQuestion
                     {
                         PublicKey = rosterGroupId, 
-                        StataExportCaption = rosterGroupId.ToString(),
+                        StataExportCaption = "var1",
                         IsInteger = true, 
                         MaxValue = 5
                     },
@@ -211,14 +211,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         {
                             new NumericQuestion
                             {
-                                StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
+                                StataExportCaption = "var2",
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
                         }
                     },
                     new SingleQuestion
                     {
-                        StataExportCaption = questionWithCustomValidation.ToString(),
+                        StataExportCaption = "var3",
                         PublicKey = questionWithCustomValidation,
                         ConditionExpression = "some random expression",
                         Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}

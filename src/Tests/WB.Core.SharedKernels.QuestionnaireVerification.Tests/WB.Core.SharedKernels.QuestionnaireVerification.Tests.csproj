@@ -96,6 +96,7 @@
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_qr_barcode_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\QRBarcode\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_qr_barcode_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_validating_questionnaire_with_empty_variable_names.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_has_question_with_variable_name_which_contains_unicode_symbols.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_has_roster_with_empty_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_has_roster_with_invalid_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_has_roster_with_not_unique_variable_name.cs" />

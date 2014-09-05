@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = questionId,
                     QuestionType = QuestionType.DropDownList,
-                    StataExportCaption = questionId.ToString(),
+                    StataExportCaption = "var1",
                     Answers =
                         new List<Answer>
                         {
