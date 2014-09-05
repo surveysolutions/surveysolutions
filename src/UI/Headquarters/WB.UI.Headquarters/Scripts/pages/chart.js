@@ -6,7 +6,7 @@
 
     self.Templates = ko.observableArray([]);
     self.SelectedTemplate = ko.observable('');
-    self.Stats = ko.observable(null);
+    self.Stats = null;
     self.Plot = null;
     self.FromDate = ko.observable(null);
     self.FromDateInput = ko.observable(null);
@@ -32,43 +32,39 @@
         };
 
         self.SendRequest(self.ServiceUrl, params, function (data) {
-            self.Stats(data);
+            self.Stats = data;
             self.drawChart();
         });
     };
 
     self.drawChart = function () {
-        if (self.Stats().Ticks.length === 0)
+        if (self.Stats.Lines.length === 0)
             return;
 
+        $('#interviewChart').empty();
 
-        var maxValue = _.reduce(self.Stats().Stats, function (maxValue, series) {
-            return Math.max(maxValue, _.max(series));
-        }, 0);
+        self.Plot = null;
 
         self.Plot = $.jqplot('interviewChart',
-            self.Stats().Stats, {
+            self.Stats.Lines,
+            {
                 seriesColors: ["#4FADDB", "#FDBD30", "#86B828", "#F08531", "#13A388", "#E06B5C", "#00647F", "#38407D", "#785C99", "#A30F2C", "#878787", "#414042"],
                 stackSeries: true,
                 showMarker: false,
-                highlighter: {
-                    show: true,
-                    showTooltip: false
-                },
+                series: [
+                   { label: 'Supervisor assigned' },
+                   { label: 'Interviewer assigned' },
+                   { label: 'Completed' },
+                   { label: 'Rejected by Supervisor' },
+                   { label: 'Approved by Supervisor' },
+                   { label: 'Rejected by Headquarters' },
+                   { label: 'Approved by Headquarters' }
+                ],
                 seriesDefaults: {
                     fill: true,
                     shadow: false,
                     fillAlpha: 0.8
                 },
-                series: [
-                    { label: 'Supervisor assigned' },
-                    { label: 'Interviewer assigned' },
-                    { label: 'Completed' },
-                    { label: 'Rejected by Supervisor' },
-                    { label: 'Approved by Supervisor' },
-                    { label: 'Rejected by Headquarters' },
-                    { label: 'Approved by Headquarters' }
-                ],
                 legend: {
                     show: true,
                     placement: 'outsideGrid'
@@ -79,25 +75,23 @@
                 },
                 axesDefaults:
                 {
-                    min: 0,
                     autoscale: true,
                     tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                     tickOptions: {
                         formatString: '%d'
                     }
-                    , numberTicks: maxValue < 3 ? 3 : undefined
                 },
                 axes: {
                     xaxis: {
-                        ticks: self.Stats().Ticks,
-                        tickRenderer: $.jqplot.DateAxisRenderer,
+                        renderer: $.jqplot.DateAxisRenderer,
                         tickOptions: {
                             formatString: '%#m/%#d/%y'
                         },
+                        min: self.Stats.from,
                         drawMajorGridlines: false
                     }
                 }
-            }).replot();
+            });
     };
 
     self.load = function () {
