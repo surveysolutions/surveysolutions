@@ -41,6 +41,7 @@
 
         self.Plot = $.jqplot('interviewChart',
             self.Stats().Stats, {
+                seriesColors: ["#4FADDB", "#FDBD30", "#86B828", "#F08531", "#13A388", "#E06B5C", "#00647F", "#38407D", "#785C99", "#A30F2C", "#878787", "#414042"],
                 stackSeries: true,
                 showMarker: false,
                 highlighter: {
@@ -70,7 +71,8 @@
                 axesDefaults:
                 {
                     min: 0,
-                    tickInterval: 1,
+                    //tickInterval: 1,
+                    autoscale:true,
                     tickOptions: {
                         formatString: '%d'
                     }
@@ -78,9 +80,9 @@
                 axes: {
                     xaxis: {
                         ticks: self.Stats().Ticks,
-                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickRenderer: $.jqplot.DateAxisRenderer,
                         tickOptions: {
-                            angle: -90
+                            //angle: -90
                         },
                         drawMajorGridlines: false
                     }
