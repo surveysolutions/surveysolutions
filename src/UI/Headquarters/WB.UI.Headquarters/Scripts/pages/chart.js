@@ -50,6 +50,8 @@
                 },
                 seriesDefaults: {
                     fill: true,
+                    shadow: false,
+                    fillAlpha: 0.8
                 },
                 series: [
                     { label: 'Supervisor assigned' },
@@ -73,16 +75,14 @@
                     min: 0,
                     //tickInterval: 1,
                     autoscale:true,
-                    tickOptions: {
-                        formatString: '%d'
-                    }
+                  
                 },
                 axes: {
                     xaxis: {
                         ticks: self.Stats().Ticks,
                         tickRenderer: $.jqplot.DateAxisRenderer,
                         tickOptions: {
-                            //angle: -90
+                            formatString: '%#m/%#d/%y'
                         },
                         drawMajorGridlines: false
                     }
@@ -116,6 +116,8 @@
             } else {
                 self.FromDateInput(self.FromDate());
                 self.ToDateInput(self.ToDate());
+                //self.initChart();
+                //console.log('hello');
             }
         });
         
