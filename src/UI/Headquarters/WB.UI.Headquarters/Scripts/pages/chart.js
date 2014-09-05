@@ -42,7 +42,9 @@
             return;
 
 
-        //var maxValue = _.
+        var maxValue = _.reduce(self.Stats().Stats, function (maxValue, series) {
+            return Math.max(maxValue, _.max(series));
+        }, 0);
 
         self.Plot = $.jqplot('interviewChart',
             self.Stats().Stats, {
@@ -83,7 +85,7 @@
                     tickOptions: {
                         formatString: '%d'
                     }
-                    ,numberTicks: 3
+                    , numberTicks: maxValue < 3 ? 3 : undefined
                 },
                 axes: {
                     xaxis: {
