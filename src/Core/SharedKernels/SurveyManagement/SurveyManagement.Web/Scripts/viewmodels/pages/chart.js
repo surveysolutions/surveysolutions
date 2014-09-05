@@ -94,6 +94,12 @@
         var today = moment().format(dateFormat);
         var oneWeekAgo = moment().add("weeks", -1).format(dateFormat);
 
+        self.FromDate(oneWeekAgo);
+        self.FromDateInput(oneWeekAgo);
+
+        self.ToDate(today);
+        self.ToDateInput(today);
+
         $('.list-group .input-group.date').datepicker({
             format: "mm/dd/yyyy",
             keyboardNavigation: false,
@@ -113,12 +119,6 @@
             }
         });
         
-        self.FromDate(oneWeekAgo);
-        self.FromDateInput(oneWeekAgo);
-
-        self.ToDate(today);
-        self.ToDateInput(today);
-
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
         self.SelectedTemplate.subscribe(function () { self.initChart(); });
