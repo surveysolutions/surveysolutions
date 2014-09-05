@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.RosterGenerators[rosterId].Invoke(rosterVector, rosterIdentityKey);
         }
 
-        private State RunConditionExpression(Func<bool> expression)
+        private State GetConditionExpressionState(Func<bool> expression)
         {
             try
             {
@@ -173,16 +173,16 @@ namespace WB.Core.SharedKernels.DataCollection
             this.QuestionTupleArrayUpdateMap.Add(id, action);
         }
 
-        protected Action Verifier(Func<bool> isEnabled, Guid questionId, ConditionalState questionState)
+        protected Action Verifier(Func<bool> isEnabled, Guid itemId, ConditionalState questionState)
         {
             return () =>
             {
                 if (questionState.State == State.Disabled)
                     return;
 
-                questionState.State = this.RunConditionExpression(isEnabled);
+                questionState.State = this.GetConditionExpressionState(isEnabled);
 
-                this.UpdateAllNestedItemsState(questionId, this.StructuralDependencies,
+                this.UpdateAllNestedItemsState(itemId, this.StructuralDependencies,
                     questionState.State);
             };
         }
