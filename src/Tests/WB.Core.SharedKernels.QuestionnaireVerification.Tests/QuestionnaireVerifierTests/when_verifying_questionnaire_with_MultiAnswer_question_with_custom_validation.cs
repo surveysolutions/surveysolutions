@@ -23,14 +23,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = multiAnswerQuestionWithValidationId,
-                StataExportCaption = multiAnswerQuestionWithValidationId.ToString(),
+                StataExportCaption = "var1",
                 ValidationExpression = "some expression",
                 ValidationMessage = "some message"
             });
 
             questionnaire.Children.Add(new TextListQuestion()
             {
-                StataExportCaption = textQuestionId.ToString(),
+                StataExportCaption = "var2",
                 PublicKey = textQuestionId
             });
 

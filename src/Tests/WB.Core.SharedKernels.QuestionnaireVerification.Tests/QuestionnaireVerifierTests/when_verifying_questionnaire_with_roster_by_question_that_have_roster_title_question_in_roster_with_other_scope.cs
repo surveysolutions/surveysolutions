@@ -19,14 +19,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new NumericQuestion("rosterSizeQuestion1")
                 {
                     PublicKey = rosterSizeQuestion1Id,
-                    StataExportCaption = rosterSizeQuestion1Id.ToString(),
+                    StataExportCaption = "var1",
                     IsInteger = true,
                     MaxValue = 5
                 },
                 new NumericQuestion("rosterSizeQuestion2")
                 {
                     PublicKey = rosterSizeQuestion2Id,
-                    StataExportCaption = rosterSizeQuestion2Id.ToString(),
+                    StataExportCaption = "var2",
                     IsInteger = true,
                     MaxValue = 5
                 },
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     {
                         new TextQuestion("rosterTitleQuestion")
                         {
-                            StataExportCaption = rosterTitleQuestionId.ToString(),
+                            StataExportCaption = "var3",
                             PublicKey = rosterTitleQuestionId
                         }
                     }
