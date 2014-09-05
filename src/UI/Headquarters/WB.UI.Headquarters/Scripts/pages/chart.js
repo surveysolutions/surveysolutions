@@ -42,7 +42,7 @@
             return;
 
 
-        var maxValue = _.
+        //var maxValue = _.
 
         self.Plot = $.jqplot('interviewChart',
             self.Stats().Stats, {
