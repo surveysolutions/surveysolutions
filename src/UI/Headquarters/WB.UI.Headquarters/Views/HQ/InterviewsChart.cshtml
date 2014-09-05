@@ -9,15 +9,10 @@
 
 @section scripts
 {
-    @Scripts.Render(
+    @Scripts.Render("~/Scripts/jqplot-area",
+        "~/Scripts/bootstrap-datepicker.js",
         "~/Scripts/viewmodels/pages/interviews.base.js",
-        "~/Scripts/pages/chart.js",
-        "~/Scripts/jqPlot/jquery.jqplot.js",
-        "~/Scripts/jqPlot/plugins/jqplot.categoryAxisRenderer.min.js",
-        "~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js",
-        "~/Scripts/jqPlot/plugins/jqplot.canvasTextRenderer.min.js",
-        "~/Scripts/jqPlot/plugins/jqplot.canvasAxisTickRenderer.min.js",
-        "~/Scripts/bootstrap-datepicker.js")
+        "~/Scripts/pages/chart.js")
 
     <script type="text/javascript">
         var chartApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "ChartStatistics" })';
