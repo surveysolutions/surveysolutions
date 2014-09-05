@@ -97,6 +97,7 @@
             keyboardNavigation: false,
             autoclose: true,
             todayHighlight: true,
+            endDate: '+0d',
             forseParse: false
         }).on("hide", function (e) {
             if (e.date !== undefined) {
