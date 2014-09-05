@@ -68,6 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/director.js",
                     "~/Scripts/knockout-3.1.0.js",
                     "~/Scripts/knockout.mapping-latest.js",
+                    "~/Scripts/lodash.underscore.js",
                     "~/Scripts/query-string.js",
                     "~/Scripts/supervisor.framework.js",
                     "~/Scripts/viewmodels/viewmodelbase.js",
