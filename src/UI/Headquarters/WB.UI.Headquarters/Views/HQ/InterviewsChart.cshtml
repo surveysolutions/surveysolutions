@@ -39,7 +39,11 @@
 
 @section header
 {
-    <h3>Cumulative Interview Chart</h3>
+    <h3>
+    Cumulative Interview Chart for "<span data-bind="text: TemplateName"></span>",
+        from: <span data-bind="text: FromDate"></span>
+        to: <span data-bind="text: ToDate"></span>
+</h3>
 }
 
 @section filters
@@ -51,7 +55,7 @@
                 <select data-bind="value: SelectedTemplate" class="form-control">
                     @foreach (var item in Model.Templates)
                     {
-                        <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
+                        <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion","name":"(ver. @item.TemplateVersion) @item.TemplateName"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
                     }
                 </select>
             </p>
