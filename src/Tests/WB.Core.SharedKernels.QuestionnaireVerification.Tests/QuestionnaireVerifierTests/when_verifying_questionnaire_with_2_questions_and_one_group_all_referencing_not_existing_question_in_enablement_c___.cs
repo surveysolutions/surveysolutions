@@ -32,16 +32,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = firstIncorrectQuestionId,
                     ConditionExpression = EnablementConditionWithNotExistingQuestion,
-                    StataExportCaption = firstIncorrectQuestionId.ToString()
+                    StataExportCaption = "var1"
                 },
                 new NumericQuestion
                 {
                     PublicKey = secondIncorrectQuestionId,
                     ConditionExpression = EnablementConditionWithNotExistingQuestion,
-                    StataExportCaption = secondIncorrectQuestionId.ToString()
+                    StataExportCaption = "var2"
                 },
                 new Group { PublicKey = incorrectGroupId, ConditionExpression = EnablementConditionWithNotExistingQuestion },
-                new TextQuestion { PublicKey = Guid.NewGuid(), StataExportCaption = textQuestionId.ToString() },
+                new TextQuestion { PublicKey = Guid.NewGuid(), StataExportCaption = "var3" },
                 new Group { PublicKey = Guid.NewGuid() }
                 );
 

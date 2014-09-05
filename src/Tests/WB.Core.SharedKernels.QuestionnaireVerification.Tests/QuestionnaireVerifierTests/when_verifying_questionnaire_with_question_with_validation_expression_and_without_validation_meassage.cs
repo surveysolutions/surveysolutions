@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = questionId,
                     ValidationExpression = validationExpression,
-                    StataExportCaption = questionId.ToString()
+                    StataExportCaption = "var1"
                 });
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor

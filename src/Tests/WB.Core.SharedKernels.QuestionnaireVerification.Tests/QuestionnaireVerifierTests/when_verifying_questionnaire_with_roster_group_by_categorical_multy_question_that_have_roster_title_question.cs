@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new MultyOptionsQuestion("question 1")
             {
                 PublicKey = rosterSizeQuestionId,
-                StataExportCaption = rosterSizeQuestionId.ToString(),
+                StataExportCaption = "var1",
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     new TextQuestion("question 1")
                     {
-                        StataExportCaption = rosterTitleQuestionId.ToString(),
+                        StataExportCaption = "var2",
                         PublicKey = rosterTitleQuestionId
                     }
                 }
