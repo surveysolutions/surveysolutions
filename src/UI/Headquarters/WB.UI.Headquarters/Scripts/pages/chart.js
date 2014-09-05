@@ -41,7 +41,6 @@
         if (self.Stats().Ticks.length === 0)
             return;
 
-
         var maxValue = _.reduce(self.Stats().Stats, function (maxValue, series) {
             return Math.max(maxValue, _.max(series));
         }, 0);
@@ -117,9 +116,19 @@
             todayHighlight: true,
             endDate: '+0d',
             forseParse: false
-        }).on("hide", function (e) {
-            self.FromDate(self.FromDateInput());
-            self.ToDate(self.ToDateInput());
+        })
+        // hack to prevent toggling selected day error https://github.com/eternicode/bootstrap-datepicker/issues/775
+        .on("hide", function (e) {
+            if (e.date !== undefined) {
+                self.FromDate(self.FromDateInput());
+                self.ToDate(self.ToDateInput());
+            }
+            else {
+                self.FromDateInput(self.FromDate());
+                self.ToDateInput(self.ToDate());
+
+                $('.list-group .input-group.date').datepicker("update");
+            }
             self.initChart();
         });
 
