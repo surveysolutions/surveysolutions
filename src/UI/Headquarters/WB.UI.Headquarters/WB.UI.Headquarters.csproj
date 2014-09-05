@@ -235,6 +235,8 @@
     </Content>
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Configuration\Dima.Headquarters.Web.config" />
+    <EmbeddedResource Include="Scripts\pages\chart.js" />
+    <Content Include="Views\HQ\InterviewsChart.cshtml" />
     <None Include="parameters.xml" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\jqPlot\changes.txt" />
