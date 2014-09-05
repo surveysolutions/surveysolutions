@@ -23,12 +23,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 PublicKey = rosterSizeQuestionId,
                 IsInteger = true,
                 MaxValue = 5,
-                StataExportCaption = rosterSizeQuestionId.ToString()
+                StataExportCaption = "var1"
             });
             questionnaire.Children.Add(new MultyOptionsQuestion()
             {
                 PublicKey = multiQuestionLinkedToQRBarcodeQuestionId,
-                StataExportCaption = multiQuestionLinkedToQRBarcodeQuestionId.ToString(),
+                StataExportCaption = "var2",
                 LinkedToQuestionId = qrBarcodeQuestionId,
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     new QRBarcodeQuestion()
                     {
                         PublicKey = qrBarcodeQuestionId,
-                        StataExportCaption = qrBarcodeQuestionId.ToString()
+                        StataExportCaption = "var3"
                     }
                 }
             });

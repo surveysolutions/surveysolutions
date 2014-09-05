@@ -324,4 +324,7 @@
   <data name="WB0076_CategoricalOneAnswerOptionsCountMoreThan20" xml:space="preserve">
     <value>Contains more than 20 options.</value>
   </data>
+  <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+    <value>Question has invalid variable name.</value>
+  </data>
 </root>

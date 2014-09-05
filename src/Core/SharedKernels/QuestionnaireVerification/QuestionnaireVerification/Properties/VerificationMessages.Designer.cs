@@ -683,5 +683,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0076_CategoricalOneAnswerOptionsCountMoreThan20", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has invalid variable name..
+        /// </summary>
+        internal static string WB0077_QuestionHasInvalidVariableName {
+            get {
+                return ResourceManager.GetString("WB0077_QuestionHasInvalidVariableName", resourceCulture);
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                 new NumericQuestion
                 {
                     PublicKey = rosterQuestionId,
-                    StataExportCaption = rosterQuestionId.ToString(),
+                    StataExportCaption = "var2",
                     IsInteger = true,
                     MaxValue = 5
                 },
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                         new NumericQuestion
                         {
                             PublicKey = rosterInsideRosterQuestionId,
-                            StataExportCaption = rosterInsideRosterQuestionId.ToString(),
+                            StataExportCaption = "var1",
                             IsInteger = true,
                             MaxValue = 5
                         },
@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                             {
                                 new SingleQuestion
                                 {
-                                    StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
+                                    StataExportCaption = "var3",
                                     PublicKey = underDeeperRosterLevelQuestionId,
                                     Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
                                 }
