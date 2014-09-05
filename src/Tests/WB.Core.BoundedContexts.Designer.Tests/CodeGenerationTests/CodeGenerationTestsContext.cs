@@ -199,13 +199,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             return questionnaireDocument;
         }
 
-        public static QuestionnaireDocument CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(Guid questionnaireId, Guid questionId)
+        public static QuestionnaireDocument CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(Guid questionnaireId, Guid questionId, Guid group1Id)
         {
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
 
             Guid chapterId = Guid.Parse("23232323232323232323232323232323");
             Guid question1Id = Guid.Parse("23232323232323232323232323232311");
-            Guid group1Id = Guid.Parse("23232323232323232323232323232111");
 
             questionnaireDocument.AddChapter(chapterId);
 
@@ -231,7 +230,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             questionnaireDocument.Add(new Group()
             {
                 PublicKey = group1Id,
-                ConditionExpression = "q2 > 5"
+                ConditionExpression = "q1 > 5"
 
             }, chapterId, null);
 
