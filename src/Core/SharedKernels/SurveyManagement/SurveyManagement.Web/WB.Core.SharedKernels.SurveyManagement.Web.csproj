@@ -377,7 +377,6 @@
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
     <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />
-    <EmbeddedResource Include="Views\HQ\InterviewsChart.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -461,9 +460,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\jquery.maskedinput.js" />
     <EmbeddedResource Include="Scripts\jquery.maskedinput.min.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\viewmodels\pages\chart.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\typeahead.js" />
