@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ChartPage = function(serviceUrl, commandExecutionUrl) {
+﻿Supervisor.VM.ChartPage = function (serviceUrl, commandExecutionUrl) {
     Supervisor.VM.ChartPage.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
 
     var self = this;
@@ -31,15 +31,18 @@
             to: self.ToDate()
         };
 
-        self.SendRequest(self.ServiceUrl, params, function(data) {
+        self.SendRequest(self.ServiceUrl, params, function (data) {
             self.Stats(data);
             self.drawChart();
         });
     };
 
-    self.drawChart = function() {
+    self.drawChart = function () {
         if (self.Stats().Ticks.length === 0)
             return;
+
+
+        var maxValue = _.
 
         self.Plot = $.jqplot('interviewChart',
             self.Stats().Stats, {
@@ -75,9 +78,12 @@
                 axesDefaults:
                 {
                     min: 0,
-                    //tickInterval: 1,
-                    autoscale:true,
-                  
+                    autoscale: true,
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                    tickOptions: {
+                        formatString: '%d'
+                    }
+                    ,numberTicks: 3
                 },
                 axes: {
                     xaxis: {
@@ -92,7 +98,7 @@
             }).replot();
     };
 
-    self.load = function() {
+    self.load = function () {
         var today = moment().format(dateFormat);
         var oneWeekAgo = moment().add("weeks", -1).format(dateFormat);
 
@@ -110,23 +116,15 @@
             endDate: '+0d',
             forseParse: false
         }).on("hide", function (e) {
-            if (e.date !== undefined) {
-                self.FromDate(self.FromDateInput());
-                self.ToDate(self.ToDateInput());
-
-                self.initChart();
-            } else {
-                self.FromDateInput(self.FromDate());
-                self.ToDateInput(self.ToDate());
-                //self.initChart();
-                //console.log('hello');
-            }
+            self.FromDate(self.FromDateInput());
+            self.ToDate(self.ToDateInput());
+            self.initChart();
         });
-        
+
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
         self.SelectedTemplate.subscribe(function () { self.initChart(); });
-        
+
         self.initChart();
     };
 };
