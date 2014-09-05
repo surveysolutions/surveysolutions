@@ -13,9 +13,11 @@
     self.ToDate = ko.observable(null);
     self.ToDateInput = ko.observable(null);
     self.ShouldShowDateValidationMessage = ko.observable(false);
+    self.TemplateName = ko.observable();
 
     self.initChart = function () {
         var selectedTemplate = JSON.parse(self.SelectedTemplate());
+        self.TemplateName(selectedTemplate.name);
 
         var startDate = moment(self.FromDate(), dateFormat);
         var endDate = moment(self.ToDate(), dateFormat);
