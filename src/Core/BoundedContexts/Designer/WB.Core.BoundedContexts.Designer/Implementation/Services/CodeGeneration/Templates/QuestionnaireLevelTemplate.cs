@@ -342,7 +342,7 @@ foreach (var question in Model.Questions)
             
             #line default
             #line hidden
-            this.Write(".State == State.Enabled ? this.");
+            this.Write(".State != State.Disabled ? this.");
             
             #line 70 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));

@@ -67,7 +67,7 @@
         private ConditionalState <#= question.GeneratedStateName#> = new ConditionalState(IdOf.<#=question.GeneratedIdName#>);
         public <#=question.GeneratedTypeName#> <#=question.VariableName#>
         {
-            get { return <#=question.GeneratedStateName#>.State == State.Enabled ? this.<#=question.GeneratedMemberName#> : null; }
+            get { return <#=question.GeneratedStateName#>.State != State.Disabled ? this.<#=question.GeneratedMemberName#> : null; }
             private set { this.<#=question.GeneratedMemberName#> = value; }
         }
         <#if(!string.IsNullOrWhiteSpace(question.Conditions))
