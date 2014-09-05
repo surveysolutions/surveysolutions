@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
@@ -20,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
-            questionnaireDocument = CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(questionnaireId, questionId);
+            questionnaireDocument = CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(questionnaireId, questionId, group1Id);
 
             IInterviewExpressionStateProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
 
@@ -31,17 +32,31 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();
 
-            state.UpdateIntAnswer(questionId, new decimal[0], 2);
+            state.UpdateIntAnswer(questionId, new decimal[0], 4);
         };
 
         private Because of = () =>
             state.ProcessConditionExpressions(out questionsToBeEnabled, out questionsToBeDisabled, out groupsToBeEnabled, out groupsToBeDisabled);
 
-        private It should_valid_question_count_equal_1 = () =>
-            questionsToBeDisabled.Count.ShouldEqual(1);
+        private It should_disabled_question_count_equal_0 = () =>
+            questionsToBeDisabled.Count.ShouldEqual(0);
+
+        private It should_enabled_question_count_equal_1 = () =>
+            questionsToBeEnabled.Count.ShouldEqual(1);
+
+        private It should_disabled_group_count_equal_1 = () =>
+            groupsToBeDisabled.Count.ShouldEqual(1);
+
+        private It should_disabled_group_id_equal_group1id = () =>
+            groupsToBeDisabled.First().Id.Equals(group1Id);
+
+        private It should_enable_group_count_equal_1 = () =>
+            groupsToBeEnabled.Count.ShouldEqual(1);
+
 
         private static Guid questionnaireId = Guid.Parse("21111111111111111111111111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111112");
+        private static Guid group1Id = Guid.Parse("23232323232323232323232323232111");
         private static QuestionnaireDocument questionnaireDocument;
 
         private static IInterviewExpressionState state;
