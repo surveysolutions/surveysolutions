@@ -1,8 +1,10 @@
-﻿Supervisor.VM.ChartPage = function (serviceUrl, commandExecutionUrl) {
+﻿Supervisor.VM.ChartPage = function (interviewChartsUrl, serviceUrl, commandExecutionUrl) {
     Supervisor.VM.ChartPage.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
 
     var self = this;
     var dateFormat = "MM/DD/YYYY";
+
+    self.Url = new Url(interviewChartsUrl);
 
     self.Templates = ko.observableArray([]);
     self.SelectedTemplate = ko.observable('');
@@ -16,8 +18,20 @@
     self.TemplateName = ko.observable();
 
     self.initChart = function () {
-        var selectedTemplate = JSON.parse(self.SelectedTemplate());
+        var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
+           ? { templateId: '', version: '' }
+           : JSON.parse(self.SelectedTemplate());
+
+        self.Url.query['templateId'] = selectedTemplate.templateId;
+        self.Url.query['templateVersion'] = selectedTemplate.version;
+        self.Url.query['from'] = self.FromDate();
+        self.Url.query['to'] = self.ToDate();
+
         self.TemplateName(selectedTemplate.name);
+
+        if (Modernizr.history) {
+            window.history.pushState({}, "Charts", self.Url.toString());
+        }
 
         var startDate = moment(self.FromDate(), dateFormat);
         var endDate = moment(self.ToDate(), dateFormat);
@@ -50,7 +64,7 @@
             {
                 seriesColors: ["#4FADDB", "#FDBD30", "#86B828", "#F08531", "#13A388", "#E06B5C", "#00647F", "#38407D", "#785C99", "#A30F2C", "#878787", "#414042"],
                 stackSeries: true,
-                showMarker: false,
+                showMarker: true,
                 series: [
                    { label: 'Supervisor assigned' },
                    { label: 'Interviewer assigned' },
@@ -61,9 +75,13 @@
                    { label: 'Approved by Headquarters' }
                 ],
                 seriesDefaults: {
+                    showMarker: true,
                     fill: true,
                     shadow: false,
-                    fillAlpha: 0.8
+                    fillAlpha: 0.8,
+                    markerOptions: {
+                        show: true,
+                    }
                 },
                 legend: {
                     show: true,
@@ -89,20 +107,45 @@
                         },
                         min: self.Stats.from,
                         drawMajorGridlines: false
+                    },
+                    yaxis: {
+                        min: 0
                     }
+                },
+                highlighter: {
+                    show: true,
+                    showMarker: true,
+                    tooltipAxes: 'xy'
+                },
+                cursor: {
+                    show: true,
+                    tooltipLocation: 'sw',
+
                 }
             });
     };
 
     self.load = function () {
+
         var today = moment().format(dateFormat);
         var oneWeekAgo = moment().add("weeks", -1).format(dateFormat);
 
-        self.FromDate(oneWeekAgo);
-        self.FromDateInput(oneWeekAgo);
+        self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
 
-        self.ToDate(today);
-        self.ToDateInput(today);
+        self.Url.query['templateId'] = self.QueryString['templateId'] || "";
+        self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
+        self.Url.query['from'] = self.QueryString['from'] || oneWeekAgo;
+        self.Url.query['to'] = self.QueryString['to'] || today;
+
+        var from = unescape(self.Url.query['from']);
+        var to = unescape(self.Url.query['to']);
+
+        self.FromDate(from);
+        self.FromDateInput(from);
+        self.ToDate(to);
+        self.ToDateInput(to);
+
+       
 
         $('.list-group .input-group.date').datepicker({
             format: "mm/dd/yyyy",
@@ -117,11 +160,9 @@
             self.initChart();
         });
 
-        self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
+        self.initChart();
 
         self.SelectedTemplate.subscribe(function () { self.initChart(); });
-
-        self.initChart();
     };
 };
 
