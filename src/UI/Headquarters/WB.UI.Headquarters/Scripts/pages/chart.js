@@ -17,10 +17,10 @@
     self.ShouldShowDateValidationMessage = ko.observable(false);
     self.TemplateName = ko.observable();
 
-    self.initChart = function () {
+    self.initChart = function() {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
-           ? { templateId: '', version: '' }
-           : JSON.parse(self.SelectedTemplate());
+            ? { templateId: '', version: '' }
+            : JSON.parse(self.SelectedTemplate());
 
         self.Url.query['templateId'] = selectedTemplate.templateId;
         self.Url.query['templateVersion'] = selectedTemplate.version;
@@ -45,10 +45,12 @@
             to: self.ToDate()
         };
 
-        self.SendRequest(self.ServiceUrl, params, function (data) {
+        self.SendRequest(self.ServiceUrl, params, function(data) {
             self.Stats = data;
             self.drawChart();
         });
+
+       
     };
 
     self.drawChart = function () {
@@ -84,8 +86,14 @@
                     }
                 },
                 legend: {
+                    renderer: $.jqplot.EnhancedLegendRenderer,
                     show: true,
-                    placement: 'outsideGrid'
+                    placement: 'outsideGrid',
+                    showSwatches: true,
+                    location: 'n',
+                    rendererOptions: {
+                        numberColumns: 7
+                    },
                 },
                 grid: {
                     drawBorder: false,
@@ -123,6 +131,10 @@
 
                 }
             });
+
+        var legendLabels = $('.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle');
+        var countItemsInLegend = legendLabels.length;
+        legendLabels.width(($('#interviewChart').outerWidth() - countItemsInLegend * 20) / countItemsInLegend - 1);
     };
 
     self.load = function () {

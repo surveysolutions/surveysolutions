@@ -40,6 +40,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     var lastDay = collectedStatistics.StatisticsByDate.Keys.Max();
                     var statisticsToRepeat = collectedStatistics.StatisticsByDate[lastDay];
                     RepeatLastStatistics(selectedRange, input.From, input.To, statisticsToRepeat);
+
+                    AddReadlStatistics(collectedStatistics, leftDate, maxCollectedDate, selectedRange);
                 }
                 else
                 {
@@ -57,13 +59,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 {
                     RepeatLastStatistics(selectedRange, rightDate.AddDays(1), input.To, collectedStatistics.StatisticsByDate[rightDate]);
                 }
+
+                AddReadlStatistics(collectedStatistics, leftDate, maxCollectedDate, selectedRange);
             }
 
-            collectedStatistics.StatisticsByDate
-             .Where(x => x.Key > leftDate.Date && x.Key.Date < maxCollectedDate.Date)
-             .ForEach(x => selectedRange.Add(x.Key, x.Value));
+           
 
-            return ChartStatisticsView(selectedRange, minCollectedDate, maxCollectedDate);
+            return ChartStatisticsView(selectedRange, input.From, input.To);
+        }
+
+        private static void AddReadlStatistics(StatisticsGroupedByDateAndTemplate collectedStatistics, DateTime leftDate, DateTime maxCollectedDate,
+            Dictionary<DateTime, QuestionnaireStatisticsForChart> selectedRange)
+        {
+            collectedStatistics.StatisticsByDate
+                .Where(x => x.Key >= leftDate.Date && x.Key.Date <= maxCollectedDate.Date)
+                .ForEach(x => selectedRange.Add(x.Key, x.Value));
         }
 
         private void RepeatLastStatistics(Dictionary<DateTime, QuestionnaireStatisticsForChart> selectedRange1, DateTime from, DateTime to, QuestionnaireStatisticsForChart statisticsToRepeat)
