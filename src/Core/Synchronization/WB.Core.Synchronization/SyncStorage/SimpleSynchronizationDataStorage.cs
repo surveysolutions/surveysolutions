@@ -60,6 +60,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public void SaveQuestionnaire(QuestionnaireDocument doc, long version, bool allowCensusMode, DateTime timestamp)
         {
+            doc.IsDeleted = false;
             var syncItem = new SyncItem
             {
                 Id = doc.PublicKey.Combine(version),

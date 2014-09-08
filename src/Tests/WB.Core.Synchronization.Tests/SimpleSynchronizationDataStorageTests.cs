@@ -117,6 +117,35 @@ namespace WB.Core.Synchronization.Tests
         }
 
         [Test]
+        public void SaveQuestionnaire_When_questionnarie_is_deleted_Then_last_stored_chunk_by_questionnarie_is_command_For_create_questionnaire_but_not_marked_as_deleted()
+        {
+            // arrange
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
+            var questionnarieId = Guid.Parse("23333333-3333-3333-3333-333333333333");
+            var supervisorId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+
+
+            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
+
+            // act
+            target.SaveQuestionnaire(new QuestionnaireDocument() { PublicKey = questionnarieId, IsDeleted = true}, 1, true, DateTime.Now);
+
+            // assert
+            var packageId = questionnarieId.Combine(1);
+            var result = target.GetLatestVersion(packageId);
+            var metaInformation = JsonConvert.DeserializeObject<QuestionnaireMetadata>(result.MetaInfo);
+            var questionnaire = JsonConvert.DeserializeObject<QuestionnaireDocument>(result.Content);
+            Assert.That(result.ItemType, Is.EqualTo(SyncItemType.Template));
+            Assert.That(result.Id, Is.EqualTo(packageId));
+            Assert.That(result.IsCompressed, Is.EqualTo(true));
+            Assert.That(questionnaire.IsDeleted,Is.EqualTo(false));
+            Assert.That(metaInformation.AllowCensusMode, Is.EqualTo(true));
+        }
+
+        [Test]
         public void DeleteQuestionnaire_When_questionnarie_is_census_mode_Then_last_stored_chunk_by_questionnarie_is_command_For_delete_questionnaire()
         {
             // arrange
