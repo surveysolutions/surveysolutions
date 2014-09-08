@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateGpsCoordinatesQuestionHan
                 questionId: questionId,
                 title: title,
                 variableName: variableName,
-                variableLabel: null,
+                variableLabel: variableLabel,
                 isMandatory: isMandatory,
                 scope: scope,
                 enablementCondition: enablementCondition,
@@ -49,34 +49,38 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateGpsCoordinatesQuestionHan
             eventContext = null;
         };
 
-        private It should_raise_QuestionChanged_event = () =>
+         It should_raise_QuestionChanged_event = () =>
             eventContext.ShouldContainEvent<QuestionChanged>();
 
-        private It should_raise_QuestionChanged_event_with_QuestionId_specified = () =>
+        It should_raise_QuestionChanged_event_with_QuestionId_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .PublicKey.ShouldEqual(questionId);
 
-        private It should_raise_QuestionChanged_event_with_variable_name_specified = () =>
+        It should_raise_QuestionChanged_event_with_variable_name_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .StataExportCaption.ShouldEqual(variableName);
 
-        private It should_raise_QuestionChanged_event_with_title_specified = () =>
+        It should_raise_QuestionChanged_event_with_variable_label_specified = () =>
+            eventContext.GetSingleEvent<QuestionChanged>()
+                .VariableLabel.ShouldEqual(variableLabel);
+
+        It should_raise_QuestionChanged_event_with_title_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .QuestionText.ShouldEqual(title);
 
-        private It should_raise_QuestionChanged_event_with_condition_specified = () =>
+        It should_raise_QuestionChanged_event_with_condition_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        private It should_raise_QuestionChanged_event_with_ismandatory_specified = () =>
+        It should_raise_QuestionChanged_event_with_ismandatory_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .Mandatory.ShouldEqual(isMandatory);
 
-        private It should_raise_QuestionChanged_event_with_instructions_specified = () =>
+        It should_raise_QuestionChanged_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .Instructions.ShouldEqual(instructions);
 
-        private It should_raise_QuestionChanged_event_with_scope_specified = () =>
+        It should_raise_QuestionChanged_event_with_scope_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .QuestionScope.ShouldEqual(scope);
 
@@ -88,6 +92,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateGpsCoordinatesQuestionHan
         private static string variableName = "qr_barcode_question";
         private static bool isMandatory = true;
         private static string title = "title";
+        private static string variableLabel = "label";
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = "some condition";

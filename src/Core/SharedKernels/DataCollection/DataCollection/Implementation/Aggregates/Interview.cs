@@ -33,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Guid questionnaireId;
         private long questionnaireVersion;
         private bool wasCompleted;
+        private bool wasHardDeleted;
         private InterviewStatus status;
 
         private IInterviewExpressionState expressionProcessorStatePrototypeInt = null;
@@ -511,6 +512,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewDeleted @event) { }
 
+        internal void Apply(InterviewHardDeleted @event)
+        {
+            wasHardDeleted = true;
+        }
+
         private void Apply(InterviewSentToHeadquarters @event) { }
 
         private void Apply(InterviewRestored @event) { }
@@ -559,6 +565,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public InterviewState CreateSnapshot()
         {
+            if(wasHardDeleted)
+                return new InterviewState(wasHardDeleted);
+
             return new InterviewState(
                 this.questionnaireId,
                 this.questionnaireVersion,
@@ -594,6 +603,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.ValidAnsweredQuestions = snapshot.ValidAnsweredQuestions;
             this.interviewState.InvalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
             this.wasCompleted = snapshot.WasCompleted;
+            this.wasHardDeleted = snapshot.WasHardDeleted;
         }
 
         #endregion
@@ -689,12 +699,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions,
+        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion, Dictionary<Guid, object> answersToFeaturedQuestions,
             DateTime answersTime, Guid supervisorId)
             : base(id)
         {
             this.questionnaireId = questionnaireId;
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
 
             var interviewChangeStructures = new InterviewChangeStructures();
             var newAnswers =
@@ -804,17 +814,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             : base(id)
         {
             this.questionnaireId = questionnaireId;
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, interviewStatus, featuredQuestionsMeta, true, null));
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId,questionnaireVersion, interviewStatus, featuredQuestionsMeta, true, null));
             this.ApplyValidationEvent(isValid);
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus,
+        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
             : base(id)
         {
             this.questionnaireId = questionnaireId;
-            this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
+            this.ApplySynchronizationMetadata(id, userId, questionnaireId,questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
 
         private InterviewChanges UpdateExpressionStateWithAnswersAndGetChanges(IEnumerable<InterviewChanges> interviewChangesItems,
@@ -1341,6 +1352,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer)
         {
+            ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
@@ -1354,6 +1366,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerNumericRealQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal answer)
         {
+            ThrowIfInterviewHardDeleted();
+
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1368,6 +1382,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer)
         {
+            ThrowIfInterviewHardDeleted();
+
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1384,6 +1400,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer)
         {
+            ThrowIfInterviewHardDeleted();
+
             var answeredQuestion = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckNumericIntegerQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion,
@@ -1402,6 +1420,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedValues)
         {
+            ThrowIfInterviewHardDeleted();
+
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1421,6 +1441,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[][] selectedPropagationVectors)
         {
+            ThrowIfInterviewHardDeleted();
+
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1445,6 +1467,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer)
         {
+            ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1458,6 +1481,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal selectedValue)
         {
+            ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1473,6 +1497,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerTextListQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
             Tuple<decimal, string>[] answers)
         {
+            ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1492,6 +1517,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
+            ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1504,6 +1530,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedPropagationVector)
         {
+            ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1530,6 +1557,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void ReevaluateSynchronizedInterview()
         {
+            ThrowIfInterviewHardDeleted();
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
@@ -1552,6 +1580,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CommentAnswer(Guid userId, Guid questionId, decimal[] rosterVector, DateTime commentTime, string comment)
         {
+            ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
@@ -1561,6 +1590,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SetFlagToAnswer(Guid userId, Guid questionId, decimal[] rosterVector)
         {
+            ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
@@ -1570,6 +1600,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RemoveFlagFromAnswer(Guid userId, Guid questionId, decimal[] rosterVector)
         {
+            ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
@@ -1579,6 +1610,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AssignSupervisor(Guid userId, Guid supervisorId)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
@@ -1587,6 +1619,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AssignInterviewer(Guid userId, Guid interviewerId)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
 
@@ -1599,6 +1632,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Delete(Guid userId)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewWasCompleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.Created, InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restored);
@@ -1607,21 +1641,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
         }
 
+        public void HardDelete(Guid userId)
+        {
+            ThrowIfInterviewHardDeleted();
+            this.ApplyEvent(new InterviewHardDeleted(userId));
+        }
+
         public void CancelByHQSynchronization(Guid userId)
         {
+            ThrowIfInterviewHardDeleted();
             this.ApplyEvent(new InterviewDeleted(userId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
         }
 
         public void MarkInterviewAsSentToHeadquarters(Guid userId)
         {
-            this.ApplyEvent(new InterviewDeleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+            if (!this.wasHardDeleted)
+            {
+                this.ApplyEvent(new InterviewDeleted(userId));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+            }
             this.ApplyEvent(new InterviewSentToHeadquarters());
         }
 
         public void Restore(Guid userId)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Deleted);
 
             this.ApplyEvent(new InterviewRestored(userId));
@@ -1630,6 +1675,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
@@ -1646,6 +1692,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Restart(Guid userId, string comment, DateTime restartTime)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
 
             this.ApplyEvent(new InterviewRestarted(userId, restartTime));
@@ -1654,6 +1701,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Approve(Guid userId, string comment)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
                 InterviewStatus.RejectedBySupervisor,
                 InterviewStatus.RejectedByHeadquarters);
@@ -1664,6 +1712,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Reject(Guid userId, string comment)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
                 InterviewStatus.ApprovedBySupervisor,
                 InterviewStatus.RejectedByHeadquarters);
@@ -1674,6 +1723,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void HqApprove(Guid userId, string comment)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewApprovedByHQ(userId, comment));
@@ -1682,6 +1732,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void HqReject(Guid userId, string comment)
         {
+            ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.ApprovedByHeadquarters);
 
             this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
@@ -1690,11 +1741,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
+            ThrowIfInterviewHardDeleted();
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
         }
 
         public void SynchronizeInterviewFromHeadquarters(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
         {
+            ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(interviewDto.QuestionnaireId,
                 interviewDto.QuestionnaireVersion);
 
@@ -1786,7 +1839,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyValidityChangesEvents(validityChanges);
         }
 
-        public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus,
+        public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
         {
             if (this.status == InterviewStatus.Deleted)
@@ -1794,7 +1847,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             else
                 this.ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
 
-            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId,
+            this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId,questionnaireVersion,
                 interviewStatus,
                 featuredQuestionsMeta,
                 createdOnClient, comments));
@@ -3215,8 +3268,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.status, string.Join(", ", expectedStatuses.Select(expectedStatus => expectedStatus.ToString()))));
         }
 
+        private void ThrowIfInterviewHardDeleted()
+        {
+            if (this.wasHardDeleted)
+                throw new InterviewException(
+                    "Interview status is hard deleted.");
+        }
+
         private void ThrowIfStatusNotAllowedToBeChangedWithMetadata(InterviewStatus interviewStatus)
         {
+            ThrowIfInterviewHardDeleted();
             switch (interviewStatus)
             {
                 case InterviewStatus.Completed:

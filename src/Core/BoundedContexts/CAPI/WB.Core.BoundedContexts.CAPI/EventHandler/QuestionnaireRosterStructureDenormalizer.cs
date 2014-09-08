@@ -11,7 +11,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
-    public class QuestionnaireRosterStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>
+    public class QuestionnaireRosterStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> questionnries;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             Guid id = evnt.EventSourceId;
-            long version = evnt.EventSequence;
+            long version = evnt.Payload.Version ?? evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
             this.StoreRosterStructure(id, version, questionnaireDocument);
@@ -46,6 +46,11 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         private void StoreRosterStructure(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
             this.questionnries.Store(this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaireDocument, version), id);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            this.questionnries.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
         }
     }
 }

@@ -6,6 +6,6 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal interface IChunkWriter
     {
-        void StoreChunk(SyncItem syncItem, Guid? userId);
+        void StoreChunk(SyncItem syncItem, Guid? userId, DateTime timestamp);
     }
 }

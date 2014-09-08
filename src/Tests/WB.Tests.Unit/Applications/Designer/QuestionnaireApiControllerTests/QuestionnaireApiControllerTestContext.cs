@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
@@ -72,7 +76,18 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             };
         }
 
-
+        internal static NewEditQuestionView CreateSingleoptionFilteredCombobox(Guid questionId, int optionsCount = 3, bool isFilteredCombobox = false)
+        {
+            var options = Enumerable.Range(1, optionsCount).Select(x => new CategoricalOption { Title = x.ToString(CultureInfo.InvariantCulture), Value = x }).ToArray();
+            
+            return new NewEditQuestionView
+            {
+                Id = questionId,
+                Type = QuestionType.SingleOption,
+                Options = options,
+                IsFilteredCombobox = isFilteredCombobox,
+            };
+        }
         internal static VerificationError[] CreateVerificationErrors()
         {
             return new VerificationError[2]

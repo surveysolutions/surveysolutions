@@ -50,7 +50,7 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
                 }
                 else
                 {
-                    this.RemoveView(evt.EventSourceId, storage);
+                    this.RemoveView(evt.EventSourceId, storage, currentState);
                 }
 
                 return;
@@ -59,10 +59,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
             if (this.IsCreator(evt))
             {
                 var newObject =
-                    (T)this.GetType()
+                    (T) this.GetType()
                         .GetMethod("Create", new[] { eventType })
                         .Invoke(this, new object[] { this.CreatePublishedEvent(evt) });
-                this.SaveView(evt.EventSourceId, newObject, storage);
+                if (newObject != null)
+                    this.SaveView(evt.EventSourceId, newObject, storage);
                 return;
             }
 
@@ -71,11 +72,11 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.EventHandlers
                 T currentState = this.GetViewById(evt.EventSourceId, storage);
                 var methodInfo = this.GetType().GetMethod("Delete", new[] { typeof(T), eventType });
                 var newState = (T)methodInfo.Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
-                this.SaveView(evt.EventSourceId, newState, storage);
+                this.RemoveView(evt.EventSourceId, storage, newState);
             }
         }
 
-        private void RemoveView(Guid id, IReadSideRepositoryWriter<T> storage)
+        private void RemoveView(Guid id, IReadSideRepositoryWriter<T> storage, T currentState)
         {
             storage.Remove(id);
         }

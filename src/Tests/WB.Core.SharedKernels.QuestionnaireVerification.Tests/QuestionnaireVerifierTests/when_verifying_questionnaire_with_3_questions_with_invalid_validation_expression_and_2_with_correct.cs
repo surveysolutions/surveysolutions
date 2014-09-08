@@ -33,35 +33,35 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     PublicKey = firstIncorrectQuestionId,
                     ValidationExpression = InvalidExpression,
                     ValidationMessage = "some message",
-                    StataExportCaption = firstIncorrectQuestionId.ToString()
+                    StataExportCaption = "var1"
                 },
                 new NumericQuestion
                 {
                     PublicKey = secondIncorrectQuestionId,
                     ValidationExpression = InvalidExpression,
                     ValidationMessage = "some message",
-                    StataExportCaption = secondIncorrectQuestionId.ToString()
+                    StataExportCaption = "var2"
                 },
                 new NumericQuestion
                 {
                     PublicKey = thirdIncorrectQuestionId,
                     ValidationExpression = InvalidExpression,
                     ValidationMessage = "some message",
-                    StataExportCaption = thirdIncorrectQuestionId.ToString()
+                    StataExportCaption = "var3"
                 },
                 new NumericQuestion
                 {
                     PublicKey = firstCorrectQuestionId,
                     ValidationExpression = ValidExpression,
                     ValidationMessage = "some message",
-                    StataExportCaption = firstCorrectQuestionId.ToString()
+                    StataExportCaption = "var4"
                 },
                 new NumericQuestion
                 {
                     PublicKey = secondCorrectQuestionId,
                     ValidationExpression = ValidExpression,
                     ValidationMessage = "some message",
-                    StataExportCaption = secondCorrectQuestionId.ToString()
+                    StataExportCaption = "var5"
                 }
                 );
 

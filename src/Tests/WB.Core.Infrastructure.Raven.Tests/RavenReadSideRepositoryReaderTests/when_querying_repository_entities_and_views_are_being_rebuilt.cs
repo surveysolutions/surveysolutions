@@ -4,12 +4,9 @@ using System.Linq;
 using Machine.Specifications;
 
 using Moq;
-
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
-
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests

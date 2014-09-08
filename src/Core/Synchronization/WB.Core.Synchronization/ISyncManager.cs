@@ -12,11 +12,11 @@ namespace WB.Core.Synchronization
         bool SendSyncPackage(SyncPackage package);
         bool SendSyncItem(SyncItem package);
 
-        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence);
+        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, DateTime timestamp);
 
-        SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, long sequence);
+        SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, DateTime timestamp);
 
-        int GetNumberToGet(Guid userId, Guid clientRegistrationId, long sequence);
+        int GetNumberToGet(Guid userId, Guid clientRegistrationId, DateTime timestamp);
         
     }
 }

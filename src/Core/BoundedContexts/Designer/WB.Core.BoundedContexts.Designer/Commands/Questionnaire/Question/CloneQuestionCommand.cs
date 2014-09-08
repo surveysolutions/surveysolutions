@@ -30,10 +30,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid responsibleId, 
             Guid? linkedToQuestionId,
             bool areAnswersOrdered,
-            int? maxAllowedAnswers)
+            int? maxAllowedAnswers, 
+            bool? isFilteredCombobox)
 
             : base(questionnaireId, questionId, title, type, variableName, variableLabel,mask, isMandatory, isPreFilled,
-                scope, enablementCondition, validationExpression, validationMessage, instructions, options, responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers)
+                scope, enablementCondition, validationExpression, validationMessage, instructions, options, responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, isFilteredCombobox)
         {
             this.ParentGroupId = parentGroupId;
             this.SourceQuestionId = sourceQuestionId;

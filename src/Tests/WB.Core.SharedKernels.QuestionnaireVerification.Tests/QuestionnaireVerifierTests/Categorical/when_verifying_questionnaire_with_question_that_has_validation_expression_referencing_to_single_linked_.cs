@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new SingleQuestion()
                 {
                     PublicKey = categoricalQuestionId,
-                    StataExportCaption = categoricalQuestionId.ToString(),
+                    StataExportCaption = "var1",
                     LinkedToQuestionId = linkedSourceQuestionId
                 }, 
                 new NumericQuestion
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     PublicKey = questionWithValidationExpressionId,
                     ValidationExpression = "some validation",
                     ValidationMessage = "some message",
-                    StataExportCaption = questionWithValidationExpressionId.ToString()
+                    StataExportCaption = "var2"
                 });
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor

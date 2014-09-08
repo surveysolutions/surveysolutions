@@ -26,10 +26,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Option[] options,
             Guid responsibleId,
             Guid? linkedToQuestionId,
-            bool areAnswersOrdered, 
-            int? maxAllowedAnswers)
+            bool areAnswersOrdered,
+            int? maxAllowedAnswers, 
+            bool? isFilteredCombobox)
 
             : base(questionnaireId, questionId, title, type, variableName, variableLabel,mask, isMandatory, isPreFilled,
-                scope, enablementCondition, validationExpression, validationMessage, instructions, options, responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers) { }
+                scope, enablementCondition, validationExpression, validationMessage, instructions, options, responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, isFilteredCombobox) { }
     }
 }

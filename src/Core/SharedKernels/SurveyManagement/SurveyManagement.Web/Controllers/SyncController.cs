@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult GetSyncPackage(string aRKey, string aRSequence, string clientRegistrationId)
+        public ActionResult GetSyncPackage(string aRKey, string aRTimestamp, string clientRegistrationId)
         {
             UserView user = this.GetUserByNameAndPassword();
             if (user == null)
@@ -163,8 +163,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return this.Json(package, JsonRequestBehavior.AllowGet);
             }
 
-            long sequence;
-            if (!long.TryParse(aRSequence, out sequence))
+            long timestamp;
+            if (!long.TryParse(aRTimestamp, out timestamp))
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "Invalid sequence identifier";
@@ -173,7 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             try
             {
-                package = this.syncManager.ReceiveSyncPackage(clientRegistrationKey, key, sequence);
+                package = this.syncManager.ReceiveSyncPackage(clientRegistrationKey, key, new DateTime(timestamp));
             }
             catch (Exception ex)
             {
@@ -225,14 +225,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey, clientSequence), JsonRequestBehavior.AllowGet);
         }
 
-        private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid clientRegistrationKey, long clientSequence)
+        private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid clientRegistrationKey, long timestamp)
         {
             var result = new SyncItemsMetaContainer();
 
             try
             {
                 IEnumerable<SynchronizationChunkMeta> package = this.syncManager.GetAllARIdsWithOrder(userId, clientRegistrationKey,
-                                                                                                      clientSequence);
+                                                                                                      new DateTime(timestamp));
                 result.ChunksMeta = package.ToList();
             }
             catch (Exception ex)

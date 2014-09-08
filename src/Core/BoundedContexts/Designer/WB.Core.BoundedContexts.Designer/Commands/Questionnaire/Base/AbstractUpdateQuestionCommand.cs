@@ -9,12 +9,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             Guid questionId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string instructions)
             : base(questionnaireId, questionId, responsibleId)
         {
-            this.VariableLabel = variableLabel;
-            Title = title;
-            VariableName = variableName;
-            IsMandatory = isMandatory;
+            this.VariableLabel = CommandUtils.SanitizeHtml(variableLabel, removeAllTags: true);
+            this.Title = CommandUtils.SanitizeHtml(title);
+            this.VariableName = CommandUtils.SanitizeHtml(variableName, removeAllTags: true);
+            this.IsMandatory = isMandatory;
             this.EnablementCondition = enablementCondition;
-            Instructions = instructions;
+            this.Instructions = CommandUtils.SanitizeHtml(instructions, removeAllTags: true);
         }
 
         public string Title { get; private set; }

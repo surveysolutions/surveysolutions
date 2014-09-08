@@ -28,7 +28,7 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireUpgrader;
@@ -40,6 +40,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Modules;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
@@ -103,8 +104,6 @@ namespace WB.UI.Supervisor.App_Start
                 ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                 : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
-            int? pageSize = GetEventStorePageSize();
-
             var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded,
                 username: WebConfigurationManager.AppSettings["Raven.Username"],
                 password: WebConfigurationManager.AppSettings["Raven.Password"],
@@ -124,18 +123,13 @@ namespace WB.UI.Supervisor.App_Start
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsFeed"]),
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireDetailsEndpoint"]).ToString(),
                 WebConfigurationManager.AppSettings["Headquarters.AccessToken"],
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]));
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]),
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireChangedFeed"]));
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
                     LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
-
-            bool useStreamingForAllEvents;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.UseStreamingForAllEvents"], out useStreamingForAllEvents))
-            {
-                useStreamingForAllEvents = true;
-            }
 
             Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
             Version applicationBuildVersion = typeof (AccountController).Assembly.GetName().Version;
@@ -154,9 +148,7 @@ namespace WB.UI.Supervisor.App_Start
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
-                pageSize.HasValue
-                    ? new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents, pageSize.Value)
-                    : new RavenWriteSideInfrastructureModule(ravenSettings, useStreamingForAllEvents),
+                ModulesFactory.GetEventStoreModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
@@ -218,16 +210,6 @@ namespace WB.UI.Supervisor.App_Start
             {
                 bus.Register(handler as IEventHandler);
             }
-        }
-
-        private static int? GetEventStorePageSize()
-        {
-            int pageSize;
-
-            if (int.TryParse(WebConfigurationManager.AppSettings["EventStorePageSize"], out pageSize))
-                return pageSize;
-            else
-                return null;
         }
     }
 }

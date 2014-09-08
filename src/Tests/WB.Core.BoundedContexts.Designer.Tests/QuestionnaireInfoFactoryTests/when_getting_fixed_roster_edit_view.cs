@@ -38,9 +38,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         It should_return_roster_with_EnablementCondition_equals_g3_enablementCondition = () =>
             result.EnablementCondition.ShouldEqual(GetGroup(rosterId).EnablementCondition);
 
-        It should_return_roster_with_Description_equals_g3_description = () =>
-            result.Description.ShouldEqual(GetGroup(rosterId).Description);
-
         It should_return_roster_with_RosterFixedTitles_equals_g3_RosterFixedTitles = () =>
             result.RosterFixedTitles.ShouldEqual(GetGroup(rosterId).RosterFixedTitles);
 

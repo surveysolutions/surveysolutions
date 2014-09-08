@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new NumericQuestion
             {
                 PublicKey = notUnderPropagatedGroupLinkingQuestionId,
-                StataExportCaption = notUnderPropagatedGroupLinkingQuestionId.ToString(),
+                StataExportCaption = "var1",
                 QuestionType = QuestionType.Numeric
             });
 
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             {
                 PublicKey = linkedQuestionId,
                 LinkedToQuestionId = notUnderPropagatedGroupLinkingQuestionId,
-                StataExportCaption = linkedQuestionId.ToString(),
+                StataExportCaption = "var2",
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
             verifier = CreateQuestionnaireVerifier();

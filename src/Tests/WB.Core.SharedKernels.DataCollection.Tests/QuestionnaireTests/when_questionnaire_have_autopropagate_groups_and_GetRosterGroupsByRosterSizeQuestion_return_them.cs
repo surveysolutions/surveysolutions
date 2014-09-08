@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
@@ -17,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         {
             var rosterSizeQuestionId = new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            IQuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
+            QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 new NumericQuestion() { PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 4 },
                 new AutoPropagateQuestion()
@@ -34,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            rosterGroups = questionnaire.GetRosterGroupsByRosterSizeQuestion(validatedQuestionId);
+            rosterGroups = questionnaire.GetQuestionnaire().GetRosterGroupsByRosterSizeQuestion(validatedQuestionId);
 
         It should_rosterGroups_not_be_empty = () =>
             rosterGroups.ShouldNotBeEmpty();

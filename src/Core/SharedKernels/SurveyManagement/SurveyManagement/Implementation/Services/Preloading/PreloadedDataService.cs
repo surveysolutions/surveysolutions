@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
         {
-            return dataFile.Header.ToList().FindIndex(header => header == "Id");
+            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, "Id", StringComparison.InvariantCultureIgnoreCase));
         }
 
         public int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile)
@@ -163,7 +163,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public PreloadedDataDto[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels)
         {
-            var topLevelData = GetDataFileByLevelName(allLevels, questionnaireDocument.Title);
+            var tolLevelExportData = exportStructure.HeaderToLevelMap.Values.FirstOrDefault(l => l.LevelScopeVector.Length == 0);
+            if (tolLevelExportData == null)
+                return null;
+
+            var topLevelData = GetDataFileByLevelName(allLevels, tolLevelExportData.LevelName);
 
             if (topLevelData == null)
                 return null;

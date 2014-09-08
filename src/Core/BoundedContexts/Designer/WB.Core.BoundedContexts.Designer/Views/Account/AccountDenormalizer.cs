@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                                        IEventHandler<AccountRoleRemoved>, 
                                        IEventHandler<AccountLoginFailed>, 
                                        IEventHandler<AccountPasswordResetTokenChanged>, 
+                                       IEventHandler<AccountValidated>,
                                        IEventHandler
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> _accounts;
@@ -192,6 +193,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         public Type[] BuildsViews
         {
             get { return new Type[] { typeof(AccountDocument) }; }
+        }
+
+        public void Handle(IPublishedEvent<AccountValidated> evnt) // Here added just to have this event registered in NCQRS
+        {
         }
     }
 }

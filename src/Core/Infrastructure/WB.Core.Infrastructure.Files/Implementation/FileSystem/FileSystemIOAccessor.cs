@@ -111,6 +111,8 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         public string MakeValidFileName(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return string.Empty;
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidReStr = String.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
             return RemoveNonAscii(Regex.Replace(name, invalidReStr, "_"));

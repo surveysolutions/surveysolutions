@@ -110,7 +110,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Id = group.Id,
                     Title = group.Title,
                     EnablementCondition = group.EnablementCondition,
-                    Description = group.Description,
                     VariableName = group.VariableName
                 }, questionnaire, questionnaireId),
                 Breadcrumbs = this.GetBreadcrumbs(questionnaire, group)
@@ -145,7 +144,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 ItemId = roster.Id.FormatGuid(),
                 Title = roster.Title,
                 EnablementCondition = roster.EnablementCondition,
-                Description = roster.Description,
                 VariableName = roster.VariableName,
 
                 Type = rosterType,
@@ -204,6 +202,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             NewEditQuestionView result = MapQuestionFields(question);
             result.Options = result.Options ?? new CategoricalOption[0];
+            result.OptionsCount = result.Options.Length;
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
             result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire);
             result.QuestionTypeOptions = QuestionTypeOptions;
@@ -257,8 +256,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                                                               .GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
                                                               .Map(singleOptionDetailsView);
                     editQuestionView.LinkedToQuestionId = Monads.Maybe(() => singleOptionDetailsView.LinkedToQuestionId.FormatGuid());
-                    return
-                        editQuestionView;
+                    return editQuestionView;
                 case QuestionType.Text:
                     return
                         ObjectMapperManager.DefaultInstance.GetMapper<TextDetailsView, NewEditQuestionView>()

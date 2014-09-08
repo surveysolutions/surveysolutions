@@ -20,14 +20,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = multiAnswerQuestionWithMaxCountId,
-                StataExportCaption = multiAnswerQuestionWithMaxCountId.ToString(),
+                StataExportCaption = "var1",
                 MaxAnswerCount = 100
             });
 
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = textQuestionId,
-                StataExportCaption = textQuestionId.ToString(),
+                StataExportCaption = "var2",
                 MaxAnswerCount = null
             });
          

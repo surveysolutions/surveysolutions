@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireQuestionsInfoDenormalizer : IEventHandler, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>
+    public class QuestionnaireQuestionsInfoDenormalizer : IEventHandler, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireQuestionsInfo> questionnaires;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             Guid id = evnt.EventSourceId;
-            long version = evnt.EventSequence;
+            long version = evnt.Payload.Version ?? evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
             this.StoreQuestionsInfo(id, version, questionnaireDocument);
@@ -66,6 +66,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             };
 
             this.questionnaires.Store(map, RepositoryKeysHelper.GetVersionedKey(id, version));
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            this.questionnaires.Remove(RepositoryKeysHelper.GetVersionedKey(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion));
         }
     }
 }

@@ -54,6 +54,8 @@
 
         Questionnaires = 11,
 
-        MapReport = 12
+        MapReport = 12,
+
+        InterviewsChart = 13
     }
 }

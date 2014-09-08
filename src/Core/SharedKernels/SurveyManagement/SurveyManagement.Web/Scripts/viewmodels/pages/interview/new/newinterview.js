@@ -27,6 +27,7 @@
                 interviewId: self.questionnaire().id,
                 supervisorId: self.responsible().id(),
                 questionnaireId: self.questionnaire().templateId,
+                questionnaireVersion: self.questionnaire().templateVersion,
                 answersToFeaturedQuestions: datacontext.prepareQuestion()
             })
         };

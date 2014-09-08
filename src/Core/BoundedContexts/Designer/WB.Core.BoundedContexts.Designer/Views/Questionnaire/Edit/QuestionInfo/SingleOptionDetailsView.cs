@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
@@ -13,5 +12,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public Guid? LinkedToQuestionId { get; set; }
         public CategoricalOption[] Options { get; set; }
         public override QuestionType Type { get; set; }
+        public bool? IsFilteredCombobox { get; set; }
     }
 }

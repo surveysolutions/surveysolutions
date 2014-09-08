@@ -33,20 +33,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = firstIncorrectQuestionId,
                     ConditionExpression = InvalidExpression,
-                    StataExportCaption = firstIncorrectQuestionId.ToString()
+                    StataExportCaption = "var1"
                 },
                 new TextQuestion
                 {
                     PublicKey = secondIncorrectQuestionId,
                     ConditionExpression = InvalidExpression,
-                    StataExportCaption = secondIncorrectQuestionId.ToString()
+                    StataExportCaption = "var2"
                 },
                 new Group { PublicKey = incorrectGroupId, ConditionExpression = InvalidExpression },
                 new NumericQuestion
                 {
                     PublicKey = correctQuestionId,
                     ConditionExpression = ValidExpression,
-                    StataExportCaption = correctQuestionId.ToString()
+                    StataExportCaption = "var3"
                 },
                 new Group { PublicKey = correctGroupId, ConditionExpression = ValidExpression }
                 );

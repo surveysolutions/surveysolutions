@@ -17,7 +17,7 @@
             <tr>
                 <th>Title</th>
                 <th class="col-xs-4 col-sm-5 col-md-4 col-lg-3"></th>
-                <th class="col-sm-1">Export Data</th>
+                <th class="col-sm-2">Export Data</th>
             </tr>
         </thead>
         <tbody>
@@ -36,20 +36,30 @@
                         else
                         {
                             <a href="@Url.Action("BatchUpload", "HQ", new { id = item.QuestionnaireId, version = item.Version })" class="btn btn-primary"><i class="icon-white"></i>Batch upload</a>
-                            <a href="@Url.Action("TakeNew", "HQ", new { id = item.QuestionnaireId })" class="btn btn-primary">
+                            <a href="@Url.Action("TakeNew", "HQ", new { id = item.QuestionnaireId, version=item.Version })" class="btn btn-primary">
                                 <i class="glyphicon glyphicon-plus-sign"></i> New Interview
                             </a>
                         }
                     </td>
-                    <td>
-                        <div class="btn-group">
+                    <td class="buttons">
                             <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = item.QuestionnaireId,version=item.Version })">
                                 <i class="glyphicon glyphicon-download"></i> CSV
                             </a>
-                        </div>
+                        <a class="btn  btn-small btn-danger" href="@Url.Action("Delete", "HQ", new { id = item.QuestionnaireId, version = item.Version })" onclick="return confirmAction()">
+                            <i class="glyphicon"></i> Delete
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+@section scripts
+{
+    <script type="text/javascript">
+        function confirmAction() {
+            var confirmed = confirm("Are you sure you want to delete questionnaire? All interviews conducted by current template will be lost!");
+            return confirmed;
+        }
+    </script>
+}

@@ -35,7 +35,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
         }
 
-        public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, long sequence)
+        public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, DateTime timestamp)
         {
             var device = devices.GetById(clientRegistrationKey);
             if (device == null)
@@ -49,7 +49,7 @@ namespace WB.Core.Synchronization.SyncProvider
             return item;
         }
 
-        public IEnumerable<SyncItem> GetSyncItemBulk(Guid userId, Guid clientRegistrationKey, long sequence)
+        public IEnumerable<SyncItem> GetSyncItemBulk(Guid userId, Guid clientRegistrationKey, DateTime timestamp)
         {
             var device = devices.GetById(clientRegistrationKey);
             if (device == null)
@@ -60,7 +60,7 @@ namespace WB.Core.Synchronization.SyncProvider
             throw new NotImplementedException();
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
+        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, DateTime timestamp)
         {
             var device = devices.GetById(clientRegistrationKey);
 
@@ -70,7 +70,7 @@ namespace WB.Core.Synchronization.SyncProvider
             /*if (clientSequence != device.LastSyncItemIdentifier)
                 logger.Info(string.Format("Local [{0}] and remote [{1}] sequence number mismatch.", device.LastSyncItemIdentifier, clientSequence));*/
 
-            return storage.GetChunkPairsCreatedAfter(clientSequence, userId);
+            return storage.GetChunkPairsCreatedAfter(timestamp, userId);
         }
 
 
