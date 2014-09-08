@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
@@ -18,26 +21,30 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             var stats = Mock.Of<IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate>>();
 
             var questionnaireId = Guid.NewGuid();
-            var baseDate = new DateTime(2014, 8, 22);
+            baseDate = new DateTime(2014, 8, 22);
             var questionnaireVersion = 1;
 
-            var data = new List<StatisticsLineGroupedByDateAndTemplate>
-            {
-                new StatisticsLineGroupedByDateAndTemplate
+            var data =
+                new StatisticsGroupedByDateAndTemplate
                 {
-                    QuestionnaireId = questionnaireId,
-                    QuestionnaireVersion = questionnaireVersion,
-                    Date = baseDate.AddDays(-3),
-                    DateTicks = baseDate.AddDays(-3).Ticks,
-                    ApprovedByHeadquartersCount = 1,
-                    ApprovedBySupervisorCount = 1,
-                    CompletedCount = 1,
-                    InterviewerAssignedCount = 1,
-                    RejectedByHeadquartersCount = 1,
-                    RejectedBySupervisorCount = 1,
-                    SupervisorAssignedCount = 1
-                }
-            }.AsQueryable();
+                    StatisticsByDate =
+                        new Dictionary<DateTime, QuestionnaireStatisticsForChart>()
+                        {
+                            {
+                                baseDate.AddDays(-3),
+                                new QuestionnaireStatisticsForChart()
+                                {
+                                    ApprovedByHeadquartersCount = 1,
+                                    ApprovedBySupervisorCount = 1,
+                                    CompletedCount = 1,
+                                    InterviewerAssignedCount = 1, 
+                                    RejectedByHeadquartersCount = 1,
+                                    RejectedBySupervisorCount = 1,
+                                    SupervisorAssignedCount = 1
+                                }
+                            }
+                        }
+                };
 
             chartStatisticsViewFactory = CreateChartStatisticsViewFactory(data);
 
@@ -53,12 +60,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         Because of = () => view = chartStatisticsViewFactory.Load(input);
 
-        It should_have_days_count_muliply_two_records = () => view.Ticks.Length.ShouldEqual(2 * 2);
+        It should_have_7_lines = () => view.Lines.Length.ShouldEqual(7);
 
-        It should_have_supervisorAssignedData_correct = () => view.Stats[0].ShouldEqual(new[] { 1, 1 });
+        It should_each_line_has_2_days_inside = () => view.Lines.ShouldEachConformTo(line => line.Length == 2);
+
+        It should_each_line_has_first_record_equal_to_from_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.AddDays(-2).ToString("MM/dd/yyyy") && (int)line[0][1]==1);
+
+        It should_each_line_has_second_record_equal_to_to_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[1][0].ToString() == baseDate.AddDays(-1).ToString("MM/dd/yyyy") && (int)line[1][1] == 1);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;
         private static ChartStatisticsView view;
+        private static DateTime baseDate;
     }
 }
