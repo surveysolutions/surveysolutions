@@ -31,9 +31,9 @@ namespace WB.Tests.Integration.InterviewStatistics
             return ToPublishedEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion), eventSourceId, eventDate);
         }
 
-        public static IPublishedEvent<InterviewStatusChanged> QuestionChangedEvent(Guid eventSourceId, DateTime eventDate, InterviewStatus status, string comment)
+        public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(Guid eventSourceId, DateTime eventDate, InterviewStatus status)
         {
-            return ToPublishedEvent(new InterviewStatusChanged(status, comment), eventSourceId, eventDate);
+            return ToPublishedEvent(new InterviewStatusChanged(status, string.Empty), eventSourceId, eventDate);
         }
     }
 }

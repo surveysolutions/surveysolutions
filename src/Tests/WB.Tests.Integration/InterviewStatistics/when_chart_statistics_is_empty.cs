@@ -16,36 +16,36 @@ namespace WB.Tests.Integration.InterviewStatistics
             denormalizer = CreateInterviewsChartDenormalizer(interviewDetailsStorage, statisticsStorage);
         };
 
-        Because of = () =>
+        private Because of = () =>
         {
             denormalizer.Handle(Create.InterviewCreatedEvent(interviewId, eventDate, userId, questionnaireId, questionnaireVersion));
         };
 
-        It should_add_one_record_with_statistics = () =>
+        private It should_add_one_record_with_statistics = () =>
             statisticsStorage.GetById(storageKey).StatisticsByDate.Count.ShouldEqual(1);
 
-        It should_set_1_to_CreatedCount_field_for_statistics_by_eventDate = () =>
+        private It should_set_1_to_CreatedCount_field_for_statistics_by_eventDate = () =>
             statisticsStorage.GetById(storageKey).StatisticsByDate[eventDate.Date].CreatedCount.ShouldEqual(1);
 
-        It should_set_0_to_SupervisorAssignedCount_field_for_statistics_by_eventDate = () =>
+        private It should_set_0_to_SupervisorAssignedCount_field_for_statistics_by_eventDate = () =>
             statisticsStorage.GetById(storageKey).StatisticsByDate[eventDate.Date].SupervisorAssignedCount.ShouldEqual(0);
 
-        It should_set_0_to_InterviewerAssignedCount_field_for_statistics_by_eventDate = () =>
+        private It should_set_0_to_InterviewerAssignedCount_field_for_statistics_by_eventDate = () =>
             statisticsStorage.GetById(storageKey).StatisticsByDate[eventDate.Date].InterviewerAssignedCount.ShouldEqual(0);
 
-        It should_set_0_to_CompletedCount_field_for_statistics_by_eventDate = () =>
+        private It should_set_0_to_CompletedCount_field_for_statistics_by_eventDate = () =>
             statisticsStorage.GetById(storageKey).StatisticsByDate[eventDate.Date].CompletedCount.ShouldEqual(0);
 
-        It should_set_0_to_ApprovedBySupervisorCount_field_for_statistics_by_eventDate = () =>
+        private It should_set_0_to_ApprovedBySupervisorCount_field_for_statistics_by_eventDate = () =>
             statisticsStorage.GetById(storageKey).StatisticsByDate[eventDate.Date].ApprovedBySupervisorCount.ShouldEqual(0);
 
-        It should_set_0_to_RejectedBySupervisorCount_field_for_statistics_by_eventDate = () =>
+        private It should_set_0_to_RejectedBySupervisorCount_field_for_statistics_by_eventDate = () =>
             statisticsStorage.GetById(storageKey).StatisticsByDate[eventDate.Date].RejectedBySupervisorCount.ShouldEqual(0);
 
-        It should_set_0_to_ApprovedByHeadquartersCount_field_for_statistics_by_eventDate = () =>
+        private It should_set_0_to_ApprovedByHeadquartersCount_field_for_statistics_by_eventDate = () =>
             statisticsStorage.GetById(storageKey).StatisticsByDate[eventDate.Date].ApprovedByHeadquartersCount.ShouldEqual(0);
 
-        It should_set_0_to_RejectedByHeadquartersCount_field_for_statistics_by_eventDate = () =>
+        private It should_set_0_to_RejectedByHeadquartersCount_field_for_statistics_by_eventDate = () =>
             statisticsStorage.GetById(storageKey).StatisticsByDate[eventDate.Date].RejectedByHeadquartersCount.ShouldEqual(0);
 
         private static InterviewsChartDenormalizer denormalizer;
