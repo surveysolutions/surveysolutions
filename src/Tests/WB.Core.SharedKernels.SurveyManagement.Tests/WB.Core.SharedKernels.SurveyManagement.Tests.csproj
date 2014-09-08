@@ -169,10 +169,6 @@
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_previous_action_is_completed.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_previous_action_is_interviewer_assigned.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_TextQuestionAnsweredRecived_recived_and_user_who_gave_answer_is_supervisor.cs" />
-    <Compile Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\InterviewsChartDenormalizerTestContext.cs" />
-    <Compile Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\when_handling_interview_created_event_in_chart_denormalizer.cs" />
-    <Compile Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\when_handling_interview_status_change_event_in_chart_denormalizer.cs" />
-    <Compile Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\when_handling_series_of_events_in_chart_denormalizer.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerFunctionalTestsContext.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewApprovedByHQ_event_and_responsible_user_not_found.cs" />
@@ -476,7 +472,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="EventHandlers\Interview\InterviewsChartDenormalizerTests\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
