@@ -49,12 +49,10 @@
             self.Stats = data;
             self.drawChart();
         });
-
-       
     };
 
     self.drawChart = function () {
-        if (self.Stats.Lines.length === 0)
+        if (self.Stats.Lines[0].length === 0)
             return;
 
         $('#interviewChart').empty();
@@ -137,7 +135,6 @@
     };
 
     self.load = function () {
-
         var today = moment().format(dateFormat);
         var oneWeekAgo = moment().add("weeks", -1).format(dateFormat);
 
@@ -155,8 +152,6 @@
         self.FromDateInput(from);
         self.ToDate(to);
         self.ToDateInput(to);
-
-       
 
         $('.list-group .input-group.date').datepicker({
             format: "mm/dd/yyyy",
