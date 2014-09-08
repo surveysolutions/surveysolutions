@@ -1821,12 +1821,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (interviewChanges.InterviewByAnswerChanges != null)
                 this.ApplyAnswersEvents(interviewChanges.InterviewByAnswerChanges);
 
-            if (interviewChanges.EnablementChanges != null)
-                this.ApplyEnablementChangesEvents(interviewChanges.EnablementChanges);
-
-            if (interviewChanges.ValidityChanges != null)
-                this.ApplyValidityChangesEvents(interviewChanges.ValidityChanges);
-
             if (interviewChanges.RosterCalculationData != null)
                 this.ApplyRostersEvents(interviewChanges.RosterCalculationData);
 
@@ -1836,6 +1830,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (interviewChanges.RosterInstancesWithAffectedTitles != null)
                 this.ApplyRosterRowsTitleChangedEvents(interviewChanges.RosterInstancesWithAffectedTitles,
                     interviewChanges.AnswerAsRosterTitle);
+
+            if (interviewChanges.EnablementChanges != null)
+                this.ApplyEnablementChangesEvents(interviewChanges.EnablementChanges);
+
+            if (interviewChanges.ValidityChanges != null)
+                this.ApplyValidityChangesEvents(interviewChanges.ValidityChanges);
         }
 
         private void ApplyInterviewChanges(IEnumerable<InterviewChanges> interviewChangesItems)
@@ -2259,8 +2259,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //Update State
             expressionProcessorState.UpdateIntAnswer(questionId, rosterVector, answer);
-            rosterCalculationData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-            rosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
+            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
+
+            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
@@ -2317,8 +2323,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateMultiOptionAnswer(questionId, rosterVector, selectedValues);
-            rosterCalculationData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-            rosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
+            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
+
+            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
@@ -2389,10 +2401,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
             expressionProcessorState.UpdateTextListAnswer(questionId, rosterVector, answers);
-            rosterCalculationData.RosterInstancesToAdd.ForEach(
-                r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-            rosterCalculationData.RosterInstancesToRemove.ForEach(
-                r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
+            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
+
+            rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
             this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid,

@@ -10,7 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 {
-    [Ignore("bulk test run failed on server build")]
+    //[Ignore("bulk test run failed on server build")]
     internal class when_expression_state_processes_validation_expressions : CodeGenerationTestsContext
     {
         private Establish context = () =>
@@ -20,10 +20,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
-            questionnaireDocument = CreateQuestionnairDocumenteWithOneNumericIntegerQuestionAndRosters(questionnaireId, questionId, rosterId);
+            questionnaireDocument = CreateQuestionnaireDocumenteWithOneNumericIntegerQuestionAndRosters(questionnaireId, questionId, rosterId);
 
             IInterviewExpressionStateProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
-
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IInterviewExpressionStateProvider>())
@@ -41,6 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         private It should_valid_question_count_equal_2 = () =>
             questionsToBeValid.Count.ShouldEqual(2);
 
+        private It should_invalid_question_count_equal_0 = () =>
+            questionsToBeInvalid.Count.ShouldEqual(0);
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111112");

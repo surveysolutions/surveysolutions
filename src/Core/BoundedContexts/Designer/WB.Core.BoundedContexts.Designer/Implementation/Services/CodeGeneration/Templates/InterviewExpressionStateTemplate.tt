@@ -222,20 +222,20 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
             {#>
             public static readonly Guid <#= r.GeneratedIdName#> = Guid.Parse("<#= r.Id #>");
-            <# }#>                        
-
+            <# }#>
+            
             public static readonly Guid[] <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedRosterScopeName#> = new[] {@__questionnaire};
 
-            <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
+            <#foreach (var r in QuestionnaireTemplateStructure.AllRosters)
             {#>
-            public static readonly Guid[] <#= r.GeneratedRosterScopeName#> = new[] {<#=String.Join(" ,", r.RosterScope.Select(g => string.Format("Guid.Parse(\"{0}\")", g)).ToArray()) #>};            
-            <# }#> 
+            public static readonly Guid[] <#= r.GeneratedRosterScopeName#> = new[] {<#=String.Join(" ,", r.RosterScope.Select(g => string.Format("Guid.Parse(\"{0}\")", g)).ToArray()) #>};
+            <# }#>
             
             public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
-            {
-                <#foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies) 
+            {            
+                <#foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies)
                 {#>
-                { Guid.Parse("<#= dependency.Key #>"), new Guid[]{
+                {Guid.Parse("<#= dependency.Key #>"), new Guid[]{
                 <#foreach (var d in dependency.Value)
                 {#>
                     Guid.Parse("<#= d #>"),
@@ -262,7 +262,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                 //questions
                 <#foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
                 {#>
-                {<#= q.GeneratedIdName#>, <#= q.RosterScopeName#>},            
+                {<#= q.GeneratedIdName#>, <#= q.RosterScopeName#>},
                 <# }#>
                 //groups
                 <#foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
@@ -270,7 +270,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
                 {<#= g.GeneratedIdName#>, <#= g.RosterScopeName#>},
                 <# }#>
                 //rosters
-                <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
+                <#foreach (var r in QuestionnaireTemplateStructure.AllRosters)
                 {#>
                 {<#= r.GeneratedIdName#>, <#= r.GeneratedRosterScopeName#>},
                 <# }#>                                        
