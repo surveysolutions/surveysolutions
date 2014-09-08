@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public int StrangeItems { get; set; }
     }
 
-    public class StatisticsGroupedByDateAndTemplate : IReadSideRepositoryEntity
+    public class StatisticsGroupedByDateAndTemplate : IReadSideRepositoryEntity, IView
     {
         public Dictionary<DateTime, QuestionnaireStatisticsForChart> StatisticsByDate { get; set; }
 
