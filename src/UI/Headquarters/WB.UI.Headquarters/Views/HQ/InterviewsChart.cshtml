@@ -9,20 +9,22 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/jqplot-area",
+    @Scripts.Render(
+    "~/Scripts/jqplot-area",
         "~/Scripts/bootstrap-datepicker.js",
         "~/Scripts/viewmodels/pages/interviews.base.js",
         "~/Scripts/pages/chart.js")
 
     <script type="text/javascript">
+    var interviewChartUrl = '@Html.Raw(@Url.Action("InterviewsChart", "HQ", new { }, Request.Url.Scheme))';;
         var chartApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "ChartStatistics" })';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
-            var model = new Supervisor.VM.ChartPage(chartApiUrl, commandExecutionUrl);
+            var model = new Supervisor.VM.ChartPage(interviewChartUrl, chartApiUrl, commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });
-    </script>
+</script>
 }
 
 @section styles
@@ -30,15 +32,27 @@
     @Styles.Render(
         "~/Scripts/jqPlot/jquery.jqplot.min.css",
         "~/Content/datepicker3.css")
+
+    <style type="text/css">
+        table.jqplot-table-legend {
+            width: 100%;
+            border: none;
+        }
+        td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
+            width: 20px;
+        }
+        div.jqplot-table-legend-swatch-outline {
+            border: none;
+        }
+        .jqplot-table-legend-swatch {
+            border-width: 10px;
+        }
+        
+    </style>
 }
 
 @section header
 {
-    <h3>
-    Cumulative Interview Chart for "<span data-bind="text: TemplateName"></span>",
-        from: <span data-bind="text: FromDate"></span>
-        to: <span data-bind="text: ToDate"></span>
-</h3>
 }
 
 @section filters
@@ -50,7 +64,7 @@
                 <select data-bind="value: SelectedTemplate" class="form-control">
                     @foreach (var item in Model.Templates)
                     {
-                        <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion","name":"(ver. @item.TemplateVersion) @item.TemplateName"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
+                        <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
                     }
                 </select>
             </p>
