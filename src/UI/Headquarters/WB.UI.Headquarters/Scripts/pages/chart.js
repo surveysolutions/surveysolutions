@@ -58,7 +58,10 @@
             return;
 
         $('#interviewChart').empty();
-        self.Plot = null;
+
+        if (self.Plot != null) {
+            self.Plot.destroy();
+        }
 
         self.Plot = $.jqplot('interviewChart',
             self.Stats.Lines,
