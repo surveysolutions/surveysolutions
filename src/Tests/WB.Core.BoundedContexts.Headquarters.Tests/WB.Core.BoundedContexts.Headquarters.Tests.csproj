@@ -50,11 +50,10 @@
       <HintPath>..\..\..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Abstractions">
-      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Abstractions.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2750\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+      <HintPath>..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -67,10 +66,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Create.cs" />
+    <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_interview_deleted_on_hq.cs" />
+    <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_interview_hard_deleted_on_hq.cs" />
     <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_interview_rejected.cs" />
     <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_supervisor_assigned_on_interview_on_capi_client.cs" />
     <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_supervisor_assigned_on_interview_on_hq.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Questionnaire\QuestionnaireFeedDenormalizerTests\when_questionnaire_deleted.cs" />
+    <Compile Include="Questionnaire\QuestionnaireFeedDenormalizerTests\when_template_imported.cs" />
+    <Compile Include="Questionnaire\QuestionnaireFeedDenormalizerTests\when_template_imported_with_not_empty_version.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

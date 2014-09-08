@@ -21,8 +21,6 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
-using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -32,6 +30,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private const int MaxCountOfDecimalPlaces = 15;
         private const int MaxChapterItemsCount = 200;
+        private const int MaxTitleLength = 250;
+        private const int maxFilteredComboboxOptionsCount = 5000;
+        private const int maxCategoricalOneAnswerOptionsCount = 20;
 
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
@@ -214,7 +215,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers,
-                        null));
+                        null,
+                        e.IsFilteredCombobox));
 
             if (question == null)
             {
@@ -260,6 +262,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.CountOfDecimalPlaces,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -303,7 +306,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        e.MaxAnswerCount));
+                        e.MaxAnswerCount,
+                        null));
 
             if (question == null)
             {
@@ -342,7 +346,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers,
-                        null));
+                        null,
+                        e.IsFilteredCombobox));
             if (question == null)
             {
                 return;
@@ -383,6 +388,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
+                        null,
                         null,
                         null,
                         null));
@@ -429,7 +435,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        e.MaxAnswerCount));
+                        e.MaxAnswerCount,
+                        null));
 
             if (question == null)
             {
@@ -479,7 +486,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.AreAnswersOrdered,
                         e.MaxAllowedAnswers,
-                        null));
+                        null,
+                        e.IsFilteredCombobox));
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
 
@@ -517,6 +525,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
+                        null,
                         null,
                         null,
                         null));
@@ -557,7 +566,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        e.MaxAnswerCount));
+                        e.MaxAnswerCount,
+                        null));
 
             if (question == null)
             {
@@ -618,6 +628,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -657,6 +668,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -688,6 +700,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Instructions,
                         null,
                         new List<Guid>(),
+                        null,
                         null,
                         null,
                         null,
@@ -764,6 +777,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private readonly ILogger logger;
 
+
         private static IClock Clock
         {
             get { return NcqrsEnvironment.Get<IClock>(); /*ServiceLocator.Current.GetInstance<IClock>(); */}
@@ -815,7 +829,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
             : base(publicKey)
         {
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
 
@@ -850,7 +864,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
             : base(publicKey)
         {
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             var clock = NcqrsEnvironment.Get<IClock>();
 
@@ -892,7 +906,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 #warning CRUD
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ApplyEvent(new QuestionnaireUpdated() { Title = title, IsPublic = isPublic, ResponsibleId = responsibleId });
         }
@@ -916,7 +930,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
 
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
@@ -961,7 +975,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
 
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
@@ -1177,6 +1191,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             validationMessage: categoricalSingleQuestion.ValidationMessage,
                             linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
                             isPreFilled: categoricalSingleQuestion.Featured,
+                            isFilteredCombobox: categoricalSingleQuestion.IsFilteredCombobox,
                             options:
                                 categoricalSingleQuestion.Answers.Select(
                                     answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
@@ -1214,7 +1229,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
@@ -1235,7 +1250,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(group);
                 this.ThrowIfRosterCantBecomeAGroupBecauseContainsLinkedSourceQuestions(group);
-                this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(group);
+                this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(group, wasRosterAndBecomeAGroup: true);
             }
 
             this.ApplyEvent(new GroupUpdated
@@ -1372,7 +1387,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = question.LinkedToQuestionId,
 
                 AreAnswersOrdered = asMultioptions != null ? (bool?)asMultioptions.AreAnswersOrdered : null,
-                MaxAllowedAnswers = asMultioptions != null ? (int?)asMultioptions.MaxAllowedAnswers : null
+                MaxAllowedAnswers = asMultioptions != null ? (int?)asMultioptions.MaxAllowedAnswers : null,
+
+                IsFilteredCombobox = question.IsFilteredCombobox
             });
         }
 
@@ -1381,7 +1398,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid sourceQuestionId, int targetIndex, Guid responsibleId,
-            Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
+            Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers, bool? isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1394,7 +1411,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
             if (type == QuestionType.SingleOption || type == QuestionType.MultyOption)
             {
-                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled);
+                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
             }
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
@@ -1427,7 +1444,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                Mask = mask
+                Mask = mask,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
@@ -1436,7 +1454,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered,
-            int? maxAllowedAnswers)
+            int? maxAllowedAnswers, bool? isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1449,7 +1467,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
             if (type == QuestionType.SingleOption || type == QuestionType.MultyOption)
             {
-                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled);
+                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
             }
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
@@ -1475,7 +1493,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = linkedToQuestionId,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                Mask = mask
+                Mask = mask,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
@@ -1484,7 +1503,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId,
-            bool areAnswersOrdered, int? maxAllowedAnswers)
+            bool areAnswersOrdered, int? maxAllowedAnswers, bool? isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1498,7 +1517,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (type == QuestionType.SingleOption || type == QuestionType.MultyOption)
             {
-                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled);
+                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
             }
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
@@ -1523,7 +1542,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = linkedToQuestionId,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
-                Mask = mask
+                Mask = mask,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
@@ -1749,6 +1769,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 QuestionType = QuestionType.GpsCoordinates,
                 StataExportCaption = variableName,
+                VariableLabel = variableLabel,
                 Mandatory = isMandatory,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -1924,7 +1945,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
@@ -1973,7 +1994,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
@@ -2022,7 +2043,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
@@ -2053,15 +2074,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Option[] options,
             Guid? linkedToQuestionId,
-            Guid responsibleId)
+            Guid responsibleId,
+            bool isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled);
+
+            var answers = !isFilteredCombobox ? ConvertOptionsToAnswers(options) : null;
+
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
+
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -2078,9 +2104,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
-                Answers = ConvertOptionsToAnswers(options),
+                Answers = answers,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
@@ -2097,18 +2124,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId,
             Option[] options,
-            Guid? linkedToQuestionId)
+            Guid? linkedToQuestionId,
+            bool isFilteredCombobox)
         {
+            var answers = ConvertOptionsToAnswers(options);
+
             PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
-            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled);
-            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
+            if (isFilteredCombobox)
+            {
+                var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+                answers = categoricalOneAnswerQuestion != null ? categoricalOneAnswerQuestion.Answers.ToArray() : null;
+            }
+
+            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
+            this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -2124,9 +2160,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
-                Answers = ConvertOptionsToAnswers(options),
+                Answers = answers,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 
@@ -2146,7 +2183,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int targetIndex,
             Guid responsibleId,
             Option[] options,
-            Guid? linkedToQuestionId)
+            Guid? linkedToQuestionId,
+            bool isFilteredCombobox)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
@@ -2154,7 +2192,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
                 responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled);
+            
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: questionId, title: title,
@@ -2162,7 +2201,37 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 enablementCondition: enablementCondition, validationExpression: validationExpression,
                 validationMessage: validationMessage, instructions: instructions, parentGroupId: parentGroupId,
                 sourceQuestionId: sourceQuestionId, targetIndex: targetIndex, responsibleId: responsibleId,
-                options: options, linkedToQuestionId: linkedToQuestionId);
+                options: options, linkedToQuestionId: linkedToQuestionId, isFilteredCombobox: isFilteredCombobox);
+        }
+
+        public void UpdateFilteredComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfFilteredComboboxIsInvalid(questionId, options);
+            ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
+
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+
+
+            this.ApplyEvent(new QuestionChanged
+            {
+                PublicKey = questionId,
+                QuestionText = categoricalOneAnswerQuestion.QuestionText,
+                QuestionType = categoricalOneAnswerQuestion.QuestionType,
+                StataExportCaption = categoricalOneAnswerQuestion.StataExportCaption,
+                VariableLabel = categoricalOneAnswerQuestion.VariableLabel,
+                Mandatory = categoricalOneAnswerQuestion.Mandatory,
+                Featured = categoricalOneAnswerQuestion.Featured,
+                QuestionScope = categoricalOneAnswerQuestion.QuestionScope,
+                ConditionExpression = categoricalOneAnswerQuestion.ConditionExpression,
+                ValidationExpression = categoricalOneAnswerQuestion.ValidationExpression,
+                ValidationMessage = categoricalOneAnswerQuestion.ValidationMessage,
+                Instructions = categoricalOneAnswerQuestion.Instructions,
+                Answers = ConvertOptionsToAnswers(options),
+                ResponsibleId = responsibleId,
+                LinkedToQuestionId = categoricalOneAnswerQuestion.LinkedToQuestionId,
+                IsFilteredCombobox = categoricalOneAnswerQuestion.IsFilteredCombobox
+            });
         }
 
         #endregion
@@ -2653,7 +2722,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string condition, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName);
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition);
 
@@ -2684,7 +2753,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
@@ -2829,7 +2898,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException("Question inside roster group can not be pre-filled.");
         }
 
-        private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
+        private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -2837,15 +2906,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.GroupTitleRequired,
                     "The titles of groups and chapters can not be empty or contains whitespace only");
             }
+
+            if (title.Length > MaxTitleLength)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.TitleIsTooLarge,
+                    string.Format("The titles of groups and chapters can't have more than {0} symbols", MaxTitleLength));
+            }
         }
 
-        private void ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(string title)
+        private void ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionnaireTitleRequired,
                     "Questionnaire's title can not be empty or contains whitespace only");
+            }
+            if (title.Length > MaxTitleLength)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.TitleIsTooLarge, 
+                    string.Format("Questionnaire's title can't have more than {0} symbols", MaxTitleLength));
             }
         }
 
@@ -2882,10 +2964,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfTitleIsEmpty(string title)
+        private void ThrowDomainExceptionIfTitleIsEmptyOrTooLong(string title)
         {
             if (string.IsNullOrEmpty(title))
                 throw new QuestionnaireException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
+
+            if (title.Length > MaxTitleLength)
+            {
+                throw new QuestionnaireException(DomainExceptionType.TitleIsTooLarge, 
+                    string.Format("Question's title can't have more than {0} symbols", MaxTitleLength));
+            }
         }
 
         private void ThrowDomainExceptionIfStaticTextIsEmpty(string text)
@@ -2967,7 +3055,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfCategoricalQuestionIsInvalid(Guid questionId, Option[] options, Guid? linkedToQuestionId, bool isFeatured)
+        private void ThrowIfCategoricalQuestionIsInvalid(Guid questionId, Option[] options, Guid? linkedToQuestionId,
+            bool isFeatured, bool? isFilteredCombobox)
         {
             bool questionIsLinked = linkedToQuestionId.HasValue;
             bool questionHasOptions = options != null && options.Any();
@@ -2984,7 +3073,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 //this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId);
                 this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured);
             }
-            else
+            else if (!isFilteredCombobox.HasValue || !isFilteredCombobox.Value)
             {
                 ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
             }
@@ -3586,10 +3675,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Join(Environment.NewLine, questionVariables)));
         }
 
-        private void ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(IGroup group)
+        private void ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(IGroup group, bool wasRosterAndBecomeAGroup = false)
         {
             var hasAnyQuestionsWithRosterTitleInSubstitutions =
                 this.innerDocument.GetEntitiesByType<AbstractQuestion>(@group)
+                    .Where(x => wasRosterAndBecomeAGroup || GetFirstRosterParentGroupOrNull(x, group) == null)
                     .Any(
                         question =>
                             SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
@@ -3644,6 +3734,32 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         string.Join(Environment.NewLine,
                             linkedQuestionSourcesInGroup.Select(
                                 questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
+            }
+        }
+
+        private void ThrowDomainExceptionIfFilteredComboboxIsInvalid(Guid questionId, Option[] options)
+        {
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+            if (categoricalOneAnswerQuestion == null)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.FilteredComboboxQuestionNotFound,
+                    string.Format("Filtered combobox with public key {0} can't be found", questionId));
+            }
+
+            if (!categoricalOneAnswerQuestion.IsFilteredCombobox.HasValue || !categoricalOneAnswerQuestion.IsFilteredCombobox.Value)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionIsNotAFilteredCombobox,
+                    string.Format("Question {0} is not a filtered combobox", FormatQuestionForException(questionId, this.innerDocument)));
+            }
+
+            if (options != null && options.Length > maxFilteredComboboxOptionsCount)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.FilteredComboboxQuestionOptionsMaxLength,
+                    string.Format("Filtered combobox question {0} contains more than {1} options",
+                        FormatQuestionForException(questionId, this.innerDocument), maxFilteredComboboxOptionsCount));
             }
         }
 
@@ -3767,17 +3883,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return this.GetFirstRosterParentGroupOrNull(item) != null;
         }
 
-        private IGroup GetFirstRosterParentGroupOrNull(IComposite item)
+        private IGroup GetFirstRosterParentGroupOrNull(IComposite item, IGroup stopGroup = null)
         {
             while (item != null)
             {
                 var parentGroup = item as IGroup;
+                if (stopGroup != null && parentGroup != null && parentGroup == stopGroup)
+                {
+                    return parentGroup.IsRoster ? parentGroup : (IGroup) null;
+                }
                 if (parentGroup != null && parentGroup.IsRoster)
                     return parentGroup;
 
                 item = item.GetParent();
             }
-
             return null;
         }
 
@@ -4187,7 +4306,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ApplyCategoricalSingleAnswerQuestionEvent(Guid questionId, string title, string variableName, string variableLabel,
             bool isMandatory, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression,
             string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex,
-            Guid responsibleId, Option[] options, Guid? linkedToQuestionId)
+            Guid responsibleId, Option[] options, Guid? linkedToQuestionId, bool? isFilteredCombobox)
         {
             this.ApplyEvent(new QuestionCloned
             {
@@ -4208,7 +4327,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsFilteredCombobox = isFilteredCombobox
             });
         }
 

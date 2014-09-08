@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary>, 
         ICreateHandler<InterviewSummary, InterviewCreated>,
         ICreateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
+        ICreateHandler<InterviewSummary, InterviewOnClientCreated>,
         IUpdateHandler<InterviewSummary, InterviewStatusChanged>,
         IUpdateHandler<InterviewSummary, SupervisorAssigned>,
         IUpdateHandler<InterviewSummary, TextQuestionAnswered>,
@@ -41,8 +42,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
-        ICreateHandler<InterviewSummary, InterviewOnClientCreated>,
-        IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>
+        IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
+        IUpdateHandler<InterviewSummary, InterviewHardDeleted>
 
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaires;
@@ -246,7 +247,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
-                var interviewerName = this.users.GetById(evnt.Payload.InterviewerId).UserName;
+                var interviewerName = GetResponsibleIdName(evnt.Payload.InterviewerId);
 
                 interview.ResponsibleId = evnt.Payload.InterviewerId;
                 interview.ResponsibleName = interviewerName;
@@ -258,6 +259,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewDeleted> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                interview.IsDeleted = true;
+
+                AddInterviewStatus(summary: interview, status: InterviewStatus.Deleted,
+                    date: evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewHardDeleted> evnt)
         {
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
@@ -284,7 +296,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 AddInterviewStatus(summary: interview, status: InterviewStatus.Restarted,
-                    date: evnt.Payload.RestartTime, comment: null, responsibleId: evnt.Payload.UserId);
+                    date: evnt.Payload.RestartTime ?? evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
             });
         }
 
@@ -293,7 +305,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
             {
                 AddInterviewStatus(summary: interview, status: InterviewStatus.Completed,
-                    date: evnt.Payload.CompleteTime, comment: null, responsibleId: evnt.Payload.UserId);
+                    date: evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, comment: null, responsibleId: evnt.Payload.UserId);
             });
         }
 
@@ -380,16 +392,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private void AddInterviewStatus(InterviewSummary summary, InterviewStatus status, DateTime date,
             string comment, Guid responsibleId)
         {
-            var responsible = this.users.GetById(responsibleId);
-            var responsibleName = responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
-
             summary.CommentedStatusesHistory.Add(new InterviewCommentedStatus()
             {
                 Status = status,
                 Date = date,
                 Comment = comment,
-                Responsible = responsibleName
+                Responsible = GetResponsibleIdName(responsibleId)
             });
+        }
+
+        private string GetResponsibleIdName(Guid responsibleId)
+        {
+            var responsible = this.users.GetById(responsibleId);
+            return responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
         }
     }
 }

@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
@@ -17,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         Establish context = () =>
         {
             rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            IQuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
+            QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 new NumericQuestion()
                 {
@@ -54,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            nestedRosters = questionnaire.GetFixedRosterGroups(null);
+            nestedRosters = questionnaire.GetQuestionnaire().GetFixedRosterGroups(null);
 
         It should_rosterGroups_not_be_empty = () =>
             nestedRosters.ShouldNotBeEmpty();

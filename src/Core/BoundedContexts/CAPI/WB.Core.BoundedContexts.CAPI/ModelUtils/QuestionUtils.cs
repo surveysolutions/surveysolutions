@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,12 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
 {
     public static class QuestionUtils
     {
+        public static string FormatDecimalAnswer(decimal answer)
+        {
+            if (answer == 0)
+                return "0";
+            return answer.ToString("##,###.############################", CultureInfo.CurrentCulture);
+        }
         public static decimal[] ExtractSelectedOptions(object answer)
         {
             return CastAnswerToSingleDimensionalArray<decimal>(answer, decimal.TryParse) ?? CastAnswerToDecimal(answer);

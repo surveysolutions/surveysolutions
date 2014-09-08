@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
@@ -17,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         Establish context = () =>
         {
             rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            IQuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
+            QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion()
                 {
                     PublicKey = rosterSizeQuestionId,
@@ -48,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            nestedRosters = questionnaire.GetRosterGroupsByRosterSizeQuestion(rosterSizeQuestionId);
+            nestedRosters = questionnaire.GetQuestionnaire().GetRosterGroupsByRosterSizeQuestion(rosterSizeQuestionId);
 
         It should_nestedRosters_has_2_elements = () =>
             nestedRosters.Count().ShouldEqual(2);

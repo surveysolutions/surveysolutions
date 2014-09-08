@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public IQuestionnaire GetQuestionnaire(Guid id)
         {
-            return this.GetQuestionnaireImpl(id);
+            return this.GetHistoricalQuestionnaireImpl(id);
         }
 
         public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
@@ -49,33 +49,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return this.historicalQuestionnaireCache[cacheKey];
         }
 
-        private IQuestionnaire GetHistoricalQuestionnaireImpl(Guid id, long version)
+        private IQuestionnaire GetHistoricalQuestionnaireImpl(Guid id, long? version = null)
         {
-            IQuestionnaire historicalQuestionnaire = this.GetQuestionnaireImpl(id, version);
-
-            if (historicalQuestionnaire.Version != version)
-                return null;
-
-            return historicalQuestionnaire;
-        }
-
-        private IQuestionnaire GetQuestionnaireImpl(Guid id, long? version = null)
-        {
-            long maxVersion = version.HasValue ? version.Value : long.MaxValue;
+            long maxEvent = long.MaxValue;
             Snapshot snapshot = null;
             long minVersion = long.MinValue;
-            snapshot = snapshotStore.GetSnapshot(id, maxVersion);
+            snapshot = snapshotStore.GetSnapshot(id, maxEvent);
             if (snapshot != null)
             {
                 minVersion = snapshot.Version + 1;
             }
-            var eventStream = eventStore.ReadFrom(id, minVersion, maxVersion);
+            var eventStream = eventStore.ReadFrom(id, minVersion, maxEvent);
             var aggregateRoot = (Questionnaire) domainRepository.Load(typeof (Questionnaire), snapshot, eventStream);
 
             if (!eventStream.IsEmpty)
                 snapshotStore.SaveShapshot(new Snapshot(id, eventStream.CurrentSourceVersion, aggregateRoot.CreateSnapshot()));
 
-            return aggregateRoot;
+            if(version.HasValue)
+                return aggregateRoot.GetHistoricalQuestionnaire(version.Value);
+            return aggregateRoot.GetQuestionnaire();
         }
     }
 }

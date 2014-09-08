@@ -9,7 +9,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     {
         public SurveyDto(Guid id, string questionnaireTitle, long questionnaireVersion, bool allowCensusMode)
         {
-            this.Id = id.Combine(questionnaireVersion).FormatGuid();
+            this.Id = GetStorageId(id, questionnaireVersion);
             this.QuestionnaireId = id.FormatGuid();
             this.SurveyTitle = questionnaireTitle;
             this.QuestionnaireVersion = questionnaireVersion;
@@ -40,5 +40,10 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         private long questionnaireVersion;
         public bool AllowCensusMode { get; private set; }
         public long TemplateMaxVersion { get; private set; }
+
+        public static string GetStorageId(Guid id, long questionnaireVersion)
+        {
+            return id.Combine(questionnaireVersion).FormatGuid();
+        }
     }
 }

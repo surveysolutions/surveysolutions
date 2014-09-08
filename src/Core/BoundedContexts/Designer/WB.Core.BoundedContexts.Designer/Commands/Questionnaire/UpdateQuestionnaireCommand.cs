@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
         public UpdateQuestionnaireCommand(Guid questionnaireId, string title, bool isPublic, Guid responsibleId)
             : base(questionnaireId, responsibleId)
         {
-            this.Title = title;
+            this.Title = CommandUtils.SanitizeHtml(title);
             this.IsPublic = isPublic;
         }
 

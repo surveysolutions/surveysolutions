@@ -57,6 +57,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 };
             }
 
+            var categoricalSingleQuestion = question as SingleQuestion;
+            if (categoricalSingleQuestion != null)
+            {
+                this.Settings = new
+                {
+                    IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox
+                };
+            }
+
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered;

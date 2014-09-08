@@ -12,5 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
         void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument);
 
         QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version);
+
+        void DeleteQuestionnaireDocument(Guid id, long version);
     }
 }

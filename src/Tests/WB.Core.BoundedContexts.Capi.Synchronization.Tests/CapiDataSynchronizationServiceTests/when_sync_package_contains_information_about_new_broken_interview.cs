@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
                 ResponsibleId = Guid.NewGuid(),
                 Status = (int)InterviewStatus.InterviewerAssigned,
                 TemplateId = Guid.NewGuid(),
-                TemplateVersion = 1,
+                TemplateVersion = 6,
                 Title = "my title",
                 Valid = true,
                 FeaturedQuestionsMeta = new FeaturedQuestionMeta[] { new FeaturedQuestionMeta(Guid.NewGuid(), "t1", "v1"), new FeaturedQuestionMeta(Guid.NewGuid(), "t2", "v2") }
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
                         x.Execute(
                             Moq.It.Is<ApplySynchronizationMetadata>(
                                 param =>
-                                    param.QuestionnaireId == questionnaireMetadata.TemplateId && param.Id == questionnaireMetadata.PublicKey &&
+                                    param.QuestionnaireId == questionnaireMetadata.TemplateId && param.QuestionnaireVersion == questionnaireMetadata.TemplateVersion && param.Id == questionnaireMetadata.PublicKey &&
                                     param.UserId == questionnaireMetadata.ResponsibleId && (int)param.InterviewStatus == questionnaireMetadata.Status &&
                                     param.Comments == "my comment" && param.Valid == true && param.CreatedOnClient == false && param.FeaturedQuestionsMeta.Length == 2), null),
                     Times.Once);

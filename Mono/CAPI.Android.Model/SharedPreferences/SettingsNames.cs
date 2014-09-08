@@ -22,6 +22,6 @@ namespace CAPI.Android.Settings
         public const string RegistrationKeyName = "RegistrationKey";
         public const string INSTALLATION = "INSTALLATION";
 
-        public const string LastHandledSequence = "LastHandledSequence";
+        public const string LastTimestamp = "LastTimestamp";
     }
 }

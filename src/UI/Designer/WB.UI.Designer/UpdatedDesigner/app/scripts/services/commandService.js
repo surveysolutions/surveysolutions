@@ -8,8 +8,9 @@
                 var commandService = {};
 
                 function commandCall(type, command) {
-                    blockUI.start();
-
+                    if (type.indexOf('Move') < 0) {
+                        blockUI.start();
+                    }
                     return $http({
                         method: 'POST',
                         url: urlBase,
@@ -82,11 +83,17 @@
 
                     switch (question.type) {
                     case "SingleOption":
-                    case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.options = question.options;
                         command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.isFilteredCombobox = question.isFilteredCombobox || false;
+                        break;
+                    case "MultyOption":
+                        command.areAnswersOrdered = question.areAnswersOrdered;
+                        command.maxAllowedAnswers = question.maxAllowedAnswers;
+                        command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.options = _.isEmpty(command.linkedToQuestionId) ? question.options : null ;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;
@@ -112,7 +119,6 @@
                         "questionnaireId": questionnaireId,
                         "groupId": chapter.itemId,
                         "title": chapter.title,
-                        "description": "",
                         "condition": "",
                         "isRoster": false,
                         "rosterSizeQuestionId": null,
@@ -131,7 +137,6 @@
                         "questionnaireId": questionnaireId,
                         "groupId": group.itemId,
                         "title": group.title,
-                        "description": "",
                         "condition": "",
                         "isRoster": false,
                         "rosterSizeQuestionId": null,
@@ -149,7 +154,6 @@
                         "questionnaireId": questionnaireId,
                         "groupId": group.itemId,
                         "title": group.title,
-                        "description": "",
                         "condition": "",
                         "isRoster": true,
                         "rosterSizeQuestionId": null,
@@ -178,7 +182,6 @@
                         "questionnaireId": questionnaireId,
                         "groupId": group.itemId,
                         "title": group.title,
-                        "description": group.description,
                         "condition": group.enablementCondition,
                         "isRoster": false,
                         "rosterSizeQuestionId": null,
@@ -258,7 +261,6 @@
                         "questionnaireId": questionnaireId,
                         "groupId": newId,
                         "title": chapter.title,
-                        "description": chapterDescription,
                         "condition": "",
                         "isRoster": false,
                         "rosterSizeQuestionId": null,

@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 => _.Version == questionnaireVersion);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionaire);
+                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId);
+            new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewCreated>();

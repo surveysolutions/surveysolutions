@@ -28,6 +28,9 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.PlainStorage
 
             PlainStorageRow row = this.documentStore.GetById(sqliteId);
 
+            if (row == null)
+                return null;
+
             TEntity entity = DeserializeEntity(row.SerializedData);
 
             return entity;

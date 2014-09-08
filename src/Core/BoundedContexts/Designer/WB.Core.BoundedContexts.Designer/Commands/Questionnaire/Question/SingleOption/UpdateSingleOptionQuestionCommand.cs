@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -23,18 +24,26 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
             QuestionScope scope,
             bool isPreFilled,
             Option[] options,
-            Guid? linkedToQuestionId)
+            Guid? linkedToQuestionId,
+            bool isFilteredCombobox)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel)
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel: variableLabel)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
-            this.ValidationMessage = validationMessage;
+            this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
             this.ValidationExpression = validationExpression;
+            if (options != null)
+                options
+                    .ToList()
+                    .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
+            this.IsFilteredCombobox = isFilteredCombobox;
         }
+
+        public bool IsFilteredCombobox { get; set; }
 
         public QuestionScope Scope { get; set; }
 

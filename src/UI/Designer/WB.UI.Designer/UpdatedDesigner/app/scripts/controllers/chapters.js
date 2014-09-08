@@ -1,7 +1,7 @@
 ﻿angular.module('designerApp')
     .controller('ChaptersCtrl', [
         '$rootScope', '$scope', '$state', 'commandService', 'utilityService', '$log', 'confirmService', 'questionnaireService',
-        function ($rootScope, $scope, $state, commandService, math, $log, confirmService, questionnaireService) {
+        function ($rootScope, $scope, $state, commandService, utilityService, $log, confirmService, questionnaireService) {
             'use strict';
             $scope.chapters = [];
 
@@ -28,7 +28,7 @@
             };
 
             $scope.addNewChapter = function () {
-                var newId = math.guid();
+                var newId = utilityService.guid();
 
                 var newChapter = {
                     title: 'New Chapter',
@@ -44,7 +44,7 @@
 
             $rootScope.cloneChapter = function (chapterId) {
                 var idToClone = chapterId || $state.params.itemId;
-                var newId = math.guid();
+                var newId = utilityService.guid();
                 var chapter = _.find($scope.questionnaire.chapters, { itemId: idToClone });
                 var targetIndex = _.indexOf($scope.questionnaire.chapters, chapter) + 1;
 
@@ -62,7 +62,7 @@
             $scope.deleteChapter = function (chapter) {
                 var itemIdToDelete = chapter.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(chapter);
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(chapter.title));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
@@ -75,7 +75,10 @@
                                 }
 
                                 questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (questionnaire) {
-                                    $scope.questionnaire = questionnaire;
+                                    _.remove($scope.questionnaire.chapters);
+                                    _.forEach(questionnaire.chapters, function(c) {
+                                         $scope.questionnaire.chapters.push(c);
+                                    });
                                     if (questionnaire.chapters.length > 0) {
                                         var defaultChapter = _.first(questionnaire.chapters);
                                         var itemId = defaultChapter.itemId;

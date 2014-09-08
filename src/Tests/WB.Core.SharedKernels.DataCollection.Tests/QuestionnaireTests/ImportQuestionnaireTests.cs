@@ -6,8 +6,10 @@ using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using Newtonsoft.Json;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
@@ -121,7 +123,40 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
+                Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(2));
             }
+        }
+
+
+        [Test]
+        public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported_Then_QuestionnaireDeleted_Event_is_Published()
+        {
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaire();
+            var newState = CreateQuestionnaireDocumentWithOneChapter();
+            var userId = Guid.NewGuid();
+
+            using (var eventContext = new EventContext())
+            {
+                questionnaire.ImportFromDesigner(userId, newState, false);
+                // act
+                questionnaire.DeleteQuestionnaire(1);
+                // assert
+                var lastEvent = GetLastEvent<QuestionnaireDeleted>(eventContext);
+            
+                Assert.That(lastEvent.QuestionnaireVersion, Is.EqualTo(1));
+            }
+        }
+
+        [Test]
+        public void DeleteQuestionnaire_When_Valid_Questionnaire_Version_is_invalid_Imported_Then_QuestionnaireException_sould_be_thrown()
+        {
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaire();
+
+            // act
+
+            Assert.Throws<QuestionnaireException>(() => questionnaire.DeleteQuestionnaire(2));
         }
 
         [Test]
@@ -173,6 +208,67 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(document));
+                Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        public void RegisterPlainQuestionnaire_When_Valid_Questionnaire_Imported_Then_Correct_Event_is_Published()
+        {
+
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Questionnaire questionnaire = CreateQuestionnaire();
+                var document = CreateQuestionnaireDocumentWithOneChapter();
+
+                // act
+                questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false);
+
+                // assert
+                Assert.That(GetLastEvent<PlainQuestionnaireRegistered>(eventContext).AllowCensusMode, Is.EqualTo(false));
+                Assert.That(GetLastEvent<PlainQuestionnaireRegistered>(eventContext).Version, Is.EqualTo(3));
+            }
+        }
+
+
+        [Test]
+        public void
+            RegisterPlainQuestionnaire_When_Valid_Questionnaire_Is_Deleted_From_Plain_Storage_Imported_Then_Correct_Event_is_Published()
+        {
+            // arrange
+            var document = CreateQuestionnaireDocumentWithOneChapter();
+            document.IsDeleted = true;
+
+            var plainQuestionnaireRepository =
+                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(document.PublicKey, 3) == document);
+
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            serviceLocatorMock.Setup(x => x.GetInstance<IPlainQuestionnaireRepository>()).Returns(plainQuestionnaireRepository);
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+            Questionnaire questionnaire = CreateQuestionnaire();
+
+            // act and assert
+            Assert.Throws<QuestionnaireException>(() => questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false));
+        }
+
+        [Test]
+        public void ImportFromDesigner_When_Valid_Questionnaire_but_previouse_version_was_deleted_Imported_Then_Correct_Event_is_Published()
+        {
+
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Questionnaire questionnaire = CreateQuestionnaire();
+                var document = CreateQuestionnaireDocumentWithOneChapter();
+
+                // act
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
+                questionnaire.DeleteQuestionnaire(2);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
+
+                // assert
+                Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(3));
             }
         }
 

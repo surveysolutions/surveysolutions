@@ -19,6 +19,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -33,8 +34,6 @@ using WB.Tools.CapiDataGenerator;
 
 namespace CapiDataGenerator
 {
-    using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
-
     public class MainPageModel : MvxViewModel
     {
         private const int MaxAllowedRosterCount = 40;
@@ -478,7 +477,7 @@ namespace CapiDataGenerator
                     try
                     {
                         var users = CreateInterviewers(interviewersCount);
-                        var questionnaire = new Questionnaire(questionnaireDocument);
+                        var questionnaire = new Questionnaire(questionnaireDocument).GetQuestionnaire();
                         var state = new State(questionnaire.GetFixedRosterGroups());
 
                         this.ImportTemplate(questionnaireDocument);
@@ -658,7 +657,7 @@ namespace CapiDataGenerator
                             supervisorId: SelectedSupervisor.UserId,
                             userId: interviewer.Id,
                             answersTime: DateTime.UtcNow,
-                            answersToFeaturedQuestions: this.GetAnswersByFeaturedQuestions(featuredQuestions)));
+                            answersToFeaturedQuestions: this.GetAnswersByFeaturedQuestions(featuredQuestions), questionnaireVersion: 1));
 
                         commandService.Execute(new AssignInterviewerCommand(interviewId: interviewId, userId: SelectedSupervisor.UserId, interviewerId: interviewer.Id));
 

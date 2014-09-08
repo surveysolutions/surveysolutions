@@ -1,19 +1,9 @@
-﻿using System.Configuration;
-using Cirrious.CrossCore;
+﻿using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Wpf.Views;
 using NConfig;
-using Ninject;
 using System;
 using System.Windows;
-using WB.Core.GenericSubdomains.Logging.NLog;
-using WB.Core.Infrastructure.Files;
-using WB.Core.Infrastructure.Raven;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.QuestionnaireVerification;
-using WB.Core.SharedKernels.SurveyManagement;
-using WB.Core.Synchronization;
 
 namespace CapiDataGenerator
 {

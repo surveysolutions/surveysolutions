@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             else if (this.IsValidCharacter(character))
             {
                 buffer.Append(this[character]);
-                index = index + 1;
+                index = buffer.Length;
             }
             else
             {

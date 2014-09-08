@@ -62,10 +62,10 @@ namespace WB.UI.Capi.Syncronization
             get { return SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);}
         }
 
-        private string lastSequence
+        private string lastTimestamp
         {
-            set { SettingsManager.SetSetting(SettingsNames.LastHandledSequence, value); }
-            get { return SettingsManager.GetSetting(SettingsNames.LastHandledSequence); }
+            set { SettingsManager.SetSetting(SettingsNames.LastTimestamp, value); }
+            get { return SettingsManager.GetSetting(SettingsNames.LastTimestamp); }
         }
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, ICapiDataSynchronizationService dataProcessor,
@@ -96,7 +96,7 @@ namespace WB.UI.Capi.Syncronization
 
             this.CancelIfException(() =>
                 {
-                    this.remoteChuncksForDownload = this.pull.GetChuncks(this.credentials.Login, this.credentials.Password, this.clientRegistrationId, this.lastSequence, this.ct);
+                    this.remoteChuncksForDownload = this.pull.GetChuncks(this.credentials.Login, this.credentials.Password, this.clientRegistrationId, this.lastTimestamp, this.ct);
                     
                     int progressCounter = 0;
                     foreach (var chunckId in this.remoteChuncksForDownload.Keys.ToList())
@@ -106,13 +106,13 @@ namespace WB.UI.Capi.Syncronization
 
                         try
                         {
-                            var data = this.pull.RequestChunck(this.credentials.Login, this.credentials.Password, chunckId.Id, chunckId.Sequence, this.clientRegistrationId, this.ct);
+                            var data = this.pull.RequestChunck(this.credentials.Login, this.credentials.Password, chunckId.Id, chunckId.Timestamp, this.clientRegistrationId, this.ct);
 
                             this.dataProcessor.SavePulledItem(data);
                             this.remoteChuncksForDownload[chunckId] = true;
                             
                             //save last handled item
-                            this.lastSequence = chunckId.Sequence.ToString();
+                            this.lastTimestamp = chunckId.Timestamp.ToString();
                         }
                         catch (Exception e)
                         {

@@ -11,11 +11,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     public class CloneGroupWithoutChildrenCommand : FullGroupDataCommand
     {
         public CloneGroupWithoutChildrenCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
-            string title, string variableName, Guid? rosterSizeQuestionId, string description, string condition,
+            string title, string variableName, Guid? rosterSizeQuestionId, string condition,
             Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster, RosterSizeSourceType rosterSizeSource,
             string[] rosterFixedTitles, Guid? rosterTitleQuestionId)
             : base(
-                questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, description, condition, isRoster, rosterSizeSource,
+                questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, isRoster, rosterSizeSource,
                 rosterFixedTitles, rosterTitleQuestionId)
         {
             this.ParentGroupId = parentGroupId;

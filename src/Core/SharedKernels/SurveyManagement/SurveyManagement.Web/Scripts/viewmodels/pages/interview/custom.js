@@ -75,6 +75,40 @@ ko.bindingHandlers.maskFormatter = {
         $(element).mask(value);
     }
 };
+ko.bindingHandlers.typeahead = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        var $element = $(element);
+        var allBindings = allBindingsAccessor();
+        var source = ko.toJS(ko.utils.unwrapObservable(valueAccessor()));
+
+        var states = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('label'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: source,
+            limit: 10
+        });
+
+        states.initialize();
+
+        $element
+            .attr('autocomplete', 'off')
+            .attr("value", allBindings.value()) // for IE, i love you!
+            .typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 1
+            },
+            {
+                name: 'states',
+                displayKey: 'label',
+                source: states.ttAdapter()
+            }).on('typeahead:selected', function(obj, datum) {
+                allBindings.id(datum.value);
+                $element.change();
+            })
+            .val(allBindings.value());
+    }
+};
 ko.bindingHandlers.numericformatter = {
     init: function (element, valueAccessor) {
         ko.utils.registerEventHandler(element, 'keyup', function () {

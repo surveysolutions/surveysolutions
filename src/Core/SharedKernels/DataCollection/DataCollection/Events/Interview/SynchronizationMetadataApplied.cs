@@ -7,19 +7,20 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class SynchronizationMetadataApplied : InterviewActiveEvent
     {
-        public SynchronizationMetadataApplied(Guid userId, Guid questionnaireId, InterviewStatus status,
+        public SynchronizationMetadataApplied(Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool createdOnClient, string comments)
             : base(userId)
         {
             this.Comments = comments;
             this.QuestionnaireId = questionnaireId;
+            this.QuestionnaireVersion = questionnaireVersion;
             this.Status = status;
             this.FeaturedQuestionsMeta = featuredQuestionsMeta;
             this.CreatedOnClient = createdOnClient;
         }
 
         public Guid QuestionnaireId { get; private set; }
-
+        public long QuestionnaireVersion { get; set; }
         public InterviewStatus Status { get; private set; }
 
         public AnsweredQuestionSynchronizationDto[] FeaturedQuestionsMeta { get; private set; }

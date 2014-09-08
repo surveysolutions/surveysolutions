@@ -5,6 +5,9 @@
         .controller('MainCtrl', [
             '$rootScope', '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'hotkeys', '$modal', '$log',
             function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, $log) {
+
+                var isIE9 = (navigator.appVersion.indexOf("MSIE 9.") != -1);
+
                 $scope.verificationStatus = {
                     errorsCount: null,
                     errors: [],
@@ -28,13 +31,14 @@
 
                         var verificationModal = $('#verification-modal');
 
+                        if (isIE9) {
+                            verificationModal.addClass("ie9-backdrop");
+                        }
+
                         if ($scope.verificationStatus.errorsCount > 0) {
                             verificationModal.modal({
-                                backdrop: false,
+                                backdrop: isIE9,
                                 show: true
-                            });
-                            $('#verification-modal .modal-dialog .arrow').css({
-                                left: $('#verification-btn').offset().left - 10
                             });
                         } else {
                             if (verificationModal.hasClass('in'))
@@ -44,17 +48,17 @@
                 };
 
                 $scope.answerTypeClass = {
-                    YesNo: 'icon-singleanswer',
-                    DropDownList: 'icon-singleanswer',
-                    MultyOption: 'icon-multianswer',
-                    Numeric: 'icon-intedit',
+                    YesNo: 'icon-singleoption',
+                    DropDownList: 'icon-singleoption',
+                    MultyOption: 'icon-multyoption',
+                    Numeric: 'icon-numeric',
                     DateTime: 'icon-datetime',
-                    GpsCoordinates: 'icon-geoloc',
+                    GpsCoordinates: 'icon-gpscoordinates',
                     AutoPropagate: 'icon-textedit',
-                    TextList: 'icon-textarea',
-                    QRBarcode: 'icon-multimedia',
-                    Text: 'icon-textedit',
-                    SingleOption: 'icon-singleanswer'
+                    TextList: 'icon-textlist',
+                    QRBarcode: 'icon-qrbarcode',
+                    Text: 'icon-text',
+                    SingleOption: 'icon-singleoption'
                 };
 
                 $scope.chapters = [];
@@ -90,6 +94,9 @@
                 };
 
                 $scope.navigateTo = function (reference) {
+                    if (isIE9) {
+                        $('#verification-modal').modal('hide');
+                    }
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,
                         itemId: reference.itemId

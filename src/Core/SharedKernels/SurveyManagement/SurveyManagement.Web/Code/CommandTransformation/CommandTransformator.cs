@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
                                                            command.QuestionnaireId,
                                                            answers,
                                                            DateTime.UtcNow,
-                                                           command.SupervisorId);
+                                                           command.SupervisorId, command.QuestionnaireVersion);
             return resultCommand;
         }
 

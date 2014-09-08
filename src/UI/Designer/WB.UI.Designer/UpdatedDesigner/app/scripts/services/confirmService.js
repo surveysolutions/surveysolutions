@@ -4,7 +4,12 @@
         function($modal) {
             var confirmService = {};
 
-            confirmService.open = function(item) {
+            confirmService.open = function (item) {
+                var scopeItem = {
+                    title: item.title || "",
+                    okButtonTitle: item.okButtonTitle || "DELETE",
+                    cancelButtonTitle: item.cancelButtonTitle || "BACK TO DESIGNER"
+                };
                 return $modal.open({
                     templateUrl: 'views/confirm.html',
                     controller: 'confirmCtrl',
@@ -12,7 +17,7 @@
                     resolve:
                     {
                         item: function() {
-                            return item;
+                            return scopeItem;
                         }
                     }
                 });

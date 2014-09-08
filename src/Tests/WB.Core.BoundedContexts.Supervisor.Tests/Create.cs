@@ -63,18 +63,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             ILogger logger = null,
             IJsonUtils jsonUtils = null,
             ICommandService commandService = null,
-            HeadquartersPushContext headquartersPushContext = null)
+            HeadquartersPushContext headquartersPushContext = null,
+            IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage=null,
+            IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage=null,
+            IHeadquartersInterviewReader headquartersInterviewReader=null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository=null)
         {
             return new InterviewsSynchronizer(
                 Mock.Of<IAtomFeedReader>(),
                 HeadquartersSettings(),
                 logger ?? Mock.Of<ILogger>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                Mock.Of<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
-                Mock.Of<IPlainQuestionnaireRepository>(),
+                plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>(),
+                userDocumentStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
+                plainQuestionnaireRepository?? Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())==new QuestionnaireDocument()),
                 Mock.Of<IHeadquartersQuestionnaireReader>(),
-                Mock.Of<IHeadquartersInterviewReader>(),
+                headquartersInterviewReader ?? Mock.Of<IHeadquartersInterviewReader>(),
                 HeadquartersPullContext(),
                 headquartersPushContext ?? HeadquartersPushContext(),
                 eventStore ?? Mock.Of<IEventStore>(),
@@ -96,7 +100,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 interviewsFeedUri ?? new Uri("http://localhost/"),
                 questionnaireDetailsEndpoint,
                 accessToken,
-                interviewsPushUrl ?? new Uri("http://localhost"));
+                interviewsPushUrl ?? new Uri("http://localhost"), new Uri("http://localhost"));
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null,
@@ -125,6 +129,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 Mock.Of<IUserChangedFeedReader>(),
                 Mock.Of<ILocalUserFeedProcessor>(),
                 interviewsSynchronizer ?? Mock.Of<IInterviewsSynchronizer>(),
+                Mock.Of<IQuestionnaireSynchronizer>(),
                 HeadquartersPullContext(),
                 HeadquartersPushContext());
         }

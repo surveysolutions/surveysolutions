@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Denormalizer
         public override void PostSaveHandler(IPublishedEvent<FileUploaded> evnt)
         {
             this.syncStorage.SaveImage(evnt.EventSourceId, evnt.Payload.Title, evnt.Payload.Description,
-                                             evnt.Payload.OriginalFile);
+                                             evnt.Payload.OriginalFile, evnt.EventTimeStamp);
         }
     }
 }
