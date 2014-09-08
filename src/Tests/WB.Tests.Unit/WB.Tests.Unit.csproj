@@ -150,11 +150,6 @@
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\ChartStatisticsViewFactoryTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_creating_statistics_with_empty_days.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_creating_statistics_with_specific_date_range.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_from_date_bigger_then_to_date.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_without_data.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\PdfQuestionnaireViewTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_entity_and_root_id_is_used_as_parent_group_id.cs" />
@@ -185,6 +180,7 @@
     <Folder Include="BoundedContexts\Supervisor\" />
     <Folder Include="GenericSubdomains\Logging\" />
     <Folder Include="Infrastructure\" />
+    <Folder Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

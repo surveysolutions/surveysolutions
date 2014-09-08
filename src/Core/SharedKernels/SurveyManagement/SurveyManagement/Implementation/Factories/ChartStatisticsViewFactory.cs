@@ -1,177 +1,126 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using Raven.Abstractions.Extensions;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
-    internal class ChartStatisticsViewFactory : IChartStatisticsViewFactory
+    public class ChartStatisticsViewFactory : IChartStatisticsViewFactory
     {
-        private class IntermediateCalculationsData
-        {
-            public IntermediateCalculationsData(int length)
-            {
-                this.Ticks = new string[length, 2];
-                this.SupervisorAssigned = new int[length];
-                this.InterviewerAssigned = new int[length];
-                this.Completed = new int[length];
-                this.RejectedBySupervisor = new int[length];
-                this.ApprovedBySupervisor = new int[length];
-                this.RejectedByHeadquarters = new int[length];
-                this.ApprovedByHeadquarters = new int[length];
-            }
+        private readonly IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate> statisticsReader;
 
-            public string[,] Ticks { get; private set; }
-            public int[] SupervisorAssigned { get; private set; }
-            public int[] InterviewerAssigned { get; private set; }
-            public int[] Completed { get; private set; }
-            public int[] RejectedBySupervisor { get; private set; }
-            public int[] ApprovedBySupervisor { get; private set; }
-            public int[] RejectedByHeadquarters { get; private set; }
-            public int[] ApprovedByHeadquarters { get; private set; }
-
-            public void FillDayWithStatistics(int dayIndex, StatisticsLineGroupedByDateAndTemplate statistics, DateTime date)
-            {
-                this.Ticks[dayIndex, 0] = (dayIndex + 1).ToString(CultureInfo.InvariantCulture);
-                this.Ticks[dayIndex, 1] = date.ToShortDateString();
-
-                if (statistics != null)
-                {
-                    this.SupervisorAssigned[dayIndex] = statistics.SupervisorAssignedCount;
-                    this.InterviewerAssigned[dayIndex] = statistics.InterviewerAssignedCount;
-                    this.Completed[dayIndex] = statistics.CompletedCount;
-                    this.RejectedBySupervisor[dayIndex] = statistics.RejectedBySupervisorCount;
-                    this.ApprovedBySupervisor[dayIndex] = statistics.ApprovedBySupervisorCount;
-                    this.RejectedByHeadquarters[dayIndex] = statistics.RejectedByHeadquartersCount;
-                    this.ApprovedByHeadquarters[dayIndex] = statistics.ApprovedByHeadquartersCount;
-                }
-            }
-
-            public void FillDayWithPreviousDayData(int dayIndex, DateTime date)
-            {
-                this.Ticks[dayIndex, 0] = (dayIndex + 1).ToString(CultureInfo.InvariantCulture);
-                this.Ticks[dayIndex, 1] = date.ToShortDateString();
-
-                if (dayIndex > 0)
-                {
-                    this.SupervisorAssigned[dayIndex] = this.SupervisorAssigned[dayIndex - 1];
-                    this.InterviewerAssigned[dayIndex] = this.InterviewerAssigned[dayIndex - 1];
-                    this.Completed[dayIndex] = this.Completed[dayIndex - 1];
-                    this.RejectedBySupervisor[dayIndex] = this.RejectedBySupervisor[dayIndex - 1];
-                    this.ApprovedBySupervisor[dayIndex] = this.ApprovedBySupervisor[dayIndex - 1];
-                    this.RejectedByHeadquarters[dayIndex] = this.RejectedByHeadquarters[dayIndex - 1];
-                    this.ApprovedByHeadquarters[dayIndex] = this.ApprovedByHeadquarters[dayIndex - 1];
-                }
-            }
-        }
-
-        private readonly IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> statisticsReader;
-
-        public ChartStatisticsViewFactory(IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate> statisticsReader)
+        public ChartStatisticsViewFactory(IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate> statisticsReader)
         {
             this.statisticsReader = statisticsReader;
         }
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
-            List<StatisticsLineGroupedByDateAndTemplate> collectedStatistics = this.GetOrderedQuestionnaireStatistics(input.QuestionnaireId, input.QuestionnaireVersion);
+            var collectedStatistics = statisticsReader.GetById(GetStatisticsKey(input.QuestionnaireId, input.QuestionnaireVersion));
 
-            if (collectedStatistics.Count == 0)
-                return new ChartStatisticsView { Ticks = new string[,] { }, Stats = new int[][] { } };
+            if (collectedStatistics.StatisticsByDate.Count == 0)
+                return new ChartStatisticsView { Lines = new object[0][][] };
 
-            DateTime firstDate = collectedStatistics.First().Date;
-            DateTime lastDate = input.CurrentDate;
-            int totalDaysCount = Convert.ToInt32((lastDate - firstDate).TotalDays) + 1;
+            var minCollectedDate = collectedStatistics.StatisticsByDate.Keys.Min();
+            var maxCollectedDate = collectedStatistics.StatisticsByDate.Keys.Max();
 
-            int filterRangeDaysCount = Convert.ToInt32((input.To - input.From).TotalDays) + 1;
-            int resultDaysCount = Math.Min(totalDaysCount, filterRangeDaysCount);
+            var leftDate = minCollectedDate < input.From ? input.From : minCollectedDate;
+            var rightDate = maxCollectedDate > input.To ? input.To : maxCollectedDate;
 
-            if (resultDaysCount <= 0)
-                return new ChartStatisticsView { Ticks = new string[,] { }, Stats = new int[][] { } };
+            var selectedRange = new Dictionary<DateTime, QuestionnaireStatisticsForChart>();
 
-            var firstDayOnChart = Max(input.From, firstDate);
-
-
-            var intermediateData = new IntermediateCalculationsData(resultDaysCount);
-
-            FillFirstDayWithStatisticsCollectedUpToThatDay(intermediateData, firstDayOnChart, collectedStatistics);
-
-            for (int dayIndex = 1; dayIndex < resultDaysCount; dayIndex++)
+            if (leftDate > rightDate)
             {
-                var date = firstDayOnChart.AddDays(dayIndex);
+                if (rightDate < input.From)
+                {
+                    var lastDay = collectedStatistics.StatisticsByDate.Keys.Max();
+                    var statisticsToRepeat = collectedStatistics.StatisticsByDate[lastDay];
+                    RepeatLastStatistics(selectedRange, input.From, input.To, statisticsToRepeat);
 
-                FillDayWithStatisticsOrPreviousDayData(intermediateData, dayIndex, date, collectedStatistics);
-            }
-
-
-            return ToChartStatisticsView(intermediateData);
-        }
-
-        private static void FillDayWithStatisticsOrPreviousDayData(IntermediateCalculationsData intermediateData, int dayIndex, DateTime date, List<StatisticsLineGroupedByDateAndTemplate> questionnaireStats)
-        {
-            StatisticsLineGroupedByDateAndTemplate statistics = questionnaireStats.Find(_ => AreDayKeysEqual(_.Date, date));
-
-            if (statistics != null)
-            {
-                intermediateData.FillDayWithStatistics(dayIndex, statistics, date);
+                    AddReadlStatistics(collectedStatistics, leftDate, maxCollectedDate, selectedRange);
+                }
+                else
+                {
+                    RepeatLastStatistics(selectedRange, input.From, input.To, new QuestionnaireStatisticsForChart());
+                }
             }
             else
             {
-                intermediateData.FillDayWithPreviousDayData(dayIndex, date);
+                if (leftDate > input.From)
+                {
+                    RepeatLastStatistics(selectedRange, input.From, leftDate.AddDays(-1), new QuestionnaireStatisticsForChart());
+                }
+
+                if (rightDate < input.To)
+                {
+                    RepeatLastStatistics(selectedRange, rightDate.AddDays(1), input.To, collectedStatistics.StatisticsByDate[rightDate]);
+                }
+
+                AddReadlStatistics(collectedStatistics, leftDate, maxCollectedDate, selectedRange);
+            }
+
+           
+
+            return ChartStatisticsView(selectedRange, input.From, input.To);
+        }
+
+        private static void AddReadlStatistics(StatisticsGroupedByDateAndTemplate collectedStatistics, DateTime leftDate, DateTime maxCollectedDate,
+            Dictionary<DateTime, QuestionnaireStatisticsForChart> selectedRange)
+        {
+            collectedStatistics.StatisticsByDate
+                .Where(x => x.Key >= leftDate.Date && x.Key.Date <= maxCollectedDate.Date)
+                .ForEach(x => selectedRange.Add(x.Key, x.Value));
+        }
+
+        private void RepeatLastStatistics(Dictionary<DateTime, QuestionnaireStatisticsForChart> selectedRange1, DateTime from, DateTime to, QuestionnaireStatisticsForChart statisticsToRepeat)
+        {
+            var date = from.Date;
+            while (date <= to)
+            {
+                selectedRange1.Add(date, new QuestionnaireStatisticsForChart(statisticsToRepeat));
+                date = date.AddDays(1);
             }
         }
 
-        private static void FillFirstDayWithStatisticsCollectedUpToThatDay(IntermediateCalculationsData intermediateData, DateTime day, List<StatisticsLineGroupedByDateAndTemplate> questionnaireStats)
+        private static ChartStatisticsView ChartStatisticsView(Dictionary<DateTime, QuestionnaireStatisticsForChart> range, DateTime minCollectedDate, DateTime maxCollectedDate)
         {
-            var statistics = GetLastExistingStatisticsForDay(day, questionnaireStats);
+            var selectedRange = range
+                .OrderBy(x => x.Key)
+                .ToList();
 
-            intermediateData.FillDayWithStatistics(0, statistics, day);
-        }
+            var lines = new List<object[][]>
+            {
+                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.SupervisorAssignedCount }).ToArray(),
+                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.InterviewerAssignedCount }).ToArray(),
+                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.CompletedCount }).ToArray(),
+                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.RejectedBySupervisorCount }).ToArray(),
+                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.ApprovedBySupervisorCount }).ToArray(),
+                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.RejectedByHeadquartersCount }).ToArray(),
+                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.ApprovedByHeadquartersCount }).ToArray()
+            };
 
-        private static StatisticsLineGroupedByDateAndTemplate GetLastExistingStatisticsForDay(DateTime day, List<StatisticsLineGroupedByDateAndTemplate> questionnaireStats)
-        {
-            return questionnaireStats.LastOrDefault(stats => stats.Date < day || AreDayKeysEqual(stats.Date, day));
-        }
-
-        private List<StatisticsLineGroupedByDateAndTemplate> GetOrderedQuestionnaireStatistics(Guid questionnaireId, long? questionnaireVersion)
-        {
-            return this.statisticsReader.Query(_ => _
-                .Where(s => s.QuestionnaireId == questionnaireId && s.QuestionnaireVersion == questionnaireVersion)
-                .OrderBy(o => o.Date)
-                .ToList()
-            );
-        }
-
-        private static ChartStatisticsView ToChartStatisticsView(IntermediateCalculationsData intermediateData)
-        {
             return new ChartStatisticsView
             {
-                Stats = new[]
-                {
-                    intermediateData.SupervisorAssigned,
-                    intermediateData.InterviewerAssigned,
-                    intermediateData.Completed,
-                    intermediateData.RejectedBySupervisor,
-                    intermediateData.ApprovedBySupervisor,
-                    intermediateData.RejectedByHeadquarters,
-                    intermediateData.ApprovedByHeadquarters,
-                },
-                Ticks = intermediateData.Ticks,
+                Lines = lines.ToArray(),
+                From = FormatDate(minCollectedDate),
+                To = FormatDate(maxCollectedDate)
             };
         }
 
-        private static DateTime Max(DateTime first, DateTime second)
+        private static string FormatDate(DateTime x)
         {
-            return first > second ? first : second;
+            return x.ToString("MM/dd/yyyy");
         }
 
-        private static bool AreDayKeysEqual(DateTime first, DateTime second)
+        private string GetStatisticsKey(Guid questionnaireId, long questionnaireVersion)
         {
-            return first.ToShortDateString() == second.ToShortDateString();
+            return String.Format("{0}_{1}$",
+                questionnaireId,
+                questionnaireVersion.ToString().PadLeft(3, '_'));
         }
     }
 }
