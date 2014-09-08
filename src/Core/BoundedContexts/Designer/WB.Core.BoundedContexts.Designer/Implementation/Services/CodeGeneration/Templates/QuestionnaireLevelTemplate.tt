@@ -14,7 +14,7 @@
         {#>
             EnablementStates.Add(<#=@group.GeneratedStateName#>.ItemId, <#= @group.GeneratedStateName#>);
         <# }#>
-
+                
         <#foreach (var q in Model.Questions)
         {#>
             EnablementStates.Add(<#=q.GeneratedStateName#>.ItemId, <#=q.GeneratedStateName#>);

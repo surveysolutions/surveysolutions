@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 {
     //[Ignore("bulk test run failed on server build")]
-    internal class when_expression_state_processes_condition_expressions : CodeGenerationTestsContext
+    internal class when_expression_state_processes_condition_expressions_on_roster : CodeGenerationTestsContext
     {
         private Establish context = () =>
         {
@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
-            questionnaireDocument = CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(questionnaireId, questionId, group1Id);
+            questionnaireDocument = CreateQuestionnairDocumenteHavingRosterWithConditions(questionnaireId, questionId, group1Id);
 
             IInterviewExpressionStateProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
 
@@ -32,7 +32,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();
 
-            state.UpdateIntAnswer(questionId, new decimal[0], 4);
+            state.UpdateIntAnswer(questionId, new decimal[0], 1);
+            state.AddRoster(group1Id, new decimal[0], 1, null);
         };
 
         private Because of = () =>

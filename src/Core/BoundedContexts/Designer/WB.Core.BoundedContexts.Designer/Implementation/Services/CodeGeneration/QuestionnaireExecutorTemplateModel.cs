@@ -258,13 +258,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        public List<Tuple<string, string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions, List<GroupTemplateModel> groups)
+        public List<Tuple<string, string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions, List<GroupTemplateModel> groups, List<RosterTemplateModel> rosters = null)
         {
-            List<GroupTemplateModel> groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Conditions)).Reverse().ToList();
+            var groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Conditions)).Reverse().ToList();
             var questionsWithConditions = questions.Where(q => !string.IsNullOrWhiteSpace(q.Conditions)).ToList();
+            var rostersWithConditions = rosters != null
+                ? rosters.Where(r => !string.IsNullOrWhiteSpace(r.Conditions)).Reverse().ToList()
+                : new List<RosterTemplateModel>();
+
 
             Dictionary<Guid, Tuple<string, string>> itemsToSort = 
                 groupsWithConditions.ToDictionary(g => g.Id, g => new Tuple<string, string>(g.GeneratedConditionsMethodName, g.GeneratedStateName));
+
+            rostersWithConditions.ForEach(r => itemsToSort.Add(r.Id, new Tuple<string, string>(r.GeneratedConditionsMethodName, r.GeneratedStateName)));
+
             questionsWithConditions.ForEach(q => itemsToSort.Add(q.Id, new Tuple<string, string>(q.GeneratedConditionsMethodName, q.GeneratedStateName)));
 
             HashSet<Guid> processedQuestion = new HashSet<Guid>();
@@ -272,6 +279,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var conditionalStack = new Stack<Guid>();
             
             foreach (var item in questionsWithConditions)
+            {
+                conditionalStack.Push(item.Id);
+            }
+
+            foreach (var item in rostersWithConditions)
             {
                 conditionalStack.Push(item.Id);
             }

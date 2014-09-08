@@ -463,7 +463,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
             public long? age
             {
-                get { return this.age_state.State == State.Enabled ? this.@__age : null; }
+                get { return this.age_state.State != State.Disabled ? this.@__age : null; }
                 set { this.@__age = value; }
             }
 

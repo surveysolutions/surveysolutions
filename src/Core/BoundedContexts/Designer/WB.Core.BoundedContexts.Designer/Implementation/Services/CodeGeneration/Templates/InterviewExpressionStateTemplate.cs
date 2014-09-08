@@ -282,7 +282,7 @@ foreach (var r in QuestionnaireTemplateStructure.AllRosters)
             
             #line default
             #line hidden
-            this.Write("                        \r\n\r\n            public static readonly Guid[] ");
+            this.Write("            \r\n            public static readonly Guid[] ");
             
             #line 227 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedRosterScopeName));
@@ -292,7 +292,7 @@ foreach (var r in QuestionnaireTemplateStructure.AllRosters)
             this.Write(" = new[] {@__questionnaire};\r\n\r\n            ");
             
             #line 229 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
+foreach (var r in QuestionnaireTemplateStructure.AllRosters)
             {
             
             #line default
@@ -311,23 +311,24 @@ foreach (var r in QuestionnaireTemplateStructure.AllRosters)
             
             #line default
             #line hidden
-            this.Write("};            \r\n            ");
+            this.Write("};\r\n            ");
             
             #line 232 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
  }
             
             #line default
             #line hidden
-            this.Write(" \r\n            \r\n            public static Dictionary<Guid, Guid[]> conditionalDe" +
-                    "pendencies = new Dictionary<Guid, Guid[]>()\r\n            {\r\n                ");
+            this.Write("            \r\n            public static Dictionary<Guid, Guid[]> conditionalDepen" +
+                    "dencies = new Dictionary<Guid, Guid[]>()\r\n            {            \r\n           " +
+                    "     ");
             
             #line 236 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies) 
+foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies)
                 {
             
             #line default
             #line hidden
-            this.Write("                { Guid.Parse(\"");
+            this.Write("                {Guid.Parse(\"");
             
             #line 238 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(dependency.Key));
@@ -432,7 +433,7 @@ foreach (var q in QuestionnaireTemplateStructure.AllQuestions)
             
             #line default
             #line hidden
-            this.Write("},            \r\n                ");
+            this.Write("},\r\n                ");
             
             #line 266 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
  }
@@ -471,7 +472,7 @@ foreach (var g in QuestionnaireTemplateStructure.AllGroups)
             this.Write("                //rosters\r\n                ");
             
             #line 273 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
-foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
+foreach (var r in QuestionnaireTemplateStructure.AllRosters)
                 {
             
             #line default
