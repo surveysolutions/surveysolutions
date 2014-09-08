@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -29,6 +30,7 @@ namespace WB.UI.Designer.Api
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
+        private const int MaxCountOfOptionForFileredCombobox = 20;
 
         public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
@@ -84,6 +86,17 @@ namespace WB.UI.Designer.Api
             if (editQuestionView == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            bool shouldTruncateOptions = editQuestionView.Type == QuestionType.SingleOption
+                && editQuestionView.IsFilteredCombobox == true
+                && editQuestionView.Options != null;
+
+            if (shouldTruncateOptions)
+            {
+                editQuestionView.WereOptionsTruncated = editQuestionView.Options.Length > MaxCountOfOptionForFileredCombobox;
+                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();
+                
             }
 
             return editQuestionView;

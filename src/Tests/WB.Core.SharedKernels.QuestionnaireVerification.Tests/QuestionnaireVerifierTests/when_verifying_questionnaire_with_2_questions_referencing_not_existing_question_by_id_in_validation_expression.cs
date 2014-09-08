@@ -31,16 +31,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 
                     ValidationMessage = "some message",
                     ValidationExpression = ValidationExpressionWithNotExistingQuestion,
-                    StataExportCaption = firstIncorrectQuestionId.ToString()
+                    StataExportCaption = "var1"
                 },
                 new NumericQuestion
                 {
                     PublicKey = secondIncorrectQuestionId,
                     ValidationMessage = "some message",
                     ValidationExpression = ValidationExpressionWithNotExistingQuestion,
-                    StataExportCaption = secondIncorrectQuestionId.ToString()
+                    StataExportCaption = "var2"
                 },
-                new TextQuestion { PublicKey = textQuestionId, StataExportCaption = textQuestionId.ToString() },
+                new TextQuestion { PublicKey = textQuestionId, StataExportCaption = "var3" },
                 new Group { PublicKey = Guid.NewGuid() }
             );
 

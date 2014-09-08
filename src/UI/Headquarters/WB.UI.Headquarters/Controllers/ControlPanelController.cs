@@ -64,6 +64,12 @@ namespace WB.UI.Headquarters.Controllers
         {
             return this.File(this.incomePackagesRepository.GetUnhandledPackagePath(id), System.Net.Mime.MediaTypeNames.Application.Octet);
         }
+        
+        [Authorize]
+        public ActionResult Settings()
+        {
+            return View();
+        }
 
         public ActionResult ReadLayer()
         {

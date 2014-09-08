@@ -6,6 +6,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
 {
     internal class InterviewState
     {
+        public InterviewState(bool wasHardDeleted)
+        {
+            WasHardDeleted = wasHardDeleted;
+        }
         public InterviewState(Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             Dictionary<string, object> answersSupportedInExpressions, Dictionary<string, Tuple<Guid, decimal[], decimal[]>> linkedSingleOptionAnswers,
             Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers, Dictionary<string, Tuple<decimal, string>[]> textListAnswers,
@@ -44,6 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public HashSet<string> ValidAnsweredQuestions { get; private set; }
         public HashSet<string> InvalidAnsweredQuestions { get; private set; }
         public bool WasCompleted { get; private set; }
+        public bool WasHardDeleted { get; private set; }
         public Dictionary<string, Tuple<decimal, string>[]> TextListAnswers { get; set; }
         public IInterviewExpressionState ExpressionProcessorState { get; set; }
     }

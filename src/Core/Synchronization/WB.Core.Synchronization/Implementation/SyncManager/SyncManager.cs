@@ -59,17 +59,17 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return this.syncProvider.HandleSyncItem(item, Guid.Empty);
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
+        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, DateTime timestamp)
         {
-            return this.syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey, clientSequence);
+            return this.syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey, timestamp);
         }
 
 
-        public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, long sequence)
+        public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, DateTime timestamp)
         {
             var syncPackage = new SyncPackage();
 
-            SyncItem item = this.syncProvider.GetSyncItem(clientRegistrationId, id, sequence);
+            SyncItem item = this.syncProvider.GetSyncItem(clientRegistrationId, id, timestamp);
 
             if (item != null)
             {
@@ -85,11 +85,11 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return syncPackage;
         }
 
-        public SyncPackage ReceiveLastSyncPackage(Guid userId, Guid clientRegistrationId, long sequence)
+        public SyncPackage ReceiveLastSyncPackage(Guid userId, Guid clientRegistrationId, DateTime timestamp)
         {
             var syncPackage = new SyncPackage();
 
-            var items = this.syncProvider.GetSyncItemBulk(userId, clientRegistrationId, sequence);
+            var items = this.syncProvider.GetSyncItemBulk(userId, clientRegistrationId, timestamp);
 
             if (items != null)
             {
@@ -106,7 +106,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return syncPackage;
         }
 
-        public int GetNumberToGet(Guid userId, Guid clientRegistrationId, long sequence)
+        public int GetNumberToGet(Guid userId, Guid clientRegistrationId, DateTime timestamp)
         {
             return 0;
         }

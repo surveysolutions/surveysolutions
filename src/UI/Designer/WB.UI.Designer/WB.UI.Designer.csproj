@@ -50,6 +50,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="CsvHelper">
+      <HintPath>..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -114,13 +117,11 @@
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Abstractions.dll</HintPath>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -424,6 +425,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="UpdatedDesigner\app\scripts\components\contextMenu.js" />
+    <Content Include="UpdatedDesigner\app\scripts\filters\escapeFilter.js" />
     <Content Include="UpdatedDesigner\app\views\treegroup.html" />
     <Content Include="UpdatedDesigner\app\views\treequestion.html" />
     <Content Include="UpdatedDesigner\app\views\treestatictext.html" />
@@ -467,6 +469,18 @@
     <Content Include="UpdatedDesigner\content\designer-editor\animations.min.css">
       <DependentUpon>animations.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.css">
+      <DependentUpon>wb-designer-editor.css.less</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.min.css">
+      <DependentUpon>wb-designer-editor.css.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.css">
+      <DependentUpon>wb-designer-verify-popover.css.less</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.min.css">
+      <DependentUpon>wb-designer-verify-popover.css.css</DependentUpon>
+    </Content>
     <Content Include="UpdatedDesigner\content\designer-editor\wb-question-list.css.min.css">
       <DependentUpon>wb-question-list.css.css</DependentUpon>
     </Content>
@@ -474,6 +488,9 @@
     <Content Include="UpdatedDesigner\content\i\chapter-panel-btn-small.png" />
     <Content Include="UpdatedDesigner\content\i\cross-red.png" />
     <Content Include="UpdatedDesigner\content\i\cross.png" />
+    <Content Include="UpdatedDesigner\content\i\d-loading.gif" />
+    <Content Include="UpdatedDesigner\content\i\d-normal.gif" />
+    <Content Include="UpdatedDesigner\content\i\icons.png" />
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.css" />
@@ -506,6 +523,12 @@
       <DependentUpon>vendor.css.css</DependentUpon>
     </Content>
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.css.map" />
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-editor.css.css.map">
+      <DependentUpon>wb-designer-editor.css.css</DependentUpon>
+    </Content>
+    <Content Include="UpdatedDesigner\content\designer-editor\wb-designer-verify-popover.css.css.map">
+      <DependentUpon>wb-designer-verify-popover.css.css</DependentUpon>
+    </Content>
     <None Include="UpdatedDesigner\data\editQuestion\d6c5faeed9fe43338b76e7a3ef184f5a.json" />
     <Content Include="UpdatedDesigner\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\app\index.html" />
@@ -645,15 +668,6 @@
     <Content Include="UpdatedDesigner\content\i\dropdown-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\dropup-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\filter-glyph.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-datetime-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-floatedit-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-geoloc-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-intedit-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-multianswer-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-multimedia-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-singleanswer-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-textarea-sm.png" />
-    <Content Include="UpdatedDesigner\content\i\icon-cat-textedit-sm.png" />
     <Content Include="UpdatedDesigner\content\i\icon-qname-block-link.png" />
     <Content Include="UpdatedDesigner\content\i\left-panel-shadow.png" />
     <Content Include="UpdatedDesigner\content\i\pretty-checkable-sprites-org.png" />
@@ -668,6 +682,7 @@
     <Content Include="UpdatedDesigner\app\views\main.html" />
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
+    <Content Include="UpdatedDesigner\gulpfile.js" />
     <Content Include="UpdatedDesigner\test.html" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
@@ -706,6 +721,12 @@
     <Content Include="UpdatedDesigner\vendor\angular-mocks\angular-mocks.js" />
     <Content Include="UpdatedDesigner\vendor\angular-mocks\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-mocks\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\dependencies\jquery.mousewheel.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\dependencies\perfect-scrollbar.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\dependencies\perfect-scrollbar.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\examples\loremipsum.html" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\src\angular-perfect-scrollbar.js" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\app\demo.html" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\src\pnotify.js" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\angular-resource.js" />
@@ -1030,11 +1051,6 @@
     <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.js" />
     <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.min.js" />
     <Content Include="UpdatedDesigner\vendor\lodash\LICENSE.txt" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.concat.min.js" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.css" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.js" />
-    <Content Include="UpdatedDesigner\vendor\malihu-custom-scrollbar-plugin\mCSB_buttons.png" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\.gitignore" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\Gruntfile.js" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\mousetrap.js" />
@@ -1060,6 +1076,26 @@
     <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\sinon-ie-1.7.1.js" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\tests\mousetrap.html" />
     <Content Include="UpdatedDesigner\vendor\mousetrap\tests\test.mousetrap.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\azusa.jpg" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-default.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-minScrollbarLength.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-suppressScrollAxis.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-useBothWheelAxes.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-wheelPropagation.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\options-wheelSpeed.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\reach-the-end-callback.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\rtl.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\scrollbars-on-the-opposite-side.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\text-content.html" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\Gruntfile.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\min\perfect-scrollbar.min.css" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\min\perfect-scrollbar.min.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\min\perfect-scrollbar.with-mousewheel.min.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\src\jquery.mousewheel.js" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\src\perfect-scrollbar.css" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\src\perfect-scrollbar.js" />
     <Content Include="UpdatedDesigner\vendor\pines-notify\.gitignore" />
     <Content Include="UpdatedDesigner\vendor\pines-notify\pnotify.buttons.css" />
     <Content Include="UpdatedDesigner\vendor\pines-notify\pnotify.buttons.js" />
@@ -1288,6 +1324,27 @@
     <Content Include="UpdatedDesigner\vendor\angular-resource\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\README.md" />
     <Content Include="UpdatedDesigner\fonts\OpenSans300.woff" />
+    <Content Include="Views\Questionnaire\EditOptions.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\package.json" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\perfect-scrollbar.jquery.json" />
+    <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\README.md" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\package.json" />
+    <Content Include="UpdatedDesigner\vendor\angular-perfect-scrollbar\README.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\CHANGES.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\CONTRIBUTING.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\README.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js.map">
+      <DependentUpon>ng-context-menu.min.js</DependentUpon>
+    </Content>
+    <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1331,9 +1388,9 @@
       <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Core.Infrastructure.Raven</Name>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Core.Infrastructure.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

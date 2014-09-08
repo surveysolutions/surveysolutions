@@ -40,14 +40,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new SingleQuestion()
                 {
                     PublicKey = categoricalQuestionId,
-                    StataExportCaption = categoricalQuestionId.ToString(),
+                    StataExportCaption = "var1",
                     LinkedToQuestionId = linkedSourceQuestionId
                 },
                 new NumericQuestion
                 {
                     PublicKey = questionWithEnablementConditionId,
                     ConditionExpression = "some condition",
-                    StataExportCaption = questionWithEnablementConditionId.ToString()
+                    StataExportCaption = "var2"
                 });
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor

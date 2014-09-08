@@ -61,11 +61,11 @@
     </Reference>
     <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Abstractions.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -102,9 +102,12 @@
     <Compile Include="Synchronization\Implementation\InterviewsSynchronizer.cs" />
     <Compile Include="Synchronization\Implementation\LocalFeedStorage.cs" />
     <Compile Include="Synchronization\Implementation\LocalInterviewFeedEntry.cs" />
+    <Compile Include="Synchronization\Implementation\LocalQuestionnaireFeedEntry.cs" />
     <Compile Include="Synchronization\Implementation\LocalUserFeedProcessor.cs" />
+    <Compile Include="Synchronization\Implementation\QuestionnaireSynchronizer.cs" />
     <Compile Include="Synchronization\Implementation\UserChangedFeedReader.cs" />
     <Compile Include="Synchronization\IInterviewsSynchronizer.cs" />
+    <Compile Include="Synchronization\IQuestionnaireSynchronizer.cs" />
     <Compile Include="Synchronization\IUserChangedFeedReader.cs" />
     <Compile Include="Synchronization\Implementation\Synchronizer.cs" />
     <Compile Include="Synchronization\ISynchronizer.cs" />

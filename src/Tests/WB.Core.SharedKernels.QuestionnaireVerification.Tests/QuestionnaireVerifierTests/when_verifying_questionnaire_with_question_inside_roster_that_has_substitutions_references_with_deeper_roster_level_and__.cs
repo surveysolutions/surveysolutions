@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             var childRosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new NumericQuestion() {PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 4, StataExportCaption = rosterSizeQuestionId.ToString()},
+                new NumericQuestion() {PublicKey = rosterSizeQuestionId, IsInteger = true, MaxValue = 4, StataExportCaption ="var1"},
                 new Group()
                 {
                     PublicKey = rosterGroupId,
@@ -29,11 +29,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>()
                     {
-                        new NumericQuestion() {PublicKey = childRosterSizeQuestionId, IsInteger = true, MaxValue = 4, StataExportCaption = childRosterSizeQuestionId.ToString()},
+                        new NumericQuestion() {PublicKey = childRosterSizeQuestionId, IsInteger = true, MaxValue = 4, StataExportCaption = "var2"},
                         new SingleQuestion()
                         {
                             PublicKey = questionWithSubstitutionsId,
-                            StataExportCaption = questionWithSubstitutionsId.ToString(),
+                            StataExportCaption = "var3",
                             QuestionText = string.Format("hello %{0}%", underDeeperRosterLevelQuestionVariableName),
                             Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
                         },

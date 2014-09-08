@@ -57,7 +57,7 @@ namespace WB.UI.Headquarters.Controllers
                         }
                         else
                         {
-                            return this.RedirectToAction("Index", "HQ");
+                            return this.RedirectToAction("SurveysAndStatuses", "HQ");
                         }
                     }
 

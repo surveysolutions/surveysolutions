@@ -119,12 +119,14 @@
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_textlist.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_textlist_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question.cs" />
     <Compile Include="InterviewTests\when_create_interview_with_3_fixed_rosters_one_inside_other_and_1_separate_fixed_roster.cs" />
+    <Compile Include="InterviewTests\when_creating_interview_with_no_featured_questions_by_deleted_template.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_prefilled_questions_and_created_info_and_status.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_prefilled_questions_and_created_info.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_no_featured_questions.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_preloaded_data.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_pre_filled_question_of_allowed_type_for_tester.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_pre_filled_question_of_allowed_type.cs" />
+    <Compile Include="InterviewTests\when_hard_delete_interview.cs" />
     <Compile Include="InterviewTests\when_hqreject_interview_in_incorrect_status.cs" />
     <Compile Include="InterviewTests\when_hqreject_interview.cs" />
     <Compile Include="InterviewTests\when_hqapprove_interview.cs" />
@@ -179,6 +181,7 @@
     <Compile Include="InterviewTests\when_checking_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_roster_is_zero.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_with_3_fixed_titles.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_and_interview_restored_after_synch_and_contains_answer_on_not_linked_multioption_question_and_qu___.cs" />
+    <Compile Include="InterviewTests\when_hq_approve_hard-deleted_interview.cs" />
     <Compile Include="InterviewTests\when_length_of_selected_values_less_than_max_for_selected_answer_options_for_multiquestion.cs" />
     <Compile Include="InterviewTests\when_length_of_selected_values_more_than_max_for_selected_answer_options_for_multiquestion_throw_interview_exception.cs" />
     <Compile Include="InterviewTests\InterviewTestsContext.cs" />
@@ -194,6 +197,7 @@
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_question_marked_as_mandatory.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_question_marked_as_mandatory_inside_initially_disabled_group.cs" />
     <Compile Include="InterviewTests\when_marking_interview_as_sent_to_headquarters_and_interview_is_approved_by_supervisor.cs" />
+    <Compile Include="InterviewTests\when_marking_interview_as_sent_to_headquarters_and_interview_is_hard_deleted.cs" />
     <Compile Include="InterviewTests\when_propagated_group_is_conditionally_disabled.cs" />
     <Compile Include="InterviewTests\when_reevaluating_interview_with_group_depending_on_recently_enabled_question.cs" />
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_group_with_custom_enablement_condition.cs" />

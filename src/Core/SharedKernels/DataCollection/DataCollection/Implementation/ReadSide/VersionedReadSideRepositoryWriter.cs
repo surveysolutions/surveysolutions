@@ -65,6 +65,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
         public void Remove(string id, long version)
         {
             internalRepositoryWroter.Remove(RepositoryKeysHelper.GetVersionedKey(id, version));
+            TEntity currentEntity = internalRepositoryWroter.GetById(id);
+
+            if (currentEntity != null && currentEntity.Version == version)
+            {
+                internalRepositoryWroter.Remove(id);
+
+                var newVersion = version - 1;
+
+                while (newVersion > 0)
+                {
+                    var previousVersion = internalRepositoryWroter.GetById(RepositoryKeysHelper.GetVersionedKey(id, version));
+                    if (previousVersion != null)
+                    {
+                        internalRepositoryWroter.Store(previousVersion, id);
+                        break;
+                    }
+                    newVersion--;
+                }
+            }
         }
     }
 }

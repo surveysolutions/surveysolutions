@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public Guid TemplateId { get; set; }
 
-        public long? TemplateVersion { get; set; }
+        public long TemplateVersion { get; set; }
 
         public string Title { get; set; }
 
@@ -53,12 +53,13 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
     public class QuestionnaireMetadata
     {
-        public QuestionnaireMetadata(long version, bool allowCensusMode)
+        public QuestionnaireMetadata(Guid questionnaireId, long version, bool allowCensusMode)
         {
+            this.QuestionnaireId = questionnaireId;
             this.AllowCensusMode = allowCensusMode;
             this.Version = version;
         }
-
+        public Guid QuestionnaireId { get; private set; }
         public long Version { get; private set; }
         public bool AllowCensusMode { get; private set; }
     }

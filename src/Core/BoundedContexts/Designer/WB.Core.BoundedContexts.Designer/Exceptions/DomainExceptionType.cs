@@ -123,5 +123,13 @@
         MaxAnswerCountNotInRange,
 
         StaticTextIsEmpty,
+
+        TitleIsTooLarge,
+
+        FilteredComboboxQuestionNotFound,
+
+        QuestionIsNotAFilteredCombobox,
+
+        FilteredComboboxQuestionOptionsMaxLength
     }
 }

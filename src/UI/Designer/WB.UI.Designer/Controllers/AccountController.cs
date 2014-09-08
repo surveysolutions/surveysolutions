@@ -348,7 +348,7 @@ namespace WB.UI.Designer.Controllers
         {
             return Json(new
             {
-                isUserExist = !string.IsNullOrEmpty(Membership.GetUserNameByEmail(email))
+                doesUserExist = !string.IsNullOrEmpty(Membership.GetUserNameByEmail(email))
             });
         }
     }

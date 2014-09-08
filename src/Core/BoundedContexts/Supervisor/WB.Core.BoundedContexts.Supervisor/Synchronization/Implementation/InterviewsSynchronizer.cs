@@ -125,19 +125,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     {
                         var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
 
-                        string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
-                            .Replace("{id}", interviewDetails.QuestionnaireId.FormatGuid())
-                            .Replace("{version}", interviewDetails.QuestionnaireVersion.ToString());
-
                         switch (interviewFeedEntry.EntryType)
                         {
                             case EntryType.SupervisorAssigned:
-                                this.StoreQuestionnaireDocumentFromHeadquartersIfNeeded(interviewDetails.QuestionnaireId, interviewDetails.QuestionnaireVersion, new Uri(questionnaireDetailsUrl));
-                                this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId, interviewFeedEntry.UserId);
+                                this.CreateOrUpdateInterviewFromHeadquarters(interviewDetails, interviewFeedEntry.SupervisorId,
+                                    interviewFeedEntry.UserId);
                                 break;
-
                             case EntryType.InterviewUnassigned:
                                 this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                break;
+                            case EntryType.InterviewDeleted:
+                                this.HardDeleteInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
                                 break;
                             case EntryType.InterviewRejected:
                                 this.RejectInterview(interviewFeedEntry, interviewDetails);
@@ -182,10 +180,26 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void RejectInterview(LocalInterviewFeedEntry feedEntry, InterviewSynchronizationDto interviewDetails)
         {
+            if (interviewDetails.Id == Guid.Empty)
+                return;
+            if (IsQuestionnaireDeleted(interviewDetails.QuestionnaireId, interviewDetails.QuestionnaireVersion))
+                return;
+
             var userIdGuid = Guid.Parse(feedEntry.UserId);
             var supervisorIdGuid = Guid.Parse(feedEntry.SupervisorId);
 
             this.headquartersPullContext.PushMessage(string.Format("Applying interview rejected by HQ on {0} interview", feedEntry.InterviewId));
+
+            if (!IsInterviewPresent(interviewDetails.Id))
+
+            {
+                var interviewerId = feedEntry.InterviewerId != null ? Guid.Parse(feedEntry.InterviewerId) : supervisorIdGuid;
+                this.executeCommand(new CreateInterviewCreatedOnClientCommand(interviewId: interviewDetails.Id,
+                       userId: interviewerId, questionnaireId: interviewDetails.QuestionnaireId,
+                       questionnaireVersion: interviewDetails.QuestionnaireVersion, status: interviewDetails.Status,
+                       featuredQuestionsMeta: new AnsweredQuestionSynchronizationDto[0], isValid: true));
+            }
+            
             this.executeCommand(new RejectInterviewFromHeadquartersCommand(interviewDetails.Id, 
                 userIdGuid, 
                 supervisorIdGuid, 
@@ -219,28 +233,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
-
-        private void StoreQuestionnaireDocumentFromHeadquartersIfNeeded(Guid questionnaireId, long questionnaireVersion, Uri questionnareUri)
+        private bool IsQuestionnaireDeleted(Guid id, long version)
         {
-            if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireId, questionnaireVersion))
-                return;
-
-            this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnareUri));
-            QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(questionnareUri).Result;
-
-            this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireId, questionnaireVersion, questionnaireDocument);
-            this.executeCommand(new RegisterPlainQuestionnaire(questionnaireId, questionnaireVersion, false));
+            var questionnaire = plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+            return questionnaire == null || questionnaire.IsDeleted;
         }
 
-        private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)
+        private bool IsInterviewPresent(Guid interviewId)
         {
-            QuestionnaireDocument localQuestionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
-
-            return localQuestionnaireDocument != null;
+            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            return interviewSummary != null && !interviewSummary.IsDeleted;
         }
 
         private void CreateOrUpdateInterviewFromHeadquarters(InterviewSynchronizationDto interviewDetails, string supervisorId, string userId)
         {
+            if (interviewDetails.Id == Guid.Empty)
+                return;
+            if (IsQuestionnaireDeleted(interviewDetails.QuestionnaireId, interviewDetails.QuestionnaireVersion))
+                return;
+            
             var userIdGuid = Guid.Parse(userId);
             var supervisorIdGuid = Guid.Parse(supervisorId);
 
@@ -250,9 +261,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void CancelInterview(string interviewId, string userId)
         {
             Guid interviewIdGuid = Guid.Parse(interviewId);
+
+            if (!IsInterviewPresent(interviewIdGuid))
+                return;
+
             Guid userIdGuid = Guid.Parse(userId);
 
             this.executeCommand(new CancelInterviewByHQSynchronizationCommand(interviewId: interviewIdGuid, userId: userIdGuid));
+        }
+
+
+        private void HardDeleteInterview(string interviewId, string userId)
+        {
+            Guid interviewIdGuid = Guid.Parse(interviewId);
+            if (!IsInterviewPresent(interviewIdGuid))
+                return;
+
+            Guid userIdGuid = Guid.Parse(userId);
+            this.executeCommand(new HardDeleteInterview(interviewId: interviewIdGuid, userId: userIdGuid));
         }
 
         private void StoreEventsToLocalStorage()

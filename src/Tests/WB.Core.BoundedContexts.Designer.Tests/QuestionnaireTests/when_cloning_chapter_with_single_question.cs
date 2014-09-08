@@ -30,7 +30,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 ValidationMessage = validationMessage,
                 LinkedToQuestionId = linkedToQuestionId,
                 Answers = answers,
-                QuestionType = questionType
+                QuestionType = questionType,
+                IsFilteredCombobox = isFilteredCombobox
             });
 
             eventContext = new EventContext();
@@ -89,6 +90,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         It should_QuestionCloned_event_Featured_be_equal_isPrefilled = () =>
             eventContext.GetSingleEvent<QuestionCloned>().Featured.ShouldEqual(isPrefilled);
 
+        It should_QuestionCloned_event_Featured_be_equal_isFilteredCombobox = () =>
+            eventContext.GetSingleEvent<QuestionCloned>().IsFilteredCombobox.ShouldEqual(isFilteredCombobox);
+
         It should_QuestionCloned_event_QuestionType_be_equal_questionType = () =>
             eventContext.GetSingleEvent<QuestionCloned>().QuestionType.ShouldEqual(questionType);
 
@@ -134,6 +138,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         private static string validationMessage = "validation message";
         private static QuestionType questionType = QuestionType.SingleOption;
         private static Guid? linkedToQuestionId = null;
+        private static bool isFilteredCombobox = true;
 
         private static Answer[] answers = new[]
         {

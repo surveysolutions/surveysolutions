@@ -130,6 +130,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
                     //Verifier<IQuestion, IComposite>(this.QuestionShouldNotHaveCircularReferences, "WB0056", VerificationMessages.WB0056_QuestionShouldNotHaveCircularReferences),
                     Verifier<IQuestion>(QuestionHasEmptyVariableName, "WB0057", VerificationMessages.WB0057_QuestionHasEmptyVariableName),
+                    Verifier<IQuestion>(QuestionHasInvalidVariableName, "WB0077", VerificationMessages.WB0077_QuestionHasInvalidVariableName),
                     Verifier<IQuestion>(QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
                     Verifier<IQuestion>(CategoricalQuestionHasLessThan2Options, "WB0060", VerificationMessages.WB0060_CategoricalQuestionHasLessThan2Options),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
@@ -145,6 +146,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
                     Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
+                    Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
+                    Verifier<IQuestion>(FilteredComboboxContainsMoreThan5000Options, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
+                    Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThan20, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan20),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -155,6 +159,22 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByRostersWithDuplicateVariableName
                 };
             }
+        }
+
+        private bool CategoricalOneAnswerOptionsCountMoreThan20(IQuestion question)
+        {
+            return IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
+                   question.Answers != null && question.Answers.Count > 20;
+        }
+
+        private bool FilteredComboboxContainsMoreThan5000Options(IQuestion question)
+        {
+            return IsFilteredComboboxQuestion(question) && question.Answers != null && question.Answers.Count > 5000;
+        }
+
+        private bool FilteredComboboxIsLinked(IQuestion question)
+        {
+            return IsFilteredComboboxQuestion(question) && question.LinkedToQuestionId.HasValue;
         }
 
         private bool StaticTextIsEmpty(IStaticText staticText)
@@ -477,9 +497,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return question.Answers.Any(option => string.IsNullOrEmpty(option.AnswerValue));
         }
 
-        private bool QuestionHasEmptyVariableName(IQuestion arg)
+        private bool QuestionHasInvalidVariableName(IQuestion arg)
         {
-            return string.IsNullOrWhiteSpace(arg.StataExportCaption);
+            return !IsVariableNameValid(arg.StataExportCaption);
+        }
+
+        private bool IsVariableNameValid(string variableName)
+        {
+            if (string.IsNullOrEmpty(variableName))
+                return true;
+
+            if (variableName.Length > 32)
+                return false;
+            var regExp = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
+            return regExp.IsMatch(variableName);
         }
 
         private bool RosterHasEmptyVariableName(IGroup group)
@@ -489,22 +520,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return string.IsNullOrWhiteSpace(group.VariableName);
         }
 
+        private bool QuestionHasEmptyVariableName(IQuestion question)
+        {
+            return string.IsNullOrEmpty(question.StataExportCaption);
+        }
+
         private bool RosterHasInvalidVariableName(IGroup group)
         {
             if (!group.IsRoster)
                 return false;
-            if (string.IsNullOrEmpty(group.VariableName))
-                return false;
-            if (group.VariableName.Length > 32)
-                return true;
-            var regExp = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
-            return !regExp.IsMatch(group.VariableName);
+            return !IsVariableNameValid(group.VariableName);
         }
 
         private bool RosterHasVariableNameEqualToQuestionnaireTitle(IGroup group, QuestionnaireDocument questionnaire)
         {
             if (!group.IsRoster)
                 return false;
+
             if (string.IsNullOrEmpty(group.VariableName))
                 return false;
 
@@ -1338,6 +1370,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             return (IsCategoricalMultiAnswersQuestion(question) || IsCategoricalSingleAnswerQuestion(question)) &&
                    question.LinkedToQuestionId.HasValue;
+        }
+
+        private static bool IsFilteredComboboxQuestion(IQuestion question)
+        {
+            return IsCategoricalSingleAnswerQuestion(question) && question.IsFilteredCombobox.HasValue &&
+                   question.IsFilteredCombobox.Value;
         }
     }
 }
