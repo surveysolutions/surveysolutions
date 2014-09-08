@@ -83,7 +83,7 @@ foreach (var @group in Model.Groups)
             
             #line default
             #line hidden
-            this.Write("\r\n        ");
+            this.Write("                \r\n        ");
             
             #line 18 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
 foreach (var q in Model.Questions)

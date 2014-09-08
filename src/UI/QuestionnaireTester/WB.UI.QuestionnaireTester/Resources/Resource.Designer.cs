@@ -26,9 +26,6 @@ namespace WB.UI.QuestionnaireTester
 		
 		public static void UpdateIdValues()
 		{
-			global::ZXing.Mobile.Resource.Id.contentFrame = global::WB.UI.QuestionnaireTester.Resource.Id.contentFrame;
-			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscanneractivitylayout;
-			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscannerfragmentlayout;
 			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
 			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.Hello = global::WB.UI.QuestionnaireTester.Resource.String.Hello;
 			global::WB.Core.GenericSubdomains.Rest.Android.Resource.String.ApplicationName = global::WB.UI.QuestionnaireTester.Resource.String.ApplicationName;
@@ -105,6 +102,9 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxListView = global::WB.UI.QuestionnaireTester.Resource.Styleable.MvxListView;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxListView_MvxDropDownItemTemplate = global::WB.UI.QuestionnaireTester.Resource.Styleable.MvxListView_MvxDropDownItemTemplate;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxListView_MvxItemTemplate = global::WB.UI.QuestionnaireTester.Resource.Styleable.MvxListView_MvxItemTemplate;
+			global::ZXing.Mobile.Resource.Id.contentFrame = global::WB.UI.QuestionnaireTester.Resource.Id.contentFrame;
+			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscanneractivitylayout;
+			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.QuestionnaireTester.Resource.Layout.zxingscannerfragmentlayout;
 		}
 		
 		public partial class Attribute

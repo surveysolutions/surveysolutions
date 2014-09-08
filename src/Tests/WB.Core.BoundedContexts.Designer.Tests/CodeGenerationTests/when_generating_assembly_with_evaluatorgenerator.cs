@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 {
-    [Ignore("bulk test run failed fix")]
+    //[Ignore("bulk test run failed fix")]
     internal class when_generating_assembly_with_evaluatorgenerator : CodeGenerationTestsContext
     {
         Establish context = () =>

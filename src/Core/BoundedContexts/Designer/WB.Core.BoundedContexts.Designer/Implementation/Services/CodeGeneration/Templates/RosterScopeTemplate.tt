@@ -20,16 +20,23 @@
 
         //TODO: generate mandatory                
         <#foreach (var @group in Model.Groups) 
-            {#>
+        {#>
             EnablementStates.Add(<#=@group.GeneratedStateName#>.ItemId, <#= @group.GeneratedStateName#>);
         <# }#>
+
+        <#foreach (var @roster in Model.RostersInScope) 
+        {#>
+            EnablementStates.Add(<#=@roster.GeneratedStateName#>.ItemId, <#= @roster.GeneratedStateName#>);
+        <# }#>
+
         <#foreach (var question in Model.Questions) 
-                        {#>            
+        {#>            
             EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);        
-        <#if(!string.IsNullOrWhiteSpace(question.Validations))
+        
+            <#if(!string.IsNullOrWhiteSpace(question.Validations))
             {#>                 
             ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] { <#=question.GeneratedValidationsMethodName#> });                      
-        <# }#>
+            <# }#>
             AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=question.GeneratedTypeName#> val) => {<#=question.GeneratedMemberName#>  = val; });
         <# }#>
         <#foreach (var @roster in Model.Rosters) 
@@ -37,10 +44,10 @@
             RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies));
         <# }#> 
 
-        <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups)) 
-            {#> 
+        <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, Model.RostersInScope)) 
+        {#> 
             __conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
-            <#}#>
+        <#}#>
         }
     
         private <#= Model.ParentTypeName#> @__parent;
@@ -131,6 +138,21 @@
                 return rosters == null ? new List<<#=@roster.GeneratedTypeName#>>() : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToList();
             }
         }
+        <# }#>
+
+        <#foreach (var @roster in Model.RostersInScope) 
+        {#>        
+
+        private ConditionalState <#= @roster.GeneratedStateName#> = new ConditionalState(IdOf.<#=@roster.GeneratedIdName#>, ItemType.Group);
+
+        <#if(!string.IsNullOrWhiteSpace(@roster.Conditions))
+        {#>      
+        private bool <#=@roster.GeneratedConditionsMethodName#>()
+        {
+            return <#=@roster.Conditions#>;
+        }      
+        <# }#>
+
         <# }#>
         
 
