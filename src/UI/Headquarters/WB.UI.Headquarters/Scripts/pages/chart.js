@@ -104,10 +104,7 @@
                 axesDefaults:
                 {
                     autoscale: true,
-                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                    tickOptions: {
-                        formatString: '%d'
-                    }
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer
                 },
                 axes: {
                     xaxis: {
