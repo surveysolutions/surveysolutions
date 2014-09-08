@@ -85,6 +85,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
+    <Compile Include="CopyBehaviour.cs" />
     <Compile Include="Executor.cs" />
     <Compile Include="IShell.cs" />
     <Compile Include="ShellViewModel.cs" />
