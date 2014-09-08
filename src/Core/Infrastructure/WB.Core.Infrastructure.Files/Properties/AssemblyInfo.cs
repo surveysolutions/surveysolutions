@@ -38,3 +38,4 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("WB.Tools.ConsoleTranslator")]
 [assembly: InternalsVisibleTo("WB.Tools.QuestionnaireDocumentsConverter")]
+[assembly: InternalsVisibleTo("WB.Core.Infrastructure.Tests")]
