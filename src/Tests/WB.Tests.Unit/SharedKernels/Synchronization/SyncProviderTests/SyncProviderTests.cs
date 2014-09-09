@@ -7,15 +7,15 @@ using Moq;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncProvider;
 
-namespace WB.Core.Synchronization.Tests.SyncProviderTests
+namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncProviderTests
 {
-    using NUnit.Framework;
-    using SyncProvider;
-
     [TestFixture]
     public class SyncProviderTests
     {
