@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 {
-    //[Ignore("bulk test run failed on server build")]
+    [Ignore("bulk test run failed on server build")]
     internal class when_expression_state_processes_condition_expressions_on_nested_roster : CodeGenerationTestsContext
     {
         private Establish context = () =>
