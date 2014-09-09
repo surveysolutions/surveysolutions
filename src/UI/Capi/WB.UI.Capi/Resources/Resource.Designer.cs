@@ -26,9 +26,6 @@ namespace WB.UI.Capi
 		
 		public static void UpdateIdValues()
 		{
-			global::ZXing.Mobile.Resource.Id.contentFrame = global::WB.UI.Capi.Resource.Id.contentFrame;
-			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.Capi.Resource.Layout.zxingscanneractivitylayout;
-			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.Capi.Resource.Layout.zxingscannerfragmentlayout;
 			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
 			global::WB.Core.GenericSubdomains.ErrorReporting.Resource.String.Hello = global::WB.UI.Capi.Resource.String.Hello;
 			global::WB.Core.GenericSubdomains.Rest.Android.Resource.String.ApplicationName = global::WB.UI.Capi.Resource.String.ApplicationName;
@@ -108,6 +105,9 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxListView = global::WB.UI.Capi.Resource.Styleable.MvxListView;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxListView_MvxDropDownItemTemplate = global::WB.UI.Capi.Resource.Styleable.MvxListView_MvxDropDownItemTemplate;
 			global::WB.UI.Shared.Android.Resource.Styleable.MvxListView_MvxItemTemplate = global::WB.UI.Capi.Resource.Styleable.MvxListView_MvxItemTemplate;
+			global::ZXing.Mobile.Resource.Id.contentFrame = global::WB.UI.Capi.Resource.Id.contentFrame;
+			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::WB.UI.Capi.Resource.Layout.zxingscanneractivitylayout;
+			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::WB.UI.Capi.Resource.Layout.zxingscannerfragmentlayout;
 		}
 		
 		public partial class Attribute
