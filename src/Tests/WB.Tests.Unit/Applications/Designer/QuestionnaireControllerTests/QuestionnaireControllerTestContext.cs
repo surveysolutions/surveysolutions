@@ -7,6 +7,7 @@ using System.Web.SessionState;
 using Main.Core.View;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
@@ -28,7 +29,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory = null,
             ILogger logger = null,
             IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory = null,
-            IQuestionnaireInfoFactory questionnaireInfoFactory = null)
+            IQuestionnaireInfoFactory questionnaireInfoFactory = null,
+            IExpressionProcessorGenerator expressionProcessorGenerator = null)
         {
             return new QuestionnaireController(commandService ?? Mock.Of<ICommandService>(),
                 userHelper ?? Mock.Of<IMembershipUserService>(),
@@ -38,7 +40,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
                 sharedPersonsViewFactory ?? Mock.Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(),
                 logger ?? Mock.Of<ILogger>(),
                 editQuestionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView>>(),
-                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>());
+                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
+                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>());
         }
 
         protected static void SetControllerContextWithSession(Controller controller, string key, object value)
