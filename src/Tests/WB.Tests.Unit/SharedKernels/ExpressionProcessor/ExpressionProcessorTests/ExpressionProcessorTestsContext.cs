@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
-namespace WB.Core.SharedKernels.ExpressionProcessorTests.ExpressionProcessorTests
+namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.ExpressionProcessorTests
 {
     internal class ExpressionProcessorTestsContext
     {
