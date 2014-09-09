@@ -17,7 +17,7 @@
     self.ShouldShowDateValidationMessage = ko.observable(false);
     self.TemplateName = ko.observable();
 
-    self.initChart = function() {
+    self.initChart = function () {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
             ? { templateId: '', version: '' }
             : JSON.parse(self.SelectedTemplate());
@@ -26,8 +26,6 @@
         self.Url.query['templateVersion'] = selectedTemplate.version;
         self.Url.query['from'] = self.FromDate();
         self.Url.query['to'] = self.ToDate();
-
-        self.TemplateName(selectedTemplate.name);
 
         if (Modernizr.history) {
             window.history.pushState({}, "Charts", self.Url.toString());
@@ -45,7 +43,7 @@
             to: self.ToDate()
         };
 
-        self.SendRequest(self.ServiceUrl, params, function(data) {
+        self.SendRequest(self.ServiceUrl, params, function (data) {
             self.Stats = data;
             self.drawChart();
         });
@@ -107,9 +105,6 @@
                 axes: {
                     xaxis: {
                         renderer: $.jqplot.DateAxisRenderer,
-                        tickOptions: {
-                            formatString: '%#m/%#d/%y'
-                        },
                         min: self.Stats.from,
                         drawMajorGridlines: false
                     },
@@ -125,7 +120,6 @@
                 cursor: {
                     show: true,
                     tooltipLocation: 'sw',
-
                 }
             });
 
@@ -145,6 +139,8 @@
         self.Url.query['from'] = self.QueryString['from'] || oneWeekAgo;
         self.Url.query['to'] = self.QueryString['to'] || today;
 
+        updateTemplateName(self.SelectedTemplate());
+
         var from = unescape(self.Url.query['from']);
         var to = unescape(self.Url.query['to']);
 
@@ -158,6 +154,7 @@
             keyboardNavigation: false,
             autoclose: true,
             todayHighlight: true,
+            startDate: "01/01/2013",
             endDate: '+0d',
             forseParse: false
         })
@@ -178,8 +175,15 @@
 
         self.initChart();
 
-        self.SelectedTemplate.subscribe(function () { self.initChart(); });
+        self.SelectedTemplate.subscribe(function (value) {
+            updateTemplateName(value);
+            self.initChart();
+        });
     };
+
+    var updateTemplateName = function(value) {
+        self.TemplateName($("#templateSelector option[value='" + value + "']").text());
+    }
 };
 
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ChartPage, Supervisor.VM.ListView);
