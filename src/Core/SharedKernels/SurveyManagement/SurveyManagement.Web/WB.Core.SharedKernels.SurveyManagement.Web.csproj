@@ -351,8 +351,6 @@
     <EmbeddedResource Include="Views\Survey\Status.cshtml" />
     <EmbeddedResource Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
     <EmbeddedResource Include="Views\TabletReport\Packages.cshtml" />
-    <EmbeddedResource Include="Views\Template\Import.cshtml" />
-    <EmbeddedResource Include="Views\Template\LoginToDesigner.cshtml" />
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
     <EmbeddedResource Include="Views\Shared\AccessDenied.cshtml" />
     <EmbeddedResource Include="Views\Shared\EditorTemplates\Boolean.cshtml" />

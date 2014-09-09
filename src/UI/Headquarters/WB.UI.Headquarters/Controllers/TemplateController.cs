@@ -9,13 +9,11 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.PublicService;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Headquarter")]
-    [Obsolete("Remove when HQ application will be separate")]
     public class TemplateController : BaseController
     {
         public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)

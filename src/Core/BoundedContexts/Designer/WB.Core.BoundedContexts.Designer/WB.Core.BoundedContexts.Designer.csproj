@@ -159,6 +159,22 @@
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Events\Users\AccountConfirmed.cs" />
+    <Compile Include="Events\Users\AccountDeleted.cs" />
+    <Compile Include="Events\Users\AccountLocked.cs" />
+    <Compile Include="Events\Users\AccountLoginFailed.cs" />
+    <Compile Include="Events\Users\AccountOnlineUpdated.cs" />
+    <Compile Include="Events\Users\AccountPasswordChanged.cs" />
+    <Compile Include="Events\Users\AccountPasswordQuestionAndAnswerChanged.cs" />
+    <Compile Include="Events\Users\AccountPasswordReset.cs" />
+    <Compile Include="Events\Users\AccountPasswordResetTokenChanged.cs" />
+    <Compile Include="Events\Users\AccountRegistered.cs" />
+    <Compile Include="Events\Users\AccountRoleAdded.cs" />
+    <Compile Include="Events\Users\AccountRoleRemoved.cs" />
+    <Compile Include="Events\Users\AccountUnlocked.cs" />
+    <Compile Include="Events\Users\AccountUpdated.cs" />
+    <Compile Include="Events\Users\AccountValidated.cs" />
+    <Compile Include="Events\Users\UserLoggedIn.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
@@ -374,10 +390,6 @@
     <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
-      <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
-      <Name>WB.UI.Designer.Providers.CQRS</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
