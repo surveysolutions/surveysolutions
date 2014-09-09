@@ -169,8 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Create.cs" />
-    <Compile Include="DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
-    <Compile Include="DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
     <Compile Include="ApiTests\ApiTestContext.cs" />
     <Compile Include="ApiTests\when_intervews_controller_interviews_filtered_with_not_empty_params.cs" />
     <Compile Include="ApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
@@ -183,7 +181,6 @@
     <Compile Include="ApiTests\when_users_controller_interviewers_is_called_with_not_elpty_params.cs" />
     <Compile Include="ApiTests\when_users_controller_details_is_called_with_not_emty_params.cs" />
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="HQControllerTests\HQControllerTestContext.cs" />
     <Compile Include="HQControllerTests\when_BatchUploadModel_model_contains_property__File__to_upload_file_data.cs" />
     <Compile Include="HQControllerTests\when_hq_controller_gets_empty_file_while_batch_upload.cs" />

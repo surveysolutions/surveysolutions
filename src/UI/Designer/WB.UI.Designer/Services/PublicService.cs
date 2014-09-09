@@ -1,21 +1,16 @@
-﻿using System.ServiceModel;
-using WB.Core.BoundedContexts.Designer.Exceptions;
+﻿using System;
+using System.IO;
+using System.ServiceModel;
+using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.UI.Designer.Services.Questionnaire;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Membership;
 
-namespace WB.UI.Designer.WebServices
+namespace WB.UI.Designer.Services
 {
-    using System;
-    using System.IO;
-
-    using Main.Core.View;
-    using WB.Core.SharedKernel.Utils.Compression;
-    using WB.UI.Designer.WebServices.Questionnaire;
-    using WB.UI.Shared.Web.Membership;
-
     public class PublicService : IPublicService
     {
         private readonly IJsonExportService exportService;
