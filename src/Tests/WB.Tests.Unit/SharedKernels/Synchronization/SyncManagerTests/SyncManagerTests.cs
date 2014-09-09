@@ -3,10 +3,11 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncProvider;
 
-namespace WB.Core.Synchronization.Tests.SyncManagerTests
+namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncManagerTests
 {
     [TestFixture]
     class SyncManagerTests

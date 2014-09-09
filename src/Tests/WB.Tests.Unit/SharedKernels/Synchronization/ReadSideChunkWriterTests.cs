@@ -9,7 +9,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
-namespace WB.Core.Synchronization.Tests
+namespace WB.Tests.Unit.SharedKernels.Synchronization
 {
     [TestFixture]
     public class ReadSideChunkWriterTests

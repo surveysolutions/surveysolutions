@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
-namespace WB.Core.Synchronization.Tests
+namespace WB.Tests.Unit.SharedKernels.Synchronization
 {
     [TestFixture]
     public class SimpleSynchronizationDataStorageTests
