@@ -37,11 +37,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? MaxValue { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
         public int? MaxAnswerCount { get; set; }
+        public bool? IsFilteredCombobox { get; set; }
 
         public List<DropdownQuestionView> SourceOfLinkedQuestions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] AllQuestionScopeOptions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] NotPrefilledQuestionScopeOptions { get; set; }
         public Breadcrumb[] Breadcrumbs { get; set; }
+        public bool WereOptionsTruncated { get; set; }
+        public int OptionsCount { get; set; }
     }
 }

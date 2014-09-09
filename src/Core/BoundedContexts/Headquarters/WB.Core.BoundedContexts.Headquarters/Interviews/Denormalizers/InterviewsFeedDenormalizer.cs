@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
     internal class InterviewsFeedDenormalizer : BaseDenormalizer,
         IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewRejectedByHQ>
     {
         private readonly IReadSideRepositoryWriter<InterviewFeedEntry> writer;
@@ -47,12 +48,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
+            string supervisorId = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document.SupervisorId.FormatGuid());
 
             this.writer.Store(new InterviewFeedEntry
             {
-                SupervisorId = interviewData.SupervisorId.GetValueOrDefault().FormatGuid(),
+                SupervisorId = supervisorId,
                 EntryType = EntryType.InterviewUnassigned,
+                Timestamp = evnt.EventTimeStamp,
+                InterviewId = evnt.EventSourceId.FormatGuid(),
+                EntryId = evnt.EventIdentifier.FormatGuid(),
+                UserId = evnt.Payload.UserId.FormatGuid()
+            }, evnt.EventIdentifier);
+        }
+
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
+        {
+            string supervisorId = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document.SupervisorId.FormatGuid());
+
+            this.writer.Store(new InterviewFeedEntry
+            {
+                SupervisorId = supervisorId,
+                EntryType = EntryType.InterviewDeleted,
                 Timestamp = evnt.EventTimeStamp,
                 InterviewId = evnt.EventSourceId.FormatGuid(),
                 EntryId = evnt.EventIdentifier.FormatGuid(),

@@ -75,6 +75,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
             return ToPublishedEvent(new InterviewDeleted(userId: GetGuidIdByStringId(userId)));
         }
 
+        public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeletedEvent(string userId = null)
+        {
+            return ToPublishedEvent(new InterviewHardDeleted(userId: GetGuidIdByStringId(userId)));
+        }
+
         public static IPublishedEvent<InterviewRestored> InterviewRestoredEvent(string userId = null)
         {
             return ToPublishedEvent(new InterviewRestored(userId: GetGuidIdByStringId(userId)));
@@ -116,7 +121,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview
         {
             return
                 ToPublishedEvent(new SynchronizationMetadataApplied(userId: GetGuidIdByStringId(userId), status: status,
-                    questionnaireId: GetGuidIdByStringId(questionnaireId), featuredQuestionsMeta: featuredQuestionsMeta,
+                    questionnaireId: GetGuidIdByStringId(questionnaireId),questionnaireVersion:1, featuredQuestionsMeta: featuredQuestionsMeta,
                     createdOnClient: createdOnClient, comments:null));
         }
 

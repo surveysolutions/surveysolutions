@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
        Because of = () => interviewEventHandlerFunctional.Update(viewState, CreatePublishableEvent(new InterviewerAssigned(Guid.NewGuid(), Guid.NewGuid())));
 
-       It should_not_sent_it_to_CAPI = () => synchronizationDataStorage.Verify(x => x.SaveInterview(Moq.It.IsAny<InterviewSynchronizationDto>(), Moq.It.IsAny<Guid>()), Times.Never);
+       It should_not_sent_it_to_CAPI = () => synchronizationDataStorage.Verify(x => x.SaveInterview(Moq.It.IsAny<InterviewSynchronizationDto>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<DateTime>()), Times.Never);
        
        static InterviewEventHandlerFunctional interviewEventHandlerFunctional;
        static ViewWithSequence<InterviewData> viewState;

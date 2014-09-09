@@ -19,8 +19,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.UserDenorma
             commandExecutorId = Guid.Parse("33333333333333333333333333333333");
 
             syncStorage = new Mock<ISynchronizationDataStorage>();
-            syncStorage.Setup(x => x.SaveUser(Moq.It.IsAny<UserDocument>()))
-                .Callback((UserDocument userDoc) => userToSave = userDoc);
+            syncStorage.Setup(x => x.SaveUser(Moq.It.IsAny<UserDocument>(), Moq.It.IsAny<DateTime>()))
+                .Callback((UserDocument userDoc, DateTime timestamp) => userToSave = userDoc);
             
             var user = new UserDocument() { PublicKey = userId };
 
@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.UserDenorma
             denormalizer.Handle(userUnlockedBySupervisorEvnt);
 
         private It should_sync_storage_stores_new_state = () =>
-            syncStorage.Verify(x => x.SaveUser(Moq.It.IsAny<UserDocument>()), Times.Once);
+            syncStorage.Verify(x => x.SaveUser(Moq.It.IsAny<UserDocument>(), Moq.It.IsAny<DateTime>()), Times.Once);
 
         private It should_user_be_locked_by_supervisor = () =>
             userToSave.IsLockedBySupervisor.ShouldEqual(false);

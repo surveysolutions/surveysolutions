@@ -21,13 +21,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new TextListQuestion()
             {
                 PublicKey = supervisorTextListquestionId,
-                StataExportCaption = supervisorTextListquestionId.ToString(),
+                StataExportCaption = "var1",
                 QuestionScope = QuestionScope.Supervisor
             });
 
             questionnaire.Children.Add(new TextListQuestion()
             {
-                StataExportCaption = textQuestionId.ToString(),
+                StataExportCaption = "var2",
                 PublicKey = textQuestionId
             });
 

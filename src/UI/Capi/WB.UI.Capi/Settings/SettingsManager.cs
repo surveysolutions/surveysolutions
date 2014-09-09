@@ -48,6 +48,7 @@ namespace WB.UI.Capi.Settings
 
         public static int AppVersionCode()
         {
+            // in production this should be the same as supervisor build number
             return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
         }
 

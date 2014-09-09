@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Adapters;
 
@@ -66,7 +68,8 @@ namespace WB.UI.Capi.Controls
           
             foreach (var featuredItem in dataItem.Properties)
             {
-                AddPropertyToContainer(llQuestionnairie, featuredItem.Title + ": " + featuredItem.Value);
+                var answerValue = featuredItem.Value;
+                AddPropertyToContainer(llQuestionnairie, featuredItem.Title + ": " + answerValue);
             }
             
             var tvArrow = new TextView(activity);

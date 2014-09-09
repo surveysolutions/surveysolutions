@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                 new NumericQuestion
                 {
                     PublicKey = rosterQuestionId,
-                    StataExportCaption = rosterQuestionId.ToString(),
+                    StataExportCaption = "var1",
                     IsInteger = true,
                     MaxValue = 5
                 },
@@ -45,14 +45,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                         new NumericQuestion
                         {
                             PublicKey = rosterInsideRosterQuestion1Id,
-                            StataExportCaption = rosterInsideRosterQuestion1Id.ToString(),
+                            StataExportCaption = "var2",
                             IsInteger = true,
                             MaxValue = 5
                         },
                         new NumericQuestion
                         {
                             PublicKey = rosterInsideRosterQuestion2Id,
-                            StataExportCaption = rosterInsideRosterQuestion2Id.ToString(),
+                            StataExportCaption = "var3",
                             IsInteger = true,
                             MaxValue = 5
                         },
@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                             {
                                 new NumericQuestion
                                 {
-                                    StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
+                                    StataExportCaption = "var4",
                                     PublicKey = underDeeperRosterLevelQuestionId
                                 }
                             }
@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablement
                                 new SingleQuestion
                                 {
                                     PublicKey = questionWithCustomCondition,
-                                    StataExportCaption = questionWithCustomCondition.ToString(),
+                                    StataExportCaption = "var5",
                                     ConditionExpression = "some random expression",
                                     Answers = { new Answer(){ AnswerValue = "1", AnswerText = "opt 1" }, new Answer(){ AnswerValue = "2", AnswerText = "opt 2" }}
                                 }

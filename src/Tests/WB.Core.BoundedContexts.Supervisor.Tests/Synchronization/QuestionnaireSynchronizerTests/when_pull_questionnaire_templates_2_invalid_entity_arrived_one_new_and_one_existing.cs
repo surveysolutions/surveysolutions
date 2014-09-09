@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.QuestionnaireSynchronizerTests
@@ -25,12 +26,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
             withALotOfExceptionsLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry();
             newLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry(Guid.NewGuid());
             existingLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry(Guid.NewGuid());
+            deleteLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry(Guid.NewGuid(), QuestionnaireEntryType.QuestionnaireDeleted,
+                Guid.NewGuid(), 1);
 
             IEnumerable<AtomFeedEntry<LocalQuestionnaireFeedEntry>> localQuestionnaireFeedEntres = new[]
             {
                 CreateAtomFeedEntry(withALotOfExceptionsLocalQuestionnaireFeedEntry), 
-                CreateAtomFeedEntry(emptyLocalQuestionnaireFeedEntry), CreateAtomFeedEntry(newLocalQuestionnaireFeedEntry),
-                CreateAtomFeedEntry(existingLocalQuestionnaireFeedEntry)
+                CreateAtomFeedEntry(emptyLocalQuestionnaireFeedEntry), 
+                CreateAtomFeedEntry(newLocalQuestionnaireFeedEntry),
+                CreateAtomFeedEntry(existingLocalQuestionnaireFeedEntry),
+                CreateAtomFeedEntry(deleteLocalQuestionnaireFeedEntry)
             };
 
             var atomFeedReaderMock=new Mock<IAtomFeedReader>();
@@ -70,20 +75,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
         Because of = () =>
             questionnaireSynchronizer.Pull();
 
-        It should_in_plain_storage_be_stored_4_entities = () =>
-            plainStorageMock.Verify(x => x.Store(Moq.It.IsAny<LocalQuestionnaireFeedEntry>(),Moq.It.IsAny<string>()), Times.Exactly(4));
+        It should_in_plain_storage_be_stored_5_entities = () =>
+            plainStorageMock.Verify(x => x.Store(Moq.It.IsAny<LocalQuestionnaireFeedEntry>(),Moq.It.IsAny<string>()), Times.Exactly(5));
 
         It should_in_2_errors_be_pushed_to_HeadquartersPullContext = () =>
             headquartersPullContext.PushedErrorsCount.ShouldEqual(2);
 
-        It should_in_1_questionnaire_be_stored_in_plain_questionnaire_repository = () =>
-           plainQuestionnaireRepositoryMock.Verify(x=>x.StoreQuestionnaire(newLocalQuestionnaireFeedEntry.QuestionnaireId,newLocalQuestionnaireFeedEntry.QuestionnaireVersion, Moq.It.IsAny<QuestionnaireDocument>()), Times.Once);
+        It should_1_questionnaire_be_stored_in_plain_questionnaire_repository = () =>
+            plainQuestionnaireRepositoryMock.Verify(x=>x.StoreQuestionnaire(newLocalQuestionnaireFeedEntry.QuestionnaireId,newLocalQuestionnaireFeedEntry.QuestionnaireVersion, Moq.It.IsAny<QuestionnaireDocument>()), Times.Once);
+
+        It should_1_questionnaire_be_deleted_in_plain_questionnaire_repository = () =>
+            plainQuestionnaireRepositoryMock.Verify(x => x.DeleteQuestionnaireDocument(deleteLocalQuestionnaireFeedEntry.QuestionnaireId, deleteLocalQuestionnaireFeedEntry.QuestionnaireVersion), Times.Once);
 
         private static QuestionnaireSynchronizer questionnaireSynchronizer;
         private static LocalQuestionnaireFeedEntry emptyLocalQuestionnaireFeedEntry;
         private static LocalQuestionnaireFeedEntry withALotOfExceptionsLocalQuestionnaireFeedEntry;
         private static LocalQuestionnaireFeedEntry newLocalQuestionnaireFeedEntry;
         private static LocalQuestionnaireFeedEntry existingLocalQuestionnaireFeedEntry;
+        private static LocalQuestionnaireFeedEntry deleteLocalQuestionnaireFeedEntry;
         private static Mock<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>> plainStorageMock;
         private static Mock<IHeadquartersQuestionnaireReader> headquartersQuestionnaireReaderMock;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;

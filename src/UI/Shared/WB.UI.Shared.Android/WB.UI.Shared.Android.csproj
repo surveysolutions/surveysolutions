@@ -137,6 +137,7 @@
     <Compile Include="Controls\ScreenItems\AutoPropagateQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\IAnswerProgressIndicator.cs" />
     <Compile Include="Controls\ScreenItems\AnswerProgressIndicator.cs" />
+    <Compile Include="Controls\ScreenItems\FilteredComboboxQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\StaticTextView.cs" />
     <Compile Include="Controls\ScreenItems\QRBarcodeQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\DateQuestionView.cs" />
@@ -189,6 +190,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\StaticTextView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\FilteredComboboxRowLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

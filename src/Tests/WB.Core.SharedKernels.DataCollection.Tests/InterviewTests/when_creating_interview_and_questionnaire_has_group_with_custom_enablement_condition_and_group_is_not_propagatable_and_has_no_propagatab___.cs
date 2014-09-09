@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && _.GetRostersFromTopToSpecifiedGroup(groupId) == new Guid[] { });
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionaire);
+                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
+            new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, answersTime, supervisorId);
 
         It should_raise_GroupsDisabled_event_with_id_of_question_with_custom_enablement_condition_and_zero_dimensional_propagation_vector = () =>
            eventContext.ShouldContainEvent<GroupsDisabled>(@event

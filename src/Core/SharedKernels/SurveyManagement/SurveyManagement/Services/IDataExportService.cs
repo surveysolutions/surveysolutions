@@ -11,5 +11,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         void AddExportedDataByInterview(InterviewDataExportView interviewDataExportView);
         void AddInterviewActions(Guid questionnaireId, long questionnaireVersion, IEnumerable<InterviewActionExportView> actions);
         void CreateExportedDataStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure);
+        void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion);
     }
 }

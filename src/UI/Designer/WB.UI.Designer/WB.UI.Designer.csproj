@@ -50,6 +50,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="CsvHelper">
+      <HintPath>..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -114,13 +117,11 @@
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Abstractions.dll</HintPath>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Client.2.5.2851\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\..\packages\RavenDB.Client.2.5.2907\lib\net45\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -1323,6 +1324,7 @@
     <Content Include="UpdatedDesigner\vendor\angular-resource\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-resource\README.md" />
     <Content Include="UpdatedDesigner\fonts\OpenSans300.woff" />
+    <Content Include="Views\Questionnaire\EditOptions.cshtml" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\bower.json" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\package.json" />
@@ -1341,6 +1343,8 @@
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js.map">
       <DependentUpon>ng-context-menu.min.js</DependentUpon>
     </Content>
+    <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1380,9 +1384,9 @@
       <Project>{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Core.Infrastructure.Raven</Name>
+    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Core.Infrastructure.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

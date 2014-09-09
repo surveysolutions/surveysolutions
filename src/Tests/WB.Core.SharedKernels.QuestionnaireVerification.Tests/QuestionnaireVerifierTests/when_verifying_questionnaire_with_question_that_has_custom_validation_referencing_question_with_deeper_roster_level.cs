@@ -26,20 +26,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             questionnaire.Children.Add(new NumericQuestion
             {
                 PublicKey = rosterGroupId,
-                StataExportCaption = rosterGroupId.ToString(),
+                StataExportCaption = "var1",
                 IsInteger = true,
                 MaxValue = 5
             });
 
             var rosterGroup = new Group() { PublicKey = rosterGroupId, VariableName = "a", IsRoster = true, RosterSizeQuestionId = rosterQuestionId };
-            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = underDeeperRosterLevelQuestionId, StataExportCaption = underDeeperRosterLevelQuestionId.ToString() });
+            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = underDeeperRosterLevelQuestionId, StataExportCaption = "var2" });
             questionnaire.Children.Add(rosterGroup);
             questionnaire.Children.Add(new SingleQuestion()
             {
                 PublicKey = questionWithCustomValidation,
                 ValidationExpression = "some random expression",
                 ValidationMessage = "some random message",
-                StataExportCaption = questionWithCustomValidation.ToString(),
+                StataExportCaption = "var3",
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
             });
 

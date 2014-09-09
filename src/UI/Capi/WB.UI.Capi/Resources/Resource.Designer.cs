@@ -89,6 +89,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Id.vpContent = global::WB.UI.Capi.Resource.Id.vpContent;
 			global::WB.UI.Shared.Android.Resource.Layout.AbstractQuestionView = global::WB.UI.Capi.Resource.Layout.AbstractQuestionView;
 			global::WB.UI.Shared.Android.Resource.Layout.Details = global::WB.UI.Capi.Resource.Layout.Details;
+			global::WB.UI.Shared.Android.Resource.Layout.FilteredComboboxRowLayout = global::WB.UI.Capi.Resource.Layout.FilteredComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::WB.UI.Capi.Resource.Layout.list_navigation_item;
 			global::WB.UI.Shared.Android.Resource.Layout.RosterQuestion = global::WB.UI.Capi.Resource.Layout.RosterQuestion;
 			global::WB.UI.Shared.Android.Resource.Layout.ScreenContentFragment = global::WB.UI.Capi.Resource.Layout.ScreenContentFragment;
@@ -488,52 +489,55 @@ namespace WB.UI.Capi
 			public const int Details = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int InterviewActionBar = 2130903048;
+			public const int FilteredComboboxRowLayout = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int list_navigation_item = 2130903049;
+			public const int InterviewActionBar = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int Login = 2130903050;
+			public const int list_navigation_item = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int Main = 2130903051;
+			public const int Login = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int RosterQuestion = 2130903052;
+			public const int Main = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int ScreenContentFragment = 2130903053;
+			public const int RosterQuestion = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int ScreenGroupView = 2130903054;
+			public const int ScreenContentFragment = 2130903054;
 			
 			// aapt resource value: 0x7f03000f
-			public const int ScreenNavigationView = 2130903055;
+			public const int ScreenGroupView = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int settings_dialog = 2130903056;
+			public const int ScreenNavigationView = 2130903056;
 			
 			// aapt resource value: 0x7f030011
-			public const int SplashScreen = 2130903057;
+			public const int settings_dialog = 2130903057;
 			
 			// aapt resource value: 0x7f030012
-			public const int StaticTextView = 2130903058;
+			public const int SplashScreen = 2130903058;
 			
 			// aapt resource value: 0x7f030013
-			public const int StatisticsContent = 2130903059;
+			public const int StaticTextView = 2130903059;
 			
 			// aapt resource value: 0x7f030014
-			public const int sync_dialog = 2130903060;
+			public const int StatisticsContent = 2130903060;
 			
 			// aapt resource value: 0x7f030015
-			public const int SyncLogin = 2130903061;
+			public const int sync_dialog = 2130903061;
 			
 			// aapt resource value: 0x7f030016
-			public const int zxingscanneractivitylayout = 2130903062;
+			public const int SyncLogin = 2130903062;
 			
 			// aapt resource value: 0x7f030017
-			public const int zxingscannerfragmentlayout = 2130903063;
+			public const int zxingscanneractivitylayout = 2130903063;
+			
+			// aapt resource value: 0x7f030018
+			public const int zxingscannerfragmentlayout = 2130903064;
 			
 			static Layout()
 			{

@@ -79,12 +79,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
                     this.commandService.Execute(new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
                         userId: meta.ResponsibleId, questionnaireId: meta.TemplateId,
-                        questionnaireVersion: meta.TemplateVersion.Value, status: (InterviewStatus) meta.Status,
+                        questionnaireVersion: meta.TemplateVersion, status: (InterviewStatus) meta.Status,
                         featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid));
 
                 }
                 else
-                    this.commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,meta.TemplateVersion,
                         (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false));
 
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
@@ -173,9 +173,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             var i = sequence + 1;
             foreach (var aggregateRootEvent in stream)
             {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0, DateTime.UtcNow));
+                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0));
                 i++;
-            }
+            } 
             return uncommitedStream;
         }
     }
