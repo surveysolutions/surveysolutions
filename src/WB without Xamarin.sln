@@ -116,8 +116,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Quest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification.Tests", "Tests\WB.Core.SharedKernels.QuestionnaireVerification.Tests\WB.Core.SharedKernels.QuestionnaireVerification.Tests.csproj", "{9071B005-CC4E-416B-B29F-449B7696D7DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.ExpressionProcessorTests", "Tests\WB.Core.SharedKernels.ExpressionProcessorTests\WB.Core.SharedKernels.ExpressionProcessorTests.csproj", "{C6139AFE-902E-4E59-BBDB-8E8125061548}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Supervisor.Tests", "Tests\WB.Core.BoundedContexts.Supervisor.Tests\WB.Core.BoundedContexts.Supervisor.Tests.csproj", "{4410AFF7-26EE-49E4-8B6B-2F2E9D9D321C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.FunctionalDenormalization", "Core\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj", "{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A}"
@@ -355,12 +353,6 @@ Global
 		{9071B005-CC4E-416B-B29F-449B7696D7DB}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{9071B005-CC4E-416B-B29F-449B7696D7DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9071B005-CC4E-416B-B29F-449B7696D7DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
-		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4410AFF7-26EE-49E4-8B6B-2F2E9D9D321C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4410AFF7-26EE-49E4-8B6B-2F2E9D9D321C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4410AFF7-26EE-49E4-8B6B-2F2E9D9D321C}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
@@ -505,7 +497,6 @@ Global
 		{5FFAB3BD-FA0D-4838-920A-AB8E6EB5D0F4} = {14B7074A-492F-485E-8DEE-F1997AB95D95}
 		{44A49DB2-2E7E-4BE7-B931-7E225EF057F4} = {5FFAB3BD-FA0D-4838-920A-AB8E6EB5D0F4}
 		{9071B005-CC4E-416B-B29F-449B7696D7DB} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
-		{C6139AFE-902E-4E59-BBDB-8E8125061548} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{4410AFF7-26EE-49E4-8B6B-2F2E9D9D321C} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 		{E7D429A7-1C9F-4F25-9C23-686EF9C2D60A} = {CA9E537B-E2ED-4A63-B936-834C9A8C194B}
 		{6AC3A080-CECA-4974-9CA1-C239695ED8F8} = {CA9E537B-E2ED-4A63-B936-834C9A8C194B}
