@@ -57,7 +57,7 @@ namespace WB.Core.Synchronization.Tests.SyncManagerTests
             var syncProvider = new Mock<ISyncProvider>();
             Guid registrationId = Guid.NewGuid();
             Guid itemId = Guid.NewGuid();
-            long sequence = 1;
+            var sequence = DateTime.Now;
 
             SyncItem expectedResult = new SyncItem() { Id = itemId };
             syncProvider.Setup(d => d.GetSyncItem(registrationId, itemId, sequence)).Returns(expectedResult);
@@ -83,7 +83,7 @@ namespace WB.Core.Synchronization.Tests.SyncManagerTests
             var syncProvider = new Mock<ISyncProvider>();
             Guid registrationId = Guid.NewGuid();
             Guid itemId = Guid.NewGuid();
-            long sequence = 1;
+            var sequence = DateTime.Now;
 
             ISyncManager manager = CreateDefaultSyncManager(syncProvider.Object);
 

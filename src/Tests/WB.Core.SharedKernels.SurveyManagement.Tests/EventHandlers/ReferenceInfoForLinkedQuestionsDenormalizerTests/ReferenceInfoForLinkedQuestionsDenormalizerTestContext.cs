@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -23,14 +24,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.ReferenceIn
             return Mock.Of<IPublishedEvent<T>>(publishedEvent => publishedEvent.Payload == @event && publishedEvent.EventSourceId == (eventSourceId ?? Guid.Parse("33333333333333333333333333333333")));
         }
 
-        protected static IPublishedEvent<TemplateImported> CreateTemplateImportedEvent(QuestionnaireDocument questionnaire = null)
+        protected static IPublishedEvent<TemplateImported> CreateTemplateImportedEvent(QuestionnaireDocument questionnaire = null, long? version=null)
         {
             var questionnaireDocument = questionnaire ?? new QuestionnaireDocument();
             return ToPublishedEvent(new TemplateImported
             {
-                Source = questionnaireDocument
+                Source = questionnaireDocument,
+                Version = version
             },
                 questionnaireDocument.PublicKey);
+        }
+
+
+        protected static IPublishedEvent<QuestionnaireDeleted> CreateQuestionnaireDeletedEvent(Guid questionnaireId, long version)
+        {
+            return ToPublishedEvent(new QuestionnaireDeleted
+            {
+                QuestionnaireVersion = version
+            },
+                questionnaireId);
         }
 
         protected static ReferenceInfoForLinkedQuestionsDenormalizer CreateReferenceInfoForLinkedQuestionsDenormalizer(

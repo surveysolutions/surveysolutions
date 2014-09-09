@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
@@ -14,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
     {
         Establish context = () =>
         {
-            IQuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
+            QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 new MultyOptionsQuestion()
                 {
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         };
 
         Because of = () =>
-            maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(validatedQuestionId);
+            maxSelectedAnswerOptions = questionnaire.GetQuestionnaire().GetMaxSelectedAnswerOptions(validatedQuestionId);
 
         It should_max_selected_answer_options_be_equal_of_proposed_selected_answer_options = () =>
             maxSelectedAnswerOptions.ShouldEqual(proposedSelectedAnswerOptions);

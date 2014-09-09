@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
         Because of = () => interviewEventHandlerFunctional.Update(viewState, interviewerAssignedEvent);
 
-        It should_sent_interview_to_CAPI = () => synchronizationDataStorage.Verify(x => x.SaveInterview(Moq.It.IsAny<InterviewSynchronizationDto>(), interviewerId), Times.Once);
+        It should_sent_interview_to_CAPI = () => synchronizationDataStorage.Verify(x => x.SaveInterview(Moq.It.IsAny<InterviewSynchronizationDto>(), interviewerId, Moq.It.IsAny<DateTime>()), Times.Once);
 
         It should_change_responsible_to_interviewer = () => viewState.Document.ResponsibleId.ShouldEqual(interviewerId);
 

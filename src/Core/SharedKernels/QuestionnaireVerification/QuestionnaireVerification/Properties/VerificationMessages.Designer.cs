@@ -656,5 +656,41 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0073_OptionValuesMustBeUniqueForCategoricalQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filtered combobox cannot be linked to another question..
+        /// </summary>
+        internal static string WB0074_FilteredComboboxIsLinked {
+            get {
+                return ResourceManager.GetString("WB0074_FilteredComboboxIsLinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contains more than 5000 options..
+        /// </summary>
+        internal static string WB0075_FilteredComboboxContainsMoreThan5000Options {
+            get {
+                return ResourceManager.GetString("WB0075_FilteredComboboxContainsMoreThan5000Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contains more than 20 options..
+        /// </summary>
+        internal static string WB0076_CategoricalOneAnswerOptionsCountMoreThan20 {
+            get {
+                return ResourceManager.GetString("WB0076_CategoricalOneAnswerOptionsCountMoreThan20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has invalid variable name..
+        /// </summary>
+        internal static string WB0077_QuestionHasInvalidVariableName {
+            get {
+                return ResourceManager.GetString("WB0077_QuestionHasInvalidVariableName", resourceCulture);
+            }
+        }
     }
 }

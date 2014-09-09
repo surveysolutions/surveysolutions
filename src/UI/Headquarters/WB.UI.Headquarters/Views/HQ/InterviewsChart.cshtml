@@ -1,0 +1,104 @@
+﻿@using System.Web.Optimization
+@using Newtonsoft.Json
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
+
+@{
+    ViewBag.Title = "Interview Chart";
+    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+}
+
+@section scripts
+{
+    @Scripts.Render(
+    "~/Scripts/jqplot-area",
+        "~/Scripts/bootstrap-datepicker.js",
+        "~/Scripts/viewmodels/pages/interviews.base.js",
+        "~/Scripts/pages/chart.js")
+
+    <script type="text/javascript">
+    var interviewChartUrl = '@Html.Raw(@Url.Action("InterviewsChart", "HQ", new { }, Request.Url.Scheme))';;
+        var chartApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "ChartStatistics" })';
+        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
+        $(function () {
+            var model = new Supervisor.VM.ChartPage(interviewChartUrl, chartApiUrl, commandExecutionUrl);
+            ko.applyBindings(model);
+            model.load();
+        });
+</script>
+}
+
+@section styles
+{
+    @Styles.Render(
+        "~/Scripts/jqPlot/jquery.jqplot.min.css",
+        "~/Content/datepicker3.css")
+
+    <style type="text/css">
+        table.jqplot-table-legend {
+            width: 100%;
+            border: none;
+        }
+        td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
+            width: 20px;
+        }
+        div.jqplot-table-legend-swatch-outline {
+            border: none;
+        }
+        .jqplot-table-legend-swatch {
+            border-width: 10px;
+        }
+        
+    </style>
+}
+
+@section header
+{
+    <h3 class="sinle-line-header" data-bind="text: TemplateName"></h3>
+}
+
+@section filters
+{
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Template</h4>
+            <p class="list-group-item-text">
+                <select id="templateSelector" data-bind="value: SelectedTemplate" class="form-control">
+                    @foreach (var item in Model.Templates)
+                    {
+                        <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
+                    }
+                </select>
+            </p>
+        </li>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">From</h4>
+            <div class="input-group date">
+                <input id="date-picker-from" type="text" class="form-control" disabled="disabled" data-bind="value: FromDateInput">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+            </div>
+        </li>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">To</h4>
+            <div class="input-group date">
+                <input id="date-picker-to" type="text" class="form-control" disabled="disabled" data-bind="value: ToDateInput">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+            </div>
+            <br />
+            <div id="dateValidationError" class="bg-danger" data-bind="visible: ShouldShowDateValidationMessage" style="display: none;">
+                <strong>"From"</strong> date can't be bigger then <strong>"To"</strong> date
+            </div>
+        </li>
+    </ul>
+}
+
+@section  actionbar
+{
+    <div class="btn-group">
+        <button type="button" class="btn btn-default" data-bind="click: $root.initChart">Refresh</button>
+    </div>
+}
+
+@section chart
+{
+    <div id="interviewChart"></div>
+}

@@ -36,8 +36,8 @@ namespace WB.Core.Synchronization.Tests
             var someContent2 = "some content2";
             var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             ReadSideChunkReader target = CreateRavenChunkReader(querableStorageMock);
-            querableStorageMock.Store(new SynchronizationDelta(chunkId, someContent1, 1, userId), chunkId);
-            querableStorageMock.Store(new SynchronizationDelta(chunkId, someContent2, 2, userId), chunkId);
+            querableStorageMock.Store(new SynchronizationDelta(chunkId, someContent1, DateTime.Now, userId), chunkId);
+            querableStorageMock.Store(new SynchronizationDelta(chunkId, someContent2, DateTime.Now, userId), chunkId);
 
             // act
 

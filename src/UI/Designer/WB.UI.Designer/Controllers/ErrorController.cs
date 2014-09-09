@@ -23,5 +23,11 @@ namespace WB.UI.Designer.Controllers
       {
           return this.View();
       }
+
+      public ActionResult RequestLengthExceeded()
+      {
+          return this.View();
+          
+      }
   }
 }

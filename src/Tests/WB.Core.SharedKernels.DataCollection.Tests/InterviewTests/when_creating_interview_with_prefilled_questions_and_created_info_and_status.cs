@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, interviewStatus, featuredQuestionsMeta, comments, isValid, createdOnClient);
+            new Interview(interviewId, userId, questionnaireId,1, interviewStatus, featuredQuestionsMeta, comments, isValid, createdOnClient);
 
         It should_event_context_contains_3_events = () =>
             eventContext.Events.Count().ShouldEqual(3);

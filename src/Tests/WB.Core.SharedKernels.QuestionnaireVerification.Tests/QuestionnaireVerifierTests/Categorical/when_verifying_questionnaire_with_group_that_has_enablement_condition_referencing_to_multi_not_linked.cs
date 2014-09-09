@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new MultyOptionsQuestion()
                 {
                     PublicKey = categoricalQuestionId,
-                    StataExportCaption = categoricalQuestionId.ToString(),
+                    StataExportCaption = "var1",
                     Answers =
                         new List<Answer>()
                         {

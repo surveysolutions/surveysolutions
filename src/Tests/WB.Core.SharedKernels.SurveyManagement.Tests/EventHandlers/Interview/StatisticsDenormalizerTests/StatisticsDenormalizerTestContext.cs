@@ -41,6 +41,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.S
             var evnt = ToPublishedEvent(new InterviewStatusChanged(status, String.Empty), eventSourceId);
             return evnt;
         }
-
     }
 }

@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
     public class QuestionnaireDenormalizer : 
         BaseDenormalizer,
         IEventHandler,
-        IEventHandler<TemplateImported>,
+        IEventHandler<TemplateImported>, IEventHandler<QuestionnaireDeleted>,
         IEventHandler<PlainQuestionnaireRegistered>
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -30,10 +30,15 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             Guid id = evnt.EventSourceId;
-            long version = evnt.EventSequence;
+            long version = evnt.Payload.Version ?? evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
             this.StoreQuestionnaireDocument(id, version, questionnaireDocument);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            this.questionnarieStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
