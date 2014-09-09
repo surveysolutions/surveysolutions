@@ -959,10 +959,6 @@
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
-      <Project>{400CDE74-7407-4388-8D57-BF429E7C508D}</Project>
-      <Name>WB.UI.Designer.Providers.CQRS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>

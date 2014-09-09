@@ -47,22 +47,6 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accounts\Events\AccountConfirmed.cs" />
-    <Compile Include="Accounts\Events\AccountLoginFailed.cs" />
-    <Compile Include="Accounts\Events\AccountPasswordResetTokenChanged.cs" />
-    <Compile Include="Accounts\Events\AccountRoleAdded.cs" />
-    <Compile Include="Accounts\Events\AccountRoleRemoved.cs" />
-    <Compile Include="Accounts\Events\AccountUpdated.cs" />
-    <Compile Include="Accounts\Events\AccountDeleted.cs" />
-    <Compile Include="Accounts\Events\AccountValidated.cs" />
-    <Compile Include="Accounts\Events\AccountRegistered.cs" />
-    <Compile Include="Accounts\Events\AccountUnlocked.cs" />
-    <Compile Include="Accounts\Events\AccountPasswordChanged.cs" />
-    <Compile Include="Accounts\Events\AccountPasswordQuestionAndAnswerChanged.cs" />
-    <Compile Include="Accounts\Events\AccountPasswordReset.cs" />
-    <Compile Include="Accounts\Events\UserLoggedIn.cs" />
-    <Compile Include="Accounts\Events\AccountOnlineUpdated.cs" />
-    <Compile Include="Accounts\Events\AccountLocked.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +58,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Accounts\Events\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
