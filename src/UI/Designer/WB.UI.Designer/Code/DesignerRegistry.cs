@@ -3,11 +3,10 @@ using System.Linq;
 using System.Reflection;
 using Main.Core;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Code
 {
-    using WB.UI.Designer.WebServices;
-
     public class DesignerRegistry : CoreRegistry
     {
         protected override IEnumerable<Assembly> GetAssembliesForRegistration()

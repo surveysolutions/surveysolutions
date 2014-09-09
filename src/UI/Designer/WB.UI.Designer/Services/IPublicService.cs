@@ -1,13 +1,9 @@
-﻿using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+﻿using System;
+using System.ServiceModel;
+using WB.UI.Designer.Services.Questionnaire;
 
-namespace WB.UI.Designer.WebServices
+namespace WB.UI.Designer.Services
 {
-    using System;
-    using System.ServiceModel;
-
-    using WB.UI.Designer.WebServices.Questionnaire;
-
     /// <summary>
     ///     The PublicService interface.
     /// </summary>
