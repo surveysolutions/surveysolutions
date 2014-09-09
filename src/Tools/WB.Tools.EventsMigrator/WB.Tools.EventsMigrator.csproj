@@ -183,10 +183,6 @@
       <Project>{29a132b5-a573-40d2-9e8f-2871e95d7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
-      <Project>{400CDE74-7407-4388-8D57-BF429E7C508D}</Project>
-      <Name>WB.UI.Designer.Providers.CQRS</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
