@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments)
         {
-            var result = BuildFrom(interview, Guid.Empty, interview.Status, comments);
+            var result = BuildFrom(interview, interview.ResponsibleId, interview.Status, comments);
             return result;
         }
 

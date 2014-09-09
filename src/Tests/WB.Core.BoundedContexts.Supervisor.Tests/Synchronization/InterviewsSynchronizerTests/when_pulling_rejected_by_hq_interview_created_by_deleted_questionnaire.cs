@@ -28,6 +28,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             userDocumentStorageMock.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<UserDocument>, IQueryable<UserDocument>>>()))
                 .Returns(new[] { new UserDocument() }.AsQueryable());
 
+            userDocumentStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
+            .Returns(new UserDocument());
+
             plainStorageMock.Setup(
                 x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalInterviewFeedEntry>, IQueryable<LocalInterviewFeedEntry>>>())).
                 Returns(
