@@ -81,6 +81,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         It should_return_7_lines_the_same_as_statuses_count = () =>
             view.Lines.Length.ShouldEqual(7);
 
+        It should_set_1st_point_horizontal_coord_of_all_lines_equal_to_2014_08_20 = () =>
+            view.Lines.ShouldEachConformTo(line => (string)line[0][0] == "08-20-2014");
+
+        It should_set_2nd_point_horizontal_coord_of_all_lines_equal_to_2014_08_21 = () =>
+            view.Lines.ShouldEachConformTo(line => (string)line[1][0] == "08-21-2014");
+
+        It should_set_3rd_point_horizontal_coord_of_all_lines_equal_to_2014_08_22 = () =>
+            view.Lines.ShouldEachConformTo(line => (string)line[2][0] == "08-22-2014");
+
         It should_set_1st_point_vertical_size_of_all_lines_equal_to_1 = () =>
             view.Lines.ShouldEachConformTo(line => (int) line[0][1] == 1);
 
