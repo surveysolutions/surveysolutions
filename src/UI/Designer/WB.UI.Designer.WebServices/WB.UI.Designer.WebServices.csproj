@@ -44,14 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PublicService.cs" />
-    <Compile Include="IPublicService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Questionnaire\DownloadQuestionnaireRequest.cs" />
-    <Compile Include="Questionnaire\QuestionnaireListRequest.cs" />
-    <Compile Include="Questionnaire\QuestionnaireListViewMessage.cs" />
-    <Compile Include="Questionnaire\QuestionnaireListViewItemMessage.cs" />
-    <Compile Include="RemoteFileInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
