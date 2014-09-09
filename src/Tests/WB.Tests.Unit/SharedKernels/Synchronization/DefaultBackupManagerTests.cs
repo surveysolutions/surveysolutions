@@ -12,7 +12,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Synchronization.Implementation.ImportManager;
 
-namespace WB.Core.Synchronization.Tests
+namespace WB.Tests.Unit.SharedKernels.Synchronization
 {
     [TestFixture]
     public class DefaultBackupManagerTests
