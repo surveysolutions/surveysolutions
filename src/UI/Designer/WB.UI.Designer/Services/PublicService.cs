@@ -73,19 +73,20 @@ namespace WB.UI.Designer.Services
 
         public QuestionnaireListViewMessage GetQuestionnaireList(QuestionnaireListRequest request)
         {
-            return new QuestionnaireListViewMessage(
+            var questionnaireListViewMessage = new QuestionnaireListViewMessage(
                 this.viewFactory.Load(
                     input:
                         new QuestionnaireListInputModel
-                            {
+                        {
 
-                                ViewerId = this.userHelper.WebServiceUser.UserId,
-                                IsAdminMode = this.userHelper.WebServiceUser.IsAdmin,
-                                Page = request.PageIndex,
-                                PageSize = request.PageSize,
-                                Order = request.SortOrder,
-                                Filter = request.Filter
-                            }));
+                            ViewerId = this.userHelper.WebServiceUser.UserId,
+                            IsAdminMode = this.userHelper.WebServiceUser.IsAdmin,
+                            Page = request.PageIndex,
+                            PageSize = request.PageSize,
+                            Order = request.SortOrder,
+                            Filter = request.Filter
+                        }));
+            return questionnaireListViewMessage;
         }
     }
 }

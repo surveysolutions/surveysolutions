@@ -22,7 +22,6 @@ using WB.UI.Headquarters.PublicService;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Headquarter")]
-    [Obsolete("Remove when HQ app will be separate")]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
         internal IPublicService DesignerService
