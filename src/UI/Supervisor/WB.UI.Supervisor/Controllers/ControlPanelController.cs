@@ -6,7 +6,6 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
-using WB.UI.Supervisor.DesignerPublicService;
 
 namespace WB.UI.Supervisor.Controllers
 {
@@ -52,19 +51,6 @@ namespace WB.UI.Supervisor.Controllers
         public ActionResult Settings()
         {
             return View();
-        }
-
-        [AllowAnonymous]
-        public ActionResult Designer()
-        {
-            return this.Designer(null, null);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult Designer(string login, string password)
-        {
-            return this.View(model: this.DiagnoseDesignerConnection(login, password));
         }
 
         [AllowAnonymous]
@@ -122,30 +108,6 @@ namespace WB.UI.Supervisor.Controllers
             return this.RedirectToAction("ReadSide");
         }
    
-        private string DiagnoseDesignerConnection(string login, string password)
-        {
-            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
-                return "Please provide login and password to continue...";
-
-            var service = new PublicServiceClient();
-
-            service.ClientCredentials.UserName.UserName = login;
-            service.ClientCredentials.UserName.Password = password;
-
-            try
-            {
-                service.Dummy();
-
-                return string.Format("Login to {0} succeeded!", service.Endpoint.Address.Uri);
-            }
-            catch (Exception exception)
-            {
-                return string.Format("Login to {1} failed.{0}{0}{2}", Environment.NewLine,
-                    service.Endpoint.Address.Uri,
-                    FormatDesignerConnectionException(exception));
-            }
-        }
-
         private static string FormatDesignerConnectionException(Exception exception)
         {
             var faultException = exception.InnerException as FaultException;

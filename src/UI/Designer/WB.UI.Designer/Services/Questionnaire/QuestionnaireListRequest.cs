@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace WB.UI.Designer.WebServices.Questionnaire
+namespace WB.UI.Designer.Services.Questionnaire
 {
     [MessageContract]
     public class QuestionnaireListRequest

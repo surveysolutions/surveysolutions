@@ -1,9 +1,9 @@
-﻿namespace WB.UI.Designer.WebServices
-{
-    using System;
-    using System.IO;
-    using System.ServiceModel;
+﻿using System;
+using System.IO;
+using System.ServiceModel;
 
+namespace WB.UI.Designer.Services
+{
     [MessageContract]
     public class RemoteFileInfo : IDisposable
     {
