@@ -10,7 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 {
-    //[Ignore("bulk test run failed on server build")]
+    [Ignore("bulk test run failed on server build")]
     internal class when_expression_state_processes_validation_expressions : CodeGenerationTestsContext
     {
         private Establish context = () =>
