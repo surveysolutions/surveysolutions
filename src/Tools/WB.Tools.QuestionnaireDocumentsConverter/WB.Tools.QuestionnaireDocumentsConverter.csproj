@@ -99,6 +99,10 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
@@ -15,11 +12,10 @@ using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 
 namespace WB.Tools.QuestionnaireDocumentsConverter
 {
