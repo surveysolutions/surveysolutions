@@ -53,6 +53,7 @@
 
 @section header
 {
+    <h3 class="sinle-line-header" data-bind="text: TemplateName"></h3>
 }
 
 @section filters
@@ -61,7 +62,7 @@
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Template</h4>
             <p class="list-group-item-text">
-                <select data-bind="value: SelectedTemplate" class="form-control">
+                <select id="templateSelector" data-bind="value: SelectedTemplate" class="form-control">
                     @foreach (var item in Model.Templates)
                     {
                         <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
