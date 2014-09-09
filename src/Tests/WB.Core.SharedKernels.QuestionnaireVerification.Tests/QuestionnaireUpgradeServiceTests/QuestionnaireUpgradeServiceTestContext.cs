@@ -4,7 +4,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
 
 namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Tests.QuestionnaireUpgradeServiceTests
 {

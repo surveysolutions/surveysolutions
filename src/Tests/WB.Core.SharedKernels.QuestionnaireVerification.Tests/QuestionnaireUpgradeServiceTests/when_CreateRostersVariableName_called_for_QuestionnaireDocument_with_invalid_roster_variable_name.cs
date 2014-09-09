@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
 
 namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Tests.QuestionnaireUpgradeServiceTests
 {

@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using Group = Main.Core.Entities.SubEntities.Group;
 
-namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services
+namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services
 {
     internal class QuestionnaireUpgradeService : IQuestionnaireUpgradeService
     {
@@ -42,21 +40,21 @@ namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services
 
             foreach (var roster in rosters)
             {
-                if (IsRosterVariableNameValid(roster.VariableName, rostersVariableNames))
+                if (this.IsRosterVariableNameValid(roster.VariableName, rostersVariableNames))
                 {
                     rostersVariableNames.Add(roster.VariableName);
                     continue;
                 }
-                var originalVariableName = CreateValidVariableNameFormGroupTitle(roster);
+                var originalVariableName = this.CreateValidVariableNameFormGroupTitle(roster);
                 var variableName = originalVariableName;
 
                 int i = 1;
                 while (rostersVariableNames.Contains(variableName))
                 {
                     variableName = originalVariableName + i;
-                    if (variableName.Length > maxLengthOfVariableName)
+                    if (variableName.Length > this.maxLengthOfVariableName)
                     {
-                        variableName = new string(originalVariableName.Take(maxLengthOfVariableName - i.ToString(CultureInfo.InvariantCulture).Length).ToArray()) + i;
+                        variableName = new string(originalVariableName.Take(this.maxLengthOfVariableName - i.ToString(CultureInfo.InvariantCulture).Length).ToArray()) + i;
                     }
                     i++;
                 }
@@ -80,16 +78,16 @@ namespace WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services
             }
             if (string.IsNullOrEmpty(variableName))
                 return "roster";
-            if (variableName.Length <= maxLengthOfVariableName)
+            if (variableName.Length <= this.maxLengthOfVariableName)
                 return variableName;
-            return new string(variableName.Take(maxLengthOfVariableName).ToArray());
+            return new string(variableName.Take(this.maxLengthOfVariableName).ToArray());
         }
 
         private bool IsRosterVariableNameValid(string rosterVariableName, HashSet<string> existingVariableNames)
         {
             if (string.IsNullOrEmpty(rosterVariableName))
                 return false;
-            if (rosterVariableName.Length > maxLengthOfVariableName)
+            if (rosterVariableName.Length > this.maxLengthOfVariableName)
                 return false;
             var validVariableNameRegEx = new Regex("^[_A-Za-z][_A-Za-z0-9]*$");
             if (!validVariableNameRegEx.IsMatch(rosterVariableName))
