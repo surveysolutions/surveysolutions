@@ -1,8 +1,8 @@
 ﻿using Ninject.Modules;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Implementation.Services;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 
-namespace WB.Core.SharedKernels.QuestionnaireUpgrader
+namespace WB.Core.SharedKernels.QuestionnaireVerification
 {
     public class QuestionnaireUpgraderModule : NinjectModule
     {
