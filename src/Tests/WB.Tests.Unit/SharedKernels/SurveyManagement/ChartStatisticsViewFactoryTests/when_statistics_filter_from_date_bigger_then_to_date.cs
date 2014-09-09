@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Moq;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
@@ -25,7 +28,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                         new Dictionary<DateTime, QuestionnaireStatisticsForChart>() { { baseDate, new QuestionnaireStatisticsForChart() } }
                 };
 
-            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(data);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(
+                Mock.Of<IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate>>(_
+                    => _.GetById(Moq.It.IsAny<string>()) == data));
 
             input = new ChartStatisticsInputModel
             {
