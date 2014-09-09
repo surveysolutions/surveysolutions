@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Raven.Abstractions.Extensions;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -113,7 +114,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         private static string FormatDate(DateTime x)
         {
-            return x.ToString("MM/dd/yyyy");
+            return x.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
         }
 
         private string GetStatisticsKey(Guid questionnaireId, long questionnaireVersion)
