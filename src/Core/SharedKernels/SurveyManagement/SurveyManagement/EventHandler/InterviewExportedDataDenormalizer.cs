@@ -291,12 +291,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
-            AddInterviewAction(evnt.EventSourceId, evnt.Payload.CompleteTime, InterviewExportedAction.Completed, evnt.Payload.UserId);
+            AddInterviewAction(evnt.EventSourceId, evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, InterviewExportedAction.Completed, evnt.Payload.UserId);
         }
 
         public void Handle(IPublishedEvent<InterviewRestarted> evnt)
         {
-            AddInterviewAction(evnt.EventSourceId, evnt.Payload.RestartTime, InterviewExportedAction.Restarted, evnt.Payload.UserId);
+            AddInterviewAction(evnt.EventSourceId, evnt.Payload.RestartTime ?? evnt.EventTimeStamp, InterviewExportedAction.Restarted, evnt.Payload.UserId);
         }
 
         public void Handle(IPublishedEvent<InterviewApproved> evnt)

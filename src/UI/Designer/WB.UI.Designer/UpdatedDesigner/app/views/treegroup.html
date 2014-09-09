@@ -41,7 +41,7 @@
         </ul>
     </div>
 </div>
-<div ng-hide="collapsed" class="slide" ng-class="{ 'roster-items':item.isRoster }" ui-tree-nodes="item.items" ng-model="item.items">
+<div ng-hide="collapsed" class="slide" ng-class="{'highlighted': is_highlighted, 'roster-items':item.isRoster }" ui-tree-nodes="item.items" ng-model="item.items">
     <div ng-repeat="item in item.items | filter:searchItem track by item.itemId"
          class="filter-animate"
          ui-tree-node ng-include="itemTemplate(item.itemType)">

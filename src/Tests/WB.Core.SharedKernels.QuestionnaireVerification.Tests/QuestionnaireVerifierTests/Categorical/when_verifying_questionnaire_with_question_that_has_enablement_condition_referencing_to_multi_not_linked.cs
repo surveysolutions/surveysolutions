@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 new MultyOptionsQuestion()
                 {
                     PublicKey = categoricalQuestionId,
-                    StataExportCaption = categoricalQuestionId.ToString(),
+                    StataExportCaption = "var1",
                     Answers =
                         new List<Answer>()
                         {
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                 {
                     PublicKey = questionWithEnablementConditionId,
                     ConditionExpression = "some condition",
-                    StataExportCaption = questionWithEnablementConditionId.ToString()
+                    StataExportCaption = "var2"
                 });
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor

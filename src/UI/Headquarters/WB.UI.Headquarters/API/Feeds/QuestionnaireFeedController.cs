@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.ServiceModel.Syndication;
 using System.Web;
 using System.Web.Http;
+using Humanizer;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
@@ -95,7 +96,7 @@ namespace WB.UI.Headquarters.API.Feeds
             {
                 var item = new SyndicationItem
                 {
-                    Title = new TextSyndicationContent("Questionnaire changed"),
+                    Title = new TextSyndicationContent(entry.EntryType.Humanize()),
                     LastUpdatedTime = entry.Timestamp,
                     Id = entry.EntryId
                 };

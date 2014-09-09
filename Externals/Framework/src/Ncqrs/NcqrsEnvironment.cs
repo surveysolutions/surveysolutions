@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Globalization;
+using System.Linq;
 using System.Reflection;
 
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Config;
 using Ncqrs.Domain;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Domain.Storage;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs
@@ -196,8 +200,10 @@ namespace Ncqrs
         public static void RegisterEventDataType(Type eventDataType)
         {
             ThrowIfThereIsAnotherEventWithSameFullName(eventDataType);
+            ThrowIfThereIsAnotherEventWithSameName(eventDataType);
 
             KnownEventDataTypes[eventDataType.FullName] = eventDataType;
+            KnownEventDataTypes[eventDataType.Name] = eventDataType;
         }
 
         public static bool IsEventDataType(string typeFullName)
@@ -205,9 +211,24 @@ namespace Ncqrs
             return KnownEventDataTypes.ContainsKey(typeFullName);
         }
 
-        public static Type GetEventDataType(string typeFullName)
+        public static Type GetEventDataTypeByFullName(string typeFullName)
         {
             return KnownEventDataTypes[typeFullName];
+        }
+
+        public static Type GetEventDataTypeByName(string typeName)
+        {
+            return KnownEventDataTypes[typeName];
+        }
+
+        private static void ThrowIfThereIsAnotherEventWithSameName(Type @event)
+        {
+            Type anotherEventWithSameName;
+            KnownEventDataTypes.TryGetValue(@event.Name, out anotherEventWithSameName);
+
+            if (anotherEventWithSameName != null && anotherEventWithSameName != @event)
+                throw new ArgumentException(string.Format("Two different events share same type name:{0}{1}{0}{2}",
+                    Environment.NewLine, @event.AssemblyQualifiedName, anotherEventWithSameName.AssemblyQualifiedName));
         }
 
         private static void ThrowIfThereIsAnotherEventWithSameFullName(Type @event)

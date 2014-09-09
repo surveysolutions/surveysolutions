@@ -8,8 +8,9 @@
                 var commandService = {};
 
                 function commandCall(type, command) {
-                    blockUI.start();
-
+                    if (type.indexOf('Move') < 0) {
+                        blockUI.start();
+                    }
                     return $http({
                         method: 'POST',
                         url: urlBase,
@@ -82,6 +83,12 @@
 
                     switch (question.type) {
                     case "SingleOption":
+                        command.areAnswersOrdered = question.areAnswersOrdered;
+                        command.maxAllowedAnswers = question.maxAllowedAnswers;
+                        command.options = question.options;
+                        command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.isFilteredCombobox = question.isFilteredCombobox || false;
+                        break;
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;

@@ -14,6 +14,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static readonly QuestionnaireVersion version_1_6_1 = new QuestionnaireVersion(1, 6, 1);
         private static readonly QuestionnaireVersion version_1_6_2 = new QuestionnaireVersion(1, 6, 2);
         private static readonly QuestionnaireVersion version_2_2_0 = new QuestionnaireVersion(2, 2, 0);
+        private static readonly QuestionnaireVersion version_3 = new QuestionnaireVersion(3, 0, 0);
+
 
         public QuestionnaireVersion GetVersion(QuestionnaireDocument questionnaire)
         {
@@ -34,7 +36,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if ((maskQuestionCount > 0 || groupWithVariableNameCount > 0 || staticTextCount > 0) && version < version_2_2_0)
                 version = version_2_2_0;
 
+            int filteredComboboxQuestionsCount = GetFilteredComboboxQuestionsCount(questionnaire);
+            if (filteredComboboxQuestionsCount > 0 && version < version_3)
+                version = version_3;
+
             return version;
+        }
+
+        private int GetFilteredComboboxQuestionsCount(QuestionnaireDocument questionnaire)
+        {
+            return
+                questionnaire.Find<SingleQuestion>(
+                    question => question.IsFilteredCombobox.HasValue && question.IsFilteredCombobox.Value).Count();
         }
 
         private int GetStaticTextCount(QuestionnaireDocument questionnaire)

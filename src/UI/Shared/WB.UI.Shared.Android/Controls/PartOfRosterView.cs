@@ -1,9 +1,11 @@
 using System;
 using Android.App;
 using Android.Content;
+using Android.Text;
 using Android.Views;
 using Android.Widget;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
+using WB.UI.Shared.Android.Bindings;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Events;
 using WB.UI.Shared.Android.Extensions;
@@ -66,7 +68,8 @@ namespace WB.UI.Shared.Android.Controls
         private TextView CreateHeaderItem(HeaderItem headerItem)
         {
             var headerItemView = this.EmptyRosterItem;
-            headerItemView.Text = headerItem.Title;
+
+            headerItemView.SetText(Html.FromHtml(headerItem.Title, new ImageGetter(this.Resources), null), TextView.BufferType.Spannable);
             if (!string.IsNullOrEmpty(headerItem.Instructions))
             {
                 var img = this.Context.Resources.GetDrawable(global::Android.Resource.Drawable.IcDialogInfo);

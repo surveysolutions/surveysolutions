@@ -67,6 +67,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -133,8 +134,15 @@
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_chapter.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_18_options.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_more_than_20_options.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_question_info_with_25_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options_and_uploaded_file_has_wrong_csv_format.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options_and_was_no_uploaded_file.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\QuestionnaireControllerTestContext.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options_and_non_csv_file_was_uploaded.cs" />
     <Compile Include="Applications\Designer\QuestionnaireHelper\when_getting_questionnaire_data_deleted_questionnaires_should_not_be_editable_.cs" />
     <Compile Include="Applications\Designer\QuestionnaireHelper\QuestionnaireHelperTestContext.cs" />
     <Compile Include="Applications\Designer\QuestionnaireHelper\when_getting_public_questionnaire_data_deleted_questionnaires_should_not_be_editable_.cs" />
@@ -147,7 +155,14 @@
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_entity_and_root_id_is_used_as_parent_group_id.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_group_specifying_root_id_as_parent.cs" />
     <Compile Include="Create.cs" />
+    <Compile Include="GenericSubdomains\Utils\StringExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\ChartStatisticsViewFactoryTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_one_day_before_and_after.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_from_date_bigger_then_to_date.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_without_data.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_statistics_view_and_from_is_more_than_to.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_3_days_with_incremental_data_for_each_count.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\InterviewApiControllerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_which_belong_to_another_supervisor.cs" />
@@ -170,7 +185,6 @@
     <Folder Include="BoundedContexts\Headquarters\" />
     <Folder Include="BoundedContexts\Supervisor\" />
     <Folder Include="GenericSubdomains\Logging\" />
-    <Folder Include="GenericSubdomains\Utils\" />
     <Folder Include="Infrastructure\" />
   </ItemGroup>
   <ItemGroup>

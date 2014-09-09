@@ -28,9 +28,9 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             var userId = input.UserId.FormatGuid();
 
             var surveys = surveyDtoDocumentStorage.Filter(s => true).ToList();
-            var questionnaires = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
+            List<QuestionnaireDTO> questionnaires = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
 
-            foreach (var surveyDto in surveys)
+            foreach (SurveyDto surveyDto in surveys)
             {
                 var interviews = new List<QuestionnaireDTO>();
                 if (string.IsNullOrEmpty(surveyDto.QuestionnaireId))
@@ -44,8 +44,11 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
                 }
                 if (interviews.Any() || surveyDto.AllowCensusMode)
                 {
-                    result.Surveys.Add(new DashboardSurveyItem(surveyDto.Id, surveyDto.QuestionnaireId, surveyDto.QuestionnaireVersion,
-                        surveyDto.SurveyTitle, interviews.Select(i => i.GetDashboardItem(i.Survey, surveyDto.SurveyTitle, i.Comments)),
+                    result.Surveys.Add(new DashboardSurveyItem(surveyDto.Id, 
+                        surveyDto.QuestionnaireId, 
+                        surveyDto.QuestionnaireVersion,
+                        surveyDto.SurveyTitle, 
+                        interviews.Select(i => i.GetDashboardItem(i.Survey, surveyDto.SurveyTitle, i.Comments)),
                         surveyDto.AllowCensusMode));
                 }
             }

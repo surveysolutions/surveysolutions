@@ -55,7 +55,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     instructions: instructions,
                     responsibleId: responsibleId
                     , options: options,
-                    linkedToQuestionId: linkedToQuestionId
+                    linkedToQuestionId: linkedToQuestionId,
+                    isFilteredCombobox: isFilteredCombobox
                     ));
 
 
@@ -85,5 +86,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static QuestionScope scope = QuestionScope.Interviewer;
+        private static bool isFilteredCombobox = false;
     }
 }

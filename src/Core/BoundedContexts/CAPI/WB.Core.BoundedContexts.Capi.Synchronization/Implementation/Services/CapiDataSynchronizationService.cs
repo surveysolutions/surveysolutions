@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Main.Core.Commands.File;
 using Main.Core.Documents;
 using Main.Core.View;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -67,6 +69,9 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
                     break;
                 case SyncItemType.Template:
                     this.UpdateQuestionnaire(item);
+                    break;
+                case SyncItemType.DeleteTemplate:
+                    this.DeleteQuestionnaire(item);
                     break;
                 default: break;
             }
@@ -127,7 +132,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             {
                 bool createdOnClient = metaInfo.CreatedOnClient.HasValue && metaInfo.CreatedOnClient.Value;
 
-                this.commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId,
+                this.commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId, metaInfo.TemplateVersion,
                     (InterviewStatus)metaInfo.Status,
                     metaInfo.FeaturedQuestionsMeta.Select(
                         q =>
@@ -161,6 +166,32 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
             this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode));
+        }
+
+        private void DeleteQuestionnaire(SyncItem item)
+        {
+            QuestionnaireMetadata metadata;
+            try
+            {
+                metadata = this.ExtractObject<QuestionnaireMetadata>(item.MetaInfo, item.IsCompressed);
+            }
+            catch (Exception exception)
+            {
+                throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
+            }
+
+            this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
+            try
+            {
+
+                this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version));
+            }
+            catch (Exception exception)
+            {
+                this.logger.Warn(
+                    string.Format("Failed to execute questionnaire deletion command (id: {0}, version: {1}).", metadata.QuestionnaireId.FormatGuid(), metadata.Version),
+                    exception);
+            }
         }
 
         private TResult ExtractObject<TResult>(string initialString, bool isCompressed)

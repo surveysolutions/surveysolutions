@@ -2,9 +2,8 @@
     'use strict';
 
     angular.module('designerApp')
-        .controller('RosterCtrl', [
-            '$rootScope', '$scope', '$stateParams', 'questionnaireService', 'commandService', 'confirmService', '$log',
-            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log) {
+        .controller('RosterCtrl', 
+            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService) {
                 $scope.currentChapterId = $stateParams.chapterId;
                 $scope.selectedNumericQuestion = null;
                 $scope.selectedMultiQuestion = null;
@@ -90,7 +89,7 @@
                 };
 
                 $scope.deleteRoster = function() {
-                    var modalInstance = confirmService.open($scope.activeRoster);
+                    var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup($scope.activeRoster.title));
 
                     modalInstance.result.then(function(confirmResult) {
                         if (confirmResult === 'ok') {
@@ -110,5 +109,5 @@
 
                 $scope.loadRoster();
             }
-        ]);
+        );
 }());

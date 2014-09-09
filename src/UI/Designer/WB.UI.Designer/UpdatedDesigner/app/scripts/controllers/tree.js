@@ -244,9 +244,7 @@
 
                 var item = questionnaireService.findItem($scope.items, itemIdToDelete);
 
-                var modalInstance = confirmService.open({
-                    title: item.text.substring(0, 15) + (item.text.length > 15 ? "..." : "")
-                });
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.text));
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
@@ -261,6 +259,8 @@
                     }
                 });
             };
+
+            
 
             $scope.cloneStaticText = function(staticTextId) {
                 var itemIdToClone = staticTextId || $state.params.itemId;
@@ -327,7 +327,7 @@
             $scope.deleteQuestion = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(item);
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title));
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
@@ -343,7 +343,7 @@
             $scope.deleteGroup = function(item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(item);
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
@@ -439,5 +439,7 @@
                     roster.variable = data.variable;
                 }
             });
+
+           
         }
     ]);

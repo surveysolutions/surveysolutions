@@ -6814,6 +6814,7 @@ textarea#edit-group-description {
   font-size: 18px;
   color: #3f3f3f;
   vertical-align: top;
+  padding-right: 50px;
 }
 #designer-editor.container section#header > .questionnarie-title > .title .questionnarie-title-text {
   max-width: 1000px;
@@ -6832,9 +6833,9 @@ textarea#edit-group-description {
   position: absolute;
   height: 100%;
   content: '';
-  width: 85px;
+  width: 35px;
   top: 0px;
-  left: -85px;
+  left: -35px;
   background-image: -webkit-linear-gradient(left, color-stop(rgba(255, 255, 255, 0) 0%), color-stop(#ffffff 100%));
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   background-repeat: repeat-x;
@@ -7045,16 +7046,17 @@ textarea#edit-group-description {
   height: calc(100% - 66px);
   overflow: auto;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder > .breadcrumbs {
-  margin-bottom: 10px;
+#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container {
+  min-height: 25px;
+  margin-bottom: 5px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder > .breadcrumbs > ul {
+#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container .breadcrumbs > ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder > .breadcrumbs > ul > li,
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder > .breadcrumbs > ul > li > a {
+#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container .breadcrumbs > ul > li,
+#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container .breadcrumbs > ul > li > a {
   display: inline;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
@@ -7062,7 +7064,7 @@ textarea#edit-group-description {
   text-transform: uppercase;
   color: #4a4a4a;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder > .breadcrumbs > ul > li:after {
+#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container .breadcrumbs > ul > li:after {
   position: relative;
   top: 3px;
   display: inline-block;
@@ -7142,6 +7144,31 @@ textarea#edit-group-description {
   font-size: 12px;
   line-height: 12px;
   letter-spacing: 1px;
+}
+.highlighted-add {
+  border-radius: 4px 4px 0 0;
+  background-color: #edeff1;
+}
+.highlighted-add .item .item-body {
+  border-bottom-color: #f8f9fa;
+}
+.highlighted-add .item .item-body .qname-block {
+  background-color: #edeff1;
+}
+.highlighted-add .item .item-body .qname-block:before {
+  background-image: -webkit-linear-gradient(left, color-stop(rgba(237, 239, 241, 0) 0%), color-stop(#edeff1 100%));
+  background-image: linear-gradient(to right, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
+}
+.highlighted-add .item.selected .qname-block {
+  background-color: #ffffff;
+}
+.highlighted-add .item.selected .qname-block:before {
+  background-image: -webkit-linear-gradient(left, color-stop(rgba(255, 255, 255, 0) 0%), color-stop(#ffffff 100%));
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
 }
 li.chapter-panel-item {
   position: relative;
@@ -7600,6 +7627,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   color: #2a81cb;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  cursor: pointer;
 }
 .dropdown ul.dropdown-menu > li > a:hover {
   background: #edeff1;

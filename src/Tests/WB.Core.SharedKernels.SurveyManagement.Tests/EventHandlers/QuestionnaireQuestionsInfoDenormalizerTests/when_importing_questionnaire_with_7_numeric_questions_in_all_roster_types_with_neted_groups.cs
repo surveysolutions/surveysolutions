@@ -6,6 +6,7 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using It = Machine.Specifications.It;
@@ -16,14 +17,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
     {
         Establish context = () =>
         {
-            importeDocument = CreateQuestionnaireDocumentWith7NumericQuestionsInDifferentRosters(questionnaireId, 
-                textAId, textBId, textCId, textDId, textEId, textFId, textGId, textHId, textIId, 
+            importeDocument = CreateQuestionnaireDocumentWith7NumericQuestionsInDifferentRosters(questionnaireId,
+                textAId, textBId, textCId, textDId, textEId, textFId, textGId, textHId, textIId,
                 textAVar, textBVar, textCVar, textDVar, textEVar, textFVar, textGVar, textHVar, textIVar);
             questionnaireQuestionsInfoWriter = new Mock<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>>();
 
             questionnaireQuestionsInfoWriter
                 .Setup(x => x.Store(Moq.It.IsAny<QuestionnaireQuestionsInfo>(), "33332222111100000000111122223333-1"))
-                .Callback((QuestionnaireQuestionsInfo info, string id) => questionsInfo = info);
+                .Callback((QuestionnaireQuestionsInfo info, string id) =>
+                {
+                    questionsInfo = info;
+                    questionsInfoId = id;
+                });
+
             denormalizer = CreateQuestionnaireQuestionsInfoDenormalizer(questionnaireQuestionsInfoWriter.Object);
             evnt = CreateTemplateImportedEvent(importeDocument);
         };
@@ -33,6 +39,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
 
         It should_create_one_view_with_mapping_of_question_id_on_variable_name = () =>
             questionsInfo.ShouldNotBeNull();
+
+        It should_create_one_view_with_id_equal_to_combination_of_questionnaireId_and_event_sequence = () =>
+          questionsInfoId.ShouldEqual(RepositoryKeysHelper.GetVersionedKey(questionnaireId, evnt.EventSequence));
 
         It should_contains_all_numeric_keys_and_corresponding_variables_in_stored_view = () =>
             questionsInfo.QuestionIdToVariableMap.ShouldContain(
@@ -68,6 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
         private static string textHVar = "textH";
         private static string textIVar = "textI";
         private static QuestionnaireDocument importeDocument;
+        private static string questionsInfoId;
         private static QuestionnaireQuestionsInfoDenormalizer denormalizer;
         private static IPublishedEvent<TemplateImported> evnt;
         private static Mock<IReadSideRepositoryWriter<QuestionnaireQuestionsInfo>> questionnaireQuestionsInfoWriter;

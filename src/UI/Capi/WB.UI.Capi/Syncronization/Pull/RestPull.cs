@@ -20,14 +20,14 @@ namespace WB.UI.Capi.Syncronization.Pull
             this.webExecutor = webExecutor;
         }
 
-        public SyncItem RequestChunck(string login, string password, Guid id, long sequence, string deviceId, CancellationToken ct)
+        public SyncItem RequestChunck(string login, string password, Guid id, long timestamp, string deviceId, CancellationToken ct)
         {
             try
             {
                 var package = this.webExecutor.ExecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
                     login, password, null,
                      new KeyValuePair<string, string>("aRKey", id.ToString()),
-                     new KeyValuePair<string, string>("aRSequence", sequence.ToString()),
+                     new KeyValuePair<string, string>("aRTimestamp", timestamp.ToString()),
                      new KeyValuePair<string, string>("clientRegistrationId", deviceId));
 
                 if (package.IsErrorOccured || package.ItemsContainer == null || package.ItemsContainer.Count == 0)

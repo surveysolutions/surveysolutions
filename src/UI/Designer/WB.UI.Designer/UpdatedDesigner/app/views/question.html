@@ -1,6 +1,7 @@
 ﻿<form role="form" id="question-editor" name="questionForm" unsaved-warning-form>
     <div class="form-holder">
-        <div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div>
+
+        <div class="breadcrumbs-container"><div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div></div>
 
         <div class="row">
             <div class="form-group col-xs-7">
@@ -124,32 +125,54 @@
 
         <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
-                <div ng-if="!activeQuestion.isLinked">
-                    <div class="table-holder">
-                        <div class="table-row" ng-repeat="option in activeQuestion.options">
-                            <div class="column-2">
-                                <input type="text" ng-model="option.value" class="form-control">
-                            </div>
-                            <div class="column-3">
-                                <input type="text" ng-model="option.title" class="form-control">
-                            </div>
-                            <div class="column-4">
-                                <a href ng:click="removeOption($index)" class="btn"></a>
-                            </div>
+                <div class="well well-sm" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Is filtered combobox" while uploading question's details and contained many options, its value is reduced up to 20</div>
+                <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="table-holder">
+                    <div class="table-row" ng-repeat="option in activeQuestion.options">
+                        <div class="column-2">
+                            <input type="text" ng-model="option.value" class="form-control">
+                        </div>
+                        <div class="column-3">
+                            <input type="text" ng-model="option.title" class="form-control">
+                        </div>
+                        <div class="column-4">
+                            <a href ng:click="removeOption($index)" class="btn"></a>
                         </div>
                     </div>
-                    <p>
-                        <input type="button" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
-                    </p>
                 </div>
-                <div class="checkbox checkbox-in-column ">
-                    <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
-                    <label for="cb-is-linked"><span></span>Is linked</label>
+                <p>
+                    <input ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
+                    <a ng-if="activeQuestion.isFilteredCombobox"
+                       href="javascript:void(0);"
+                       class="btn btn-link"
+                       ng-click="editFilteredComboboxOptions()">
+                        <ng-pluralize count="activeQuestion.optionsCount"
+                                      when="{'0': 'Add options',
+                                     'one': 'Edit 1 option',
+                                     'other': 'Edit {} options'}">
+                        </ng-pluralize>
+                    </a>
+                </p>
+                <div class="table-holder">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="checkbox checkbox-in-column">
+                                <input id="cb-is-filtered-combobox" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isFilteredCombobox" />
+                                <label for="cb-is-filtered-combobox"><span></span>Is filtered combobox</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div ng-if="!activeQuestion.isFilteredCombobox" class="checkbox checkbox-in-column">
+                                <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
+                                <label for="cb-is-linked"><span></span>Is linked</label>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}">
-                </div>
-            </div>
+                <div ng-if="!activeQuestion.isFilteredCombobox" class="form-group"
+                     ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
         </script>
+
 
         <script type="text/ng-template" id="linkTemplate.html">
             <div id="sourceOfLinkedQuestion" class="dropdown-with-breadcrumbs-and-icons">
@@ -203,7 +226,7 @@
                         </div>
                     </div>
                     <p>
-                        <input type="button" class="btn btn-link" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
+                        <input type="button" ng-if="!activeQuestion.isLinked" class="btn btn-link" value="Add Option" id="edit-question-save-button" ng-click="addOption()">
                     </p>
                 </div>
                 <div class="row">

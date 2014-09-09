@@ -27,11 +27,12 @@
     position: relative;
 }
 
-.angular-ui-tree-placeholder{
+.angular-ui-tree-placeholder {
     border: none;
     height: @questionnaire-tree-item-height;
     background: rgba(0,0,0,0.1);
 }
+
 #designer-editor.container {
     width: 100%;
     min-width: 1280px;
@@ -91,6 +92,7 @@
             > .title {
                 .questionnarie-title-fontstyle();
                 vertical-align: top;
+                padding-right: 50px;
 
                 .questionnarie-title-text {
                     max-width: 1000px;
@@ -106,7 +108,7 @@
                     position: relative;
 
                     &:before {
-                        @w: 85px;
+                        @w: 35px;
                         display: block;
                         position: absolute;
                         height: 100%;
@@ -339,9 +341,13 @@
                         height: @form-holder-height;
                         overflow: auto;
 
-                        > .breadcrumbs {
-                            margin-bottom: 10px;
-                            .wb-breadcrumbs('gray');
+                        .breadcrumbs-container {
+                            min-height: 25px;
+                            margin-bottom: 5px;
+
+                            .breadcrumbs {
+                                .wb-breadcrumbs('gray');
+                            }
                         }
 
                         .gray {
@@ -393,6 +399,35 @@
                             .inline-button-fontstyle();
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+.highlighted-add {
+    border-radius: 4px 4px 0 0;
+    background-color: @questionnarie-question-list-item-hover-color;
+
+    .item {
+        .item-body {
+            border-bottom-color: @questionnaire-item-border-when-highlighted;
+
+            .qname-block {
+                background-color: @questionnarie-question-list-item-hover-color;
+
+                &:before {
+                    #gradient > .horizontal(rgba(237,239,241, 0.0), rgba(237,239,241, 1.0));
+                }
+            }
+        }
+
+        &.selected {
+            .qname-block {
+                background-color: @questionnarie-question-list-item-selected-color;
+
+                &:before {
+                    #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
                 }
             }
         }
@@ -884,6 +919,7 @@ li.chapter-panel-item {
 
 .dropdown ul.dropdown-menu > li > a {
     .context-menu-fontstyle();
+    cursor: pointer;
 
     &:hover {
         background: @context-menu-hover-color;

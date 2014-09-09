@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
+   <parameter name="The Event Store Provider"
+      description="Where application will store events"
+      defaultValue="Raven">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='Core.EventStoreProvider']/@value" />
+   </parameter>
    <parameter name="The RavenDB instance address"
       description="Provide the address for RavenDB instance"
       defaultValue="http://localhost:8080">
@@ -7,6 +14,43 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='Raven.DocumentStore']/@value" />
    </parameter>
+     <parameter name="Event store IP address"
+      defaultValue="127.0.0.1">
+   <parameterValidation kind="AllowEmpty" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='EventStore.ServerIP']/@value" />
+   </parameter>
+  <parameter name="Event store TPC port"
+      defaultValue="1113">
+   <parameterValidation kind="AllowEmpty" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='EventStore.ServerTcpPort']/@value" />
+   </parameter>
+  <parameter name="Event store HTTP port"
+      defaultValue="2113">
+   <parameterValidation kind="AllowEmpty" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='EventStore.ServerHttpPort']/@value" />
+   </parameter>
+  <parameter name="Event store login"
+      defaultValue="admin">
+   <parameterValidation kind="AllowEmpty" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='EventStore.Login']/@value" />
+   </parameter>
+  <parameter name="Event store password"
+      defaultValue="changeit">
+   <parameterValidation kind="AllowEmpty" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='EventStore.Password']/@value" />
+   </parameter>
+
+
    <parameter name="Events database name"
       description="The database where the events will be stored"
       defaultValue="HeadquartersEvents">

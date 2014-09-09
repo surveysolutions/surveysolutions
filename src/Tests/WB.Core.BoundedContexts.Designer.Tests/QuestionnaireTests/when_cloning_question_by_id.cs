@@ -31,7 +31,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 ValidationExpression = "Validation",
                 ValidationMessage = "Val message",
                 Instructions = "Intructions",
-                LinkedToQuestionId = Guid.NewGuid()
+                LinkedToQuestionId = Guid.NewGuid(),
+                IsFilteredCombobox = true
             };
             questionnaire.Apply(newQuestionAdded);
 
@@ -58,11 +59,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             e.TargetIndex == 3 &&
             e.ResponsibleId == responsibleId &&
             e.AreAnswersOrdered == newQuestionAdded.AreAnswersOrdered &&
-            e.MaxAllowedAnswers == newQuestionAdded.MaxAllowedAnswers
+            e.MaxAllowedAnswers == newQuestionAdded.MaxAllowedAnswers &&
+            e.IsFilteredCombobox == newQuestionAdded.IsFilteredCombobox
             );
         
         // If we extend QuestionCloned be sure to add check in the validation above and increase counter here
-        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(26);
+        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(27);
 
         static Questionnaire questionnaire;
         static Guid questionId = Guid.Parse("11111111111111111111111111111111");

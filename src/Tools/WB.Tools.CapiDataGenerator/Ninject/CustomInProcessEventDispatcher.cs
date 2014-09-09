@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -23,29 +25,34 @@ namespace WB.Tools.CapiDataGenerator.Ninject
 
         protected Action<PublishedEvent> DoActionForHandler<TEvent>(IEventHandler<TEvent> handler)
         {
+            bool isCapiHandler = handler.GetType().ToString().Contains("CAPI");
+
+            Func<object, bool> isSupervisorEvent = (o) => o is NewUserCreated ||
+                                         o is TemplateImported ||
+                                         o is InterviewCreated ||
+                                         o is InterviewApproved ||
+                                         o is InterviewerAssigned;
+
+
+            Func<object, bool> isCapiEventToHandle = (o) => o is InterviewCompleted ||
+                (o is NewUserCreated && (o as NewUserCreated).Roles.All(role => role == UserRoles.Operator)) ||
+                o is InterviewSynchronized ||
+                o is TemplateImported;
+
             return evnt =>
             {
+               
                 if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitSupervisorHeadquarter)
                 {
-                    handler.Handle((IPublishedEvent<TEvent>)evnt);
+                    if ((isSupervisorEvent(evnt.Payload) && !isCapiHandler) ||
+                        (isCapiEventToHandle(evnt.Payload) && isCapiHandler))
+                    {
+                        handler.Handle((IPublishedEvent<TEvent>)evnt);
+                    }
                 }
                 else if (AppSettings.Instance.CurrentMode == GenerationMode.DataSplitCapiAndSupervisor ||
                          AppSettings.Instance.CurrentMode == GenerationMode.DataSplitOnCapiCreatedAndSupervisor)
                 {
-                    bool isCapiHandler = handler.GetType().ToString().Contains("CAPI");
-                    
-                    Func<object, bool> isSupervisorEvent = (o) => o is NewUserCreated ||
-                                              o is TemplateImported ||
-                                              o is InterviewCreated ||
-                                              o is InterviewApproved ||
-                                              o is InterviewerAssigned;
-
-
-                    Func<object, bool> isCapiEventToHandle = (o) => o is InterviewCompleted || 
-                        o is NewUserCreated ||
-                        o is InterviewSynchronized || 
-                        o is TemplateImported;
-
                     if ((isSupervisorEvent(evnt.Payload) && !isCapiHandler) ||
                         (isCapiEventToHandle(evnt.Payload) && isCapiHandler))
                     {

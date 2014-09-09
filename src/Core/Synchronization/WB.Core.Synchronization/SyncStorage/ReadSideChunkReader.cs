@@ -35,23 +35,13 @@ namespace WB.Core.Synchronization.SyncStorage
                 };
         }
 
-        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(long sequence, IEnumerable<Guid> users)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(DateTime timestamp, IEnumerable<Guid> users)
         {
-            //todo: query is not optimal but will be replaced shortly
             return
                 queryableStorage.QueryAll(
-                    d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
-                                .OrderBy(o => o.Sequence).Where((package) => FilterDeleteNotificationsWithInterviewWasnotSend(package,sequence))
-                                .Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Sequence)).ToList();
-        }
-
-        private bool FilterDeleteNotificationsWithInterviewWasnotSend(SynchronizationDelta package, long sequence)
-        {
-            if (package.ItemType != SyncItemType.DeleteQuestionnare)
-                return true;
-            if (sequence > 0)
-                return true;
-            return false;
+                    d => d.Timestamp > timestamp && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
+                                .OrderBy(o => o.Timestamp)
+                                .Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Timestamp.Ticks)).ToList();
         }
     }
 }

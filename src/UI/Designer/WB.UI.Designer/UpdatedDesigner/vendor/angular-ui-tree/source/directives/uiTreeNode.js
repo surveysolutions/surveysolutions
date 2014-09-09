@@ -18,10 +18,10 @@
             scope.init(controllersArr);
 
             scope.collapsed = !!$uiTreeHelper.getNodeAttribute(scope, 'collapsed');
-            attrs.$observe('collapsed', function(val) {
-              var collapsed = scope.$eval(val);
-              if((typeof collapsed) == "boolean") {
-                scope.collapsed = collapsed;
+
+            scope.$watch(attrs.collapsed, function(val) {
+              if((typeof val) == "boolean") {
+                scope.collapsed = val;
               }
             });
 
@@ -36,6 +36,8 @@
             var placeElm, hiddenPlaceElm, dragElm;
             var treeScope = null;
             var elements; // As a parameter for callbacks
+            var dragDelaying = true;
+            var dragStarted = false;
             var dragTimer = null;
             var body = document.body,
                 html = document.documentElement,
@@ -68,7 +70,9 @@
 
               var eventElmTagName = eventElm.prop('tagName').toLowerCase();
               if (eventElmTagName == 'input' ||
-                eventElmTagName == 'button') { // if it's a input or button, ignore it
+                eventElmTagName == 'textarea' ||
+                eventElmTagName == 'button' ||
+                eventElmTagName == 'select') { // if it's a input or button, ignore it
                 return;
               }
 
@@ -78,6 +82,10 @@
                   return;
                 }
                 eventElm = eventElm.parent();
+              }
+
+              if (!scope.beforeDrag(scope)){
+                return;
               }
 
               e.uiTreeDragging = true; // stop event bubbling
@@ -131,9 +139,6 @@
                 placeholder: placeElm,
                 dragging: dragElm
               };
-              scope.$apply(function() {
-                scope.$callbacks.dragStart(dragInfo.eventArgs(elements, pos));
-              });
 
               angular.element($document).bind('touchend', dragEndEvent);
               angular.element($document).bind('touchcancel', dragEndEvent);
@@ -141,17 +146,33 @@
               angular.element($document).bind('mouseup', dragEndEvent);
               angular.element($document).bind('mousemove', dragMoveEvent);
               angular.element($document).bind('mouseleave', dragCancelEvent);
+
               document_height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
               document_width = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
             };
 
             var dragMove = function(e) {
+              if (!dragStarted) {
+                if (!dragDelaying) {
+                  dragStarted = true;
+                  scope.$apply(function() {
+                    scope.$callbacks.dragStart(dragInfo.eventArgs(elements, pos));
+                  });
+                }
+                return;
+              }
+
               var eventObj = $uiTreeHelper.eventObj(e);
               var prev, leftElmPos, topElmPos;
 
               if (dragElm) {
                 e.preventDefault();
-                $window.getSelection().removeAllRanges();
+
+                if ($window.getSelection) {
+                  $window.getSelection().removeAllRanges();
+                } else if ($window.document.selection) {
+                  $window.document.selection.empty();
+                }
 
                 leftElmPos = eventObj.pageX - pos.offsetX;
                 topElmPos = eventObj.pageY - pos.offsetY;
@@ -383,9 +404,12 @@
 
             var bindDrag = function() {
               element.bind('touchstart mousedown', function (e) {
-                dragTimer = $timeout(function(){dragStartEvent(e);}, scope.dragDelay);
+                dragDelaying = true;
+                dragStarted = false;
+                dragStartEvent(e);
+                dragTimer = $timeout(function(){dragDelaying = false;}, scope.dragDelay);
               });
-              element.bind('touchend touchmove touchcancel mousemove mouseup',function(){$timeout.cancel(dragTimer);});
+              element.bind('touchend touchcancel mouseup',function(){$timeout.cancel(dragTimer);});
             };
             bindDrag();
 

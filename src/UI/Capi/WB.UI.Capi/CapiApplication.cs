@@ -178,6 +178,7 @@ namespace WB.UI.Capi
                 this.kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
+            bus.RegisterHandler(templateDenoramalizer, typeof(QuestionnaireDeleted));
             bus.RegisterHandler(templateDenoramalizer, typeof(PlainQuestionnaireRegistered));
             
             var rosterStructureDenormalizer = new QuestionnaireRosterStructureDenormalizer(
@@ -186,6 +187,7 @@ namespace WB.UI.Capi
                 this.kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(rosterStructureDenormalizer, typeof(TemplateImported));
+            bus.RegisterHandler(rosterStructureDenormalizer, typeof(QuestionnaireDeleted));
             bus.RegisterHandler(rosterStructureDenormalizer, typeof(PlainQuestionnaireRegistered));
         }
 
@@ -218,6 +220,7 @@ namespace WB.UI.Capi
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
+            bus.RegisterHandler(dashboardeventHandler, typeof(QuestionnaireDeleted));
             bus.RegisterHandler(dashboardeventHandler, typeof(PlainQuestionnaireRegistered));
 
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewOnClientCreated));

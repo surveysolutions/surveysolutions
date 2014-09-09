@@ -24,7 +24,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
             QuestionScope scope,
             bool isPreFilled,
             Option[] options,
-            Guid? linkedToQuestionId)
+            Guid? linkedToQuestionId,
+            bool isFilteredCombobox)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel: variableLabel)
@@ -39,7 +40,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
                     .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
+            this.IsFilteredCombobox = isFilteredCombobox;
         }
+
+        public bool IsFilteredCombobox { get; set; }
 
         public QuestionScope Scope { get; set; }
 
