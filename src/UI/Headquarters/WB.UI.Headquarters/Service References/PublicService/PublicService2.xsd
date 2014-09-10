@@ -3,7 +3,7 @@
   <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects" />
   <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/Message" />
-  <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" />
+  <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.Services.Questionnaire" />
   <xs:element name="DownloadQuestionnaireRequest">
     <xs:complexType>
       <xs:sequence />
@@ -56,7 +56,7 @@
   <xs:element name="QuestionnaireListViewMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" minOccurs="0" name="Items" nillable="true" type="q5:ArrayOfQuestionnaireListViewItemMessage" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/WB.UI.Designer.Services.Questionnaire" minOccurs="0" name="Items" nillable="true" type="q5:ArrayOfQuestionnaireListViewItemMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

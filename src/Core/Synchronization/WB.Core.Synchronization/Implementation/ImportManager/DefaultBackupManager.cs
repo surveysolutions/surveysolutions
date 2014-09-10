@@ -7,7 +7,6 @@ using Main.Core.Events;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
-using SynchronizationMessages.Export;
 using WB.Core.Synchronization.SyncProvider;
 
 namespace WB.Core.Synchronization.Implementation.ImportManager

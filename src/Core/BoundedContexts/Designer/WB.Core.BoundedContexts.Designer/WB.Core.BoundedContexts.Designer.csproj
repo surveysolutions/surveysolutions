@@ -174,6 +174,22 @@
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\IDynamicCompiler.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\InterviewCompiler.cs" />
+    <Compile Include="Events\Users\AccountConfirmed.cs" />
+    <Compile Include="Events\Users\AccountDeleted.cs" />
+    <Compile Include="Events\Users\AccountLocked.cs" />
+    <Compile Include="Events\Users\AccountLoginFailed.cs" />
+    <Compile Include="Events\Users\AccountOnlineUpdated.cs" />
+    <Compile Include="Events\Users\AccountPasswordChanged.cs" />
+    <Compile Include="Events\Users\AccountPasswordQuestionAndAnswerChanged.cs" />
+    <Compile Include="Events\Users\AccountPasswordReset.cs" />
+    <Compile Include="Events\Users\AccountPasswordResetTokenChanged.cs" />
+    <Compile Include="Events\Users\AccountRegistered.cs" />
+    <Compile Include="Events\Users\AccountRoleAdded.cs" />
+    <Compile Include="Events\Users\AccountRoleRemoved.cs" />
+    <Compile Include="Events\Users\AccountUnlocked.cs" />
+    <Compile Include="Events\Users\AccountUpdated.cs" />
+    <Compile Include="Events\Users\AccountValidated.cs" />
+    <Compile Include="Events\Users\UserLoggedIn.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
@@ -422,10 +438,6 @@
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
-      <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
-      <Name>WB.UI.Designer.Providers.CQRS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
@@ -453,10 +465,6 @@
     <ProjectReference Include="..\..\..\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
-      <Project>{8c4b0e67-8c0a-4222-8646-3cf3131cade5}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>

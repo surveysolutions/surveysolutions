@@ -1,0 +1,176 @@
+﻿@using System.Runtime.Serialization.Formatters
+@using System.Web.Optimization
+@using Newtonsoft.Json
+
+@model WB.Core.SharedKernels.SurveyManagement.Views.TakeNew.TakeNewInterviewView
+
+@{
+    ViewBag.Title = "TakeNew";
+}
+
+<div class="page-header">
+    <h3>
+        Take New Interview <small data-bind="text: questionnaire().title"></small>
+    </h3>
+</div>
+
+
+@section styles
+{
+    @Styles.Render("~/css/interview-new")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/js/interview-general", "~/js/interview-new")
+    <script type="text/javascript">
+        $(function() {
+            var questionnaire = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+                                  {
+                                      TypeNameHandling = TypeNameHandling.None,
+                                      TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                                  }));
+            var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
+            var interviewListUrl = '@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme)';
+
+            var model = new Supervisor.VM.NewInterview(commandExecutionUrl, questionnaire, interviewListUrl);
+            model.load();
+            ko.applyBindings(model);
+        });
+    </script>
+    <script type="text/html" id="SingleOption">
+        <!-- ko ifnot: isFilteredCombobox -->
+        <div data-bind="template: { name: 'SingleOptionRegular' }"></div>
+        <!-- /ko -->
+        <!-- ko if: isFilteredCombobox -->
+        <div data-bind="template: { name: 'SingleOptionFiltered' }"></div>
+        <!-- /ko -->
+    </script>
+    <script type="text/html" id="SingleOptionRegular">
+        <div class="form-group" data-bind="validationElement: selectedOption">
+            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <div class="col-sm-2">
+                <!-- ko foreach: options -->
+                <div class="radio">
+                    <label data-bind='attr: { "for": optionFor }'>
+                        <input type='radio' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOption" />
+                        <span data-bind="text: label"></span>
+                    </label>
+                </div>
+
+                <!-- /ko -->
+                <span class="help-block" data-bind="validationMessage: selectedOption"></span>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="SingleOptionFiltered">
+        <div class="form-group" data-bind="validationElement: value">
+            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <div class="col-sm-2">
+                <input class="form-control" type="text" data-bind="typeahead: options, id: selectedOption, value: value, valueUpdate: 'afterkeydown'" />
+                <span class="help-block" data-bind="validationMessage: value"></span>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="MultyOption">
+        <div class="form-group" data-bind="validationElement: selectedOptions">
+            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <div class="col-sm-2">
+                <!-- ko foreach: options -->
+                <div class="checkbox">
+                    <label data-bind='attr: { "for": optionFor }'>
+                        <input type='checkbox' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOptions" />
+                        <span data-bind="text: label"></span>
+                    </label>
+                </div>
+                <!-- /ko -->
+                <span class="help-block" data-bind="validationMessage: selectedOptions"></span>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="Numeric">
+        <div class="form-group" data-bind="validationElement: selectedOption">
+            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <div class="col-sm-2">
+                <div class="input-group">
+                    <span class="input-group-addon">#</span>
+                    <input class="form-control" type="text" data-bind="numericformatter: selectedOption, valueUpdate: 'afterkeydown'" />
+                </div>
+                <span class="help-block" data-bind="validationMessage: selectedOption"></span>
+            </div>
+        </div>
+
+    </script>
+    <script type="text/html" id="DateTime">
+        <div class="form-group" data-bind="validationElement: selectedOption">
+            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <div class="col-sm-2">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    <input class="form-control" type="text" data-date-format="mm/dd/yy" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }" />
+                </div>
+                <span class="help-block" data-bind="validationMessage: selectedOption"></span>
+            </div>
+        </div>
+
+    </script>
+    <script type="text/html" id="AutoPropagate">
+        <div class="form-group" data-bind="validationElement: selectedOption">
+            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <div class="col-sm-2">
+                <div class="input-group">
+                    <span class="input-group-addon">#</span>
+                    <input type="number" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
+                </div>
+                <span class="help-block" data-bind="validationMessage: selectedOption"></span>
+            </div>
+        </div>
+
+    </script>
+    <script type="text/html" id="Text">
+        <div class="form-group" data-bind="validationElement: selectedOption">
+            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <div class="col-sm-2">
+                <div class="input-group">
+                    <span class="input-group-addon">T</span>
+                    <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown', maskFormatter:mask" />
+                </div>
+                <span class="help-block" data-bind="validationMessage: selectedOption"></span>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="GpsCoordinates">
+        <div class="form-group" data-bind="validationElement: selectedOption">
+            <label class="col-sm-2 control-label" data-bind="text: title"></label>
+            <div class="col-sm-2">
+                <div class="input-prepend">
+                    <span class="add-on">T</span>
+                    <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
+                </div>
+                <span class="help-block" data-bind="validationMessage: selectedOption"></span>
+            </div>
+        </div>
+    </script>
+}
+
+<div class="row-fluid" id="featured-questions-region" data-bind="visible: IsPageLoaded">
+    <div id="featured-questions" class="form-horizontal">
+        <!-- ko foreach: questions -->
+        <!-- ko template:  { name: type(), data: $data } -->
+        <!-- /ko -->
+        <!-- /ko -->
+        <div class="form-group" data-bind="validationElement: responsible">
+            <label class="col-sm-2 control-label">Responsible</label>
+            <div class="col-md-2">
+                <select class="form-control" data-bind="options: supervisors, optionsText: 'name', value: responsible"></select>
+                <span class="help-block" data-bind="validationMessage: responsible"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-2">
+            <button type="submit" class="btn btn-primary" data-bind="click: saveCommand, enable: isSaveEnable">Create</button>
+            @Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>
