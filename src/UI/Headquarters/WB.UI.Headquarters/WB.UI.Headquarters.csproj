@@ -235,6 +235,7 @@
     </Content>
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Configuration\Dima.Headquarters.Web.config" />
+    <Content Include="Scripts\ko.datepicker.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Views\HQ\InterviewsChart.cshtml" />
     <None Include="parameters.xml" />
@@ -379,6 +380,19 @@
     <None Include="Properties\PublishProfiles\package.pubxml" />
     <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
+    <Content Include="Views\HQ\Assign.cshtml" />
+    <Content Include="Views\HQ\BatchUpload.cshtml" />
+    <Content Include="Views\HQ\ImportResult.cshtml" />
+    <Content Include="Views\HQ\ImportSample.cshtml" />
+    <Content Include="Views\HQ\Index.cshtml" />
+    <Content Include="Views\HQ\Interviews.cshtml" />
+    <Content Include="Views\HQ\MapReport.cshtml" />
+    <Content Include="Views\HQ\SampleCreationResult.cshtml" />
+    <Content Include="Views\HQ\Status.cshtml" />
+    <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
+    <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
+    <Content Include="Views\HQ\TakeNew.cshtml" />
+    <Content Include="Views\HQ\VerifySample.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -449,6 +463,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
+    <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
@@ -560,10 +575,6 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
-      <Project>{8C4B0E67-8C0A-4222-8646-3CF3131CADE5}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>

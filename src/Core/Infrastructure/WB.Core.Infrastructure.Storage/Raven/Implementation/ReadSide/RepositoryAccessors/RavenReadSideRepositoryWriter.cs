@@ -48,7 +48,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
                 return query.Invoke(
                     session
                         .Query<TEntity>()
-                        .Customize(customization => customization.WaitForNonStaleResultsAsOfNow()));
+                        .Customize(customization => customization.WaitForNonStaleResultsAsOfLastWrite()));
             }
         }
 
