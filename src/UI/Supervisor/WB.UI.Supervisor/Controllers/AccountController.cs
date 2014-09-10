@@ -4,11 +4,11 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
-using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Security;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 
 namespace WB.UI.Supervisor.Controllers
 {

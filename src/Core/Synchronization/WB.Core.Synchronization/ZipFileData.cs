@@ -1,9 +1,9 @@
-namespace SynchronizationMessages.Export
-{
-    using System;
-    using System.Collections.Generic;
-    using Main.Core.Events;
+using System;
+using System.Collections.Generic;
+using Main.Core.Events;
 
+namespace WB.Core.Synchronization
+{
     public class ZipFileData
     {
         public ZipFileData()

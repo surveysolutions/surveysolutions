@@ -4,11 +4,10 @@ using System.IO;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Threading;
-using SynchronizationMessages.Export;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Threading;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers

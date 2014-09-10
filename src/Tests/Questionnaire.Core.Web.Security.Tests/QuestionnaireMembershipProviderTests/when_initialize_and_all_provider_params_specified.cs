@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using Machine.Specifications;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using It = Machine.Specifications.It;
 
 namespace Questionnaire.Core.Web.Security.Tests.QuestionnaireMembershipProviderTests

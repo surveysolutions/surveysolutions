@@ -1,12 +1,10 @@
-﻿namespace SynchronizationMessages.Export
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Ionic.Zip;
+
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text;
-
-    using Ionic.Zip;
-
     /// <summary>
     /// The zip manager.
     /// </summary>
