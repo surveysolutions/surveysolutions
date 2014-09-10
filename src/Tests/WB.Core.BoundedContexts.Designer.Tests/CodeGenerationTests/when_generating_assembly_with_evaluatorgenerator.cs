@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         };
 
         private Because of = () =>
-            emitResult = expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
+            emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
 
         private It should_result_succeded = () =>
             emitResult.Success.ShouldEqual(true);

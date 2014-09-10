@@ -52,13 +52,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             groupsToBeDisabled.Count.ShouldEqual(1);
 
         private It should_disabled_group_id_equal_group2id = () =>
-            groupsToBeDisabled.First().Id.ShouldEqual(group2Id);
+            groupsToBeDisabled.Single().Id.ShouldEqual(group2Id);
 
         private It should_enable_group_count_equal_1 = () =>
             groupsToBeEnabled.Count.ShouldEqual(1);
 
         private It should_enabled_group_id_equal_group1id = () =>
-            groupsToBeEnabled.First().Id.ShouldEqual(group1Id);
+            groupsToBeEnabled.Single().Id.ShouldEqual(group1Id);
 
         private static Guid questionnaireId = Guid.Parse("21111111111111111111111111111111");
         private static Guid question1Id = Guid.Parse("11111111111111111111111111111112");

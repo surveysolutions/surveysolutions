@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using IExpressionProcessor = WB.Core.SharedKernels.DataCollection.IExpressionProcessor;
 
 namespace WB.Tests.Integration.InterviewTests
 {
@@ -70,6 +71,11 @@ namespace WB.Tests.Integration.InterviewTests
         {
             return new InterviewExpressionStateProvider();
         }
+
+        /*protected static IExpressionProcessor CreateExpressionProcessorStub()
+        {
+            return new ExpressionProcessor();
+        }*/
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {

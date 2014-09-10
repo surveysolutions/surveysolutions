@@ -2,8 +2,7 @@
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
 
-
-namespace WB.Core.Infrastructure.Compilation.Tests
+namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
 {
     internal class when_StronglyTypedInterviewEvaluator_with_one_roster_is_cloning
     {
@@ -39,7 +38,6 @@ namespace WB.Core.Infrastructure.Compilation.Tests
         private static int persons_count = 1;
         private static int age = 11;
 
-        private static string filePath;
         private static readonly decimal[] emptyRosterVector = new decimal[0];
         private static decimal[] firstLevelRosterVector = new [] { 1.0m };
     }

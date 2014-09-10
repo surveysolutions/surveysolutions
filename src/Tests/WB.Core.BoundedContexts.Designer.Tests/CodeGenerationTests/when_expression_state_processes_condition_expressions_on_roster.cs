@@ -45,11 +45,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         private It should_enabled_question_count_equal_1 = () =>
             questionsToBeEnabled.Count.ShouldEqual(1);
 
+        private It should_enabled_question_id_equal_ = () =>
+            questionsToBeEnabled.Single().Id.ShouldEqual(questionId);
+
         private It should_disabled_group_count_equal_1 = () =>
             groupsToBeDisabled.Count.ShouldEqual(1);
 
         private It should_disabled_group_id_equal_group1id = () =>
-            groupsToBeDisabled.First().Id.ShouldEqual(group1Id);
+            groupsToBeDisabled.Single().Id.ShouldEqual(group1Id);
 
         private It should_enable_group_count_equal_0 = () =>
             groupsToBeEnabled.Count.ShouldEqual(0);

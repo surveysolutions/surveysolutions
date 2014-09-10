@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Microsoft.CodeAnalysis.Emit;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
-namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
+namespace WB.Core.BoundedContexts.Designer.Tests.InterviewCompilerTests
 {
     internal class when_generating_assembly_as_string
     {
@@ -19,6 +21,9 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
         private It should_result_succeded = () =>
             emitResult.Success.ShouldEqual(true);
 
+        private It should_diagnostics_count_equal_0 = () =>
+            emitResult.Diagnostics.Count().ShouldEqual(0);
+
         private It should_ = () =>
             resultAssembly.Length.ShouldBeGreaterThan(0);
         
@@ -28,8 +33,7 @@ namespace WB.Core.Infrastructure.Compilation.Tests.InterviewCompilerTests
         private static EmitResult emitResult;
 
         public static string testClassToCompile =
-            @"using System;
-                using System.Collections.Generic;
+            @"using System.Collections.Generic;
                 using System.Linq;
                 using WB.Core.SharedKernels.DataCollection;
                 public class InterviewEvaluator : IInterviewEvaluator

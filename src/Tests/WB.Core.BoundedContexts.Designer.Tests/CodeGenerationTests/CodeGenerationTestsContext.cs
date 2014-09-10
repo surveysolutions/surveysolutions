@@ -379,7 +379,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 var expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
 
                 string resultAssembly;
-                var emitResult = expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
+                var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
 
                 var filePath = Path.GetTempFileName();
 
