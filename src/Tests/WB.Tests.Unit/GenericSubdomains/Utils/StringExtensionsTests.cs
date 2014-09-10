@@ -1,6 +1,4 @@
-﻿using System;
-using CsQuery;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils
