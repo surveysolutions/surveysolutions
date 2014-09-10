@@ -380,6 +380,19 @@
     <None Include="Properties\PublishProfiles\package.pubxml" />
     <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
+    <Content Include="Views\HQ\Assign.cshtml" />
+    <Content Include="Views\HQ\BatchUpload.cshtml" />
+    <Content Include="Views\HQ\ImportResult.cshtml" />
+    <Content Include="Views\HQ\ImportSample.cshtml" />
+    <Content Include="Views\HQ\Index.cshtml" />
+    <Content Include="Views\HQ\Interviews.cshtml" />
+    <Content Include="Views\HQ\MapReport.cshtml" />
+    <Content Include="Views\HQ\SampleCreationResult.cshtml" />
+    <Content Include="Views\HQ\Status.cshtml" />
+    <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
+    <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
+    <Content Include="Views\HQ\TakeNew.cshtml" />
+    <Content Include="Views\HQ\VerifySample.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -450,6 +463,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
+    <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
