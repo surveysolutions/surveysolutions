@@ -17,7 +17,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private readonly IEventStore eventStore;
         private readonly ISnapshotStore snapshotStore;
         private readonly IDomainRepository domainRepository;
-        private readonly Dictionary<string, IQuestionnaire> historicalQuestionnaireCache = new Dictionary<string, IQuestionnaire>();
 
         public DomainQuestionnaireRepository(IDomainRepository domainRepository, IEventStore eventStore,
                                        ISnapshotStore snapshotStore)
@@ -34,19 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
         {
-            string cacheKey = string.Format("{0}---{1}", id, version);
-
-            if (!this.historicalQuestionnaireCache.ContainsKey(cacheKey))
-            {
-                IQuestionnaire historicalQuestionnaire = this.GetHistoricalQuestionnaireImpl(id, version);
-
-                if (historicalQuestionnaire == null)
-                    return null; // does not need to store not existing result because questionnaire with asked version and id might probably appear in future
-
-                this.historicalQuestionnaireCache[cacheKey] = historicalQuestionnaire;
-            }
-
-            return this.historicalQuestionnaireCache[cacheKey];
+            return this.GetHistoricalQuestionnaireImpl(id, version);
         }
 
         private IQuestionnaire GetHistoricalQuestionnaireImpl(Guid id, long? version = null)
