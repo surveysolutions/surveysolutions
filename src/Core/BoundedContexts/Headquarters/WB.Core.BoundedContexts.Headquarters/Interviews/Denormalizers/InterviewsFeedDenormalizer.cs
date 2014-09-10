@@ -46,6 +46,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
             }, evnt.EventIdentifier);
         }
 
+        public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
+        {
+            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
+
+            string supervisorId = Monads.Maybe(() => interviewData.SupervisorId.FormatGuid());
+            string responsibleId = interviewData.ResponsibleId.FormatGuid();
+            this.writer.Store(new InterviewFeedEntry
+            {
+                InterviewId = evnt.EventSourceId.FormatGuid(),
+                EntryType = EntryType.InterviewRejected,
+                SupervisorId = supervisorId,
+                Timestamp = evnt.EventTimeStamp,
+                EntryId = evnt.EventIdentifier.FormatGuid(),
+                UserId = evnt.Payload.UserId.FormatGuid(),
+                InterviewerId = supervisorId != responsibleId ? responsibleId : null
+            }, evnt.EventIdentifier.FormatGuid());
+        }
+
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
             string supervisorId = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document.SupervisorId.FormatGuid());
@@ -74,24 +92,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
                 EntryId = evnt.EventIdentifier.FormatGuid(),
                 UserId = evnt.Payload.UserId.FormatGuid()
             }, evnt.EventIdentifier);
-        }
-
-        public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
-        {
-            InterviewData interviewData = this.interviews.GetById(evnt.EventSourceId).Document;
-
-            string supervisorId = Monads.Maybe(() => interviewData.SupervisorId.FormatGuid());
-            string responsibleId = interviewData.ResponsibleId.FormatGuid();
-            this.writer.Store(new InterviewFeedEntry
-            {
-                InterviewId = evnt.EventSourceId.FormatGuid(),
-                EntryType = EntryType.InterviewRejected,
-                SupervisorId = supervisorId,
-                Timestamp = evnt.EventTimeStamp,
-                EntryId = evnt.EventIdentifier.FormatGuid(),
-                UserId = evnt.Payload.UserId.FormatGuid(),
-                InterviewerId =  supervisorId != responsibleId ? responsibleId : null
-            }, evnt.EventIdentifier.FormatGuid());
         }
 
         public override Type[] BuildsViews
