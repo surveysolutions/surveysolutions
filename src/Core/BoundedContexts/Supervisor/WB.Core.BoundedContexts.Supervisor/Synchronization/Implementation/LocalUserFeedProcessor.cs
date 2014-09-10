@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersPullContext = headquartersPullContext;
         }
 
-        public void Process()
+        public Guid[] PullUsersAndReturnListOfSynchronizedSupervisorsId()
         {
             var localSupervisors = users.Query(_ => _.Where(x => x.Roles.Contains(UserRoles.Supervisor)));
 
@@ -61,6 +61,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.ProcessOneUserChanges(userChanges);
                 }
             }
+            return localSupervisors.Select(s => s.PublicKey).ToArray();
         }
 
         private void ProcessOneUserChanges(IEnumerable<LocalUserChangedFeedEntry> userChanges)

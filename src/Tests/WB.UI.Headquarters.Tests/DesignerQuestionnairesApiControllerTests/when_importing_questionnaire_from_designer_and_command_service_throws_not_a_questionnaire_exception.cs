@@ -4,7 +4,6 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.PublicService;

@@ -2,12 +2,12 @@
 using System.Web.Mvc;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers

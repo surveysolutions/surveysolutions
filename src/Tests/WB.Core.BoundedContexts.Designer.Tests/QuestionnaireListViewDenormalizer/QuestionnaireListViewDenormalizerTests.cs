@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireListViewDenormalizer

@@ -322,10 +322,6 @@
     <Compile Include="View\User\UserView.cs" />
     <Compile Include="View\User\UserViewFactory.cs" />
     <Compile Include="View\User\UserViewInputModel.cs" />
-    <Compile Include="WCF\AuthorizationPacket.cs" />
-    <Compile Include="WCF\BaseAuthorizationService.cs" />
-    <Compile Include="WCF\IAuthorizationPacket.cs" />
-    <Compile Include="WCF\IAuthorizationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

@@ -43,6 +43,10 @@
     <Reference Include="HtmlSanitizationLibrary">
       <HintPath>..\..\..\..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -79,6 +83,7 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebPages.3.1.1\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -124,6 +129,9 @@
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
+    <Compile Include="Utils\Binding\IModelBinder.cs" />
+    <Compile Include="Utils\Binding\ModelBinder.cs" />
     <Compile Include="Code\AppSettings.cs" />
     <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializer.cs" />
     <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
@@ -143,7 +151,6 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommandApiController.cs" />
-    <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
@@ -224,6 +231,16 @@
     </Compile>
     <Compile Include="SurveyManagementAreaRegistration.cs" />
     <Compile Include="SurveyManagementWebModule.cs" />
+    <Compile Include="Utils\Compression\ZipHelper.cs" />
+    <Compile Include="Utils\Compression\ZipManager.cs" />
+    <Compile Include="Utils\Membership\GlobalInfo.cs" />
+    <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
+    <Compile Include="Utils\Membership\IGlobalInfoProvider.cs" />
+    <Compile Include="Utils\Security\FormsAuthentication.cs" />
+    <Compile Include="Utils\Security\IFormsAuthentication.cs" />
+    <Compile Include="Utils\Security\QuestionnaireMembershipProvider.cs" />
+    <Compile Include="Utils\Security\QuestionnaireRoleProvider.cs" />
+    <Compile Include="Utils\Threading\AsyncQuestionnaireUpdater.cs" />
     <Compile Include="Utils\Alerts.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
@@ -303,6 +320,7 @@
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.eot" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.ttf" />
     <EmbeddedResource Include="fonts\glyphicons-halflings-regular.woff" />
+    <None Include="app.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewDetails.cshtml" />
@@ -332,27 +350,12 @@
     <EmbeddedResource Include="Views\ControlPanel\NConfig.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RevalidateInterviews.cshtml" />
     <EmbeddedResource Include="Views\Device\Index.cshtml" />
-    <EmbeddedResource Include="Views\HQ\Assign.cshtml" />
-    <EmbeddedResource Include="Views\HQ\BatchUpload.cshtml" />
-    <EmbeddedResource Include="Views\HQ\ImportResult.cshtml" />
-    <EmbeddedResource Include="Views\HQ\ImportSample.cshtml" />
-    <EmbeddedResource Include="Views\HQ\Index.cshtml" />
-    <EmbeddedResource Include="Views\HQ\Interviews.cshtml" />
-    <EmbeddedResource Include="Views\HQ\MapReport.cshtml" />
-    <EmbeddedResource Include="Views\HQ\SampleCreationResult.cshtml" />
-    <EmbeddedResource Include="Views\HQ\Status.cshtml" />
-    <EmbeddedResource Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
-    <EmbeddedResource Include="Views\HQ\SurveysAndStatuses.cshtml" />
-    <EmbeddedResource Include="Views\HQ\TakeNew.cshtml" />
-    <EmbeddedResource Include="Views\HQ\VerifySample.cshtml" />
     <EmbeddedResource Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
     <EmbeddedResource Include="Views\Survey\Index.cshtml" />
     <EmbeddedResource Include="Views\Survey\Interviews.cshtml" />
     <EmbeddedResource Include="Views\Survey\Status.cshtml" />
     <EmbeddedResource Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
     <EmbeddedResource Include="Views\TabletReport\Packages.cshtml" />
-    <EmbeddedResource Include="Views\Template\Import.cshtml" />
-    <EmbeddedResource Include="Views\Template\LoginToDesigner.cshtml" />
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
     <EmbeddedResource Include="Views\Shared\AccessDenied.cshtml" />
     <EmbeddedResource Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
@@ -387,14 +390,6 @@
     <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
-      <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
-      <Name>Questionnaire.Core.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
-      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
-      <Name>SynchronizationMessages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
@@ -448,9 +443,7 @@
     <EmbeddedResource Include="Content\app.css" />
     <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Team\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
   </ItemGroup>

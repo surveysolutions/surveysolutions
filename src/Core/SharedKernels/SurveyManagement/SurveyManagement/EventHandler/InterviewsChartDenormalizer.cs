@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             RejectedBySupervisorCount = statisticsToDublicate.RejectedBySupervisorCount;
             ApprovedByHeadquartersCount = statisticsToDublicate.ApprovedByHeadquartersCount;
             RejectedByHeadquartersCount = statisticsToDublicate.RejectedByHeadquartersCount;
-            StrangeItems = statisticsToDublicate.StrangeItems;
+            OtherStatusesCount = statisticsToDublicate.OtherStatusesCount;
         }
 
         public int CreatedCount { get; set; }
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public int RejectedBySupervisorCount { get; set; }
         public int ApprovedByHeadquartersCount { get; set; }
         public int RejectedByHeadquartersCount { get; set; }
-        public int StrangeItems { get; set; }
+        public int OtherStatusesCount { get; set; }
     }
 
     public class StatisticsGroupedByDateAndTemplate : IReadSideRepositoryEntity, IView
@@ -144,7 +144,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     break;
 
                 default:
-                    statistics.StrangeItems += delta;
+                    statistics.OtherStatusesCount += delta;
                     break;
             }
         }
