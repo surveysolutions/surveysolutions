@@ -1,6 +1,5 @@
 ﻿using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.Infrastructure.Compilation;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -15,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.codeGenerator = new CodeGenerator();
         }
 
-        public GenerationResult GenerateProcessor(QuestionnaireDocument questionnaire, out string generatedAssembly)
+        public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, out string generatedAssembly)
         {
             string genertedEvaluator = this.codeGenerator.Generate(questionnaire);
 

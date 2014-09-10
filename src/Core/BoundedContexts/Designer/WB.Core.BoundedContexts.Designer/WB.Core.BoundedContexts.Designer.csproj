@@ -40,11 +40,15 @@
     <Reference Include="EmitMapper">
       <HintPath>..\..\..\..\..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
     </Reference>
-     <Reference Include="HtmlSanitizer">
+    <Reference Include="HtmlSanitizer">
       <HintPath>..\..\..\..\..\packages\HtmlSanitizer.1.1.5297.28403\lib\net40\HtmlSanitizer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis">
       <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.0.7.4052301-beta\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=0.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.0.7.4052301-beta\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -168,6 +172,8 @@
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\IDynamicCompiler.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\InterviewCompiler.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
@@ -432,10 +438,6 @@
       <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
       <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Compilation\WB.Core.Infrastructure.Compilation.csproj">
-      <Project>{13B91730-958C-4C6F-BB83-4D1BA7930CF2}</Project>
-      <Name>WB.Core.Infrastructure.Compilation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.FunctionalDenormalization\WB.Core.Infrastructure.FunctionalDenormalization.csproj">
       <Project>{e7d429a7-1c9f-4f25-9c23-686ef9c2d60a}</Project>
       <Name>WB.Core.Infrastructure.FunctionalDenormalization</Name>
@@ -443,6 +445,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
@@ -478,7 +484,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
-   <ItemGroup>
+  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>

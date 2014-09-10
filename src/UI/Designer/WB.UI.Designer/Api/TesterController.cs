@@ -142,7 +142,7 @@ namespace WB.UI.Designer.Api
             {
                 try
                 {
-                    generationResult = this.expressionProcessorGenerator.GenerateProcessor(questionnaireView.Source, out resultAssembly);
+                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
                 }
                 catch (Exception)
                 {

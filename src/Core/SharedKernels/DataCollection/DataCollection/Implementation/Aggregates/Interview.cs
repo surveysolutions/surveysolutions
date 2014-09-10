@@ -37,20 +37,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewStatus status;
 
         private IInterviewExpressionState expressionProcessorStatePrototypeInt = null;
-
         private IInterviewExpressionState expressionProcessorStatePrototype
         {
-            get { return this.expressionProcessorStatePrototypeInt ??
-                    (this.expressionProcessorStatePrototypeInt = this.expressionProcessorStateProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion));
+            get 
+            {
+                return this.expressionProcessorStatePrototypeInt ??
+                    (this.expressionProcessorStatePrototypeInt =
+                        this.expressionProcessorStateProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion));
             }
 
-            set { expressionProcessorStatePrototypeInt = value; }
+            set
+            {
+                expressionProcessorStatePrototypeInt = value;
+            }
         }
     
         private InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
-
-        private IExpressionProcessor expressionSharpProcessor = new ExpressionProcessor();
-
+        
         private void Apply(InterviewCreated @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
@@ -630,9 +633,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get
             {
                 return ServiceLocator.Current.GetInstance<IInterviewExpressionStateProvider>();
-                //new InterviewExpressionStateProvider();
             }
         }
+
+        private IExpressionProcessor expressionSharpProcessorInt = new ExpressionProcessor();
+        private IExpressionProcessor expressionSharpProcessor
+        {
+            get
+            {
+                //return ServiceLocator.Current.GetInstance<IExpressionProcessor>();
+                return expressionSharpProcessorInt;
+            }
+        }
+    
 
         #endregion
 

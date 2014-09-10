@@ -5,8 +5,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
-namespace WB.Core.Infrastructure.Compilation
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     public class RoslynCompiler : IDynamicCompiler
     {
@@ -38,7 +39,7 @@ namespace WB.Core.Infrastructure.Compilation
                 referencedPortableAssemblies.Select(
                     defaultReferencedPortableAssembly =>
                         new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly))));
-            metadataFileReference.Add(new MetadataFileReference(typeof (IInterviewEvaluator).Assembly.Location));
+            metadataFileReference.Add(new MetadataFileReference(typeof(Identity).Assembly.Location));
 
             var compilation = CSharpCompilation.Create(
                 String.Format("rules-{0}.dll", templateId),
