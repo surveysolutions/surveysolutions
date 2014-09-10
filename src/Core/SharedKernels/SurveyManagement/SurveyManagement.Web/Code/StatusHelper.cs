@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                    };
         }
 
-        internal static IEnumerable<SurveyStatusViewItem> GetOnlyActualSurveyStatusViewItems()
+        public static IEnumerable<SurveyStatusViewItem> GetOnlyActualSurveyStatusViewItems()
         {
             return from InterviewStatus status in Enum.GetValues(typeof (InterviewStatus))
                    where !invisibleForUserStatuses.Contains(status)

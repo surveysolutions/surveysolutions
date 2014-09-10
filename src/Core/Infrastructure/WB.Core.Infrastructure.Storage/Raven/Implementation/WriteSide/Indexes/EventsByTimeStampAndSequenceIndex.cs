@@ -1,5 +1,4 @@
 using System.Linq;
-using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 

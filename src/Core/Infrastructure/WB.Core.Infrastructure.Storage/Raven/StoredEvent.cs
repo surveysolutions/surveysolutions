@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using Raven.Imports.Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json.Converters;
 
-namespace Ncqrs.Eventing.Storage.RavenDB
+namespace WB.Core.Infrastructure.Storage.Raven
 {
-    using Raven.Imports.Newtonsoft.Json;
-    using Raven.Imports.Newtonsoft.Json.Converters;
-
     [DebuggerDisplay("StoredEvent {Data.GetType().Name}")]
     public class StoredEvent
     {

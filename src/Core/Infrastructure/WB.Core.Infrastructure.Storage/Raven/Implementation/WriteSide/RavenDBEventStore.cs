@@ -9,7 +9,7 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes;
-using StoredEvent = Ncqrs.Eventing.Storage.RavenDB.StoredEvent;
+using StoredEvent = WB.Core.Infrastructure.Storage.Raven.StoredEvent;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide
 {

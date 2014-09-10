@@ -32,6 +32,7 @@ using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using StoredEvent = WB.Core.Infrastructure.Storage.Raven.StoredEvent;
 
 namespace WB.Tools.DatabaseCleaner
 {
@@ -157,7 +158,7 @@ namespace WB.Tools.DatabaseCleaner
             return resultViewCount;
         }
 
-        private static void SaveEventsByInterviewInTemporaryDataBase(DocumentStore backupStorage, List<Ncqrs.Eventing.Storage.RavenDB.StoredEvent> allEventsByInterview)
+        private static void SaveEventsByInterviewInTemporaryDataBase(DocumentStore backupStorage, List<StoredEvent> allEventsByInterview)
         {
             using (IDocumentSession session = backupStorage.OpenSession())
             {
@@ -271,17 +272,17 @@ namespace WB.Tools.DatabaseCleaner
                 converters.Remove(jsonDynamicConverter);
             }
         }
-        private static List<Ncqrs.Eventing.Storage.RavenDB.StoredEvent> GetEventStreamByInterview(Guid eventSourceId)
+        private static List<StoredEvent> GetEventStreamByInterview(Guid eventSourceId)
         {
             int pageSize = 1024;
-            var result = new List<Ncqrs.Eventing.Storage.RavenDB.StoredEvent>();
+            var result = new List<StoredEvent>();
             int page = 0;
             while (true)
             {
                 using (IDocumentSession session = sourceStorage.OpenSession())
                 {
-                    List<Ncqrs.Eventing.Storage.RavenDB.StoredEvent> chunk = session
-                        .Query<Ncqrs.Eventing.Storage.RavenDB.StoredEvent, Event_ByEventSource>()
+                    List<StoredEvent> chunk = session
+                        .Query<StoredEvent, Event_ByEventSource>()
                         .Customize(x => x.WaitForNonStaleResults())
                         .Where(x => x.EventSourceId == eventSourceId).OrderBy(e => e.EventSequence)
                         .Skip(page * pageSize)
@@ -318,7 +319,7 @@ namespace WB.Tools.DatabaseCleaner
         {
             using (var session = sourceStorage.OpenSession())
             {
-                var any = session.Query<Ncqrs.Eventing.Storage.RavenDB.StoredEvent, Event_ByEventSource>()
+                var any = session.Query<StoredEvent, Event_ByEventSource>()
                         .Customize(q => q.WaitForNonStaleResultsAsOfNow()).Where(s => s.EventSourceId == eventSourceId)
                         .Any();
 
