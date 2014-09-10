@@ -106,18 +106,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.httpMessageHandler = httpMessageHandler;
         }
 
-        public void Pull()
+        public void PullInterviewsForSupervisors(Guid[] supervisorIds)
         {
             this.StoreEventsToLocalStorage();
 
-            var localSupervisors = users.Query(_ => _.Where(x => x.Roles.Any(role => role == UserRoles.Supervisor)));
-
-            foreach (var localSupervisor in localSupervisors)
+            foreach (var localSupervisor in supervisorIds)
             {
                 IEnumerable<LocalInterviewFeedEntry> events = 
-                    this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.PublicKey.FormatGuid() && !x.Processed));
+                    this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed));
 
-                this.headquartersPullContext.PushMessage(string.Format("Synchronizing interviews for supervisor '{0}'. Events count: {1}", localSupervisor.UserName, events.Count()));
+                this.headquartersPullContext.PushMessage(string.Format("Synchronizing interviews for supervisor '{0}'. Events count: {1}", localSupervisor, events.Count()));
                 
                 foreach (var interviewFeedEntry in events)
                 {
