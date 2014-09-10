@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     string resultAssembly;
-                    generationResult = this.expressionProcessorGenerator.GenerateProcessor(questionnaireDocument, out resultAssembly);
+                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
                 }
                 catch (Exception)
                 {

@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             groupsToBeDisabled.Count.ShouldEqual(1);
 
         private It should_disabled_group_id_equal_group1id = () =>
-            groupsToBeDisabled.First().Id.ShouldEqual(group1Id);
+            groupsToBeDisabled.Single().Id.ShouldEqual(group1Id);
 
         private It should_enable_group_count_equal_0 = () =>
             groupsToBeEnabled.Count.ShouldEqual(0);

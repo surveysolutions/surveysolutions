@@ -32,7 +32,8 @@ namespace WB.Core.SharedKernels.DataCollection
             }
 
             this.Bind<IInterviewExpressionStateProvider>().To<InterviewExpressionStateProvider>();
-            
+            //this.Bind<IExpressionProcessor>().To<ExpressionProcessor>();
+
             this.Bind<IQuestionnaireFactory>().To<QuestionnaireFactory>();
 
             this.Bind(typeof(IVersionedReadSideRepositoryWriter<>)).To(typeof(VersionedReadSideRepositoryWriter<>));
