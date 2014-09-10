@@ -11,6 +11,7 @@
     <AssemblyName>WB.Tests.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -157,9 +158,14 @@
     <Compile Include="Create.cs" />
     <Compile Include="GenericSubdomains\Utils\StringExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SharedKernels\ExpressionProcessor\ExpressionProcessorTests\ExpressionProcessorTestsContext.cs" />
+    <Compile Include="SharedKernels\ExpressionProcessor\ExpressionProcessorTests\when_getting_identifiers_used_in_expression__a_or_colon_b_and_c_colon__.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\ChartStatisticsViewFactoryTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_one_day_before_and_after.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_from_date_bigger_then_to_date.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_without_data.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_statistics_view_and_from_is_more_than_to.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_3_days_with_incremental_data_for_each_count.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\InterviewApiControllerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_details_which_belong_to_another_supervisor.cs" />
@@ -173,6 +179,12 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_which_belong_to_another_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_not_existing_interview_details.cs" />
+    <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
+    <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests.cs" />
+    <Compile Include="SharedKernels\Synchronization\ReadSideChunkWriterTests.cs" />
+    <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests.cs" />
+    <Compile Include="SharedKernels\Synchronization\SyncManagerTests\SyncManagerTests.cs" />
+    <Compile Include="SharedKernels\Synchronization\SyncProviderTests\SyncProviderTests.cs" />
     <Compile Include="Stub.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -197,10 +209,6 @@
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
-      <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
-      <Name>Questionnaire.Core.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
@@ -221,6 +229,10 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
@@ -233,13 +245,17 @@
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
-      <Project>{8263CA84-BFB5-4A7B-AE31-F5FC5B05E7C1}</Project>
-      <Name>WB.UI.Designer.WebServices</Name>
+    <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
+      <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
+      <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>

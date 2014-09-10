@@ -1,4 +1,6 @@
-﻿namespace Questionnaire.Core.Web.Security.Tests.QuestionnaireMembershipProviderTests
+﻿using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
+
+namespace Questionnaire.Core.Web.Security.Tests.QuestionnaireMembershipProviderTests
 {
     internal class QuestionnaireMembershipProviderTestsContext
     {

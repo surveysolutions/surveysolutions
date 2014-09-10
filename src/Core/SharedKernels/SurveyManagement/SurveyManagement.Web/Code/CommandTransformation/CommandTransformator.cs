@@ -6,9 +6,9 @@ using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Newtonsoft.Json.Linq;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
 {

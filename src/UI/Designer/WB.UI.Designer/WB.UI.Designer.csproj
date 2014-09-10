@@ -318,6 +318,13 @@
     <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Services\IPublicService.cs" />
+    <Compile Include="Services\PublicService.cs" />
+    <Compile Include="Services\Questionnaire\DownloadQuestionnaireRequest.cs" />
+    <Compile Include="Services\Questionnaire\QuestionnaireListRequest.cs" />
+    <Compile Include="Services\Questionnaire\QuestionnaireListViewItemMessage.cs" />
+    <Compile Include="Services\Questionnaire\QuestionnaireListViewMessage.cs" />
+    <Compile Include="Services\RemoteFileInfo.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
   </ItemGroup>
@@ -1400,10 +1407,6 @@
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
-      <Project>{8C4B0E67-8C0A-4222-8646-3CF3131CADE5}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
@@ -1419,10 +1422,6 @@
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
-      <Project>{8263ca84-bfb5-4a7b-ae31-f5fc5b05e7c1}</Project>
-      <Name>WB.UI.Designer.WebServices</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

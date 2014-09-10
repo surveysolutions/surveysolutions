@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Client.Indexes;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide.Indexes

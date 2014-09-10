@@ -3,10 +3,10 @@ using System.Web.Mvc;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using Quartz;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.UI.Supervisor.Controllers
 {

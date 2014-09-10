@@ -169,8 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Create.cs" />
-    <Compile Include="DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
-    <Compile Include="DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
     <Compile Include="ApiTests\ApiTestContext.cs" />
     <Compile Include="ApiTests\when_intervews_controller_interviews_filtered_with_not_empty_params.cs" />
     <Compile Include="ApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
@@ -183,10 +181,6 @@
     <Compile Include="ApiTests\when_users_controller_interviewers_is_called_with_not_elpty_params.cs" />
     <Compile Include="ApiTests\when_users_controller_details_is_called_with_not_emty_params.cs" />
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
-    <Compile Include="HQControllerTests\HQControllerTestContext.cs" />
-    <Compile Include="HQControllerTests\when_BatchUploadModel_model_contains_property__File__to_upload_file_data.cs" />
-    <Compile Include="HQControllerTests\when_hq_controller_gets_empty_file_while_batch_upload.cs" />
     <Compile Include="HQSyncControllerTests\HQSyncControllerTestsContext.cs" />
     <Compile Include="HQSyncControllerTests\when_pushing_data_to_hq.cs" />
     <Compile Include="HQSyncControllerTests\when_requesting_push_status.cs" />
@@ -261,10 +255,6 @@
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
-      <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
-      <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
