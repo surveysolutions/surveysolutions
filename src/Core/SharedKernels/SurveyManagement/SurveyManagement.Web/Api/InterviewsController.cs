@@ -5,6 +5,7 @@ using Main.Core.View;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
@@ -14,14 +15,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     {
         private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
         private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsViewFactory;
+        private readonly IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory;
 
         public InterviewsController(ILogger logger,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
-            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsViewFactory)
+            IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsViewFactory, IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory)
             : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
+            this.interviewHistoryViewFactory = interviewHistoryViewFactory;
         }
 
         [HttpGet]
@@ -80,6 +83,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             var interviewDetails = new InterviewApiDetails(interview);
 
             return interviewDetails;
+        }
+
+        [HttpGet]
+        [Route("apis/v1/interviews/{id:guid}/history")]
+        public InterviewHistoryView InterviewHistory(Guid id)
+        {
+            var inputModel = new InterviewHistoryInputModel(id);
+
+            var interview = this.interviewHistoryViewFactory.Load(inputModel);
+
+            if (interview == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            return interview;
         }
     }
 }

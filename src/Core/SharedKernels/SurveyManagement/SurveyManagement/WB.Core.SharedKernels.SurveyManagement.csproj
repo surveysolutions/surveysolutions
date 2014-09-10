@@ -82,6 +82,7 @@
     <Compile Include="Denormalizer\SupervisorFileStoreDenormalizer.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
+    <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
     <Compile Include="EventHandler\EventHandlerUtils.cs" />
     <Compile Include="EventHandler\HardDeletedInterviewEventHandler.cs" />
@@ -191,6 +192,10 @@
     <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
+    <Compile Include="Views\InterviewHistory\InterviewHistoricalRecord.cs" />
+    <Compile Include="Views\InterviewHistory\InterviewHistoricalRecordView.cs" />
+    <Compile Include="Views\InterviewHistory\InterviewHistoryFactory.cs" />
+    <Compile Include="Views\InterviewHistory\InterviewHistoryInputModel.cs" />
     <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
     <Compile Include="Views\Device\DeviceView.cs" />
     <Compile Include="Views\Device\DeviceViewFactory.cs" />
@@ -204,6 +209,7 @@
     <Compile Include="Views\Interviewer\InterviewersView.cs" />
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
     <Compile Include="Implementation\Factories\ChartStatisticsViewFactory.cs" />
+    <Compile Include="Views\InterviewHistory\InterviewHistoryView.cs" />
     <Compile Include="Views\Interviews\ChartStatisticsView.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />

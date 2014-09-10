@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
@@ -39,13 +40,21 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 var multiAnswer = (decimal[]) answer;
 
                 return getCategoricalAnswerOptionText == null
-                    ? string.Empty
+                    ? string.Join(", ", multiAnswer)
                     : string.Join(", ", multiAnswer.Select(getCategoricalAnswerOptionText));
             }
-
+            if (answer is decimal[][])
+            {
+                var multiLinkAnswer = (decimal[][])answer;
+                return string.Join("|", multiLinkAnswer.Select(a => string.Join(", ", a)));
+            }
             if (answer is GeoPosition)
             {
                 return ((GeoPosition) answer).ToString();
+            }
+            if (answer is InterviewTextListAnswers)
+            {
+                return string.Join("|", ((InterviewTextListAnswers) answer).Answers.Select(x => x.Answer));
             }
 
             return answer.ToString();
