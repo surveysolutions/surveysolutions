@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,7 +47,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                         }
                 };
 
-            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(data);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(
+                Mock.Of<IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate>>(_
+                    => _.GetById(Moq.It.IsAny<string>()) == data));
 
             input = new ChartStatisticsInputModel
             {
@@ -64,9 +67,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         It should_each_line_has_2_days_inside = () => view.Lines.ShouldEachConformTo(line => line.Length == 2);
 
-        It should_each_line_has_first_record_equal_to_from_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.AddDays(-2).ToString("MM/dd/yyyy") && (int)line[0][1]==1);
+        It should_each_line_has_first_record_equal_to_from_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.AddDays(-2).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture) && (int)line[0][1]==1);
 
-        It should_each_line_has_second_record_equal_to_to_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[1][0].ToString() == baseDate.AddDays(-1).ToString("MM/dd/yyyy") && (int)line[1][1] == 1);
+        It should_each_line_has_second_record_equal_to_to_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[1][0].ToString() == baseDate.AddDays(-1).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture) && (int)line[1][1] == 1);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;
