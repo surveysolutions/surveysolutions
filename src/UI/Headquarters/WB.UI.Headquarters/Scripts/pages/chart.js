@@ -11,41 +11,37 @@
     self.Stats = null;
     self.Plot = null;
     self.FromDate = ko.observable(null);
-    self.FromDateInput = ko.observable(null);
     self.ToDate = ko.observable(null);
-    self.ToDateInput = ko.observable(null);
     self.ShouldShowDateValidationMessage = ko.observable(false);
     self.TemplateName = ko.observable();
 
-    self.initChart = function() {
+    self.initChart = function () {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
             ? { templateId: '', version: '' }
             : JSON.parse(self.SelectedTemplate());
 
+        var startDate = moment(self.FromDate());
+        var endDate = moment(self.ToDate());
+
         self.Url.query['templateId'] = selectedTemplate.templateId;
         self.Url.query['templateVersion'] = selectedTemplate.version;
-        self.Url.query['from'] = self.FromDate();
-        self.Url.query['to'] = self.ToDate();
-
-        self.TemplateName(selectedTemplate.name);
+        self.Url.query['from'] = startDate.format(dateFormat);
+        self.Url.query['to'] = endDate.format(dateFormat);
 
         if (Modernizr.history) {
             window.history.pushState({}, "Charts", self.Url.toString());
         }
-
-        var startDate = moment(self.FromDate(), dateFormat);
-        var endDate = moment(self.ToDate(), dateFormat);
 
         self.ShouldShowDateValidationMessage(startDate.isAfter(endDate));
 
         var params = {
             templateId: selectedTemplate.templateId,
             templateVersion: selectedTemplate.version,
-            from: self.FromDate(),
-            to: self.ToDate()
+            from: startDate.format(dateFormat),
+            to: endDate.format(dateFormat)
         };
 
-        self.SendRequest(self.ServiceUrl, params, function(data) {
+        self.SendRequest(self.ServiceUrl, params, function (data) {
             self.Stats = data;
             self.drawChart();
         });
@@ -107,9 +103,6 @@
                 axes: {
                     xaxis: {
                         renderer: $.jqplot.DateAxisRenderer,
-                        tickOptions: {
-                            formatString: '%#m/%#d/%y'
-                        },
                         min: self.Stats.from,
                         drawMajorGridlines: false
                     },
@@ -125,7 +118,6 @@
                 cursor: {
                     show: true,
                     tooltipLocation: 'sw',
-
                 }
             });
 
@@ -142,44 +134,36 @@
 
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
         self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
-        self.Url.query['from'] = self.QueryString['from'] || oneWeekAgo;
-        self.Url.query['to'] = self.QueryString['to'] || today;
+        self.Url.query['from'] = self.QueryString['from'] || moment(oneWeekAgo).format(dateFormat);
+        self.Url.query['to'] = self.QueryString['to'] || moment(today).format(dateFormat);
+
+        updateTemplateName(self.SelectedTemplate());
 
         var from = unescape(self.Url.query['from']);
         var to = unescape(self.Url.query['to']);
 
         self.FromDate(from);
-        self.FromDateInput(from);
         self.ToDate(to);
-        self.ToDateInput(to);
-
-        $('.list-group .input-group.date').datepicker({
-            format: "mm/dd/yyyy",
-            keyboardNavigation: false,
-            autoclose: true,
-            todayHighlight: true,
-            endDate: '+0d',
-            forseParse: false
-        })
-        // hack to prevent toggling selected day error https://github.com/eternicode/bootstrap-datepicker/issues/775
-        .on("hide", function (e) {
-            if (e.date !== undefined) {
-                self.FromDate(self.FromDateInput());
-                self.ToDate(self.ToDateInput());
-            }
-            else {
-                self.FromDateInput(self.FromDate());
-                self.ToDateInput(self.ToDate());
-
-                $('.list-group .input-group.date').datepicker("update");
-            }
-            self.initChart();
-        });
 
         self.initChart();
 
-        self.SelectedTemplate.subscribe(function () { self.initChart(); });
+        self.SelectedTemplate.subscribe(function (value) {
+            updateTemplateName(value);
+            self.initChart();
+        });
+
+        self.FromDate.subscribe(function () {
+            self.initChart();
+        });
+
+        self.ToDate.subscribe(function () {
+            self.initChart();
+        });
     };
+
+    var updateTemplateName = function(value) {
+        self.TemplateName($("#templateSelector option[value='" + value + "']").text());
+    }
 };
 
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ChartPage, Supervisor.VM.ListView);
