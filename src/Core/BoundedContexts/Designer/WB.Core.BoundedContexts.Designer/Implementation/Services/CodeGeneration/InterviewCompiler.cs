@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -41,8 +40,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         new MetadataFileReference(Path.Combine(this.portableAssembliesPath, defaultReferencedPortableAssembly))));
             metadataFileReference.Add(new MetadataFileReference(typeof(Identity).Assembly.Location));
 
+            Guid uniqueAssemblySuffix = Guid.NewGuid();
+
             var compilation = CSharpCompilation.Create(
-                String.Format("rules-{0}.dll", templateId),
+                String.Format("rules-{0}-{1}.dll", templateId, uniqueAssemblySuffix),
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
                 syntaxTrees: new[] { tree },
                 references: metadataFileReference);
