@@ -25,9 +25,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
     {
         private Establish context = () =>
         {
-            userDocumentStorageMock.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<UserDocument>, IQueryable<UserDocument>>>()))
-                .Returns(new[] { new UserDocument() }.AsQueryable());
-
             plainStorageMock.Setup(
                 x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalInterviewFeedEntry>, IQueryable<LocalInterviewFeedEntry>>>())).
                 Returns(
@@ -59,7 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         };
 
         Because of = () =>
-            interviewsSynchronizer.Pull();
+            interviewsSynchronizer.PullInterviewsForSupervisors(new[] { Guid.NewGuid() });
 
 
         It should_CancelInterviewByHQSynchronizationCommand_be_called_once = () =>
