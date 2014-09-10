@@ -10,6 +10,7 @@ using Main.Core.View;
 using Main.Core.View.User;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using It = Machine.Specifications.It;
 
 namespace Questionnaire.Core.Web.Security.Tests.QuestionaireRoleProviderTests

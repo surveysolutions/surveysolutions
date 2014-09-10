@@ -3,7 +3,6 @@ using System.ServiceModel;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;

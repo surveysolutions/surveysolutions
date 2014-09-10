@@ -2,9 +2,9 @@ using System;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
