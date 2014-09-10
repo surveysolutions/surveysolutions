@@ -143,7 +143,6 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommandApiController.cs" />
-    <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
@@ -332,19 +331,6 @@
     <EmbeddedResource Include="Views\ControlPanel\NConfig.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RevalidateInterviews.cshtml" />
     <EmbeddedResource Include="Views\Device\Index.cshtml" />
-    <EmbeddedResource Include="Views\HQ\Assign.cshtml" />
-    <EmbeddedResource Include="Views\HQ\BatchUpload.cshtml" />
-    <EmbeddedResource Include="Views\HQ\ImportResult.cshtml" />
-    <EmbeddedResource Include="Views\HQ\ImportSample.cshtml" />
-    <EmbeddedResource Include="Views\HQ\Index.cshtml" />
-    <EmbeddedResource Include="Views\HQ\Interviews.cshtml" />
-    <EmbeddedResource Include="Views\HQ\MapReport.cshtml" />
-    <EmbeddedResource Include="Views\HQ\SampleCreationResult.cshtml" />
-    <EmbeddedResource Include="Views\HQ\Status.cshtml" />
-    <EmbeddedResource Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
-    <EmbeddedResource Include="Views\HQ\SurveysAndStatuses.cshtml" />
-    <EmbeddedResource Include="Views\HQ\TakeNew.cshtml" />
-    <EmbeddedResource Include="Views\HQ\VerifySample.cshtml" />
     <EmbeddedResource Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
     <EmbeddedResource Include="Views\Survey\Index.cshtml" />
     <EmbeddedResource Include="Views\Survey\Interviews.cshtml" />
@@ -446,9 +432,7 @@
     <EmbeddedResource Include="Content\app.css" />
     <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Team\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
   </ItemGroup>

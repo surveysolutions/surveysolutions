@@ -14,22 +14,21 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.SampleRecordsAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
-using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
 using WB.Core.SharedKernels.SurveyManagement.Views.TakeNew;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
+namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Headquarter")]
     public class HQController : BaseController
@@ -85,7 +84,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult Delete(Guid id, long version)
         {
             var interviewByQuestionnaire =
-              interviews.QueryAll(i => !i.IsDeleted && i.QuestionnaireId == id && i.QuestionnaireVersion == version);
+              this.interviews.QueryAll(i => !i.IsDeleted && i.QuestionnaireId == id && i.QuestionnaireVersion == version);
 
             var interviewDeletionErrors = new List<Exception>();
 
@@ -93,11 +92,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 try
                 {
-                    CommandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId, this.GlobalInfo.GetCurrentUser().Id));
+                    this.CommandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId, this.GlobalInfo.GetCurrentUser().Id));
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e.Message, e);
+                    this.Logger.Error(e.Message, e);
                     interviewDeletionErrors.Add(e);
                 }
             }
@@ -107,9 +106,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.", id.FormatGuid(), version),
                     interviewDeletionErrors);
 
-            CommandService.Execute(new DeleteQuestionnaire(id, version));
+            this.CommandService.Execute(new DeleteQuestionnaire(id, version));
 
-            return RedirectToAction("Index");
+            return this.RedirectToAction("Index");
         }
 
         public ActionResult Interviews(Guid? questionnaireId)
@@ -135,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
-                FeaturedQuestions = questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions
+                FeaturedQuestions = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions
             };
 
             return this.View(viewModel);
@@ -146,13 +145,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return View("BatchUpload", model);
+                return this.View("BatchUpload", model);
             }
 
-            var preloadedDataId = preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
-            var preloadedMetadata = preloadedDataRepository.GetPreloadedDataMetaInformationForSampleData(preloadedDataId);
+            var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
+            var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForSampleData(preloadedDataId);
 
             return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
         }
@@ -162,26 +161,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return View("BatchUpload", model);
+                return this.View("BatchUpload", model);
             }
 
-            var preloadedDataId = preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
-            var preloadedMetadata = preloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(preloadedDataId);
+            var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
+            var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(preloadedDataId);
 
             return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
         }
 
         public ActionResult TemplateDownload(Guid id, long version)
         {
-            var pathToFile = preloadingTemplateService.GetFilePathToPreloadingTemplate(id, version);
+            var pathToFile = this.preloadingTemplateService.GetFilePathToPreloadingTemplate(id, version);
             return this.File(pathToFile, "application/zip", fileDownloadName: Path.GetFileName(pathToFile));
         }
 
         public ActionResult VerifySample(Guid questionnaireId, long version, string id)
         {
-            var errors = preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedDataRepository.GetPreloadedDataOfSample(id));
+            var errors = this.preloadedDataVerifier.VerifySample(questionnaireId, version, this.preloadedDataRepository.GetPreloadedDataOfSample(id));
             this.ViewBag.SupervisorList =
               this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
             return this.View(new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Sample));
@@ -189,7 +188,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult VerifyPanel(Guid questionnaireId, long version, string id)
         {
-            var errors = preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedDataRepository.GetPreloadedDataOfPanel(id));
+            var errors = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, this.preloadedDataRepository.GetPreloadedDataOfPanel(id));
             this.ViewBag.SupervisorList =
               this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
             return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Panel));
@@ -197,14 +196,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult ImportPanelData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
         {
-            this.sampleImportService.CreatePanel(questionnaireId, version, id, preloadedDataRepository.GetPreloadedDataOfPanel(id),
+            this.sampleImportService.CreatePanel(questionnaireId, version, id, this.preloadedDataRepository.GetPreloadedDataOfPanel(id),
                 this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
             return this.RedirectToAction("SampleCreationResult", new { id });
         }
 
         public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
         {
-            this.sampleImportService.CreateSample(questionnaireId, version, id, preloadedDataRepository.GetPreloadedDataOfSample(id),
+            this.sampleImportService.CreateSample(questionnaireId, version, id, this.preloadedDataRepository.GetPreloadedDataOfSample(id),
                 this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
             return this.RedirectToAction("SampleCreationResult", new { id });
         }
