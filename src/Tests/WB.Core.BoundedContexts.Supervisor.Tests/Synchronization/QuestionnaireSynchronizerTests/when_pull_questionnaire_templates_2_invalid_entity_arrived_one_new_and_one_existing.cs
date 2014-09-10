@@ -8,7 +8,6 @@ using Main.Core.Documents;
 using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Supervisor.Questionnaires;
-using WB.Core.BoundedContexts.Supervisor.Synchronization;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -29,21 +28,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
             deleteLocalQuestionnaireFeedEntry = CreateLocalQuestionnaireFeedEntry(Guid.NewGuid(), QuestionnaireEntryType.QuestionnaireDeleted,
                 Guid.NewGuid(), 1);
 
-            IEnumerable<AtomFeedEntry<LocalQuestionnaireFeedEntry>> localQuestionnaireFeedEntres = new[]
+            IEnumerable<LocalQuestionnaireFeedEntry> localQuestionnaireFeedEntres = new[]
             {
-                CreateAtomFeedEntry(withALotOfExceptionsLocalQuestionnaireFeedEntry), 
-                CreateAtomFeedEntry(emptyLocalQuestionnaireFeedEntry), 
-                CreateAtomFeedEntry(newLocalQuestionnaireFeedEntry),
-                CreateAtomFeedEntry(existingLocalQuestionnaireFeedEntry),
-                CreateAtomFeedEntry(deleteLocalQuestionnaireFeedEntry)
+                withALotOfExceptionsLocalQuestionnaireFeedEntry, 
+                emptyLocalQuestionnaireFeedEntry, 
+                newLocalQuestionnaireFeedEntry,
+                existingLocalQuestionnaireFeedEntry,
+                deleteLocalQuestionnaireFeedEntry
             };
 
-            var atomFeedReaderMock=new Mock<IAtomFeedReader>();
-
-            atomFeedReaderMock.Setup(x => x.ReadAfterAsync<LocalQuestionnaireFeedEntry>(Moq.It.IsAny<Uri>(), Moq.It.IsAny<string>()))
-                .Returns(Task.FromResult(localQuestionnaireFeedEntres));
 
             plainStorageMock=new Mock<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>>();
+            plainStorageMock.Setup(
+                x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalQuestionnaireFeedEntry>, IQueryable<LocalQuestionnaireFeedEntry>>>()))
+                .Returns(localQuestionnaireFeedEntres.AsQueryable());
 
             headquartersQuestionnaireReaderMock=new Mock<IHeadquartersQuestionnaireReader>();
             headquartersQuestionnaireReaderMock.Setup(x => x.GetQuestionnaireByUri(Moq.It.IsAny<Uri>()))
@@ -69,7 +67,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
 
             headquartersPullContext=new HeadquartersPullContextTestable();
 
-            questionnaireSynchronizer = CreateQuestionnaireSynchronizer(atomFeedReaderMock.Object, plainStorageMock.Object, plainQuestionnaireRepositoryMock.Object, headquartersQuestionnaireReaderMock.Object, headquartersPullContext);
+            questionnaireSynchronizer = CreateQuestionnaireSynchronizer(plainStorage: plainStorageMock.Object,
+                plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object,
+                headquartersQuestionnaireReader: headquartersQuestionnaireReaderMock.Object, headquartersPullContext: headquartersPullContext);
         };
 
         Because of = () =>
@@ -97,19 +97,5 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
         private static Mock<IHeadquartersQuestionnaireReader> headquartersQuestionnaireReaderMock;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
         private static HeadquartersPullContextTestable headquartersPullContext;
-    }
-
-    internal class HeadquartersPullContextTestable : HeadquartersPullContext
-    {
-        private int pushedErrorsCount = 0;
-        public int PushedErrorsCount { get { return pushedErrorsCount; } }
-        public HeadquartersPullContextTestable()
-            : base(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()) { }
-
-        public override void PushError(string message)
-        {
-            base.PushError(message);
-            pushedErrorsCount++;
-        }
     }
 }
