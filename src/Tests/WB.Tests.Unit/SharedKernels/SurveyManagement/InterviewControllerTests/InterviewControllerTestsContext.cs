@@ -2,12 +2,12 @@
 using Main.Core.View;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
 {

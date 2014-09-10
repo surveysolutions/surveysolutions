@@ -90,6 +90,7 @@
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
     <Compile Include="SyncStorage\IChunkWriter.cs" />
     <Compile Include="SyncStorage\SynchronizationDelta.cs" />
+    <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -118,10 +119,6 @@
     <ProjectReference Include="..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
-      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
-      <Name>SynchronizationMessages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
