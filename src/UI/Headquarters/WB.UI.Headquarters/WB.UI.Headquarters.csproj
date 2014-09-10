@@ -235,6 +235,7 @@
     </Content>
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Configuration\Dima.Headquarters.Web.config" />
+    <Content Include="Scripts\ko.datepicker.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Views\HQ\InterviewsChart.cshtml" />
     <None Include="parameters.xml" />
