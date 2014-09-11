@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 fileSystemAccessor: fileSystemAccessor ?? CreateDefaultFileSystemAccessorMock().Object,
                 jsonUtils: jsonUtils ?? Mock.Of<IJsonUtils>(),
-                interviewSummaryRepositoryWriter: interviewSummaryStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>());
+                interviewSummaryRepositoryWriter: interviewSummaryStorage ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), overrideReceivedEventTimeStamp: false);
         }
 
         protected static string GetPathToSynchItemInErrorFolder(Guid syncItemId)
