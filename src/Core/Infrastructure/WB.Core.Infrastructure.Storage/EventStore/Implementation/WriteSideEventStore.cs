@@ -36,7 +36,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         private IEventStoreConnection connection;
         bool disposed;
 
-        internal const string AllEventsStream = "$ce-WB";
+        internal const string AllEventsStream = "all_wb";
 
         public WriteSideEventStore(EventStoreConnectionSettings connectionSettings)
         {
