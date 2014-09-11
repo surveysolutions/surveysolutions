@@ -28,13 +28,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
         private string incomingCapiPackagesWithErrorsDirectory;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly ILogger logger;
+        private readonly bool overrideReceivedEventTimeStamp;
         private readonly ICommandService commandService;
         private readonly SyncSettings syncSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IJsonUtils jsonUtils;
 
         public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
-            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter)
+            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter, bool overrideReceivedEventTimeStamp)
         {
             this.logger = logger;
             this.syncSettings = syncSettings;
@@ -42,6 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             this.fileSystemAccessor = fileSystemAccessor;
             this.jsonUtils = jsonUtils;
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
+            this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
 
             this.InitializeDirectoriesForCapiIncomePackages();
         }
@@ -173,9 +175,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             var i = sequence + 1;
             foreach (var aggregateRootEvent in stream)
             {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0));
+                uncommitedStream.Append(this.overrideReceivedEventTimeStamp
+                    ? aggregateRootEvent.CreateUncommitedEvent(i, 0, DateTime.UtcNow)
+                    : aggregateRootEvent.CreateUncommitedEvent(i, 0));
                 i++;
-            } 
+            }
             return uncommitedStream;
         }
     }
