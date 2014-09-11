@@ -17,7 +17,7 @@
     self.ShouldShowDateValidationMessage = ko.observable(false);
     self.TemplateName = ko.observable();
 
-    self.initChart = function () {
+        self.initChart = function () {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
             ? { templateId: '', version: '' }
             : JSON.parse(self.SelectedTemplate());
@@ -66,13 +66,13 @@
                 stackSeries: true,
                 showMarker: true,
                 series: [
-                   { label: 'Supervisor assigned' },
-                   { label: 'Interviewer assigned' },
-                   { label: 'Completed' },
-                   { label: 'Rejected by Supervisor' },
-                   { label: 'Approved by Supervisor' },
-                   { label: 'Rejected by Headquarters' },
-                   { label: 'Approved by Headquarters' }
+                    { label: 'Supervisor assigned' },
+                    { label: 'Interviewer assigned' },
+                    { label: 'Completed' },
+                    { label: 'Rejected by Supervisor' },
+                    { label: 'Approved by Supervisor' },
+                    { label: 'Rejected by Headquarters' },
+                    { label: 'Approved by Headquarters' }
                 ],
                 seriesDefaults: {
                     showMarker: true,
@@ -123,9 +123,22 @@
                 }
             });
 
+        var maxY = self.Plot.axes.yaxis._dataBounds.max;
+        var interval = self.getCustomInterval(maxY);
+        if (interval !== null) {
+            self.Plot.replot({ axes: { yaxis: { min: 0, tickInterval: interval } } });
+        };
+        
         var legendLabels = $('.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle');
         var countItemsInLegend = legendLabels.length;
         legendLabels.width(($('#interviewChart').outerWidth() - countItemsInLegend * 20) / countItemsInLegend - 1);
+    };
+
+    self.getCustomInterval = function(maxValue) {
+        if (maxValue <= 10) {
+            return 1;
+        }
+        return null;
     };
 
     self.load = function () {
