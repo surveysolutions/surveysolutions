@@ -117,11 +117,12 @@
                 highlighter: {
                     show: true,
                     showMarker: true,
-                    tooltipAxes: 'xy'
+                    tooltipAxes: 'xy',
+                    tooltipLocation: 'ne'
                 },
                 cursor: {
                     show: true,
-                    tooltipLocation: 'sw',
+                    tooltipLocation: 'sw'
                 }
             });
 
