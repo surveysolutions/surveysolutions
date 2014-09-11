@@ -6,17 +6,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class RosterScopeTemplateModel : IRosterScope
     {
-
-        public RosterScopeTemplateModel(KeyValuePair<string, List<RosterTemplateModel>> rosterScope, QuestionnaireExecutorTemplateModel executorModel)
+        public RosterScopeTemplateModel(KeyValuePair<string, List<RosterTemplateModel>> rosterScope,
+            QuestionnaireExecutorTemplateModel executorModel)
         {
-            GeneratedTypeName = rosterScope.Key;
-            RostersInScope = rosterScope.Value;
+            this.GeneratedTypeName = rosterScope.Key;
+            this.RostersInScope = rosterScope.Value;
 
-            ParentTypeName = rosterScope.Value[0].GetParentScope().GetTypeName();
+            this.ParentTypeName = rosterScope.Value[0].GetParentScope().GetTypeName();
 
-            Questions = rosterScope.Value.SelectMany(r => r.Questions).ToList();
-            Groups = rosterScope.Value.SelectMany(r => r.Groups).ToList();
-            Rosters = rosterScope.Value.SelectMany(r => r.Rosters).ToList();
+            this.Questions = rosterScope.Value.SelectMany(r => r.Questions).ToList();
+            this.Groups = rosterScope.Value.SelectMany(r => r.Groups).ToList();
+            this.Rosters = rosterScope.Value.SelectMany(r => r.Rosters).ToList();
 
             this.ExecutorModel = executorModel;
         }
@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
 
         public List<RosterTemplateModel> RostersInScope { set; get; }
+
         public IRosterScope GetParentScope()
         {
             return this.RostersInScope.First().GetParentScope();
