@@ -41,6 +41,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Settings;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
@@ -141,6 +142,7 @@ namespace WB.UI.Supervisor.App_Start
                     LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
+            var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -163,7 +165,7 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
                     isDebug,
                     applicationBuildVersion,
-                    interviewDetailsDataLoaderSettings),
+                    interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
 
