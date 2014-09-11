@@ -20,8 +20,6 @@ namespace WB.UI.Headquarters
                 ,"~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js"
                 , "~/Scripts/jqPlot/plugins/jqplot.cursor.js"
                 , "~/Scripts/jqPlot/plugins/jqplot.enhancedLegendRenderer.js"
-                //"~/Scripts/jqPlot/plugins/jqplot.canvasTextRenderer.min.js",
-                //"~/Scripts/jqPlot/plugins/jqplot.canvasAxisTickRenderer.min.js"
                 ));
         }
     }
