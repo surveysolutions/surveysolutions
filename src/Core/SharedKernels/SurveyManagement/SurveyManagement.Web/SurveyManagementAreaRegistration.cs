@@ -171,11 +171,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 new { controller = "Backup", action = "Index", id = UrlParameter.Optional });
 
             context.MapRoute(
-                "HQRoute",
-                "HQ/{action}/{id}",
-                new { controller = "HQ", action = "Index", id = UrlParameter.Optional });
-
-            context.MapRoute(
                 "ImportExportRoute",
                 "ImportExport/{action}/{id}",
                 new { controller = "ImportExport", action = "Index", id = UrlParameter.Optional });
