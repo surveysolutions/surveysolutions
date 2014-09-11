@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,33 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         {
             return new ChartStatisticsViewFactory(
                 statisticsReader ?? Stub<IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate>>.WithNotEmptyValues);
+        }
+
+        protected static QuestionnaireStatisticsForChart CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(int count)
+        {
+            return CreateQuestionnaireStatisticsForChart(count, count, count, count, count, count, count);
+        }
+
+        protected static QuestionnaireStatisticsForChart CreateQuestionnaireStatisticsForChart(
+            int supervisorAssigned, int interviewerAssigned, int completed,
+            int rejectedBySupervisor, int approvedBySupervisor, int rejectedByHeadquarters, int approvedByHeadquarters)
+        {
+            return new QuestionnaireStatisticsForChart
+            {
+                ApprovedByHeadquartersCount = approvedByHeadquarters,
+                ApprovedBySupervisorCount = approvedBySupervisor,
+                CompletedCount = completed,
+                InterviewerAssignedCount = interviewerAssigned,
+                RejectedByHeadquartersCount = rejectedByHeadquarters,
+                RejectedBySupervisorCount = rejectedBySupervisor,
+                SupervisorAssignedCount = supervisorAssigned,
+            };
+        }
+
+        protected static StatisticsGroupedByDateAndTemplate CreateStatisticsGroupedByDateAndTemplate(
+            Dictionary<DateTime, QuestionnaireStatisticsForChart> statistics)
+        {
+            return new StatisticsGroupedByDateAndTemplate { StatisticsByDate = statistics };
         }
     }
 }
