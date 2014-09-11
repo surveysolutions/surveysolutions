@@ -5,7 +5,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class QuestionnaireLevelTemplateModel : IRosterScope
     {
-
         public QuestionnaireLevelTemplateModel(QuestionnaireExecutorTemplateModel executorModel)
         {
             this.Questions = new List<QuestionTemplateModel>();
@@ -15,17 +14,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         }
 
         public List<QuestionTemplateModel> Questions { set; get; }
-        public List<GroupTemplateModel> Groups {  set; get; }
+        public List<GroupTemplateModel> Groups { set; get; }
         public List<RosterTemplateModel> Rosters { set; get; }
         public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }
 
-        public string GeneratedRosterScopeName {
-            set {} 
+        public string GeneratedRosterScopeName
+        {
+            set { }
             get { return "@__questionnaire_scope"; }
-            
         }
 
-        public string GeneratedTypeName 
+        public string GeneratedTypeName
         {
             get { return "QuestionnaireTopLevel"; }
         }
@@ -37,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string GetTypeName()
         {
-            return GeneratedTypeName;
+            return this.GeneratedTypeName;
         }
 
         public IEnumerable<QuestionTemplateModel> GetAllQuestionsToTop()
