@@ -295,7 +295,7 @@ input::-ms-clear {
 #interviewChart {
     width: 100%;
     height: 600px;
-    position: relative;
+    padding: 10px;
 }
 
 #dateValidationError {
