@@ -377,6 +377,7 @@
     <EmbeddedResource Include="Content\admin.css" />
     <EmbeddedResource Include="Views\Shared\SupervisorMainMenu.cshtml" />
     <EmbeddedResource Include="Views\Shared\_AdminLayout.cshtml" />
+    <EmbeddedResource Include="Views\Interview\InterviewHistory.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
     <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />

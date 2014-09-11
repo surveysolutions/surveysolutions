@@ -109,7 +109,7 @@ namespace WB.UI.Headquarters
                 activeBundles: WebConfigurationManager.AppSettings["Raven.Databases.ActiveBundles"]);
 
             var interviewDetailsDataLoaderSettings =
-                new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled && LegacyOptions.SupervisorFunctionsEnabled,
+                new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
                     LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
                     LegacyOptions.InterviewDetailsDataSchedulerNumberOfInterviewsProcessedAtTime);
 
@@ -170,11 +170,8 @@ namespace WB.UI.Headquarters
 
             kernel.Bind<IIdentityManager>().To<IdentityManager>().InSingletonScope();
 
-            if (LegacyOptions.SupervisorFunctionsEnabled)
-            {
-                ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-            }
 
+            ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
 #warning dirty index registrations

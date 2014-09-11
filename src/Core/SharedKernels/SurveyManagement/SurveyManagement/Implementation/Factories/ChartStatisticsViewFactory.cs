@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Raven.Abstractions.Extensions;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -93,23 +94,43 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 .OrderBy(x => x.Key)
                 .ToList();
 
-            var lines = new List<object[][]>
+            IEnumerable<IEnumerable<Tuple<DateTime, int>>> rangeLines = new[]
             {
-                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.SupervisorAssignedCount }).ToArray(),
-                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.InterviewerAssignedCount }).ToArray(),
-                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.CompletedCount }).ToArray(),
-                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.RejectedBySupervisorCount }).ToArray(),
-                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.ApprovedBySupervisorCount }).ToArray(),
-                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.RejectedByHeadquartersCount }).ToArray(),
-                selectedRange.Select(x => new object[] { FormatDate(x.Key), x.Value.ApprovedByHeadquartersCount }).ToArray()
+                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.SupervisorAssignedCount)),
+                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.InterviewerAssignedCount)),
+                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.CompletedCount)),
+                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.RejectedBySupervisorCount)),
+                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.ApprovedBySupervisorCount)),
+                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.RejectedByHeadquartersCount)),
+                selectedRange.Select(x => Tuple.Create(x.Key, x.Value.ApprovedByHeadquartersCount)),
             };
+
+            rangeLines = RemoveEmptyEndingLines(rangeLines);
+
+            var chartLines = rangeLines.Select(ToChartLine).ToArray();
 
             return new ChartStatisticsView
             {
-                Lines = lines.ToArray(),
+                Lines = chartLines,
                 From = FormatDate(minCollectedDate),
                 To = FormatDate(maxCollectedDate)
             };
+        }
+
+        private static IEnumerable<IEnumerable<Tuple<DateTime, int>>> RemoveEmptyEndingLines(
+            IEnumerable<IEnumerable<Tuple<DateTime, int>>> rangeLines)
+        {
+            return rangeLines
+                .Reverse()
+                .SkipWhile(line => line.All(point => point.Item2 == 0))
+                .Reverse();
+        }
+
+        private static object[][] ToChartLine(IEnumerable<Tuple<DateTime, int>> rangeLine)
+        {
+            return rangeLine
+                .Select(x => new object[] { FormatDate(x.Item1), x.Item2 })
+                .ToArray();
         }
 
         private static string FormatDate(DateTime x)

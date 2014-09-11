@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.UI.Headquarters.API;
@@ -57,7 +58,7 @@ namespace WB.UI.Headquarters.Tests.ApiTests
             return new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
                 allInterviewsViewViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
-                interviewDetailsView ?? Mock.Of<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>());
+                interviewDetailsView ?? Mock.Of<IViewFactory<InterviewDetailsInputModel, InterviewDetailsView>>(), Mock.Of<IViewFactory<InterviewHistoryInputModel, InterviewHistoryView>>());
         }
     }
 }
