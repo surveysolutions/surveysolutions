@@ -77,10 +77,14 @@
                 seriesDefaults: {
                     showMarker: true,
                     fill: true,
+                    breakOnNull: false,
+                    showLine: true,
+                    lineWidth: 3,
+                    fillAndStroke: true,
                     shadow: false,
                     fillAlpha: 0.8,
                     markerOptions: {
-                        show: true,
+                        show: false,
                     }
                 },
                 legend: {

@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -11,7 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    internal class when_building_view_from_statistics_which_has_3_days_with_incremental_data_for_each_count : ChartStatisticsViewFactoryTestsContext
+    internal class when_building_view_from_statistics_which_has_zeroes_for_2_headquarters_statuses_and_for_completed_status : ChartStatisticsViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -19,15 +18,36 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             {
                 {
                     new DateTime(2014, 8, 20),
-                    CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(count: 1)
+                    CreateQuestionnaireStatisticsForChart(
+                        supervisorAssigned: 1,
+                        interviewerAssigned: 1,
+                        rejectedBySupervisor: 1,
+                        approvedBySupervisor: 1,
+                        completed: 0,
+                        approvedByHeadquarters: 0,
+                        rejectedByHeadquarters: 0)
                 },
                 {
                     new DateTime(2014, 8, 21),
-                    CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(count: 2)
+                    CreateQuestionnaireStatisticsForChart(
+                        supervisorAssigned: 1,
+                        interviewerAssigned: 1,
+                        rejectedBySupervisor: 1,
+                        approvedBySupervisor: 1,
+                        completed: 0,
+                        approvedByHeadquarters: 0,
+                        rejectedByHeadquarters: 0)
                 },
                 {
                     new DateTime(2014, 8, 22),
-                    CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(count: 3)
+                    CreateQuestionnaireStatisticsForChart(
+                        supervisorAssigned: 1,
+                        interviewerAssigned: 1,
+                        rejectedBySupervisor: 1,
+                        approvedBySupervisor: 1,
+                        completed: 0,
+                        approvedByHeadquarters: 0,
+                        rejectedByHeadquarters: 0)
                 },
             });
 
@@ -46,28 +66,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statsStorage);
         };
 
-        Because of = () => view = chartStatisticsViewFactory.Load(input);
+        Because of = () =>
+            view = chartStatisticsViewFactory.Load(input);
 
-        It should_return_7_lines_the_same_as_statuses_count = () =>
-            view.Lines.Length.ShouldEqual(7);
-
-        It should_set_1st_point_horizontal_coord_of_all_lines_equal_to_2014_08_20 = () =>
-            view.Lines.ShouldEachConformTo(line => (string)line[0][0] == "08/20/2014");
-
-        It should_set_2nd_point_horizontal_coord_of_all_lines_equal_to_2014_08_21 = () =>
-            view.Lines.ShouldEachConformTo(line => (string)line[1][0] == "08/21/2014");
-
-        It should_set_3rd_point_horizontal_coord_of_all_lines_equal_to_2014_08_22 = () =>
-            view.Lines.ShouldEachConformTo(line => (string)line[2][0] == "08/22/2014");
-
-        It should_set_1st_point_vertical_size_of_all_lines_equal_to_1 = () =>
-            view.Lines.ShouldEachConformTo(line => (int) line[0][1] == 1);
-
-        It should_set_2nd_point_vertical_size_of_all_lines_equal_to_2 = () =>
-            view.Lines.ShouldEachConformTo(line => (int) line[1][1] == 2);
-
-        It should_set_3rd_point_vertical_size_of_all_lines_equal_to_3 = () =>
-            view.Lines.ShouldEachConformTo(line => (int) line[2][1] == 3);
+        It should_return_5_lines_the_same_as_statuses_count = () =>
+            view.Lines.Length.ShouldEqual(5);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

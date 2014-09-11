@@ -22,12 +22,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             var questionnaireId = Guid.NewGuid();
             baseDate = new DateTime(2014, 8, 22);
 
-            var data =
-                new StatisticsGroupedByDateAndTemplate
+            var data = CreateStatisticsGroupedByDateAndTemplate(new Dictionary<DateTime, QuestionnaireStatisticsForChart>
+            {
                 {
-                    StatisticsByDate =
-                        new Dictionary<DateTime, QuestionnaireStatisticsForChart>() { { baseDate, new QuestionnaireStatisticsForChart() } }
-                };
+                    baseDate,
+                    CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(count: 7)
+                }
+            });
 
             chartStatisticsViewFactory = CreateChartStatisticsViewFactory(
                 Mock.Of<IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate>>(_
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         It should_each_line_has_1_day_inside = () => view.Lines.ShouldEachConformTo(line => line.Length == 1);
 
-        It should_each_line_has_record_equal_to_from_date_with_zero_count = () => view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture) && (int)line[0][1] == 0);
+        It should_each_line_has_record_equal_to_from_date = () => view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;
