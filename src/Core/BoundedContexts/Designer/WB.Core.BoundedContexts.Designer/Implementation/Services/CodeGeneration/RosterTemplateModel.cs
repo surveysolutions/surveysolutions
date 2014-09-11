@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string GeneratedConditionsMethodName { set; get; }
         public string GeneratedRosterScopeName { set; get; }
 
-        public List<QuestionTemplateModel> Questions {  set; get; }
+        public List<QuestionTemplateModel> Questions { set; get; }
         public List<GroupTemplateModel> Groups { set; get; }
         public List<RosterTemplateModel> Rosters { set; get; }
 
@@ -48,12 +48,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public IEnumerable<QuestionTemplateModel> GetAllQuestionsToTop()
         {
-            return ParentScope != null ? this.Questions.Union(ParentScope.GetAllQuestionsToTop()) : this.Questions ;
+            return this.ParentScope != null ? this.Questions.Union(this.ParentScope.GetAllQuestionsToTop()) : this.Questions;
         }
 
         public IEnumerable<RosterTemplateModel> GetAllRostersToTop()
         {
-            return ParentScope != null ? this.Rosters.Union(ParentScope.GetAllRostersToTop()) : this.Rosters;
+            return this.ParentScope != null ? this.Rosters.Union(this.ParentScope.GetAllRostersToTop()) : this.Rosters;
         }
     }
 }
