@@ -66,6 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 PublicKey = pets_questionId,
                 StataExportCaption = "pets_n",
                 IsInteger = true,
+                Mandatory = true,
                 QuestionType = QuestionType.Numeric
 
             }, rosterId, null);
@@ -85,6 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 StataExportCaption = "pets_text",
                 ConditionExpression = "pets_n > 0",
                 ValidationExpression = "pets_n == 0",
+                Mandatory = true,
                 QuestionType = QuestionType.Text
 
             }, groupId, null);
@@ -245,10 +247,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         public static QuestionnaireDocument CreateQuestionnairDocumenteHavingRosterWithConditions(Guid questionnaireId, Guid questionId, Guid group1Id)
         {
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
-
-            //Guid chapterId = Guid.Parse("23232323232323232323232323232323");
-            //questionnaireDocument.AddChapter(chapterId);
-
+            
             questionnaireDocument.Add(new NumericQuestion()
             {
                 QuestionType = QuestionType.Numeric,
@@ -268,6 +267,47 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             }, questionnaireId, null);
 
+            return questionnaireDocument;
+        }
+
+        public static QuestionnaireDocument CreateQuestionnaireDocumenteHavingMandatoryQuestions(Guid questionnaireId, Guid questionId, Guid question1Id, Guid question2Id, Guid question3Id)
+        {
+            QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
+
+            questionnaireDocument.Add(new NumericQuestion()
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = questionId,
+                StataExportCaption = "number1",
+                Mandatory = true,
+                IsInteger = true,
+
+            }, questionnaireId, null);
+
+            questionnaireDocument.Add(new MultyOptionsQuestion()
+            {
+                QuestionType = QuestionType.MultyOption,
+                PublicKey = question1Id,
+                StataExportCaption = "multy1",
+                Mandatory = true,
+            }, questionnaireId, null);
+
+            questionnaireDocument.Add(new SingleQuestion()
+            {
+                QuestionType = QuestionType.SingleOption,
+                PublicKey = question2Id,
+                StataExportCaption = "single1",
+                Mandatory = true,
+            }, questionnaireId, null);
+
+            questionnaireDocument.Add(new DateTimeQuestion() 
+            {
+                QuestionType = QuestionType.SingleOption,
+                PublicKey = question3Id,
+                StataExportCaption = "date1",
+                Mandatory = true,
+            }, questionnaireId, null);
+            
             return questionnaireDocument;
         }
 

@@ -9,20 +9,32 @@
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
         {
-        //TODO: generate mandatory 
+        
         <#foreach (var @group in Model.Groups) 
         {#>
             EnablementStates.Add(<#=@group.GeneratedStateName#>.ItemId, <#= @group.GeneratedStateName#>);
         <# }#>
                 
-        <#foreach (var q in Model.Questions)
+        <#foreach (var question in Model.Questions)
         {#>
-            EnablementStates.Add(<#=q.GeneratedStateName#>.ItemId, <#=q.GeneratedStateName#>);
-        <#if(!string.IsNullOrWhiteSpace(q.Validations))
-        {#>    
-            ValidationExpressions.Add(new Identity(IdOf.<#= q.GeneratedIdName#>, rosterVector), new Func<bool>[] { <#=q.GeneratedValidationsMethodName#> });             
+            EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);
+        <#
+            var validationMethods = new List<string>();
+
+            if(!string.IsNullOrWhiteSpace(question.Validations))
+                validationMethods.Add(question.GeneratedValidationsMethodName);
+            
+            if(question.IsMandatory)
+                validationMethods.Add(question.GeneratedMandatoryMethodName);
+
+            if(validationMethods.Count > 0)
+            {#>    
+            ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] {             
+            <#foreach (var methodName in validationMethods)
+            {#>  <#= methodName #> , <# }#>
+            });             
         <# }#>
-            AddUpdaterToMap(IdOf.<#= q.GeneratedIdName#>, (<#=q.GeneratedTypeName#> val) => {<#=q.GeneratedMemberName#>  = val; });
+            AddUpdaterToMap(IdOf.<#= question.GeneratedIdName#>, (<#=question.GeneratedTypeName#> val) => {<#=question.GeneratedMemberName#>  = val; });
         <# }#>
         <#foreach (var @roster in Model.Rosters) 
         {#>    
@@ -77,6 +89,14 @@
             return <#=question.Conditions#>;
         }
         <# }#>
+        <#if(question.IsMandatory)
+        {#>        
+        private bool <#=question.GeneratedMandatoryMethodName#>()
+        {
+            return !this.IsEmptyAnswer(<#=question.VariableName#>);
+        }
+        <# }#>
+
         <#if(!string.IsNullOrWhiteSpace(question.Validations))
         {#>        
         private bool <#=question.GeneratedValidationsMethodName#>()
