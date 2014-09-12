@@ -1,5 +1,4 @@
 ﻿@using System.Web.Optimization
-@using Newtonsoft.Json
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 
 @{
@@ -10,7 +9,7 @@
 @section scripts
 {
     @Scripts.Render(
-    "~/Scripts/jqplot-area",
+        "~/Scripts/jqplot-area",
         "~/Scripts/bootstrap-datepicker.js",
         "~/Scripts/viewmodels/pages/interviews.base.js",
         "~/Scripts/pages/chart.js")

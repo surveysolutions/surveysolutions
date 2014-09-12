@@ -50,7 +50,7 @@
     };
 
     self.drawChart = function () {
-        if (self.Stats.Lines[0].length === 0)
+        if (self.Stats.Lines.length === 0 ||self.Stats.Lines[0].length === 0)
             return;
 
         $('#interviewChart').empty();
