@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using RestSharp;
 using WB.Core.GenericSubdomains.Rest;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.UI.Capi.Syncronization.Push
 {
@@ -33,6 +35,25 @@ namespace WB.UI.Capi.Syncronization.Push
                 throw new SynchronizationException("Data sending was canceled");
             }
 
+        }
+
+        public void PushBinary(string login, string password, byte[] data, string fileName, Guid interviewId, CancellationToken ct)
+        {
+            if (data==null)
+                throw new InvalidOperationException("data is empty");
+
+            try
+            {
+                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(getChunckPath, ct,
+                    System.Text.Encoding.Default.GetString(data), login, password, null, new KeyValuePair<string, string>("interviewId", interviewId.FormatGuid()));
+
+                if (!result)
+                    throw new SynchronizationException("Push binary data was failed. Try again later.");
+            }
+            catch (RestException)
+            {
+                throw new SynchronizationException("Data sending was canceled");
+            }
         }
     }
 }
