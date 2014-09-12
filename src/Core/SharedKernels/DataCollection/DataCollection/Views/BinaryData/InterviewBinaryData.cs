@@ -8,14 +8,15 @@ namespace WB.Core.SharedKernels.DataCollection.Views.BinaryData
 {
     public class InterviewBinaryData
     {
-        public InterviewBinaryData(Guid interviewId, string id, byte[] data)
+        public InterviewBinaryData(Guid interviewId, string fileName, Func<byte[]> getData)
         {
             this.InterviewId = interviewId;
-            this.Id = id;
-            this.Data = data;
+            this.FileName = fileName;
+            this.getData = getData;
         }
         public Guid InterviewId { get; private set; }
-        public string Id { get; private set; }
-        public byte[] Data { get; private set; }
+        public string FileName { get; private set; }
+        public byte[] Data { get { return getData(); } }
+        private readonly Func<byte[]> getData;
     }
 }
