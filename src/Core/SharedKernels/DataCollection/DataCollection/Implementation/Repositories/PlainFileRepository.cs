@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
+        private const string SyncDirectoryName = "SYNC";
 
         public PlainFileRepository(IFileSystemAccessor fileSystemAccessor, string basePath, string directoryName)
         {
@@ -58,6 +59,60 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             fileSystemAccessor.DeleteDirectory(directoryPath);
         }
 
+        public void MoveInterviewsBinaryDataToSyncFolder(Guid interviewId)
+        {
+            var pathToInterviewDirectory = this.GetPathToInterviewDirectory(interviewId);
+             if (!fileSystemAccessor.IsDirectoryExists(pathToInterviewDirectory))
+               return;
+
+            var syncDirectoryPath = this.GetPathToSyncFolder();
+
+            if (!fileSystemAccessor.IsDirectoryExists(syncDirectoryPath))
+                fileSystemAccessor.CreateDirectory(syncDirectoryPath);
+
+            fileSystemAccessor.CopyFileOrDirectory(pathToInterviewDirectory, syncDirectoryPath);
+        }
+
+        public IList<InterviewBinaryData> GetBinaryFilesFromSyncFolder()
+        {
+            var syncDirectoryPath = this.GetPathToSyncFolder();
+
+            if (!fileSystemAccessor.IsDirectoryExists(syncDirectoryPath))
+                return new InterviewBinaryData[0];
+
+            var result = new List<InterviewBinaryData>();
+
+            foreach (var syncInterviewDirectory in fileSystemAccessor.GetDirectoriesInDirectory(syncDirectoryPath))
+            {
+                var directoryName = fileSystemAccessor.GetFileName(syncInterviewDirectory);
+                Guid interviewId;
+                if (!Guid.TryParse(directoryName, out interviewId))
+                    continue;
+                result.AddRange(
+                    fileSystemAccessor.GetFilesInDirectory(syncDirectoryPath)
+                        .Select(
+                            fileName =>
+                                new InterviewBinaryData(interviewId, fileSystemAccessor.GetFileName(fileName),
+                                    () => fileSystemAccessor.ReadAllBytes(fileName))));
+            }
+
+            return result;
+        }
+
+        public void RemoveBinaryDataFromSyncFolder(Guid interviewId, string fileName)
+        {
+            var syncDirectoryPath = this.GetPathToSyncFolder();
+
+            if (!fileSystemAccessor.IsDirectoryExists(syncDirectoryPath))
+                return;
+
+            var interviewSyncDirectory = this.GetPathToInterviewDirectory(interviewId, syncDirectoryPath);
+
+            var pathToFile = fileSystemAccessor.CombinePath(interviewSyncDirectory, fileName);
+            if (fileSystemAccessor.IsFileExists(pathToFile))
+                fileSystemAccessor.DeleteFile(pathToFile);
+        }
+
         public string[] GetAllIdsOfBinaryDataByInterview(Guid interviewId)
         {
             var directoryPath = this.GetPathToInterviewDirectory(interviewId);
@@ -72,9 +127,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return fileSystemAccessor.CombinePath(GetPathToInterviewDirectory(interviewId), fileName);
         }
 
-        private string GetPathToInterviewDirectory(Guid interviewId)
+        private string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory=null)
         {
-            return fileSystemAccessor.CombinePath(basePath, interviewId.FormatGuid());
+            return fileSystemAccessor.CombinePath(baseDirectory ?? basePath, interviewId.FormatGuid());
+        }
+
+        private string GetPathToSyncFolder()
+        {
+            return fileSystemAccessor.CombinePath(basePath, SyncDirectoryName);
         }
     }
 }
