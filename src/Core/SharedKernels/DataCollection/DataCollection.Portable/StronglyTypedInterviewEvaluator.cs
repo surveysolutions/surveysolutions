@@ -379,7 +379,7 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
         //roster first level
-        public class HhMember_type : AbstractRosterLevel<HhMember_type>, IExpressionExecutable
+        public class HhMember_type : AbstractConditionalLevel<HhMember_type>, IExpressionExecutable
         {
             public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid,
                 IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -646,7 +646,7 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
         //roster second level
-        public class FoodConsumption_type : AbstractRosterLevel<FoodConsumption_type>, IExpressionExecutable
+        public class FoodConsumption_type : AbstractConditionalLevel<FoodConsumption_type>, IExpressionExecutable
         {
             public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -814,7 +814,7 @@ namespace WB.Core.SharedKernels.DataCollection
             }
         }
 
-        public class Education_type : AbstractRosterLevel<Education_type>, IExpressionExecutable
+        public class Education_type : AbstractConditionalLevel<Education_type>, IExpressionExecutable
         {
             public Education_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)

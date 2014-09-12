@@ -3,7 +3,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-    private class <#=Model.GeneratedTypeName#> : AbstractRosterLevel<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
+    private class <#=Model.GeneratedTypeName#> : AbstractConditionalLevel<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
     {    
         public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, <#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, 
             Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
