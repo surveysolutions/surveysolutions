@@ -4,8 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
     private class <#=Model.GeneratedTypeName#> : AbstractRosterLevel<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
-    {
-    
+    {    
         public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, <#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, 
             Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
             : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
@@ -16,9 +15,7 @@
         private <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, 
             Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
             : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
-        {
-
-        //TODO: generate mandatory                
+        {           
         <#foreach (var @group in Model.Groups) 
         {#>
             EnablementStates.Add(<#=@group.GeneratedStateName#>.ItemId, <#= @group.GeneratedStateName#>);
@@ -31,11 +28,22 @@
 
         <#foreach (var question in Model.Questions) 
         {#>            
-            EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);        
-        
-            <#if(!string.IsNullOrWhiteSpace(question.Validations))
-            {#>                 
-            ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] { <#=question.GeneratedValidationsMethodName#> });                      
+            EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);
+            <#
+            var validationMethods = new List<string>();
+
+            if(!string.IsNullOrWhiteSpace(question.Validations))
+                validationMethods.Add(question.GeneratedValidationsMethodName);
+            
+            if(question.IsMandatory)
+                validationMethods.Add(question.GeneratedMandatoryMethodName);
+
+            if(validationMethods.Count > 0)
+            {#>    
+            ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] {             
+                <#foreach (var methodName in validationMethods)
+                {#>  <#= methodName #> , <# }#>
+            });             
             <# }#>
             AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=question.GeneratedTypeName#> val) => {<#=question.GeneratedMemberName#>  = val; });
         <# }#>
@@ -113,7 +121,13 @@
             return <#=question.Validations#>;
         }  
         <# }#>
-
+        <#if(question.IsMandatory)
+        {#>        
+        private bool <#=question.GeneratedMandatoryMethodName#>()
+        {
+            return !this.IsEmptyAnswer(<#=question.VariableName#>);
+        }
+        <# }#>
         <# }#>
         //groups
         <#foreach (var @group in Model.Groups) 
