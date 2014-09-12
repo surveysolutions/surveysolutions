@@ -199,11 +199,10 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         //generating rosters
         <#foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
            {
-
                 RosterScopeTemplate template = new RosterScopeTemplate(rosterGroup, QuestionnaireTemplateStructure);
                 this.Write(template.TransformText());                
            }
-         #>
+        #>
 
         public static class IdOf
         {
