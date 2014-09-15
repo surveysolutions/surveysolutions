@@ -4,29 +4,28 @@ namespace Main.Core.Entities.SubEntities
 {
     public enum QuestionType
     {
-        SingleOption = 0, 
+        SingleOption = 0,
 
-        [Obsolete]
-        YesNo = 1, 
+        [Obsolete] YesNo = 1,
 
-        [Obsolete]
-        DropDownList = 2, 
+        [Obsolete] DropDownList = 2,
 
-        MultyOption = 3, 
+        MultyOption = 3,
 
-        Numeric = 4, 
+        Numeric = 4,
 
-        DateTime = 5, 
-        
-        GpsCoordinates = 6, 
+        DateTime = 5,
 
-        Text = 7, 
+        GpsCoordinates = 6,
 
-        [Obsolete]
-        AutoPropagate = 8,
+        Text = 7,
+
+        [Obsolete] AutoPropagate = 8,
 
         TextList = 9,
 
-        QRBarcode = 10
+        QRBarcode = 10,
+
+        Multimedia = 11
     }
 }

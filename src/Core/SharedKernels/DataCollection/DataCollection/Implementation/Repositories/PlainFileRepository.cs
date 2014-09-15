@@ -16,11 +16,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
         private const string SyncDirectoryName = "SYNC";
+        private const string DataDirectoryName = "DATA";
 
-        public PlainFileRepository(IFileSystemAccessor fileSystemAccessor, string basePath, string directoryName)
+        public PlainFileRepository(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.basePath = basePath;
+
+            this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, DataDirectoryName);
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.basePath))
+                this.fileSystemAccessor.CreateDirectory(this.basePath);
         }
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
