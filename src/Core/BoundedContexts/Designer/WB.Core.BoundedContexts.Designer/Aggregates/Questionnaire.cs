@@ -1406,7 +1406,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
             if (type == QuestionType.SingleOption || type == QuestionType.MultyOption)
             {
-                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
+                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
             }
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
@@ -1462,7 +1462,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
             if (type == QuestionType.SingleOption || type == QuestionType.MultyOption)
             {
-                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
+                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
             }
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
@@ -1512,7 +1512,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (type == QuestionType.SingleOption || type == QuestionType.MultyOption)
             {
-                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
+                this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
             }
             this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
@@ -1940,7 +1940,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
@@ -1989,7 +1989,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
@@ -2038,7 +2038,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
@@ -2080,7 +2080,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var answers = !isFilteredCombobox ? ConvertOptionsToAnswers(options) : null;
 
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
 
@@ -2138,7 +2138,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new QuestionChanged
@@ -2188,7 +2188,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
                 responsibleId);
             
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: questionId, title: title,
@@ -3052,7 +3052,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowIfCategoricalQuestionIsInvalid(Guid questionId, Option[] options, Guid? linkedToQuestionId,
-            bool isFeatured, bool? isFilteredCombobox)
+            bool isFeatured, bool? isFilteredCombobox, QuestionScope scope)
         {
             bool questionIsLinked = linkedToQuestionId.HasValue;
             bool questionHasOptions = options != null && options.Any();
@@ -3068,6 +3068,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 //this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId);
                 this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured);
+                this.ThrowIfLinkedCategoricalQuestionIsFilledBySupervisor(scope);
             }
             else if (!isFilteredCombobox.HasValue || !isFilteredCombobox.Value)
             {
@@ -3149,6 +3150,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.LinkedQuestionIsNotInPropagateGroup,
                     "Question that you are linked to is not in the roster group");
+            }
+        }
+
+        private void ThrowIfLinkedCategoricalQuestionIsFilledBySupervisor(QuestionScope scope)
+        {
+            if (scope == QuestionScope.Supervisor)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.LinkedCategoricalQuestionCanNotBeFilledBySupervisor,
+                    "Linked categorical questions cannot be filled by supervisor");
             }
         }
 
