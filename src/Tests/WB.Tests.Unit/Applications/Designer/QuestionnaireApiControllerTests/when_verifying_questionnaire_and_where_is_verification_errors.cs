@@ -53,6 +53,9 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
         It should_return_errors_created_by_mapper_as_action_result = () =>
             result.Errors.ShouldEqual(mappedAndEnrichedVerificationErrors);
 
+        It should_return_original_errors_count_before_grouping_in_result = () =>
+           result.ErrorsCount.ShouldEqual(verificationErrors.Length);
+
         private static QuestionnaireDocument questionnaireDocument; 
         private static Mock<IQuestionnaireVerifier> verifierMock ;
         private static Mock<IVerificationErrorsMapper> errorsMapperMock;
