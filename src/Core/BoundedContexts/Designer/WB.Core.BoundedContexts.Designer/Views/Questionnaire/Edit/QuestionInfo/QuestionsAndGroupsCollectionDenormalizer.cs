@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionCloned>
+        , IUpdateHandler<QuestionsAndGroupsCollectionView, MultimediaQuestionUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, StaticTextCloned>
@@ -164,6 +165,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
             return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.ParentGroupId, question);
+        }
+
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<MultimediaQuestionUpdated> evnt)
+        {
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.MultimediaQuestionUpdatedToQuestionData(evnt));
+            return this.UpdateStateWithUpdatedQuestion(currentState, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,

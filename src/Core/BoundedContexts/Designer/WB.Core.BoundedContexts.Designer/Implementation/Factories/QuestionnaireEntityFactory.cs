@@ -95,6 +95,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 case QuestionType.QRBarcode:
                     return new QRBarcodeQuestion();
 
+                case QuestionType.Multimedia:
+                    return new MultimediaQuestion();
+
                 default:
                     throw new NotSupportedException(string.Format("Question type is not supported: {0}", type));
             }

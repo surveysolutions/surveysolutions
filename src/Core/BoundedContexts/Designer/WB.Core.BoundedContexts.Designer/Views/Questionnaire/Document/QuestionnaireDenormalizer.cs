@@ -48,6 +48,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<QRBarcodeQuestionCloned>,
 
+        IEventHandler<MultimediaQuestionUpdated>,
+
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
@@ -500,6 +502,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QRBarcodeQuestionCloned e = evnt.Payload;
             CloneQuestion(evnt, e.ParentGroupId, e.TargetIndex,EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
+        }
+
+        public void Handle(IPublishedEvent<MultimediaQuestionUpdated> evnt)
+        {
+            UpdateQuestion(evnt, EventConverter.MultimediaQuestionUpdatedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<StaticTextAdded> evnt)
