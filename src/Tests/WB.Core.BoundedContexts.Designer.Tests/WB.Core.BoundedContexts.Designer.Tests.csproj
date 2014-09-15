@@ -178,6 +178,7 @@
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_and_max_allowed_answers_less_than_2.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_1_option.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_empty_options.cs" />
+    <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_not_null_linkedQuestion_and_with_options.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_set_in_null.cs" />
     <Compile Include="AddMultiOptionQuestionHandlerTests\when_adding_multi_option_question_with_options_with_empty_option_title.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="AddQrBarcodeQuestionHandlerTests\when_adding_qr_barcode_question_and_variable_name_is_null.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_filtered_combobox_question_and_all_parameters_is_specified.cs" />
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_and_variable_name_is_null.cs" />
+    <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_parent_does_not_exists.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_is_null.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_with_substitution_referencing_valid_variable_but_another_question_has_null_variable_name.cs" />
@@ -204,8 +206,10 @@
     <Compile Include="CloneDateTimeQuestionHandlerTests\when_cloning_datetime_question_and_variable_name_is_null.cs" />
     <Compile Include="CloneGpsCoordinatesQuestionHandlerTests\when_cloning_gps_coordinates_question_and_variable_name_is_null.cs" />
     <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_and_variable_name_is_null.cs" />
+    <Compile Include="CloneMultiOptionQuestionHandlerTests\when_cloning_multi_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="CloneQrBarcodeQuestionHandlerTests\when_cloning_qr_barcode_question_and_variable_name_is_null.cs" />
     <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_and_variable_name_is_null.cs" />
+    <Compile Include="CloneSingleOptionQuestionHandlerTests\when_cloning_single_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_all_parameters_specified.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_entity_with_same_id_already_exists.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_entity_does_not_exists.cs" />
@@ -263,9 +267,11 @@
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_question_not_found.cs" />
     <Compile Include="UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_filtered_combobox_question_and_all_parameters_is_specified.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_text_contains_only_whitespaces.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_text_is_empty.cs" />
