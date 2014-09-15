@@ -107,6 +107,38 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             return data;
         }
 
+        public static QuestionData MultimediaQuestionUpdatedToQuestionData(IPublishedEvent<MultimediaQuestionUpdated> evnt)
+        {
+            MultimediaQuestionUpdated e = evnt.Payload;
+            var data = new QuestionData(
+                e.QuestionId,
+                QuestionType.Multimedia,
+                QuestionScope.Interviewer,
+                e.Title,
+                e.VariableName,
+                e.VariableLabel,
+                e.EnablementCondition,
+                null,
+                null,
+                Order.AZ,
+                false,
+                e.IsMandatory,
+                false,
+                e.Instructions,
+                null,
+                new List<Guid>(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+            return data;
+        }
+
         public static QuestionData TextListQuestionAddedToQuestionData(IPublishedEvent<TextListQuestionAdded> evnt)
         {
             TextListQuestionAdded e = evnt.Payload;

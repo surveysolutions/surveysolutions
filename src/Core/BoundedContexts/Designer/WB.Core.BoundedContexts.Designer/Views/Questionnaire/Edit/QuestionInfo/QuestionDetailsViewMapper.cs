@@ -120,6 +120,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
                 case QuestionType.QRBarcode:
                     return new QrBarcodeDetailsView();
+
+                case QuestionType.Multimedia:
+                    return new MultimediaDetailsView();
             }
 
             return null;
