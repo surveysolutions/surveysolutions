@@ -58,7 +58,8 @@
                     TextList: 'icon-textlist',
                     QRBarcode: 'icon-qrbarcode',
                     Text: 'icon-text',
-                    SingleOption: 'icon-singleoption'
+                    SingleOption: 'icon-singleoption',
+                    Multimedia: 'icon-photo'
                 };
 
                 $scope.chapters = [];
