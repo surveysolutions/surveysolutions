@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
-    public class MultimediaQuestion : AbstractQuestion
+    public class MultimediaQuestion : AbstractQuestion, IMultimediaQuestion
     {
         public MultimediaQuestion() {}
 

@@ -101,6 +101,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             };
         }
 
+        protected static IQuestion CreateMultimediaQuestion(Guid questionId, string enablementCondition, bool isMandatory, string instructions, string title, string variableName)
+        {
+            return new MultimediaQuestion()
+            {
+                PublicKey = questionId,
+                QuestionText = title,
+                QuestionType = QuestionType.Multimedia,
+                ConditionExpression = enablementCondition,
+                Mandatory = isMandatory,
+                StataExportCaption = variableName,
+                Instructions = instructions
+            };
+        }
+
         protected static TextQuestion CreateTextQuestion(Guid? questionId = null, string title = null)
         {
             return new TextQuestion
