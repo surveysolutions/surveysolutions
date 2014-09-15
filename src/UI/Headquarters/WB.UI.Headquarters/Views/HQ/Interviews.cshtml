@@ -9,17 +9,19 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/hq.interviews.js")
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme))';
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new { }, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         var statistics = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "AllInterviews" })';
-        $(function () {
+        $(function() {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
             var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, users, commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });
+
+
     </script>
 }
 
@@ -30,7 +32,18 @@
 
 @section  actionbar{
     <div class="btn-group">
-        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
+        <div class="form-inline" >
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
+
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-bind="click: search">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 }
 
