@@ -38,7 +38,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             QuestionType.GpsCoordinates,
             QuestionType.Text,
             QuestionType.TextList,
-            QuestionType.QRBarcode
+            QuestionType.QRBarcode,
+            QuestionType.Multimedia
         };
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeSubstitutionReferences = new[]
