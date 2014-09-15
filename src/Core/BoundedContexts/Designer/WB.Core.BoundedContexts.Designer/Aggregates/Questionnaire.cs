@@ -1354,6 +1354,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IComposite parentGroup = question.GetParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(question.PublicKey);
 
+            var asTextQuestion = question as TextQuestion;
             var asMultioptions = question as IMultyOptionsQuestion;
 
             this.ApplyEvent(new QuestionCloned
@@ -1383,6 +1384,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 AreAnswersOrdered = asMultioptions != null ? (bool?)asMultioptions.AreAnswersOrdered : null,
                 MaxAllowedAnswers = asMultioptions != null ? (int?)asMultioptions.MaxAllowedAnswers : null,
+
+                Mask = asTextQuestion != null ? asTextQuestion.Mask : null,
 
                 IsFilteredCombobox = question.IsFilteredCombobox
             });
