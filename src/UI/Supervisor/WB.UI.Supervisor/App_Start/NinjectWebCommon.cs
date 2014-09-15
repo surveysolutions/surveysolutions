@@ -144,7 +144,7 @@ namespace WB.UI.Supervisor.App_Start
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: AppDomain.CurrentDomain.BaseDirectory),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 ModulesFactory.GetEventStoreModule(),
