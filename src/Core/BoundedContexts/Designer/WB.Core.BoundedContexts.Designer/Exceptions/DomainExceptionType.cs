@@ -87,6 +87,8 @@
 
         LinkedQuestionIsNotInPropagateGroup,
 
+        LinkedCategoricalQuestionCanNotBeFilledBySupervisor,
+
         NotCategoricalQuestionLinkedToAnoterQuestion,
 
         QuestionWithLinkedQuestionCanNotBeFeatured,
