@@ -3,7 +3,6 @@ using Android.Content;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Droid.Platform;
-using Cirrious.MvvmCross.Plugins.PictureChooser;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
