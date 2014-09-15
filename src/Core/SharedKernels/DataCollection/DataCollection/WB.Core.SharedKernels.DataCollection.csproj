@@ -55,6 +55,7 @@
     <Compile Include="Aggregates\UserAR.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerPictureQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerTextListQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerQRBarcodeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\CancelInterviewByHQSynchronizationCommand.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Events\Interview\InterviewSentToHeadquarters.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Interview\PictureQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QRBarcodeQuestionAnswered.cs" />
     <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />

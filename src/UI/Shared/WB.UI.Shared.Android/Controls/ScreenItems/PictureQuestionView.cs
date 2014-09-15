@@ -82,11 +82,6 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         protected readonly Button btnRemovePicture;
         protected readonly ImageView ivImage;
 
-        protected string PictureFileName
-        {
-            get { return String.Format("{0}.jpg", Model.Variable); }
-        }
-
         protected ValueQuestionViewModel TypedMode
         {
             get { return this.Model as ValueQuestionViewModel; }
@@ -106,32 +101,48 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void BtnRemovePictureClick(object sender, EventArgs e)
         {
-            plainFileRepository.RemoveInterviewBinaryData(this.QuestionnairePublicKey, PictureFileName);
-            PutAnswerStoredInModelToUI();
+            plainFileRepository.RemoveInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
+         //   ivImage.SetImageResource(0);
+            ivImage.SetImageDrawable(null);
+            this.SavePictureToAR(string.Empty);
         }
 
         private void OnPicture(Stream pictureStream)
         {
+            var pictureFileName = String.Format("{0}{1}.jpg", Model.Variable,
+                string.Join("-", Model.PublicKey.InterviewItemPropagationVector));
+            byte[] data = null;
             using (var memoryStream = new MemoryStream())
             {
                 pictureStream.CopyTo(memoryStream);
-                plainFileRepository.StoreInterviewBinaryData(this.QuestionnairePublicKey, PictureFileName,
-                    memoryStream.ToArray());
+                data = memoryStream.ToArray();
+                plainFileRepository.StoreInterviewBinaryData(this.QuestionnairePublicKey, pictureFileName, data);
             }
-            PutAnswerStoredInModelToUI();
+
+            Bitmap bitmap = BitmapFactory.DecodeByteArray(data, 0, data.Length);
+            ivImage.SetImageBitmap(bitmap);
+            this.SavePictureToAR(pictureFileName);
+        }
+
+        private void SavePictureToAR(string pictureFileName)
+        {
+            this.SaveAnswer(pictureFileName,
+               new AnswerPictureQuestionCommand(interviewId: this.QuestionnairePublicKey, userId: this.Membership.CurrentUser.Id,
+                   questionId: this.Model.PublicKey.Id, rosterVector: this.Model.PublicKey.InterviewItemPropagationVector,
+                   answerTime: DateTime.UtcNow, pictureFileName: pictureFileName));
         }
 
         protected override string GetAnswerStoredInModelAsString()
         {
-            return PictureFileName;
+            return this.Model.AnswerString;
         }
 
         protected override void PutAnswerStoredInModelToUI()
         {
-            var bytes = plainFileRepository.GetInterviewBinaryData(this.QuestionnairePublicKey, PictureFileName);
+            var bytes = plainFileRepository.GetInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
             if (bytes == null || bytes.Length == 0)
             {
-                ivImage.SetImageResource(0);
+               // ivImage.SetImageResource(0);
                 ivImage.SetImageDrawable(null);
                 return;
             }
