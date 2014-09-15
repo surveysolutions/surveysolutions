@@ -145,10 +145,12 @@ namespace WB.UI.Designer.Api
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
 
             QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            var errorsCount = verificationErrors.Length;
             VerificationError[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
             var verificationResult = new VerificationErrors
             {
-                Errors = errors
+                Errors = errors,
+                ErrorsCount = errorsCount
             };
             return verificationResult;
         }
