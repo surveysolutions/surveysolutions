@@ -282,6 +282,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GeoLocationDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GroupAndRosterDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\IQuestionDetailsViewMapper.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultimediaDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultiOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\NumericDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QrBarcodeDetailsView.cs" />

@@ -686,7 +686,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
                         e.QuestionId,
-                        QuestionType.QRBarcode,
+                        QuestionType.Multimedia,
                         QuestionScope.Interviewer,
                         e.Title,
                         e.VariableName,
