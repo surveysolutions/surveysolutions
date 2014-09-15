@@ -25,6 +25,7 @@ using WB.Core.BoundedContexts.Capi.EventHandler;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Rest.Android;
+using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
@@ -159,6 +160,8 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(eventHandler, typeof(RosterRowTitleChanged));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesTitleChanged));
             bus.RegisterHandler(eventHandler, typeof(QRBarcodeQuestionAnswered));
+
+            bus.RegisterHandler(eventHandler, typeof(PictureQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
 
             var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
@@ -217,6 +220,7 @@ namespace WB.UI.QuestionnaireTester
                 new TesterLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new RestAndroidModule(),
+                new FileInfrastructureModule(),
                 new ExpressionProcessorModule());
 
             this.kernel.Bind<IAuthentication, DesignerAuthentication>().ToConstant(new DesignerAuthentication());
