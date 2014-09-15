@@ -119,6 +119,7 @@
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\AddGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\CloneGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\UpdateGpsCoordinatesQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\Mulimedia\UpdateMultimediaQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\AddMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\CloneMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\UpdateMultiOptionQuestionCommand.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
     <Compile Include="Events\Users\AccountDeleted.cs" />
     <Compile Include="Events\Users\AccountLocked.cs" />

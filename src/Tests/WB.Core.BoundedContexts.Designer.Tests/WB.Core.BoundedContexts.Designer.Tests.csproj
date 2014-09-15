@@ -262,6 +262,7 @@
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_question_is_not_a_filtered_combobox.cs" />
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_question_not_found.cs" />
     <Compile Include="UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateMultimediaQuestionHandlerTests\when_updating_multimedia_question_and_all_parameters_is_specified.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_filtered_combobox_question_and_all_parameters_is_specified.cs" />
