@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 input.QuestionnaireVersion = data.Request.TemplateVersion;
                 input.TeamLeadId = data.Request.ResponsibleId;
                 input.Status = data.Request.Status;
+                input.SearchBy = data.Request.SearchBy;
             }
 
             return this.allInterviewsViewFactory.Load(input);
@@ -90,6 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 input.QuestionnaireVersion = data.Request.TemplateVersion;
                 input.ResponsibleId = data.Request.ResponsibleId;
                 input.Status = data.Request.Status;
+                input.SearchBy = data.Request.SearchBy;
             }
 
             return this.teamInterviewViewFactory.Load(input);

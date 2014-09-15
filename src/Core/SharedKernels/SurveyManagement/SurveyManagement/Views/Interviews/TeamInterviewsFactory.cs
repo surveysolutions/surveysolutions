@@ -3,56 +3,61 @@ using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Utility;
 using Main.Core.View;
+using Raven.Client;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 {
     public class TeamInterviewsFactory : IViewFactory<TeamInterviewsInputModel, TeamInterviewsView>
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        public TeamInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
+        public TeamInterviewsFactory(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this.interviews = interviews;
+            this.indexAccessor = indexAccessor;
         }
 
         public TeamInterviewsView Load(TeamInterviewsInputModel input)
         {
-            Expression<Func<InterviewSummary, bool>> predicate = (i) => !i.IsDeleted;
+            string indexName = typeof (InterviewsSearchIndex).Name;
+
+            var items = this.indexAccessor.Query<InterviewSummary>(indexName).Where(x => !x.IsDeleted);
+
+            if (!string.IsNullOrWhiteSpace(input.SearchBy))
+            {
+                items = items.Search(x => x.AnswersToFeaturedQuestions, input.SearchBy);
+            }
 
             if (input.Status.HasValue)
             {
-                predicate = predicate.AndCondition(x => (x.Status == input.Status));
+                items = items.Where(x => (x.Status == input.Status));
             }
 
             if (input.QuestionnaireId.HasValue)
             {
-                predicate = predicate.AndCondition(x => (x.QuestionnaireId == input.QuestionnaireId));
+                items = items.Where(x => (x.QuestionnaireId == input.QuestionnaireId));
             }
 
             if (input.QuestionnaireVersion.HasValue)
             {
-                predicate = predicate.AndCondition(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
+                items = items.Where(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
             }
 
-            predicate = input.ResponsibleId.HasValue
-                ? predicate.AndCondition(x => x.ResponsibleId == input.ResponsibleId)
-                : predicate.AndCondition(x => x.TeamLeadId != null && x.TeamLeadId == input.ViewerId);
-            
+            items = input.ResponsibleId.HasValue
+                ? items.Where(x => x.ResponsibleId == input.ResponsibleId)
+                : items.Where(x => x.TeamLeadId == input.ViewerId);
 
-            var interviewItems = this.DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)), input)
-                            .Skip((input.Page - 1) * input.PageSize)
-                            .Take(input.PageSize).ToList();
+            items = this.DefineOrderBy(items, input);
 
-
-            return new TeamInterviewsView()
-            {
-                TotalCount = this.interviews.Query(_ => _.Count(predicate)),
-                Items = interviewItems.Select(x => new TeamInterviewsViewItem()
-                {
+            var totalCount = items.Count();
+            var teamInterviewsViewItems = items.Skip((input.Page - 1) * input.PageSize)
+                .Take(input.PageSize)
+                .ToList()
+                .Select(x => new TeamInterviewsViewItem {
                     FeaturedQuestions = x.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion()
                     {
                         Id = a.Id,
@@ -66,11 +71,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                     Status = x.Status.ToString(),
                     HasErrors = x.HasErrors,
                     CanBeReassigned = x.Status == InterviewStatus.Created
-                                      || x.Status == InterviewStatus.SupervisorAssigned
-                                      || x.Status == InterviewStatus.InterviewerAssigned
-                                      || x.Status == InterviewStatus.RejectedBySupervisor,
+                        || x.Status == InterviewStatus.SupervisorAssigned
+                        || x.Status == InterviewStatus.InterviewerAssigned
+                        || x.Status == InterviewStatus.RejectedBySupervisor,
                     CreatedOnClient = x.WasCreatedOnClient
-                })
+                });
+            return new TeamInterviewsView
+            {
+                TotalCount = totalCount,
+                Items = teamInterviewsViewItems
             };   
         }
 
