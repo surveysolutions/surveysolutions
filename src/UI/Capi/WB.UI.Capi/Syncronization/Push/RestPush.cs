@@ -10,7 +10,8 @@ namespace WB.UI.Capi.Syncronization.Push
     public class RestPush
     {
         private readonly IRestServiceWrapper webExecutor;
-        private const string getChunckPath = "sync/PostPackage";
+        private const string PostPackagePath = "sync/PostPackage";
+        private const string PostFilePath = "sync/PostFile";
         public RestPush(IRestServiceWrapper webExecutor)
         {
             this.webExecutor = webExecutor;
@@ -24,7 +25,7 @@ namespace WB.UI.Capi.Syncronization.Push
 
             try
             {
-                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(getChunckPath, ct,
+                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostPackagePath, ct,
                     content, login, password, null);
 
                 if (!result)
@@ -44,8 +45,10 @@ namespace WB.UI.Capi.Syncronization.Push
 
             try
             {
-                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(getChunckPath, ct,
-                    System.Text.Encoding.Default.GetString(data), login, password, null, new KeyValuePair<string, string>("interviewId", interviewId.FormatGuid()));
+                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostFilePath, ct,
+                    System.Text.Encoding.Default.GetString(data), login, password, null,
+                    new KeyValuePair<string, string>("interviewId", interviewId.FormatGuid()),
+                    new KeyValuePair<string, string>("pictureFileName", fileName));
 
                 if (!result)
                     throw new SynchronizationException("Push binary data was failed. Try again later.");
