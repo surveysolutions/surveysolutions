@@ -41,7 +41,8 @@
                 } else {
                     $("body").scrollTop(0);
                     $("#applyOptionsErrorContent").html(response.Error);
-                    $('#applyOptionsError').fadeIn().delay(10000).fadeOut();
+                    $('#applyOptionsError').fadeIn();
+                    setTimeout(function () { $('#applyOptionsError').fadeOut(); }, 10000);
                 }
             });
         }
@@ -58,7 +59,7 @@
         $(document).ready(function () {
             ajustNavPanels();
 
-            $('.alert.alert-danger').delay(10000).fadeOut();
+            setTimeout(function () { $('.alert.alert-danger').fadeOut(); }, 10000);
         });
     </script>
 </head>
