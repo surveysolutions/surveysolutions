@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 if (!Guid.TryParse(directoryName, out interviewId))
                     continue;
                 result.AddRange(
-                    fileSystemAccessor.GetFilesInDirectory(syncDirectoryPath)
+                    fileSystemAccessor.GetFilesInDirectory(syncInterviewDirectory)
                         .Select(
                             fileName =>
                                 new InterviewBinaryData(interviewId, fileSystemAccessor.GetFileName(fileName),
