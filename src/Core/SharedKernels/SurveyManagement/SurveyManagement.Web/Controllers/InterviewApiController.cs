@@ -414,6 +414,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                     new OptionModel(uid) {value = option.Value.ToString(), label = option.Label})
                     };
                     break;
+                case QuestionType.Multimedia:
+                    questionModel = new PictureQuestionModel()
+                    {
+                        pictureFileName = answerAsString
+                    };
+                    break;
             }
 
             questionModel.isReadonly = questionDto.IsReadOnly;
@@ -537,6 +543,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         public string answer { set; get; }
         public string mask { set; get; }
+    }
+    public class PictureQuestionModel : QuestionModel
+    {
+        public string pictureFileName { set; get; }
     }
     public class NumericQuestionModel : TextQuestionModel
     {
