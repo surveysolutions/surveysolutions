@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             exportedHeaderItem.ColumnNames = new string[] { question.StataExportCaption };
 
             exportedHeaderItem.Labels = new Dictionary<Guid, LabelItem>();
-            foreach (IAnswer answer in question.Answers)
+            foreach (var answer in question.Answers)
             {
                 exportedHeaderItem.Labels.Add(answer.PublicKey, new LabelItem(answer));
             }
