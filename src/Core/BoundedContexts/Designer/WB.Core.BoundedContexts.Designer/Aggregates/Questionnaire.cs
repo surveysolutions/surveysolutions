@@ -646,6 +646,46 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
+        internal void Apply(MultimediaQuestionUpdated e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionId);
+            IQuestion newQuestion =
+                this.questionnaireEntityFactory.CreateQuestion(
+                    new QuestionData(
+                        e.QuestionId,
+                        QuestionType.Multimedia,
+                        QuestionScope.Interviewer,
+                        e.Title,
+                        e.VariableName,
+                        e.VariableLabel,
+                        e.EnablementCondition,
+                        null,
+                        null,
+                        Order.AZ,
+                        false,
+                        e.IsMandatory,
+                        false,
+                        e.Instructions,
+                        null,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.ReplaceEntity(question, newQuestion);
+        }
+
         internal void Apply(QRBarcodeQuestionCloned e)
         {
             IQuestion question =
@@ -2443,6 +2483,34 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
 
                 MaxAnswerCount = maxAnswerCount
+            });
+        }
+
+        #endregion
+
+        #region Question: Multimedia command handlers
+
+        public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel,
+         bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
+        {
+            PrepareGeneralProperties(ref title, ref variableName);
+
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+
+            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: null, title: title,
+                variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
+
+            this.ApplyEvent(new MultimediaQuestionUpdated()
+            {
+                QuestionId = questionId,
+                Title = title,
+                VariableName = variableName,
+                VariableLabel = variableLabel,
+                IsMandatory = isMandatory,
+                EnablementCondition = enablementCondition,
+                Instructions = instructions,
+                ResponsibleId = responsibleId
             });
         }
 

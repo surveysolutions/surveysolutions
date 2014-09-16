@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
         It should_cleanup_data_for_interview =
             () =>
                 cleanUpExecutorMock.Verify(
-                    x => x.DeleteInterveiw(interviewId),
+                    x => x.DeleteInterview(interviewId),
                     Times.Once);
 
         It should_create_public_record_in_change_log_for_sync_item_once =
