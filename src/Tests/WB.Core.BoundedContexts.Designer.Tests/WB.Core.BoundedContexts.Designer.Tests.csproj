@@ -815,7 +815,6 @@
     <Compile Include="QuestionnaireTests\when_updating_non_roster_group_that_contains_prefilled_question.cs" />
     <Compile Include="QuestionnaireTests\SharedPersonsTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteGroupTests.cs" />
-    <Compile Include="QuestionnaireTests\DeleteImageTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\MoveGroupTests.cs" />
