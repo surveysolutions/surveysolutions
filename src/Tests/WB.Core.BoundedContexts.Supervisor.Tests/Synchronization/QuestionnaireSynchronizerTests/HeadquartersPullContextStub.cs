@@ -4,11 +4,11 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.QuestionnaireSynchronizerTests
 {
-    internal class HeadquartersPullContextTestable : HeadquartersPullContext
+    internal class HeadquartersPullContextStub : HeadquartersPullContext
     {
         private int pushedErrorsCount = 0;
         public int PushedErrorsCount { get { return this.pushedErrorsCount; } }
-        public HeadquartersPullContextTestable()
+        public HeadquartersPullContextStub()
             : base(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()) { }
 
         public override void PushError(string message)
