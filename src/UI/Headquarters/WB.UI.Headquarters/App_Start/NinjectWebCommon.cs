@@ -122,6 +122,7 @@ namespace WB.UI.Headquarters
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
+            var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -132,7 +133,7 @@ namespace WB.UI.Headquarters
                 new QuestionnaireVerificationModule(),
                 new QuestionnaireUpgraderModule(),
                 eventStoreModule,
-                new RavenReadSideInfrastructureModule(ravenSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
+                new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
@@ -146,7 +147,7 @@ namespace WB.UI.Headquarters
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
                     isDebug,
                     applicationBuildVersion,
-                    interviewDetailsDataLoaderSettings));
+                    interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
