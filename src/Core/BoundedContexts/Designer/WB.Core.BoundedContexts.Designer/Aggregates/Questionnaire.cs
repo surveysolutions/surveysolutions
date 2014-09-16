@@ -97,39 +97,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText,e.VariableName, e.Description, e.ConditionExpression);
         }
 
-        private void Apply(ImageDeleted e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
-
-            question.RemoveCard(e.ImageKey);
-        }
-
-        private void Apply(ImageUpdated e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
-            if (question == null)
-            {
-                return;
-            }
-
-            question.UpdateCard(e.ImageKey, e.Title, e.Description);
-        }
-
-        private void Apply(ImageUploaded e)
-        {
-            var newImage = new Image
-            {
-                PublicKey = e.ImagePublicKey,
-                Title = e.Title,
-                Description = e.Description,
-                CreationDate = DateTime.Now
-            };
-
-            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-
-            question.AddCard(newImage);
-        }
-
         internal void Apply(NewGroupAdded e)
         {
             var group = new Group();
@@ -3851,7 +3818,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return new Answer
             {
                 PublicKey = option.Id,
-                AnswerType = AnswerType.Select,
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
             };

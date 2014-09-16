@@ -180,9 +180,6 @@
     <Compile Include="Entities\SubEntities\Group.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\SubEntities\IAnswer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Entities\SubEntities\IConditional.cs">
       <SubType>Code</SubType>
     </Compile>
