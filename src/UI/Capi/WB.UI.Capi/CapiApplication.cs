@@ -157,6 +157,7 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(RosterRowTitleChanged));
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesTitleChanged));
             bus.RegisterHandler(eventHandler, typeof(QRBarcodeQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof(PictureQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
 
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
@@ -262,7 +263,7 @@ namespace WB.UI.Capi
                 new AndroidModelModule(basePath),
                 new ErrorReportingModule(basePath),
                 new AndroidLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new ExpressionProcessorModule());
 
             CrashManager.Initialize(this);
