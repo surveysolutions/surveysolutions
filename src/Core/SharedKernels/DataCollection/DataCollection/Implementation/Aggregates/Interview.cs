@@ -141,6 +141,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnsweredQuestions.Add(questionKey);
         }
 
+        internal void Apply(PictureQuestionAnswered @event)
+        {
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.PictureFileName;
+            this.interviewState.AnsweredQuestions.Add(questionKey);
+        }
+
         private void Apply(NumericQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
@@ -1303,6 +1311,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
+        public void AnswerPictureQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string pictureFileName)
+        {
+            ThrowIfInterviewHardDeleted();
+
+            var answeredQuestion = new Identity(questionId, rosterVector);
+
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
+            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+
+            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerPictureQuestion(userId,
+                questionId, rosterVector, answerTime, pictureFileName, questionnaire);
+
+            this.ApplyInterviewChanges(interviewChanges);
+        }
+
         public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer)
         {
             ThrowIfInterviewHardDeleted();
@@ -1542,6 +1568,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
             if (applyStrongChecks)
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerPictureQuestion(Guid userId, Guid questionId, decimal[] rosterVector,
+            DateTime answerTime, string pictureFileName, IQuestionnaire questionnaire)
+        {
+            var isQuestionMandatory = questionnaire.IsQuestionMandatory(questionId);
+            var questionIdentity = new Identity(questionId, rosterVector);
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
+                questionnaire);
+
+            var answerChanges = new List<AnswerChange>()
+            {
+                new AnswerChange(AnswerChangeType.Picture, userId, questionId, rosterVector, answerTime, pictureFileName)
+            };
+
+            var answersDeclaredValid = new List<Identity>();
+            var answersDeclaredInvalid = new List<Identity>();
+
+            if (isQuestionMandatory && string.IsNullOrWhiteSpace(pictureFileName))
+            {
+                answersDeclaredInvalid.Add(questionIdentity);
+            }
+            else
+            {
+                answersDeclaredValid.Add(questionIdentity);
+            }
+
+            var validityChanges = new ValidityChanges(
+                answersDeclaredValid: answersDeclaredValid,
+                answersDeclaredInvalid: answersDeclaredInvalid);
+            return new InterviewChanges(answerChanges, null,
+                validityChanges,
+                null,
+                null,
+                rosterInstancesWithAffectedTitles,
+                pictureFileName);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerQrBarcodeQuestion(Guid userId,
@@ -2358,6 +2421,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
                     case AnswerChangeType.QRBarcode:
                         this.ApplyEvent(new QRBarcodeQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, (string)change.Answer));
+                        break;
+                    case AnswerChangeType.Picture:
+                        this.ApplyEvent(new PictureQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, (string)change.Answer));
                         break;
                     case AnswerChangeType.MultipleOptionsLinked:
                         this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, (decimal[][])change.Answer));

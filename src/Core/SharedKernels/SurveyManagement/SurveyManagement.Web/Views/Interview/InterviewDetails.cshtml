@@ -77,6 +77,13 @@
             </div>
         </div>
     </script>
+<script type="text/html" id="MultimediaReadOnly">
+    <div class="form-group">
+        <div class="controls">
+            <input class="form-control" type="text" data-bind="value: pictureFileName" disabled="disabled" />
+        </div>
+    </div>
+</script>
     <script type="text/html" id="DateTimeReadOnly">
         <span data-bind=" text: answer ? moment(answer).format('l') : '' "></span>
     </script>
@@ -209,6 +216,15 @@
         </div>
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly==false, enable: errors().length == 0">Save answer</button>
     </script>
+<script type="text/html" id="MultimediaFull">
+    <div class="form-group" data-bind="validationElement: answer">
+        <div class="controls">
+            <input class="form-control" type="text" data-bind="value: pictureFileName, disable: isReadonly" />
+            <span class="help-inline" data-bind="validationMessage: answer"></span>
+        </div>
+    </div>
+    <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly==false, enable: errors().length == 0">Save answer</button>
+</script>
     <script type="text/html" id="GpsCoordinatesFull">
         <div>latitude: <span data-bind="text: latitude"></span></div>
         <div>longitude: <span data-bind="text: longitude"></span></div>
@@ -240,6 +256,9 @@
     <script type="text/html" id="Text">
         <span data-bind=" text: answer"></span>
     </script>
+<script type="text/html" id="Multimedia">
+    <span data-bind=" text: pictureFileName"></span>
+</script>
     <script type="text/html" id="QRBarcode">
         <span data-bind=" text: answer"></span>
     </script>

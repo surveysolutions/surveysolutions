@@ -173,7 +173,9 @@
     <Compile Include="Entities\SubEntities\IStaticText.cs" />
     <Compile Include="Entities\SubEntities\NumericQuestionUtils.cs" />
     <Compile Include="Entities\SubEntities\QuestionIdAndVariableName.cs" />
+    <Compile Include="Entities\SubEntities\Question\IMultimediaQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\IQRBarcodeQuestion.cs" />
+    <Compile Include="Entities\SubEntities\Question\MultimediaQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\QRBarcodeQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\IAutoPropagate.cs" />
     <Compile Include="Entities\SubEntities\Question\IAutoPropagateQuestion.cs" />

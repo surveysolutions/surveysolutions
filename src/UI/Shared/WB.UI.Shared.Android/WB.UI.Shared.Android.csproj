@@ -67,6 +67,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.Droid.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -120,6 +127,7 @@
     <Compile Include="Bindings\MandatoryValidationMessageBinding.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
+    <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Controls\Breadcrumbs.cs" />
     <Compile Include="Controls\IScreenChanging.cs" />
     <Compile Include="Controls\MaskedEditTextControl\MaskedWatcher.cs" />
@@ -138,6 +146,7 @@
     <Compile Include="Controls\ScreenItems\IAnswerProgressIndicator.cs" />
     <Compile Include="Controls\ScreenItems\AnswerProgressIndicator.cs" />
     <Compile Include="Controls\ScreenItems\FilteredComboboxQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\PictureQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\StaticTextView.cs" />
     <Compile Include="Controls\ScreenItems\QRBarcodeQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\DateQuestionView.cs" />

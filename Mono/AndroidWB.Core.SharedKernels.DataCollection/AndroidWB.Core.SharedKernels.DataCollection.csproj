@@ -72,6 +72,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\AnswerNumericRealQuestionCommand.cs">
       <Link>Commands\Interview\AnswerNumericRealQuestionCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\AnswerPictureQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerPictureQuestionCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\AnswerQRBarcodeQuestionCommand.cs">
       <Link>Commands\Interview\AnswerQRBarcodeQuestionCommand.cs</Link>
     </Compile>
@@ -390,6 +393,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\NumericRealQuestionAnswered.cs">
       <Link>Events\Interview\NumericRealQuestionAnswered.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\PictureQuestionAnswered.cs">
+      <Link>Events\Interview\PictureQuestionAnswered.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QRBarcodeQuestionAnswered.cs">
       <Link>Events\Interview\QRBarcodeQuestionAnswered.cs</Link>
     </Compile>
@@ -543,6 +549,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\DomainQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\DomainQuestionnaireRepository.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainFileRepository.cs">
+      <Link>Implementation\Repositories\PlainFileRepository.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\PlainQuestionnaireRepository.cs</Link>
     </Compile>
@@ -560,6 +569,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ReadSide\VersionedReadSideRepositoryWriterExtensions.cs">
       <Link>ReadSide\VersionedReadSideRepositoryWriterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IPlainFileRepository.cs">
+      <Link>Repositories\IPlainFileRepository.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IPlainQuestionnaireRepository.cs">
       <Link>Repositories\IPlainQuestionnaireRepository.cs</Link>
@@ -590,6 +602,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ValueObjects\ValueVector.cs">
       <Link>ValueObjects\ValueVector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\BinaryData\InterviewBinaryData.cs">
+      <Link>Views\BinaryData\InterviewBinaryData.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\Interview\InterviewTextListAnswer.cs">
       <Link>Views\Interview\InterviewTextListAnswer.cs</Link>
@@ -683,7 +698,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
