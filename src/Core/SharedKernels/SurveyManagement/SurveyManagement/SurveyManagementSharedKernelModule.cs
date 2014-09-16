@@ -34,11 +34,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
+        private readonly bool overrideReceivedEventTimeStamp;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings)
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -47,6 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.isDebug = isDebug;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
             this.applicationBuildVersion = applicationBuildVersion;
+            this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
         }
 
         public override void Load()
@@ -99,7 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
 
-            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope();
+            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope().WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp);
             //this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
         }
 
