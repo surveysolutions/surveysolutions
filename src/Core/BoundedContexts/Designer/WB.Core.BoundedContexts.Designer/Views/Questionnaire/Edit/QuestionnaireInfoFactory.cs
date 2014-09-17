@@ -79,6 +79,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 Value = "QRBarcode",
                 Text = "QR Barcode"
+            },
+            new SelectOption
+            {
+                Value = "Multimedia",
+                Text = "Multimedia"
             }
         };
 
@@ -279,6 +284,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 case QuestionType.QRBarcode:
                     return ObjectMapperManager.DefaultInstance.GetMapper<QrBarcodeDetailsView, NewEditQuestionView>()
                         .Map(question as QrBarcodeDetailsView);
+                case QuestionType.Multimedia:
+                    return ObjectMapperManager.DefaultInstance.GetMapper<MultimediaDetailsView, NewEditQuestionView>()
+                        .Map(question as MultimediaDetailsView);
             }
             return null;
         }

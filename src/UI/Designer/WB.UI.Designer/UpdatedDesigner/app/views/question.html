@@ -96,7 +96,7 @@
                     <input id="mandatory-question" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" />
                     <label for="mandatory-question"><span></span>Mandatory question</label>
                 </div>
-                <div class="form-group col-xs-7" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'">
+                <div class="form-group col-xs-7" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'|| activeQuestion.type == 'Multimedia'">
                     <label for="Question-scope">Question scope&nbsp;</label>
                     <div class="btn-group dropup" dropdown>
                         <button class="btn dropdown-toggle" id="Question-scope" type="button">
@@ -166,7 +166,12 @@
                                 <label for="cb-is-linked"><span></span>Is linked</label>
                             </div>
                         </div>
-
+                        <div class="col-xs-4">
+                            <div class="checkbox checkbox-in-column">
+                                <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascading" />
+                                <label for="cb-is-cascading"><span></span>Is cascading</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div ng-if="!activeQuestion.isFilteredCombobox" class="form-group"
@@ -256,6 +261,7 @@
                 </div>
             </div>
         </script>
+
         <script type="text/ng-template" id="Numeric-template.html">
             <div class="row">
                 <div class="col-xs-3">
@@ -296,6 +302,8 @@
         <script type="text/ng-template" id="GpsCoordinates-template.html">
         </script>
         <script type="text/ng-template" id="QRBarcode-template.html">
+        </script>
+        <script type="text/ng-template" id="Multimedia-template.html">
         </script>
     </div>
     <div class="form-buttons-holder">

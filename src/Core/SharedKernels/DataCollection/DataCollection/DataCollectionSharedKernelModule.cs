@@ -12,10 +12,12 @@ namespace WB.Core.SharedKernels.DataCollection
     public class DataCollectionSharedKernelModule : NinjectModule
     {
         private readonly bool usePlainQuestionnaireRepository;
+        private readonly string basePath;
 
-        public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository)
+        public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository, string basePath)
         {
             this.usePlainQuestionnaireRepository = usePlainQuestionnaireRepository;
+            this.basePath = basePath;
         }
 
         public override void Load()
@@ -37,6 +39,9 @@ namespace WB.Core.SharedKernels.DataCollection
             this.Bind(typeof(IVersionedReadSideRepositoryReader<>)).To(typeof(VersionedReadSideRepositoryReader<>));
 
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
+
+            this.Bind<IPlainFileRepository>()
+              .To<PlainFileRepository>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath);
         }
     }
 }

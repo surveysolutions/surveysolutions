@@ -97,39 +97,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText,e.VariableName, e.Description, e.ConditionExpression);
         }
 
-        private void Apply(ImageDeleted e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
-
-            question.RemoveCard(e.ImageKey);
-        }
-
-        private void Apply(ImageUpdated e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
-            if (question == null)
-            {
-                return;
-            }
-
-            question.UpdateCard(e.ImageKey, e.Title, e.Description);
-        }
-
-        private void Apply(ImageUploaded e)
-        {
-            var newImage = new Image
-            {
-                PublicKey = e.ImagePublicKey,
-                Title = e.Title,
-                Description = e.Description,
-                CreationDate = DateTime.Now
-            };
-
-            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-
-            question.AddCard(newImage);
-        }
-
         internal void Apply(NewGroupAdded e)
         {
             var group = new Group();
@@ -647,6 +614,46 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.QRBarcode,
+                        QuestionScope.Interviewer,
+                        e.Title,
+                        e.VariableName,
+                        e.VariableLabel,
+                        e.EnablementCondition,
+                        null,
+                        null,
+                        Order.AZ,
+                        false,
+                        e.IsMandatory,
+                        false,
+                        e.Instructions,
+                        null,
+                        new List<Guid>(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null));
+
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.ReplaceEntity(question, newQuestion);
+        }
+
+        internal void Apply(MultimediaQuestionUpdated e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionId);
+            IQuestion newQuestion =
+                this.questionnaireEntityFactory.CreateQuestion(
+                    new QuestionData(
+                        e.QuestionId,
+                        QuestionType.Multimedia,
                         QuestionScope.Interviewer,
                         e.Title,
                         e.VariableName,
@@ -2481,6 +2488,34 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
+        #region Question: Multimedia command handlers
+
+        public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel,
+         bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
+        {
+            PrepareGeneralProperties(ref title, ref variableName);
+
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+
+            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: null, title: title,
+                variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
+
+            this.ApplyEvent(new MultimediaQuestionUpdated()
+            {
+                QuestionId = questionId,
+                Title = title,
+                VariableName = variableName,
+                VariableLabel = variableLabel,
+                IsMandatory = isMandatory,
+                EnablementCondition = enablementCondition,
+                Instructions = instructions,
+                ResponsibleId = responsibleId
+            });
+        }
+
+        #endregion
+
         #region Question: QR-Barcode command handlers
 
         public void AddQRBarcodeQuestion(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
@@ -3851,7 +3886,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return new Answer
             {
                 PublicKey = option.Id,
-                AnswerType = AnswerType.Select,
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
             };

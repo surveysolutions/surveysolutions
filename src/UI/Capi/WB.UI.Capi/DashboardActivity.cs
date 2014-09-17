@@ -15,6 +15,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
@@ -32,6 +33,7 @@ namespace WB.UI.Capi
         protected AlertDialog dialog;
 
         private IChangeLogManipulator logManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
+        private IPlainFileRepository plainFileRepository = CapiApplication.Kernel.Get<IPlainFileRepository>();
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -103,7 +105,7 @@ namespace WB.UI.Capi
 
             alert.SetPositiveButton("OK", (e, s) =>
             {
-                new CapiCleanUpService(logManipulator).DeleteInterveiw(itemId);
+                new CapiCleanUpService(logManipulator, plainFileRepository).DeleteInterview(itemId);
                 ((LinearLayout)view.Parent).RemoveView(view);
             });
 

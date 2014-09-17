@@ -12,7 +12,6 @@ namespace Main.Core.Entities.SubEntities
         List<Answer> Answers { get; set; }
         Order AnswerOrder { get; set; }
         bool Capital { get; set; }
-        List<Image> Cards { get; set; }
         bool Featured { get; set; }
         string Instructions { get; set; }
         bool Mandatory { get; set; }
@@ -38,6 +37,8 @@ namespace Main.Core.Entities.SubEntities
         Guid? LinkedToQuestionId { get; set; }
 
         bool? IsFilteredCombobox { get; set; }
+
+        bool? IsCascadingCombobox { get; set; }
 
         void AddAnswer(Answer answer);
         IEnumerable<string> GetVariablesUsedInTitle();
