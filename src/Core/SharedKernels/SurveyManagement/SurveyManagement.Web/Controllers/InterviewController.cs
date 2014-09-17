@@ -4,6 +4,7 @@ using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -20,17 +21,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory;
         private readonly IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
+        private readonly IPlainFileRepository plainFileRepository;
 
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
             IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory,
-            IInterviewSummaryViewFactory interviewSummaryViewFactory, IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory)
+            IInterviewSummaryViewFactory interviewSummaryViewFactory, IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory, IPlainFileRepository plainFileRepository)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;
             this.revalidateInterviewViewFactory = revalidateInterviewViewFactory;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
+            this.plainFileRepository = plainFileRepository;
         }
 
         public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
@@ -58,6 +61,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     CurrentPropagationKeyId = propagationKey,
                     InterviewStatus = interviewInfo.Status
                 });
+        }
+
+        public ActionResult InterviewFile(Guid interviewId, string fileName)
+        {
+            return this.File(plainFileRepository.GetInterviewBinaryData(interviewId, fileName), "image/jpeg", fileName);
         }
 
         public ActionResult InterviewHistory(Guid id)
