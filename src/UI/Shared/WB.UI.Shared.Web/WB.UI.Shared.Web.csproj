@@ -109,6 +109,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
+    <Compile Include="Filters\LocalOrDevelopmentAccessOnlyAttribute.cs" />
     <Compile Include="MembershipProvider\Accounts\IAccountPasswordInfo.cs" />
     <Compile Include="MembershipProvider\Accounts\IAccountRepository.cs" />
     <Compile Include="MembershipProvider\Accounts\IMembershipAccount.cs" />
