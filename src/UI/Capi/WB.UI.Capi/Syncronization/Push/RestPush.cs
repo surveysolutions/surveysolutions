@@ -38,7 +38,7 @@ namespace WB.UI.Capi.Syncronization.Push
 
         }
 
-        public void PushBinary(string login, string password, byte[] data, string fileName, Guid interviewId, CancellationToken ct)
+        public bool PushBinary(string login, string password, byte[] data, string fileName, Guid interviewId, CancellationToken ct)
         {
             if (data==null)
                 throw new InvalidOperationException("data is empty");
@@ -49,12 +49,11 @@ namespace WB.UI.Capi.Syncronization.Push
                     data, fileName, login, password, null,
                     new KeyValuePair<string, string>("interviewId", interviewId.FormatGuid()));
 
-                if (!result)
-                    throw new SynchronizationException("Push binary data was failed. Try again later.");
+                return result;
             }
             catch (RestException)
             {
-                throw new SynchronizationException("Data sending was canceled");
+                return false;
             }
         }
     }
