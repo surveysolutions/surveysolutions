@@ -15,7 +15,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
     public class FilteredComboboxQuestionView : AbstractQuestionView
     {
-        private AutoCompleteTextView filteredCombobox;
+        protected AutoCompleteTextView filteredCombobox;
         public FilteredComboboxQuestionView(
             Context context, 
             IMvxAndroidBindingContext bindingActivity, 
