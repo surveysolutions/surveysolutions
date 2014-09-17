@@ -141,7 +141,7 @@ namespace WB.UI.Supervisor.App_Start
                     LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
-            var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
+            
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -150,7 +150,6 @@ namespace WB.UI.Supervisor.App_Start
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: AppDomain.CurrentDomain.BaseDirectory),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
-                ModulesFactory.GetEventStoreModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
@@ -158,15 +157,18 @@ namespace WB.UI.Supervisor.App_Start
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
                 new QuestionnaireUpgraderModule(),
-                new SurveyManagementSharedKernelModule(
-                    AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
+
+            var eventStoreModule = ModulesFactory.GetEventStoreModule();
+            var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
+
+            kernel.Load(
+                eventStoreModule,
+                new SurveyManagementSharedKernelModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
-                    isDebug,
-                    applicationBuildVersion,
-                    interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp),
-                new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);

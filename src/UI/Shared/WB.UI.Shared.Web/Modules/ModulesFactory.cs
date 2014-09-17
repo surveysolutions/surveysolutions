@@ -11,9 +11,7 @@ namespace WB.UI.Shared.Web.Modules
     {
         public static NinjectModule GetEventStoreModule()
         {
-            var storeProvider =
-                (StoreProviders)
-                    Enum.Parse(typeof (StoreProviders), WebConfigurationManager.AppSettings["Core.EventStoreProvider"], true);
+            var storeProvider = CoreSettings.EventStoreProvider;
 
             if (storeProvider == StoreProviders.EventStore)
             {
