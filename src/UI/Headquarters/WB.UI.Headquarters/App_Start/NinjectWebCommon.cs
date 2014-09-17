@@ -126,7 +126,7 @@ namespace WB.UI.Headquarters
                 new ServiceLocationModule(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: AppDomain.CurrentDomain.BaseDirectory),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 new QuestionnaireUpgraderModule(),

@@ -147,7 +147,7 @@ namespace WB.UI.Supervisor.App_Start
                 new ServiceLocationModule(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: AppDomain.CurrentDomain.BaseDirectory),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),

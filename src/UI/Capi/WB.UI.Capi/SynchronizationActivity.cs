@@ -256,7 +256,7 @@ namespace WB.UI.Capi
                         CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), cleaner, ServiceLocator.Current.GetInstance<ILogger>(),
                         CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(), CapiApplication.Kernel.Get<IStringCompressor>(),
                         CapiApplication.Kernel.Get<IJsonUtils>()),
-                    cleaner, CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), plainFileRepository);
+                    cleaner, CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(),CapiApplication.Kernel.Get<IFileSyncRepository>());
             }
             catch (Exception ex)
             {

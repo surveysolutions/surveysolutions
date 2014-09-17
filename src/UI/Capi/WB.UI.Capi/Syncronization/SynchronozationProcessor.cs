@@ -50,7 +50,7 @@ namespace WB.UI.Capi.Syncronization
 
         private readonly ICapiDataSynchronizationService dataProcessor;
         private readonly ICapiCleanUpService cleanUpExecutor;
-        private readonly IPlainFileRepository plainFileRepository;
+        private readonly IFileSyncRepository fileSyncRepository;
         private IDictionary<SynchronizationChunkMeta, bool> remoteChuncksForDownload;
 
         private readonly ISyncAuthenticator authentificator;
@@ -69,14 +69,14 @@ namespace WB.UI.Capi.Syncronization
         }
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, ICapiDataSynchronizationService dataProcessor,
-            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory, IPlainFileRepository plainFileRepository)
+            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory, IFileSyncRepository fileSyncRepository)
         {
             this.context = context;
 
             this.Preparation();
             this.authentificator = authentificator;
             this.cleanUpExecutor = cleanUpExecutor;
-            this.plainFileRepository = plainFileRepository;
+            this.fileSyncRepository = fileSyncRepository;
 
             var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
             this.pull = new RestPull(executor);
@@ -144,7 +144,7 @@ namespace WB.UI.Capi.Syncronization
 
                         this.push.PushChunck(this.credentials.Login, this.credentials.Password, chunckDescription.Content, this.ct);
 
-                        this.plainFileRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
+                        this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(chunckDescription.EventSourceId);
                         //fix method
                         cleanUpExecutor.DeleteInterview(chunckDescription.EventSourceId);
 
@@ -156,7 +156,7 @@ namespace WB.UI.Capi.Syncronization
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing binary data", Operation.Push, true, 0));
             this.CancelIfException(() =>
             {
-                var binaryDatas = this.plainFileRepository.GetBinaryFilesFromSyncFolder();
+                var binaryDatas = this.fileSyncRepository.GetBinaryFilesFromSyncFolder();
                 int i = 1;
                 foreach (var binaryData in binaryDatas)
                 {
@@ -165,7 +165,7 @@ namespace WB.UI.Capi.Syncronization
                     this.push.PushBinary(this.credentials.Login, this.credentials.Password, binaryData.Data, binaryData.FileName,
                         binaryData.InterviewId, this.ct);
 
-                    this.plainFileRepository.RemoveBinaryDataFromSyncFolder(binaryData.InterviewId, binaryData.FileName);
+                    this.fileSyncRepository.RemoveBinaryDataFromSyncFolder(binaryData.InterviewId, binaryData.FileName);
 
                     this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing binary data", Operation.Push, true, (i * 100) / binaryDatas.Count));
                     i++;
