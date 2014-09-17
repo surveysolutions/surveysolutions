@@ -64,6 +64,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                     else if(model is FilteredComboboxQuestionViewModel)
                         itemView = new FilteredComboboxQuestionView(context, bindingActivity, model, questionnairePublicKey,
                             this.commandService, this.answerCommandService, this.membership);
+                    else if (model is CascadingComboboxQuestionViewModel)
+                        itemView = new CascadingComboboxQuestionView(context, bindingActivity, model, questionnairePublicKey,
+                            this.commandService, this.answerCommandService, this.membership);
                     else
                         itemView = new SingleOptionQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService, this.answerCommandService, this.membership);
                     break;

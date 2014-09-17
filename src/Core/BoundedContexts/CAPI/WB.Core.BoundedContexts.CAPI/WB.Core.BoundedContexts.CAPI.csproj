@@ -89,6 +89,7 @@
     <Compile Include="UI\MaskFormatter\MaskedFormatter.cs" />
     <Compile Include="Views\InterviewDetails\AnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\BreadCrumbsUtils.cs" />
+    <Compile Include="Views\InterviewDetails\CascadingComboboxQuestionViewModel.cs" />
     <Compile Include="Views\InterviewDetails\CommentDocument.cs" />
     <Compile Include="Views\InterviewDetails\GridItems\HeaderItem.cs" />
     <Compile Include="Views\InterviewDetails\InterviewViewModel.cs" />

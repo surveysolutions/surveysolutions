@@ -980,6 +980,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     return this.CreateFilteredComboboxQuestion(question);
                 }
 
+                if (questionViewType == QuestionType.SingleOption && question.IsCascadingCombobox == true)
+                {
+                    return this.CreateCascadingComboboxQuestion(question);
+                }
+
                 if (question.LinkedToQuestionId.HasValue)
                 {
                     return this.CreateLinkedQuestion(question, questionViewType);
@@ -1082,6 +1087,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
                 multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
+        }
+
+        private CascadingComboboxQuestionViewModel CreateCascadingComboboxQuestion(IQuestion question)
+        {
+            return new CascadingComboboxQuestionViewModel(
+                new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText, question.Answers.Select(
+                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, null)).ToList(),
+                true, question.Instructions, null,
+                true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle());
         }
 
         private FilteredComboboxQuestionViewModel CreateFilteredComboboxQuestion(IQuestion question)
