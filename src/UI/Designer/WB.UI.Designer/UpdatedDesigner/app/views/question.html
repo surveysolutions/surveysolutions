@@ -125,7 +125,7 @@
 
         <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
-                <div class="well well-sm" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Is filtered combobox" while uploading question's details and contained many options, its value is reduced up to 20</div>
+                <div class="well well-sm" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Is filtered combobox" while uploading question's details and contained many options, its value is reduced up to 200</div>
                 <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="table-holder">
                     <div class="table-row" ng-repeat="option in activeQuestion.options">
                         <div class="column-2">
