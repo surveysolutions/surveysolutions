@@ -140,6 +140,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_prefilled.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_filled_by_supervisor.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_with_custom_validation.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_single_option_and_options_count_more_than_200.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_TextList_question_with_maxAnswer_value_set_in_100.cs" />
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_MultiAnswer_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_MultiAnswer_question.cs" />
