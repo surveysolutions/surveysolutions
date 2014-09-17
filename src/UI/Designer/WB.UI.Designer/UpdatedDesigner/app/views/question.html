@@ -166,7 +166,12 @@
                                 <label for="cb-is-linked"><span></span>Is linked</label>
                             </div>
                         </div>
-
+                        <div class="col-xs-4">
+                            <div class="checkbox checkbox-in-column">
+                                <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascading" />
+                                <label for="cb-is-cascading"><span></span>Is cascading</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div ng-if="!activeQuestion.isFilteredCombobox" class="form-group"
@@ -256,6 +261,7 @@
                 </div>
             </div>
         </script>
+
         <script type="text/ng-template" id="Numeric-template.html">
             <div class="row">
                 <div class="col-xs-3">

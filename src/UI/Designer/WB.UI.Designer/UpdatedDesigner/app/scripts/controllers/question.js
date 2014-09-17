@@ -29,6 +29,7 @@
                     $scope.activeQuestion.maxAllowedAnswers = result.maxAllowedAnswers;
                     $scope.activeQuestion.areAnswersOrdered = result.areAnswersOrdered;
                     $scope.activeQuestion.isFilteredCombobox = result.isFilteredCombobox;
+                    $scope.activeQuestion.isCascading = false;
 
                     var options = result.options || [];
                     _.each(options, function (option) {
