@@ -186,6 +186,10 @@
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests.cs" />
     <Compile Include="SharedKernels\Synchronization\SyncManagerTests\SyncManagerTests.cs" />
     <Compile Include="SharedKernels\Synchronization\SyncProviderTests\SyncProviderTests.cs" />
+    <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\LocalOrDevelopmentAccessOnlyAttributeTestsContext.cs" />
+    <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_called_by_localhost.cs" />
+    <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_in_development.cs" />
+    <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_not_in_development_and_called_not_by_localhost.cs" />
     <Compile Include="Stub.cs" />
   </ItemGroup>
   <ItemGroup>
