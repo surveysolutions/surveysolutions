@@ -10,12 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     public interface IPlainFileRepository
     {
         byte[] GetInterviewBinaryData(Guid interviewId, string fileName);
+        IList<InterviewBinaryData> GetBinaryFilesForInterview(Guid interviewId);
         void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data);
         void RemoveInterviewBinaryData(Guid interviewId, string fileName);
         void RemoveAllBinaryDataForInterview(Guid interviewId);
-
-        void MoveInterviewsBinaryDataToSyncFolder(Guid interviewId);
-        IList<InterviewBinaryData> GetBinaryFilesFromSyncFolder();
-        void RemoveBinaryDataFromSyncFolder(Guid interviewId, string fileName);
     }
 }

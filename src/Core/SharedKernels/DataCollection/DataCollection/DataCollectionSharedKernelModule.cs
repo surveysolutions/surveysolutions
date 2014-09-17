@@ -42,6 +42,9 @@ namespace WB.Core.SharedKernels.DataCollection
 
             this.Bind<IPlainFileRepository>()
               .To<PlainFileRepository>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath);
+
+            this.Bind<IFileSyncRepository>()
+            .To<FileSyncRepository>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath);
         }
     }
 }
