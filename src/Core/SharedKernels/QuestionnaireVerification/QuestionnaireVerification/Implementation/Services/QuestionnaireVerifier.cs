@@ -144,7 +144,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
                     Verifier<IQuestion>(FilteredComboboxContainsMoreThan5000Options, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
-                    Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThan20, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan20),
+                    Verifier<IQuestion>(this.CategoricalOneAnswerOptionsCountMoreThan5000, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan5000),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -157,10 +157,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             }
         }
 
-        private bool CategoricalOneAnswerOptionsCountMoreThan20(IQuestion question)
+        private bool CategoricalOneAnswerOptionsCountMoreThan5000(IQuestion question)
         {
             return IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
-                   question.Answers != null && question.Answers.Count > 20;
+                   question.Answers != null && question.Answers.Count > 5000;
         }
 
         private bool FilteredComboboxContainsMoreThan5000Options(IQuestion question)
