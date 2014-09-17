@@ -1,13 +1,19 @@
 ﻿using System;
-using System.Web.Configuration;
+using Microsoft.Practices.ServiceLocation;
+using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Shared.Web.Settings
 {
-    public static class CoreSettings
+    public class CoreSettings
     {
-        public static StoreProviders EventStoreProvider
+        private static IConfigurationManager config
         {
-            get { return (StoreProviders) Enum.Parse(typeof(StoreProviders), WebConfigurationManager.AppSettings["Core.EventStoreProvider"], true); }
-        } 
+            get { return ServiceLocator.Current.GetInstance<IConfigurationManager>(); }
+        }
+
+        public static bool IsUnderDevelopment
+        {
+            get { return bool.Parse(config.AppSettings["IsUnderDevelopment"]); }
+        }
     }
 }
