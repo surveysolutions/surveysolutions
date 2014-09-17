@@ -46,9 +46,8 @@ namespace WB.UI.Capi.Syncronization.Push
             try
             {
                 bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostFilePath, ct,
-                    System.Text.Encoding.Default.GetString(data), login, password, null,
-                    new KeyValuePair<string, string>("interviewId", interviewId.FormatGuid()),
-                    new KeyValuePair<string, string>("pictureFileName", fileName));
+                    data, fileName, login, password, null,
+                    new KeyValuePair<string, string>("interviewId", interviewId.FormatGuid()));
 
                 if (!result)
                     throw new SynchronizationException("Push binary data was failed. Try again later.");
