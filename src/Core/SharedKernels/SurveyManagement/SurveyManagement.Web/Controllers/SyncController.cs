@@ -262,7 +262,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
             try
             {
-                if (this.Request.Files.Count == 0 || this.Request.Files[0]==null)
+                if (this.Request.Files==null || this.Request.Files.Count == 0 || this.Request.Files[0] == null)
                 {
                     return this.Json(false, JsonRequestBehavior.AllowGet);
                 }
