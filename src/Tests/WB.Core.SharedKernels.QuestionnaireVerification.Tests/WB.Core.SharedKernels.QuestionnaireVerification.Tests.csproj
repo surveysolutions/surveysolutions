@@ -113,7 +113,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_nullable_options.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_circular_references.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_1_option.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_options_count_more_than_20.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_options_count_more_than_5000.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_filtered_combobox_and_options_count_more_than_5000.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_filtered_combobox_and_question_is_linked.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_empty_static_text.cs" />

@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    class when_verifying_questionnaire_with_categorical_one_answer_question_options_count_more_than_20 : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_categorical_one_answer_question_options_count_more_than_5000 : QuestionnaireVerifierTestsContext
     {
 
         Establish context = () =>
@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
                         StataExportCaption = "var",
                         Answers =
                             new List<Answer>(
-                                new Answer[21].Select(
+                                new Answer[5001].Select(
                                     answer =>
                                         new Answer()
                                         {
