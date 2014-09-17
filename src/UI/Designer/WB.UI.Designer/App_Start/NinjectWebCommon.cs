@@ -74,9 +74,8 @@ namespace WB.UI.Designer.App_Start
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
+                new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-
-                ModulesFactory.GetEventStoreModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(),
@@ -88,6 +87,7 @@ namespace WB.UI.Designer.App_Start
                  new FileInfrastructureModule(),
                 new DesignerRegistry()
                 );
+            kernel.Load(ModulesFactory.GetEventStoreModule());
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
