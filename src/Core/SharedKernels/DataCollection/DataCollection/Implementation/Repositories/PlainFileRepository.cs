@@ -15,7 +15,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
-        private const string SyncDirectoryName = "SYNC";
         private const string DataDirectoryName = "DATA";
 
         public PlainFileRepository(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
@@ -34,6 +33,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (!fileSystemAccessor.IsFileExists(filePath))
                 return null;
             return fileSystemAccessor.ReadAllBytes(filePath);
+        }
+
+        public IList<InterviewBinaryData> GetBinaryFilesForInterview(Guid interviewId)
+        {
+            var directoryPath = this.GetPathToInterviewDirectory(interviewId);
+            
+            if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
+                return new InterviewBinaryData[0];
+
+            return fileSystemAccessor.GetFilesInDirectory(directoryPath)
+                .Select(
+                    fileName =>
+                        new InterviewBinaryData(interviewId, fileSystemAccessor.GetFileName(fileName),
+                            () => fileSystemAccessor.ReadAllBytes(fileName))).ToList();
         }
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
@@ -64,69 +77,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             fileSystemAccessor.DeleteDirectory(directoryPath);
         }
 
-        public void MoveInterviewsBinaryDataToSyncFolder(Guid interviewId)
-        {
-            var pathToInterviewDirectory = this.GetPathToInterviewDirectory(interviewId);
-             if (!fileSystemAccessor.IsDirectoryExists(pathToInterviewDirectory))
-               return;
-
-            var syncDirectoryPath = this.GetPathToSyncFolder();
-
-            if (!fileSystemAccessor.IsDirectoryExists(syncDirectoryPath))
-                fileSystemAccessor.CreateDirectory(syncDirectoryPath);
-
-            fileSystemAccessor.CopyFileOrDirectory(pathToInterviewDirectory, syncDirectoryPath);
-        }
-
-        public IList<InterviewBinaryData> GetBinaryFilesFromSyncFolder()
-        {
-            var syncDirectoryPath = this.GetPathToSyncFolder();
-
-            if (!fileSystemAccessor.IsDirectoryExists(syncDirectoryPath))
-                return new InterviewBinaryData[0];
-
-            var result = new List<InterviewBinaryData>();
-
-            foreach (var syncInterviewDirectory in fileSystemAccessor.GetDirectoriesInDirectory(syncDirectoryPath))
-            {
-                var directoryName = fileSystemAccessor.GetFileName(syncInterviewDirectory);
-                Guid interviewId;
-                if (!Guid.TryParse(directoryName, out interviewId))
-                    continue;
-                result.AddRange(
-                    fileSystemAccessor.GetFilesInDirectory(syncInterviewDirectory)
-                        .Select(
-                            fileName =>
-                                new InterviewBinaryData(interviewId, fileSystemAccessor.GetFileName(fileName),
-                                    () => fileSystemAccessor.ReadAllBytes(fileName))));
-            }
-
-            return result;
-        }
-
-        public void RemoveBinaryDataFromSyncFolder(Guid interviewId, string fileName)
-        {
-            var syncDirectoryPath = this.GetPathToSyncFolder();
-
-            if (!fileSystemAccessor.IsDirectoryExists(syncDirectoryPath))
-                return;
-
-            var interviewSyncDirectory = this.GetPathToInterviewDirectory(interviewId, syncDirectoryPath);
-
-            var pathToFile = fileSystemAccessor.CombinePath(interviewSyncDirectory, fileName);
-            if (fileSystemAccessor.IsFileExists(pathToFile))
-                fileSystemAccessor.DeleteFile(pathToFile);
-        }
-
-        public string[] GetAllIdsOfBinaryDataByInterview(Guid interviewId)
-        {
-            var directoryPath = this.GetPathToInterviewDirectory(interviewId);
-            if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
-                return new string[0];
-
-            return fileSystemAccessor.GetFilesInDirectory(directoryPath);
-        }
-
         private string GetPathToFile(Guid interviewId, string fileName)
         {
             return fileSystemAccessor.CombinePath(GetPathToInterviewDirectory(interviewId), fileName);
@@ -135,11 +85,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory=null)
         {
             return fileSystemAccessor.CombinePath(baseDirectory ?? basePath, interviewId.FormatGuid());
-        }
-
-        private string GetPathToSyncFolder()
-        {
-            return fileSystemAccessor.CombinePath(basePath, SyncDirectoryName);
         }
     }
 }

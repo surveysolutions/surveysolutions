@@ -549,6 +549,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\DomainQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\DomainQuestionnaireRepository.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\FileSyncRepository.cs">
+      <Link>Implementation\Repositories\FileSyncRepository.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainFileRepository.cs">
       <Link>Implementation\Repositories\PlainFileRepository.cs</Link>
     </Compile>
@@ -569,6 +572,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ReadSide\VersionedReadSideRepositoryWriterExtensions.cs">
       <Link>ReadSide\VersionedReadSideRepositoryWriterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IFileSyncRepository.cs">
+      <Link>Repositories\IFileSyncRepository.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IPlainFileRepository.cs">
       <Link>Repositories\IPlainFileRepository.cs</Link>
@@ -698,7 +704,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

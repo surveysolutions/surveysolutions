@@ -231,6 +231,7 @@
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryReader.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs" />
     <Compile Include="Implementation\Repositories\DomainQuestionnaireRepository.cs" />
+    <Compile Include="Implementation\Repositories\FileSyncRepository.cs" />
     <Compile Include="Implementation\Repositories\PlainFileRepository.cs" />
     <Compile Include="Implementation\Repositories\PlainQuestionnaireRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="ReadSide\IVersionedView.cs" />
     <Compile Include="ReadSide\VersionedReadSideRepositoryReaderExtensions.cs" />
     <Compile Include="ReadSide\VersionedReadSideRepositoryWriterExtensions.cs" />
+    <Compile Include="Repositories\IFileSyncRepository.cs" />
     <Compile Include="Repositories\IPlainFileRepository.cs" />
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />

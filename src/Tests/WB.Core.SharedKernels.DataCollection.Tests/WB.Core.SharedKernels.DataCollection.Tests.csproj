@@ -89,6 +89,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_textlist_roster_group.cs" />
+    <Compile Include="FileSyncRepositoryTests\FileSyncRepositoryTestContext.cs" />
+    <Compile Include="FileSyncRepositoryTests\when_getting_all_interview_files_from_sync_storage.cs" />
     <Compile Include="InterviewItemIdTests.cs" />
     <Compile Include="InterviewItemIdTests\InterviewItemIdTestsContext.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_hashcodes_two_instances_with_same_id_and_propagation_vectors_0point0_and_0.cs" />
@@ -222,8 +224,19 @@
     <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_unanswered_mandatory_question_with_validation.cs" />
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />
     <Compile Include="PlainFileRepositoryTests\PlainFileRepositoryTestContext.cs" />
-    <Compile Include="PlainFileRepositoryTests\when_2_files_are_stored_for_the_same_interview.cs" />
-    <Compile Include="PlainFileRepositoryTests\when_2_files_of_interview_are_moving_to_sync_Storage.cs" />
+    <Compile Include="PlainFileRepositoryTests\when_file_are_stored_for_the_same_interview.cs" />
+    <Compile Include="FileSyncRepositoryTests\when_2_files_of_interview_are_moving_to_sync_storage.cs" />
+    <Compile Include="PlainFileRepositoryTests\when_deleting_all_files_stored_for_the_interview.cs" />
+    <Compile Include="PlainFileRepositoryTests\when_deleting_all_interview_files_for_not_Existing_interview.cs" />
+    <Compile Include="PlainFileRepositoryTests\when_deleting_not_existing_file_for_the_interview.cs" />
+    <Compile Include="PlainFileRepositoryTests\when_deleting_one_file_stored_for_the_interview.cs" />
+    <Compile Include="FileSyncRepositoryTests\when_files_is_deleted_from_sync_storage.cs" />
+    <Compile Include="FileSyncRepositoryTests\when_moving_all_interview_files_for_not_existing_interview.cs" />
+    <Compile Include="FileSyncRepositoryTests\when_moving_all_interview_files_for_not_existing_interview_from_sync_storage.cs" />
+    <Compile Include="PlainFileRepositoryTests\when_getting_data_for_existing_file.cs" />
+    <Compile Include="PlainFileRepositoryTests\when_getting_data_for_not_existing_file.cs" />
+    <Compile Include="PlainFileRepositoryTests\when_getting_files_for_existing_interview.cs" />
+    <Compile Include="PlainFileRepositoryTests\when_getting_files_for_not_existing_interview.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_fixed_rosters_and_GetFixedRosterGroups_called_for_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_fixed_rosters_and_GetFixedRosterGroups_called_for_whole_questionnaire.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_roster_inside_nested_group_of_other_roster_and_GetNestedRostersOfGroupById_called_for_parent_roster.cs" />
