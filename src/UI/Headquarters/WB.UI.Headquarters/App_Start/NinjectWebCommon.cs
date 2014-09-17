@@ -126,6 +126,7 @@ namespace WB.UI.Headquarters
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
+                new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
                 new ExpressionProcessorModule(),

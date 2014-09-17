@@ -102,6 +102,8 @@
     <Compile Include="CommandDeserialization\CommandDeserializationException.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
     <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
+    <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="Configuration\IConfigurationManager.cs" />
     <Compile Include="Elmah\ElmahDataFilter.cs" />
     <Compile Include="Exceptions\HttpStatusException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="Membership\IMembershipUserService.cs" />
     <Compile Include="Membership\MembershipUserService.cs" />
     <Compile Include="Modules\ModulesFactory.cs" />
+    <Compile Include="Modules\WebConfigurationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />
