@@ -29,7 +29,7 @@
                     $scope.activeQuestion.maxAllowedAnswers = result.maxAllowedAnswers;
                     $scope.activeQuestion.areAnswersOrdered = result.areAnswersOrdered;
                     $scope.activeQuestion.isFilteredCombobox = result.isFilteredCombobox;
-                    $scope.activeQuestion.isCascading = false;
+                    $scope.activeQuestion.isCascadingCombobox = result.isCascadingCombobox;
 
                     var options = result.options || [];
                     _.each(options, function (option) {
@@ -55,12 +55,10 @@
                 };
 
                 $scope.loadQuestion = function () {
-
                     questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
                         .success(function (result) {
                             $scope.initialQuestion = angular.copy(result);
                             dataBind(result);
-
                         });
                 };
 
@@ -68,6 +66,7 @@
                     if ($scope.questionForm.$valid) {
                         commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function (result) {
                             $scope.initialQuestion = angular.copy($scope.activeQuestion);
+
                             $rootScope.$emit('questionUpdated', {
                                 itemId: $scope.activeQuestion.itemId,
                                 title: $scope.activeQuestion.title,
@@ -75,9 +74,11 @@
                                 type: $scope.activeQuestion.type,
                                 linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
                             });
+
                             if ($scope.activeQuestion.type == "SingleOption" && !$scope.activeQuestion.isFilteredCombobox) {
                                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                             }
+
                             $scope.questionForm.$setPristine();
                             if (_.isFunction(callback)) {
                                 callback();

@@ -168,7 +168,7 @@
                         </div>
                         <div class="col-xs-4">
                             <div class="checkbox checkbox-in-column">
-                                <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascading" />
+                                <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascadingCombobox" />
                                 <label for="cb-is-cascading"><span></span>Is cascading</label>
                             </div>
                         </div>
@@ -176,10 +176,47 @@
                 </div>
                 <div ng-if="!activeQuestion.isFilteredCombobox" class="form-group"
                      ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
+
+                <!--<div ng-if="!activeQuestion.isFilteredCombobox" class="form-group"
+                     ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />-->                
         </script>
 
-
         <script type="text/ng-template" id="linkTemplate.html">
+            <div id="sourceOfLinkedQuestion" class="dropdown-with-breadcrumbs-and-icons">
+                <input type="hidden" name="linkedToQuestion" ng-model="activeQuestion.linkedToQuestion" ng-required="true" />
+                <label for="linkedQuestionSource">Bind to question from roster group</label>
+                <div class="btn-group" dropdown>
+                    <button class="btn dropdown-toggle" id="linkedQuestionSource" type="button">
+                        <span class="select-placeholder" ng-if="(activeQuestion.linkedToQuestion.title || '') == ''">Select question</span>
+
+                        <span class="selected-item" ng-if="(activeQuestion.linkedToQuestion.title || '') !== ''">
+                            <span class="path">{{activeQuestion.linkedToQuestion.breadcrumbs}}</span>
+                            <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToQuestion.type"></i>{{activeQuestion.linkedToQuestion.title}}</span>
+                        </span>
+                        <span class="dropdown-arrow"></span>
+                    </button>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedQuestions">
+                            <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+
+                            <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                               ng-click="setLinkSource(breadCrumb.id)"
+                               role="menuitem"
+                               tabindex="-1"
+                               href="javascript:void(0);">
+                                <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <p class="help-block ng-cloak" ng-show="questionForm.linkedToQuestion.$error.required">
+                    You must bind this question
+                </p>
+            </div>
+        </script>
+
+        <script type="text/ng-template" id="cascadingTemplate.html">
             <div id="sourceOfLinkedQuestion" class="dropdown-with-breadcrumbs-and-icons">
                 <input type="hidden" name="linkedToQuestion" ng-model="activeQuestion.linkedToQuestion" ng-required="true" />
                 <label for="linkedQuestionSource">Bind to question from roster group</label>

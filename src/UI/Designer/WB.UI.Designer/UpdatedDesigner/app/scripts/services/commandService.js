@@ -88,6 +88,7 @@
                         command.options = question.options;
                         command.linkedToQuestionId = question.linkedToQuestionId;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
+                        command.isCascadingCombobox = question.isCascadingCombobox || false;
                         break;
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;

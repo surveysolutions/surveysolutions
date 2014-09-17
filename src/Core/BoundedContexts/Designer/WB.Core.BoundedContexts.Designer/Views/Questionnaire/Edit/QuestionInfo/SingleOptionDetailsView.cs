@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public CategoricalOption[] Options { get; set; }
         public override QuestionType Type { get; set; }
         public bool? IsFilteredCombobox { get; set; }
+        public bool? IsCascadingCombobox { get; set; }
     }
 }
