@@ -162,10 +162,11 @@ namespace WB.UI.Capi.Syncronization
                 {
                     this.ExitIfCanceled();
 
-                    this.push.PushBinary(this.credentials.Login, this.credentials.Password, binaryData.Data, binaryData.FileName,
+                    var result = this.push.PushBinary(this.credentials.Login, this.credentials.Password, binaryData.Data, binaryData.FileName,
                         binaryData.InterviewId, this.ct);
-
-                    this.fileSyncRepository.RemoveBinaryDataFromSyncFolder(binaryData.InterviewId, binaryData.FileName);
+                    
+                    if(result)
+                        this.fileSyncRepository.RemoveBinaryDataFromSyncFolder(binaryData.InterviewId, binaryData.FileName);
 
                     this.OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing binary data", Operation.Push, true, (i * 100) / binaryDatas.Count));
                     i++;
