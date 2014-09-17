@@ -1,10 +1,14 @@
 using System;
 using Android.Content;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Core;
+using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
@@ -14,12 +18,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         private readonly IAnswerOnQuestionCommandService answerCommandService;
         private readonly ICommandService commandService;
         private readonly IAuthentication membership;
+        private readonly IPlainFileRepository plainFileRepository;
 
         public DefaultQuestionViewFactory(IKernel kernel)
         {
             this.answerCommandService = kernel.Get<IAnswerOnQuestionCommandService>();
             this.membership = kernel.Get<IAuthentication>();
             this.commandService = kernel.Get<ICommandService>();
+            this.plainFileRepository = kernel.Get<IPlainFileRepository>();
         }
 
         #region Implementation of IQuestionViewFactory
@@ -72,6 +78,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                     break;
                 case QuestionType.GpsCoordinates:
                     itemView = new GeoPositionQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService, this.answerCommandService, this.membership);
+                    break;
+                case QuestionType.Multimedia:
+                    itemView = new PictureQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService,
+                        this.answerCommandService, this.membership, plainFileRepository);
                     break;
                 default:
                     itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService, this.answerCommandService, this.membership);

@@ -444,7 +444,9 @@
     <EmbeddedResource Include="Content\app.css" />
     <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Scripts\components\bindings.js" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
   </ItemGroup>
