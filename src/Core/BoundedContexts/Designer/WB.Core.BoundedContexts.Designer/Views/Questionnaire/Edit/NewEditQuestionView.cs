@@ -7,7 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class NewEditQuestionView
     {
-        //public QuestionDetailsView Question { get; set; }
         public NewEditQuestionView()
         {
             this.SourceOfLinkedQuestions = new List<DropdownQuestionView>();
@@ -38,6 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? CountOfDecimalPlaces { get; set; }
         public int? MaxAnswerCount { get; set; }
         public bool? IsFilteredCombobox { get; set; }
+        public bool? IsCascadingCombobox { get; set; }
 
         public List<DropdownQuestionView> SourceOfLinkedQuestions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
