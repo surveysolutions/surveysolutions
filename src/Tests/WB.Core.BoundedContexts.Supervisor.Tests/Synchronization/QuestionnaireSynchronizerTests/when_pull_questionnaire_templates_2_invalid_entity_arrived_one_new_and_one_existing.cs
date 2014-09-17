@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
                    x.GetQuestionnaireDocument(existingLocalQuestionnaireFeedEntry.QuestionnaireId,
                        existingLocalQuestionnaireFeedEntry.QuestionnaireVersion)).Returns(new QuestionnaireDocument());
 
-            headquartersPullContext=new HeadquartersPullContextTestable();
+            headquartersPullContext=new HeadquartersPullContextStub();
 
             questionnaireSynchronizer = CreateQuestionnaireSynchronizer(plainStorage: plainStorageMock.Object,
                 plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object,
@@ -96,6 +96,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
         private static Mock<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>> plainStorageMock;
         private static Mock<IHeadquartersQuestionnaireReader> headquartersQuestionnaireReaderMock;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
-        private static HeadquartersPullContextTestable headquartersPullContext;
+        private static HeadquartersPullContextStub headquartersPullContext;
     }
 }

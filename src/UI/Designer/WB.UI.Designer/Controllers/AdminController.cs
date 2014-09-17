@@ -217,6 +217,7 @@ namespace WB.UI.Designer.Controllers
                                  IsApproved = x.IsApproved, 
                                  IsLockedOut = x.IsLockedOut, 
                                  CanEdit = editAction(x), 
+                                 CanOpen = false,
                                  CanDelete = false, 
                                  CanPreview = editAction(x)
                              });

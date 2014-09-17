@@ -147,12 +147,10 @@ namespace WB.Core.GenericSubdomains.Rest.Android
                 //request.AddBody(requestBody);
                 request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             }
-            else
+
+            foreach (var additionalParam in additionalParams)
             {
-                foreach (var additionalParam in additionalParams)
-                {
-                    request.AddParameter(additionalParam.Key, additionalParam.Value);
-                }
+                request.AddParameter(additionalParam.Key, additionalParam.Value);
             }
 
             return request;

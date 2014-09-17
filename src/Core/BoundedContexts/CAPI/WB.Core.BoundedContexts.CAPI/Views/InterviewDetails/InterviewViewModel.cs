@@ -1077,7 +1077,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return new SelectebleQuestionViewModel(
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType, question.Answers.Select(
-                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage)).ToList(),
+                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, null)).ToList(),
                 true, question.Instructions, null,
                 true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
                 multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
@@ -1088,7 +1088,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             return new FilteredComboboxQuestionViewModel(
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText, question.Answers.Select(
-                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage)).ToList(),
+                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, null)).ToList(),
                 true, question.Instructions, null,
                 true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle());
         }

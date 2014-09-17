@@ -196,6 +196,7 @@
     <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_parent_does_not_exists.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_is_null.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_with_substitution_referencing_valid_variable_but_another_question_has_null_variable_name.cs" />
+    <Compile Include="ChapterInfoViewDenormalizerTests\when_MultimediaQuestionUpdated_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextDeleted_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received_and_entity_does_not_exists.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextCloned_event_received_and_parent_of_entity_does_not_exists.cs" />
@@ -223,6 +224,8 @@
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="PdfQuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
+    <Compile Include="QuestionDetailsFactoryTests\when_creating_multimedia_question_details_view.cs" />
+    <Compile Include="QuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
@@ -238,12 +241,14 @@
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_fixed_titles_with_too_long_title.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_question_and_roster_size_question_is_empty.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning_text_question_by_id.cs" />
     <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_numeric_question_and_question_is_null.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_filtered_combobox.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_static_text.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_group_with_variable_name.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_masked_text_question.cs" />
+    <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
@@ -266,6 +271,7 @@
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_question_is_not_a_filtered_combobox.cs" />
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_question_not_found.cs" />
     <Compile Include="UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateMultimediaQuestionHandlerTests\when_updating_multimedia_question_and_all_parameters_is_specified.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_variable_name_is_null.cs" />
@@ -814,7 +820,6 @@
     <Compile Include="QuestionnaireTests\when_updating_non_roster_group_that_contains_prefilled_question.cs" />
     <Compile Include="QuestionnaireTests\SharedPersonsTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteGroupTests.cs" />
-    <Compile Include="QuestionnaireTests\DeleteImageTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\MoveGroupTests.cs" />

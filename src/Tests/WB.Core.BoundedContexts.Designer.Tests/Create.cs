@@ -473,5 +473,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 }
             };
         }
+
+        public static IPublishedEvent<MultimediaQuestionUpdated> MultimediaQuestionUpdatedEvent(string questionId, string questionVariable, string questionTitle, string questionConditionExpression)
+        {
+            return ToPublishedEvent(new MultimediaQuestionUpdated()
+            {
+                QuestionId = Guid.Parse(questionId),
+                VariableName = questionVariable,
+                Title = questionTitle,
+                EnablementCondition = questionConditionExpression
+            });
+        }
     }
 }
