@@ -6,7 +6,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Moq;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
@@ -14,24 +16,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
     [Subject(typeof(PlainFileRepository))]
     class PlainFileRepositoryTestContext
     {
-        protected static PlainFileRepository CreatePlainFileRepository()
+        protected static PlainFileRepository CreatePlainFileRepository(IFileSystemAccessor fileSystemAccessor = null)
         {
-            Cleanup();
-            return new PlainFileRepository(new FileSystemIOAccessor(), GetBasePath());
+            return new PlainFileRepository(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object, "");
         }
 
-        protected static string GetBasePath()
+        protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()
         {
-            var pathToDll = Assembly.GetExecutingAssembly().Location;
-            var directoryPath = Path.GetDirectoryName(pathToDll);
-            return Path.Combine(directoryPath, "Test");
-        }
-
-        protected static void Cleanup()
-        {
-            var directoryPath = GetBasePath();
-            if (Directory.Exists(directoryPath))
-                Directory.Delete(directoryPath,true);
+            var result = new Mock<IFileSystemAccessor>();
+            result.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                .Returns<string, string>(Path.Combine);
+            return result;
         }
     }
 }
