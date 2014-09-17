@@ -6,10 +6,11 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.Synchronization;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Supervisor.Controllers
 {
-    [Authorize()]
+    [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : Controller
     {
         private readonly IServiceLocator serviceLocator;
