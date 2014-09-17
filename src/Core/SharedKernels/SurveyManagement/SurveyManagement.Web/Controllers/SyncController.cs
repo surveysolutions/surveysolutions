@@ -253,7 +253,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
          //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult PostFile(string login, string password, Guid interviewId, string pictureFileName)
+        public ActionResult PostFile(string login, string password, Guid interviewId)
         {
             UserView user = this.GetUserByNameAndPassword();
             if (user == null)
@@ -262,11 +262,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
             try
             {
+                if (this.Request.Files.Count == 0 || this.Request.Files[0]==null)
+                {
+                    return this.Json(false, JsonRequestBehavior.AllowGet);
+                }
                 using (var memoryStream = new MemoryStream())
                 {
-                    this.Request.InputStream.CopyTo(memoryStream);
+                    this.Request.Files[0].InputStream.CopyTo(memoryStream);
                     var data = memoryStream.ToArray();
-                    plainFileRepository.StoreInterviewBinaryData(interviewId, pictureFileName, data);
+                    plainFileRepository.StoreInterviewBinaryData(interviewId, this.Request.Files[0].FileName, data);
                 }
                 return this.Json(true, JsonRequestBehavior.AllowGet);
             }
