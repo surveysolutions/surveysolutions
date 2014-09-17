@@ -52,7 +52,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                 responsibleId: responsibleId,
                 options: new_options,
                 linkedToQuestionId: linkedToQuestionId,
-                isFilteredCombobox: isFilteredCombobox);
+                isFilteredCombobox: isFilteredCombobox,
+                isCascadingCombobox: isCascadingCombobox);
 
         private Cleanup stuff = () =>
         {
@@ -138,5 +139,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static Option[] new_options = new Option[] { new Option(Guid.NewGuid(), "3", "Option 1"), new Option(Guid.NewGuid(), "4", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = true;
+        private static bool isCascadingCombobox = true;
     }
 }

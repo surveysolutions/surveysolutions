@@ -89,8 +89,7 @@ namespace WB.UI.Designer.Api
             if (shouldTruncateOptions)
             {
                 editQuestionView.WereOptionsTruncated = editQuestionView.Options.Length > MaxCountOfOptionForFileredCombobox;
-                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();
-                
+                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();   
             }
 
             return editQuestionView;

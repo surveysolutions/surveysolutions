@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     questionId: questionId,
                     title: title,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
@@ -53,10 +53,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
-                    responsibleId: responsibleId
-                    , options: options,
+                    responsibleId: responsibleId,
+                    options: options,
                     linkedToQuestionId: linkedToQuestionId,
-                    isFilteredCombobox: isFilteredCombobox
+                    isFilteredCombobox: isFilteredCombobox,
+                    isCascadingCombobox: isCascadingCombobox
                     ));
 
 
@@ -87,5 +88,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static bool isFilteredCombobox = false;
+        private static bool isCascadingCombobox = false;
     }
 }

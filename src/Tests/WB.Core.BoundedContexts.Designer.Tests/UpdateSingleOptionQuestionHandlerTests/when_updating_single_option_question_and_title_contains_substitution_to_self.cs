@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     questionId: questionId,
                     title: titleWithSubstitutionToSelf,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
@@ -42,10 +42,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
-                    responsibleId: responsibleId
-                    ,options:options,
+                    responsibleId: responsibleId,
+                    options:options,
                     linkedToQuestionId: linkedToQuestionId,
-                    isFilteredCombobox: isFilteredCombobox
+                    isFilteredCombobox: isFilteredCombobox,
+                    isCascadingCombobox: isCascadingCombobox
                     ));
 
         It should_throw_QuestionnaireException = () =>
@@ -73,5 +74,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = false;
+        private static bool isCascadingCombobox = false;
     }
 }

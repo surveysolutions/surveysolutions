@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
+                null,
                 null);
             return data;
         }
@@ -63,6 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.Instructions,
                 null,
                 new List<Guid>(),
+                null,
                 null,
                 null,
                 null,
@@ -103,6 +105,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
+                null,
                 null);
             return data;
         }
@@ -127,6 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.Instructions,
                 null,
                 new List<Guid>(),
+                null,
                 null,
                 null,
                 null,
@@ -167,6 +171,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 e.MaxAnswerCount,
+                null,
                 null);
             return data;
         }
@@ -199,6 +204,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 e.MaxAnswerCount,
+                null,
                 null);
             return data;
         }
@@ -231,6 +237,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 e.MaxAnswerCount,
+                null,
                 null);
             return data;
         }
@@ -263,7 +270,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.AreAnswersOrdered,
                 e.MaxAllowedAnswers,
                 null,
-                e.IsFilteredCombobox);
+                e.IsFilteredCombobox,
+                e.IsCascadingCombobox);
             return data;
         }
 
@@ -295,7 +303,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.AreAnswersOrdered,
                 e.MaxAllowedAnswers,
                 null,
-                e.IsFilteredCombobox);
+                e.IsFilteredCombobox,
+                e.IsCascadingCombobox);
             return data;
         }
 
@@ -327,11 +336,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.AreAnswersOrdered,
                 e.MaxAllowedAnswers,
                 null,
-                e.IsFilteredCombobox);
+                e.IsFilteredCombobox,
+                e.IsCascadingCombobox);
             return data;
         }
-
-       
 
         public static QuestionData NumericQuestionAddedToQuestionData(IPublishedEvent<NumericQuestionAdded> evnt)
         {
@@ -358,6 +366,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 e.IsInteger,
                 e.CountOfDecimalPlaces,
+                null,
                 null,
                 null,
                 null,
@@ -393,6 +402,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
+                null,
                 null);
             return data;
         }
@@ -422,6 +432,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 e.IsInteger,
                 e.CountOfDecimalPlaces,
+                null,
                 null,
                 null,
                 null,

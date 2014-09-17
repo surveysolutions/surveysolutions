@@ -31,7 +31,8 @@ namespace Main.Core.Entities
             bool? areAnswersOrdered,
             int? maxAllowedAnswers,
             int? maxAnswerCount,
-            bool? isFilteredCombobox
+            bool? isFilteredCombobox,
+            bool? isCascadingCombobox
             )
         {
             this.PublicKey = publicKey;
@@ -60,6 +61,7 @@ namespace Main.Core.Entities
             this.Mask = mask;
             this.MaxAnswerCount = maxAnswerCount;
             this.IsFilteredCombobox = isFilteredCombobox;
+            this.IsCascadingCombobox = isCascadingCombobox;
         }
 
         public readonly Guid PublicKey;
@@ -89,5 +91,6 @@ namespace Main.Core.Entities
 
         public readonly int? MaxAnswerCount;
         public readonly bool? IsFilteredCombobox;
+        public readonly bool? IsCascadingCombobox;
     }
 }

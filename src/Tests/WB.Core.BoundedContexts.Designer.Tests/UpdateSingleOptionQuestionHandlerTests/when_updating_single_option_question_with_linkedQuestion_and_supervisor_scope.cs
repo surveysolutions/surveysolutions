@@ -55,7 +55,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     responsibleId: responsibleId,
                     options: null,
                     linkedToQuestionId: linkedToQuestionId,
-                    isFilteredCombobox: isFilteredCombobox
+                    isFilteredCombobox: isFilteredCombobox,
+                    isCascadingCombobox: isCascadingCombobox
                     ));
 
 
@@ -83,6 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static string validationExpression = "";
         private static string validationMessage = "";
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-        private static bool isFilteredCombobox = false;         
+        private static bool isFilteredCombobox = false;
+        private static bool isCascadingCombobox = false;
     }
 }
