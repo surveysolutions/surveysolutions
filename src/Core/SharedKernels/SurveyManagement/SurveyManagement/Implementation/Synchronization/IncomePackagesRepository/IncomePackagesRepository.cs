@@ -22,7 +22,8 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository
 {
-    internal class IncomePackagesRepository : IIncomePackagesRepository
+    internal class 
+        IncomePackagesRepository : IIncomePackagesRepository
     {
         private string incomingCapiPackagesDirectory;
         private string incomingCapiPackagesWithErrorsDirectory;
@@ -86,8 +87,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
                 }
                 else
-                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,meta.TemplateVersion,
-                        (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false));
+                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                        meta.TemplateVersion,
+                        (InterviewStatus) meta.Status, null, meta.Comments, meta.Valid, false));
 
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
             }
@@ -96,6 +98,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                 this.logger.Error("error on handling incoming package,", ex);
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.Id),this.jsonUtils.GetItemAsContent(item));
             }
+        }
+
+        private bool IsInterviewPresent(Guid interviewId)
+        {
+            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            if (interviewSummary == null)
+                return false;
+            return !interviewSummary.IsDeleted;
         }
 
         private string GetItemFileName(Guid id)
@@ -115,6 +125,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             var fileName = this.GetItemFileName(id);
             if (!this.fileSystemAccessor.IsFileExists(fileName))
                 return;
+
+            if (!IsInterviewPresent(id))
+            {
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(id), this.fileSystemAccessor.ReadAllText(fileName));
+                this.fileSystemAccessor.DeleteFile(fileName);
+                return;
+            }
 
             var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
 
