@@ -580,10 +580,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                             var isCascadingQuestion = question != null &&
                                 question.IsCascadingCombobox.HasValue &&
                                 question.IsCascadingCombobox.Value &&
-                                question.LinkedToQuestionId != null;
+                                question.CascadeFromQuestionId.HasValue;
                             if (isCascadingQuestion)
                             {
-                                return question.LinkedToQuestionId == foundItem;
+                                return question.CascadeFromQuestionId == foundItem;
                             }
                             return false;
                         }).Select(x => x.PublicKey).ToList();
