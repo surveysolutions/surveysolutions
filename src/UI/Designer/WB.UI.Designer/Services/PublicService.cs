@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.ServiceModel;
 using Main.Core.View;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.UI.Designer.Services.Questionnaire;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
@@ -18,25 +23,48 @@ namespace WB.UI.Designer.Services
         private readonly IStringCompressor zipUtils;
         private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory;
 
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+
+        private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+
         public PublicService(
             IJsonExportService exportService,
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
-            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory)
+            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
+            IQuestionnaireVerifier questionnaireVerifier,
+            IExpressionProcessorGenerator expressionProcessorGenerator)
         {
             this.exportService = exportService;
             this.zipUtils = zipUtils;
             this.userHelper = userHelper;
             this.viewFactory = viewFactory;
+            this.questionnaireVerifier = questionnaireVerifier;
+            this.questionnaireViewFactory = questionnaireViewFactory; 
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
 
         public RemoteFileInfo DownloadQuestionnaire(DownloadQuestionnaireRequest request)
         {
-            var templateInfo = this.exportService.GetQuestionnaireTemplate(request.QuestionnaireId);
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
+            if (questionnaireView == null)
+            {
+                var message = String.Format("Requested questionnaire id={0} was not found",
+                        request.QuestionnaireId);
+
+                throw new FaultException(message, new FaultCode("TemplateNotFound"));
+            }
+
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
 
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
-                return null;
+                var message = String.Format("Requested questionnaire cannot be processed",
+                        request.QuestionnaireId);
+
+                throw new FaultException(message, new FaultCode("TemplateProcessingError"));
             }
 
             var templateTitle = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName());
@@ -51,19 +79,62 @@ namespace WB.UI.Designer.Services
                 throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
 
+            string resultAssembly;
+            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
+
+            if (questoinnaireErrors.Any())
+            {
+                var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify and fix it on Designer.",
+                        questionnaireView.Title);
+
+                throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
+            }
+            else
+            {
+                GenerationResult generationResult;
+                try
+                {
+                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+                }
+                catch (Exception)
+                {
+                    generationResult = new GenerationResult()
+                    {
+                        Success = false,
+                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                    };
+                    resultAssembly = string.Empty;
+                }
+
+                if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
+                {
+                    var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify template on Designer.",
+                        questionnaireView.Title);
+
+                    throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
+                }
+            }
+
             Stream stream = this.zipUtils.Compress(templateInfo.Source);
 
             return new RemoteFileInfo
             {
                 FileName = templateTitle,
                 Length = stream.Length,
-                FileByteStream = stream
+                FileByteStream = stream,
+                //SupportingAssembly = resultAssembly
             };
         }
 
         public string DownloadQuestionnaireSource(Guid request)
         {
-            var templateInfo = this.exportService.GetQuestionnaireTemplate(request);
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request));
+            if (questionnaireView == null)
+            {
+                return string.Empty;
+            }
+
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
             return templateInfo == null ? string.Empty : templateInfo.Source;
         }
 

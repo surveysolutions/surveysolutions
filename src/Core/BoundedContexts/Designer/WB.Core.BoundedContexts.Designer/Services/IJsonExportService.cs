@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IJsonExportService
     {
-        TemplateInfo GetQuestionnaireTemplate(Guid templateId);
-        TemplateInfo GetQuestionnaireTemplate(QuestionnaireDocument template);
+        TemplateInfo GetQuestionnaireTemplateInfo(Guid templateId);
+        TemplateInfo GetQuestionnaireTemplateInfo(QuestionnaireDocument template);
     }
 }

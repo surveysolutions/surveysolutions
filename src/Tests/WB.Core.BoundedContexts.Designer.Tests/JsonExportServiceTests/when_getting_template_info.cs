@@ -3,8 +3,6 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using It = Machine.Specifications.It;
 
@@ -14,14 +12,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.JsonExportServiceTests
     {
         Establish context = () =>
         {
-            var questionnaire = new QuestionnaireDocument();
-            var questionnaireStorage = Mock.Of<IReadSideRepositoryReader<QuestionnaireDocument>>(x => x.GetById(questionnaireId.FormatGuid()) == questionnaire);
+            var questionnaireViewFactory = CreateQuestionnaireViewFactory();
+
             var versioner = Mock.Of<IQuestionnaireVersioner>(x => x.GetVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
-            exportService = CreateJsonExportService(questionnaireStorage: questionnaireStorage, versioner: versioner);
+            exportService = CreateJsonExportService(questionnaireViewFactory: questionnaireViewFactory, versioner: versioner);
         };
 
+        
         Because of = () =>
-            info = exportService.GetQuestionnaireTemplate(questionnaireId);
+            info = exportService.GetQuestionnaireTemplateInfo(questionnaireId);
 
         It should_return_info_with_version = () => 
             info.Version.ShouldNotBeNull();
