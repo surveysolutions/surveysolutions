@@ -43,6 +43,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Drawable.donecountershape = global::WB.UI.Capi.Resource.Drawable.donecountershape;
 			global::WB.UI.Shared.Android.Resource.Drawable.errorwarningstyle = global::WB.UI.Capi.Resource.Drawable.errorwarningstyle;
 			global::WB.UI.Shared.Android.Resource.Drawable.grid_headerItem = global::WB.UI.Capi.Resource.Drawable.grid_headerItem;
+			global::WB.UI.Shared.Android.Resource.Drawable.no_image_found = global::WB.UI.Capi.Resource.Drawable.no_image_found;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionAnsweredShape = global::WB.UI.Capi.Resource.Drawable.questionAnsweredShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionDisabledShape = global::WB.UI.Capi.Resource.Drawable.questionDisabledShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionInvalidShape = global::WB.UI.Capi.Resource.Drawable.questionInvalidShape;
@@ -85,6 +86,7 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Id.tvTitle = global::WB.UI.Capi.Resource.Id.tvTitle;
 			global::WB.UI.Shared.Android.Resource.Id.vpContent = global::WB.UI.Capi.Resource.Id.vpContent;
 			global::WB.UI.Shared.Android.Resource.Layout.AbstractQuestionView = global::WB.UI.Capi.Resource.Layout.AbstractQuestionView;
+			global::WB.UI.Shared.Android.Resource.Layout.CascadingComboboxRowLayout = global::WB.UI.Capi.Resource.Layout.CascadingComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.Details = global::WB.UI.Capi.Resource.Layout.Details;
 			global::WB.UI.Shared.Android.Resource.Layout.FilteredComboboxRowLayout = global::WB.UI.Capi.Resource.Layout.FilteredComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::WB.UI.Capi.Resource.Layout.list_navigation_item;
@@ -190,28 +192,31 @@ namespace WB.UI.Capi
 			public const int navigation_Selector = 2130837518;
 			
 			// aapt resource value: 0x7f02000f
-			public const int questionAnsweredShape = 2130837519;
+			public const int no_image_found = 2130837519;
 			
 			// aapt resource value: 0x7f020010
-			public const int questionDisabledShape = 2130837520;
+			public const int questionAnsweredShape = 2130837520;
 			
 			// aapt resource value: 0x7f020011
-			public const int questionInvalidShape = 2130837521;
+			public const int questionDisabledShape = 2130837521;
 			
 			// aapt resource value: 0x7f020012
-			public const int questionShape = 2130837522;
+			public const int questionInvalidShape = 2130837522;
 			
 			// aapt resource value: 0x7f020013
-			public const int splash = 2130837523;
+			public const int questionShape = 2130837523;
 			
 			// aapt resource value: 0x7f020014
-			public const int statistics_row_style = 2130837524;
+			public const int splash = 2130837524;
 			
 			// aapt resource value: 0x7f020015
-			public const int SurveyShape = 2130837525;
+			public const int statistics_row_style = 2130837525;
 			
 			// aapt resource value: 0x7f020016
-			public const int SurveyTableHeader = 2130837526;
+			public const int SurveyShape = 2130837526;
+			
+			// aapt resource value: 0x7f020017
+			public const int SurveyTableHeader = 2130837527;
 			
 			static Drawable()
 			{
@@ -471,73 +476,76 @@ namespace WB.UI.Capi
 			public const int ActionBar = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int CreateInterview = 2130903042;
+			public const int CascadingComboboxRowLayout = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int dashboard_survey_header = 2130903043;
+			public const int CreateInterview = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int dashboard_survey_item = 2130903044;
+			public const int dashboard_survey_header = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int dashboard_survey_property_item = 2130903045;
+			public const int dashboard_survey_item = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int dashboard_survey_row = 2130903046;
+			public const int dashboard_survey_property_item = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int Details = 2130903047;
+			public const int dashboard_survey_row = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int FilteredComboboxRowLayout = 2130903048;
+			public const int Details = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int InterviewActionBar = 2130903049;
+			public const int FilteredComboboxRowLayout = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int list_navigation_item = 2130903050;
+			public const int InterviewActionBar = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int Login = 2130903051;
+			public const int list_navigation_item = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int Main = 2130903052;
+			public const int Login = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int RosterQuestion = 2130903053;
+			public const int Main = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int ScreenContentFragment = 2130903054;
+			public const int RosterQuestion = 2130903054;
 			
 			// aapt resource value: 0x7f03000f
-			public const int ScreenGroupView = 2130903055;
+			public const int ScreenContentFragment = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int ScreenNavigationView = 2130903056;
+			public const int ScreenGroupView = 2130903056;
 			
 			// aapt resource value: 0x7f030011
-			public const int settings_dialog = 2130903057;
+			public const int ScreenNavigationView = 2130903057;
 			
 			// aapt resource value: 0x7f030012
-			public const int SplashScreen = 2130903058;
+			public const int settings_dialog = 2130903058;
 			
 			// aapt resource value: 0x7f030013
-			public const int StaticTextView = 2130903059;
+			public const int SplashScreen = 2130903059;
 			
 			// aapt resource value: 0x7f030014
-			public const int StatisticsContent = 2130903060;
+			public const int StaticTextView = 2130903060;
 			
 			// aapt resource value: 0x7f030015
-			public const int sync_dialog = 2130903061;
+			public const int StatisticsContent = 2130903061;
 			
 			// aapt resource value: 0x7f030016
-			public const int SyncLogin = 2130903062;
+			public const int sync_dialog = 2130903062;
 			
 			// aapt resource value: 0x7f030017
-			public const int zxingscanneractivitylayout = 2130903063;
+			public const int SyncLogin = 2130903063;
 			
 			// aapt resource value: 0x7f030018
-			public const int zxingscannerfragmentlayout = 2130903064;
+			public const int zxingscanneractivitylayout = 2130903064;
+			
+			// aapt resource value: 0x7f030019
+			public const int zxingscannerfragmentlayout = 2130903065;
 			
 			static Layout()
 			{

@@ -74,19 +74,22 @@ namespace WB.UI.Shared.Android
 			public static int grid_headerItem = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public static int questionAnsweredShape = 2130837509;
+			public static int no_image_found = 2130837509;
 			
 			// aapt resource value: 0x7f020006
-			public static int questionDisabledShape = 2130837510;
+			public static int questionAnsweredShape = 2130837510;
 			
 			// aapt resource value: 0x7f020007
-			public static int questionInvalidShape = 2130837511;
+			public static int questionDisabledShape = 2130837511;
 			
 			// aapt resource value: 0x7f020008
-			public static int questionShape = 2130837512;
+			public static int questionInvalidShape = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public static int statistics_row_style = 2130837513;
+			public static int questionShape = 2130837513;
+			
+			// aapt resource value: 0x7f02000a
+			public static int statistics_row_style = 2130837514;
 			
 			static Drawable()
 			{
