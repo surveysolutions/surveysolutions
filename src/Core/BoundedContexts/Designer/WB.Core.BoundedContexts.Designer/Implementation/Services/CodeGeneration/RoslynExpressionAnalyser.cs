@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -10,12 +11,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public IEnumerable<string> ExtractVariables(string expression)
         {
-            string code = string.Format("internal partial class X {{ private bool M() {{ return ({0}); }} }} ", expression);
+            string code = string.Format("class a {{ bool b() {{ return ({0}); }} }} ", expression);
 
             return SyntaxFactory
                 .ParseSyntaxTree(code).GetRoot().ChildNodesAndTokens().TreeToEnumerable(_ => _.ChildNodesAndTokens())
                 .Where(IsIdentifierToken)
-                .Select(token => token.ToString());
+                .Select(token => token.ToString())
+                .Distinct();
         }
 
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)

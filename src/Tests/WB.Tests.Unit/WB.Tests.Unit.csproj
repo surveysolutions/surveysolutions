@@ -152,8 +152,7 @@
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\PdfQuestionnaireViewTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_entity_and_root_id_is_used_as_parent_group_id.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_group_specifying_root_id_as_parent.cs" />
-    <Compile Include="BoundedContexts\Designer\RoslynExpressionAnalyserTests\RoslynExpressionAnalyserTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\RoslynExpressionAnalyserTests\when_extracting_variables_from__a_plus_b__.cs" />
+    <Compile Include="BoundedContexts\Designer\RoslynExpressionAnalyserTests\when_extracting_variables_from_different_expressions.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="GenericSubdomains\Utils\StringExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
