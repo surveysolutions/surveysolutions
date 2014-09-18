@@ -108,6 +108,7 @@
                         "title": '',
                         "id": utilityService.guid()
                     });
+                    $scope.activeQuestion.optionsCount += 1;
                 };
 
                 $scope.editFilteredComboboxOptions = function () {
@@ -137,6 +138,7 @@
 
                 $scope.removeOption = function (index) {
                     $scope.activeQuestion.options.splice(index, 1);
+                    $scope.activeQuestion.optionsCount -= 1;
                 };
 
                 $scope.changeQuestionScope = function (scope) {

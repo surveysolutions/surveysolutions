@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 <p>
-                    <input ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
+                    <input ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" ng-hide="activeQuestion.optionsCount>=200" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
                     <a ng-if="activeQuestion.isFilteredCombobox"
                        href="javascript:void(0);"
                        class="btn btn-link"
