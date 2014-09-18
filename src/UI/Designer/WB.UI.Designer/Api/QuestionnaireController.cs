@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Api
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
-        private const int MaxCountOfOptionForFileredCombobox = 20;
+        private const int MaxCountOfOptionForFileredCombobox = 200;
 
         public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
