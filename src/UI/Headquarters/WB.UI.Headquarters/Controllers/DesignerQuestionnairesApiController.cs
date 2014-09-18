@@ -121,7 +121,7 @@ namespace WB.UI.Headquarters.Controllers
                     throw;
                 }
 
-                var response = new QuestionnaireVerificationResponse(true, document.Title);
+                var response = new QuestionnaireVerificationResponse(true, document != null ? document.Title : "");
                 var verificationException = domainEx as QuestionnaireVerificationException;
                 if (verificationException != null)
                 {

@@ -15,7 +15,7 @@ namespace WB.UI.Designer.Services
 
         [MessageHeader]
         public long Length;
-
+        
         public void Dispose()
         {
             if (this.FileByteStream != null)
