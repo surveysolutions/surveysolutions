@@ -10,6 +10,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
@@ -94,7 +95,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public PlainQuestionnaire(QuestionnaireDocument document, long version)
-            : this(document, () => version) {}
+            : this(document, () => version) { }
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion,
             Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache)
@@ -195,7 +196,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     "Cannot return maximum for selected answers for question with id '{0}' because it's type {1} does not support that parameter.",
                     questionId, question.QuestionType));
 
-            return ((IMultyOptionsQuestion) question).MaxAllowedAnswers;
+            return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
         }
 
         public bool IsCustomValidationDefined(Guid questionId)
@@ -533,11 +534,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId)
         {
             var roster = this.GetGroupOrThrow(rosterId);
-            
+
             var nestedRosters = new List<Guid>();
             var nestedGroups = new Queue<IGroup>(roster.Children.OfType<IGroup>());
 
-            while (nestedGroups.Count>0)
+            while (nestedGroups.Count > 0)
             {
                 var currentGroup = nestedGroups.Dequeue();
                 if (IsRosterGroup(currentGroup))
@@ -558,6 +559,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var roster = this.GetGroupOrThrow(rosterId);
             return roster.RosterSizeQuestionId;
+        }
+
+        public IEnumerable<Guid> GetCascadingQuestionsThatDependUponQuestion(Guid questionId)
+        {
+            var result = new List<Guid>();
+            var foundItems = new List<Guid>{questionId};
+            bool itemsAdded = true;
+
+            while (itemsAdded)
+            {
+                itemsAdded = false;
+                foreach (var foundItem in foundItems)
+                {
+                    foundItems = this.QuestionnaireDocument.Children
+                        .TreeToEnumerable(x => x.Children)
+                        .Where(x =>
+                        {
+                            var question = x as SingleQuestion;
+                            var isCascadingQuestion = question != null &&
+                                question.IsCascadingCombobox.HasValue &&
+                                question.IsCascadingCombobox.Value &&
+                                question.LinkedToQuestionId != null;
+                            if (isCascadingQuestion)
+                            {
+                                return question.LinkedToQuestionId == foundItem;
+                            }
+                            return false;
+                        }).Select(x => x.PublicKey).ToList();
+
+                    itemsAdded = itemsAdded || foundItems.Count > 0;
+                    result.AddRange(foundItems);
+                }
+            }
+
+            return result;
         }
 
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
@@ -663,7 +699,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            var parentGroup = (IGroup) question.GetParent();
+            var parentGroup = (IGroup)question.GetParent();
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
@@ -680,7 +716,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             while (group != document)
             {
                 parentGroups.Add(group);
-                group = (IGroup) group.GetParent();
+                group = (IGroup)group.GetParent();
             }
 
             return parentGroups;
