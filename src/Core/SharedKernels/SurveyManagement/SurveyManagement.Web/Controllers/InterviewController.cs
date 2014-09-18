@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Web.Mvc;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
@@ -65,7 +66,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult InterviewFile(Guid interviewId, string fileName)
         {
-            return this.File(plainFileRepository.GetInterviewBinaryData(interviewId, fileName), "image/jpeg", fileName);
+            var file = plainFileRepository.GetInterviewBinaryData(interviewId, fileName);
+            if(file==null)
+                return this.File(Assembly.GetExecutingAssembly().GetManifestResourceStream("WB.Core.SharedKernels.SurveyManagement.Web.Content.img.no_image_found.jpg"), "image/jpeg", fileName);
+            return this.File(file, "image/jpeg", fileName);
         }
 
         public ActionResult InterviewHistory(Guid id)

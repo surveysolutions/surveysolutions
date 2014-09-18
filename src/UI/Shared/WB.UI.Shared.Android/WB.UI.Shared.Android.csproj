@@ -260,6 +260,9 @@
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
   </ItemGroup>
+   <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\no_image_found.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml">
       <SubType>Designer</SubType>

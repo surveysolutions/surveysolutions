@@ -445,6 +445,7 @@
     <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Scripts\components\bindings.js" />
   </ItemGroup>
   <ItemGroup>
