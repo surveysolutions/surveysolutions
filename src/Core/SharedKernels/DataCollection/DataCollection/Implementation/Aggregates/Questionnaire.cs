@@ -113,10 +113,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
-            ThrowIfVerifierFindsErrors(document);
+            //ThrowIfVerifierFindsErrors(document);
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
-
-
+            
             this.ApplyEvent(new TemplateImported { Source = document, AllowCensusMode = allowCensusMode, Version = GetNextVersion() });
         }
 

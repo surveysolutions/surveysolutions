@@ -1,34 +1,38 @@
 using System;
 using Main.Core.Documents;
+using Main.Core.View;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal class JsonExportService : IJsonExportService
     {
-        #warning ViewFactory should be used here
-        private readonly IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage;
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IQuestionnaireVersioner versioner;
 
-        public JsonExportService(IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage,
+        public JsonExportService(IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVersioner versioner)
         {
-            this.questionnaireStorage = questionnaireStorage;
+            this.questionnaireViewFactory = questionnaireViewFactory;
             this.versioner = versioner;
         }
 
-        public TemplateInfo GetQuestionnaireTemplate(Guid templateId)
+        public TemplateInfo GetQuestionnaireTemplateInfo(Guid templateId)
         {
-            var template = questionnaireStorage.GetById(templateId);
-            return this.GetQuestionnaireTemplate(template);
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(templateId));
+            if (questionnaireView == null)
+                return null;
+
+            return this.GetQuestionnaireTemplateInfo(questionnaireView.Source);
         }
 
-        public TemplateInfo GetQuestionnaireTemplate(QuestionnaireDocument template)
+        public TemplateInfo GetQuestionnaireTemplateInfo(QuestionnaireDocument template)
         {
             if (template == null) 
                 return null;
+
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             return new TemplateInfo()
             {

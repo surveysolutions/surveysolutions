@@ -89,13 +89,13 @@ namespace WB.Tests.Unit.Applications.Designer
             SynchronizationController controller = this.CreateSynchronizationController();
             Guid templateId = Guid.NewGuid();
             TemplateInfo dataForZip = new TemplateInfo() { Source = "zipped data", Title = "template" };
-            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId)).Returns(dataForZip);
+            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(templateId)).Returns(dataForZip);
             this.ZipUtilsMock.Setup(x => x.Compress(dataForZip.Source)).Returns(new MemoryStream());
             // act
             controller.Export(templateId);
 
             // assert
-            this.ExportServiceMock.Verify(x => x.GetQuestionnaireTemplate(templateId), Times.Once());
+            this.ExportServiceMock.Verify(x => x.GetQuestionnaireTemplateInfo(templateId), Times.Once());
             this.ZipUtilsMock.Verify(x => x.Compress(dataForZip.Source), Times.Once());
         }
 
@@ -107,7 +107,7 @@ namespace WB.Tests.Unit.Applications.Designer
             // arrange
             SynchronizationController target = this.CreateSynchronizationController();
             Guid templateId = Guid.NewGuid();
-            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId))
+            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(templateId))
                              .Returns(new TemplateInfo() { Source = data });
 
             // act
