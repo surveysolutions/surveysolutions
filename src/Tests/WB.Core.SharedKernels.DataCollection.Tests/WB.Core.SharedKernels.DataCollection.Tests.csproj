@@ -106,6 +106,7 @@
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
+    <Compile Include="InterviewTests\when_answering_linked_categorical_question_with_cascading_options.cs" />
     <Compile Include="InterviewTests\when_answering_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_has_2_selected_options_and__.cs" />
     <Compile Include="InterviewTests\when_answering_picture_question_and_answer_is_specified.cs" />
     <Compile Include="InterviewTests\when_answering_top_level_question_which_enables_nested_roster.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="PlainFileRepositoryTests\when_getting_data_for_not_existing_file.cs" />
     <Compile Include="PlainFileRepositoryTests\when_getting_files_for_existing_interview.cs" />
     <Compile Include="PlainFileRepositoryTests\when_getting_files_for_not_existing_interview.cs" />
+    <Compile Include="QuestionnaireTests\when_questionnaire_has_cascading_options.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_fixed_rosters_and_GetFixedRosterGroups_called_for_parent_roster.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_fixed_rosters_and_GetFixedRosterGroups_called_for_whole_questionnaire.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_nested_roster_inside_nested_group_of_other_roster_and_GetNestedRostersOfGroupById_called_for_parent_roster.cs" />
