@@ -105,6 +105,7 @@
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_canceled_interview_which_is_absent_on_supervisor.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_deleted_interview_which_is_absent_on_supervisor.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_deleted_interview_which_is_present_on_supervisor.cs" />
+    <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_hard_deleted_by_hq_interview_in_light_delete_state_at_supervisor.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_new_interview_created_but_interview_but_insterviewer_is_absent_for_now.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_new_interview_created_but_interview_details_is_absen_on_hq.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_rejected_by_hq_interview_absent_on_hq.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_rejected_by_hq_interview_created_by_deleted_questionnaire.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_rejected_by_hq_interview_created_on_client.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_canceled_interview_which_is_present_on_supervisor.cs" />
+    <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_rejected_by_hq_interview_in_light_delete_state_at_supervisor.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interviews_and_no_interviews_are_ready.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interviews_and_one_interview_is_ready_and_has_different_events.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interview_and_interview_has_prefilled_question_and_was_client_created.cs" />
