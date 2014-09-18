@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.MaxAllowedAnswers,
                 data.MaxAnswerCount,
                 data.IsFilteredCombobox,
-                data.IsCascadingCombobox);
+                data.CascadeFromQuestionId);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             int? maxAllowedAnswers,
             int? masAnswerCount,
             bool? isFilteredCombobox,
-            bool? isCascadingCombobox)
+            Guid? cascadeFromQuestionId)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -162,7 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
             question.IsFilteredCombobox = isFilteredCombobox;
-            question.IsCascadingCombobox = isCascadingCombobox;
+            question.CascadeFromQuestionId = cascadeFromQuestionId;
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)

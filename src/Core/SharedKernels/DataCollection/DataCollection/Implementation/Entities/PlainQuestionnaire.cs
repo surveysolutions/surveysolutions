@@ -578,8 +578,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                         {
                             var question = x as SingleQuestion;
                             var isCascadingQuestion = question != null &&
-                                question.IsCascadingCombobox.HasValue &&
-                                question.IsCascadingCombobox.Value &&
                                 question.CascadeFromQuestionId.HasValue;
                             if (isCascadingQuestion)
                             {

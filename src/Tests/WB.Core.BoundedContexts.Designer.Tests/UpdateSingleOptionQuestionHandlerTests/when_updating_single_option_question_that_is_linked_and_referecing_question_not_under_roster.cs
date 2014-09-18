@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     options: options,
                     linkedToQuestionId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    isCascadingCombobox: isCascadingCombobox
+                    cascadeFromQuestionId: ñascadeFromQuestionId
                     ));
 
 
@@ -88,6 +88,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static bool isFilteredCombobox = false;
-        private static bool isCascadingCombobox = false;
+        private static Guid? ñascadeFromQuestionId = (Guid?)null;
     }
 }

@@ -23,6 +23,6 @@ namespace Main.Core.Events.Questionnaire
         public int? MaxAllowedAnswers { get; set; }
         public string Mask { get; set; }
         public bool? IsFilteredCombobox { get; set; }
-        public bool? IsCascadingCombobox { get; set; }
+        public Guid? CascadeFromQuestionId { get; set; }
     }
 }

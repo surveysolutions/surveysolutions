@@ -184,7 +184,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAllowedAnswers,
                         null,
                         e.IsFilteredCombobox,
-                        e.IsCascadingCombobox
+                        e.CascadeFromQuestionId
                         ));
 
             if (question == null)
@@ -319,7 +319,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAllowedAnswers,
                         null,
                         e.IsFilteredCombobox,
-                        e.IsCascadingCombobox));
+                        e.CascadeFromQuestionId));
 
             if (question == null)
             {
@@ -463,7 +463,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAllowedAnswers,
                         null,
                         e.IsFilteredCombobox,
-                        e.IsCascadingCombobox));
+                        e.CascadeFromQuestionId));
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
 
@@ -1410,7 +1410,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 Mask = asTextQuestion != null ? asTextQuestion.Mask : null,
 
-                IsCascadingCombobox = question.IsCascadingCombobox,
+                CascadeFromQuestionId = question.CascadeFromQuestionId,
                 IsFilteredCombobox = question.IsFilteredCombobox
             });
         }
@@ -2148,7 +2148,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Option[] options,
             Guid? linkedToQuestionId,
             bool isFilteredCombobox,
-            bool isCascadingCombobox)
+            Guid? cascadeFromQuestionId)
         {
             var answers = ConvertOptionsToAnswers(options);
 
@@ -2187,7 +2187,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
                 IsFilteredCombobox = isFilteredCombobox,
-                IsCascadingCombobox = isCascadingCombobox
+                CascadeFromQuestionId = cascadeFromQuestionId
             });
         }
 

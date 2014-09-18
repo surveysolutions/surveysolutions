@@ -262,6 +262,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                                                               .GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
                                                               .Map(singleOptionDetailsView);
                     editQuestionView.LinkedToQuestionId = Monads.Maybe(() => singleOptionDetailsView.LinkedToQuestionId.FormatGuid());
+                    editQuestionView.CascadeFromQuestionId = Monads.Maybe(() => singleOptionDetailsView.CascadeFromQuestionId.FormatGuid());
                     return editQuestionView;
                 case QuestionType.Text:
                     return

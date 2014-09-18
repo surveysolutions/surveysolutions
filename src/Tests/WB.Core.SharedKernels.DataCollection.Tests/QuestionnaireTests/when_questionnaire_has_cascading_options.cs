@@ -25,13 +25,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                {
                    PublicKey = childCascadedComboboxId,
                    QuestionType = QuestionType.SingleOption,
-                   IsCascadingCombobox = true,
                    CascadeFromQuestionId = parentSingleOptionQuestionId
-               }, new SingleQuestion
+               },
+               new SingleQuestion
                {
                    PublicKey = grandChildCascadedComboboxId,
                    QuestionType = QuestionType.SingleOption,
-                   IsCascadingCombobox = true,
                    CascadeFromQuestionId = childCascadedComboboxId
                }));
         };

@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
             Option[] options,
             Guid? linkedToQuestionId,
             bool isFilteredCombobox,
-            bool isCascadingCombobox)
+            Guid? cascadeFromQuestionId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, 
@@ -43,12 +43,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
             this.IsFilteredCombobox = isFilteredCombobox;
-            this.IsCascadingCombobox = isCascadingCombobox;
+            this.CascadeFromQuestionId = cascadeFromQuestionId;
         }
 
         public bool IsFilteredCombobox { get; set; }
 
-        public bool IsCascadingCombobox { get; set; }
+        public Guid? CascadeFromQuestionId { get; set; }
 
         public QuestionScope Scope { get; set; }
 
