@@ -12,6 +12,8 @@ namespace Main.Core.Entities.SubEntities
         public string AnswerText { get; set; }
 
         public string AnswerValue { get; set; }
+
+        public string ParentValue { get; set; }
        
         public Guid PublicKey { get; set; }
 
@@ -27,6 +29,7 @@ namespace Main.Core.Entities.SubEntities
                 AnswerText = answer.AnswerText,
                 AnswerValue = answer.AnswerValue,
                 PublicKey = answer.PublicKey,
+                ParentValue = answer.ParentValue
             };
         }
     }
