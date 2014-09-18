@@ -1,9 +1,10 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 
 namespace WB.Tests.Unit
 {
-    public static class Create
+    internal static class Create
     {
         public static PdfQuestionnaireView PdfQuestionnaireView(Guid? publicId = null)
         {
@@ -21,6 +22,11 @@ namespace WB.Tests.Unit
         public static PdfGroupView PdfGroupView()
         {
             return new PdfGroupView();
+        }
+
+        public static RoslynExpressionAnalyser RoslynExpressionAnalyser()
+        {
+            return new RoslynExpressionAnalyser();
         }
     }
 }
