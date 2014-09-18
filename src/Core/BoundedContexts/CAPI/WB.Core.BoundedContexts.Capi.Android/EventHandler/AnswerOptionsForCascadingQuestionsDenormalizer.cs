@@ -25,34 +25,26 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             foreach (var question in @event.Payload.Questions)
             {
-                this.RemoveAnswerOptionForCascadingQuestions(@event.EventSourceId, question.Id, question.RosterVector);
+                Guid questionId = question.Id;
+                this.UpdateInMemoryInterviewViewModel(@event.EventSourceId, interviewViewModel =>
+                {
+                    if (!interviewViewModel.IsQuestionReferencedByAnyCascadingQuestion(questionId))
+                        return;
+
+                    interviewViewModel.RemoveInstanceOfAnsweredQuestionUsableAsCascadingQuestion(questionId, question.RosterVector);
+                });
             }
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
-            this.AddFilterForAnswerOptionForCascadingQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
-        }
-
-        private void AddFilterForAnswerOptionForCascadingQuestions(Guid interviewId, Guid questionId, decimal[] propagationVector)
-        {
-            this.UpdateInMemoryInterviewViewModel(interviewId, interviewViewModel =>
+            Guid questionId = @event.Payload.QuestionId;
+            this.UpdateInMemoryInterviewViewModel(@event.EventSourceId, interviewViewModel =>
             {
-                if (!interviewViewModel.IsQuestionReferencedByAnyLinkedQuestion(questionId))
+                if (!interviewViewModel.IsQuestionReferencedByAnyCascadingQuestion(questionId))
                     return;
 
-                interviewViewModel.AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(questionId, propagationVector);
-            });
-        }
-
-        private void RemoveAnswerOptionForCascadingQuestions(Guid interviewId, Guid questionId, decimal[] propagationVector)
-        {
-            this.UpdateInMemoryInterviewViewModel(interviewId, interviewViewModel =>
-            {
-                if (!interviewViewModel.IsQuestionReferencedByAnyLinkedQuestion(questionId))
-                    return;
-
-                interviewViewModel.RemoveInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(questionId, propagationVector);
+                interviewViewModel.AddInstanceOfAnsweredQuestionUsableAsCascadingQuestion(questionId, @event.Payload.PropagationVector, @event.Payload.SelectedValue);
             });
         }
 
