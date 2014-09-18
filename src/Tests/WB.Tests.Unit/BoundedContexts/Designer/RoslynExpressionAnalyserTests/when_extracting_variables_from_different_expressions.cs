@@ -19,6 +19,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.RoslynExpressionAnalyserTests
                 { "-1", new string[] { } },
                 { "w + 7", new[] { "w" } },
                 { "r + r - r", new[] { "r" } },
+                { "c1 + \"s\"", new[] { "c1" } },
+                { "c2 + 's'", new[] { "c2" } },
             };
 
             analyzer = Create.RoslynExpressionAnalyser();
