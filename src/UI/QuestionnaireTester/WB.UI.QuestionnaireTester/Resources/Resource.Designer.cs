@@ -43,6 +43,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Drawable.donecountershape = global::WB.UI.QuestionnaireTester.Resource.Drawable.donecountershape;
 			global::WB.UI.Shared.Android.Resource.Drawable.errorwarningstyle = global::WB.UI.QuestionnaireTester.Resource.Drawable.errorwarningstyle;
 			global::WB.UI.Shared.Android.Resource.Drawable.grid_headerItem = global::WB.UI.QuestionnaireTester.Resource.Drawable.grid_headerItem;
+			global::WB.UI.Shared.Android.Resource.Drawable.no_image_found = global::WB.UI.QuestionnaireTester.Resource.Drawable.no_image_found;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionAnsweredShape = global::WB.UI.QuestionnaireTester.Resource.Drawable.questionAnsweredShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionDisabledShape = global::WB.UI.QuestionnaireTester.Resource.Drawable.questionDisabledShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionInvalidShape = global::WB.UI.QuestionnaireTester.Resource.Drawable.questionInvalidShape;
@@ -85,6 +86,7 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Id.tvTitle = global::WB.UI.QuestionnaireTester.Resource.Id.tvTitle;
 			global::WB.UI.Shared.Android.Resource.Id.vpContent = global::WB.UI.QuestionnaireTester.Resource.Id.vpContent;
 			global::WB.UI.Shared.Android.Resource.Layout.AbstractQuestionView = global::WB.UI.QuestionnaireTester.Resource.Layout.AbstractQuestionView;
+			global::WB.UI.Shared.Android.Resource.Layout.CascadingComboboxRowLayout = global::WB.UI.QuestionnaireTester.Resource.Layout.CascadingComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.Details = global::WB.UI.QuestionnaireTester.Resource.Layout.Details;
 			global::WB.UI.Shared.Android.Resource.Layout.FilteredComboboxRowLayout = global::WB.UI.QuestionnaireTester.Resource.Layout.FilteredComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::WB.UI.QuestionnaireTester.Resource.Layout.list_navigation_item;
@@ -169,28 +171,31 @@ namespace WB.UI.QuestionnaireTester
 			public const int Icon = 2130837511;
 			
 			// aapt resource value: 0x7f020008
-			public const int questionAnsweredShape = 2130837512;
+			public const int no_image_found = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public const int questionDisabledShape = 2130837513;
+			public const int questionAnsweredShape = 2130837513;
 			
 			// aapt resource value: 0x7f02000a
-			public const int questionInvalidShape = 2130837514;
+			public const int questionDisabledShape = 2130837514;
 			
 			// aapt resource value: 0x7f02000b
-			public const int questionShape = 2130837515;
+			public const int questionInvalidShape = 2130837515;
 			
 			// aapt resource value: 0x7f02000c
-			public const int splash = 2130837516;
+			public const int questionShape = 2130837516;
 			
 			// aapt resource value: 0x7f02000d
-			public const int statistics_row_style = 2130837517;
+			public const int splash = 2130837517;
 			
 			// aapt resource value: 0x7f02000e
-			public const int tester_icon = 2130837518;
+			public const int statistics_row_style = 2130837518;
 			
 			// aapt resource value: 0x7f02000f
-			public const int tester_splash = 2130837519;
+			public const int tester_icon = 2130837519;
+			
+			// aapt resource value: 0x7f020010
+			public const int tester_splash = 2130837520;
 			
 			static Drawable()
 			{
@@ -393,46 +398,49 @@ namespace WB.UI.QuestionnaireTester
 			public const int ActionBarSearchable = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int CreateInterview = 2130903043;
+			public const int CascadingComboboxRowLayout = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int Details = 2130903044;
+			public const int CreateInterview = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int FilteredComboboxRowLayout = 2130903045;
+			public const int Details = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int Home = 2130903046;
+			public const int FilteredComboboxRowLayout = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int list_navigation_item = 2130903047;
+			public const int Home = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int Login = 2130903048;
+			public const int list_navigation_item = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int RosterQuestion = 2130903049;
+			public const int Login = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int ScreenContentFragment = 2130903050;
+			public const int RosterQuestion = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int SplashScreen = 2130903051;
+			public const int ScreenContentFragment = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int StaticTextView = 2130903052;
+			public const int SplashScreen = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int StatisticsContent = 2130903053;
+			public const int StaticTextView = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int template_list_item = 2130903054;
+			public const int StatisticsContent = 2130903054;
 			
 			// aapt resource value: 0x7f03000f
-			public const int zxingscanneractivitylayout = 2130903055;
+			public const int template_list_item = 2130903055;
 			
 			// aapt resource value: 0x7f030010
-			public const int zxingscannerfragmentlayout = 2130903056;
+			public const int zxingscanneractivitylayout = 2130903056;
+			
+			// aapt resource value: 0x7f030011
+			public const int zxingscannerfragmentlayout = 2130903057;
 			
 			static Layout()
 			{

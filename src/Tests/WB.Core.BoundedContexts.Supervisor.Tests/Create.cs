@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using Main.Core.Documents;
 using Moq;
@@ -19,6 +20,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests
@@ -67,7 +69,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage=null,
             IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage=null,
             IHeadquartersInterviewReader headquartersInterviewReader=null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository=null)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository=null,
+            IFileSyncRepository fileSyncRepository =null)
         {
             return new InterviewsSynchronizer(
                 Mock.Of<IAtomFeedReader>(),
@@ -85,7 +88,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 interviewSummaryRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 readyToSendInterviewsRepositoryWriter ?? Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(),
-                httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>());
+                httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
+                fileSyncRepository ?? Mock.Of<IFileSyncRepository>(_=>_.GetBinaryFilesFromSyncFolder()==new List<InterviewBinaryData>()));
         }
 
         public static HeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,
@@ -100,7 +104,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 interviewsFeedUri ?? new Uri("http://localhost/"),
                 questionnaireDetailsEndpoint,
                 accessToken,
-                interviewsPushUrl ?? new Uri("http://localhost"), new Uri("http://localhost"));
+                interviewsPushUrl ?? new Uri("http://localhost"), new Uri("http://localhost"), new Uri("http://localhost"));
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null,
