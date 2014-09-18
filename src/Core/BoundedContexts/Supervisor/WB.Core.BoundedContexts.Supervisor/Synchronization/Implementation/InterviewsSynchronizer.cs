@@ -29,6 +29,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -52,6 +53,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
+        private readonly IFileSyncRepository fileSyncRepository;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
@@ -69,7 +71,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
             IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
-            Func<HttpMessageHandler> httpMessageHandler)
+            Func<HttpMessageHandler> httpMessageHandler, IFileSyncRepository fileSyncRepository)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -104,6 +106,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
             this.readyToSendInterviewsRepositoryWriter = readyToSendInterviewsRepositoryWriter;
             this.httpMessageHandler = httpMessageHandler;
+            this.fileSyncRepository = fileSyncRepository;
         }
 
         public void PullInterviewsForSupervisors(Guid[] supervisorIds)
@@ -213,6 +216,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public void Push(Guid userId)
         {
+            this.PushInterviewData(userId);
+            this.PushInterviewFile();
+        }
+
+        private void PushInterviewData(Guid userId)
+        {
             this.headquartersPushContext.PushMessage("Getting interviews to be pushed.");
             List<Guid> interviewsToPush = this.GetInterviewsToPush();
             this.headquartersPushContext.PushMessage(string.Format("Found {0} interviews to push.", interviewsToPush.Count));
@@ -223,15 +232,48 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(), interviewIndex + 1, interviewsToPush.Count));
+                    this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(),
+                        interviewIndex + 1, interviewsToPush.Count));
                     this.PushInterview(interviewId, userId);
+                    this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(interviewId);
                     this.headquartersPushContext.PushMessage(string.Format("Interview {0} successfully pushed.", interviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {
                     this.logger.Error(string.Format("Failed to push interview {0} to Headquarters.", interviewId.FormatGuid()), exception);
-                    this.headquartersPushContext.PushError(string.Format("Failed to push interview {0}. Error message: {1}. Exception messages: {2}",
-                        interviewId.FormatGuid(), exception.Message, string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
+                    this.headquartersPushContext.PushError(string.Format(
+                        "Failed to push interview {0}. Error message: {1}. Exception messages: {2}",
+                        interviewId.FormatGuid(), exception.Message,
+                        string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
+                }
+            }
+        }
+
+        private void PushInterviewFile()
+        {
+            this.headquartersPushContext.PushMessage("Getting interviews files to be pushed.");
+            var files = this.fileSyncRepository.GetBinaryFilesFromSyncFolder();
+            this.headquartersPushContext.PushMessage(string.Format("Found {0} files to push.", files.Count));
+
+            for (int interviewIndex = 0; interviewIndex < files.Count; interviewIndex++)
+            {
+                var interviewFile = files[interviewIndex];
+
+                try
+                {
+                    this.headquartersPushContext.PushMessage(string.Format("Pushing file {0} for interview {1} ({2} out of {3}).", interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
+                        interviewIndex + 1, files.Count));
+                    this.PushFile(interviewFile);
+                    this.fileSyncRepository.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
+                    this.headquartersPushContext.PushMessage(string.Format("Interview {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
+                }
+                catch (Exception exception)
+                {
+                    this.logger.Error(string.Format("Failed to push file {0} for interview {1} to Headquarters.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()), exception);
+                    this.headquartersPushContext.PushError(string.Format(
+                        "Failed to push file {0} for interview {1}. Error message: {2}. Exception messages: {3}",
+                        interviewFile.FileName, interviewFile.InterviewId.FormatGuid(), exception.Message,
+                        string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
             }
         }
@@ -414,6 +456,45 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 if (!serverOperationSucceeded)
                 {
                     throw new Exception(string.Format("Failed to send interview {0} because server returned negative response.", interviewId));
+                }
+            }
+        }
+
+        private void PushFile(InterviewBinaryData interviewFile)
+        {
+            using (var client = new HttpClient(this.httpMessageHandler()).AppendAuthToken(this.settings))
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post,
+                    string.Format("{0}?interviewId={1}&fileName={2}", this.settings.FilePushUrl, interviewFile.InterviewId,
+                        interviewFile.FileName))
+                { Content = new ByteArrayContent(interviewFile.Data) };
+                
+                
+                HttpResponseMessage response = client.SendAsync(request).Result;
+
+                string result = response.Content.ReadAsStringAsync().Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(string.Format("Failed to send  file {0} for interview {1}. Server response: {2}",
+                        interviewFile.FileName, interviewFile.InterviewId, result));
+                }
+
+                bool serverOperationSucceeded;
+
+                try
+                {
+                    serverOperationSucceeded = this.jsonUtils.Deserrialize<bool>(result);
+                }
+                catch (Exception exception)
+                {
+                    throw new Exception(
+                        string.Format("Failed to read server response while sending file {0} for interview {1}. Server response: {2}", interviewFile.FileName, interviewFile.InterviewId, result),
+                        exception);
+                }
+
+                if (!serverOperationSucceeded)
+                {
+                    throw new Exception(string.Format("Failed to send file {0} for interview {1} because server returned negative response.", interviewFile.FileName, interviewFile.InterviewId));
                 }
             }
         }

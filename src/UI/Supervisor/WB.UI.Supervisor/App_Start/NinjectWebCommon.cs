@@ -124,7 +124,8 @@ namespace WB.UI.Supervisor.App_Start
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireDetailsEndpoint"]).ToString(),
                 WebConfigurationManager.AppSettings["Headquarters.AccessToken"],
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireChangedFeed"]));
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireChangedFeed"]),
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.FilePushEndpoint"]));
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
