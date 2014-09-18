@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
@@ -31,8 +32,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private Dictionary<string, Guid> VariableNames { set; get; }
 
+        private IRoslynExpressionAnalyser ExpressionAnalyser
+        {
+            get { return ServiceLocator.Current.GetInstance<IRoslynExpressionAnalyser>(); }
+        }
+
         public QuestionnaireExecutorTemplateModel(QuestionnaireDocument questionnaireDocument)
         {
+            #warning models should not have logic, they should store only data, logic should be extracted outside from ctor
+
             this.AllQuestions = new List<QuestionTemplateModel>();
             this.AllGroups = new List<GroupTemplateModel>();
             this.AllRosters = new List<RosterTemplateModel>();
@@ -205,19 +213,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.ConditionalDependencies = dependencies;
         }
 
-
         private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression)
         {
-            //char[] separators = { '.', ')', '(' , ' ', '=' , '!', '[', ']', ',', '<', '>', '?', ':', '+', '-'};
-            //string[] expressionStrings = conditionExpression.Split(separators);
-            //return VariableNames.Where(v => expressionStrings.Contains(v.Key, StringComparer.Ordinal)).Select(d => d.Value).ToList();
-
-
-            //should be changed to bertter reference extaction method
-            return
-                this.VariableNames.Where(v => conditionExpression.IndexOf(v.Key, StringComparison.Ordinal) > -1)
-                    .Select(d => d.Value)
-                    .ToList();
+            return new List<Guid>(
+                from variable in this.ExpressionAnalyser.ExtractVariables(conditionExpression)
+                where this.VariableNames.ContainsKey(variable)
+                select this.VariableNames[variable]);
         }
 
         private string GenerateQuestionTypeName(IQuestion question)
