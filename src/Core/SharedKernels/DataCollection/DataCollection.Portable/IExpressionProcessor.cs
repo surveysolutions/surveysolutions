@@ -4,7 +4,8 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public interface IExpressionProcessor
     {
-        void ProcessValidationExpressions(IInterviewExpressionState interviewExpressionState, out List<Identity> questionsToBeValid,
+        void ProcessValidationExpressions(IInterviewExpressionState interviewExpressionState, 
+            out List<Identity> questionsToBeValid,
             out List<Identity> questionsToBeInvalid);
 
         void ProcessConditionExpressions(IInterviewExpressionState interviewExpressionState,
