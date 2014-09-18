@@ -980,7 +980,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     return this.CreateFilteredComboboxQuestion(question);
                 }
 
-                if (questionViewType == QuestionType.SingleOption && question.IsCascadingCombobox == true)
+                if (questionViewType == QuestionType.SingleOption && question.CascadeFromQuestionId.HasValue)
                 {
                     return this.CreateCascadingComboboxQuestion(question);
                 }
