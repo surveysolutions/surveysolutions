@@ -36,9 +36,9 @@ namespace Main.Core.Entities.SubEntities
 
         Guid? LinkedToQuestionId { get; set; }
 
-        bool? IsFilteredCombobox { get; set; }
+        Guid? CascadeFromQuestionId { get; set; }
 
-        bool? IsCascadingCombobox { get; set; }
+        bool? IsFilteredCombobox { get; set; }
 
         void AddAnswer(Answer answer);
         IEnumerable<string> GetVariablesUsedInTitle();

@@ -168,7 +168,7 @@
                         </div>
                         <div class="col-xs-4">
                             <div class="checkbox checkbox-in-column">
-                                <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascadingCombobox" />
+                                <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
                                 <label for="cb-is-cascading"><span></span>Is cascading</label>
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                 <div ng-if="!activeQuestion.isFilteredCombobox || !activeQuestion.isCascadingCombobox" class="form-group"
                      ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
 
-                <div ng-if="activeQuestion.isCascadingCombobox && !activeQuestion.isLinked" class="form-group" ng-include="'CascadingComboBox-Template.html'" />            
+                <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked" class="form-group" ng-include="'CascadingComboBox-Template.html'" />            
         </script>
 
         <script type="text/ng-template" id="linkTemplate.html">
@@ -217,15 +217,15 @@
 
         <script type="text/ng-template" id="CascadingComboBox-Template.html">
             <div id="sourceOfLinkedQuestion" class="dropdown-with-breadcrumbs-and-icons">
-                <input type="hidden" name="linkedToQuestion" ng-model="activeQuestion.linkedToQuestion" ng-required="true" />
+                <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestion" ng-required="true" />
                 <label for="singleOptionQuestionSource">Bind to SingleOption question</label>
                 <div class="btn-group" dropdown>
-                    <button class="btn dropdown-toggle" id="linkedQuestionSource" type="button">
-                        <span class="select-placeholder" ng-if="(activeQuestion.linkedToQuestion.title || '') == ''">Select question</span>
+                    <button class="btn dropdown-toggle" id="singleOptionQuestionSource" type="button">
+                        <span class="select-placeholder" ng-if="(activeQuestion.cascadeFromQuestion.title || '') == ''">Select question</span>
 
-                        <span class="selected-item" ng-if="(activeQuestion.linkedToQuestion.title || '') !== ''">
-                            <span class="path">{{activeQuestion.linkedToQuestion.breadcrumbs}}</span>
-                            <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToQuestion.type"></i>{{activeQuestion.linkedToQuestion.title}}</span>
+                        <span class="selected-item" ng-if="(activeQuestion.cascadeFromQuestion.title || '') !== ''">
+                            <span class="path">{{activeQuestion.cascadeFromQuestion.breadcrumbs}}</span>
+                            <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.cascadeFromQuestion.type"></i>{{activeQuestion.cascadeFromQuestion.title}}</span>
                         </span>
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -235,7 +235,7 @@
                             <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
 
                             <a ng-if="!breadCrumb.isSectionPlaceHolder"
-                               ng-click="setLinkSource(breadCrumb.id)"
+                               ng-click="setCascadeSource(breadCrumb.id)"
                                role="menuitem"
                                tabindex="-1"
                                href="javascript:void(0);">
@@ -244,7 +244,7 @@
                         </li>
                     </ul>
                 </div>
-                <p class="help-block ng-cloak" ng-show="questionForm.linkedToQuestion.$error.required">
+                <p class="help-block ng-cloak" ng-show="questionForm.cascadeFromQuestion.$error.required">
                     You must bind this question
                 </p>
             </div>

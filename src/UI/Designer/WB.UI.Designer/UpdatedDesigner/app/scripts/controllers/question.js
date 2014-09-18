@@ -28,8 +28,7 @@
                     $scope.activeQuestion.maxAnswerCount = result.maxAnswerCount;
                     $scope.activeQuestion.maxAllowedAnswers = result.maxAllowedAnswers;
                     $scope.activeQuestion.areAnswersOrdered = result.areAnswersOrdered;
-                    $scope.activeQuestion.isFilteredCombobox = result.isFilteredCombobox;
-                    $scope.activeQuestion.isCascadingCombobox = result.isCascadingCombobox;
+                    $scope.activeQuestion.isFilteredCombobox = result.isFilteredCombobox;                    
 
                     var options = result.options || [];
                     _.each(options, function (option) {
@@ -49,7 +48,9 @@
                     $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
                     $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
                     $scope.setQuestionType(result.type);
+
                     $scope.setLinkSource(result.linkedToQuestionId);
+                    $scope.setCascadeSource(result.cascadeFromQuestionId);
 
                     $scope.questionForm.$setPristine();
                 };
@@ -154,19 +155,27 @@
                     }
                 });
 
-                $scope.setLinkSource = function (itemId) {
-                    if (!$scope.activeQuestion.isCascadingCombobox) {
-                        $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
+                $scope.$watch('activeQuestion.isCascade', function (newValue) {
+                    if (!newValue && $scope.activeQuestion) {
+                        $scope.activeQuestion.cascadeFromQuestionId = null;
                     }
+                });
+
+                $scope.setLinkSource = function (itemId) {
+                    $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
 
                     if (itemId) {
                         $scope.activeQuestion.linkedToQuestionId = itemId;
+                        $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+                    }
+                };
 
-                        if ($scope.activeQuestion.isCascadingCombobox) {
-                            $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
-                        } else {
-                            $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
-                        }
+                $scope.setCascadeSource = function (itemId) {
+                    $scope.activeQuestion.isCascade = !_.isEmpty(itemId);
+
+                    if (itemId) {
+                        $scope.activeQuestion.cascadeFromQuestionId = itemId;
+                        $scope.activeQuestion.cascadeFromQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.cascadeFromQuestionId });
                     }
                 };
 

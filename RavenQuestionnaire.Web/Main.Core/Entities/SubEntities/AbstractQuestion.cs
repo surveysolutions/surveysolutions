@@ -132,8 +132,6 @@ namespace Main.Core.Entities.SubEntities
         
         public bool? IsFilteredCombobox { get; set; }
         
-        public bool? IsCascadingCombobox { get; set; }
-
         public abstract void AddAnswer(Answer answer);
 
         public virtual IComposite Clone()

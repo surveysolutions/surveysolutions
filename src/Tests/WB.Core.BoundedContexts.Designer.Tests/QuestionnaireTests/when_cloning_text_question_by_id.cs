@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Instructions = "Intructions",
                 LinkedToQuestionId = Guid.NewGuid(),
                 IsFilteredCombobox = true,
-                IsCascadingCombobox = true,
+                CascadeFromQuestionId = Guid.NewGuid(),
                 Mask = "(###)-##-##-###"
             };
             questionnaire.Apply(newQuestionAdded);

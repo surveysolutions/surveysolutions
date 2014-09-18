@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     maxAllowedAnswers: null,
                     maxAnswerCount: null,
                     isFilteredCombobox: null,
-                    isCascadingCombobox: null
+                    cascadeFromQuestionId: null
                     ));
         }
 
