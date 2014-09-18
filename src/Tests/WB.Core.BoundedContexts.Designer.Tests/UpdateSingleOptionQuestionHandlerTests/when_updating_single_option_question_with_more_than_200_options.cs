@@ -40,8 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     responsibleId: responsibleId
                     , options: options,
                     linkedToQuestionId: linkedToQuestionId,
-                    isFilteredCombobox: isFilteredCombobox
-                    ));
+                    isFilteredCombobox: isFilteredCombobox,
+                    cascadeFromQuestionId: null));
 
 
         It should_throw_QuestionnaireException = () =>
