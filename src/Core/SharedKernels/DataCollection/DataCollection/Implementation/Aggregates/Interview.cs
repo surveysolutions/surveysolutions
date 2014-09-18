@@ -2187,8 +2187,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (interviewChanges.RosterCalculationData != null)
                 this.ApplyRostersEvents(interviewChanges.RosterCalculationData);
 
-            if (interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling != null)
-                this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling);
+            if (interviewChanges.AnswersForLinkedQuestionsToRemove != null)
+                this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemove);
 
             if (interviewChanges.RosterInstancesWithAffectedTitles != null)
                 this.ApplyRosterRowsTitleChangedEvents(interviewChanges.RosterInstancesWithAffectedTitles,
@@ -2211,8 +2211,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (interviewChanges.RosterCalculationData != null)
                     this.ApplyRostersEvents(interviewChanges.RosterCalculationData);
 
-                if (interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling != null)
-                    this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling);
+                if (interviewChanges.AnswersForLinkedQuestionsToRemove != null)
+                    this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemove);
 
                 if (interviewChanges.RosterInstancesWithAffectedTitles != null)
                     this.ApplyRosterRowsTitleChangedEvents(interviewChanges.RosterInstancesWithAffectedTitles,
@@ -2842,15 +2842,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue,
                 answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
 
+            var answersToRemoveByCascading = CalculateCascadingDropdownChanges(questionId, rosterVector, questionnaire, state);
+            var answersToRemove = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading);
+
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(AnswerChangeType.SingleOption, userId, questionId, rosterVector, answerTime, selectedValue)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
-                null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
+            return new InterviewChanges(interviewByAnswerChange, 
+                enablementChanges,
+                new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+                null, 
+                answersToRemove.ToList(), 
+                rosterInstancesWithAffectedTitles, 
+                answerFormattedAsRosterTitle);
         }
 
+        private IEnumerable<Identity> CalculateCascadingDropdownChanges(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
+        {
+            IEnumerable<Guid> dependentQuesions = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionId);
+
+            return GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, dependentQuesions, rosterVector, questionnaire, GetRosterInstanceIds);
+        }
 
         private void CalculateChangesByFeaturedQuestion(InterviewChangeStructures changeStructures, Guid userId,
             IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
