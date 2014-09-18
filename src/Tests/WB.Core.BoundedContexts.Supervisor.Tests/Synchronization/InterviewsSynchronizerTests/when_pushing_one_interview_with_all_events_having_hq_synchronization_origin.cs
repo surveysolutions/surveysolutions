@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
@@ -15,6 +16,8 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -39,12 +42,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(writer
                 => writer.QueryAll(it.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
 
+            fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder()).Returns(new List<InterviewBinaryData>());
+
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryWriter: readyToSendInterviewsRepositoryWriter,
                 httpMessageHandler: () => httpMessageHandlerMock.Object,
                 eventStore: eventStore,
                 logger: loggerMock.Object,
-                commandService: commandServiceMock.Object);
+                commandService: commandServiceMock.Object,
+                fileSyncRepository: fileSyncRepository.Object);
         };
 
         Because of = () =>
@@ -55,6 +61,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
 
         It should_not_log_errors = () =>
             loggerMock.Verify(logger => logger.Error(it.IsAny<string>(), it.IsAny<Exception>()), Times.Never);
+
+        It should_interview_files_be_moved_to_sync_storage = () =>
+          fileSyncRepository.Verify(x=>x.MoveInterviewsBinaryDataToSyncFolder(interviewId), Times.Once);
 
         It should_mark_interview_as_sent_to_hq_using_hq_synchronization_origin = () =>
             commandServiceMock.Verify(service =>
@@ -67,6 +76,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 Times.Once);
 
         private static Mock<HttpMessageHandler> httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        private static Mock<IFileSyncRepository> fileSyncRepository = new Mock<IFileSyncRepository>();
         private static InterviewsSynchronizer interviewsSynchronizer;
         private static Guid userId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
