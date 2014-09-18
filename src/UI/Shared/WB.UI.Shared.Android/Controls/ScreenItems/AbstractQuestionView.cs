@@ -323,7 +323,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             get { return this.FindViewById<EditText>(Resource.Id.etComments); }
         }
 
-        protected void InitializeTextAndButtonView(TextView textView, string buttonText, EventHandler buttonClickHandler)
+        protected void InitializeViewAndButtonView(View textView, string buttonText, EventHandler buttonClickHandler)
         {
             var wrapper = new RelativeLayout(this.Context)
             {

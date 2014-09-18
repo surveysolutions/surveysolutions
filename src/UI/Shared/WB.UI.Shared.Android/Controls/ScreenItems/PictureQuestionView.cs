@@ -42,45 +42,25 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (IsThereAnAppToTakePictures())
             {
                 this.pictureChooserTask = Mvx.Resolve<IMvxPictureChooserTask>();
-                this.btnTakePicture = new Button(this.Context);
-                this.btnTakePicture.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                    ViewGroup.LayoutParams.WrapContent);
-                this.btnTakePicture.Text = "Take Picture";
-                this.btnTakePicture.Click += this.BtnTakePictureClick;
-
-                this.btnRemovePicture = new Button(this.Context);
-                this.btnRemovePicture.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                    ViewGroup.LayoutParams.WrapContent);
-                this.btnRemovePicture.Text = "Remove Picture";
-                this.btnRemovePicture.Click += this.BtnRemovePictureClick;
-
                 ivImage = new ImageView(this.Context);
-                ivImage.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
-
-                this.llWrapper.AddView(this.btnTakePicture);
-                this.llWrapper.AddView(this.btnRemovePicture);
-                this.llWrapper.AddView(this.ivImage);
-
+                this.InitializeViewAndButtonView(ivImage, IsPicturePresent() ? Remove : TakePicture, this.BtnTakePictureClick);
                 this.PutAnswerStoredInModelToUI();
             }
             else
             {
                 var tvWarning = new TextView(this.Context);
-
                 tvWarning.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                     ViewGroup.LayoutParams.WrapContent);
-
                 tvWarning.Text = "Camera is absent";
-
                 this.llWrapper.AddView(tvWarning);
             }
         }
 
         private readonly IPlainFileRepository plainFileRepository;
         private readonly IMvxPictureChooserTask pictureChooserTask;
-        protected readonly Button btnTakePicture;
-        protected readonly Button btnRemovePicture;
         protected readonly ImageView ivImage;
+        private readonly string TakePicture = "Take Picture";
+        private readonly string Remove = "Remove";
 
         protected ValueQuestionViewModel TypedMode
         {
@@ -96,18 +76,25 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected void BtnTakePictureClick(object sender, EventArgs e)
         {
-            pictureChooserTask.TakePicture(400, 95, OnPicture, () => { });
+            var button = sender as Button;
+            if (button == null)
+                return;
+
+            if (IsPicturePresent())
+            {
+                plainFileRepository.RemoveInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
+                ivImage.SetImageDrawable(null);
+                this.SavePictureToAR(string.Empty);
+
+                button.Text = TakePicture;
+            }
+            else
+            {
+                pictureChooserTask.TakePicture(400, 95, (s) => OnPicture(s, button), () => { });
+            }
         }
 
-        private void BtnRemovePictureClick(object sender, EventArgs e)
-        {
-            plainFileRepository.RemoveInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
-         //   ivImage.SetImageResource(0);
-            ivImage.SetImageDrawable(null);
-            this.SavePictureToAR(string.Empty);
-        }
-
-        private void OnPicture(Stream pictureStream)
+        private void OnPicture(Stream pictureStream, Button button)
         {
             var pictureFileName = String.Format("{0}{1}.jpg", Model.Variable,
                 string.Join("-", Model.PublicKey.InterviewItemPropagationVector));
@@ -122,6 +109,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             Bitmap bitmap = BitmapFactory.DecodeByteArray(data, 0, data.Length);
             ivImage.SetImageBitmap(bitmap);
             this.SavePictureToAR(pictureFileName);
+            button.Text = Remove;
         }
 
         private void SavePictureToAR(string pictureFileName)
@@ -132,6 +120,11 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                    answerTime: DateTime.UtcNow, pictureFileName: pictureFileName));
         }
 
+        protected bool IsPicturePresent()
+        {
+            return !string.IsNullOrEmpty(this.Model.AnswerString);
+        }
+
         protected override string GetAnswerStoredInModelAsString()
         {
             return this.Model.AnswerString;
@@ -139,11 +132,13 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override void PutAnswerStoredInModelToUI()
         {
+            if (!IsPicturePresent())
+                return;
+
             var bytes = plainFileRepository.GetInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
             if (bytes == null || bytes.Length == 0)
             {
-               // ivImage.SetImageResource(0);
-                ivImage.SetImageDrawable(null);
+                ivImage.SetImageResource(Resource.Drawable.no_image_found);
                 return;
             }
 
