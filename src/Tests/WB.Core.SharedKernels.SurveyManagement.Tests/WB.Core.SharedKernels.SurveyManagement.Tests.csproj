@@ -140,6 +140,7 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultipleOptionsQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericIntegerQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericRealQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_PictureQuestionAnswered_received.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowAdded_event_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived.cs" />

@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
             ILogger logger = null,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
             IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory = null,
-            IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
+            IInterviewSummaryViewFactory interviewSummaryViewFactory = null, IPlainFileRepository plainFileRepository=null)
         {
             return new InterviewController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
                 changeStatusFactory ?? Stub<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>.WithNotEmptyValues,
                 revalidateInterviewViewFactory ?? Mock.Of<IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>>(),
                 interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues,
-                Mock.Of<IViewFactory<InterviewHistoryInputModel, InterviewHistoryView>>(), Mock.Of<IPlainFileRepository>());
+                Mock.Of<IViewFactory<InterviewHistoryInputModel, InterviewHistoryView>>(), plainFileRepository??Mock.Of<IPlainFileRepository>());
         }
     }
 }
