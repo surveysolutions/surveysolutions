@@ -133,8 +133,33 @@
                     }
                 };
 
+                $scope.editCascadingComboboxOptions = function () {
+                    if ($scope.questionForm.$dirty) {
+                        var modalInstance = confirmService.open({
+                            title: "To open options editor all unsaved changes must be saved. Should we save them now?",
+                            okButtonTitle: "Save",
+                            cancelButtonTitle: "No, later"
+                        });
+
+                        modalInstance.result.then(function (confirmResult) {
+                            if (confirmResult === 'ok') {
+                                $scope.saveQuestion(function () {
+                                    openCascadeOptionsEditor();
+                                });
+                            }
+                        });
+                    } else {
+                        openCascadeOptionsEditor();
+                    }
+                };
+
                 var openOptionsEditor = function () {
                     window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
+                      "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
+                }
+
+                var openCascadeOptionsEditor = function () {
+                    window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
                       "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
                 }
 

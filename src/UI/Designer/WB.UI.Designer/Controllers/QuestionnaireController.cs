@@ -228,6 +228,24 @@ namespace WB.UI.Designer.Controllers
 
             return this.View(this.questionWithOptionsViewModel.Options);
         }
+        public ActionResult EditCascadingOptions(string id, Guid questionId)
+        {
+            var editQuestionView = questionnaireInfoFactory.GetQuestionEditView(id, questionId);
+
+            var options = editQuestionView != null ? editQuestionView.Options.Select(
+                option => new Option(value: option.Value.ToString(), title: option.Title, id: Guid.NewGuid())) : new Option[0];
+
+            this.questionWithOptionsViewModel = new EditOptionsViewModel()
+            {
+                QuestionnaireId = id,
+                QuestionId = questionId,
+                QuestionTitle = editQuestionView.Title,
+                Options = options,
+                SourceOptions = options
+            };
+
+            return this.View(this.questionWithOptionsViewModel.Options);
+        }
 
         public ActionResult ResetOptions()
         {
