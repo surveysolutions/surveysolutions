@@ -42,14 +42,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private Func<decimal[], ValueVector<Guid>, IEnumerable<AnswerViewModel>> getAnswerOptions;
 
-        private IEnumerable<AnswerViewModel> answers;
+        private IEnumerable<AnswerViewModel> filteredAnswers;
 
         public IEnumerable<AnswerViewModel> AnswerOptions
         {
             get
             {
-                this.answers = this.getAnswerOptions(PublicKey.InterviewItemPropagationVector, QuestionRosterScope);
-                return answers;
+                this.filteredAnswers = this.getAnswerOptions(PublicKey.InterviewItemPropagationVector, QuestionRosterScope);
+                return this.filteredAnswers;
 
             }
         }
@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             get
             {
-                var selectedAnswers = this.answers.Where(a => a.Selected).OrderBy(x => x.AnswerOrder).Select(answer => answer.Title).ToList();
+                var selectedAnswers = this.filteredAnswers.Where(a => a.Selected).OrderBy(x => x.AnswerOrder).Select(answer => answer.Title).ToList();
                 return string.Join(", ", selectedAnswers);
             }
         }
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
             }
 
-            foreach (var item in this.answers)
+            foreach (var item in this.filteredAnswers)
             {
                 item.Selected = typedAnswers.Contains(item.Value);
                 item.AnswerOrder = Array.IndexOf(typedAnswers, item.Value) + 1;
@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void RemoveAnswer()
         {
-            foreach (var item in this.answers)
+            foreach (var item in this.filteredAnswers)
             {
                 item.Selected = false;
             }
