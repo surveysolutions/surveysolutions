@@ -123,6 +123,11 @@ namespace Main.Core.Entities.SubEntities
 
         public string ValidationMessage { get; set; }
 
+        /// <summary>
+        /// Id of parent question to cascade from 
+        /// </summary>
+        public Guid? CascadeFromQuestionId { get; set; }
+
         public Guid? LinkedToQuestionId { get; set; }
         
         public bool? IsFilteredCombobox { get; set; }
