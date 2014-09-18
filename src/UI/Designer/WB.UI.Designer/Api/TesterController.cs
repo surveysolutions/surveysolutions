@@ -127,7 +127,6 @@ namespace WB.UI.Designer.Api
 
             var questionnaireSyncPackage = new QuestionnaireCommunicationPackage();
 
-            GenerationResult generationResult;
             string resultAssembly;
 
             var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
@@ -140,6 +139,7 @@ namespace WB.UI.Designer.Api
             }
             else
             {
+                GenerationResult generationResult;
                 try
                 {
                     generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
@@ -164,7 +164,7 @@ namespace WB.UI.Designer.Api
             }
             
 
-            var templateInfo = this.exportService.GetQuestionnaireTemplate(questionnaireView.Source);
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
                 questionnaireSyncPackage.IsErrorOccured = true;
