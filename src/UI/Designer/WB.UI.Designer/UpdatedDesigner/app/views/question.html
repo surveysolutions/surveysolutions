@@ -126,7 +126,7 @@
         <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
                 <div class="well well-sm" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Is filtered combobox" while uploading question's details and contained many options, its value is reduced up to 20</div>
-                <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="table-holder">
+                <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade" class="table-holder">
                     <div class="table-row" ng-repeat="option in activeQuestion.options">
                         <div class="column-2">
                             <input type="text" ng-model="option.value" class="form-control">
@@ -140,8 +140,18 @@
                     </div>
                 </div>
                 <p>
-                    <input ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
+                    <input ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade" class="btn btn-link" type="button" value="Add Option" ng-click="addOption()">
                     <a ng-if="activeQuestion.isFilteredCombobox"
+                       href="javascript:void(0);"
+                       class="btn btn-link"
+                       ng-click="editFilteredComboboxOptions()">
+                        <ng-pluralize count="activeQuestion.optionsCount"
+                                      when="{'0': 'Add options',
+                                     'one': 'Edit 1 option',
+                                     'other': 'Edit {} options'}">
+                        </ng-pluralize>
+                    </a>
+                    <a ng-if="activeQuestion.isCascade"
                        href="javascript:void(0);"
                        class="btn btn-link"
                        ng-click="editFilteredComboboxOptions()">
