@@ -6,9 +6,12 @@ using Main.Core.Events;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryTests
@@ -31,11 +34,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
                 .Setup(store => store.Store(Moq.It.IsAny<UncommittedEventStream>()))
                 .Callback<UncommittedEventStream>(stream => storedStream = stream);
 
-            incomePackagesRepository = CreateIncomePackagesRepository(eventStore: eventStore, fileSystemAccessor: fileSystemAccessor, jsonUtils: jsonUtils);
+            incomePackagesRepository = CreateIncomePackagesRepository(eventStore: eventStore, fileSystemAccessor: fileSystemAccessor, jsonUtils: jsonUtils,
+                interviewSummaryStorage:
+                    Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_ => _.GetById(interviewId.FormatGuid()) == new InterviewSummary()));
         };
 
         Because of = () =>
-            incomePackagesRepository.ProcessItem(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"));
+            incomePackagesRepository.ProcessItem(interviewId);
 
         It should_not_change_event_timespamp = () =>
             storedStream.Single().EventTimeStamp.ShouldEqual(initialTimestamp);
@@ -43,5 +48,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
         private static UncommittedEventStream storedStream;
         private static readonly DateTime initialTimestamp = new DateTime(2012, 04, 22);
         private static IncomePackagesRepository incomePackagesRepository;
+        private static Guid interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
     }
-}
+} 
