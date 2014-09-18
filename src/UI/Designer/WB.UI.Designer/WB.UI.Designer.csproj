@@ -1352,6 +1352,7 @@
     </Content>
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.scss" />
+    <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
