@@ -67,8 +67,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult InterviewFile(Guid interviewId, string fileName)
         {
             var file = plainFileRepository.GetInterviewBinaryData(interviewId, fileName);
-            if(file==null)
-                return this.File(Assembly.GetExecutingAssembly().GetManifestResourceStream("WB.Core.SharedKernels.SurveyManagement.Web.Content.img.no_image_found.jpg"), "image/jpeg", fileName);
+            if (file == null || file.Length == 0)
+                return
+                    this.File(
+                        Assembly.GetExecutingAssembly()
+                            .GetManifestResourceStream("WB.Core.SharedKernels.SurveyManagement.Web.Content.img.no_image_found.jpg"),
+                        "image/jpeg", "no_image_found.jpg");
             return this.File(file, "image/jpeg", fileName);
         }
 
