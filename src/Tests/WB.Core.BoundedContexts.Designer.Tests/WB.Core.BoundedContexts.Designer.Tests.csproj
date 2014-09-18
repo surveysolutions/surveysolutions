@@ -265,6 +265,7 @@
     <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_filtered_combobox_question_and_all_parameters_is_specified.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_with_more_than_200_options.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_text_contains_only_whitespaces.cs" />
     <Compile Include="UpdateStaticTextHandlerTests\when_updating_static_text_and_text_is_empty.cs" />
