@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public CascadingComboboxQuestionViewModel(
             InterviewItemId publicKey, ValueVector<Guid> questionRosterScope,
             string text,
-            IEnumerable<AnswerViewModel> answers,
+            Func<decimal[], ValueVector<Guid>, IEnumerable<AnswerViewModel>> getAnswerOptions,
             bool enabled,
             string instructions,
             string comments,
@@ -23,29 +23,55 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             string validationMessage,
             string variable,
             IEnumerable<string> substitutionReferences)
-            : base(publicKey, questionRosterScope, text, QuestionType.SingleOption, enabled, instructions, comments, valid, mandatory,
-                answerObject, validationMessage, variable, substitutionReferences)
+            : base(publicKey,
+                questionRosterScope,
+                text,
+                QuestionType.SingleOption,
+                enabled,
+                instructions,
+                comments,
+                valid,
+                mandatory,
+                answerObject,
+                validationMessage,
+                variable,
+                substitutionReferences)
         {
-            this.Answers = answers;
+            this.getAnswerOptions = getAnswerOptions;
         }
 
-        public IEnumerable<AnswerViewModel> Answers { get; private set; }
+        private Func<decimal[], ValueVector<Guid>, IEnumerable<AnswerViewModel>> getAnswerOptions;
+
+        private IEnumerable<AnswerViewModel> answers;
+
+        public IEnumerable<AnswerViewModel> AnswerOptions
+        {
+            get
+            {
+                this.answers = this.getAnswerOptions(PublicKey.InterviewItemPropagationVector, QuestionRosterScope);
+                return answers;
+
+            }
+        }
+
+        public void HandleAnswerListChange()
+        {
+            this.RaisePropertyChanged("AnswerOptions");
+        }
 
         public override string AnswerString
         {
             get
             {
-                var selectedAnswers = this.Answers.Where(a => a.Selected).OrderBy(x => x.AnswerOrder).Select(answer => answer.Title).ToList();
+                var selectedAnswers = this.answers.Where(a => a.Selected).OrderBy(x => x.AnswerOrder).Select(answer => answer.Title).ToList();
                 return string.Join(", ", selectedAnswers);
             }
         }
 
         public override IQuestionnaireItemViewModel Clone(decimal[] propagationVector)
         {
-            IList<AnswerViewModel> newAnswers = this.Answers.Select(answerViewModel => answerViewModel.Clone() as AnswerViewModel).ToList();
-
             return new CascadingComboboxQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector), this.QuestionRosterScope,
-                this.SourceText, newAnswers,
+                this.SourceText, getAnswerOptions,
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                 this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
                 this.Mandatory, this.AnswerObject, this.ValidationMessage, this.Variable, this.SubstitutionReferences);
@@ -65,7 +91,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
             }
 
-            foreach (var item in this.Answers)
+            foreach (var item in this.answers)
             {
                 item.Selected = typedAnswers.Contains(item.Value);
                 item.AnswerOrder = Array.IndexOf(typedAnswers, item.Value) + 1;
@@ -76,12 +102,20 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void RemoveAnswer()
         {
-            foreach (var item in this.Answers)
+            foreach (var item in this.answers)
             {
                 item.Selected = false;
             }
 
             base.RemoveAnswer();
+
+            this.RemoveAnsweredFromStatus();
+        }
+
+        private void RemoveAnsweredFromStatus()
+        {
+            this.Status &= ~QuestionStatus.Answered;
+            this.RaisePropertyChanged("Status");
         }
     }
 }
