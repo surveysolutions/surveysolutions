@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     options: options,
                     linkedToQuestionId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    isCascadingCombobox: isCascadingCombobox));
+                    cascadeFromQuestionId: ñascadeFromQuestionId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -81,6 +81,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static string validationMessage = "validation message";
         private static Option[] options = null;
         private static bool isFilteredCombobox = false;
-        private static bool isCascadingCombobox = false;
+        private static Guid? ñascadeFromQuestionId = (Guid?)null;
     }
 }

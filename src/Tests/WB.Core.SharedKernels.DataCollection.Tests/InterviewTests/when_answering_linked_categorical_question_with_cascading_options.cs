@@ -44,17 +44,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     {
                         PublicKey = childCascadedComboboxId,
                         QuestionType = QuestionType.SingleOption,
-                        IsCascadingCombobox = true,
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer>
                         {
                             new Answer { AnswerText = "grind", AnswerValue = "2", PublicKey = Guid.NewGuid() }
                         }
-                    }, new SingleQuestion
+                    },
+                    new SingleQuestion
                     {
                         PublicKey = grandChildCascadedComboboxId,
                         QuestionType = QuestionType.SingleOption,
-                        IsCascadingCombobox = true,
                         CascadeFromQuestionId = childCascadedComboboxId,
                         Answers = new List<Answer>
                         {
@@ -73,7 +72,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     {
                         PublicKey = comboShouldNotBeRemoved,
                         QuestionType = QuestionType.SingleOption,
-                        IsCascadingCombobox = true,
                         CascadeFromQuestionId = nonAnsweredCombo,
                         Answers = new List<Answer> {
                             new Answer { AnswerText = "blue", AnswerValue = "1", PublicKey = Guid.NewGuid() }
