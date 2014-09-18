@@ -2,8 +2,11 @@
 using System.ServiceModel;
 using Machine.Specifications;
 using Machine.Specifications.Utility;
+using Main.Core.Documents;
+using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Designer.Services;
 using WB.UI.Designer.Services.Questionnaire;
@@ -23,9 +26,10 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 
             var templateInfo = CreateTemplateInfo(version);
 
-            exportService = Mock.Of<IJsonExportService>(x => x.GetQuestionnaireTemplate(questionnaireId) == templateInfo);
+            exportService = Mock.Of<IJsonExportService>(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()) == templateInfo);
 
-            service = CreatePublicService(exportService: exportService);
+            var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
+            service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory);
         };
 
         Because of = () => 
