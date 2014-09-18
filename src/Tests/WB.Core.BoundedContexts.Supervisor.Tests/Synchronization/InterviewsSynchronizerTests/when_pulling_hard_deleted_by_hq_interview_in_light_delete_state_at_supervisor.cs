@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         };
 
         Because of = () =>
-            interviewsSynchronizer.Pull();
+            interviewsSynchronizer.PullInterviewsForSupervisors(new []{supervisorId});
 
         It should_HardDeleteInterview_be_called_once = () =>
             commandServiceMock.Verify(
