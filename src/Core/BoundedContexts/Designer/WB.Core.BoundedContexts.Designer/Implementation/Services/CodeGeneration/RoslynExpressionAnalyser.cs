@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    internal class RoslynExpressionAnalyser
+    internal class RoslynExpressionAnalyser : IRoslynExpressionAnalyser
     {
         public IEnumerable<string> ExtractVariables(string expression)
         {
