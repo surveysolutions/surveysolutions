@@ -46,8 +46,8 @@
 
                     $scope.activeQuestion.questionScope = result.isPreFilled ? 'Prefilled' : result.questionScope;
 
-
                     $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
+                    $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
                     $scope.setQuestionType(result.type);
                     $scope.setLinkSource(result.linkedToQuestionId);
 
@@ -155,10 +155,18 @@
                 });
 
                 $scope.setLinkSource = function (itemId) {
-                    $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
+                    if (!$scope.activeQuestion.isCascadingCombobox) {
+                        $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
+                    }
+
                     if (itemId) {
                         $scope.activeQuestion.linkedToQuestionId = itemId;
-                        $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+
+                        if ($scope.activeQuestion.isCascadingCombobox) {
+                            $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+                        } else {
+                            $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+                        }
                     }
                 };
 

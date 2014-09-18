@@ -174,11 +174,10 @@
                         </div>
                     </div>
                 </div>
-                <div ng-if="!activeQuestion.isFilteredCombobox" class="form-group"
+                <div ng-if="!activeQuestion.isFilteredCombobox || !activeQuestion.isCascadingCombobox" class="form-group"
                      ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
 
-                <!--<div ng-if="!activeQuestion.isFilteredCombobox" class="form-group"
-                     ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />-->                
+                <div ng-if="activeQuestion.isCascadingCombobox && !activeQuestion.isLinked" class="form-group" ng-include="'CascadingComboBox-Template.html'" />            
         </script>
 
         <script type="text/ng-template" id="linkTemplate.html">
@@ -216,10 +215,10 @@
             </div>
         </script>
 
-        <script type="text/ng-template" id="cascadingTemplate.html">
+        <script type="text/ng-template" id="CascadingComboBox-Template.html">
             <div id="sourceOfLinkedQuestion" class="dropdown-with-breadcrumbs-and-icons">
                 <input type="hidden" name="linkedToQuestion" ng-model="activeQuestion.linkedToQuestion" ng-required="true" />
-                <label for="linkedQuestionSource">Bind to question from roster group</label>
+                <label for="singleOptionQuestionSource">Bind to SingleOption question</label>
                 <div class="btn-group" dropdown>
                     <button class="btn dropdown-toggle" id="linkedQuestionSource" type="button">
                         <span class="select-placeholder" ng-if="(activeQuestion.linkedToQuestion.title || '') == ''">Select question</span>
@@ -232,7 +231,7 @@
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedQuestions">
+                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfSingleQuestions">
                             <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
 
                             <a ng-if="!breadCrumb.isSectionPlaceHolder"
