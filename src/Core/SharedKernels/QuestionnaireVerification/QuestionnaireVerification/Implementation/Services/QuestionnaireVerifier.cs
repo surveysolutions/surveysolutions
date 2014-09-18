@@ -9,8 +9,6 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Properties;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
@@ -144,7 +142,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
                     Verifier<IQuestion>(FilteredComboboxContainsMoreThan5000Options, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
-                    Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThan20, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan20),
+                    Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan200),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -157,10 +155,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             }
         }
 
-        private bool CategoricalOneAnswerOptionsCountMoreThan20(IQuestion question)
+        private static bool CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount(IQuestion question)
         {
             return IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
-                   question.Answers != null && question.Answers.Count > 20;
+                   question.Answers != null && question.Answers.Count > 200;
         }
 
         private bool FilteredComboboxContainsMoreThan5000Options(IQuestion question)

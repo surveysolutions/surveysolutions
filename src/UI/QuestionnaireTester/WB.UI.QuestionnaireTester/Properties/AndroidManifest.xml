@@ -1,16 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.Vtester" android:versionCode="101" android:versionName="1.0.1">
-	<application android:label="Tester" android:icon="@drawable/tester_icon" android:theme="@android:style/Theme.DeviceDefault.Light"></application>
-		<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />	
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
-	<uses-permission android:name="android.permission.CAMERA" android:required="false" />
-	<uses-feature android:name="android:hardware.camera" android:required="false" />
-	<uses-feature android:name="android.hardware.camera.front" android:required="false" />
-	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-	<activity android:name="CAPI.Android.Implementations.Activities.DataCollectionDetailsActivity" />
-	<uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18" />
+  <application android:label="Tester" android:icon="@drawable/tester_icon" android:theme="@android:style/Theme.DeviceDefault.Light"></application>
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+  <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+  <uses-feature android:name="android.hardware.camera" android:required="false"/>
+  <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+  <uses-permission android:name="android.permission.CAMERA" />
+
+  <activity android:name="CAPI.Android.Implementations.Activities.DataCollectionDetailsActivity" />
+  <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18" />
 </manifest>

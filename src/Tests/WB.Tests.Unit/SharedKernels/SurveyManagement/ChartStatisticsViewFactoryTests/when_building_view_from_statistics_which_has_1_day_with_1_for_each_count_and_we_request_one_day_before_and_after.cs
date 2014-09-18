@@ -14,25 +14,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
     {
         Establish context = () =>
         {
-            var statistics = new StatisticsGroupedByDateAndTemplate
+            var statistics = CreateStatisticsGroupedByDateAndTemplate(new Dictionary<DateTime, QuestionnaireStatisticsForChart>
             {
-                StatisticsByDate = new Dictionary<DateTime, QuestionnaireStatisticsForChart>
                 {
-                    {
-                        new DateTime(2014, 8, 21),
-                        new QuestionnaireStatisticsForChart
-                        {
-                            ApprovedByHeadquartersCount = 1,
-                            ApprovedBySupervisorCount = 1,
-                            CompletedCount = 1,
-                            InterviewerAssignedCount = 1,
-                            RejectedByHeadquartersCount = 1,
-                            RejectedBySupervisorCount = 1,
-                            SupervisorAssignedCount = 1,
-                        }
-                    },
-                }
-            };
+                    new DateTime(2014, 8, 21),
+                    CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(count: 1)
+                },
+            });
 
             var statsStorage = Mock.Of<IReadSideRepositoryReader<StatisticsGroupedByDateAndTemplate>>(_
                 => _.GetById(Moq.It.IsAny<string>()) == statistics);
