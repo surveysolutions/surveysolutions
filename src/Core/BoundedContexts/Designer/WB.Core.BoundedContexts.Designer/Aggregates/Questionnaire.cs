@@ -2108,6 +2108,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var answers = !isFilteredCombobox ? ConvertOptionsToAnswers(options) : null;
 
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
+            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, linkedToQuestionId.HasValue);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
 
@@ -2167,6 +2168,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
+            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, linkedToQuestionId.HasValue);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new QuestionChanged
@@ -2218,6 +2220,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 responsibleId);
             
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
+            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, linkedToQuestionId.HasValue);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: questionId, title: title,
@@ -3130,6 +3133,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             else if (!isFilteredCombobox.HasValue || !isFilteredCombobox.Value)
             {
                 ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
+            }
+        }
+
+        private void ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(Option[] options, bool isFilteredCombobox, bool isLinkedQuestion)
+        {
+            if (!isLinkedQuestion && !isFilteredCombobox && options.Count() > 200)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.CategoricalSingleOptionHasMoreThan200Options,
+                    "Categorical one answer question contains more than 200 options");
             }
         }
 

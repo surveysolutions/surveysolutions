@@ -321,8 +321,8 @@
   <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
     <value>Contains more than 5000 options.</value>
   </data>
-  <data name="WB0076_CategoricalOneAnswerOptionsCountMoreThan5000" xml:space="preserve">
-    <value>Contains more than 5000 options.</value>
+  <data name="WB0076_CategoricalOneAnswerOptionsCountMoreThan200" xml:space="preserve">
+    <value>Contains more than 200 options.</value>
   </data>
   <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
     <value>Question has invalid variable name.</value>
