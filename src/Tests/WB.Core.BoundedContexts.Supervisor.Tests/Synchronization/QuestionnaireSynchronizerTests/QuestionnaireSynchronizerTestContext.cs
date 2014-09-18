@@ -14,8 +14,10 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.QuestionnaireSynchronizerTests
 {
@@ -23,15 +25,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
     internal class QuestionnaireSynchronizerTestContext
     {
         protected static QuestionnaireSynchronizer CreateQuestionnaireSynchronizer(IAtomFeedReader atomFeedReader = null,
-            IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage = null, IPlainQuestionnaireRepository plainQuestionnaireRepository=null,
-            IHeadquartersQuestionnaireReader headquartersQuestionnaireReader = null, HeadquartersPullContext headquartersPullContext=null)
+            IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage = null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IHeadquartersQuestionnaireReader headquartersQuestionnaireReader = null, HeadquartersPullContext headquartersPullContext = null,
+            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews = null, ICommandService commandService=null)
         {
             return new QuestionnaireSynchronizer(atomFeedReader ?? Mock.Of<IAtomFeedReader>(),
-                new HeadquartersSettings(new Uri("http://localhost"), new Uri("http://localhost"), new Uri("http://localhost"), "http://localhost", "http://localhost",
+                new HeadquartersSettings(new Uri("http://localhost"), new Uri("http://localhost"), new Uri("http://localhost"),
+                    "http://localhost", "http://localhost",
                     new Uri("http://localhost"), new Uri("http://localhost")),
-                headquartersPullContext??new HeadquartersPullContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
+                headquartersPullContext ?? new HeadquartersPullContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
                 plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>>(), Mock.Of<ILogger>(),
-                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(), Mock.Of<ICommandService>(), headquartersQuestionnaireReader ??Mock.Of<IHeadquartersQuestionnaireReader>());
+                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(), commandService ?? Mock.Of<ICommandService>(),
+                headquartersQuestionnaireReader ?? Mock.Of<IHeadquartersQuestionnaireReader>(),
+                interviews ?? Mock.Of<IQueryableReadSideRepositoryWriter<InterviewSummary>>());
+
         }
 
         protected static AtomFeedEntry<T> CreateAtomFeedEntry<T>(T entry)

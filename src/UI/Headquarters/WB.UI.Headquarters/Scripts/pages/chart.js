@@ -17,7 +17,7 @@
     self.ShouldShowDateValidationMessage = ko.observable(false);
     self.TemplateName = ko.observable();
 
-    self.initChart = function () {
+        self.initChart = function () {
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
             ? { templateId: '', version: '' }
             : JSON.parse(self.SelectedTemplate());
@@ -50,7 +50,7 @@
     };
 
     self.drawChart = function () {
-        if (self.Stats.Lines[0].length === 0)
+        if (self.Stats.Lines.length === 0 ||self.Stats.Lines[0].length === 0)
             return;
 
         $('#interviewChart').empty();
@@ -64,23 +64,28 @@
             {
                 seriesColors: ["#4FADDB", "#FDBD30", "#86B828", "#F08531", "#13A388", "#E06B5C", "#00647F", "#38407D", "#785C99", "#A30F2C", "#878787", "#414042"],
                 stackSeries: true,
+                gridPadding: { top: 50, right: 50, bottom: 50, left: 50 },
                 showMarker: true,
                 series: [
-                   { label: 'Supervisor assigned' },
-                   { label: 'Interviewer assigned' },
-                   { label: 'Completed' },
-                   { label: 'Rejected by Supervisor' },
-                   { label: 'Approved by Supervisor' },
-                   { label: 'Rejected by Headquarters' },
-                   { label: 'Approved by Headquarters' }
+                    { label: 'Supervisor assigned' },
+                    { label: 'Interviewer assigned' },
+                    { label: 'Completed' },
+                    { label: 'Rejected by Supervisor' },
+                    { label: 'Approved by Supervisor' },
+                    { label: 'Rejected by Headquarters' },
+                    { label: 'Approved by Headquarters' }
                 ],
                 seriesDefaults: {
                     showMarker: true,
                     fill: true,
+                    breakOnNull: false,
+                    showLine: true,
+                    lineWidth: 3,
+                    fillAndStroke: true,
                     shadow: false,
                     fillAlpha: 0.8,
                     markerOptions: {
-                        show: true,
+                        show: false,
                     }
                 },
                 legend: {
@@ -115,17 +120,31 @@
                 highlighter: {
                     show: true,
                     showMarker: true,
-                    tooltipAxes: 'xy'
+                    tooltipAxes: 'xy',
+                    tooltipLocation: 'ne'
                 },
                 cursor: {
                     show: true,
-                    tooltipLocation: 'sw',
+                    tooltipLocation: 'sw'
                 }
             });
 
+        var maxY = self.Plot.axes.yaxis._dataBounds.max;
+        var interval = self.getCustomInterval(maxY);
+        if (interval !== null) {
+            self.Plot.replot({ axes: { yaxis: { min: 0, tickInterval: interval } } });
+        };
+        
         var legendLabels = $('.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle');
         var countItemsInLegend = legendLabels.length;
         legendLabels.width(($('#interviewChart').outerWidth() - countItemsInLegend * 20) / countItemsInLegend - 1);
+    };
+
+    self.getCustomInterval = function(maxValue) {
+        if (maxValue <= 10) {
+            return 1;
+        }
+        return null;
     };
 
     self.load = function () {

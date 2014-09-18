@@ -130,6 +130,8 @@
 
         QuestionIsNotAFilteredCombobox,
 
-        FilteredComboboxQuestionOptionsMaxLength
+        FilteredComboboxQuestionOptionsMaxLength,
+
+        CategoricalSingleOptionHasMoreThan200Options
     }
 }

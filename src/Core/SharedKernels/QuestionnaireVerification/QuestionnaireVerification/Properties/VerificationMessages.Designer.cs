@@ -676,11 +676,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains more than 20 options..
+        ///   Looks up a localized string similar to Contains more than 200 options..
         /// </summary>
-        internal static string WB0076_CategoricalOneAnswerOptionsCountMoreThan20 {
+        internal static string WB0076_CategoricalOneAnswerOptionsCountMoreThan200 {
             get {
-                return ResourceManager.GetString("WB0076_CategoricalOneAnswerOptionsCountMoreThan20", resourceCulture);
+                return ResourceManager.GetString("WB0076_CategoricalOneAnswerOptionsCountMoreThan200", resourceCulture);
             }
         }
         
