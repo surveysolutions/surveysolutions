@@ -211,6 +211,8 @@
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_questions_one_with_var_lable_other_without.cs" />
     <Compile Include="IncomePackagesRepositoryTests\IncomePackagesRepositoryTestContext.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_Processing_Stored_Item_by_deleted_interview.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_Processing_Stored_Item_with_zero_events_inside.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_empty_content.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_metainfo_which_cant_be_desirialized.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_wasnt_created_on_tablet.cs" />

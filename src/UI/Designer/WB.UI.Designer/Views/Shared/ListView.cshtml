@@ -65,7 +65,7 @@
                 var actionModel = model as IActionItem;
                 if (actionModel != null)
                 {
-                    if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint || actionModel.CanSynchronize)
+                    if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint || actionModel.CanSynchronize || actionModel.CanOpen)
                     {
                                 <div class="btn-group pull-right">
                                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action
@@ -79,6 +79,10 @@
                                             var itemName = Uri.EscapeDataString(model.GetName());
 
                                             if (actionModel.CanEdit)
+                                            {
+                                                <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
+                                            }
+                                            if (actionModel.CanOpen)
                                             {
                                                 <li>@Html.ActionLink("Edit", "Open", "App", routevalues, null)</li>
                                             }

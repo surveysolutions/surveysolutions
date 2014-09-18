@@ -11,9 +11,12 @@ using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -24,6 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage;
+        private readonly IQueryableReadSideRepositoryWriter<InterviewSummary> interviews;
         private readonly IHeadquartersQuestionnaireReader headquartersQuestionnaireReader;
         private readonly Action<ICommand> executeCommand;
         private readonly ILogger logger;
@@ -31,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         public QuestionnaireSynchronizer(IAtomFeedReader feedReader, HeadquartersSettings settings,
             HeadquartersPullContext headquartersPullContext, IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage, ILogger logger, IPlainQuestionnaireRepository plainQuestionnaireRepository,
 
-            ICommandService commandService, IHeadquartersQuestionnaireReader headquartersQuestionnaireReader)
+            ICommandService commandService, IHeadquartersQuestionnaireReader headquartersQuestionnaireReader, IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
         {
             this.feedReader = feedReader;
             this.settings = settings;
@@ -40,34 +44,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.logger = logger;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.headquartersQuestionnaireReader = headquartersQuestionnaireReader;
+            this.interviews = interviews;
             this.executeCommand = command => commandService.Execute(command, origin: Constants.HeadquartersSynchronizationOrigin);
             
         }
 
         public void Pull()
         {
-            var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).Select(x => x.EntryId).FirstOrDefault());
+            this.StoreEventsToLocalStorage();
 
-            IList<AtomFeedEntry<LocalQuestionnaireFeedEntry>> remoteEvents =
-                this.feedReader
-                    .ReadAfterAsync<LocalQuestionnaireFeedEntry>(this.settings.QuestionnaireChangedFeedUrl, lastStoredEntry)
-                    .Result.ToList();
+            IEnumerable<LocalQuestionnaireFeedEntry> events =
+                this.plainStorage.Query(_ => _.Where(x => !x.Processed));
 
-            this.headquartersPullContext.PushMessage(string.Format("Received {0} events from {1} feed", remoteEvents.Count,
-                this.settings.QuestionnaireChangedFeedUrl));
+            this.headquartersPullContext.PushMessage(string.Format("Synchronizing questionnaires. Events count: {0}", events.Count()));
 
-            foreach (var remoteEvent in remoteEvents)
+            foreach (var questionnaireFeedEntry in events)
             {
-                var questionnaireFeedEntry = remoteEvent.Content;
-
                 try
                 {
                     switch (questionnaireFeedEntry.EntryType)
                     {
                         case QuestionnaireEntryType.QuestionnaireDeleted:
-                            this.executeCommand(new DeleteQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
-                                questionnaireFeedEntry.QuestionnaireVersion));
-                            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireFeedEntry.QuestionnaireId,
+                            DeleteQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion);
                             break;
                         case QuestionnaireEntryType.QuestionnaireCreated:
@@ -75,7 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                             if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion))
-                            break;
+                                break;
                             string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
                                 .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
                                 .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
@@ -91,6 +89,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                 questionnaireFeedEntry.EntryType == QuestionnaireEntryType.QuestionnaireCreatedInCensusMode));
                             break;
                     }
+                    questionnaireFeedEntry.Processed = true;
+                    questionnaireFeedEntry.ProcessedWithError = false;
                 }
                 catch (AggregateException ex)
                 {
@@ -111,6 +111,56 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
+        private void StoreEventsToLocalStorage()
+        {
+            var lastStoredEntry = this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).Select(x => x.EntryId).FirstOrDefault());
+
+            IList<AtomFeedEntry<LocalQuestionnaireFeedEntry>> remoteEvents =
+                this.feedReader
+                    .ReadAfterAsync<LocalQuestionnaireFeedEntry>(this.settings.QuestionnaireChangedFeedUrl, lastStoredEntry)
+                    .Result.ToList();
+
+            this.headquartersPullContext.PushMessage(string.Format("Received {0} events from {1} feed", remoteEvents.Count,
+                this.settings.QuestionnaireChangedFeedUrl));
+
+            var newEvents = new List<LocalQuestionnaireFeedEntry>();
+            foreach (AtomFeedEntry<LocalQuestionnaireFeedEntry> remoteEvent in remoteEvents)
+            {
+                newEvents.Add(remoteEvent.Content);
+            }
+
+            this.plainStorage.Store(newEvents.Select(x => Tuple.Create(x, x.EntryId)));
+        }
+
+        private void DeleteQuestionnaire(Guid id, long version)
+        {
+            var interviewByQuestionnaire =
+                              interviews.QueryAll(i => !i.IsDeleted && i.QuestionnaireId == id && i.QuestionnaireVersion == version);
+
+            var interviewDeletionErrors = new List<Exception>();
+
+            foreach (var interviewSummary in interviewByQuestionnaire)
+            {
+                try
+                {
+                    if (interviewSummary.WasCreatedOnClient)
+                        this.executeCommand(new HardDeleteInterview(interviewSummary.InterviewId, interviewSummary.ResponsibleId));
+                }
+                catch (Exception e)
+                {
+                    interviewDeletionErrors.Add(e);
+                }
+            }
+
+            if (interviewDeletionErrors.Any())
+                throw new AggregateException(
+                    string.Format(
+                        "Failed to delete one or more interviews which were created from questionnaire {0} version {1}.",
+                        id.FormatGuid(), version),
+                    interviewDeletionErrors);
+            this.executeCommand(new DeleteQuestionnaire(id, version));
+            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(id, version);
+        }
         private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)
         {
             QuestionnaireDocument localQuestionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);

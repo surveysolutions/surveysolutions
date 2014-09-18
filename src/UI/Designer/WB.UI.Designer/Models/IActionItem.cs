@@ -8,6 +8,8 @@
 
         bool CanEdit { get; }
 
+        bool CanOpen { get; }
+
         bool CanExport { get; }
 
         bool CanPreview { get; }

@@ -22,19 +22,21 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository
 {
-    internal class IncomePackagesRepository : IIncomePackagesRepository
+    internal class 
+        IncomePackagesRepository : IIncomePackagesRepository
     {
         private string incomingCapiPackagesDirectory;
         private string incomingCapiPackagesWithErrorsDirectory;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly ILogger logger;
+        private readonly bool overrideReceivedEventTimeStamp;
         private readonly ICommandService commandService;
         private readonly SyncSettings syncSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IJsonUtils jsonUtils;
 
         public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
-            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter)
+            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter, bool overrideReceivedEventTimeStamp)
         {
             this.logger = logger;
             this.syncSettings = syncSettings;
@@ -42,6 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             this.fileSystemAccessor = fileSystemAccessor;
             this.jsonUtils = jsonUtils;
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
+            this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
 
             this.InitializeDirectoriesForCapiIncomePackages();
         }
@@ -84,8 +87,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
 
                 }
                 else
-                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,meta.TemplateVersion,
-                        (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false));
+                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                        meta.TemplateVersion,
+                        (InterviewStatus) meta.Status, null, meta.Comments, meta.Valid, false));
 
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
             }
@@ -94,6 +98,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                 this.logger.Error("error on handling incoming package,", ex);
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.Id),this.jsonUtils.GetItemAsContent(item));
             }
+        }
+
+        private bool IsInterviewPresent(Guid interviewId)
+        {
+            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            if (interviewSummary == null)
+                return false;
+            return !interviewSummary.IsDeleted;
         }
 
         private string GetItemFileName(Guid id)
@@ -113,6 +125,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             var fileName = this.GetItemFileName(id);
             if (!this.fileSystemAccessor.IsFileExists(fileName))
                 return;
+
+            if (!IsInterviewPresent(id))
+            {
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(id), this.fileSystemAccessor.ReadAllText(fileName));
+                this.fileSystemAccessor.DeleteFile(fileName);
+                return;
+            }
 
             var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
 
@@ -173,9 +192,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             var i = sequence + 1;
             foreach (var aggregateRootEvent in stream)
             {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0));
+                uncommitedStream.Append(this.overrideReceivedEventTimeStamp
+                    ? aggregateRootEvent.CreateUncommitedEvent(i, 0, DateTime.UtcNow)
+                    : aggregateRootEvent.CreateUncommitedEvent(i, 0));
                 i++;
-            } 
+            }
             return uncommitedStream;
         }
     }

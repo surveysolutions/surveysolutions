@@ -9,11 +9,14 @@
             CanPreview = false;
             CanExport = false;
             CanSynchronize = false;
+            CanOpen = false;
         }
 
         public virtual bool CanDelete { get; set; }
 
         public virtual bool CanEdit { get; set; }
+
+        public virtual bool CanOpen { get; set; }
 
         public virtual bool CanPreview { get; set; }
 

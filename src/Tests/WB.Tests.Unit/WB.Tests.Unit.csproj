@@ -135,7 +135,7 @@
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_18_options.cs" />
-    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_more_than_20_options.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_more_than_200_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_question_info_with_25_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
@@ -159,6 +159,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\ChartStatisticsViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_one_day_before_and_after.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_zeroes_for_2_headquarters_statuses_and_for_completed_status.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_from_date_bigger_then_to_date.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_without_data.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_statistics_view_and_from_is_more_than_to.cs" />
