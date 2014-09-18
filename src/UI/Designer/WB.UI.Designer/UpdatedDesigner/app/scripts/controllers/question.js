@@ -152,12 +152,16 @@
                 $scope.$watch('activeQuestion.isLinked', function (newValue) {
                     if (!newValue && $scope.activeQuestion) {
                         $scope.activeQuestion.linkedToQuestionId = null;
-                    }
+                    }                    
                 });
 
                 $scope.$watch('activeQuestion.isCascade', function (newValue) {
-                    if (!newValue && $scope.activeQuestion) {
-                        $scope.activeQuestion.cascadeFromQuestionId = null;
+                    if ($scope.activeQuestion) {
+                        if (newValue) {
+                            $scope.activeQuestion.questionScope = 'Interviewer';
+                        } else {
+                            $scope.activeQuestion.cascadeFromQuestionId = null;
+                        }
                     }
                 });
 
@@ -173,7 +177,7 @@
                 $scope.setCascadeSource = function (itemId) {
                     $scope.activeQuestion.isCascade = !_.isEmpty(itemId);
 
-                    if (itemId) {
+                    if (itemId) {                        
                         $scope.activeQuestion.cascadeFromQuestionId = itemId;
                         $scope.activeQuestion.cascadeFromQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.cascadeFromQuestionId });
                     }

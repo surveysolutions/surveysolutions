@@ -96,7 +96,7 @@
                     <input id="mandatory-question" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isMandatory" />
                     <label for="mandatory-question"><span></span>Mandatory question</label>
                 </div>
-                <div class="form-group col-xs-7" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'|| activeQuestion.type == 'Multimedia'">
+                <div class="form-group col-xs-7" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'|| activeQuestion.type == 'Multimedia' || activeQuestion.isCascade == true">
                     <label for="Question-scope">Question scope&nbsp;</label>
                     <div class="btn-group dropup" dropdown>
                         <button class="btn dropdown-toggle" id="Question-scope" type="button">
@@ -324,7 +324,6 @@
                 <label for="edit-mask">Mask <help key="mask" /></label>
                 <input id="edit-mask" type="text" ng-model="activeQuestion.mask" class="form-control" placeholder="Mask">
             </div>
-
         </script>
 
         <script type="text/ng-template" id="TextList-template.html">
@@ -333,12 +332,16 @@
                 <input id="edit-question-max-answers-number" type="text" ng-model="activeQuestion.maxAnswerCount" class="form-control">
             </div>
         </script>
+
         <script type="text/ng-template" id="DateTime-template.html">
         </script>
+
         <script type="text/ng-template" id="GpsCoordinates-template.html">
         </script>
+
         <script type="text/ng-template" id="QRBarcode-template.html">
         </script>
+
         <script type="text/ng-template" id="Multimedia-template.html">
         </script>
     </div>
