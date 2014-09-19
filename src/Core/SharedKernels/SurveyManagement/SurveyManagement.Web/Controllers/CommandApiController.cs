@@ -52,8 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
                     response.CommandId = concreteCommand.CommandIdentifier;
-                    ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(request.Type,
-                        concreteCommand);
+                    ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(concreteCommand);
                     this.CommandService.Execute(transformedCommand);
 
                     response.IsSuccess = true;

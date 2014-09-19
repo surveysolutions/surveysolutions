@@ -427,7 +427,7 @@
                     <dl data-bind="foreach: comments">
                         <dt data-bind="text: userName"></dt>
                         <dd>
-                            <span data-bind="html: text"></span>
+                            <span data-bind="text: text"></span>
                             <small class="text-block comment-date " data-bind="text: moment(date).fromNow()"></small>
                         </dd>
                     </dl>
