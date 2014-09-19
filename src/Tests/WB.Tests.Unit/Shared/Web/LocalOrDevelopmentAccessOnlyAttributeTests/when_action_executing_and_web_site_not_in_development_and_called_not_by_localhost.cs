@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
         Establish context = () =>
         {
             var configMock =new Mock<IConfigurationManager>();
-            configMock.Setup(_ =>_.AppSettings).Returns(new NameValueCollection {{"IsUnderDevelopment", IsWebsiteUnderDevelopment.ToString()}});
+            configMock.Setup(_ => _.AppSettings).Returns(new NameValueCollection { { "IsDevelopmentEnvironment", IsWebsiteUnderDevelopment.ToString() } });
             Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IConfigurationManager>()).Returns(configMock.Object);
 
             filter = Create();
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
              exception.ShouldBeOfExactType<HttpException>();
 
         It should_http_code_in_http_exception__be_equal_to_404 = () =>
-            ((HttpException)exception).GetHttpCode().ShouldEqual(404);
+            ((HttpException)exception).GetHttpCode().ShouldEqual(403);
         
         private static LocalOrDevelopmentAccessOnlyAttribute filter;
         private static ActionExecutingContext actionExecutingContext = CreateFilterContext(IsLocalhost);

@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
         Establish context = () =>
         {
             var configMock =new Mock<IConfigurationManager>();
-            configMock.Setup(_ =>_.AppSettings).Returns(new NameValueCollection {{"IsUnderDevelopment", IsWebsiteUnderDevelopment.ToString()}});
+            configMock.Setup(_ => _.AppSettings).Returns(new NameValueCollection { { "IsDevelopmentEnvironment", IsWebsiteUnderDevelopment.ToString() } });
             Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IConfigurationManager>()).Returns(configMock.Object);
 
             filter = Create();
