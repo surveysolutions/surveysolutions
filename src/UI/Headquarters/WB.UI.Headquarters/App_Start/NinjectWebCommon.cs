@@ -43,6 +43,8 @@ using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WebActivatorEx;
@@ -174,6 +176,8 @@ namespace WB.UI.Headquarters
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
+
+            kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
 
 #warning dirty index registrations
             // SuccessMarker.Start(kernel);

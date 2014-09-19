@@ -1,20 +1,10 @@
-﻿namespace WB.UI.Designer
-{
-    using WB.UI.Shared.Web.MembershipProvider.Accounts;
+﻿using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
-    /// <summary>
-    /// The password policy factory.
-    /// </summary>
+namespace WB.UI.Shared.Web.MembershipProvider.Settings
+{
     public static class PasswordPolicyFactory
     {
-        #region Public Methods and Operators
 
-        /// <summary>
-        /// The create password policy.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IPasswordPolicy"/>.
-        /// </returns>
         public static IPasswordPolicy CreatePasswordPolicy()
         {
             return new PasswordPolicy
@@ -29,7 +19,5 @@
                            PasswordStrengthRegularExpression = MembershipProviderSettings.Instance.PasswordStrengthRegularExpression
                        };
         }
-
-        #endregion
     }
 }

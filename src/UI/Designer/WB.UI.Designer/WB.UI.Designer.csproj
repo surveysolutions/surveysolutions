@@ -225,9 +225,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
-    <Compile Include="App_Start\ValidatorsConfig.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
-    <Compile Include="Code\ConfigurationManager\MembershipProviderSettings.cs" />
     <Compile Include="Code\AccountRepositoryFactory.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
@@ -239,8 +237,6 @@
     <Compile Include="Code\Exceptions\CustomHandleErrorFilter.cs" />
     <Compile Include="Code\IQuestionnaireHelper.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
-    <Compile Include="Code\PasswordRegularExpressionAttribute.cs" />
-    <Compile Include="Code\PasswordStringLengthAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
     <Compile Include="Code\VerificationErrorsMapper.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
@@ -307,7 +303,6 @@
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
-    <Compile Include="Code\PasswordPolicyFactory.cs" />
     <Compile Include="Pdf\OSUtil.cs" />
     <Compile Include="Pdf\PdfConvert.cs" />
     <Compile Include="Pdf\PdfConvertEnvironment.cs" />

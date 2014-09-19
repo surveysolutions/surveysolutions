@@ -133,10 +133,13 @@
     <value>Is locked</value>
   </data>
   <data name="PasswordErrorMessage" xml:space="preserve">
-    <value>Password must contain at least one number, one upper case character and one lower case character. Length must be between 6 and 255 characters</value>
+    <value>Password must contain at least one number, one upper case character and one lower case character</value>
   </data>
   <data name="PasswordFieldName" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="PasswordLengthMessage" xml:space="preserve">
+    <value>Password must be at least {2} characters long</value>
   </data>
   <data name="RequiredEmailErrorMessage" xml:space="preserve">
     <value>Email is required</value>
