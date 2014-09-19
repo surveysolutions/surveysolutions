@@ -196,7 +196,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             this.headquartersPullContext.PushMessage(string.Format("Applying interview rejected by HQ on {0} interview", interviewId));
 
-            if (!IsInterviewPresent(interviewDetails.Id))
+            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            if (interviewSummary == null)
 
             {
                 this.executeCommand(new CreateInterviewCreatedOnClientCommand(interviewId: interviewDetails.Id,
@@ -282,7 +283,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void HardDeleteInterview(string interviewId, string userId)
         {
             Guid interviewIdGuid = Guid.Parse(interviewId);
-            if (!IsInterviewPresent(interviewIdGuid))
+
+            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            if (interviewSummary == null)
                 return;
 
             Guid userIdGuid = Guid.Parse(userId);
