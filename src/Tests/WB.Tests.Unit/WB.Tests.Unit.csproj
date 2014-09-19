@@ -182,6 +182,8 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_file_which_is_absent.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_file_which_is_present.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_not_existing_interview_details.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\CommandTransformatorTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\when_need_to_transform_CreateInterviewControllerCommand.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
     <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests.cs" />
     <Compile Include="SharedKernels\Synchronization\ReadSideChunkWriterTests.cs" />
