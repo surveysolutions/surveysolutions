@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<QRBarcodeQuestionAdded>,
         IEventHandler<QRBarcodeQuestionCloned>,
         IEventHandler<QRBarcodeQuestionUpdated>,
+        IEventHandler<MultimediaQuestionUpdated>,
         IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
         IEventHandler<TextListQuestionChanged>,
@@ -483,6 +484,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 existingQuestion.ConditionExpression = @event.EnablementCondition;
                 existingQuestion.Title = @event.Title;
                 existingQuestion.QuestionType = QuestionType.QRBarcode;
+                existingQuestion.Answers = new List<PdfAnswerView>(0);
+
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<MultimediaQuestionUpdated> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var existingQuestion = questionnaire.GetEntityById<PdfQuestionView>(@event.QuestionId);
+                if (existingQuestion == null)
+                {
+                    return questionnaire;
+                }
+
+                existingQuestion.Variable = @event.VariableName;
+                existingQuestion.ConditionExpression = @event.EnablementCondition;
+                existingQuestion.Title = @event.Title;
+                existingQuestion.QuestionType = QuestionType.Multimedia;
                 existingQuestion.Answers = new List<PdfAnswerView>(0);
 
                 return questionnaire;
