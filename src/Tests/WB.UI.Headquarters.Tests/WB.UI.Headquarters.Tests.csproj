@@ -137,6 +137,8 @@
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_and_exception_occured.cs" />
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_empty_id.cs" />
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_not_empty_id.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedFilesAsync_is_called.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedFilesAsync_is_called_and_exception_occured.cs" />
     <Compile Include="InstallControllerTests\InstallControllerTestsContext.cs" />
     <Compile Include="InstallControllerTests\when_finish_installation_and_command_service_throws_exception.cs" />
     <Compile Include="InstallControllerTests\when_finish_installation.cs" />

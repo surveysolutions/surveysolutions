@@ -25,13 +25,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     {
         protected static FileBasedDataExportService CreateFileBasedDataExportService(
             IFileSystemAccessor fileSystemAccessor = null, IDataFileExportService dataFileExportService = null,
-            IEnvironmentContentService environmentContentService = null)
+            IEnvironmentContentService environmentContentService = null, IPlainFileRepository plainFileRepository=null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new FileBasedDataExportService(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "",
                 dataFileExportService ?? Mock.Of<IDataFileExportService>(),
                 environmentContentService ?? Mock.Of<IEnvironmentContentService>(), currentFileSystemAccessor,
-                Mock.Of<ILogger>(), Mock.Of<IPlainFileRepository>(_=>_.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>())== new InterviewBinaryData[0]));
+                Mock.Of<ILogger>(), plainFileRepository??Mock.Of<IPlainFileRepository>(_ => _.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>()) == new InterviewBinaryData[0]));
         }
 
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,
