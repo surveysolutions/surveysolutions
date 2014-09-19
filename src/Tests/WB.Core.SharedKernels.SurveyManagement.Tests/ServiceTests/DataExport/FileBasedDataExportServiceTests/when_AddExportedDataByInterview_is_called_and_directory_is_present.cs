@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns("1st");
 
             interviewLevelToExport = new InterviewDataExportLevelView(new ValueVector<Guid> { Guid.NewGuid() }, "1st", null);
-            interviewToExport = new InterviewDataExportView(Guid.NewGuid(), 1,
+            interviewToExport = new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1,
                 new[] { interviewLevelToExport });
 
             fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object);
