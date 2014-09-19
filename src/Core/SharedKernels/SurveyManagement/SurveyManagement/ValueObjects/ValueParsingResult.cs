@@ -16,6 +16,7 @@
         QuestionTypeIsIncorrect,
         UnsupportedLinkedQuestion,
 
-        GeneralErrorOccured
+        GeneralErrorOccured,
+        UnsupportedMultimediaQuestion
     }
 }
