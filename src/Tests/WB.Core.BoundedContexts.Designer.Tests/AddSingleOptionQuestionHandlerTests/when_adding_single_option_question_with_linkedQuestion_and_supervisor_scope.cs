@@ -46,6 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
                     responsibleId: responsibleId,
                     options: null,
                     linkedToQuestionId: linkedToQuestionId,
+                    cascadeFromQuestionId: cascadeFromQuestionId,
                     isFilteredCombobox: isFilteredCombobox));
 
         It should_throw_QuestionnaireException = () =>
@@ -71,6 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
         private static string validationExpression = "";
         private static string validationMessage = "";
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        private static Guid? cascadeFromQuestionId = null;
         private static bool isFilteredCombobox = false;
     }
 }

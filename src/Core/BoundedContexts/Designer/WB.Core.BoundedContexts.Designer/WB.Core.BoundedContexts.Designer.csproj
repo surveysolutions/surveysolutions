@@ -239,6 +239,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Roster.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ExceptionMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\IJsonExportService.cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
@@ -429,13 +434,15 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Properties\Roster.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ExceptionMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

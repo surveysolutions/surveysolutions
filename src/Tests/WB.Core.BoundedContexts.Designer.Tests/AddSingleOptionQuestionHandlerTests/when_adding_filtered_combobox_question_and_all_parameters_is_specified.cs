@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
 {
     internal class when_adding_filtered_combobox_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
             eventContext = new EventContext();
         };
 
-        Because of = () =>
+        private Because of = () =>
             questionnaire.AddSingleOptionQuestion(
                 questionId: questionId,
                 parentGroupId: chapterId,
@@ -35,57 +35,58 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
                 responsibleId: responsibleId,
                 options: options,
                 linkedToQuestionId: linkedToQuestionId,
+                cascadeFromQuestionId: cascadeFromQuestionId,
                 isFilteredCombobox: isFilteredCombobox);
 
-        Cleanup stuff = () =>
+        private Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;
         };
 
-        It should_raise_NewQuestionAdded_event = () =>
+        private It should_raise_NewQuestionAdded_event = () =>
             eventContext.ShouldContainEvent<NewQuestionAdded>();
 
-        It should_raise_NewQuestionAdded_event_with_QuestionId_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_QuestionId_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_raise_NewQuestionAdded_event_with_ParentGroupId_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_ParentGroupId_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .GroupPublicKey.ShouldEqual(chapterId);
 
-        It should_raise_NewQuestionAdded_event_with_variable_name_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_variable_name_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .StataExportCaption.ShouldEqual(variableName);
 
-        It should_raise_NewQuestionAdded_event_with_title_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_title_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .QuestionText.ShouldEqual(title);
 
-        It should_raise_NewQuestionAdded_event_with_enablementCondition_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_enablementCondition_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        It should_raise_NewQuestionAdded_event_with_ismandatory_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_ismandatory_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .Mandatory.ShouldEqual(isMandatory);
 
-        It should_raise_NewQuestionAdded_event_with_isfeatured_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_isfeatured_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .Featured.ShouldEqual(isPreFilled);
 
-        It should_raise_NewQuestionAdded_event_with_instructions_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .Instructions.ShouldEqual(instructions);
 
-        It should_raise_NewQuestionAdded_event_with_nullable_answers = () =>
+        private It should_raise_NewQuestionAdded_event_with_nullable_answers = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>().Answers.ShouldBeNull();
 
-        It should_raise_NewQuestionAdded_event_with_linkedToQuestionId_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_linkedToQuestionId_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .LinkedToQuestionId.ShouldEqual(linkedToQuestionId);
 
-        It should_raise_NewQuestionAdded_event_with_isFilteredCombobox_specified = () =>
+        private It should_raise_NewQuestionAdded_event_with_isFilteredCombobox_specified = () =>
             eventContext.GetSingleEvent<NewQuestionAdded>()
                 .IsFilteredCombobox.ShouldEqual(isFilteredCombobox);
 
@@ -102,8 +103,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
         private static string enablementCondition = "enablementCondition";
         private static string validationExpression = "validationExpression";
         private static string validationMessage = "validationMessage";
-        private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
-        private static Guid? linkedToQuestionId = (Guid?)null;
+
+        private static Option[] options = new Option[]
+        { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
+
+        private static Guid? linkedToQuestionId = (Guid?) null;
+        private static Guid? cascadeFromQuestionId = (Guid?) null;
         private static bool isFilteredCombobox = true;
     }
 }

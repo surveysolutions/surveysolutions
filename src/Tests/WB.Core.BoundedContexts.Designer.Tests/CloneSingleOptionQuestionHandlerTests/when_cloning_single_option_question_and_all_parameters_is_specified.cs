@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
                 responsibleId: responsibleId,
                 options: options,
                 linkedToQuestionId: linkedToQuestionId,
+                cascadeFromQuestionId: cascadeFromQuestionId,
                     isFilteredCombobox: isFilteredCombobox);
 
         Cleanup stuff = () =>
@@ -130,6 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
         private static string validationMessage = "validationMessage";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
+        private static Guid? cascadeFromQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = true;
     }
 }
