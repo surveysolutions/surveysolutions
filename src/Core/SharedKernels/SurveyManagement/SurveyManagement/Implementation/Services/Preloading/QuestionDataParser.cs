@@ -25,6 +25,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (question.LinkedToQuestionId.HasValue)
                 return ValueParsingResult.UnsupportedLinkedQuestion;
 
+            if (question is IMultimediaQuestion)
+                return ValueParsingResult.UnsupportedMultimediaQuestion;
+
             switch (question.QuestionType)
             {
                 case QuestionType.Text:
