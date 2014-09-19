@@ -105,6 +105,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_has_roster_with_not_unique_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_has_roster_with_variable_name_equal_to_questionnaire_title.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_references_itself_in_condition.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_multimedia_questions_with_supervisor_and_prefilled_scope_respectively.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_that_used_with__.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_linked_one_answer_question_without_options.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_count_more___.cs" />
@@ -117,6 +118,12 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_filtered_combobox_and_options_count_more_than_5000.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_filtered_combobox_and_question_is_linked.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_empty_static_text.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_that_have_validation_expression.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_as_link_source.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_in_condition_expression.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_in_groups_condition_expression.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_in_substitution.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_in_validation_expression.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multi_question_without_options.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multi_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question-inside_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />

@@ -692,5 +692,50 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0077_QuestionHasInvalidVariableName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multimedia question can be interviewers only.
+        /// </summary>
+        internal static string WB0078_MultimediaQuestionIsInterviewersOnly {
+            get {
+                return ResourceManager.GetString("WB0078_MultimediaQuestionIsInterviewersOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multimedia question cannot have a validation expression..
+        /// </summary>
+        internal static string WB0079_MultimediaShouldNotHaveValidationExpression {
+            get {
+                return ResourceManager.GetString("WB0079_MultimediaShouldNotHaveValidationExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multimedia questions cannot be used in validation expression..
+        /// </summary>
+        internal static string WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression {
+            get {
+                return ResourceManager.GetString("WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Groups cannot have condition expression referencing child question..
+        /// </summary>
+        internal static string WB0081_MultimediaQuestionsCannotBeUsedInEnablementCondition {
+            get {
+                return ResourceManager.GetString("WB0081_MultimediaQuestionsCannotBeUsedInEnablementCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multimedia questions cannot be used in condition expression..
+        /// </summary>
+        internal static string WB0082_MultimediaQuestionsCannotBeUsedInEnablementCondition {
+            get {
+                return ResourceManager.GetString("WB0082_MultimediaQuestionsCannotBeUsedInEnablementCondition", resourceCulture);
+            }
+        }
     }
 }

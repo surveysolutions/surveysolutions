@@ -327,4 +327,19 @@
   <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
     <value>Question has invalid variable name.</value>
   </data>
+  <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Multimedia question can be interviewers only</value>
+  </data>
+  <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+    <value>Multimedia question cannot have a validation expression.</value>
+  </data>
+  <data name="WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression" xml:space="preserve">
+    <value>Multimedia questions cannot be used in validation expression.</value>
+  </data>
+  <data name="WB0081_MultimediaQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
+    <value>Groups cannot have condition expression referencing child question.</value>
+  </data>
+  <data name="WB0082_MultimediaQuestionsCannotBeUsedInEnablementCondition" xml:space="preserve">
+    <value>Multimedia questions cannot be used in condition expression.</value>
+  </data>
 </root>
