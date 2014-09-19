@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var exportStructure = this.questionnaireExportStructureWriter.GetById(interview.Document.QuestionnaireId,
                 interview.Document.QuestionnaireVersion);
 
-            var interviewDataExportView = new InterviewDataExportView(interview.Document.QuestionnaireId,
+            var interviewDataExportView = new InterviewDataExportView(evnt.EventSourceId, interview.Document.QuestionnaireId,
                 interview.Document.QuestionnaireVersion,
                 exportStructure.HeaderToLevelMap.Values.Select(
                     exportStructureForLevel =>

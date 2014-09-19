@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         };
 
         Because of =()=>
-            raisedException = Catch.Exception(() => fileBasedDataExportService.AddExportedDataByInterview(new InterviewDataExportView(Guid.NewGuid(), 1, null))) as InterviewDataExportException;
+            raisedException = Catch.Exception(() => fileBasedDataExportService.AddExportedDataByInterview(new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, null))) as InterviewDataExportException;
 
         It should_InterviewDataExportException_be_rised = () =>
             raisedException.ShouldNotBeNull();
