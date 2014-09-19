@@ -17,6 +17,7 @@ using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 
 namespace WB.UI.Headquarters
@@ -86,6 +87,8 @@ namespace WB.UI.Headquarters
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            DataAnnotationsConfig.RegisterAdapters();
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());

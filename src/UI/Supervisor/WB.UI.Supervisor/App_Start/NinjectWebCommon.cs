@@ -39,6 +39,8 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Supervisor.Code;
@@ -188,6 +190,8 @@ namespace WB.UI.Supervisor.App_Start
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
+
+            kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
 
             return kernel;
         }

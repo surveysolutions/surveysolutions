@@ -1,11 +1,10 @@
-﻿using System.Configuration;
+﻿using System.Collections.Specialized;
+using Microsoft.Practices.ServiceLocation;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 
-namespace WB.UI.Designer
+namespace WB.UI.Shared.Web.MembershipProvider.Settings
 {
-    using System.Collections.Specialized;
-    using System.Web.Configuration;
-
     public class MembershipProviderSettings
     {
         private static MembershipProviderSettings instance;
@@ -17,8 +16,7 @@ namespace WB.UI.Designer
 
         private static NameValueCollection GetSection()
         {
-            var membershipSection = (MembershipSection) ConfigurationManager.GetSection("system.web/membership");
-            return membershipSection.Providers[membershipSection.DefaultProvider].Parameters;
+            return ServiceLocator.Current.GetInstance<IConfigurationManager>().MembershipSettings;
         }
 
         public bool EnablePasswordRetrieval

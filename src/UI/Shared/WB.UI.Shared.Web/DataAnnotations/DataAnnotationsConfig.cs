@@ -1,12 +1,10 @@
-﻿namespace WB.UI.Designer.App_Start
+﻿using System.Web.Mvc;
+
+namespace WB.UI.Shared.Web.DataAnnotations
 {
-    using System.Web.Mvc;
-    
-    public class ValidatorsConfig
+    public class DataAnnotationsConfig
     {
-        #region Public Methods and Operators
-        
-        public static void Register()
+        public static void RegisterAdapters()
         {
             DataAnnotationsModelValidatorProvider.RegisterAdapter(
                 typeof(PasswordStringLengthAttribute), typeof(StringLengthAttributeAdapter));
@@ -14,7 +12,5 @@
             DataAnnotationsModelValidatorProvider.RegisterAdapter(
                 typeof(PasswordRegularExpressionAttribute), typeof(RegularExpressionAttributeAdapter));
         }
-
-        #endregion
     }
 }
