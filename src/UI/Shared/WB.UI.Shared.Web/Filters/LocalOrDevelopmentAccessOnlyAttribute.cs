@@ -8,9 +8,9 @@ namespace WB.UI.Shared.Web.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (!filterContext.HttpContext.Request.IsLocal && !CoreSettings.IsUnderDevelopment)
+            if (!filterContext.HttpContext.Request.IsLocal && !CoreSettings.IsDevelopmentEnvironment)
             {
-                throw new HttpException(404, "controller is missing with current web site configuration");
+                throw new HttpException(403, "you are not allowed to see contents of this page under current configuration");
             }
             base.OnActionExecuting(filterContext);
         }
