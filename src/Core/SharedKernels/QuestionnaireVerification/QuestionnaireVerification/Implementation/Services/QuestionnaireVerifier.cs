@@ -144,7 +144,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
                     Verifier<IQuestion>(FilteredComboboxContainsMoreThan5000Options, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
                     Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan200),
-
+                    Verifier<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
+                    Verifier<IMultimediaQuestion>(MultimediaShouldNotHaveValidationExpression, "WB0079", VerificationMessages.WB0079_MultimediaShouldNotHaveValidationExpression),
+                    Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInValidationExpression, "WB0080", VerificationMessages.WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression),
+                    Verifier<IGroup, IComposite>(MultimediaQuestionsCannotBeUsedInGroupEnablementCondition, "WB0081", VerificationMessages.WB0081_MultimediaQuestionsCannotBeUsedInEnablementCondition),
+                    Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0082", VerificationMessages.WB0082_MultimediaQuestionsCannotBeUsedInEnablementCondition),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -585,6 +589,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return IsPreFilledQuestion(question);
         }
 
+        private bool MultimediaQuestionIsInterviewersOnly(IMultimediaQuestion question)
+        {
+            return question.QuestionScope != QuestionScope.Interviewer;
+        }
+
         private static bool QRBarcodeQuestionIsSupervisorQuestion(IQRBarcodeQuestion question)
         {
             return IsSupervisorQuestion(question);
@@ -600,11 +609,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return !string.IsNullOrEmpty(question.ValidationExpression);
         }
 
+        private bool MultimediaShouldNotHaveValidationExpression(IMultimediaQuestion question)
+        {
+            return !string.IsNullOrEmpty(question.ValidationExpression);
+        }
+
         private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
         {
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
                 question, question.ValidationExpression, questionnaire,
                 isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
+        }
+
+        private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+                question, question.ValidationExpression, questionnaire,
+                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
         }
 
         private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
@@ -614,6 +635,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
+        private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+               question, question.ConditionExpression, questionnaire,
+               isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
+        }
+
         private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
         {
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
@@ -621,6 +649,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
+        private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+               group, group.ConditionExpression, questionnaire,
+               isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
+        }
 
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
         {
