@@ -1420,7 +1420,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid sourceQuestionId, int targetIndex, Guid responsibleId,
-            Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers, bool? isFilteredCombobox)
+            Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1467,7 +1467,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
                 Mask = mask,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                CascadeFromQuestionId = cascadeFromQuestionId
             });
         }
 
@@ -1476,7 +1477,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered,
-            int? maxAllowedAnswers, bool? isFilteredCombobox)
+            int? maxAllowedAnswers, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1516,7 +1517,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
                 Mask = mask,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                CascadeFromQuestionId = cascadeFromQuestionId
             });
         }
 
@@ -1525,7 +1527,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isMandatory, bool isPreFilled,
             QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Guid responsibleId, Guid? linkedToQuestionId,
-            bool areAnswersOrdered, int? maxAllowedAnswers, bool? isFilteredCombobox)
+            bool areAnswersOrdered, int? maxAllowedAnswers, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1565,7 +1567,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
                 Mask = mask,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                CascadeFromQuestionId = cascadeFromQuestionId
             });
         }
 
@@ -2097,7 +2100,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Option[] options,
             Guid? linkedToQuestionId,
             Guid responsibleId,
-            bool isFilteredCombobox)
+            bool isFilteredCombobox,
+            Guid? cascadeFromQuestionId)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
@@ -2110,7 +2114,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope);
             this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, linkedToQuestionId.HasValue);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
-
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -2130,7 +2133,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Answers = answers,
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                CascadeFromQuestionId = cascadeFromQuestionId
             });
         }
 
@@ -2210,7 +2214,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid responsibleId,
             Option[] options,
             Guid? linkedToQuestionId,
-            bool isFilteredCombobox)
+            bool isFilteredCombobox,
+            Guid? cascadeFromQuestionId)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             var parentGroup = this.GetGroupById(parentGroupId);
@@ -2228,7 +2233,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 enablementCondition: enablementCondition, validationExpression: validationExpression,
                 validationMessage: validationMessage, instructions: instructions, parentGroupId: parentGroupId,
                 sourceQuestionId: sourceQuestionId, targetIndex: targetIndex, responsibleId: responsibleId,
-                options: options, linkedToQuestionId: linkedToQuestionId, isFilteredCombobox: isFilteredCombobox);
+                options: options, linkedToQuestionId: linkedToQuestionId, isFilteredCombobox: isFilteredCombobox, cascadeFromQuestionId: cascadeFromQuestionId);
         }
 
         public void UpdateFilteredComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
@@ -4382,7 +4387,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ApplyCategoricalSingleAnswerQuestionEvent(Guid questionId, string title, string variableName, string variableLabel,
             bool isMandatory, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression,
             string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex,
-            Guid responsibleId, Option[] options, Guid? linkedToQuestionId, bool? isFilteredCombobox)
+            Guid responsibleId, Option[] options, Guid? linkedToQuestionId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
         {
             this.ApplyEvent(new QuestionCloned
             {
@@ -4404,7 +4409,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
-                IsFilteredCombobox = isFilteredCombobox
+                IsFilteredCombobox = isFilteredCombobox,
+                CascadeFromQuestionId = cascadeFromQuestionId
             });
         }
 
