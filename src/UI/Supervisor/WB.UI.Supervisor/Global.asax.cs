@@ -9,6 +9,7 @@ using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
+using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Filters;
@@ -90,6 +91,8 @@ namespace WB.UI.Supervisor
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            DataAnnotationsConfig.RegisterAdapters();
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());

@@ -1,4 +1,6 @@
 ﻿using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.UI.Shared.Web.MembershipProvider.Settings;
+using WB.UI.Shared.Web.Modules;
 
 namespace WB.UI.Designer
 {
@@ -12,7 +14,7 @@ namespace WB.UI.Designer
         public override void Load()
         {
             Bind<IPasswordStrategy>().To<HashPasswordStrategy>().InSingletonScope();
-            Bind<IPasswordPolicy>().ToConstant(PasswordPolicyFactory.CreatePasswordPolicy());
+            Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
             Bind<IAccountRepository>().ToMethod(c => AccountRepositoryFactory.CreateRepository()).InSingletonScope();
             Bind<IRoleRepository>().To<CQRSRoleRepository>().InSingletonScope();
         }
