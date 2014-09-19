@@ -223,6 +223,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
                 if (IsQuestionReferencedByAnyLinkedQuestion(answeredQuestion.Id))
                     AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(answeredQuestion.Id, answeredQuestion.QuestionPropagationVector);
+
+                if (this.IsQuestionReferencedByAnyCascadingQuestion(answeredQuestion.Id))
+                    this.AddInstanceOfAnsweredQuestionUsableAsCascadingQuestion(answeredQuestion.Id, answeredQuestion.QuestionPropagationVector, Convert.ToDecimal(answeredQuestion.Answer));
             }
         }
 
@@ -653,7 +656,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             var questionInstanceId = new InterviewItemId(questionId, propagationVector);
 
-            this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions[questionId].Add(questionInstanceId, selectedValue);
+            this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions[questionId][questionInstanceId] = selectedValue;
 
             this.NotifyAffectedCascadingQuestions(questionId);
         }
