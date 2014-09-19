@@ -47,8 +47,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
                     responsibleId: responsibleId,
                     options: options,
                     linkedToQuestionId: linkedToQuestionId,
-                    cascadeFromQuestionId: cascadeFromQuestionId,
-                    isFilteredCombobox: isFilteredCombobox));
+                    isFilteredCombobox: isFilteredCombobox,
+                    cascadeFromQuestionId: null));
 
         It should_not_throw_exception = () => exception.ShouldBeNull();
 
