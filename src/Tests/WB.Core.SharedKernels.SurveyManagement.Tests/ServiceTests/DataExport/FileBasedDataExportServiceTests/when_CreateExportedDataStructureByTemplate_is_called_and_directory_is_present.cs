@@ -33,23 +33,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
 
         Because of = () =>
             raisedException =
-                Catch.Exception(() => fileBasedDataExportService.CreateExportStructureByTemplate(new QuestionnaireExportStructure())) as InterviewDataExportException;
+                Catch.Exception(() => fileBasedDataExportService.CreateExportStructureByTemplate(questionnaireExportStructure)) as InterviewDataExportException;
 
         It should_not_raise_exception = () =>
             raisedException.ShouldBeNull();
 
-        It should_delete_directory = () =>
+        It should_delete_exported_data_directory = () =>
             fileSystemAccessorMock.Verify(accessor => accessor.DeleteDirectory(it.Is<string>(name => name.Contains("ExportedData"))), Times.Once);
 
-        It should_copy_directory = () =>
+        It should_copy_exported_data_directory = () =>
             fileSystemAccessorMock.Verify(accessor => accessor.CopyFileOrDirectory(it.Is<string>(name => name.Contains("ExportedData")), it.IsAny<string>()), Times.Once);
 
         It should_action_file_be_created = () =>
           dataFileExportServiceMock.Verify(dataFileExportService => dataFileExportService.CreateHeaderForActionFile(Moq.It.IsAny<string>()), Times.Once);
 
+        It should_delete_exported_files_directory = () =>
+            fileSystemAccessorMock.Verify(accessor => accessor.DeleteDirectory(it.Is<string>(name => name.Contains("ExportedFiles"))), Times.Once);
+
+        It should_copy_exported_files_directory = () =>
+            fileSystemAccessorMock.Verify(accessor => accessor.CopyFileOrDirectory(it.Is<string>(name => name.Contains("ExportedFiles")), it.IsAny<string>()), Times.Once);
+
+        It should_file_folder_for_template_be_created = () =>
+          fileSystemAccessorMock.Verify(accessor => accessor.CreateDirectory(it.Is<string>(name => name.Contains("ExportedFiles\\exported_files_" + questionnaireExportStructure.QuestionnaireId.ToString()))), Times.Once);
+
         private static FileBasedDataExportService fileBasedDataExportService;
         private static InterviewDataExportException raisedException;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Mock<IDataFileExportService> dataFileExportServiceMock;
+        private static QuestionnaireExportStructure questionnaireExportStructure= new QuestionnaireExportStructure();
     }
 }
