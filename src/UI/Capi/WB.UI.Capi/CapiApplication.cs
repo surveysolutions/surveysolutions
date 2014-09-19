@@ -45,10 +45,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Injections;
-using WB.UI.Capi.Syncronization;
-using WB.UI.Shared.Android;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
 
@@ -85,11 +82,6 @@ namespace WB.UI.Capi
             get { return Kernel.Get<IFileStorageService>(); }
         }
 
-        /*public static ISyncCacher SyncCacher
-        {
-            get { return Kernel.Get<ISyncCacher>(); }
-        }*/
-
         public static IKernel Kernel
         {
             get
@@ -103,20 +95,16 @@ namespace WB.UI.Capi
             }
         }
 
-
         #endregion
-
 
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
-           
-           
-
         }
 
         private void RegisterInterviewHandlerInBus(InProcessEventBus bus, InterviewViewModelDenormalizer eventHandler, 
-            AnswerOptionsForLinkedQuestionsDenormalizer answerOptionsForLinkedQuestionsDenormalizer)
+            AnswerOptionsForLinkedQuestionsDenormalizer answerOptionsForLinkedQuestionsDenormalizer,
+            AnswerOptionsForCascadingQuestionsDenormalizer answerOptionsForCascadingQuestionsDenormalizer)
         {
             
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
@@ -159,6 +147,7 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof(QRBarcodeQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(PictureQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof(InterviewOnClientCreated));
 
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswersRemoved));
@@ -168,8 +157,9 @@ namespace WB.UI.Capi
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
 
-            bus.RegisterHandler(eventHandler, typeof(InterviewOnClientCreated));
 
+            bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(AnswersRemoved));
+            bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(SingleOptionQuestionAnswered));
         }
 
         private void InitTemplateStorage(InProcessEventBus bus)
@@ -304,9 +294,19 @@ namespace WB.UI.Capi
                     this.kernel.Get<IQuestionnaireRosterStructureFactory>());
 
             var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
+            var answerOptionsForCascadingQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForCascadingQuestionsDenormalizer>();
 
-            this.RegisterInterviewHandlerInBus(bus, eventHandler, answerOptionsForLinkedQuestionsDenormalizer);
-            this.RegisterInterviewHandlerInBus(interviewViewBus, eventHandler, answerOptionsForLinkedQuestionsDenormalizer);
+            this.RegisterInterviewHandlerInBus(
+                bus, 
+                eventHandler, 
+                answerOptionsForLinkedQuestionsDenormalizer, 
+                answerOptionsForCascadingQuestionsDenormalizer);
+            
+            this.RegisterInterviewHandlerInBus(
+                interviewViewBus, 
+                eventHandler, 
+                answerOptionsForLinkedQuestionsDenormalizer,
+                answerOptionsForCascadingQuestionsDenormalizer);
 
             this.InitTemplateStorage(bus);
 

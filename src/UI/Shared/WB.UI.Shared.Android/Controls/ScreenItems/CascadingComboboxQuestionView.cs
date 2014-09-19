@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.UI.Shared.Android.Controls.ScreenItems
 {
-    public class CascadingComboboxQuestionView : FilteredComboboxQuestionView
+    public class CascadingComboboxQuestionView : AbstractQuestionView
     {
         public CascadingComboboxQuestionView(
             Context context,
@@ -25,10 +25,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             IAuthentication membership)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService, membership)
         {
+            this.Model.PropertyChanged += this.Model_PropertyChanged;
         }
 
-        protected AutoCompleteTextView filteredCombobox;
-       
+        protected AutoCompleteTextView cascadingCombobox;
+        private ArrayAdapter<string> adapter;
+
 
         protected override void Initialize()
         {
@@ -40,24 +42,40 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void InitializeFilteredCombobox()
         {
-            this.filteredCombobox = new AutoCompleteTextView(this.Context);
-            
-            this.filteredCombobox.Threshold = 1;
-            this.filteredCombobox.ImeOptions = ImeAction.Done;
-            this.filteredCombobox.SetSelectAllOnFocus(true);
-            this.filteredCombobox.SetSingleLine(true);
-            this.filteredCombobox.ItemClick += filteredCombobox_ItemClick;
+            this.cascadingCombobox = new AutoCompleteTextView(this.Context)
+            {
+                Threshold = 1, 
+                ImeOptions = ImeAction.Done
+            };
 
-            var adapter = new ArrayAdapter<String>(this.Context, Resource.Layout.FilteredComboboxRowLayout,
+            this.cascadingCombobox.SetSelectAllOnFocus(true);
+            this.cascadingCombobox.SetSingleLine(true);
+            this.cascadingCombobox.ItemClick += this.cascadingCombobox_ItemClick;
+
+            this.adapter = new ArrayAdapter<String>(
+                this.Context, 
+                Resource.Layout.CascadingComboboxRowLayout,
                 this.Answers.Select(option => option.Title).ToList());
-            this.filteredCombobox.Adapter = adapter;
+
+            this.cascadingCombobox.Adapter = this.adapter;
             
-            this.llWrapper.AddView(this.filteredCombobox);
+            this.llWrapper.AddView(this.cascadingCombobox);
         }
 
-        void filteredCombobox_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var answer = this.Answers.FirstOrDefault(option=> option.Title.Equals(this.filteredCombobox.Text));
+            bool answerOptionsChanged = e.PropertyName == "AnswerOptions";
+            if (!answerOptionsChanged)
+                return;
+
+            //refill list of answers
+            adapter.Clear();
+            adapter.AddAll(this.Answers.Select(option => option.Title).ToList());
+        }
+
+        void cascadingCombobox_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            var answer = this.Answers.FirstOrDefault(option=> option.Title.Equals(this.cascadingCombobox.Text));
             if (answer != null)
             {
                 this.SaveAnswer(this.GetAnswerTitle(answer), this.CreateSaveAnswerCommand(answer));
@@ -75,17 +93,17 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         protected override void PutAnswerStoredInModelToUI()
         {
-            this.filteredCombobox.Text = GetAnswerStoredInModelAsString();
+            this.cascadingCombobox.Text = GetAnswerStoredInModelAsString();
         }
 
-        private FilteredComboboxQuestionViewModel TypedMode
+        private CascadingComboboxQuestionViewModel TypedMode
         {
-            get { return this.Model as FilteredComboboxQuestionViewModel; }
+            get { return this.Model as CascadingComboboxQuestionViewModel; }
         }
 
         private IEnumerable<AnswerViewModel> Answers
         {
-            get { return this.TypedMode.Answers; }
+            get { return this.TypedMode.AnswerOptions; }
         }
 
         private bool IsAnswerSelected(AnswerViewModel answer)
@@ -104,6 +122,19 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 this.Membership.CurrentUser.Id,
                 this.Model.PublicKey.Id, this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow,
                 selectedAnswer.Value);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.Model != null)
+                {
+                    this.Model.PropertyChanged -= this.Model_PropertyChanged;
+                }
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

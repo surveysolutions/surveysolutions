@@ -164,6 +164,8 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(eventHandler, typeof(PictureQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(TextListQuestionAnswered));
 
+            bus.RegisterHandler(eventHandler, typeof(InterviewForTestingCreated));
+
             var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
 
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
@@ -174,7 +176,10 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
 
-            bus.RegisterHandler(eventHandler, typeof(InterviewForTestingCreated));
+            var answerOptionsForCascadingQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForCascadingQuestionsDenormalizer>();
+           
+            bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(AnswersRemoved));
+            bus.RegisterHandler(answerOptionsForCascadingQuestionsDenormalizer, typeof(SingleOptionQuestionAnswered));
         }
 
         private void InitTemplateStorage(InProcessEventBus bus)
