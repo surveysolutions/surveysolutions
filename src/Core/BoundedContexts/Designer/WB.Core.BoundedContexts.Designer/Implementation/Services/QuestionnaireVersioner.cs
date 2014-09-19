@@ -40,6 +40,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (filteredComboboxQuestionsCount > 0 && version < version_3)
                 version = version_3;
 
+            int multimediaQuestionCount = this.GetMultimediaQuestionsCount(questionnaire);
+            if (multimediaQuestionCount > 0 && version < version_3)
+                version = version_3;
+
             return version;
         }
 
@@ -48,6 +52,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return
                 questionnaire.Find<SingleQuestion>(
                     question => question.IsFilteredCombobox.HasValue && question.IsFilteredCombobox.Value).Count();
+        }
+
+        private int GetMultimediaQuestionsCount(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Find<MultimediaQuestion>(x => true).Count();
         }
 
         private int GetStaticTextCount(QuestionnaireDocument questionnaire)
