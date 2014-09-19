@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,27 +20,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Establish context = () =>
         {
             dataFileExportServiceMock=new Mock<IDataFileExportService>();
+            dataFileExportServiceMock.Setup(x => x.GetInterviewActionFileName()).Returns("file.csv");
+
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock
-                .Setup(x => x.IsDirectoryExists(it.IsAny<string>()))
-                .Returns(true)
-                .Callback<string>(directory => existingDirectory = directory);
+            fileSystemAccessorMock.Setup(x => x.IsDirectoryExists(it.IsAny<string>())).Returns(true);
+
+            fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                .Returns<string, string>(Path.Combine);
 
             fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, dataFileExportServiceMock.Object);
         };
 
         Because of = () =>
             raisedException =
-                Catch.Exception(() => fileBasedDataExportService.CreateExportedDataStructureByTemplate(new QuestionnaireExportStructure())) as InterviewDataExportException;
+                Catch.Exception(() => fileBasedDataExportService.CreateExportStructureByTemplate(new QuestionnaireExportStructure())) as InterviewDataExportException;
 
         It should_not_raise_exception = () =>
             raisedException.ShouldBeNull();
 
         It should_delete_directory = () =>
-            fileSystemAccessorMock.Verify(accessor => accessor.DeleteDirectory(existingDirectory), Times.Once);
+            fileSystemAccessorMock.Verify(accessor => accessor.DeleteDirectory(it.Is<string>(name => name.Contains("ExportedData"))), Times.Once);
 
         It should_copy_directory = () =>
-            fileSystemAccessorMock.Verify(accessor => accessor.CopyFileOrDirectory(existingDirectory, it.IsAny<string>()), Times.Once);
+            fileSystemAccessorMock.Verify(accessor => accessor.CopyFileOrDirectory(it.Is<string>(name => name.Contains("ExportedData")), it.IsAny<string>()), Times.Once);
 
         It should_action_file_be_created = () =>
           dataFileExportServiceMock.Verify(dataFileExportService => dataFileExportService.CreateHeaderForActionFile(Moq.It.IsAny<string>()), Times.Once);
@@ -48,7 +51,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         private static InterviewDataExportException raisedException;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Mock<IDataFileExportService> dataFileExportServiceMock;
-
-        private static string existingDirectory;
     }
 }
