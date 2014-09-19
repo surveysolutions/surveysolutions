@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
                     parentGroupId: chapterId,
                     title: title,
                     variableName: longVariableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,
@@ -34,7 +34,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
                     responsibleId: responsibleId,
                     options: options,
                     linkedToQuestionId: linkedToQuestionId,
-                    isFilteredCombobox: isFilteredCombobox));
+                    isFilteredCombobox: isFilteredCombobox,
+                    cascadeFromQuestionId: cascadeFromQuestionId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -59,6 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
         private static string validationMessage = "";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
+        private static Guid? cascadeFromQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = false;
     }
 }

@@ -59,6 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
                     responsibleId: responsibleId,
                     options: null,
                     linkedToQuestionId: linkedToQuestionId,
+                    cascadeFromQuestionId: cascadeFromQuestionId,
                     isFilteredCombobox: isFilteredCombobox));
 
         It should_throw_QuestionnaireException = () =>
@@ -85,6 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
         private static string validationExpression = "";
         private static string validationMessage = "";
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        private static Guid? cascadeFromQuestionId = null;
         private static int targetIndex = 1;
         private static bool isFilteredCombobox = false;
     }
