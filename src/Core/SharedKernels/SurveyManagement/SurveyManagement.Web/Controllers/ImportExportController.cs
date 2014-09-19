@@ -98,11 +98,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Headquarter")]
         public void GetExportedFilesAsync(Guid id, long version)
         {
-            if (id == Guid.Empty)
-            {
-                throw new HttpException(404, "Invalid query string parameters");
-            }
-
             AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
                 () =>
