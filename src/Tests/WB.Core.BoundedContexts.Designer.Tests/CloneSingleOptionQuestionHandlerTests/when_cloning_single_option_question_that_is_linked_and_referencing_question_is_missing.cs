@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
                     questionId: questionId,
                     title: title,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
                     responsibleId: responsibleId,
                     options: options,
                     linkedToQuestionId: linkedToQuestionId,
+                    cascadeFromQuestionId: cascadeFromQuestionId,
                     isFilteredCombobox: isFilteredCombobox));
 
 
@@ -79,6 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CloneSingleOptionQuestionHandle
         private static string validationMessage = "";
         private static Option[] options = null;
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        private static Guid? cascadeFromQuestionId = null;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static int targetIndex = 1;
         private static bool isFilteredCombobox = false;

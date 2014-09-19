@@ -1210,6 +1210,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
                             isPreFilled: categoricalSingleQuestion.Featured,
                             isFilteredCombobox: categoricalSingleQuestion.IsFilteredCombobox,
+                            cascadeFromQuestionId: categoricalSingleQuestion.CascadeFromQuestionId,
                             options:
                                 categoricalSingleQuestion.Answers.Select(
                                     answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
