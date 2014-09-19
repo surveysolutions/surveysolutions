@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
                     parentGroupId: groupFromRosterId,
                     title: title,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPrefilled,
                     scope: QuestionScope.Interviewer,
@@ -46,6 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
                     responsibleId: responsibleId,
                     options: options,
                     linkedToQuestionId: linkedToQuestionId,
+                    cascadeFromQuestionId: cascadeFromQuestionId,
                     isFilteredCombobox: isFilteredCombobox));
 
         It should_throw_QuestionnaireException = () =>
@@ -72,6 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
         private static string validationMessage = "";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid linkedToQuestionId =  Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        private static Guid? cascadeFromQuestionId = null;
         private static bool isFilteredCombobox = false;
     }
 }

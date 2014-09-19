@@ -237,12 +237,15 @@
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_edit_view_and_static_text_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view.cs" />
+    <Compile Include="QuestionnaireTests\CascadigOptions\when_removing_single_option_question.cs" />
+    <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_setting_to_cascade_from_non_existing_question.cs" />
     <Compile Include="QuestionnaireTests\GetChapterOfTests\when_finding_group_that_exists_in_questionnaire.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_fixed_titles_with_too_long_title.cs" />
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_question_and_roster_size_question_is_empty.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_text_question_by_id.cs" />
     <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
+    <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_with_cascading_options.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_numeric_question_and_question_is_null.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_filtered_combobox.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_static_text.cs" />

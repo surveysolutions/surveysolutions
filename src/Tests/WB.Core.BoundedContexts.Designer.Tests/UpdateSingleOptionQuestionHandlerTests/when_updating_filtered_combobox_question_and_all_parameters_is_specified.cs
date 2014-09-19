@@ -32,7 +32,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                 responsibleId: responsibleId,
                 options: old_options,
                 linkedToQuestionId: null,
-                isFilteredCombobox: false);
+                isFilteredCombobox: false,
+                cascadeFromQuestionId: null);
             eventContext = new EventContext();
         };
 
