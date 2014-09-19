@@ -251,6 +251,7 @@
     <Compile Include="QuestionnaireTests\when_questionnaire_have_nested_roster_group_with_not_empty_RosterSizeQuestionId_and_GetRosterGroupsByRosterSizeQuestion_called.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_question_has_enablement_condition.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_numeric_question_which_is_triggering_roster_and_nested_roster_and_GetRosterGroupsByRosterSizeQuestion.cs" />
+    <Compile Include="QuestionnaireTests\when_trying_to_set_both_cascading_and_linked_question_ids.cs" />
     <Compile Include="RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader.cs" />
     <Compile Include="RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader_from_guid_and_version.cs" />
     <Compile Include="RepositoryKeyHelperTests\when_creating_key_for_variable_by_questionnaire_readside_versioned_repositories.cs" />
