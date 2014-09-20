@@ -2247,7 +2247,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
 
-
             this.ApplyEvent(new QuestionChanged
             {
                 PublicKey = questionId,
@@ -3977,6 +3976,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = option.Id,
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
+                ParentValue = option.ParentValue
             };
         }
 
