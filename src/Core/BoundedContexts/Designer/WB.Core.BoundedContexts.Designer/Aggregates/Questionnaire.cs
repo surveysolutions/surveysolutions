@@ -2269,6 +2269,33 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
+        public void UpdateCascadingComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+
+            this.ApplyEvent(new QuestionChanged
+            {
+                PublicKey = questionId,
+                QuestionText = categoricalOneAnswerQuestion.QuestionText,
+                QuestionType = categoricalOneAnswerQuestion.QuestionType,
+                StataExportCaption = categoricalOneAnswerQuestion.StataExportCaption,
+                VariableLabel = categoricalOneAnswerQuestion.VariableLabel,
+                Mandatory = categoricalOneAnswerQuestion.Mandatory,
+                Featured = categoricalOneAnswerQuestion.Featured,
+                QuestionScope = categoricalOneAnswerQuestion.QuestionScope,
+                ConditionExpression = categoricalOneAnswerQuestion.ConditionExpression,
+                ValidationExpression = categoricalOneAnswerQuestion.ValidationExpression,
+                ValidationMessage = categoricalOneAnswerQuestion.ValidationMessage,
+                Instructions = categoricalOneAnswerQuestion.Instructions,
+                Answers = ConvertOptionsToAnswers(options),
+                ResponsibleId = responsibleId,
+                LinkedToQuestionId = categoricalOneAnswerQuestion.LinkedToQuestionId,
+                CascadeFromQuestionId = categoricalOneAnswerQuestion.CascadeFromQuestionId,
+                IsFilteredCombobox = categoricalOneAnswerQuestion.IsFilteredCombobox
+            });
+        }
         #endregion
 
         #region Question: Numeric question command handlers
