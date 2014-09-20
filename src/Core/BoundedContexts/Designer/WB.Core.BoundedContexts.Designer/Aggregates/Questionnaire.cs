@@ -2264,6 +2264,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Answers = ConvertOptionsToAnswers(options),
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = categoricalOneAnswerQuestion.LinkedToQuestionId,
+                CascadeFromQuestionId = categoricalOneAnswerQuestion.CascadeFromQuestionId,
                 IsFilteredCombobox = categoricalOneAnswerQuestion.IsFilteredCombobox
             });
         }
