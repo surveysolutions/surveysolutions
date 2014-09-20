@@ -87,11 +87,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             if (answers == null)
                 return null;
+
             return EventConverter.GetValidAnswersCollection(answers.ToArray()).Select(x => new CategoricalOption
-            {
-                Title = x.AnswerText,
-                Value = decimal.Parse(x.AnswerValue)
-            }).ToArray();
+                {
+                    Title = x.AnswerText,
+                    Value = decimal.Parse(x.AnswerValue),
+                    ParentValue = Convert.ToDecimal(x.ParentValue)
+                }
+            ).ToArray();
         }
 
         private static QuestionDetailsView CreateQuestionByType(QuestionType type)

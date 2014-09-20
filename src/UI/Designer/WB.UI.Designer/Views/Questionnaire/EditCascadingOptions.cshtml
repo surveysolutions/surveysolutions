@@ -35,7 +35,7 @@
             }
         }
         function apply() {
-            $.post("@Url.Action("ApplyOptions", "Questionnaire")", function (response) {
+            $.post("@Url.Action("ApplyCascadingOptions", "Questionnaire")", function (response) {
                 if (response.IsSuccess) {
                     close();
                 } else {
@@ -64,7 +64,7 @@
     </script>
 </head>
 <body>
-    @using (Html.BeginForm("EditOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("EditCascadingOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <nav id="topNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
@@ -74,11 +74,11 @@
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">Export</a>
-
                 </div>
             </div>
         </nav>
     }
+
     <div id="content" class="container">
         <div id="applyOptionsError" class="alert alert-danger">
             <div id="applyOptionsErrorContent"></div>
@@ -108,7 +108,7 @@
                         <tr>
                             <td>@option.Value</td>
                             <td>@option.Title</td>
-                            <td></td>
+                            <td>@option.ParentValue</td>
                         </tr>
                     }
                 </tbody>
