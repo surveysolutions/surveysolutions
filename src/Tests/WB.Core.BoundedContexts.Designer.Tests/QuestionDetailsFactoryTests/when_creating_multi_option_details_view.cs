@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionDetailsFactoryTests
         private static bool isMandatory = true;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string variableName = "variable";
-        private static Guid linkedToQuestionId= Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static Guid linkedToQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static bool areAnswersOrdered = true;
         private static int maxAllowedAnswers = 15;
         private static List<Answer> options = new List<Answer>
