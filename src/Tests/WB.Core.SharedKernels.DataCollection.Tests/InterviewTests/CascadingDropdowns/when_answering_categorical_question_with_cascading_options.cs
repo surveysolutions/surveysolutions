@@ -2,23 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDropdowns
 {
     [Subject(typeof(Interview))]
-    internal class swhen_answering_linked_categorical_question_with_cascading_options : InterviewTestsContext
+    internal class when_answering_categorical_question_with_cascading_options : InterviewTestsContext
     {
         private Establish context = () =>
         {
@@ -97,7 +94,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         Because of = () => interview.AnswerSingleOptionQuestion(Guid.NewGuid(), parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 2);
 
-        private It should_not_remove_answer_from_self = () =>
+        private It should_enable_child_question = () =>
+            eventContext.ShouldContainEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
+
+        It should_not_remove_answer_from_self = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == parentSingleOptionQuestionId));
 
         It should_not_remove_answer_from_not_related_question = () => 
