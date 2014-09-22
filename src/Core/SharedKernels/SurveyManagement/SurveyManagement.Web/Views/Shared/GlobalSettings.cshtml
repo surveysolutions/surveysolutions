@@ -1,0 +1,32 @@
+﻿@using WB.UI.Shared.Web.Filters
+
+@functions{
+    public string TokenHeaderValue()
+    {
+        string cookieToken, formToken;
+        AntiForgery.GetTokens(null, out cookieToken, out formToken);
+        return cookieToken + ":" + formToken;
+    }
+}
+
+<script type="text/javascript">
+    var input = window.input || (function () {
+        'use strict';
+        return {
+            settings: {
+                messages: {
+                    unhandledExceptionMessage: 'An unexpected error occurred. We are sorry for inconvenience.',
+                    notifyDialogTitle: 'Please wait',
+                    notifyDialogText: '"Your previous request is not complete. Please wait for it to be finished and repeat your operation."',
+                    notifyNoMarkersTitle: 'No markers were added',
+                    notifyNoMarkersText: 'There is no any information about geolocation points'
+                },
+                acsrf: {
+                    tokenName : '@TokenValidationAuthorizationFilter.Apikey',
+                    token : '@TokenHeaderValue()'
+                    }
+            }
+        };
+    }(document));
+    window.input = input;
+</script>

@@ -37,23 +37,7 @@
             </div>
         </div>
         @Scripts.Render("~/js/main")
-        <script type="text/javascript">
-            var input = window.input || (function () {
-                'use strict';
-                return {
-                    settings: {
-                        messages: {
-                            unhandledExceptionMessage: 'An unexpected error occurred. We are sorry for inconvenience.',
-                            notifyDialogTitle: 'Please wait',
-                            notifyDialogText: '"Your previous request is not complete. Please wait for it to be finished and repeat your operation."',
-                            notifyNoMarkersTitle: 'No markers were added',
-                            notifyNoMarkersText: 'There is no any information about geolocation points'
-                        }
-                    }
-                };
-            }(document));
-            window.input = input;
-        </script>
+        @Html.Partial("GlobalSettings")
         @RenderSection("scripts", false)
     </body>
 </html>
