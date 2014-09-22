@@ -13,12 +13,6 @@
     <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")" />
     @Styles.Render("~/Content/main")
     @RenderSection("styles", false)
-    @*Clickjacking protection*@
-    <style>
-        body {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -113,15 +107,7 @@
             </div>
         </footer>
     </div>
-    @*Clickjacking protection*@
-    <script>
-        if (self == top) {
-            var theBody = document.getElementsByTagName('body')[0];
-            theBody.style.display = "block";
-        } else {
-            top.location = self.location;
-        }
-    </script>
+    @Html.Partial("Clickjacking")
     @Scripts.Render("~/js/main")
     <script type="text/javascript">
         var input = window.input || (function () {

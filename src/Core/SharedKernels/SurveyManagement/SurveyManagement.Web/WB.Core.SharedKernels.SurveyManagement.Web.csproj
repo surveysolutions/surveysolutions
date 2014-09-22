@@ -382,6 +382,7 @@
     <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Settings.cshtml" />
+    <EmbeddedResource Include="Views\Shared\Clickjacking.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
