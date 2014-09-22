@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Tests.Unit.Applications.CAPI
+namespace WB.Core.BoundedContexts.Capi.Tests.CascadingComboboxTests
 {
     [Subject(typeof(InterviewViewModel))]
     internal class InterviewViewModelTestContext

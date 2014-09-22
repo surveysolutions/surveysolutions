@@ -83,6 +83,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="CascadingComboboxTests\CascadingComboboxQuestionViewTestContext.cs" />
+    <Compile Include="CascadingComboboxTests\InterviewViewModelTestContext.cs" />
+    <Compile Include="CascadingComboboxTests\when_creating_cascading_question_and_handling_answers_change.cs" />
+    <Compile Include="CascadingComboboxTests\when_creating_cascading_question_and_setting_answer.cs" />
+    <Compile Include="CascadingComboboxTests\when_creating_cascading_question_and_setting_answer_as_string.cs" />
+    <Compile Include="CascadingComboboxTests\when_creating_cascading_question_and_setting_empty_answer.cs" />
+    <Compile Include="CascadingComboboxTests\when_creating_cascading_question_with_3_options.cs" />
+    <Compile Include="CascadingComboboxTests\when_creating_cascading_question_with_selected_option_and_getting_answer_string.cs" />
+    <Compile Include="CascadingComboboxTests\when_creating_cascading_question_with_selected_option_and_removing_answer.cs" />
+    <Compile Include="CascadingComboboxTests\when_synchronized_data_contains_2nd_level_rosters_and_cascading_questions_on_each_level_with_some_answers.cs" />
+    <Compile Include="CascadingComboboxTests\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_firt_level_inside_it.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\InterviewViewModelDenormalizerTests.cs" />
     <Compile Include="InterviewViewModelDenormalizerTests\InterviewViewModelDenormalizerTestsContext.cs" />

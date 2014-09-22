@@ -4,9 +4,9 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 
-namespace WB.Tests.Unit.Applications.CAPI
+namespace WB.Core.BoundedContexts.Capi.Tests.CascadingComboboxTests
 {
-    internal class when_creating_cascading_question_and_handling_answers_change : CascadingComboboxQuestionViewTestContext
+    internal class when_creating_cascading_question_and_setting_empty_answer : CascadingComboboxQuestionViewTestContext
     {
         Establish context = () =>
         {
@@ -17,22 +17,18 @@ namespace WB.Tests.Unit.Applications.CAPI
                 new AnswerViewModel(Guid.NewGuid(), "o 3", "3", false, null),
             };
             cascadingCombobox = CreateCascadingComboboxQuestionViewModel(getAnswerOptions);
+
+            cascadingCombobox.HandleAnswerListChange();
         };
 
         Because of = () =>
-            cascadingCombobox.HandleAnswerListChange();
+            cascadingCombobox.SetAnswer("");
 
-        It should_return_3_options = () =>
-            cascadingCombobox.filteredAnswers.Count().ShouldEqual(3);
+        It should_not_find_any_selected_option = () =>
+            cascadingCombobox.filteredAnswers.Any(x => x.Selected).ShouldBeFalse();
 
-        It should_return_options_with_values_1_2_3 = () =>
-            cascadingCombobox.filteredAnswers.Select(x => x.Value).ShouldContainOnly(1, 2, 3);
-
-        It should_return_options_with_titles__1__2__3 = () =>
-            cascadingCombobox.filteredAnswers.Select(x => x.Title).ShouldContainOnly("o 1", "o 2", "o 3");
-
-        It should_return_options_with_titles__1__2__31 = () =>
-            cascadingCombobox.filteredAnswers.Select(x => x.Title).ShouldContainOnly("o 1", "o 2", "o 3");
+        It should_set_non_answered_status = () =>
+            cascadingCombobox.Status.ShouldEqual(QuestionStatus.Enabled | QuestionStatus.ParentEnabled | QuestionStatus.Valid);
 
         private static CascadingComboboxQuestionViewModel cascadingCombobox;
     }
