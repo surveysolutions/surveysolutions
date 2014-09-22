@@ -18,6 +18,7 @@ using Main.Core.Documents;
 using Main.Core.View;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
+using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.ChangeLog;
@@ -27,10 +28,13 @@ using WB.Core.BoundedContexts.Capi.Synchronization.Views.InterviewMetaInfo;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.QuestionnaireAssembly;
 
 namespace CAPI.Android.Core.Model
 {
@@ -68,6 +72,9 @@ namespace CAPI.Android.Core.Model
 
             var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
 
+            var assemblyFileAccessor = new QuestionnareAssemblyCapiFileAccessor(this.Kernel.Get<IFileSystemAccessor>());
+            var stateProvider = new InterviewExpressionStateProvider(assemblyFileAccessor);
+
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
@@ -92,6 +99,9 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
 
+            this.Bind<IQuestionnareAssemblyFileAccessor>().ToConstant(assemblyFileAccessor);
+            this.Bind<IInterviewExpressionStateProvider>().ToConstant(stateProvider);
+
             this.Bind<IBackup>()
                 .To<DefaultBackup>()
                 .InSingletonScope()
@@ -99,7 +109,7 @@ namespace CAPI.Android.Core.Model
                 .WithConstructorArgument("backupables", new IBackupable[]
                 {
                     evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
-                    bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
+                    bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore , assemblyFileAccessor
                 });
         }
     }

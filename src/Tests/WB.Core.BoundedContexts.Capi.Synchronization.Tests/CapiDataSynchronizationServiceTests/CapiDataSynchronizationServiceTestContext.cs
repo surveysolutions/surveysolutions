@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizationServiceTests
@@ -18,7 +19,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
             ICommandService commandService = null, IJsonUtils jsonUtils = null,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null, ICapiSynchronizationCacheService capiSynchronizationCacheService = null,
-            ICapiCleanUpService capiCleanUpService = null)
+            ICapiCleanUpService capiCleanUpService = null, IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor = null)
         {
             var mockOfCompressor = new Mock<IStringCompressor>();
             mockOfCompressor.Setup(x => x.DecompressString(Moq.It.IsAny<string>())).Returns<string>(s => s);
@@ -27,7 +28,9 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
                 loginViewFactory ?? Mock.Of<IViewFactory<LoginViewInput, LoginView>>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 capiCleanUpService ?? Mock.Of<ICapiCleanUpService>(),
-                Mock.Of<ILogger>(), capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(), mockOfCompressor.Object, jsonUtils ?? Mock.Of<IJsonUtils>());
+                Mock.Of<ILogger>(), capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(), 
+                mockOfCompressor.Object, jsonUtils ?? Mock.Of<IJsonUtils>(),
+                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnareAssemblyFileAccessor>());
         }
     }
 }

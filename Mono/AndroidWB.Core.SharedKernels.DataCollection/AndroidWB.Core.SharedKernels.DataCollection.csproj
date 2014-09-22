@@ -447,6 +447,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\QuestionnaireDeleted.cs">
       <Link>Events\Questionnaire\QuestionnaireDeleted.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\TemplateAssemblyImported.cs">
+      <Link>Events\Questionnaire\TemplateAssemblyImported.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\TemplateImported.cs">
       <Link>Events\Questionnaire\TemplateImported.cs</Link>
     </Compile>
@@ -527,6 +530,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Factories\QuestionnaireRosterStructureFactory.cs">
       <Link>Implementation\Factories\QuestionnaireRosterStructureFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Providers\InterviewExpressionStateProvider.cs">
+      <Link>Implementation\Providers\InterviewExpressionStateProvider.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\ReadSide\VersionedReadSideRepositoryReader.cs">
       <Link>Implementation\ReadSide\VersionedReadSideRepositoryReader.cs</Link>

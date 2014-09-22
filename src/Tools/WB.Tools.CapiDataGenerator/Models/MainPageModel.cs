@@ -480,7 +480,8 @@ namespace CapiDataGenerator
                         var questionnaire = new Questionnaire(questionnaireDocument).GetQuestionnaire();
                         var state = new State(questionnaire.GetFixedRosterGroups());
 
-                        this.ImportTemplate(questionnaireDocument);
+                        //fix loading with correspoding assembly
+                        this.ImportTemplate(questionnaireDocument, null);
 
                         var interviews = this.CreateInterviews(questionnaireDocument, interviewsCount, users, questionnaire, state);
 
@@ -524,10 +525,10 @@ namespace CapiDataGenerator
             });
         }
 
-        private void ImportTemplate(IQuestionnaireDocument template)
+        private void ImportTemplate(IQuestionnaireDocument template, string supportingAssembly)
         {
             this.Log("import template");
-            this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template, true));
+            this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template, true, null));
 
             //incorrect. should be saved on denormalizer
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, 1, template as QuestionnaireDocument);

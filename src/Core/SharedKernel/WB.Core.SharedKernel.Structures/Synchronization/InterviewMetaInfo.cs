@@ -63,4 +63,16 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
         public long Version { get; private set; }
         public bool AllowCensusMode { get; private set; }
     }
+
+    public class QuestionnaireAssemblyMetadata
+    {
+        public QuestionnaireAssemblyMetadata(Guid questionnaireId, long version)
+        {
+            this.QuestionnaireId = questionnaireId;
+            this.Version = version;
+        }
+        public Guid QuestionnaireId { get; private set; }
+        public long Version { get; private set; }
+
+    }
 }

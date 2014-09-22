@@ -111,7 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\QuestionnaireListAdapter.cs" />
-    <Compile Include="InterviewExpressionStateTesterProvider.cs" />
+    <Compile Include="QuestionnareAssemblyTesterFileAccessor.cs" />
     <Compile Include="TesterLoggingModule.cs" />
     <Compile Include="AndroidTesterModelModule.cs" />
     <Compile Include="App.cs" />

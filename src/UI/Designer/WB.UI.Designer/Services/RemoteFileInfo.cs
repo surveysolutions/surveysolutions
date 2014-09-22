@@ -10,8 +10,11 @@ namespace WB.UI.Designer.Services
         [MessageBodyMember]
         public Stream FileByteStream;
 
+        /*[MessageHeader]
+        public string FileName;*/
+
         [MessageHeader]
-        public string FileName;
+        public string SupportingAssembly;
 
         [MessageHeader]
         public long Length;

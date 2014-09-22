@@ -237,8 +237,10 @@ namespace WB.UI.QuestionnaireTester
             this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
 
+            /*this.kernel.Bind<IQuestionnareAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
+
             this.kernel.Unbind<IInterviewExpressionStateProvider>();
-            this.kernel.Bind<IInterviewExpressionStateProvider>().To<InterviewExpressionStateTesterProvider>().InSingletonScope();
+            this.kernel.Bind<IInterviewExpressionStateProvider>().To<InterviewExpressionStateTesterProvider>().InSingletonScope();*/
 
 
             #region register handlers

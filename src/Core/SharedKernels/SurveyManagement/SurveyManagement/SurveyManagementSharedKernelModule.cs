@@ -6,7 +6,9 @@ using WB.Core.GenericSubdomains.Utils.Implementation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
@@ -55,6 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IDataExportService>().To<FileBasedDataExportService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IQuestionnareAssemblyFileAccessor>().To<QuestionnaireAssemblyFileAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
             this.Bind<ICsvWriterService>().To<CsvWriterService>();
@@ -100,6 +103,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
 
             this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope();
+            this.Bind<IInterviewExpressionStateProvider>().To<WB.Core.SharedKernels.SurveyManagement.Implementation.QuestionnaireAssembly.InterviewExpressionStateProvider>().InSingletonScope();
+            
             //this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
         }
 
