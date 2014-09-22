@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -32,9 +33,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private Dictionary<string, Guid> VariableNames { set; get; }
 
-        private IRoslynExpressionAnalyser ExpressionAnalyser
+        private IExpressionProcessor ExpressionProcessor
         {
-            get { return ServiceLocator.Current.GetInstance<IRoslynExpressionAnalyser>(); }
+            get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
         }
 
         public QuestionnaireExecutorTemplateModel(QuestionnaireDocument questionnaireDocument)
@@ -216,7 +217,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression)
         {
             return new List<Guid>(
-                from variable in this.ExpressionAnalyser.ExtractVariables(conditionExpression)
+                from variable in this.ExpressionProcessor.GetIdentifiersUsedInExpression(conditionExpression)
                 where this.VariableNames.ContainsKey(variable)
                 select this.VariableNames[variable]);
         }

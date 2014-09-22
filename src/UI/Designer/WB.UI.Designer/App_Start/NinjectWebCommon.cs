@@ -79,16 +79,15 @@ namespace WB.UI.Designer.App_Start
                 ModulesFactory.GetEventStoreModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
-                new DesignerBoundedContextModule(),
                 new ExpressionProcessorModule(),
+                new DesignerBoundedContextModule(),
                 new QuestionnaireVerificationModule(),
                 new QuestionnaireUpgraderModule(),
                 new MembershipModule(),
                 new MainModule(),
-                 new FileInfrastructureModule(),
+                new FileInfrastructureModule(),
                 new DesignerRegistry()
                 );
-
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             

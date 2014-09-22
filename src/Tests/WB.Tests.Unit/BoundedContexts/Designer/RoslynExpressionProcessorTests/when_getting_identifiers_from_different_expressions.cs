@@ -3,9 +3,9 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.RoslynExpressionAnalyserTests
+namespace WB.Tests.Unit.BoundedContexts.Designer.RoslynExpressionProcessorTests
 {
-    internal class when_extracting_variables_from_different_expressions
+    internal class when_getting_identifiers_from_different_expressions
     {
         Establish context = () =>
         {
@@ -23,15 +23,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.RoslynExpressionAnalyserTests
                 { "c2 + 's'", new[] { "c2" } },
             };
 
-            analyzer = Create.RoslynExpressionAnalyser();
+            analyzer = Create.RoslynExpressionProcessor();
         };
 
         Because of = () =>
             results = expectedResults.Keys.ToDictionary(
                 expression => expression,
-                expression => analyzer.ExtractVariables(expression));
+                expression => analyzer.GetIdentifiersUsedInExpression(expression));
 
-        It should_return_only_expected_variables = () =>
+        It should_return_only_expected_identifiers = () =>
         {
             foreach (var result in results)
             {
@@ -41,6 +41,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.RoslynExpressionAnalyserTests
 
         private static Dictionary<string, IEnumerable<string>> results;
         private static Dictionary<string, IEnumerable<string>> expectedResults;
-        private static RoslynExpressionAnalyser analyzer;
+        private static RoslynExpressionProcessor analyzer;
     }
 }
