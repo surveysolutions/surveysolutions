@@ -6,9 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using WB.UI.Headquarters.API.Attributes;
 
-namespace WB.UI.Headquarters.API.Filters
+namespace WB.UI.Shared.Web.Filters
 {
     public class TokenValidationAuthorizationFilter : IAuthorizationFilter
     {
@@ -29,7 +28,7 @@ namespace WB.UI.Headquarters.API.Filters
         {
             try
             {
-                string token = actionContext.Request.Headers.GetValues(Apikey).FirstOrDefault();
+                string token = Enumerable.FirstOrDefault<string>(actionContext.Request.Headers.GetValues(Apikey));
 
                 if (!this.tokenVerifier.IsTokenValid(token))
                 {

@@ -1,6 +1,6 @@
-﻿using System.Web.Http.Filters;
+﻿using System.Web.Mvc;
 
-namespace WB.UI.Headquarters.API.Attributes
+namespace WB.UI.Shared.Web.Filters
 {
     public class TokenValidationAuthorizationAttribute : FilterAttribute {}
 }
