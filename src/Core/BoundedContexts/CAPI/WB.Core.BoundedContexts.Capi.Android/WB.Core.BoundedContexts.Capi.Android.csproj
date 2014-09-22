@@ -73,6 +73,9 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\CapiBoundedContextModule.cs">
       <Link>CapiBoundedContextModule.cs</Link>
     </Compile>
+    <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs">
+      <Link>EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs</Link>
+    </Compile>
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs">
       <Link>EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs</Link>
     </Compile>
@@ -181,7 +184,6 @@
     <Compile Include="..\WB.Core.BoundedContexts.CAPI\Views\Login\LoginViewModel.cs">
       <Link>Views\Login\LoginViewModel.cs</Link>
     </Compile>
-    <Compile Include="EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -224,7 +226,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="c6ed30a9-4d14-48d1-8311-c2267dfd424f" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="c6ed30a9-4d14-48d1-8311-c2267dfd424f" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

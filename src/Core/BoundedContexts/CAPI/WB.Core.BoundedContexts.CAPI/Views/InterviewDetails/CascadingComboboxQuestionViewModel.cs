@@ -11,9 +11,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
     public class CascadingComboboxQuestionViewModel : QuestionViewModel
     {
         public CascadingComboboxQuestionViewModel(
-            InterviewItemId publicKey, ValueVector<Guid> questionRosterScope,
+            InterviewItemId publicKey, 
+            ValueVector<Guid> questionRosterScope,
             string text,
-            Func<decimal[], ValueVector<Guid>, IEnumerable<AnswerViewModel>> getAnswerOptions,
+            Func<decimal[], IEnumerable<AnswerViewModel>> getAnswerOptions,
             bool enabled,
             string instructions,
             string comments,
@@ -40,22 +41,25 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.getAnswerOptions = getAnswerOptions;
         }
 
-        private Func<decimal[], ValueVector<Guid>, IEnumerable<AnswerViewModel>> getAnswerOptions;
+        private readonly Func<decimal[], IEnumerable<AnswerViewModel>> getAnswerOptions;
 
-        private IEnumerable<AnswerViewModel> filteredAnswers;
+        internal IEnumerable<AnswerViewModel> filteredAnswers;
 
         public IEnumerable<AnswerViewModel> AnswerOptions
         {
             get
             {
-                this.filteredAnswers = this.getAnswerOptions(PublicKey.InterviewItemPropagationVector, QuestionRosterScope);
+                if (this.filteredAnswers == null)
+                {
+                    this.UpdateOptionsList();
+                }
                 return this.filteredAnswers;
-
             }
         }
 
         public void HandleAnswerListChange()
         {
+            UpdateOptionsList();
             this.RaisePropertyChanged("AnswerOptions");
         }
 
@@ -63,8 +67,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             get
             {
-                var selectedAnswers = this.filteredAnswers.Where(a => a.Selected).OrderBy(x => x.AnswerOrder).Select(answer => answer.Title).ToList();
-                return string.Join(", ", selectedAnswers);
+                return string.Join(", ", this.filteredAnswers.Where(a => a.Selected).Select(answer => answer.Title));
             }
         }
 
@@ -79,22 +82,18 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void SetAnswer(object answer)
         {
-            if (answer == null)
-            {
-                return;
-            }
-
-            var typedAnswers = QuestionUtils.ExtractSelectedOptions(answer);
+            var typedAnswers = QuestionUtils.ExtractSelectedOptions(answer ?? "");
 
             if (typedAnswers == null)
             {
                 return;
             }
 
-            foreach (var item in this.filteredAnswers)
+            var selectedAnswer = typedAnswers[0];
+
+            foreach (var item in this.filteredAnswers ?? AnswerOptions)
             {
-                item.Selected = typedAnswers.Contains(item.Value);
-                item.AnswerOrder = Array.IndexOf(typedAnswers, item.Value) + 1;
+                item.Selected = selectedAnswer == item.Value;
             }
 
             base.SetAnswer(answer);
@@ -102,20 +101,21 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void RemoveAnswer()
         {
-            foreach (var item in this.filteredAnswers)
+            foreach (var item in this.filteredAnswers ?? AnswerOptions)
             {
                 item.Selected = false;
             }
 
             base.RemoveAnswer();
 
-            this.RemoveAnsweredFromStatus();
-        }
-
-        private void RemoveAnsweredFromStatus()
-        {
             this.Status &= ~QuestionStatus.Answered;
             this.RaisePropertyChanged("Status");
+            this.RaisePropertyChanged("AnswerRemoved");
+        }
+
+        private void UpdateOptionsList()
+        {
+            this.filteredAnswers = this.getAnswerOptions(this.PublicKey.InterviewItemPropagationVector);
         }
     }
 }

@@ -65,12 +65,16 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             bool answerOptionsChanged = e.PropertyName == "AnswerOptions";
-            if (!answerOptionsChanged)
-                return;
-
-            //refill list of answers
-            adapter.Clear();
-            adapter.AddAll(this.Answers.Select(option => option.Title).ToList());
+            if (answerOptionsChanged)
+            {
+                adapter.Clear();
+                adapter.AddAll(this.Answers.Select(option => option.Title).ToList());
+            }
+            bool answerRemovedChanged = e.PropertyName == "AnswerRemoved";
+            if (answerRemovedChanged)
+            {
+                this.cascadingCombobox.Text = string.Empty;
+            }
         }
 
         void cascadingCombobox_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
