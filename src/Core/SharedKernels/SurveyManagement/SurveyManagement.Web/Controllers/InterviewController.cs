@@ -22,12 +22,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory;
         private readonly IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
-        private readonly IPlainFileRepository plainFileRepository;
+        private readonly IPlainInterviewFileStorage plainFileRepository;
 
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
             IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory,
-            IInterviewSummaryViewFactory interviewSummaryViewFactory, IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory, IPlainFileRepository plainFileRepository)
+            IInterviewSummaryViewFactory interviewSummaryViewFactory, IViewFactory<InterviewHistoryInputModel, InterviewHistoryView> interviewHistoryViewFactory, IPlainInterviewFileStorage plainFileRepository)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;

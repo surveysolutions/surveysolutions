@@ -18,12 +18,12 @@ namespace WB.UI.Capi.Syncronization
     public class CapiCleanUpService : ICapiCleanUpService
     {
         private readonly IChangeLogManipulator changelog;
-        private readonly IPlainFileRepository plainFileRepository;
+        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
 
-        public CapiCleanUpService(IChangeLogManipulator changelog, IPlainFileRepository plainFileRepository)
+        public CapiCleanUpService(IChangeLogManipulator changelog, IPlainInterviewFileStorage plainInterviewFileStorage)
         {
             this.changelog = changelog;
-            this.plainFileRepository = plainFileRepository;
+            this.plainInterviewFileStorage = plainInterviewFileStorage;
         }
 
 
@@ -48,7 +48,7 @@ namespace WB.UI.Capi.Syncronization
             //think about more elegant solution
             CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>().Remove(id);
             CapiApplication.Kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>().Remove(id);
-            plainFileRepository.RemoveAllBinaryDataForInterview(id);
+            this.plainInterviewFileStorage.RemoveAllBinaryDataForInterview(id);
         }
     }
 }

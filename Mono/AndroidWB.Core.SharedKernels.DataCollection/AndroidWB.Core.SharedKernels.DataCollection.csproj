@@ -549,11 +549,11 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\DomainQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\DomainQuestionnaireRepository.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\FileSyncRepository.cs">
-      <Link>Implementation\Repositories\FileSyncRepository.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\InterviewSynchronizationFileStorage.cs">
+      <Link>Implementation\Repositories\InterviewSynchronizationFileStorage.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainFileRepository.cs">
-      <Link>Implementation\Repositories\PlainFileRepository.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainInterviewFileStorage.cs">
+      <Link>Implementation\Repositories\PlainInterviewFileStorage.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\PlainQuestionnaireRepository.cs</Link>
@@ -573,11 +573,11 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ReadSide\VersionedReadSideRepositoryWriterExtensions.cs">
       <Link>ReadSide\VersionedReadSideRepositoryWriterExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IFileSyncRepository.cs">
-      <Link>Repositories\IFileSyncRepository.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IInterviewSynchronizationFileStorage.cs">
+      <Link>Repositories\IInterviewSynchronizationFileStorage.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IPlainFileRepository.cs">
-      <Link>Repositories\IPlainFileRepository.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IPlainInterviewFileStorage.cs">
+      <Link>Repositories\IPlainInterviewFileStorage.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IPlainQuestionnaireRepository.cs">
       <Link>Repositories\IPlainQuestionnaireRepository.cs</Link>
@@ -609,8 +609,8 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ValueObjects\ValueVector.cs">
       <Link>ValueObjects\ValueVector.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\BinaryData\InterviewBinaryData.cs">
-      <Link>Views\BinaryData\InterviewBinaryData.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\BinaryData\InterviewBinaryDataDescriptor.cs">
+      <Link>Views\BinaryData\InterviewBinaryDataDescriptor.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\Interview\InterviewTextListAnswer.cs">
       <Link>Views\Interview\InterviewTextListAnswer.cs</Link>
@@ -704,7 +704,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

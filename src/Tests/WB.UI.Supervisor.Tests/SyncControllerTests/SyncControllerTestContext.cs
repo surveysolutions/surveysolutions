@@ -35,7 +35,7 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
         protected static SyncController CreateSyncControllerWithFile(ISyncManager syncManager = null,
             ILogger logger = null,
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            ISupportedVersionProvider versionProvider = null, IPlainFileRepository plainFileRepository = null, Stream stream = null, string fileName=null)
+            ISupportedVersionProvider versionProvider = null, IPlainInterviewFileStorage plainFileRepository = null, Stream stream = null, string fileName = null)
         {
             var controller = CreateSyncControllerImpl(syncManager, logger, viewFactory, versionProvider, plainFileRepository);
             SetControllerContextWithFiles(controller, stream: stream, fileName: fileName);
@@ -46,12 +46,12 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
         private static SyncController CreateSyncControllerImpl(ISyncManager syncManager = null,
             ILogger logger = null,
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            ISupportedVersionProvider versionProvider = null, IPlainFileRepository plainFileRepository=null)
+            ISupportedVersionProvider versionProvider = null, IPlainInterviewFileStorage plainFileRepository = null)
         {
             var controller = new SyncController(syncManager ?? Mock.Of<ISyncManager>(),
                 logger ?? Mock.Of<ILogger>(),
                 viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
-                versionProvider ?? Mock.Of<ISupportedVersionProvider>(), (login, password) => true, (login, role) => true, plainFileRepository ?? Mock.Of<IPlainFileRepository>());
+                versionProvider ?? Mock.Of<ISupportedVersionProvider>(), (login, password) => true, (login, role) => true, plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>());
 
             return controller;
         }

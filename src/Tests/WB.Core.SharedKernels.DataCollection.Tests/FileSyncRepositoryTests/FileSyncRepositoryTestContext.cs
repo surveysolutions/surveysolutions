@@ -14,12 +14,12 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
 {
-    [Subject(typeof(FileSyncRepository))]
+    [Subject(typeof(InterviewSynchronizationFileStorage))]
     internal class FileSyncRepositoryTestContext
     {
-        protected static FileSyncRepository CreateFileSyncRepository(IPlainFileRepository plainFileRepository = null, IFileSystemAccessor fileSystemAccessor=null)
+        protected static InterviewSynchronizationFileStorage CreateFileSyncRepository(IPlainInterviewFileStorage plainFileRepository = null, IFileSystemAccessor fileSystemAccessor = null)
         {
-            return new FileSyncRepository(plainFileRepository ?? Mock.Of<IPlainFileRepository>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "");
+            return new InterviewSynchronizationFileStorage(plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "");
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

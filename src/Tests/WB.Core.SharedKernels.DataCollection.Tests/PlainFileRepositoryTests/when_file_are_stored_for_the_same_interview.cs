@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
         It should_first_file_be_stored_to_file_system = () =>
             FileSystemAccessorMock.Verify(x =>  x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid())), data1), Times.Once);
 
-        private static PlainFileRepository plainFileRepository;
+        private static PlainInterviewFileStorage plainFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 

@@ -248,7 +248,7 @@ namespace WB.UI.Capi
             try
             {
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
-                var plainFileRepository = CapiApplication.Kernel.Get<IPlainFileRepository>();
+                var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
                 var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository);
                 this.synchronizer = new SynchronozationProcessor(this, this.CreateAuthenticator(),
                     new CapiDataSynchronizationService(changeLogManipulator, NcqrsEnvironment.Get<ICommandService>(),
@@ -256,7 +256,7 @@ namespace WB.UI.Capi
                         CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), cleaner, ServiceLocator.Current.GetInstance<ILogger>(),
                         CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(), CapiApplication.Kernel.Get<IStringCompressor>(),
                         CapiApplication.Kernel.Get<IJsonUtils>()),
-                    cleaner, CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(),CapiApplication.Kernel.Get<IFileSyncRepository>());
+                    cleaner, CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>());
             }
             catch (Exception ex)
             {

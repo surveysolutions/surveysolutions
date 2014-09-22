@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
         It should_result_Be_equal_to_null = () =>
             result.ShouldBeNull();
 
-        private static PlainFileRepository plainFileRepository;
+        private static PlainInterviewFileStorage plainFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 

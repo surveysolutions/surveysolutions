@@ -15,17 +15,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
         Establish context = () =>
         {
             plainFileRepositoryMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
-             .Returns(new List<InterviewBinaryData>());
-            fileSyncRepository = CreateFileSyncRepository(plainFileRepository: plainFileRepositoryMock.Object);
+             .Returns(new List<InterviewBinaryDataDescriptor>());
+            interviewSynchronizationFileStorage = CreateFileSyncRepository(plainFileRepository: plainFileRepositoryMock.Object);
         };
 
-        Because of = () => fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(interviewId);
+        Because of = () => interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
 
         It should_sync_storage_contains_0_files = () =>
-            fileSyncRepository.GetBinaryFilesFromSyncFolder().Count.ShouldEqual(0);
+            interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder().Count.ShouldEqual(0);
 
-        private static FileSyncRepository fileSyncRepository;
-        private static Mock<IPlainFileRepository> plainFileRepositoryMock = new Mock<IPlainFileRepository>();
+        private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
+        private static Mock<IPlainInterviewFileStorage> plainFileRepositoryMock = new Mock<IPlainInterviewFileStorage>();
         private static Guid interviewId = Guid.NewGuid();
     }
 }

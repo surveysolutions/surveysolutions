@@ -50,7 +50,7 @@ namespace WB.UI.Capi.Syncronization
 
         private readonly ICapiDataSynchronizationService dataProcessor;
         private readonly ICapiCleanUpService cleanUpExecutor;
-        private readonly IFileSyncRepository fileSyncRepository;
+        private readonly IInterviewSynchronizationFileStorage fileSyncRepository;
         private IDictionary<SynchronizationChunkMeta, bool> remoteChuncksForDownload;
 
         private readonly ISyncAuthenticator authentificator;
@@ -69,7 +69,7 @@ namespace WB.UI.Capi.Syncronization
         }
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, ICapiDataSynchronizationService dataProcessor,
-            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory, IFileSyncRepository fileSyncRepository)
+            ICapiCleanUpService cleanUpExecutor, IRestServiceWrapperFactory restServiceWrapperFactory, IInterviewSynchronizationFileStorage fileSyncRepository)
         {
             this.context = context;
 

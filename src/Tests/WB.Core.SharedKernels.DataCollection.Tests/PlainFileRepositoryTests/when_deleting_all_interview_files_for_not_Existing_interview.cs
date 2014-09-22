@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
         It should_interview_folder_be_never_deleted_from_file_system = () =>
          FileSystemAccessorMock.Verify(x => x.DeleteDirectory(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid()))), Times.Never);
 
-        private static PlainFileRepository plainFileRepository;
+        private static PlainInterviewFileStorage plainFileRepository;
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
         private static Guid interviewId = Guid.NewGuid();
     }
