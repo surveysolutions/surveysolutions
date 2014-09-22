@@ -65,7 +65,7 @@
 
                 $scope.saveQuestion = function (callback) {
                     if ($scope.questionForm.$valid) {
-                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function (result) {
+                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function () {
                             $scope.initialQuestion = angular.copy($scope.activeQuestion);
 
                             $rootScope.$emit('questionUpdated', {
@@ -76,7 +76,7 @@
                                 linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
                             });
 
-                            if ($scope.activeQuestion.type == "SingleOption" && !$scope.activeQuestion.isFilteredCombobox) {
+                            if ($scope.activeQuestion.type === "SingleOption" && !$scope.activeQuestion.isFilteredCombobox) {
                                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                             }
 
@@ -91,10 +91,10 @@
                 $scope.setQuestionType = function (type) {
                     $scope.activeQuestion.type = type;
                     $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
-                    if (type == 'GpsCoordinates' && $scope.activeQuestion.questionScope == 'Prefilled') {
+                    if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Prefilled') {
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
-                    if (type != "SingleOption" && type != "MultyOption") {
+                    if (type !== "SingleOption" && type !== "MultyOption") {
                         $scope.setLinkSource(null);
                     }
                 };
@@ -157,12 +157,12 @@
                 var openOptionsEditor = function () {
                     window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
                       "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
-                }
+                };
 
                 var openCascadeOptionsEditor = function () {
                     window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
                       "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
-                }
+                };
 
                 $scope.removeOption = function (index) {
                     $scope.activeQuestion.options.splice(index, 1);
@@ -171,7 +171,7 @@
 
                 $scope.changeQuestionScope = function (scope) {
                     $scope.activeQuestion.questionScope = scope.text;
-                    if ($scope.activeQuestion.questionScope == 'Prefilled') {
+                    if ($scope.activeQuestion.questionScope === 'Prefilled') {
                         $scope.activeQuestion.enablementCondition = '';
                     }
                 };
