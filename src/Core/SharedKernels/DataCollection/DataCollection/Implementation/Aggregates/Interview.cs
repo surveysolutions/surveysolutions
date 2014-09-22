@@ -2853,7 +2853,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue,
                 answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
 
-            var answersToRemoveByCascading = answerChanged ? CalculateCascadingDropdownChanges(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
+            var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
             
             var answersToRemove = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading);
 
@@ -2871,7 +2871,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answerFormattedAsRosterTitle);
         }
 
-        private IEnumerable<Identity> CalculateCascadingDropdownChanges(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
+        private IEnumerable<Identity> GetQuestionsToRemoveAnswersFromDependingOnCascading(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
         {
             IEnumerable<Guid> dependentQuesions = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionId);
             var result = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, dependentQuesions, rosterVector, questionnaire, GetRosterInstanceIds);
@@ -3078,11 +3078,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     }
                 }
 
-                var dependingCascadingQuestion = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id);
-                IEnumerable<Identity> dependentCascadingQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                    dependingCascadingQuestion, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
+                var cascadingQuestionsToEnable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id);
+                IEnumerable<Identity> cascadingQuestionsToEnableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                    cascadingQuestionsToEnable, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
 
-                foreach (var dependentCascadingQuestion in dependentCascadingQuestions)
+                foreach (var dependentCascadingQuestion in cascadingQuestionsToEnableIdentities)
                 {
                     if (!collectedQuestionsToBeDisabled.Contains(dependentCascadingQuestion) && 
                         !collectedQuestionsToBeEnabled.Contains(dependentCascadingQuestion))
@@ -3090,6 +3090,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         collectedQuestionsToBeEnabled.Add(dependentCascadingQuestion);
                     }
                 }
+
+                var cascadingQuestionsToDisable = questionnaire.GetCascadingQuestionsThatDependUponQuestion(affectingQuestion.Id)
+                                                              .Except(questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id));
+
+                IEnumerable<Identity> cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                    cascadingQuestionsToDisable, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
+
+                foreach (var dependentCascadingQuestion in cascadingQuestionsToDisableIdentities)
+                {
+                    if (!collectedQuestionsToBeDisabled.Contains(dependentCascadingQuestion) &&
+                        !collectedQuestionsToBeEnabled.Contains(dependentCascadingQuestion))
+                    {
+                        collectedQuestionsToBeEnabled.Remove(dependentCascadingQuestion);
+                        collectedQuestionsToBeDisabled.Add(dependentCascadingQuestion);
+                    }
+                }
+
             }
 
             questionsToBeDisabled = collectedQuestionsToBeDisabled;
