@@ -2805,11 +2805,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
         }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime,
-            decimal selectedValue, Identity answeredQuestion, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
+        private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(InterviewStateDependentOnAnswers state, 
+            Guid userId,
+            Guid questionId, 
+            decimal[] rosterVector, 
+            DateTime answerTime,
+            decimal selectedValue, 
+            Identity answeredQuestion, 
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
             IQuestionnaire questionnaire)
         {
+            var questionIdentity = new Identity(questionId, rosterVector);
+            var previsousAnswer = GetEnabledQuestionAnswerSupportedInExpressions(state, questionIdentity,
+                questionnaire);
+            bool answerChanged = WasQuestionAnswered(state, questionIdentity) && (decimal) previsousAnswer != selectedValue;
+
             EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
                 answeredQuestion, selectedValue, questionnaire, GetRosterInstanceIds);
 
@@ -2842,7 +2852,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue,
                 answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
 
-            var answersToRemoveByCascading = CalculateCascadingDropdownChanges(questionId, rosterVector, questionnaire, state);
+            var answersToRemoveByCascading = answerChanged ? CalculateCascadingDropdownChanges(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
+            
             var answersToRemove = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading);
 
             var interviewByAnswerChange = new List<AnswerChange>
@@ -2862,8 +2873,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IEnumerable<Identity> CalculateCascadingDropdownChanges(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
         {
             IEnumerable<Guid> dependentQuesions = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionId);
+            var result = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, dependentQuesions, rosterVector, questionnaire, GetRosterInstanceIds);
 
-            return GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, dependentQuesions, rosterVector, questionnaire, GetRosterInstanceIds);
+            foreach (var identity in result)
+            {
+                string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
+                if (state.AnsweredQuestions.Contains(questionKey))
+                {
+                    yield return identity;
+                }
+            }
         }
 
         private void CalculateChangesByFeaturedQuestion(InterviewChangeStructures changeStructures, Guid userId,

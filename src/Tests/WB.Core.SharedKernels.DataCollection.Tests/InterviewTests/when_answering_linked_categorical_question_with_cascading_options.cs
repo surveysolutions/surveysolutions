@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
     [Subject(typeof(Interview))]
-    internal class when_answering_linked_categorical_question_with_cascading_options : InterviewTestsContext
+    internal class swhen_answering_linked_categorical_question_with_cascading_options : InterviewTestsContext
     {
         private Establish context = () =>
         {
@@ -30,14 +30,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var nonAnsweredCombo = Guid.NewGuid();
             comboShouldNotBeRemoved = Guid.NewGuid();
-            Questionnaire questionnaire = Create.Questionnaire(Guid.NewGuid(),
+            actorId = Guid.NewGuid();
+            Questionnaire questionnaire = Create.Questionnaire(actorId,
                 CreateQuestionnaireDocumentWithOneChapter(new MultyOptionsQuestion
                 {
                     PublicKey = parentSingleOptionQuestionId,
                     QuestionType = QuestionType.SingleOption,
                     Answers = new List<Answer>
                     {
-                        new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() }
+                        new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
+                        new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
                     }
                 },
                     new SingleQuestion
@@ -47,7 +49,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer>
                         {
-                            new Answer { AnswerText = "grind", AnswerValue = "2", PublicKey = Guid.NewGuid() }
+                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1"},
+                            new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" }
                         }
                     },
                     new SingleQuestion
@@ -57,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                         CascadeFromQuestionId = childCascadedComboboxId,
                         Answers = new List<Answer>
                         {
-                            new Answer { AnswerText = "crab", AnswerValue = "3", PublicKey = Guid.NewGuid() }
+                            new Answer { AnswerText = "grand child", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1"}
                         }
                     },
                     new SingleQuestion
@@ -65,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                         PublicKey = nonAnsweredCombo,
                         QuestionType = QuestionType.SingleOption,
                         Answers = new List<Answer> {
-                            new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() }
+                            new Answer { AnswerText = "grand child 1 1", AnswerValue = "1", PublicKey = Guid.NewGuid() }
                         }
                     },
                     new SingleQuestion
@@ -85,19 +88,26 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(questionnaireRepository);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
+
+            interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
+            interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 1);
+            
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.AnswerSingleOptionQuestion(Guid.NewGuid(), parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
+        Because of = () => interview.AnswerSingleOptionQuestion(Guid.NewGuid(), parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 2);
 
-        It should_remove_answer_from_2_questions = () => 
+        private It should_not_remove_answer_from_self = () =>
+            eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == parentSingleOptionQuestionId));
+
+        It should_not_remove_answer_from_not_related_question = () => 
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == comboShouldNotBeRemoved));
 
         It should_remove_dependent_answers = () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
 
-        It should_remove_dependent_answers_on_second_level_of_cascades = () =>
-            eventContext.ShouldContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
+        It should_remove_dependent_answers_on_second_level_of_cascades_if_it_is_answered = () =>
+            eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
 
         private static Interview interview;
         private static EventContext eventContext;
@@ -105,6 +115,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static Guid childCascadedComboboxId;
         private static Guid grandChildCascadedComboboxId;
         private static Guid comboShouldNotBeRemoved;
+        private static Guid actorId;
     }
 }
 
