@@ -129,7 +129,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                     File.Copy(file, CombinePath(destDir, GetFileName(file)));
 
                 foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
-                    CopyFileOrDirectory(directory, CombinePath(destDir, sourceDirectoryName));
+                    CopyFileOrDirectory(directory, destDir);
             }
             else
             {

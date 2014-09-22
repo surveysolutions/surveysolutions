@@ -214,9 +214,9 @@ namespace WB.UI.QuestionnaireTester
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
-            var basePath = Directory.Exists(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath)
-                               ? Android.OS.Environment.ExternalStorageDirectory.AbsolutePath
-                               : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            var basePath = Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal))
+                   ? System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal)
+                   : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
             this.kernel = new StandardKernel(
                 new CapiTesterCoreRegistry(),

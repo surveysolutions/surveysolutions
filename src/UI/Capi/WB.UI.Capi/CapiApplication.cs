@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Android.App;
 using Android.Content;
+using Android.Provider;
 using Android.Runtime;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.EventHandlers;
@@ -241,19 +242,23 @@ namespace WB.UI.Capi
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
 
-            var basePath = Directory.Exists(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath)
-                                 ? Android.OS.Environment.ExternalStorageDirectory.AbsolutePath
-                                 : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-
+            var basePath = Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal))
+                ? System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal)
+                : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+            
+            const string SynchronizationFolder = "SYNC";
+            const string InterviewFilesFolder = "InterviewData";
+            
             this.kernel = new StandardKernel(
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new RestAndroidModule(),
                 new FileInfrastructureModule(),
-                new AndroidModelModule(basePath),
+                new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder }),
                 new ErrorReportingModule(basePath),
                 new AndroidLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, syncDirectoryName: SynchronizationFolder,
+                    dataDirectoryName: InterviewFilesFolder),
                 new ExpressionProcessorModule());
 
             CrashManager.Initialize(this);
