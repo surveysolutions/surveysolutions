@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -38,6 +39,18 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             QuestionType.TextList,
             QuestionType.QRBarcode,
             QuestionType.Multimedia
+        };
+
+        private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>
+        {
+            QuestionType.SingleOption,
+            QuestionType.MultyOption,
+            QuestionType.Numeric,
+            QuestionType.DateTime,
+            QuestionType.GpsCoordinates,
+            QuestionType.Text,
+            QuestionType.TextList,
+            QuestionType.QRBarcode
         };
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeSubstitutionReferences = new[]
@@ -147,8 +160,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
                     Verifier<IMultimediaQuestion>(MultimediaShouldNotHaveValidationExpression, "WB0079", VerificationMessages.WB0079_MultimediaShouldNotHaveValidationExpression),
                     Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInValidationExpression, "WB0080", VerificationMessages.WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression),
-                    Verifier<IGroup, IComposite>(MultimediaQuestionsCannotBeUsedInGroupEnablementCondition, "WB0081", VerificationMessages.WB0081_MultimediaQuestionsCannotBeUsedInEnablementCondition),
-                    Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0082", VerificationMessages.WB0082_MultimediaQuestionsCannotBeUsedInEnablementCondition),
+                    Verifier<IGroup, IComposite>(MultimediaQuestionsCannotBeUsedInGroupEnablementCondition, "WB0081", VerificationMessages.WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition),
+                    Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0082", VerificationMessages.WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition),
+                    Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
@@ -335,12 +349,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return true;
 
             return false;
-
-            //var rostersByRosterTitleQuestion =
-            //    questionnaire.Find<IGroup>(
-            //        g => g.RosterTitleQuestionId.HasValue && (g.RosterTitleQuestionId.Value == group.RosterTitleQuestionId.Value));
-
-            //return rostersByRosterTitleQuestion.Any(g => g.RosterSizeQuestionId.HasValue && (g.RosterSizeQuestionId.Value != group.RosterSizeQuestionId.Value));
         }
 
         private static bool GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion(IGroup group, QuestionnaireDocument questionnaire)
@@ -640,6 +648,27 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
                question, question.ConditionExpression, questionnaire,
                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
+        }
+
+        private EntityVerificationResult<IComposite> QuestionsCannotBeUsedAsRosterTitle(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            var noErrors=new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            if (!group.RosterTitleQuestionId.HasValue)
+                return noErrors;
+
+            var rosterTitleQuestion = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == group.RosterTitleQuestionId.Value);
+            if (rosterTitleQuestion == null)
+                return noErrors;
+
+            if (QuestionTypesValidToBeRosterTitles.Contains(rosterTitleQuestion.QuestionType))
+                return noErrors;
+
+            return new EntityVerificationResult<IComposite>()
+            {
+                HasErrors = true,
+                ReferencedEntities = new IComposite[] { group, rosterTitleQuestion }
+            };
         }
 
         private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
