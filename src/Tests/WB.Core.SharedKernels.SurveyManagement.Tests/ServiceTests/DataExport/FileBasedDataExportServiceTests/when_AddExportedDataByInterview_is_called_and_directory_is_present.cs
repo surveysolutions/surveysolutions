@@ -34,9 +34,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             interviewToExport = new InterviewDataExportView(interviewId, Guid.NewGuid(), 1,
                 new[] { interviewLevelToExport });
 
-            plainFileRepositoryMock=new Mock<IPlainFileRepository>();
+            plainFileRepositoryMock = new Mock<IPlainInterviewFileStorage>();
             plainFileRepositoryMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
-                .Returns(new List<InterviewBinaryData> { new InterviewBinaryData(interviewId, fileName, () => data) });
+                .Returns(new List<InterviewBinaryDataDescriptor> { new InterviewBinaryDataDescriptor(interviewId, fileName, () => data) });
             fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object, plainFileRepository: plainFileRepositoryMock.Object);
         };
 
@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         private static FileBasedDataExportService fileBasedDataExportService;
         
         private static Mock<IDataFileExportService> interviewExportServiceMock;
-        private static Mock<IPlainFileRepository> plainFileRepositoryMock;
+        private static Mock<IPlainInterviewFileStorage> plainFileRepositoryMock;
         private static InterviewDataExportView interviewToExport;
         private static InterviewDataExportLevelView interviewLevelToExport;
         private static Guid interviewId = Guid.NewGuid();

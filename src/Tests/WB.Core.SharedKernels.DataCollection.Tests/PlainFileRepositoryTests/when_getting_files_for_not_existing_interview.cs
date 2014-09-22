@@ -24,12 +24,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
         It should_result_count_Be_equal_to_0 = () =>
             result.Count.ShouldEqual(0);
 
-        private static PlainFileRepository plainFileRepository;
+        private static PlainInterviewFileStorage plainFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 
         private static Guid interviewId = Guid.NewGuid();
 
-        private static IList<InterviewBinaryData> result;
+        private static IList<InterviewBinaryDataDescriptor> result;
     }
 }

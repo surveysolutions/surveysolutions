@@ -33,7 +33,7 @@ namespace WB.UI.Capi
         protected AlertDialog dialog;
 
         private IChangeLogManipulator logManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
-        private IPlainFileRepository plainFileRepository = CapiApplication.Kernel.Get<IPlainFileRepository>();
+        private IPlainInterviewFileStorage plainInterviewFileStorage = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -105,7 +105,7 @@ namespace WB.UI.Capi
 
             alert.SetPositiveButton("OK", (e, s) =>
             {
-                new CapiCleanUpService(logManipulator, plainFileRepository).DeleteInterview(itemId);
+                new CapiCleanUpService(logManipulator, this.plainInterviewFileStorage).DeleteInterview(itemId);
                 ((LinearLayout)view.Parent).RemoveView(view);
             });
 

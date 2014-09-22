@@ -40,11 +40,11 @@ namespace WB.Core.SharedKernels.DataCollection
 
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
 
-            this.Bind<IPlainFileRepository>()
-              .To<PlainFileRepository>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath);
+            this.Bind<IPlainInterviewFileStorage>()
+              .To<PlainInterviewFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath);
 
-            this.Bind<IFileSyncRepository>()
-            .To<FileSyncRepository>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath);
+            this.Bind<IInterviewSynchronizationFileStorage>()
+            .To<InterviewSynchronizationFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath);
         }
     }
 }

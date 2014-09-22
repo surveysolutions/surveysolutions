@@ -9,15 +9,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
     {
         Establish context = () =>
         {
-            plainFileRepository = CreateFileSyncRepository();
+            plainInterviewSynchronizationFileRepository = CreateFileSyncRepository();
         };
 
-        Because of = () => plainFileRepository.RemoveBinaryDataFromSyncFolder(interviewId,"fileName");
+        Because of = () => plainInterviewSynchronizationFileRepository.RemoveBinaryDataFromSyncFolder(interviewId,"fileName");
 
         It should_sync_storage_contains_0_files = () =>
-            plainFileRepository.GetBinaryFilesFromSyncFolder().Count.ShouldEqual(0);
+            plainInterviewSynchronizationFileRepository.GetBinaryFilesFromSyncFolder().Count.ShouldEqual(0);
 
-        private static FileSyncRepository plainFileRepository;
+        private static InterviewSynchronizationFileStorage plainInterviewSynchronizationFileRepository;
         private static Guid interviewId = Guid.NewGuid();
     }
 }

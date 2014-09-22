@@ -14,15 +14,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
         Establish context = () =>
         {
             fileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
-            fileSyncRepository = CreateFileSyncRepository(fileSystemAccessor:fileSystemAccessorMock.Object);
+            interviewSynchronizationFileStorage = CreateFileSyncRepository(fileSystemAccessor:fileSystemAccessorMock.Object);
         };
 
-        Because of = () => fileSyncRepository.RemoveBinaryDataFromSyncFolder(interviewId, fileName1);
+        Because of = () => interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewId, fileName1);
 
         It should_one_file_be_deleted = () =>
             fileSystemAccessorMock.Verify(x=>x.DeleteFile(Moq.It.IsAny<string>()), Times.Once);
 
-        private static FileSyncRepository fileSyncRepository;
+        private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock = CreateIFileSystemAccessorMock();
         private static Guid interviewId = Guid.NewGuid();
         private static string fileName1 = "file1";

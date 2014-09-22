@@ -34,10 +34,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
     {
         public PictureQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source,
                                 Guid questionnairePublicKey, ICommandService commandService,
-                                IAnswerOnQuestionCommandService answerCommandService, IAuthentication membership, IPlainFileRepository plainFileRepository)
+                                IAnswerOnQuestionCommandService answerCommandService, IAuthentication membership, IPlainInterviewFileStorage plainInterviewFileStorage)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService, answerCommandService, membership)
         {
-            this.plainFileRepository = plainFileRepository;
+            this.plainInterviewFileStorage = plainInterviewFileStorage;
 
             if (this.IsThereAnAppToTakePictures())
             {
@@ -77,7 +77,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             }
         }
 
-        private readonly IPlainFileRepository plainFileRepository;
+        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IMvxPictureChooserTask pictureChooserTask;
         protected readonly ImageView ivImage;
         private readonly string TakePicture = "Take Picture";
@@ -103,7 +103,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
             if (IsPicturePresent())
             {
-                plainFileRepository.RemoveInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
+                this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
                 ivImage.SetImageDrawable(null);
                 this.SavePictureToAR(string.Empty);
 
@@ -124,7 +124,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             {
                 pictureStream.CopyTo(memoryStream);
                 data = memoryStream.ToArray();
-                plainFileRepository.StoreInterviewBinaryData(this.QuestionnairePublicKey, pictureFileName, data);
+                this.plainInterviewFileStorage.StoreInterviewBinaryData(this.QuestionnairePublicKey, pictureFileName, data);
             }
 
             Bitmap bitmap = BitmapFactory.DecodeByteArray(data, 0, data.Length);
@@ -156,7 +156,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             if (!IsPicturePresent())
                 return;
 
-            var bytes = plainFileRepository.GetInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
+            var bytes = this.plainInterviewFileStorage.GetInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
             if (bytes == null || bytes.Length == 0)
             {
                 ivImage.SetImageResource(Resource.Drawable.no_image_found);

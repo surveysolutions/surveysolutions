@@ -35,13 +35,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
         It should_result_first_item_data_be_equal_to_data1 = () =>
          result[0].Data.ShouldEqual(data1);
 
-        private static PlainFileRepository plainFileRepository;
+        private static PlainInterviewFileStorage plainFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 
         private static Guid interviewId = Guid.NewGuid();
 
-        private static IList<InterviewBinaryData> result;
+        private static IList<InterviewBinaryDataDescriptor> result;
         private static string file1 = "file1";
         private static byte[] data1 = new byte[] { 1 };
     }

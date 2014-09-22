@@ -24,10 +24,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
             fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { fileName1, fileName2 });
             fileSystemAccessorMock.Setup(x => x.ReadAllBytes(fileName1)).Returns(data1);
             fileSystemAccessorMock.Setup(x => x.ReadAllBytes(fileName2)).Returns(data2);
-            fileSyncRepository = CreateFileSyncRepository(fileSystemAccessor: fileSystemAccessorMock.Object);
+            interviewSynchronizationFileStorage = CreateFileSyncRepository(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
-        Because of = () => result = fileSyncRepository.GetBinaryFilesFromSyncFolder();
+        Because of = () => result = interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
 
         It should_result_has_2_files = () =>
             result.Count.ShouldEqual(2);
@@ -38,8 +38,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
         It should_data_of_second_record_in_result_be_equal_to_data2 = () =>
            result[1].Data.ShouldEqual(data2);
 
-        private static FileSyncRepository fileSyncRepository;
-        private static IList<InterviewBinaryData> result; 
+        private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
+        private static IList<InterviewBinaryDataDescriptor> result; 
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock = CreateIFileSystemAccessorMock();
         private static Guid interviewId = Guid.NewGuid();
         private static byte[] data1 = new byte[] { 1 };

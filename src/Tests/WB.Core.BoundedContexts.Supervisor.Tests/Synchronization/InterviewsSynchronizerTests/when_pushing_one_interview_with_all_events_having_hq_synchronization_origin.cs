@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(writer
                 => writer.QueryAll(it.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
 
-            fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder()).Returns(new List<InterviewBinaryData>());
+            fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder()).Returns(new List<InterviewBinaryDataDescriptor>());
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryWriter: readyToSendInterviewsRepositoryWriter,
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 eventStore: eventStore,
                 logger: loggerMock.Object,
                 commandService: commandServiceMock.Object,
-                fileSyncRepository: fileSyncRepository.Object);
+                interviewSynchronizationFileStorage: fileSyncRepository.Object);
         };
 
         Because of = () =>
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 Times.Once);
 
         private static Mock<HttpMessageHandler> httpMessageHandlerMock = new Mock<HttpMessageHandler>();
-        private static Mock<IFileSyncRepository> fileSyncRepository = new Mock<IFileSyncRepository>();
+        private static Mock<IInterviewSynchronizationFileStorage> fileSyncRepository = new Mock<IInterviewSynchronizationFileStorage>();
         private static InterviewsSynchronizer interviewsSynchronizer;
         private static Guid userId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

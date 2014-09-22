@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
             controller =
                 CreateController(
                     plainFileRepository:
-                        Mock.Of<IPlainFileRepository>(_ => _.GetInterviewBinaryData(interviewId, fileName) == fileContent));
+                        Mock.Of<IPlainInterviewFileStorage>(_ => _.GetInterviewBinaryData(interviewId, fileName) == fileContent));
         };
 
         Because of = () =>

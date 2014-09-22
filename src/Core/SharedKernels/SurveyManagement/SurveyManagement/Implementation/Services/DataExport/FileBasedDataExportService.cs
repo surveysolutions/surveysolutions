@@ -25,14 +25,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IEnvironmentContentService environmentContentService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
-        private readonly IPlainFileRepository plainFileRepository;
+        private readonly IPlainInterviewFileStorage plainFileRepository;
 
         public FileBasedDataExportService(
             IReadSideRepositoryCleanerRegistry cleanerRegistry, 
             string folderPath,
             IDataFileExportService dataFileExportService, 
             IEnvironmentContentService environmentContentService,
-            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainFileRepository plainFileRepository)
+            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository)
         {
             this.dataFileExportService = dataFileExportService;
             this.environmentContentService = environmentContentService;

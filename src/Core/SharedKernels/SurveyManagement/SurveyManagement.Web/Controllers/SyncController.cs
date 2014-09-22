@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly Func<string, string, bool> validateUserCredentials;
         private readonly Func<string, string, bool> checkIfUserIsInRole;
         private readonly ISupportedVersionProvider versionProvider;
-        private readonly IPlainFileRepository plainFileRepository;
+        private readonly IPlainInterviewFileStorage plainFileRepository;
 
         private string CapiFileName = "wbcapi.apk";
 
@@ -38,10 +38,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public SyncController(ISyncManager syncManager,
             ILogger logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory,
-            ISupportedVersionProvider versionProvider, IPlainFileRepository plainFileRepository)
+            ISupportedVersionProvider versionProvider, IPlainInterviewFileStorage plainFileRepository)
             : this(syncManager, logger, viewFactory, versionProvider, Membership.ValidateUser, Roles.IsUserInRole, plainFileRepository) { }
 
-        public SyncController(ISyncManager syncManager, ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory, ISupportedVersionProvider versionProvider, Func<string, string, bool> validateUserCredentials, Func<string, string, bool> checkIfUserIsInRole, IPlainFileRepository plainFileRepository)
+        public SyncController(ISyncManager syncManager, ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory,
+            ISupportedVersionProvider versionProvider, Func<string, string, bool> validateUserCredentials,
+            Func<string, string, bool> checkIfUserIsInRole, IPlainInterviewFileStorage plainFileRepository)
         {
             this.validateUserCredentials = validateUserCredentials;
             this.checkIfUserIsInRole = checkIfUserIsInRole;

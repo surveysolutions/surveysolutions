@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
-        private readonly IFileSyncRepository fileSyncRepository;
+        private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
             IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
-            Func<HttpMessageHandler> httpMessageHandler, IFileSyncRepository fileSyncRepository)
+            Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
             this.readyToSendInterviewsRepositoryWriter = readyToSendInterviewsRepositoryWriter;
             this.httpMessageHandler = httpMessageHandler;
-            this.fileSyncRepository = fileSyncRepository;
+            this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
         }
 
         public void PullInterviewsForSupervisors(Guid[] supervisorIds)
@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(),
                         interviewIndex + 1, interviewsToPush.Count));
                     this.PushInterview(interviewId, userId);
-                    this.fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(interviewId);
+                    this.interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
                     this.headquartersPushContext.PushMessage(string.Format("Interview {0} successfully pushed.", interviewId.FormatGuid()));
                 }
                 catch (Exception exception)
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void PushInterviewFile()
         {
             this.headquartersPushContext.PushMessage("Getting interviews files to be pushed.");
-            var files = this.fileSyncRepository.GetBinaryFilesFromSyncFolder();
+            var files = this.interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
             this.headquartersPushContext.PushMessage(string.Format("Found {0} files to push.", files.Count));
 
             for (int interviewIndex = 0; interviewIndex < files.Count; interviewIndex++)
@@ -265,7 +265,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.headquartersPushContext.PushMessage(string.Format("Pushing file {0} for interview {1} ({2} out of {3}).", interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
                         interviewIndex + 1, files.Count));
                     this.PushFile(interviewFile);
-                    this.fileSyncRepository.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
+                    this.interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
                     this.headquartersPushContext.PushMessage(string.Format("Interview {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
                 }
                 catch (Exception exception)
@@ -463,7 +463,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
-        private void PushFile(InterviewBinaryData interviewFile)
+        private void PushFile(InterviewBinaryDataDescriptor interviewFile)
         {
             using (var client = new HttpClient(this.httpMessageHandler()).AppendAuthToken(this.settings))
             {

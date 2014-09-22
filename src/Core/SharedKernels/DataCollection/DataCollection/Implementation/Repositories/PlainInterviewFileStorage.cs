@@ -11,13 +11,13 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class PlainFileRepository : IPlainFileRepository
+    internal class PlainInterviewFileStorage : IPlainInterviewFileStorage
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
-        private const string DataDirectoryName = "DATA";
+        private const string DataDirectoryName = "InterviewData";
 
-        public PlainFileRepository(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
+        public PlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
@@ -35,17 +35,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return fileSystemAccessor.ReadAllBytes(filePath);
         }
 
-        public IList<InterviewBinaryData> GetBinaryFilesForInterview(Guid interviewId)
+        public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
         {
             var directoryPath = this.GetPathToInterviewDirectory(interviewId);
             
             if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
-                return new InterviewBinaryData[0];
+                return new List<InterviewBinaryDataDescriptor>();
 
             return fileSystemAccessor.GetFilesInDirectory(directoryPath)
                 .Select(
                     fileName =>
-                        new InterviewBinaryData(interviewId, fileSystemAccessor.GetFileName(fileName),
+                        new InterviewBinaryDataDescriptor(interviewId, fileSystemAccessor.GetFileName(fileName),
                             () => fileSystemAccessor.ReadAllBytes(fileName))).ToList();
         }
 
