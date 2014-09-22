@@ -24,9 +24,9 @@ namespace WB.Tests.Unit
             return new PdfGroupView();
         }
 
-        public static RoslynExpressionAnalyser RoslynExpressionAnalyser()
+        public static RoslynExpressionProcessor RoslynExpressionProcessor()
         {
-            return new RoslynExpressionAnalyser();
+            return new RoslynExpressionProcessor();
         }
     }
 }
