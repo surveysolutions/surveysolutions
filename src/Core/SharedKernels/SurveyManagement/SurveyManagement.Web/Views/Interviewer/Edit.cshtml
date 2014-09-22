@@ -24,6 +24,7 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     <fieldset class="form-horizontal">
         @{
             this.Html.RenderPartial("UserEditForm");

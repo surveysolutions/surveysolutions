@@ -19,6 +19,7 @@
 
 
 <form class="form-horizontal" method="POST">
+    @Html.AntiForgeryToken()
     @{
         this.Html.RenderPartial("UserCreateForm");
     }
