@@ -13,11 +13,15 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         private readonly bool usePlainQuestionnaireRepository;
         private readonly string basePath;
+        private readonly string syncDirectoryName;
+        private readonly string dataDirectoryName;
 
-        public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository, string basePath)
+        public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository, string basePath, string syncDirectoryName = "SYNC", string dataDirectoryName = "InterviewData")
         {
             this.usePlainQuestionnaireRepository = usePlainQuestionnaireRepository;
             this.basePath = basePath;
+            this.syncDirectoryName = syncDirectoryName;
+            this.dataDirectoryName = dataDirectoryName;
         }
 
         public override void Load()
@@ -41,10 +45,10 @@ namespace WB.Core.SharedKernels.DataCollection
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
 
             this.Bind<IPlainInterviewFileStorage>()
-              .To<PlainInterviewFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath);
+              .To<PlainInterviewFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("dataDirectoryName", this.dataDirectoryName);
 
             this.Bind<IInterviewSynchronizationFileStorage>()
-            .To<InterviewSynchronizationFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath);
+            .To<InterviewSynchronizationFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("syncDirectoryName", this.syncDirectoryName);
         }
     }
 }

@@ -14,15 +14,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     {
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private const string SyncDirectoryName = "SYNC";
         private readonly string basePath;
 
-        public InterviewSynchronizationFileStorage(IPlainInterviewFileStorage plainInterviewFileStorage, IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
+        public InterviewSynchronizationFileStorage(IPlainInterviewFileStorage plainInterviewFileStorage, IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath, string syncDirectoryName)
         {
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.fileSystemAccessor = fileSystemAccessor;
 
-            this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, SyncDirectoryName);
+            this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, syncDirectoryName);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(this.basePath))
                 this.fileSystemAccessor.CreateDirectory(this.basePath);
