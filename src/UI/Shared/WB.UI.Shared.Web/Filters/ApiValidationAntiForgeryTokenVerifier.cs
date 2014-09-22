@@ -6,19 +6,30 @@ namespace WB.UI.Shared.Web.Filters
     {
         public bool IsTokenValid(string token)
         {
-            var cookieToken = "";
-            var formToken = "";
+            var isTokenValid = false;
 
-            var tokens = token.Split(':');
-            if (tokens.Length == 2)
+            try
             {
-                cookieToken = tokens[0].Trim();
-                formToken = tokens[1].Trim();
+                var cookieToken = string.Empty;
+                var formToken = string.Empty;
+
+                var tokens = token.Split(':');
+                if (tokens.Length == 2)
+                {
+                    cookieToken = tokens[0].Trim();
+                    formToken = tokens[1].Trim();
+                }
+
+                AntiForgery.Validate(cookieToken, formToken);
+
+                isTokenValid = true;
+            }
+            catch
+            {
+                
             }
 
-            AntiForgery.Validate(cookieToken, formToken);
-
-            return true;
+            return isTokenValid;
         }
     }
 }

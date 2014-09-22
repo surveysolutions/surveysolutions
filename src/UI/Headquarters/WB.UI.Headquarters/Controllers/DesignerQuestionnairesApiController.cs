@@ -18,10 +18,12 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.PublicService;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Headquarter")]
+    [ApiValidationAntiForgeryToken]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
         internal IPublicService DesignerService
