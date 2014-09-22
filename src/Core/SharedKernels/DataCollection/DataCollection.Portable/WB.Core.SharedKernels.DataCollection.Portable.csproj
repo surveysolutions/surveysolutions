@@ -49,10 +49,9 @@
     <Compile Include="IInterviewEvaluator.cs" />
     <Compile Include="IInterviewExpressionState.cs" />
     <Compile Include="IInterviewExpressionStateProvider.cs" />
-    <Compile Include="InterviewExpressionStateProvider.cs" />
     <Compile Include="IExpressionExecutable.cs" />
+    <Compile Include="IQuestionnareAssemblyFileAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

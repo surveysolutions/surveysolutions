@@ -226,7 +226,6 @@
     <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
     <Compile Include="CodeGenerationTests\when_expression_state_processes_mandatory_question.cs" />
     <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string.cs" />
-    <Compile Include="InterviewCompilerTests\when_StronglyTypedInterviewEvaluator_with_one_roster_is_cloning.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_all_parameters_specified.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_target_entity_does_not_exists.cs" />
     <Compile Include="MoveStaticTextHandlerTests\when_moving_static_text_and_entity_does_not_exists.cs" />

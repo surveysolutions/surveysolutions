@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IInterviewExpressionStateProvider>())
-                .Returns(CreateInterviewExpressionStateProviderStub());
+                .Returns(CreateInterviewExpressionStateProviderStub(questionnaireId));
 
             return CreateInterview(questionnaireId: questionnaireId);
         }
@@ -67,15 +67,20 @@ namespace WB.Tests.Integration.InterviewTests
                 && repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
         }
 
-        protected static IInterviewExpressionStateProvider CreateInterviewExpressionStateProviderStub()
+        protected static IInterviewExpressionStateProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
         {
-            return new InterviewExpressionStateProvider();
-        }
+            var expressionState = new Mock<IInterviewExpressionState>();
 
-        /*protected static IExpressionProcessor CreateExpressionProcessorStub()
-        {
-            return new ExpressionProcessor();
-        }*/
+            var emptyList = new List<Identity>();
+
+            expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
+            expressionState.Setup(_ => _.ProcessConditionExpressions(out emptyList, out emptyList, out emptyList, out emptyList));
+            
+            return Mock.Of<IInterviewExpressionStateProvider>(
+                    provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);
+
+
+        }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
@@ -97,5 +102,6 @@ namespace WB.Tests.Integration.InterviewTests
                 .Setup(locator => locator.GetInstance<TInstance>())
                 .Returns(instance);
         }
+
     }
 }

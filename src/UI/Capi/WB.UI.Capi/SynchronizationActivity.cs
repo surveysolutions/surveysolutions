@@ -29,6 +29,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
@@ -254,8 +255,9 @@ namespace WB.UI.Capi
                         CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
                         CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), cleaner, ServiceLocator.Current.GetInstance<ILogger>(),
                         CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(), CapiApplication.Kernel.Get<IStringCompressor>(),
-                        CapiApplication.Kernel.Get<IJsonUtils>()),
-                    cleaner, CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
+                        CapiApplication.Kernel.Get<IJsonUtils>(), CapiApplication.Kernel.Get<IQuestionnareAssemblyFileAccessor>()),
+                        cleaner, 
+                        CapiApplication.Kernel.Get<IRestServiceWrapperFactory>());
             }
             catch (Exception ex)
             {

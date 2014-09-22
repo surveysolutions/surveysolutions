@@ -67,7 +67,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         protected static IInterviewExpressionStateProvider CreateInterviewExpressionStateProviderStub()
         {
-            return new InterviewExpressionStateProvider();
+            return new InterviewExpressionStateProviderForTests();
+        }
+
+        public class InterviewExpressionStateProviderForTests : IInterviewExpressionStateProvider
+        {
+            public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
+            {
+                return new StronglyTypedInterviewEvaluator();
+            }
         }
 
         protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)

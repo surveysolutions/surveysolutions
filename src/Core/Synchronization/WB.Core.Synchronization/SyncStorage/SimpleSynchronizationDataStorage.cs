@@ -67,7 +67,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 ItemType = SyncItemType.Template,
                 IsCompressed = UseCompression,
                 Content = GetItemAsContent(doc),
-                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(doc.PublicKey,version, allowCensusMode)),
+                MetaInfo = GetItemAsContent(new QuestionnaireMetadata(doc.PublicKey, version, allowCensusMode)),
             };
             chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
         }
@@ -154,7 +154,21 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, doc.PublicKey,timestamp);
         }
 
-       
+
+        public void SaveTemplateAssembly(Guid publicKey, long version, string assemblyAsBase64String, DateTime timestamp)
+        {
+            var meta = new QuestionnaireAssemblyMetadata(publicKey, version);
+
+            var syncItem = new SyncItem
+            {
+                Id = publicKey.Combine(version),
+                ItemType = SyncItemType.TemplateAssembly,
+                IsCompressed = UseCompressionForFiles,
+                Content = assemblyAsBase64String,
+                MetaInfo = GetItemAsContent(meta)
+            };
+            chunkStorageWriter.StoreChunk(syncItem, null, timestamp);
+        }
 
         #region from sync provider
 

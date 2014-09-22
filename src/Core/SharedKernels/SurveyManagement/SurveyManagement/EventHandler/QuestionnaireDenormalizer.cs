@@ -13,7 +13,8 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>, IEventHandler
+    public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, 
+        IEventHandler<QuestionnaireDeleted>, IEventHandler<TemplateAssemblyImported>, IEventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
@@ -85,6 +86,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public Type[] BuildsViews
         {
             get { return new Type[] { typeof(QuestionnaireDocument), typeof(SynchronizationDelta) }; }
+        }
+
+        public void Handle(IPublishedEvent<TemplateAssemblyImported> evnt)
+        {
+            this.synchronizationDataStorage.SaveTemplateAssembly(evnt.EventSourceId, evnt.Payload.Version, evnt.Payload.AssemblySource, evnt.EventTimeStamp);
         }
     }
 }

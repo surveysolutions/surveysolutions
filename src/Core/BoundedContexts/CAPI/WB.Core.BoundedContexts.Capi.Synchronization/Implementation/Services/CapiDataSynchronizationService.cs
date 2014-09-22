@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Main.Core.Commands.File;
 using Main.Core.Documents;
 using Main.Core.View;
@@ -15,6 +14,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -28,7 +28,8 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
     {
         public CapiDataSynchronizationService(IChangeLogManipulator changelog, ICommandService commandService,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory, IPlainQuestionnaireRepository questionnaireRepository,
-            ICapiCleanUpService capiCleanUpService, ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService, IStringCompressor stringCompressor, IJsonUtils jsonUtils)
+            ICapiCleanUpService capiCleanUpService, ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService,
+            IStringCompressor stringCompressor, IJsonUtils jsonUtils, IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
@@ -39,6 +40,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             this.capiCleanUpService = capiCleanUpService;
             this.loginViewFactory = loginViewFactory;
             this.questionnaireRepository = questionnaireRepository;
+            this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
         }
 
         private readonly ILogger logger;
@@ -50,6 +52,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStringCompressor stringCompressor;
         private readonly IJsonUtils jsonUtils;
+        private readonly IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
         public void SavePulledItem(SyncItem item)
         {
@@ -72,6 +75,9 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
                     break;
                 case SyncItemType.DeleteTemplate:
                     this.DeleteQuestionnaire(item);
+                    break;
+                case SyncItemType.TemplateAssembly:
+                    this.UpdateAssembly(item);
                     break;
                 default: break;
             }
@@ -165,6 +171,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             }
 
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
+            
             this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode));
         }
 
@@ -181,6 +188,8 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             }
 
             this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
+            this.questionnareAssemblyFileAccessor.RemoveAssembly(metadata.QuestionnaireId, metadata.Version);
+            
             try
             {
 
@@ -193,6 +202,21 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
                     exception);
             }
         }
+
+        private void UpdateAssembly(SyncItem item)
+        {
+            QuestionnaireAssemblyMetadata metadata;
+            try
+            {
+                metadata = this.ExtractObject<QuestionnaireAssemblyMetadata>(item.MetaInfo, item.IsCompressed);
+            }
+            catch (Exception exception)
+            {
+                throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
+            }
+
+            questionnareAssemblyFileAccessor.StoreAssembly(metadata.QuestionnaireId, metadata.Version, item.Content);
+        }        
 
         private TResult ExtractObject<TResult>(string initialString, bool isCompressed)
         {
