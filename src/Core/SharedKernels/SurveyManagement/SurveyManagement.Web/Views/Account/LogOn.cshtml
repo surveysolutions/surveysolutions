@@ -18,6 +18,7 @@
 <div class="well form-signin">
     @using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
     {
+        @Html.AntiForgeryToken()
         <fieldset>
             <legend>
                 Please log in

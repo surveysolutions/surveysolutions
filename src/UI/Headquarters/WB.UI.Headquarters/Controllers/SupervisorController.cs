@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(UserModel model)
         {
             if (this.ModelState.IsValid)
@@ -71,6 +72,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditModel model)
         {
             if (this.ModelState.IsValid)
