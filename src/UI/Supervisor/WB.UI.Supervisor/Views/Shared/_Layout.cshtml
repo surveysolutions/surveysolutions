@@ -109,24 +109,8 @@
     </div>
     @Html.Partial("Clickjacking")
     @Scripts.Render("~/js/main")
+    @Html.Partial("GlobalSettings")
     <script type="text/javascript">
-        var input = window.input || (function () {
-            'use strict';
-            return {
-                settings: {
-                    messages: {
-                        unhandledExceptionMessage: 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.AdminEmail">@AppSettings.Instance.AdminEmail</a>',
-                        notifyDialogTitle: 'Please wait',
-                        notifyDialogText: '"Your previous request is not complete. Please wait for it to be finished and repeat your operation."',
-                        notifyNoMarkersTitle: 'No markers were added',
-                        notifyNoMarkersText: 'There is no any information about geolocation points'
-                    }
-                }
-            };
-        }(document));
-
-        window.input = input;
-
         var setMinHeight = function () {
             var windowHeight = $(window).height();
             var navigationHeight = $('.navbar.navbar-fixed-top').height();
