@@ -4,7 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 
-namespace WB.Tests.Unit.Applications.CAPI
+namespace WB.Core.BoundedContexts.Capi.Tests.CascadingComboboxTests
 {
     internal class when_creating_cascading_question_and_setting_answer_as_string : CascadingComboboxQuestionViewTestContext
     {

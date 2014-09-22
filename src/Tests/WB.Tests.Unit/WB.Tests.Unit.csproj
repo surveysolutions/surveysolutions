@@ -126,17 +126,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Applications\CAPI\CascadingComboboxQuestionViewTestContext.cs" />
-    <Compile Include="Applications\CAPI\InterviewViewModelTestContext.cs" />
-    <Compile Include="Applications\CAPI\when_creating_cascading_question_and_handling_answers_change.cs" />
-    <Compile Include="Applications\CAPI\when_creating_cascading_question_and_setting_answer.cs" />
-    <Compile Include="Applications\CAPI\when_creating_cascading_question_and_setting_answer_as_string.cs" />
-    <Compile Include="Applications\CAPI\when_creating_cascading_question_and_setting_empty_answer.cs" />
-    <Compile Include="Applications\CAPI\when_creating_cascading_question_with_3_options.cs" />
-    <Compile Include="Applications\CAPI\when_creating_cascading_question_with_selected_option_and_getting_answer_string.cs" />
-    <Compile Include="Applications\CAPI\when_creating_cascading_question_with_selected_option_and_removing_answer.cs" />
-    <Compile Include="Applications\CAPI\when_synchronized_data_contains_2nd_level_rosters_and_cascading_questions_on_each_level_with_some_answers.cs" />
-    <Compile Include="Applications\CAPI\when_synchronized_data_contains_2nd_level_rosters_and_linked_question_on_firt_level_inside_it.cs" />
     <Compile Include="Applications\Designer\AttributesTests\AttributesTestContext.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials.cs" />
