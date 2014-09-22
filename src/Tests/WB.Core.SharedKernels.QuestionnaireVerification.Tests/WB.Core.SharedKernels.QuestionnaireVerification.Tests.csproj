@@ -135,6 +135,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_title_which_contains_roster_title_as_substitution_reference.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_validation_expression_and_without_validation_meassage.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_variable_name_roster_title.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_by_question_that_have_roster_title_as_multimedia_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_by_question_that_have_roster_title_question_in_roster_with_other_scope.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_roster.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_that_used_in_title_substitutions.cs" />

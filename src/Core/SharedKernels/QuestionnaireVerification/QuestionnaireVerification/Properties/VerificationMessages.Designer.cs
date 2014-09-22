@@ -721,20 +721,29 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Groups cannot have condition expression referencing child question..
+        ///   Looks up a localized string similar to Multimedia questions cannot be used in group&apos;s condition expression..
         /// </summary>
-        internal static string WB0081_MultimediaQuestionsCannotBeUsedInEnablementCondition {
+        internal static string WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition {
             get {
-                return ResourceManager.GetString("WB0081_MultimediaQuestionsCannotBeUsedInEnablementCondition", resourceCulture);
+                return ResourceManager.GetString("WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multimedia questions cannot be used in condition expression..
+        ///   Looks up a localized string similar to Multimedia questions cannot be used in question&apos;s condition expression..
         /// </summary>
-        internal static string WB0082_MultimediaQuestionsCannotBeUsedInEnablementCondition {
+        internal static string WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition {
             get {
-                return ResourceManager.GetString("WB0082_MultimediaQuestionsCannotBeUsedInEnablementCondition", resourceCulture);
+                return ResourceManager.GetString("WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question with current type can not be used as roster title.
+        /// </summary>
+        internal static string WB0083_QuestionCannotBeUsedAsRosterTitle {
+            get {
+                return ResourceManager.GetString("WB0083_QuestionCannotBeUsedAsRosterTitle", resourceCulture);
             }
         }
     }
