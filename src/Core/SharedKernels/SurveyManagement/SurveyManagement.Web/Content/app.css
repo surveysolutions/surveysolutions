@@ -1,4 +1,7 @@
 ﻿body {
+    /*Clickjacking protection*/
+    display: none;
+
     padding-top: 50px;
 }
 
