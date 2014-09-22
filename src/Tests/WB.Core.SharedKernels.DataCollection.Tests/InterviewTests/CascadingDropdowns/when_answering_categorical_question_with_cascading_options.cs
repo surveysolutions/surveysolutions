@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
                         PublicKey = nonAnsweredCombo,
                         QuestionType = QuestionType.SingleOption,
                         Answers = new List<Answer> {
-                            new Answer { AnswerText = "grand child 1 1", AnswerValue = "1", PublicKey = Guid.NewGuid() }
+                            new Answer { AnswerText = "other cascade", AnswerValue = "1", PublicKey = Guid.NewGuid() }
                         }
                     },
                     new SingleQuestion
@@ -94,8 +94,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
 
         Because of = () => interview.AnswerSingleOptionQuestion(Guid.NewGuid(), parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 2);
 
-        private It should_enable_child_question = () =>
+        It should_enable_child_question = () =>
             eventContext.ShouldContainEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
+
+        private It should_disable_grandchild_question = () =>
+            eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
 
         It should_not_remove_answer_from_self = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == parentSingleOptionQuestionId));
