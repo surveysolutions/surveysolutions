@@ -79,50 +79,50 @@ namespace WB.UI.Designer.Services
                 throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
 
-            string resultAssembly;
+            
             var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
 
             if (questoinnaireErrors.Any())
             {
-                var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify and fix it on Designer.",
+                var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify and fix them on Designer.",
                         questionnaireView.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
-            else
+
+            
+            GenerationResult generationResult;
+            string resultAssembly;
+            try
             {
-                GenerationResult generationResult;
-                try
+                generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+            }
+            catch (Exception)
+            {
+                generationResult = new GenerationResult()
                 {
-                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
-                }
-                catch (Exception)
-                {
-                    generationResult = new GenerationResult()
-                    {
-                        Success = false,
-                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
-                    };
-                    resultAssembly = string.Empty;
-                }
+                    Success = false,
+                    Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                };
+                resultAssembly = string.Empty;
+            }
 
-                if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
-                {
-                    var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify template on Designer.",
-                        questionnaireView.Title);
+            if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
+            {
+                var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify template on Designer.",
+                    questionnaireView.Title);
 
-                    throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
-                }
+                throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
 
             Stream stream = this.zipUtils.Compress(templateInfo.Source);
 
             return new RemoteFileInfo
             {
-                FileName = templateTitle,
+                //FileName = templateTitle,
                 Length = stream.Length,
                 FileByteStream = stream,
-                //SupportingAssembly = resultAssembly
+                SupportingAssembly = resultAssembly  //move it from header to the body
             };
         }
 

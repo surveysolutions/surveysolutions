@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
@@ -14,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -42,15 +40,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             availableVersions[e.Version] = null;
         }
 
+        protected internal void Apply(TemplateAssemblyImported e)
+        {
+        }
+
         #endregion
 
         #region Dependencies
-
-        private static IQuestionnaireVerifier QuestionnaireVerifier
-        {
-            get { return ServiceLocator.Current.GetInstance<IQuestionnaireVerifier>(); }
-        }
-
+        
         public IPlainQuestionnaireRepository PlainQuestionnaireRepository
         {
             get { return ServiceLocator.Current.GetInstance<IPlainQuestionnaireRepository>(); }
@@ -63,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode)
             : base(source.PublicKey)
         {
-            this.ImportFromDesigner(createdBy, source, allowCensusMode);
+            this.ImportFromDesigner(createdBy, source, allowCensusMode, null);
         }
 
         public Questionnaire(IQuestionnaireDocument source)
@@ -110,13 +107,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.availableVersions = snapshot.AvailableVersions;
         }
 
-        public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode)
+        public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode, string supportingAssembly)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
-            //ThrowIfVerifierFindsErrors(document);
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
-            
-            this.ApplyEvent(new TemplateImported { Source = document, AllowCensusMode = allowCensusMode, Version = GetNextVersion() });
+
+            var newVersion = GetNextVersion();
+            this.ApplyEvent(new TemplateImported { Source = document, AllowCensusMode = allowCensusMode, Version = newVersion });
+
+            if (supportingAssembly != null && !string.IsNullOrWhiteSpace(supportingAssembly))
+            {
+                this.ApplyEvent(new TemplateAssemblyImported { AssemblySource = supportingAssembly, Version = newVersion });
+            }
         }
 
         public void ImportFromSupervisor(IQuestionnaireDocument source)
@@ -166,7 +168,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
-
             this.ApplyEvent(new TemplateImported { Source = document, Version = GetNextVersion() });
         }
 
@@ -176,15 +177,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return 1;
             return this.availableVersions.Keys.Max() + 1;
         }
-
-        private static void ThrowIfVerifierFindsErrors(QuestionnaireDocument document)
-        {
-            var errors = QuestionnaireVerifier.Verify(document);
-            if (errors.Any())
-                throw new QuestionnaireVerificationException(string.Format("Questionnaire '{0}' can't be imported", document.Title),
-                    errors.ToArray());
-        }
-
+        
         private void ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository()
         {
             if (this.isProxyToPlainQuestionnaireRepository)

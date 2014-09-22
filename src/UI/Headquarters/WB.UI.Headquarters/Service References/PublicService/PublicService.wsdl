@@ -66,8 +66,8 @@
     <wsdl:part name="parameters" element="tns:RemoteFileInfo" />
   </wsdl:message>
   <wsdl:message name="RemoteFileInfo_Headers">
-    <wsdl:part name="FileName" element="tns:FileName" />
     <wsdl:part name="Length" element="tns:Length" />
+    <wsdl:part name="SupportingAssembly" element="tns:SupportingAssembly" />
   </wsdl:message>
   <wsdl:message name="IPublicService_DownloadQuestionnaireSource_InputMessage">
     <wsdl:part name="parameters" element="tns:DownloadQuestionnaireSource" />
@@ -128,8 +128,8 @@
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output name="RemoteFileInfo">
-        <soap12:header message="tns:RemoteFileInfo_Headers" part="FileName" use="literal" />
         <soap12:header message="tns:RemoteFileInfo_Headers" part="Length" use="literal" />
+        <soap12:header message="tns:RemoteFileInfo_Headers" part="SupportingAssembly" use="literal" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

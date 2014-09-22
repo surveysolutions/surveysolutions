@@ -18,8 +18,8 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="FileName" nillable="true" type="xs:string" />
   <xs:element name="Length" type="xs:long" />
+  <xs:element name="SupportingAssembly" nillable="true" type="xs:string" />
   <xs:element name="DownloadQuestionnaireSource">
     <xs:complexType>
       <xs:sequence>

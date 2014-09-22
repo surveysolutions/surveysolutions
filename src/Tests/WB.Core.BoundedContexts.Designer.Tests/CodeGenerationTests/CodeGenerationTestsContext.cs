@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 {
-    
     public class CodeGenerationTestsContext
     {
         public static QuestionnaireDocument CreateQuestionnaireForGeneration(Guid? questionnaireId = null)
@@ -27,7 +26,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 PublicKey = questionId,
                 StataExportCaption = "persons_n",
                 IsInteger = true
-
             }, chapterId, null);
 
             var rosterId = Guid.Parse("23232323232323232323232323232322");
@@ -37,7 +35,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 VariableName = "r1"
-
             }, chapterId, null);
 
             var rosterId1 = Guid.Parse("23232323232323232323232323232388");
@@ -47,7 +44,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 VariableName = "r2"
-
             }, chapterId, null);
 
             questionnaireDocument.Add(new NumericQuestion()
@@ -56,7 +52,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 StataExportCaption = "q_22",
                 IsInteger = true,
                 QuestionType = QuestionType.Numeric
-
             }, rosterId1, null);
 
 
@@ -68,7 +63,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 IsInteger = true,
                 Mandatory = true,
                 QuestionType = QuestionType.Numeric
-
             }, rosterId, null);
 
             var groupId = Guid.Parse("12345678912345678912345678912345");
@@ -77,7 +71,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 PublicKey = groupId,
                 IsRoster = false,
                 ConditionExpression = "pets_n > 0"
-
             }, rosterId, null);
 
             questionnaireDocument.Add(new TextQuestion()
@@ -88,7 +81,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 ValidationExpression = "pets_n == 0",
                 Mandatory = true,
                 QuestionType = QuestionType.Text
-
             }, groupId, null);
 
             questionnaireDocument.Add(new Group()
@@ -97,16 +89,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = pets_questionId,
                 ConditionExpression = "pets_text.Length > 0"
-
             }, rosterId, null);
 
             return questionnaireDocument;
         }
 
 
-        public static QuestionnaireDocument CreateQuestionnairDocumenteWithOneNumericIntegerQuestionWithValidationAndTwoRosters(Guid questionnaireId, Guid questionId)
+        public static QuestionnaireDocument CreateQuestionnairDocumenteWithOneNumericIntegerQuestionWithValidationAndTwoRosters(
+            Guid questionnaireId, Guid questionId)
         {
-            QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId};
+            QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
 
             Guid chapterId = Guid.Parse("23232323232323232323232323232323");
             Guid roster1Id = Guid.Parse("23232323232323232323232323232311");
@@ -123,7 +115,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 StataExportCaption = "test",
                 IsInteger = true,
                 ValidationExpression = "test > 3"
-
             }, chapterId, null);
 
             questionnaireDocument.Add(new Group()
@@ -133,7 +124,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 RosterSizeSource = RosterSizeSourceType.Question
-
             }, chapterId, null);
 
             questionnaireDocument.Add(new Group()
@@ -143,7 +133,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 RosterSizeSource = RosterSizeSourceType.Question
-
             }, chapterId, null);
 
             questionnaireDocument.Add(new NumericQuestion()
@@ -153,7 +142,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 StataExportCaption = "test_in_r",
                 IsInteger = true,
                 ValidationExpression = "test > 3"
-
             }, roster2Id, null);
 
             return questionnaireDocument;
@@ -177,7 +165,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 StataExportCaption = "test",
                 IsInteger = true,
                 ValidationExpression = "test >= 1"
-
             }, chapterId, null);
 
             questionnaireDocument.Add(new Group()
@@ -187,10 +174,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 RosterSizeSource = RosterSizeSourceType.Question
-
             }, chapterId, null);
 
-            
+
             questionnaireDocument.Add(new NumericQuestion()
             {
                 QuestionType = QuestionType.Numeric,
@@ -198,13 +184,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 StataExportCaption = "test_in_roster",
                 IsInteger = true,
                 ValidationExpression = "test >= 1"
-
             }, rosterId, null);
 
             return questionnaireDocument;
         }
 
-        public static QuestionnaireDocument CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(Guid questionnaireId, Guid questionId, Guid group1Id)
+        public static QuestionnaireDocument CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(
+            Guid questionnaireId, Guid questionId, Guid group1Id)
         {
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
 
@@ -219,7 +205,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 PublicKey = questionId,
                 StataExportCaption = "q1",
                 IsInteger = true,
-
             }, questionnaireId, null);
 
             questionnaireDocument.Add(new NumericQuestion()
@@ -229,48 +214,45 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 StataExportCaption = "q2",
                 IsInteger = true,
                 ConditionExpression = "q1 > 3"
-
             }, questionnaireId, null);
 
             questionnaireDocument.Add(new Group()
             {
                 PublicKey = group1Id,
                 ConditionExpression = "q1 > 5"
-
             }, questionnaireId, null);
 
-            
 
             return questionnaireDocument;
         }
 
-        public static QuestionnaireDocument CreateQuestionnairDocumenteHavingRosterWithConditions(Guid questionnaireId, Guid questionId, Guid group1Id)
+        public static QuestionnaireDocument CreateQuestionnairDocumenteHavingRosterWithConditions(Guid questionnaireId, Guid questionId,
+            Guid group1Id)
         {
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
-            
+
             questionnaireDocument.Add(new NumericQuestion()
             {
                 QuestionType = QuestionType.Numeric,
                 PublicKey = questionId,
                 StataExportCaption = "q1",
                 IsInteger = true,
-
             }, questionnaireId, null);
 
-            
+
             questionnaireDocument.Add(new Group()
             {
                 PublicKey = group1Id,
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 ConditionExpression = "q1 > 5"
-
             }, questionnaireId, null);
 
             return questionnaireDocument;
         }
 
-        public static QuestionnaireDocument CreateQuestionnaireDocumenteHavingMandatoryQuestions(Guid questionnaireId, Guid questionId, Guid question1Id, Guid question2Id, Guid question3Id)
+        public static QuestionnaireDocument CreateQuestionnaireDocumenteHavingMandatoryQuestions(Guid questionnaireId, Guid questionId,
+            Guid question1Id, Guid question2Id, Guid question3Id)
         {
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
 
@@ -281,7 +263,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 StataExportCaption = "number1",
                 Mandatory = true,
                 IsInteger = true,
-
             }, questionnaireId, null);
 
             questionnaireDocument.Add(new MultyOptionsQuestion()
@@ -300,18 +281,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 Mandatory = true,
             }, questionnaireId, null);
 
-            questionnaireDocument.Add(new DateTimeQuestion() 
+            questionnaireDocument.Add(new DateTimeQuestion()
             {
                 QuestionType = QuestionType.SingleOption,
                 PublicKey = question3Id,
                 StataExportCaption = "date1",
                 Mandatory = true,
             }, questionnaireId, null);
-            
+
             return questionnaireDocument;
         }
 
-        public static QuestionnaireDocument CreateQuestionnairDocumenteHavingNestedRosterWithConditions(Guid questionnaireId, Guid questionId, Guid roster1Id,
+        public static QuestionnaireDocument CreateQuestionnairDocumenteHavingNestedRosterWithConditions(Guid questionnaireId,
+            Guid questionId, Guid roster1Id,
             Guid question2Id, Guid roster2Id)
         {
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
@@ -322,7 +304,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 PublicKey = questionId,
                 StataExportCaption = "q1",
                 IsInteger = true,
-
             }, questionnaireId, null);
 
 
@@ -332,7 +313,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 VariableName = "R1"
-
             }, questionnaireId, null);
 
 
@@ -342,7 +322,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 PublicKey = question2Id,
                 StataExportCaption = "q2",
                 IsInteger = true,
-
             }, roster1Id, null);
 
             questionnaireDocument.Add(new Group()
@@ -352,13 +331,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 RosterSizeQuestionId = questionId,
                 ConditionExpression = "q2 > 5",
                 VariableName = "R1_1"
-
             }, roster1Id, null);
 
             return questionnaireDocument;
         }
 
-        public static QuestionnaireDocument CreateQuestionnairDocumenteHavingTwoRostersInOneScopeWithConditions(Guid questionnaireId, Guid questionId, 
+        public static QuestionnaireDocument CreateQuestionnairDocumenteHavingTwoRostersInOneScopeWithConditions(Guid questionnaireId,
+            Guid questionId,
             Guid roster1Id, Guid question2Id, Guid roster2Id)
         {
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
@@ -369,7 +348,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 PublicKey = questionId,
                 StataExportCaption = "q1",
                 IsInteger = true,
-
             }, questionnaireId, null);
 
 
@@ -379,7 +357,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 VariableName = "R1"
-
             }, questionnaireId, null);
 
 
@@ -389,7 +366,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 PublicKey = question2Id,
                 StataExportCaption = "q2",
                 IsInteger = true,
-
             }, roster1Id, null);
 
             questionnaireDocument.Add(new Group()
@@ -399,7 +375,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 RosterSizeQuestionId = questionId,
                 ConditionExpression = "q2 > 5",
                 VariableName = "R2"
-
             }, questionnaireId, null);
 
             return questionnaireDocument;
@@ -409,7 +384,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         {
             return new InterviewExpressionStateTestingProvider(questionnaireDocument);
         }
-        
+
         private class InterviewExpressionStateTestingProvider : IInterviewExpressionStateProvider
         {
             private IInterviewExpressionState interviewExpressionState;
@@ -429,32 +404,27 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
                     var compiledAssembly = Assembly.LoadFrom(filePath);
 
-                    Type interviewExpressionStateType = compiledAssembly.GetTypes().FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IInterviewExpressionState)));
+                    Type interviewExpressionStateType =
+                        compiledAssembly.GetTypes()
+                            .FirstOrDefault(type => type.GetInterfaces().Contains(typeof (IInterviewExpressionState)));
 
                     if (interviewExpressionStateType == null)
                         throw new Exception("Type InterviewExpressionState was not found");
 
-                    interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
+                    this.interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
                 }
                 else
                 {
                     throw new Exception("Error on IInterviewExpressionState generation");
                 }
-               
             }
 
 
             public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
             {
-                return interviewExpressionState.Clone();
+                return this.interviewExpressionState.Clone();
             }
-
-            public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assembly)
-            {
-                
-            }
+            
         }
     }
-
-    
 }

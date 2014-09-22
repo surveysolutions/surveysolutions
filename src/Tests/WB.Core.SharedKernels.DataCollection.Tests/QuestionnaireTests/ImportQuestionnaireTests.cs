@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(),newState, false);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(),newState, false, null);
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             // act
             TestDelegate act =
                 () =>
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), docMock.Object, false);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), docMock.Object, false, null);
             
             // assert
             Assert.Throws<QuestionnaireException>(act);
@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var newState = JsonConvert.DeserializeObject<QuestionnaireDocument>(questionnaireTemplate, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), newState, false);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), newState, false, null);
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var newState = JsonConvert.DeserializeObject<QuestionnaireDocument>(questionnaireTemplate, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), newState, false);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), newState, false, null);
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
             using (var eventContext = new EventContext())
             {
-                questionnaire.ImportFromDesigner(userId, newState, false);
+                questionnaire.ImportFromDesigner(userId, newState, false, null);
                 // act
                 questionnaire.DeleteQuestionnaire(1);
                 // assert
@@ -263,9 +263,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false, null);
                 questionnaire.DeleteQuestionnaire(2);
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
+                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false, null);
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(3));

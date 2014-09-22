@@ -106,8 +106,10 @@ namespace WB.UI.Headquarters.Controllers
                 }
 
                 document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
+                
+                string supportingAssembly = docSource.SupportingAssembly;
 
-                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document, request.AllowCensusMode));
+                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document, request.AllowCensusMode, supportingAssembly));
 
                 return new QuestionnaireVerificationResponse(true);
             }

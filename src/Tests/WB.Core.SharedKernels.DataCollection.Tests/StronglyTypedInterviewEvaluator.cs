@@ -4,7 +4,7 @@ using System.Linq;
 
 // ReSharper disable InconsistentNaming
 
-namespace WB.Core.SharedKernels.DataCollection
+namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
     public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState 
     {
@@ -284,7 +284,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 this.EnablementStates.Add(this.edu_visit_state.ItemId, this.edu_visit_state);
                 //EnablementStates.Add(persons_count_state.ItemId, persons_count_state);
 
-                QuestionStringUpdateMap.Add(IdOf.id, (s) => {@__id = s; });
+                this.QuestionStringUpdateMap.Add(IdOf.id, (s) => {this.__id = s; });
             }
 
             private string @__id;
@@ -322,7 +322,7 @@ namespace WB.Core.SharedKernels.DataCollection
                     conditionalState.Value.PreviousState = oldState.PreviousState;
                 }
 
-                ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
+                this.ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
 
 
                 level.id = this.@__id;
@@ -409,7 +409,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 this.EnablementStates.Add(this.group_state.ItemId, this.group_state);
 
 
-                this.QuestionLongUpdateMap.Add(IdOf.age, l => { @__age = l; });
+                this.QuestionLongUpdateMap.Add(IdOf.age, l => { this.__age = l; });
 
             }
 
@@ -417,7 +417,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
             public IEnumerable<HhMember_type> hhMembers
             {
-                get { return @__parent.hhMembers; }
+                get { return this.__parent.hhMembers; }
             }
 
             public IEnumerable<FoodConsumption_type> foodConsumption
@@ -833,7 +833,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
             public IEnumerable<Education_type> educations
             {
-                get { return @__parent.educations; }
+                get { return this.__parent.educations; }
             }
 
             public string id { get { return this.@__parent.id; } }
