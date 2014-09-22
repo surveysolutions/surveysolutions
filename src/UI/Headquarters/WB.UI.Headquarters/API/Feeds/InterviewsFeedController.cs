@@ -10,11 +10,11 @@ using Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.UI.Headquarters.API.Attributes;
-using WB.UI.Headquarters.API.Filters;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.Feeds
 {
-    [TokenValidationAuthorizationAttribute]
+    [TokenValidationAuthorization]
     [HeadquarterFeatureOnly]
     public class InterviewsFeedController : ApiController
     {

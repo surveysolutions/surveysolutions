@@ -9,6 +9,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
