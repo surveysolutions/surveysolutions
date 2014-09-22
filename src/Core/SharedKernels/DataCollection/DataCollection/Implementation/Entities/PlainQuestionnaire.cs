@@ -594,6 +594,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return result;
         }
 
+        public IEnumerable<Guid> GetCascadingQuestionsThatDirectlyDependUponQuestion(Guid id)
+        {
+            return this.QuestionnaireDocument.Children.TreeToEnumerable(_ => _.Children)
+                .Where(x =>
+                {
+                    var question = x as AbstractQuestion;
+                    return question != null && question.CascadeFromQuestionId.HasValue && question.CascadeFromQuestionId.Value == id;
+                }).Select(x => x.PublicKey);
+        }
+
+        public IEnumerable<Guid> GetAllChildCascadingQuestions()
+        {
+            return this.QuestionnaireDocument.Children.TreeToEnumerable(_ => _.Children)
+                .Where(x =>
+                {
+                    var question = x as AbstractQuestion;
+                    return question != null && question.CascadeFromQuestionId.HasValue;
+                }).Select(x => x.PublicKey);
+        }
+
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
         {
             if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))

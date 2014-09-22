@@ -1218,6 +1218,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionnaire
                 .GetAllQuestionsWithNotEmptyCustomEnablementConditions()
                 .Where(questionId => !IsQuestionUnderRosterGroup(questionnaire, questionId))
+                .Concat(questionnaire.GetAllChildCascadingQuestions())
                 .Select(questionId => new Identity(questionId, EmptyRosterVector))
                 .ToList();
         }
@@ -3054,6 +3055,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(
                    affectingQuestion.Id);
+
                 IEnumerable<Identity> dependentQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
                     dependentQuestionIds, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
 
@@ -3073,6 +3075,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (isNewStateEnabled != isOldStateEnabled)
                     {
                         affectingQuestions.Enqueue(dependentQuestion);
+                    }
+                }
+
+                var dependingCascadingQuestion = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id);
+                IEnumerable<Identity> dependentCascadingQuestions = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                    dependingCascadingQuestion, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
+
+                foreach (var dependentCascadingQuestion in dependentCascadingQuestions)
+                {
+                    if (!collectedQuestionsToBeDisabled.Contains(dependentCascadingQuestion) && 
+                        !collectedQuestionsToBeEnabled.Contains(dependentCascadingQuestion))
+                    {
+                        collectedQuestionsToBeEnabled.Add(dependentCascadingQuestion);
                     }
                 }
             }
