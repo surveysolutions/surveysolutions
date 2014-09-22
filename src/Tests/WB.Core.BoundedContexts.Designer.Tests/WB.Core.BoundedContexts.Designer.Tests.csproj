@@ -263,6 +263,8 @@
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_and_1_option_has_empty_parent_value.cs" />
+    <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_with_1_duplicated_option.cs" />
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_some_of_option_titles_not_unique.cs" />
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_1_option_have_empty_title.cs" />
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_some_options_not_unique.cs" />

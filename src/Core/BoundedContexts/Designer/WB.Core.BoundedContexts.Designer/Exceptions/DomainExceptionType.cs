@@ -134,6 +134,10 @@
 
         FilteredComboboxQuestionOptionsMaxLength,
 
-        CategoricalSingleOptionHasMoreThan200Options
+        CategoricalSingleOptionHasMoreThan200Options,
+
+        CategoricalCascadingOptionsCantContainsEmptyParentValueField,
+
+        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair
     }
 }

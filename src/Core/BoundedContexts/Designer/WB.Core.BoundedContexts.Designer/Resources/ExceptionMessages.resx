@@ -123,6 +123,12 @@
   <data name="CantRemoveParentQuestionInCascading" xml:space="preserve">
     <value>Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed</value>
   </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>At least one options contains empty value in ParentValue column</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>There is at least one duplicate of Title + ParentValue pairs. List of option should not contains any duplicates of such type</value>
+  </data>
   <data name="ShouldCascadeFromExistingQuestion" xml:space="preserve">
     <value>Question to cascade from should exist in questionnaire</value>
   </data>
