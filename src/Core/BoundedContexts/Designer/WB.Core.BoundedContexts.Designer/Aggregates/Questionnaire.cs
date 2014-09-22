@@ -2273,6 +2273,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
+            ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
+
+            ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
+
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
 
             this.ApplyEvent(new QuestionChanged
@@ -2296,6 +2300,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 IsFilteredCombobox = categoricalOneAnswerQuestion.IsFilteredCombobox
             });
         }
+
+       
+
         #endregion
 
         #region Question: Numeric question command handlers
@@ -3477,6 +3484,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.DoesNotHavePermissionsForEdit,
                     "You don't have permissions for changing this questionnaire");
+            }
+        }
+
+        private void ThrowDomainExceptionIfOptionsHasEmptyParentValue(Option[] options)
+        {
+            if (options.Select(x => x.ParentValue).Any(string.IsNullOrWhiteSpace))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.CategoricalCascadingOptionsCantContainsEmptyParentValueField,
+                    ExceptionMessages.CategoricalCascadingOptionsCantContainsEmptyParentValueField);
+            }
+        }
+
+        private void ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(Option[] options)
+        {
+
+            if (options.Select(x => x.ParentValue + "$" + x.Title).Distinct().Count() != options.Length)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
+                    ExceptionMessages.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair);
             }
         }
 
