@@ -6,12 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")">
     @Styles.Render("~/css/main-not-loggedin")
-    @*Clickjacking protection*@
-    <style>
-        body {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <div id="page" class="container-fluid">
@@ -25,15 +19,7 @@
             <a href="@Url.Action("GetLatestVersion", "Sync", new { area = string.Empty })" class="btn btn-default">Get CAPI</a>
         </footer>
     </div>
-    @*Clickjacking protection*@
-    <script>
-        if (self == top) {
-            var theBody = document.getElementsByTagName('body')[0];
-            theBody.style.display = "block";
-        } else {
-            top.location = self.location;
-        }
-    </script>
+    @Html.Partial("Clickjacking")
     @Scripts.Render("~/js/main")
     @RenderSection("scripts", false)
 </body>
