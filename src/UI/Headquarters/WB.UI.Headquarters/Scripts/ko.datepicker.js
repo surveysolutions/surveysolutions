@@ -5,7 +5,7 @@
 
         $el.datepicker(options);
 
-        var previousValue;
+        var previousValue = $el.datepicker("getDate");
 
         ko.utils.registerEventHandler(element, "hide", function (e) {
             var observable = valueAccessor();
@@ -15,14 +15,12 @@
             } else {
                 var date = $el.datepicker("getDate");
                 previousValue = date;
-                observable(date);
             }
         });
         
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
             $el.datepicker("destroy");
         });
-
     },
     update: function (element, valueAccessor) {
         var value = ko.utils.unwrapObservable(valueAccessor()),
