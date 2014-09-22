@@ -4,6 +4,8 @@ namespace Main.Core.Entities.SubEntities
 {
     public class Option
     {
+        public Option() {}
+
         public Option(Guid id, string value, string title)
         {
             this.Id = id;
@@ -11,7 +13,8 @@ namespace Main.Core.Entities.SubEntities
             this.Title = title;
         }
 
-        public Option(Guid id, string value, string title, string parentValue) : this(id, value, title)
+        public Option(Guid id, string value, string title, string parentValue) 
+            : this(id, value, title)
         {
             this.ParentValue = parentValue;
         }
