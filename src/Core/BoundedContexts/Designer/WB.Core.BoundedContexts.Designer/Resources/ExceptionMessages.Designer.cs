@@ -79,6 +79,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to At least one options contains empty value in ParentValue column.
+        /// </summary>
+        internal static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
+            get {
+                return ResourceManager.GetString("CategoricalCascadingOptionsCantContainsEmptyParentValueField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is at least one duplicate of Title + ParentValue pairs. List of option should not contains any duplicates of such type.
+        /// </summary>
+        internal static string CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
+            get {
+                return ResourceManager.GetString("CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question to cascade from should exist in questionnaire.
         /// </summary>
         internal static string ShouldCascadeFromExistingQuestion {
