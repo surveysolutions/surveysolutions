@@ -46,6 +46,7 @@
     <div>
         @using (Html.BeginForm("SampleBatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
+            @Html.AntiForgeryToken()
 
             @Html.HiddenFor(x => x.QuestionnaireId)
             @Html.HiddenFor(x => x.QuestionnaireVersion)
@@ -70,7 +71,7 @@
     <div>
         @using (Html.BeginForm("PanelBatchUpload", "HQ", routeValues: new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
         {
-
+            @Html.AntiForgeryToken()
             @Html.HiddenFor(x => x.QuestionnaireId)
             @Html.HiddenFor(x => x.QuestionnaireVersion)
             <br />

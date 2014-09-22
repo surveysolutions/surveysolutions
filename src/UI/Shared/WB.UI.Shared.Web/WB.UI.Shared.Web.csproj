@@ -121,13 +121,11 @@
     <Compile Include="Exceptions\HttpStatusException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
-    <Compile Include="Filters\AntiForgeryTokenVerifier.cs" />
-    <Compile Include="Filters\ApiAntiForgeryTokenVerifier.cs" />
+    <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
     <Compile Include="Filters\ITokenVerifier.cs" />
     <Compile Include="Filters\LocalOrDevelopmentAccessOnlyAttribute.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenAttribute.cs" />
-    <Compile Include="Filters\ValidationAntiForgeryTokenAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
     <Compile Include="MembershipProvider\Accounts\IAccountPasswordInfo.cs" />
