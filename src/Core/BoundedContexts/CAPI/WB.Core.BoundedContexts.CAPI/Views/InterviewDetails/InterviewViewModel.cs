@@ -48,13 +48,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             #region interview data initialization
             this.Status = interview.Status;
+            this.Title = questionnaire.Title;
             this.PropagateGroups(interview);
             this.SetAnswers(interview);
             this.DisableInterviewElements(interview);
             this.MarkAnswersAsInvalid(interview);
 
             this.FireSubstitutionEventsForPrefilledQuestions();
-            this.CreateInterviewTitle(questionnaire);
             #endregion
         }
 
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             : this(id)
         {
             #region interview structure initialization
-
+            this.Title = questionnaire.Title;
             questionnaire.ConnectChildrenWithParent();
 
             this.rosterStructure = rosterStructure;
@@ -97,8 +97,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             #region interview data initialization
 
             this.CreateInterviewChapters(questionnaire);
-
-            this.CreateInterviewTitle(questionnaire);
 
             this.SubscribePrefilledQuestionsOnPropertiesChanges();
 
@@ -272,17 +270,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 c => this.Screens[new InterviewItemId(c.PublicKey)]).OfType<QuestionnaireScreenViewModel>().ToList();
         }
 
-        private void CreateInterviewTitle(IQuestionnaireDocument questionnarie)
-        {
-            string featuredTitle = "";
-            foreach (var questionViewModel in this.FeaturedQuestions)
-            {
-                featuredTitle += string.Format("| {0} ", questionViewModel.Value.AnswerString);
-            }
-
-            this.Title = string.Format("{0} {1}", questionnarie.Title, featuredTitle);
-        }
-
         protected void BuildInterviewStructureFromTemplate(IGroup document)
         {
             List<IGroup> rout = new List<IGroup>();
@@ -320,7 +307,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         #region fields
 
         public Guid PublicKey { get; private set; }
-        public string Title { get; private set; }
+
+        public string Title { get; set; }
+
         public InterviewStatus Status { get; set; }
         public IDictionary<InterviewItemId, IQuestionnaireViewModel> Screens { get; protected set; }
         public IList<QuestionnaireScreenViewModel> Chapters { get; protected set; }
