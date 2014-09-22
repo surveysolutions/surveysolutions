@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
     {
         protected static InterviewSynchronizationFileStorage CreateFileSyncRepository(IPlainInterviewFileStorage plainFileRepository = null, IFileSystemAccessor fileSystemAccessor = null)
         {
-            return new InterviewSynchronizationFileStorage(plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "");
+            return new InterviewSynchronizationFileStorage(plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "", "InterviewData");
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

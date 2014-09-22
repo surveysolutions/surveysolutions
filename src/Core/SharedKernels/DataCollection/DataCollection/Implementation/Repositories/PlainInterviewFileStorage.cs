@@ -15,13 +15,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
-        private const string DataDirectoryName = "InterviewData";
 
-        public PlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
+        public PlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath, string dataDirectoryName)
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
-            this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, DataDirectoryName);
+            this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, dataDirectoryName);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(this.basePath))
                 this.fileSystemAccessor.CreateDirectory(this.basePath);

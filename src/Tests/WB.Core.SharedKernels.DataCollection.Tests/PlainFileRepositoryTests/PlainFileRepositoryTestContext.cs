@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
     {
         protected static PlainInterviewFileStorage CreatePlainFileRepository(IFileSystemAccessor fileSystemAccessor = null)
         {
-            return new PlainInterviewFileStorage(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object, "");
+            return new PlainInterviewFileStorage(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object, "", "SYNC");
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()
