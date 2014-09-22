@@ -39,11 +39,32 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             this.plainFileRepository = plainFileRepository;
 
-            if (IsThereAnAppToTakePictures())
+            if (this.IsThereAnAppToTakePictures())
             {
                 this.pictureChooserTask = Mvx.Resolve<IMvxPictureChooserTask>();
-                ivImage = new ImageView(this.Context);
-                this.InitializeViewAndButtonView(ivImage, IsPicturePresent() ? Remove : TakePicture, this.BtnTakePictureClick);
+                var wrapper = new LinearLayout(this.Context)
+                {
+                    LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent)
+                };
+                wrapper.Orientation = Orientation.Horizontal;
+
+                this.llWrapper.AddView(wrapper);
+               
+                var imageLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WrapContent,4);
+                
+                this.ivImage = new ImageView(this.Context) { LayoutParameters = imageLayoutParams };
+                ivImage.SetAdjustViewBounds(true);
+                ivImage.SetScaleType(ImageView.ScaleType.Center);
+                wrapper.AddView(this.ivImage);
+
+                var buttonLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WrapContent,1);
+
+                var button = new Button(this.Context) { Text = this.IsPicturePresent() ? this.Remove : this.TakePicture, LayoutParameters = buttonLayoutParams };
+                button.Click += this.BtnTakePictureClick;
+                wrapper.AddView(button);
+
+
+                
                 this.PutAnswerStoredInModelToUI();
             }
             else
