@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.BinaryData
 {
-    public class InterviewBinaryData
+    public class InterviewBinaryDataDescriptor
     {
-        public InterviewBinaryData(Guid interviewId, string fileName, Func<byte[]> getData)
+        public InterviewBinaryDataDescriptor(Guid interviewId, string fileName, Func<byte[]> getData)
         {
             this.InterviewId = interviewId;
             this.FileName = fileName;

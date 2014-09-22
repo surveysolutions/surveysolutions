@@ -7,10 +7,10 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
-    public interface IFileSyncRepository
+    public interface IInterviewSynchronizationFileStorage
     {
         void MoveInterviewsBinaryDataToSyncFolder(Guid interviewId);
-        IList<InterviewBinaryData> GetBinaryFilesFromSyncFolder();
+        IList<InterviewBinaryDataDescriptor> GetBinaryFilesFromSyncFolder();
         void RemoveBinaryDataFromSyncFolder(Guid interviewId, string fileName);
     }
 }

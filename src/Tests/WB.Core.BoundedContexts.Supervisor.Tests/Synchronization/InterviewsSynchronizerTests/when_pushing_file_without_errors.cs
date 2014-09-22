@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             string positiveResponse = ":)";
 
             fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder())
-                .Returns(new List<InterviewBinaryData>() { new InterviewBinaryData(interviewId, fileName, () => new byte[] { 1 }) });
+                .Returns(new List<InterviewBinaryDataDescriptor>() { new InterviewBinaryDataDescriptor(interviewId, fileName, () => new byte[] { 1 }) });
 
             var httpMessageHandler = Mock.Of<HttpMessageHandler>();
 
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 httpMessageHandler: () => httpMessageHandler,
-                fileSyncRepository: fileSyncRepository.Object,
+                interviewSynchronizationFileStorage: fileSyncRepository.Object,
                 jsonUtils: jsonUtils);
         };
 
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         It should_sent_file_be_removed_from_sync_storage = () =>
           fileSyncRepository.Verify(x => x.RemoveBinaryDataFromSyncFolder(interviewId,fileName), Times.Once);
 
-        private static Mock<IFileSyncRepository> fileSyncRepository = new Mock<IFileSyncRepository>();
+        private static Mock<IInterviewSynchronizationFileStorage> fileSyncRepository = new Mock<IInterviewSynchronizationFileStorage>();
         private static InterviewsSynchronizer interviewsSynchronizer;
         private static Guid userId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

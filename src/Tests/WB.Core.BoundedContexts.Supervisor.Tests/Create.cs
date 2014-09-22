@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage=null,
             IHeadquartersInterviewReader headquartersInterviewReader=null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository=null,
-            IFileSyncRepository fileSyncRepository =null)
+            IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage =null)
         {
             return new InterviewsSynchronizer(
                 Mock.Of<IAtomFeedReader>(),
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 interviewSummaryRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 readyToSendInterviewsRepositoryWriter ?? Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(),
                 httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
-                fileSyncRepository ?? Mock.Of<IFileSyncRepository>(_=>_.GetBinaryFilesFromSyncFolder()==new List<InterviewBinaryData>()));
+                interviewSynchronizationFileStorage ?? Mock.Of<IInterviewSynchronizationFileStorage>(_ => _.GetBinaryFilesFromSyncFolder() == new List<InterviewBinaryDataDescriptor>()));
         }
 
         public static HeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,

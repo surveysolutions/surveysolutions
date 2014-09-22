@@ -18,9 +18,9 @@ namespace WB.UI.Headquarters.API
     public class SyncController : ApiController
     {
         private readonly ISyncManager syncManager;
-        private readonly IPlainFileRepository plainFileRepository;
+        private readonly IPlainInterviewFileStorage plainFileRepository;
 
-        public SyncController(ISyncManager syncManager, IPlainFileRepository plainFileRepository)
+        public SyncController(ISyncManager syncManager, IPlainInterviewFileStorage plainFileRepository)
         {
             this.syncManager = syncManager;
             this.plainFileRepository = plainFileRepository;

@@ -21,7 +21,7 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
         {
             var user = new UserView();
             var userFactory = Mock.Of<IViewFactory<UserViewInputModel, UserView>>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == user);
-            plainFileRepository=new Mock<IPlainFileRepository>();
+            plainFileRepository = new Mock<IPlainInterviewFileStorage>();
             controller = CreateSyncControllerWithFile(viewFactory: userFactory, stream: new MemoryStream(), plainFileRepository: plainFileRepository.Object, fileName: fileName);
         };
 
@@ -36,7 +36,7 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
 
         private static SyncController controller;
         private static JsonResult result;
-        private static Mock<IPlainFileRepository> plainFileRepository;
+        private static Mock<IPlainInterviewFileStorage> plainFileRepository;
         private static Guid iterviewId = Guid.NewGuid();
         private static string fileName = "file name";
     }

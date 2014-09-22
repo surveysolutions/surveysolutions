@@ -18,14 +18,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         private readonly IAnswerOnQuestionCommandService answerCommandService;
         private readonly ICommandService commandService;
         private readonly IAuthentication membership;
-        private readonly IPlainFileRepository plainFileRepository;
+        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
 
         public DefaultQuestionViewFactory(IKernel kernel)
         {
             this.answerCommandService = kernel.Get<IAnswerOnQuestionCommandService>();
             this.membership = kernel.Get<IAuthentication>();
             this.commandService = kernel.Get<ICommandService>();
-            this.plainFileRepository = kernel.Get<IPlainFileRepository>();
+            this.plainInterviewFileStorage = kernel.Get<IPlainInterviewFileStorage>();
         }
 
         #region Implementation of IQuestionViewFactory
@@ -84,7 +84,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                     break;
                 case QuestionType.Multimedia:
                     itemView = new PictureQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService,
-                        this.answerCommandService, this.membership, plainFileRepository);
+                        this.answerCommandService, this.membership, this.plainInterviewFileStorage);
                     break;
                 default:
                     itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey, this.commandService, this.answerCommandService, this.membership);

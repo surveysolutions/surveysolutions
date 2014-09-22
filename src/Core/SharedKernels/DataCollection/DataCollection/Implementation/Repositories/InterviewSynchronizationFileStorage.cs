@@ -10,16 +10,16 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class FileSyncRepository : IFileSyncRepository
+    internal class InterviewSynchronizationFileStorage : IInterviewSynchronizationFileStorage
     {
-        private readonly IPlainFileRepository plainFileRepository;
+        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private const string SyncDirectoryName = "SYNC";
         private readonly string basePath;
 
-        public FileSyncRepository(IPlainFileRepository plainFileRepository, IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
+        public InterviewSynchronizationFileStorage(IPlainInterviewFileStorage plainInterviewFileStorage, IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
-            this.plainFileRepository = plainFileRepository;
+            this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.fileSystemAccessor = fileSystemAccessor;
 
             this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, SyncDirectoryName);
@@ -35,16 +35,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (!fileSystemAccessor.IsDirectoryExists(interviewDirectoryPath))
                 fileSystemAccessor.CreateDirectory(interviewDirectoryPath);
 
-            var files = plainFileRepository.GetBinaryFilesForInterview(interviewId);
+            var files = this.plainInterviewFileStorage.GetBinaryFilesForInterview(interviewId);
             foreach (var file in files)
             {
                 fileSystemAccessor.WriteAllBytes(GetPathToFile(interviewId, file.FileName), file.Data);
             }
         }
 
-        public IList<InterviewBinaryData> GetBinaryFilesFromSyncFolder()
+        public IList<InterviewBinaryDataDescriptor> GetBinaryFilesFromSyncFolder()
         {
-            var result = new List<InterviewBinaryData>();
+            var result = new List<InterviewBinaryDataDescriptor>();
 
             foreach (var syncInterviewDirectory in fileSystemAccessor.GetDirectoriesInDirectory(basePath))
             {
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                     fileSystemAccessor.GetFilesInDirectory(syncInterviewDirectory)
                         .Select(
                             fileName =>
-                                new InterviewBinaryData(interviewId, fileSystemAccessor.GetFileName(fileName),
+                                new InterviewBinaryDataDescriptor(interviewId, fileSystemAccessor.GetFileName(fileName),
                                     () => fileSystemAccessor.ReadAllBytes(fileName))));
             }
 

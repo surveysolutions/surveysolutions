@@ -17,28 +17,28 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
         Establish context = () =>
         {
             plainFileRepositoryMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
-                .Returns(new List<InterviewBinaryData>
+                .Returns(new List<InterviewBinaryDataDescriptor>
                 {
-                    new InterviewBinaryData(interviewId, "file1", () => data1),
-                    new InterviewBinaryData(interviewId, "file2", () => data2)
+                    new InterviewBinaryDataDescriptor(interviewId, "file1", () => data1),
+                    new InterviewBinaryDataDescriptor(interviewId, "file2", () => data2)
                 });
-            fileSyncRepository = CreateFileSyncRepository(plainFileRepository: plainFileRepositoryMock.Object,fileSystemAccessor: fileSystemAccessorMock.Object);
+            interviewSynchronizationFileStorage = CreateFileSyncRepository(plainFileRepository: plainFileRepositoryMock.Object,fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
-        Because of = () => fileSyncRepository.MoveInterviewsBinaryDataToSyncFolder(interviewId);
+        Because of = () => interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
 
-        It should_sycn_storage_store_2_files = () =>
+        It should_store_2_files_to_sync_storage = () =>
             fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Exactly(2));
 
-        It should_sycn_storage_store_first_file_with_InterviewId_equal_to_interviewId = () =>
+        It should_store_first_file_with_InterviewId_equal_to_interviewId_to_sync_storage = () =>
             fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name=> name.Contains(interviewId.FormatGuid())), data1), Times.Once);
 
-        It should_sycn_storage_store_second_file_with_InterviewId_equal_to_interviewId = () =>
+        It should_store_second_file_with_InterviewId_equal_to_interviewId_to_sync_storage = () =>
            fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid())), data2), Times.Once);
 
-        private static FileSyncRepository fileSyncRepository;
-        private static Mock<IPlainFileRepository> plainFileRepositoryMock = new Mock<IPlainFileRepository>();
-          private static Mock<IFileSystemAccessor> fileSystemAccessorMock = CreateIFileSystemAccessorMock();
+        private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
+        private static Mock<IPlainInterviewFileStorage> plainFileRepositoryMock = new Mock<IPlainInterviewFileStorage>();
+         private static Mock<IFileSystemAccessor> fileSystemAccessorMock = CreateIFileSystemAccessorMock();
         private static Guid interviewId = Guid.NewGuid();
         private static byte[] data1 = new byte[] { 1 };
         private static byte[] data2 = new byte[] { 2 };

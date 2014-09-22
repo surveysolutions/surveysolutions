@@ -13,12 +13,12 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
 {
-    [Subject(typeof(PlainFileRepository))]
+    [Subject(typeof(PlainInterviewFileStorage))]
     class PlainFileRepositoryTestContext
     {
-        protected static PlainFileRepository CreatePlainFileRepository(IFileSystemAccessor fileSystemAccessor = null)
+        protected static PlainInterviewFileStorage CreatePlainFileRepository(IFileSystemAccessor fileSystemAccessor = null)
         {
-            return new PlainFileRepository(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object, "");
+            return new PlainInterviewFileStorage(fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object, "");
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()
