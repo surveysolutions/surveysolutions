@@ -115,6 +115,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid? GetRosterSizeQuestion(Guid rosterId);
 
         IEnumerable<Guid> GetCascadingQuestionsThatDependUponQuestion(Guid questionId);
+
         IEnumerable<Guid> GetCascadingQuestionsThatDirectlyDependUponQuestion(Guid id);
 
         IEnumerable<Guid> GetAllChildCascadingQuestions();
