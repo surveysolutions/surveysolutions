@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Tests.Unit.Applications.CAPI
+namespace WB.Core.BoundedContexts.Capi.Tests.CascadingComboboxTests
 {
     internal class CascadingComboboxQuestionViewTestContext
     {

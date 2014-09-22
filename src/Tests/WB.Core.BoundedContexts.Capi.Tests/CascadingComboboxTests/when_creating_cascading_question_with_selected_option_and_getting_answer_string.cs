@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 
-namespace WB.Tests.Unit.Applications.CAPI
+namespace WB.Core.BoundedContexts.Capi.Tests.CascadingComboboxTests
 {
-    internal class when_creating_cascading_question_with_selected_option_and_removing_answer : CascadingComboboxQuestionViewTestContext
+    internal class when_creating_cascading_question_with_selected_option_and_getting_answer_string : CascadingComboboxQuestionViewTestContext
     {
         Establish context = () =>
         {
@@ -24,14 +23,12 @@ namespace WB.Tests.Unit.Applications.CAPI
         };
 
         Because of = () =>
-            cascadingCombobox.RemoveAnswer();
+            answerString = cascadingCombobox.AnswerString;
 
-        It should_not_find_any_selected_option = () =>
-            cascadingCombobox.filteredAnswers.Any(x => x.Selected).ShouldBeFalse();
-
-        It should_set_non_answered_status = () =>
-            cascadingCombobox.Status.ShouldEqual(QuestionStatus.Enabled | QuestionStatus.ParentEnabled | QuestionStatus.Valid);
+        It should_return_title_of_the_3rd_option = () =>
+            answerString.ShouldEqual("o 3");
 
         private static CascadingComboboxQuestionViewModel cascadingCombobox;
+        private static string answerString;
     }
 }
