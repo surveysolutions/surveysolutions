@@ -446,15 +446,12 @@
     <Compile Include="Code\IdentityManager.cs" />
     <Compile Include="Code\IIdentityManager.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
-    <Compile Include="Code\Security\ITokenVerifier.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
-    <Compile Include="API\Filters\TokenValidationAuthorizationFilter.cs" />
     <Compile Include="API\Feeds\Constants.cs" />
     <Compile Include="API\Feeds\InterviewsFeedController.cs" />
     <Compile Include="API\Feeds\PagingExtensions.cs" />
     <Compile Include="API\Feeds\SyndicationFeedExtensions.cs" />
     <Compile Include="API\Feeds\UsersFeedController.cs" />
-    <Compile Include="API\Attributes\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="API\Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="API\Formatters\JsonNetFormatter.cs" />
     <Compile Include="API\Formatters\SyndicationFeedFormatter.cs" />
