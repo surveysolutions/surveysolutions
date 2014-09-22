@@ -13,7 +13,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CustomEnablementConditions
 {
-    [Ignore("C#")]
     internal class when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_TextList_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
