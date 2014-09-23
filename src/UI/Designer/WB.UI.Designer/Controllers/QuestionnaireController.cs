@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using CsvHelper;
@@ -12,6 +13,7 @@ using System.Web;
 using System.Web.Mvc;
 using Raven.Imports.Newtonsoft.Json.Utilities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -213,40 +215,33 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult EditOptions(string id, Guid questionId)
         {
-            var editQuestionView = questionnaireInfoFactory.GetQuestionEditView(id, questionId);
-
-            var options = editQuestionView != null ? editQuestionView.Options.Select(
-                option => new Option(value: option.Value.ToString(), title: option.Title, id: Guid.NewGuid())) : new Option[0];
-
-            this.questionWithOptionsViewModel = new EditOptionsViewModel()
-            {
-                QuestionnaireId = id,
-                QuestionId = questionId,
-                QuestionTitle = editQuestionView.Title, 
-                Options = options,
-                SourceOptions = options
-            };
-
+            this.SetupViewModel(id, questionId);
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
         public ActionResult EditCascadingOptions(string id, Guid questionId)
         {
-            var editQuestionView = questionnaireInfoFactory.GetQuestionEditView(id, questionId);
+            this.SetupViewModel(id, questionId);
+            return this.View(this.questionWithOptionsViewModel.Options);
+        }
 
-            var options = editQuestionView != null ? editQuestionView.Options.Select(
-                option => new Option(value: option.Value.ToString(), title: option.Title, id: Guid.NewGuid(), parentValue: option.ParentValue.ToString())) : new Option[0];
+        private void SetupViewModel(string id, Guid questionId)
+        {
+            var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
+
+            var options = editQuestionView != null
+                ? editQuestionView.Options.Select(
+                    option => new Option(Guid.NewGuid(), option.Value.ToString(CultureInfo.InvariantCulture), option.Title, option.ParentValue))
+                : new Option[0];
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel()
             {
                 QuestionnaireId = id,
                 QuestionId = questionId,
                 QuestionTitle = editQuestionView.Title,
-                Options = options.ToList(),
+                Options = options,
                 SourceOptions = options
             };
-
-            return this.View(this.questionWithOptionsViewModel.Options);
         }
 
         public ActionResult ResetOptions()
@@ -272,35 +267,22 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public ActionResult EditOptions(HttpPostedFileBase csvFile)
         {
-            try
-            {
-                this.questionWithOptionsViewModel.Options = ExtractOptionsFromStream(csvFile.InputStream);
-            }
-            catch (Exception)
-            {
-                if (csvFile == null)
-                {
-                    this.Error("Choose .csv (comma-separated values) file to upload, please");
-                }
-                else if (csvFile.FileName.EndsWith(".csv"))
-                {
-                    this.Error("CSV-file has wrong format or file is corrupted.");
-                }
-                else
-                {
-                    this.Error("Only .csv (comma-separated values) files are accepted");
-                }
-            }
-
+            this.GetOptionsFromStream(csvFile);
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
         [HttpPost]
         public ActionResult EditCascadingOptions(HttpPostedFileBase csvFile)
         {
+            this.GetOptionsFromStream(csvFile);
+            return this.View(this.questionWithOptionsViewModel.Options);
+        }
+
+        private void GetOptionsFromStream(HttpPostedFileBase csvFile)
+        {
             try
             {
-                this.questionWithOptionsViewModel.Options = this.ExtractCascadingOptionsFromStream(csvFile.InputStream);
+                this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream);
             }
             catch (Exception)
             {
@@ -317,59 +299,45 @@ namespace WB.UI.Designer.Controllers
                     this.Error("Only .csv (comma-separated values) files are accepted");
                 }
             }
-
-            return this.View(this.questionWithOptionsViewModel.Options);
         }
 
         public JsonResult ApplyOptions()
         {
-            var commandResult = new JsonQuestionnaireResult() {IsSuccess = true};
-            try
-            {
-                this.commandService.Execute(
-                    new UpdateFilteredComboboxOptionsCommand(
+            var commandResult = this.ExecuteCommand(
+                new UpdateFilteredComboboxOptionsCommand(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId, 
+                        this.questionWithOptionsViewModel.QuestionId,
                         this.UserHelper.WebUser.UserId,
                         this.questionWithOptionsViewModel.Options.ToArray()));
-            }
-            catch (Exception e)
-            {
-                var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
-                if (domainEx == null)
-                {
-                    this.logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(UpdateFilteredComboboxOptionsCommand)), e);
-                }
-
-                commandResult = new JsonQuestionnaireResult
-                {
-                    IsSuccess = false,
-                    HasPermissions = domainEx!=null && ( domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit),
-                    Error = domainEx!=null ? domainEx.Message : "Something goes wrong"
-                };
-            }
 
             return Json(commandResult);
         }
 
         public JsonResult ApplyCascadingOptions()
         {
-            var commandResult = new JsonQuestionnaireResult() { IsSuccess = true };
-            try
-            {
-                this.commandService.Execute(
-                    new UpdateCascadingComboboxOptionsCommand(
+            var commandResult = this.ExecuteCommand(
+                new UpdateCascadingComboboxOptionsCommand(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
                         this.UserHelper.WebUser.UserId,
                         this.questionWithOptionsViewModel.Options.ToArray()));
+
+            return Json(commandResult);
+        }
+        
+        private JsonQuestionnaireResult ExecuteCommand(QuestionCommand command)
+        {
+            var commandResult = new JsonQuestionnaireResult() { IsSuccess = true };
+            try
+            {
+                this.commandService.Execute(command);
             }
             catch (Exception e)
             {
                 var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
-                    this.logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(UpdateFilteredComboboxOptionsCommand)), e);
+                    this.logger.Error(string.Format("Error on command of type ({0}) handling ", command.GetType()), e);
                 }
 
                 commandResult = new JsonQuestionnaireResult
@@ -379,8 +347,7 @@ namespace WB.UI.Designer.Controllers
                     Error = domainEx != null ? domainEx.Message : "Something goes wrong"
                 };
             }
-
-            return Json(commandResult);
+            return commandResult;
         }
 
         public FileResult ExportOptions()
@@ -415,33 +382,13 @@ namespace WB.UI.Designer.Controllers
             {
                 while (csvReader.Read())
                 {
-                    importedOptions.Add(new Option(value: csvReader.GetField(0), title: csvReader.GetField(1), id: Guid.NewGuid()));
+                    importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField(0), csvReader.GetField(1), csvReader.GetField(2)));
                 }
             }
 
             return importedOptions;
         }
-
-        private IEnumerable<Option> ExtractCascadingOptionsFromStream(Stream inputStream)
-        {
-            var importedOptions = new List<Option>();
-
-            var csvReader = new CsvReader(new StreamReader(inputStream));
-            csvReader.Configuration.HasHeaderRecord = false;
-            csvReader.Configuration.TrimFields = true;
-            csvReader.Configuration.IgnoreQuotes = true;
-
-            using (csvReader)
-            {
-                while (csvReader.Read())
-                {
-                    importedOptions.Add(new Option(value: csvReader.GetField(0), title: csvReader.GetField(1), id: Guid.NewGuid(), parentValue: csvReader.GetField(2)));
-                }
-            }
-
-            return importedOptions;
-        }
-
+        
         private Stream SaveOptionsToStream(IEnumerable<Option> options)
         {
             var sb = new StringBuilder();
