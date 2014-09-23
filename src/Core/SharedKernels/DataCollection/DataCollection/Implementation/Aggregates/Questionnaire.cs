@@ -57,10 +57,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public Questionnaire() { }
 
-        public Questionnaire(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode)
+        public Questionnaire(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode, string supportingAssembly)
             : base(source.PublicKey)
         {
-            this.ImportFromDesigner(createdBy, source, allowCensusMode, null);
+            this.ImportFromDesigner(createdBy, source, allowCensusMode, supportingAssembly);
         }
 
         public Questionnaire(IQuestionnaireDocument source)
