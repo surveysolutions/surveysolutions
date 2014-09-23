@@ -21,10 +21,10 @@ namespace Main.Core.Entities.SubEntities
             this.ParentValue = parentValue;
         }
 
-        public Option(Guid id, string value, string title, decimal parentValue)
+        public Option(Guid id, string value, string title, decimal? parentValue)
             : this(id, value, title)
         {
-            this.ParentValue = parentValue.ToString(CultureInfo.InvariantCulture);
+            this.ParentValue = parentValue.HasValue? parentValue.Value.ToString(CultureInfo.InvariantCulture) : null;
         }
 
         public Guid Id { get; set; }

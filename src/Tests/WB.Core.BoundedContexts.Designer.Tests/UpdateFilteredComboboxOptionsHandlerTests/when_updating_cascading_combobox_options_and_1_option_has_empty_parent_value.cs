@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static Option[] options =
         {
             new Option(Guid.NewGuid(), "1", "Option 1", "1"), 
-            new Option(Guid.NewGuid(), "2", "Option 2", null)
+            new Option(Guid.NewGuid(), "2", "Option 2", (string)null)
         };
     }
 }
