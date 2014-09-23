@@ -66,6 +66,24 @@
         <AbsolutePath>\\TabletInformationStorage$</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
+	  <MsDeploySkipRules Include="SkipTabletInformationStorageFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>\\TabletInformationStorage$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+	  <MsDeploySkipRules Include="SkipQuestionnaireAssemblies">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>filePath</ObjectName>
+        <AbsolutePath>\\QuestionnaireAssemblies\\.*</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipQuestionnaireAssembliesFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>\\QuestionnaireAssemblies$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
     </ItemGroup>
   </Target>
 </Project>
