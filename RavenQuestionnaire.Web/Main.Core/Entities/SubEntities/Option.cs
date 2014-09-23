@@ -12,6 +12,7 @@ namespace Main.Core.Entities.SubEntities
             this.Id = id;
             this.Value = value;
             this.Title = title;
+            this.ParentValue = null;
         }
 
         public Option(Guid id, string value, string title, string parentValue) 

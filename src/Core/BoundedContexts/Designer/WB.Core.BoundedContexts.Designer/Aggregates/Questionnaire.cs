@@ -3194,7 +3194,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured);
                 this.ThrowIfLinkedCategoricalQuestionIsFilledBySupervisor(scope);
             }
-            else if (!isFilteredCombobox.HasValue || !isFilteredCombobox.Value)
+            else if (isFilteredCombobox != true && !(cascadeFromQuestionId.HasValue))
             {
                 ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
             }
