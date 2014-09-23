@@ -803,9 +803,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             get { return ServiceLocator.Current.GetInstance<IQuestionnaireDocumentUpgrader>(); }
         }
 
-        protected IVariableNameValidator VariableNameValidator
+        protected IKeywordsProvider VariableNameValidator
         {
-            get { return ServiceLocator.Current.GetInstance<IVariableNameValidator>(); }
+            get { return ServiceLocator.Current.GetInstance<IKeywordsProvider>(); }
         }
 
         #endregion

@@ -6,7 +6,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -72,21 +71,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private readonly IExpressionProcessor expressionProcessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ISubstitutionService substitutionService;
+        private readonly IKeywordsProvider keywordsProvider;
 
-        protected static ISubstitutionService SubstitutionService
-        {
-            get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
-        }
-
-        protected static IVariableNameValidator VariableNameValidator
-        {
-            get { return ServiceLocator.Current.GetInstance<IVariableNameValidator>(); }
-        }
-
-        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor)
+        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
+            ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.substitutionService = substitutionService;
+            this.keywordsProvider = keywordsProvider;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -223,10 +217,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
         {
-            var keywords = VariableNameValidator.GetAllReservedKeywords();
+            var keywords = keywordsProvider.GetAllReservedKeywords();
             bool isReservedKeyword = keywords.Contains(question.StataExportCaption);
 
-            return isReservedKeyword || question.StataExportCaption == SubstitutionService.RosterTitleSubstitutionReference;
+            return isReservedKeyword || question.StataExportCaption == substitutionService.RosterTitleSubstitutionReference;
         }
 
         private bool RosterHasVariableNameReservedForServiceNeeds(IGroup roster)
@@ -234,7 +228,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (!IsRosterGroup(roster))
                 return false;
 
-            var keywords = VariableNameValidator.GetAllReservedKeywords();
+            var keywords = keywordsProvider.GetAllReservedKeywords();
             return keywords.Contains(roster.VariableName);
         }
 
@@ -770,10 +764,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         }
 
-        private static IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithSubstitutions(QuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithSubstitutions(QuestionnaireDocument questionnaire)
         {
             IEnumerable<IQuestion> questionsWithSubstitutions =
-                questionnaire.Find<IQuestion>(question => SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
+                questionnaire.Find<IQuestion>(question => substitutionService.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
 
             var errorByAllQuestionsWithSubstitutions = new List<QuestionnaireVerificationError>();
 
@@ -785,7 +779,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     continue;
                 }
 
-                var substitutionReferences = SubstitutionService.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
+                var substitutionReferences = substitutionService.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
 
                 Guid[] vectorOfRosterSizeQuestionsForQuestionWithSubstitution =
                     GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionWithSubstitution, questionnaire);
@@ -1046,7 +1040,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 : questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier);
         }
 
-        private static QuestionnaireVerificationError GetVerificationErrorBySubstitutionReferenceOrNull(IQuestion questionWithSubstitution,
+        private  QuestionnaireVerificationError GetVerificationErrorBySubstitutionReferenceOrNull(IQuestion questionWithSubstitution,
             string substitutionReference, Guid[] vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions,
             QuestionnaireDocument questionnaire)
         {
@@ -1055,7 +1049,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return QuestionWithTitleSubstitutionCantReferenceSelf(questionWithSubstitution);
             }
 
-            if (substitutionReference == SubstitutionService.RosterTitleSubstitutionReference)
+            if (substitutionReference == substitutionService.RosterTitleSubstitutionReference)
             {
                 if (vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions.Length == 0)
                 {

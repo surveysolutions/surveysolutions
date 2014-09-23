@@ -158,6 +158,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedKernels\ExpressionProcessor\ExpressionProcessorTests\ExpressionProcessorTestsContext.cs" />
     <Compile Include="SharedKernels\ExpressionProcessor\ExpressionProcessorTests\when_getting_identifiers_used_in_expression__a_or_colon_b_and_c_colon__.cs" />
+    <Compile Include="SharedKernels\ExpressionProcessor\KeywordsProvider\KeywordsProviderTestContext.cs" />
+    <Compile Include="SharedKernels\ExpressionProcessor\KeywordsProvider\when_getting_all_reserved_keywords.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\ChartStatisticsViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_one_day_before_and_after.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_zeroes_for_2_headquarters_statuses_and_for_completed_status.cs" />
