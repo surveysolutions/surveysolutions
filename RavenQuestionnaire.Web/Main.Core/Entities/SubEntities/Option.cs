@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Main.Core.Entities.SubEntities
 {
@@ -17,6 +18,12 @@ namespace Main.Core.Entities.SubEntities
             : this(id, value, title)
         {
             this.ParentValue = parentValue;
+        }
+
+        public Option(Guid id, string value, string title, decimal parentValue)
+            : this(id, value, title)
+        {
+            this.ParentValue = parentValue.ToString(CultureInfo.InvariantCulture);
         }
 
         public Guid Id { get; set; }
