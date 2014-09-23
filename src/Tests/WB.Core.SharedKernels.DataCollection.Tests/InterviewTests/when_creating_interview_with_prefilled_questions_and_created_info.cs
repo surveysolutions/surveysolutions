@@ -35,8 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             new Interview(interviewId, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid);
 
-        It should_event_context_contains_3_events = () =>
-            eventContext.Events.Count().ShouldEqual(3);
+        It should_event_context_contains_4_events = () =>
+            eventContext.Events.Count().ShouldEqual(4);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewOnClientCreated>();
@@ -62,6 +62,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         It should_provide_InterviewDeclaredValid_event = () =>
             eventContext.ShouldContainEvent<InterviewDeclaredValid>();
+
+        It should_provide_InterviewStatusChanged_event = () =>
+            eventContext.ShouldContainEvent<InterviewStatusChanged>();
         
         Cleanup stuff = () =>
         {
