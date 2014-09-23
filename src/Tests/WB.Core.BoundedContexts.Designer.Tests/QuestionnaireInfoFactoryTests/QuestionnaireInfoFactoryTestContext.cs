@@ -137,6 +137,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         ParentGroupId = g5Id,
                         ParentGroupsIds = new Guid[] { g5Id },
                         RosterScopeIds = new Guid[] {  }
+                    },
+                    new MultimediaDetailsView()
+                    {
+                        Id = q8Id,
+                        Title = "Photo",
+                        ParentGroupId = g5Id,
+                        ParentGroupsIds = new Guid[] { g5Id },
+                        RosterScopeIds = new Guid[] {  }
                     }
                 },
                 StaticTexts = new List<StaticTextDetailsView>()
@@ -263,6 +271,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         protected static Guid q5Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         protected static Guid q6Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         protected static Guid q7Id = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        protected static Guid q8Id = Guid.Parse("11EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         
         protected static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         protected static Guid st2Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
