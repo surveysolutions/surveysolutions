@@ -1,10 +1,26 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Machine.Specifications;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
-namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
+namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProvider
 {
-    public class VariableNameValidator : IVariableNameValidator
+    internal class when_getting_all_reserved_keywords : KeywordsProviderTestContext
     {
+        Establish context = () =>
+        {
+            keywordsProvider = CreateKeywordsProvider();
+        };
+
+        Because of = () =>
+            result = keywordsProvider.GetAllReservedKeywords();
+
+        It should_contain_fixed_number = () =>
+            result.Count().ShouldEqual(ReservedKeywords.Count());
+
+        It should_contain_only_predefined_keywords = () =>
+            result.ShouldContainOnly(ReservedKeywords);
+
         private static readonly string[] CSharpKeyWords = new[]
         {
             "abstract", "as", "base", "bool", "break", "byte", "case",
@@ -34,9 +50,8 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
         private static readonly string[] ReservedKeywords =
             CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).ToArray();
 
-        public string[] GetAllReservedKeywords()
-        {
-            return ReservedKeywords;
-        }
+
+        private static IEnumerable<string> result;
+        private static IKeywordsProvider keywordsProvider;
     }
 }

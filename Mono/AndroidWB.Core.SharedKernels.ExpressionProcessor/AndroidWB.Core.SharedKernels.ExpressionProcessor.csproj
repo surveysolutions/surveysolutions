@@ -52,20 +52,20 @@
     <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\IdentifierCollector.cs">
       <Link>Implementation\Services\IdentifierCollector.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\KeywordsProvider.cs">
+      <Link>Implementation\Services\KeywordsProvider.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\SubstitutionService.cs">
       <Link>Implementation\Services\SubstitutionService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\VariableNameValidator.cs">
-      <Link>Implementation\Services\VariableNameValidator.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Services\IExpressionProcessor.cs">
       <Link>Services\IExpressionProcessor.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Services\IKeywordsProvider .cs">
+      <Link>Services\IKeywordsProvider .cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Services\ISubstitutionService.cs">
       <Link>Services\ISubstitutionService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Services\IVariableNameValidator.cs">
-      <Link>Services\IVariableNameValidator.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -87,7 +87,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="d55b9582-70fd-4340-a3bc-55a33d49b2e6" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="d55b9582-70fd-4340-a3bc-55a33d49b2e6" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
