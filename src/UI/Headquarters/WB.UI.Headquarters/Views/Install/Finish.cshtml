@@ -22,7 +22,7 @@
     @Html.AntiForgeryToken()
     <fieldset class="form-horizontal">
         <div class="form-group">
-            @Html.LabelFor(x => x.UserName, new { @class = "col-sm-2 control-label" })
+            @Html.LabelFor(x => x.UserName, new { @class = "col-sm-2 control-label", autocomplete = "off" })
             <div class="col-sm-2">
                 @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
             </div>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(x => x.Password, new { @class = "col-sm-2 control-label" })
+            @Html.LabelFor(x => x.Password, new { @class = "col-sm-2 control-label", autocomplete = "off" })
             <div class="col-sm-2">
                 @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
             </div>
