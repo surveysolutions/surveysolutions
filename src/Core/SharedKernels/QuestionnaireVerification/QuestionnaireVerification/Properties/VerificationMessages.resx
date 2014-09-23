@@ -345,4 +345,7 @@
   <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
     <value>Question with current type can not be used as roster title</value>
   </data>
+  <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+    <value>Options in child cascading question should reference only existing option in parent question</value>
+  </data>
 </root>
