@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             availableVersions[e.Version] = null;
         }
 
-        protected internal void Apply(TemplateAssemblyImported e)
+        protected internal void Apply(QuestionnaireAssemblyImported e)
         {
         }
 
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (supportingAssembly != null && !string.IsNullOrWhiteSpace(supportingAssembly))
             {
-                this.ApplyEvent(new TemplateAssemblyImported { AssemblySource = supportingAssembly, Version = newVersion });
+                this.ApplyEvent(new QuestionnaireAssemblyImported { AssemblySourceInBase64 = supportingAssembly, Version = newVersion });
             }
         }
 
