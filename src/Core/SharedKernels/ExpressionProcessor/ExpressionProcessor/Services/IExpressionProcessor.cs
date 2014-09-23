@@ -8,10 +8,12 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Services
     /// </summary>
     public interface IExpressionProcessor
     {
+        [Obsolete("Now a separate engine verifies validity of C# expressions")]
         bool IsSyntaxValid(string expression);
 
         IEnumerable<string> GetIdentifiersUsedInExpression(string expression);
 
+        [Obsolete("Now a separate engine evaluates C# expressions")]
         bool EvaluateBooleanExpression(string expression, Func<string, object> getValueForIdentifier);
     }
 }
