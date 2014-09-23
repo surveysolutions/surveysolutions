@@ -129,6 +129,7 @@
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />
@@ -356,8 +357,6 @@
     <EmbeddedResource Include="Views\Survey\Status.cshtml" />
     <EmbeddedResource Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
     <EmbeddedResource Include="Views\TabletReport\Packages.cshtml" />
-    <EmbeddedResource Include="Views\Shared\Error.cshtml" />
-    <EmbeddedResource Include="Views\Shared\AccessDenied.cshtml" />
     <EmbeddedResource Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <EmbeddedResource Include="Views\Shared\_alerts.cshtml" />
     <EmbeddedResource Include="Views\Shared\_ListViewPagingScript.cshtml" />
@@ -384,6 +383,11 @@
     <EmbeddedResource Include="Views\ControlPanel\Settings.cshtml" />
     <EmbeddedResource Include="Views\Shared\Clickjacking.cshtml" />
     <EmbeddedResource Include="Views\Shared\GlobalSettings.cshtml" />
+    <EmbeddedResource Include="Views\Error\AccessDenied.cshtml" />
+    <EmbeddedResource Include="Views\Error\Forbidden.cshtml" />
+    <EmbeddedResource Include="Views\Error\Index.cshtml" />
+    <EmbeddedResource Include="Views\Error\NotFound.cshtml" />
+    <EmbeddedResource Include="Views\Error\WebsitePathIsTooLong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

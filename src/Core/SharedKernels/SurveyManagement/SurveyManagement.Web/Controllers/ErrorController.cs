@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace WB.UI.Supervisor.Controllers
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     public class ErrorController : Controller
     {
