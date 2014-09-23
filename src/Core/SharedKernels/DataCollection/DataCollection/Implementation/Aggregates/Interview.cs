@@ -674,6 +674,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId,questionnaireVersion, interviewStatus, featuredQuestionsMeta, true, null));
+            this.ApplyEvent(new InterviewStatusChanged(interviewStatus, string.Empty));
             this.ApplyValidationEvent(isValid);
         }
 
