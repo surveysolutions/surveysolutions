@@ -265,14 +265,14 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditOptions(HttpPostedFileBase csvFile)
+        public ViewResult EditOptions(HttpPostedFileBase csvFile)
         {
             this.GetOptionsFromStream(csvFile);
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
         [HttpPost]
-        public ActionResult EditCascadingOptions(HttpPostedFileBase csvFile)
+        public ViewResult EditCascadingOptions(HttpPostedFileBase csvFile)
         {
             this.GetOptionsFromStream(csvFile);
             return this.View(this.questionWithOptionsViewModel.Options);
@@ -377,12 +377,17 @@ namespace WB.UI.Designer.Controllers
             csvReader.Configuration.HasHeaderRecord = false;
             csvReader.Configuration.TrimFields = true;
             csvReader.Configuration.IgnoreQuotes = true;
-
+            
             using (csvReader)
             {
                 while (csvReader.Read())
                 {
-                    importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField(0), csvReader.GetField(1), csvReader.GetField(2)));
+                    string parentValue;
+                    if (!csvReader.TryGetField(2, out parentValue))
+                    {
+                        parentValue = null;
+                    }
+                    importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField(0), csvReader.GetField(1), parentValue));
                 }
             }
 
