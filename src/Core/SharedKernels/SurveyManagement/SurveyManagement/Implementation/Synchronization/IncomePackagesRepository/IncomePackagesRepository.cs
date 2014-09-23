@@ -164,10 +164,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                 this.fileSystemAccessor.DeleteFile(fileName);
 
                 this.EventBus.Publish(incomeEvents);
-                if (this.syncSettings.ReevaluateInterviewWhenSynchronized)
-                {
-                    this.commandService.Execute(new ReevaluateSynchronizedInterview(id));
-                }
             }
             else
             {
