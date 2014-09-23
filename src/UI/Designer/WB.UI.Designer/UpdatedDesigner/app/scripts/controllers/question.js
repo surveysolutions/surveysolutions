@@ -51,7 +51,7 @@
 
                     $scope.setLinkSource(result.linkedToQuestionId);
                     $scope.setCascadeSource(result.cascadeFromQuestionId);
-
+                    
                     $scope.questionForm.$setPristine();
                 };
 
@@ -65,7 +65,8 @@
 
                 $scope.saveQuestion = function (callback) {
                     if ($scope.questionForm.$valid) {
-                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function () {
+                        var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion);
+                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).success(function () {
                             $scope.initialQuestion = angular.copy($scope.activeQuestion);
 
                             $rootScope.$emit('questionUpdated', {
@@ -76,7 +77,7 @@
                                 linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
                             });
 
-                            if ($scope.activeQuestion.type === "SingleOption" && !$scope.activeQuestion.isFilteredCombobox) {
+                            if ($scope.activeQuestion.type === "SingleOption" && !$scope.activeQuestion.isFilteredCombobox && !_.isEmpty($scope.activeQuestion.cascadeFromQuestionId)) {
                                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                             }
 
@@ -84,9 +85,31 @@
                             if (_.isFunction(callback)) {
                                 callback();
                             }
+
+                            if (shouldGetOptionsOnServer) {
+                                $scope.loadQuestion();
+                            }
                         });
                     }
                 };
+
+                var wasThereOptionsLooseWhileChanginQuestionProperties = function(initialQuestion, actualQuestion) {
+                    if (actualQuestion.type != "SingleOption")
+                        return false;
+
+                    if ((actualQuestion.wereOptionsTruncated || false) == false)
+                        return false;
+
+                    var wasItFiltered = initialQuestion.isFilteredCombobox || false;
+                    var wasItCascade = !_.isEmpty(initialQuestion.cascadeFromQuestionId);
+
+                    if ((wasItCascade && actualQuestion.isFilteredCombobox) || (
+                        wasItFiltered && !_.isEmpty(actualQuestion.cascadeFromQuestionId))) {
+                        return true;
+                    }
+
+                    return false;
+                }
 
                 $scope.setQuestionType = function (type) {
                     $scope.activeQuestion.type = type;

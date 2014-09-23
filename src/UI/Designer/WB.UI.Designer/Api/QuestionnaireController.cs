@@ -83,7 +83,7 @@ namespace WB.UI.Designer.Api
             }
 
             bool shouldTruncateOptions = editQuestionView.Type == QuestionType.SingleOption
-                && editQuestionView.IsFilteredCombobox == true
+                && (editQuestionView.IsFilteredCombobox == true || !string.IsNullOrWhiteSpace(editQuestionView.CascadeFromQuestionId))
                 && editQuestionView.Options != null;
 
             if (shouldTruncateOptions)

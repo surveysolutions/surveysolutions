@@ -56,7 +56,7 @@
                     });
                 };
 
-                commandService.sendUpdateQuestionCommand = function(questionnaireId, question) {
+                commandService.sendUpdateQuestionCommand = function (questionnaireId, question, shouldGetOptionsOnServer) {
 
                     var command = {
                         questionnaireId: questionnaireId,
@@ -85,10 +85,14 @@
                     case "SingleOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
-                        command.options = question.options;
                         command.linkedToQuestionId = question.linkedToQuestionId;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
+                        if (shouldGetOptionsOnServer) {
+                            command.options = null;
+                        } else {
+                            command.options = question.options;
+                        }
                         break;
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
