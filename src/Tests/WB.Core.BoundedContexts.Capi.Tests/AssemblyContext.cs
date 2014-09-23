@@ -25,8 +25,8 @@ namespace WB.Core.BoundedContexts.Capi.Tests
                 .Returns(new SubstitutionService());
 
             serviceLocatorMock
-                .Setup(locator => locator.GetInstance<IVariableNameValidator>())
-                .Returns(new VariableNameValidator());
+                .Setup(locator => locator.GetInstance<IKeywordsProvider>())
+                .Returns(new KeywordsProvider());
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }

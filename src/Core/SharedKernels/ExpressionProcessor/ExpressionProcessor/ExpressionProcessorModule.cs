@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessor
             this.Bind<IExpressionProcessor>().To<Implementation.Services.ExpressionProcessor>().InSingletonScope();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
-            this.Bind<IVariableNameValidator>().To<VariableNameValidator>();
+            this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
         }
     }
 }
