@@ -144,13 +144,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 
         private string GetUserName(UserDocument responsible)
         {
-            var userName = responsible != null ? responsible.UserName : "<UNKNOWN USER>";
+            var userName = responsible != null ? responsible.UserName : "";
             return userName;
         }
 
         private string GetUserRole(UserDocument user)
         {
-            const string UnknownUserRole = "<UNKNOWN ROLE>";
+            const string UnknownUserRole = "";
             if (user == null || !user.Roles.Any())
                 return UnknownUserRole;
             var firstRole = user.Roles.First();
