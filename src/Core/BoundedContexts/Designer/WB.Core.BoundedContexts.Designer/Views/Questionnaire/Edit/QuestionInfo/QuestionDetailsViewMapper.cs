@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 {
                     Title = x.AnswerText,
                     Value = decimal.Parse(x.AnswerValue),
-                    ParentValue = Convert.ToDecimal(x.ParentValue)
+                    ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) ? (decimal?)null : Convert.ToDecimal(x.ParentValue)
                 }
             ).ToArray();
         }
