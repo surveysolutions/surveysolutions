@@ -315,7 +315,6 @@
     <Compile Include="Code\Bundling\StyleImagePathBundle.cs" />
     <Compile Include="Code\Bundling\StyleRelativePathTransform.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HQSyncController.cs" />
     <Compile Include="Filters\LongWebsiteDirectoryPathFilter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -370,11 +369,6 @@
     </Content>
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQSync\Synchronization.cshtml" />
-    <Content Include="Views\Error\AccessDenied.cshtml" />
-    <Content Include="Views\Error\Forbidden.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
-    <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <Content Include="Views\ControlPanel\Headquarters.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
