@@ -157,6 +157,7 @@
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options_and_uploaded_file_has_wrong_csv_format.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options_and_was_no_uploaded_file.cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\QuestionnaireControllerTestContext.cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options_and_non_csv_file_was_uploaded.cs" />
