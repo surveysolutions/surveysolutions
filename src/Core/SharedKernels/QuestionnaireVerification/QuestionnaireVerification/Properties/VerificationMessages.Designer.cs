@@ -746,5 +746,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0083_QuestionCannotBeUsedAsRosterTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options in child cascading question should reference only existing option in parent question.
+        /// </summary>
+        internal static string WB0084_CascadingOptionsShouldHaveParent {
+            get {
+                return ResourceManager.GetString("WB0084_CascadingOptionsShouldHaveParent", resourceCulture);
+            }
+        }
     }
 }
