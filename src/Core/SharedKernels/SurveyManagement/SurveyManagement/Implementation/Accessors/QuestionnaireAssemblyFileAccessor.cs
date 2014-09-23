@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Accessors
 {
     public class QuestionnaireAssemblyFileAccessor : IQuestionnareAssemblyFileAccessor
     {
-        private const string FolderName = "TemplateAssemblies";
+        private const string FolderName = "QuestionnaireAssemblies";
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToStore;
 
