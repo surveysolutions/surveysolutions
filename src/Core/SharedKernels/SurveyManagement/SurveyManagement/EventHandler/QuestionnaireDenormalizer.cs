@@ -3,6 +3,7 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -20,17 +21,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
         public QuestionnaireDenormalizer(
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, 
             ISynchronizationDataStorage synchronizationDataStorage,
             IQuestionnaireCacheInitializer questionnaireCacheInitializer,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             this.documentStorage = documentStorage;
             this.synchronizationDataStorage = synchronizationDataStorage;
             this.questionnaireCacheInitializer = questionnaireCacheInitializer;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+
+            this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -54,6 +59,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
             this.documentStorage.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            this.questionnareAssemblyFileAccessor.RemoveAssembly(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+
             this.synchronizationDataStorage.DeleteQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion, evnt.EventTimeStamp);
         }
 
@@ -90,6 +97,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<TemplateAssemblyImported> evnt)
         {
+            this.questionnareAssemblyFileAccessor.StoreAssembly(evnt.EventSourceId, evnt.Payload.Version, evnt.Payload.AssemblySource);
             this.synchronizationDataStorage.SaveTemplateAssembly(evnt.EventSourceId, evnt.Payload.Version, evnt.Payload.AssemblySource, evnt.EventTimeStamp);
         }
     }
