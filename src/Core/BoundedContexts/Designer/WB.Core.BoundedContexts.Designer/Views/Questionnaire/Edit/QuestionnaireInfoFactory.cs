@@ -320,7 +320,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             GroupAndRosterDetailsView roster)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                q => q.Where(x => x.ParentGroupId == roster.Id).ToList();
+                q => q.Where(x => x.ParentGroupId == roster.Id && x.Type!=QuestionType.Multimedia).ToList();
 
             return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }
