@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessor
     {
         public override void Load()
         {
-            this.Bind<IExpressionProcessor>().To<WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services.ExpressionProcessor>().InSingletonScope();
+            this.Bind<IExpressionProcessor>().To<Implementation.Services.ExpressionProcessor>().InSingletonScope();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
             this.Bind<IVariableNameValidator>().To<VariableNameValidator>();
