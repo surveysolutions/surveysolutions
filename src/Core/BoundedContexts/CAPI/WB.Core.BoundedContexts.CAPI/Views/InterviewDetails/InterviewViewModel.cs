@@ -638,7 +638,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.NotifyAffectedLinkedQuestions(questionId);
         }
 
-        public void AddInstanceOfAnsweredQuestionUsableAsCascadingQuestion(Guid questionId, decimal[] propagationVector, decimal selectedValue)
+        public virtual void AddInstanceOfAnsweredQuestionUsableAsCascadingQuestion(Guid questionId, decimal[] propagationVector, decimal selectedValue)
         {
             if (!this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.ContainsKey(questionId))
                 this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.Add(questionId, new Dictionary<InterviewItemId, decimal>());
@@ -650,7 +650,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.NotifyAffectedCascadingQuestions(questionId);
         }
 
-        public void RemoveInstanceOfAnsweredQuestionUsableAsCascadingQuestion(Guid questionId, decimal[] propagationVector)
+        public virtual void RemoveInstanceOfAnsweredQuestionUsableAsCascadingQuestion(Guid questionId, decimal[] propagationVector)
         {
             if (!this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.ContainsKey(questionId))
                 return;
@@ -674,6 +674,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void NotifyAffectedCascadingQuestions(Guid referencedQuestionId)
         {
+            if (!this.referencedQuestionToCascadingQuestionsMap.ContainsKey(referencedQuestionId))
+                return;
+
             this.referencedQuestionToCascadingQuestionsMap[referencedQuestionId]
                 .SelectMany(cascadingQuestionId => this.GetQuestionModelById<CascadingComboboxQuestionViewModel>(cascadingQuestionId))
                 .ToList()
@@ -1272,7 +1275,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 && this.referencedQuestionToLinkedQuestionsMap[questionId].Any();
         }
 
-        public bool IsQuestionReferencedByAnyCascadingQuestion(Guid questionId)
+        public virtual bool IsQuestionReferencedByAnyCascadingQuestion(Guid questionId)
         {
             return this.referencedQuestionToCascadingQuestionsMap.ContainsKey(questionId)
                 && this.referencedQuestionToCascadingQuestionsMap[questionId].Any();
