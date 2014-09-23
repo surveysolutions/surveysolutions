@@ -91,4 +91,10 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='Raven.Databases.FailoverBehavior']/@value" />
    </parameter>
+   <parameter name="Show control panel"
+      defaultValue="false">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='IsDevelopmentEnvironment']/@value" />
+   </parameter>
 </parameters>
