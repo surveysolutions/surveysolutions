@@ -282,7 +282,9 @@
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="UpdateQrBarcodeQuestionHandlerTests\when_updating_qr_barcode_question_and_variable_name_is_null.cs" />
+    <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_cascading_combobox_question_that_was_filtered_combobox_and_options_are_more_then_200.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_filtered_combobox_question_and_all_parameters_is_specified.cs" />
+    <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_filtered_combobox_question_that_was_cascading_combobox_and_options_are_more_then_200.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_with_more_than_200_options.cs" />

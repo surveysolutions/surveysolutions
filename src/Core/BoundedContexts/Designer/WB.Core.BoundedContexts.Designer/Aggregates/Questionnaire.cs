@@ -2115,7 +2115,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var answers = !isFilteredCombobox ? ConvertOptionsToAnswers(options) : null;
 
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
-            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, linkedToQuestionId.HasValue);
+            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, cascadeFromQuestionId, linkedToQuestionId.HasValue);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new NewQuestionAdded
@@ -2158,7 +2158,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isFilteredCombobox,
             Guid? cascadeFromQuestionId)
         {
-            var answers = ConvertOptionsToAnswers(options);
+            Answer[] answers;
+
+            if (options == null && (isFilteredCombobox || cascadeFromQuestionId.HasValue))
+            {
+                IQuestion question = this.GetQuestion(questionId);
+                answers = question.Answers.ToArray();
+            }
+            else
+            {
+                answers = ConvertOptionsToAnswers(options);
+            }
 
             PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
@@ -2175,7 +2185,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
-            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, linkedToQuestionId.HasValue);
+            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, cascadeFromQuestionId, linkedToQuestionId.HasValue);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyEvent(new QuestionChanged
@@ -2228,7 +2238,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 responsibleId);
             
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
-            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, linkedToQuestionId.HasValue);
+            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, cascadeFromQuestionId, linkedToQuestionId.HasValue);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression);
 
             this.ApplyCategoricalSingleAnswerQuestionEvent(questionId: questionId, title: title,
@@ -3200,9 +3210,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(Option[] options, bool isFilteredCombobox, bool isLinkedQuestion)
+        private void ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(Option[] options, bool isFilteredCombobox, Guid? cascadeFromQuestionId, bool isLinkedQuestion)
         {
-            if (!isLinkedQuestion && !isFilteredCombobox && options.Count() > 200)
+            if (!isLinkedQuestion && !isFilteredCombobox && !cascadeFromQuestionId.HasValue && options.Count() > 200)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.CategoricalSingleOptionHasMoreThan200Options,
