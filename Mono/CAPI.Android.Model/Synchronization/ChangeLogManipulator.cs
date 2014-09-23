@@ -106,57 +106,13 @@ namespace CAPI.Android.Core.Model.Synchronization
                     break;
                 }
 
-                if (this.EventIsActive(storedEvents[i]))
-                    eventsToSend.Add(new AggregateRootEvent(storedEvents[i]));
+                eventsToSend.Add(new AggregateRootEvent(storedEvents[i]));
             }
 
             eventsToSend.Reverse();
             return eventsToSend.ToArray();
         }
 
-        private bool EventIsActive(CommittedEvent committedEvent)
-        {
-            var eventType = committedEvent.Payload;
-
-            if (eventType is AnswerDeclaredInvalid)
-                return false;
-
-            if (eventType is AnswerDeclaredValid)
-                return false;
-
-            if (eventType is AnswersDeclaredInvalid)
-                return false;
-
-            if (eventType is AnswersDeclaredValid)
-                return false;
-
-            if (eventType is GroupDisabled)
-                return false;
-
-            if (eventType is GroupEnabled)
-                return false;
-
-            if (eventType is GroupsDisabled)
-                return false;
-
-            if (eventType is GroupsEnabled)
-                return false;
-
-            if (eventType is QuestionDisabled)
-                return false;
-
-            if (eventType is QuestionEnabled)
-                return false;
-
-            if (eventType is QuestionsDisabled)
-                return false;
-
-            if (eventType is QuestionsEnabled)
-                return false;
-            
-            return true;
-        }
-        
         public void CleanUpChangeLogByRecordId(Guid recordId)
         {
             var record = this.draftChangeLog.GetById(recordId);
