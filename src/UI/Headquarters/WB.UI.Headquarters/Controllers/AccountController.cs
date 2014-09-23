@@ -13,6 +13,7 @@ using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {
+    [RequireHttps]
     public class AccountController : Controller
     {
         private readonly IFormsAuthentication authentication;
