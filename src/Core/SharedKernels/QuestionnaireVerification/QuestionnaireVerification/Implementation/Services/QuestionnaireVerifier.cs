@@ -163,6 +163,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup, IComposite>(MultimediaQuestionsCannotBeUsedInGroupEnablementCondition, "WB0081", VerificationMessages.WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition),
                     Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0082", VerificationMessages.WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition),
                     Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
+                    Verifier<IQuestion, IComposite>(CascadingComboboxHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
+                    Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
+                    Verifier<IQuestion>(this.CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -170,32 +173,69 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
-                    ErrorsByRostersWithDuplicateVariableName,
-                    this.CascadingComboboxHasNoParentOptions
+                    ErrorsByRostersWithDuplicateVariableName
                 };
             }
         }
 
-        private IEnumerable<QuestionnaireVerificationError> CascadingComboboxHasNoParentOptions(QuestionnaireDocument document)
+        private bool CascadingQuestionReferencesMissingParent(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            foreach (var question in document.Find<SingleQuestion>(x => x.CascadeFromQuestionId.HasValue))
-            {
-                if (question.CascadeFromQuestionId.HasValue)
-                {
-                    var parentQuestion = document.Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
-                    var result = !question.Answers.All(childAnswer =>
-                        parentQuestion.Answers.Any(
-                            parentAnswer => parentAnswer.AnswerValue == childAnswer.ParentValue));
-                    if (result)
-                    {
-                        yield return new QuestionnaireVerificationError("WB0084",
-                            VerificationMessages.WB0084_CascadingOptionsShouldHaveParent,
-                            CreateReference(question), 
-                            CreateReference(parentQuestion));
-                    }
-                }
+            if (!question.CascadeFromQuestionId.HasValue)
+                return false;
 
+            return questionnaire.Find<SingleQuestion>(question.CascadeFromQuestionId.Value) == null;
+        }
+
+        private EntityVerificationResult<IComposite> ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            if (!question.CascadeFromQuestionId.HasValue)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var parentQuestion = questionnaire
+                .Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
+            if (parentQuestion == null)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(parentQuestion, questionnaire);
+            if (rosterLevelForRoster == null)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster;
+            if (rosterLevelWithoutOwnRosterSizeQuestion.Length > 0)
+            {
+                rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster.Skip(1).ToArray();
             }
+
+            if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(parentQuestion, rosterLevelWithoutOwnRosterSizeQuestion, questionnaire))
+            {
+                return new EntityVerificationResult<IComposite>
+                {
+                    HasErrors = true,
+                    ReferencedEntities = new IComposite[] { question, parentQuestion },
+                };
+            }
+
+            return new EntityVerificationResult<IComposite> { HasErrors = false };
+        }
+
+        private EntityVerificationResult<IComposite> CascadingComboboxHasNoParentOptions(IQuestion question, QuestionnaireDocument document)
+        {
+            if (!question.CascadeFromQuestionId.HasValue)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var parentQuestion = document.Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
+            if (parentQuestion == null)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var result = !question.Answers.All(childAnswer =>
+                parentQuestion.Answers.Any(
+                    parentAnswer => parentAnswer.AnswerValue == childAnswer.ParentValue));
+
+            return new EntityVerificationResult<IComposite>()
+            {
+                HasErrors = result,
+                ReferencedEntities = new List<IComposite> { question, parentQuestion }
+            };
         }
 
         private static bool CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount(IQuestion question)
