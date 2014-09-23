@@ -71,6 +71,7 @@ namespace WB.UI.Headquarters
         protected void Application_Start()
         {
             this.logger.Info("Starting application.");
+            MvcHandler.DisableMvcResponseHeader = true;
 
             AppDomain current = AppDomain.CurrentDomain;
             current.UnhandledException += this.CurrentUnhandledException;
@@ -156,6 +157,15 @@ namespace WB.UI.Headquarters
                 return;
             }
             ElmahDataFilter.Apply(e, ctx);
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            var application = sender as HttpApplication;
+            if (application != null && application.Context != null)
+            {
+                application.Context.Response.Headers.Remove("Server");
+            }
         }
     }
 }
