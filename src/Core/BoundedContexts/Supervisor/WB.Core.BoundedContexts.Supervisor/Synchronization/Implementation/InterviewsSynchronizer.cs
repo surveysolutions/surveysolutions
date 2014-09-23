@@ -30,6 +30,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -511,7 +512,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             AggregateRootEvent[] eventsToSend = storedEvents
                 .Skip(countOfEventsSentToHeadquarters)
-                .Where(storedEvent => storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin)
+                .Where(
+                    storedEvent =>
+                        storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin &&
+                            storedEvent.Origin != Constants.SynchronizationMetaOrigin)
                 .Select(storedEvent => new AggregateRootEvent(storedEvent))
                 .ToArray();
 

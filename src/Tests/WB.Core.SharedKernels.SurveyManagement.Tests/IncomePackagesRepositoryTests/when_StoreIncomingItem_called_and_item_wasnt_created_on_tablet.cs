@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.IncomePackagesRepositoryT
                                     && passedCommand.InterviewStatus == InterviewStatus.Completed &&
                                     passedCommand.FeaturedQuestionsMeta == null && passedCommand.Comments == interviewMetaInfo.Comments
                                     && passedCommand.Valid == false && passedCommand.CreatedOnClient == false),
-                        null), Times.Once);
+                        "sync-meta"), Times.Once);
 
         private static IncomePackagesRepository incomePackagesRepository;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;

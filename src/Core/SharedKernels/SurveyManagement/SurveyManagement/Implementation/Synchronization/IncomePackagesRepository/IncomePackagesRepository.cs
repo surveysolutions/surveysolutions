@@ -97,13 +97,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                     this.commandService.Execute(new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
                         userId: meta.ResponsibleId, questionnaireId: meta.TemplateId,
                         questionnaireVersion: meta.TemplateVersion, status: (InterviewStatus) meta.Status,
-                        featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid));
+                        featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid), Constants.SynchronizationMetaOrigin);
 
                 }
                 else
                     commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
                         meta.TemplateVersion,
-                        (InterviewStatus) meta.Status, null, meta.Comments, meta.Valid, false));
+                        (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false), Constants.SynchronizationMetaOrigin);
 
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
             }
