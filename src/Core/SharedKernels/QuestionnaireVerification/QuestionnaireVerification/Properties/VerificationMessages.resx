@@ -310,10 +310,10 @@
     <value>Chapter cannot contain more than 500 child items.</value>
   </data>
   <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
-    <value>Option titles must be unique</value>
+    <value>Option titles must be unique.</value>
   </data>
   <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
-    <value>Option values must be unique</value>
+    <value>Option values must be unique.</value>
   </data>
   <data name="WB0074_FilteredComboboxIsLinked" xml:space="preserve">
     <value>Filtered combobox cannot be linked to another question.</value>
@@ -328,7 +328,7 @@
     <value>Question has invalid variable name.</value>
   </data>
   <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
-    <value>Multimedia question can be interviewers only</value>
+    <value>Multimedia question can be interviewers only.</value>
   </data>
   <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
     <value>Multimedia question cannot have a validation expression.</value>
@@ -343,9 +343,15 @@
     <value>Multimedia questions cannot be used in question's condition expression.</value>
   </data>
   <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
-    <value>Question with current type can not be used as roster title</value>
+    <value>Question with current type can not be used as roster title.</value>
   </data>
   <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
-    <value>Options in child cascading question should reference only existing option in parent question</value>
+    <value>Options in child cascading question should reference only existing option in parent question.</value>
+  </data>
+  <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+    <value>Question should have deeper or the same level as it's parent question.</value>
+  </data>
+  <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+    <value>Cascading question references missing or supported type question.</value>
   </data>
 </root>

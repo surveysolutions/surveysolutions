@@ -640,7 +640,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option titles must be unique.
+        ///   Looks up a localized string similar to Option titles must be unique..
         /// </summary>
         internal static string WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion {
             get {
@@ -649,7 +649,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option values must be unique.
+        ///   Looks up a localized string similar to Option values must be unique..
         /// </summary>
         internal static string WB0073_OptionValuesMustBeUniqueForCategoricalQuestion {
             get {
@@ -694,7 +694,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multimedia question can be interviewers only.
+        ///   Looks up a localized string similar to Multimedia question can be interviewers only..
         /// </summary>
         internal static string WB0078_MultimediaQuestionIsInterviewersOnly {
             get {
@@ -739,7 +739,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with current type can not be used as roster title.
+        ///   Looks up a localized string similar to Question with current type can not be used as roster title..
         /// </summary>
         internal static string WB0083_QuestionCannotBeUsedAsRosterTitle {
             get {
@@ -748,11 +748,29 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options in child cascading question should reference only existing option in parent question.
+        ///   Looks up a localized string similar to Options in child cascading question should reference only existing option in parent question..
         /// </summary>
         internal static string WB0084_CascadingOptionsShouldHaveParent {
             get {
                 return ResourceManager.GetString("WB0084_CascadingOptionsShouldHaveParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question should have deeper or the same level as it&apos;s parent question..
+        /// </summary>
+        internal static string WB0085_CascadingQuestionWrongParentLevel {
+            get {
+                return ResourceManager.GetString("WB0085_CascadingQuestionWrongParentLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading question references missing or supported type question..
+        /// </summary>
+        internal static string WB0086_ParentCascadingQuestionShouldExist {
+            get {
+                return ResourceManager.GetString("WB0086_ParentCascadingQuestionShouldExist", resourceCulture);
             }
         }
     }
