@@ -10,12 +10,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Questions = new List<QuestionTemplateModel>();
             this.Groups = new List<GroupTemplateModel>();
             this.Rosters = new List<RosterTemplateModel>();
+
+
             this.ExecutorModel = executorModel;
         }
 
         public List<QuestionTemplateModel> Questions { set; get; }
         public List<GroupTemplateModel> Groups { set; get; }
         public List<RosterTemplateModel> Rosters { set; get; }
+
+        private Dictionary<Guid, List<Guid>> ConditionalDependencies { set; get; }
+    
+
         public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }
 
         public string GeneratedRosterScopeName
