@@ -15,7 +15,7 @@ using WB.Core.Synchronization.SyncStorage;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, 
-        IEventHandler<QuestionnaireDeleted>, IEventHandler<TemplateAssemblyImported>, IEventHandler
+        IEventHandler<QuestionnaireDeleted>, IEventHandler<QuestionnaireAssemblyImported>, IEventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
@@ -95,10 +95,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new Type[] { typeof(QuestionnaireDocument), typeof(SynchronizationDelta) }; }
         }
 
-        public void Handle(IPublishedEvent<TemplateAssemblyImported> evnt)
+        public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt)
         {
-            this.questionnareAssemblyFileAccessor.StoreAssembly(evnt.EventSourceId, evnt.Payload.Version, evnt.Payload.AssemblySource);
-            this.synchronizationDataStorage.SaveTemplateAssembly(evnt.EventSourceId, evnt.Payload.Version, evnt.Payload.AssemblySource, evnt.EventTimeStamp);
+            this.questionnareAssemblyFileAccessor.StoreAssembly(evnt.EventSourceId, evnt.Payload.Version, evnt.Payload.AssemblySourceInBase64);
+            this.synchronizationDataStorage.SaveTemplateAssembly(evnt.EventSourceId, evnt.Payload.Version, evnt.Payload.AssemblySourceInBase64, evnt.EventTimeStamp);
         }
     }
 }

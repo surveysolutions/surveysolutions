@@ -125,7 +125,7 @@
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
-    <Compile Include="Events\Questionnaire\TemplateAssemblyImported.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireAssemblyImported.cs" />
     <Compile Include="Events\User\UserLockedBySupervisor.cs" />
     <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />

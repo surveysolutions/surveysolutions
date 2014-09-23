@@ -1,8 +1,8 @@
 ﻿namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
 {
-    public class TemplateAssemblyImported
+    public class QuestionnaireAssemblyImported
     {
-        public string AssemblySource { get; set; }
+        public string AssemblySourceInBase64 { get; set; }
         public long Version { get; set; }
     }
 }
