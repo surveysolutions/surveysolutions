@@ -163,14 +163,38 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup, IComposite>(MultimediaQuestionsCannotBeUsedInGroupEnablementCondition, "WB0081", VerificationMessages.WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition),
                     Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0082", VerificationMessages.WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition),
                     Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
+
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByEpressionsThatUsesTextListQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
-                    ErrorsByRostersWithDuplicateVariableName
+                    ErrorsByRostersWithDuplicateVariableName,
+                    this.CascadingComboboxHasNoParentOptions
                 };
+            }
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> CascadingComboboxHasNoParentOptions(QuestionnaireDocument document)
+        {
+            foreach (var question in document.Find<SingleQuestion>(x => x.CascadeFromQuestionId.HasValue))
+            {
+                if (question.CascadeFromQuestionId.HasValue)
+                {
+                    var parentQuestion = document.Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
+                    var result = !question.Answers.All(childAnswer =>
+                        parentQuestion.Answers.Any(
+                            parentAnswer => parentAnswer.AnswerValue == childAnswer.ParentValue));
+                    if (result)
+                    {
+                        yield return new QuestionnaireVerificationError("WB0084",
+                            VerificationMessages.WB0084_CascadingOptionsShouldHaveParent,
+                            CreateReference(question), 
+                            CreateReference(parentQuestion));
+                    }
+                }
+
             }
         }
 
