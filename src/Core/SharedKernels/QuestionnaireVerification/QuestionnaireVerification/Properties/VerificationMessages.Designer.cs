@@ -773,5 +773,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0086_ParentCascadingQuestionShouldExist", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cicrular references in cascading questions not allowed..
+        /// </summary>
+        internal static string WB0087_CascadingQuestionHasCicularReference {
+            get {
+                return ResourceManager.GetString("WB0087_CascadingQuestionHasCicularReference", resourceCulture);
+            }
+        }
     }
 }

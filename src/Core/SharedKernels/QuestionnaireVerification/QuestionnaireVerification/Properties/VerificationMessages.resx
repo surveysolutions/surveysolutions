@@ -354,4 +354,7 @@
   <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
     <value>Cascading question references missing or supported type question.</value>
   </data>
+  <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+    <value>Cicrular references in cascading questions not allowed.</value>
+  </data>
 </root>
