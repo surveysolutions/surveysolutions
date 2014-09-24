@@ -167,6 +167,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
                     Verifier<IQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
                     Verifier<SingleQuestion, SingleQuestion>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
+                    Verifier<SingleQuestion>(CascadingQuestionHasMoreThanAllowedOptions, "WB0088", VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers),
+                    Verifier<SingleQuestion>(CascadingQuestionOptionsWithParentValuesShouldBeUnique, "WB0089", VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
 
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
@@ -178,6 +180,22 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByRostersWithDuplicateVariableName
                 };
             }
+        }
+
+        private bool CascadingQuestionOptionsWithParentValuesShouldBeUnique(SingleQuestion question)
+        {
+            if (question.Answers != null && question.CascadeFromQuestionId.HasValue)
+            {
+                var result = question.Answers.Select(x => new {x.AnswerValue, x.ParentValue})
+                    .Distinct().Count() == question.Answers.Count;
+                return result;
+            }
+            return false;
+        }
+
+        private bool CascadingQuestionHasMoreThanAllowedOptions(SingleQuestion question)
+        {
+            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > 10000;
         }
 
         private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, QuestionnaireDocument questionnaire)
@@ -271,7 +289,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static bool CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount(IQuestion question)
         {
-            return IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
+            return !question.CascadeFromQuestionId.HasValue && IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
                    question.Answers != null && question.Answers.Count > 200;
         }
 
@@ -297,7 +315,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question)
         {
-            if (question.Answers != null)
+            if (question.Answers != null && !question.CascadeFromQuestionId.HasValue)
             {
                 return question.Answers.Where(x => x.AnswerText != null).Select(x => x.AnswerText.Trim()).Distinct().Count() != question.Answers.Count;
             }
@@ -306,7 +324,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool OptionValuesMustBeUniqueForCategoricalQuestion(IQuestion question)
         {
-            if (question.Answers != null)
+            if (question.Answers != null && !question.CascadeFromQuestionId.HasValue)
             {
                 return question.Answers.Where(x => x.AnswerValue != null).Select(x => x.AnswerValue.Trim()).Distinct().Count() != question.Answers.Count;
             }

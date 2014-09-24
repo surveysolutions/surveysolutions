@@ -782,5 +782,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0087_CascadingQuestionHasCicularReference", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading question should have less than 10.000 options..
+        /// </summary>
+        internal static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
+            get {
+                return ResourceManager.GetString("WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading question should have unique value and parent value options list..
+        /// </summary>
+        internal static string WB0089_CascadingQuestionOptionWithParentShouldBeUnique {
+            get {
+                return ResourceManager.GetString("WB0089_CascadingQuestionOptionWithParentShouldBeUnique", resourceCulture);
+            }
+        }
     }
 }
