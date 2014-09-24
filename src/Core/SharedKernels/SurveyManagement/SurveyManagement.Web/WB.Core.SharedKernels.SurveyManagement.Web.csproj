@@ -373,9 +373,9 @@
     <EmbeddedResource Include="Views\Interviewer\Create.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserEditForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserCreateForm.cshtml" />
-    <EmbeddedResource Include="Content\admin.css" />
+    <EmbeddedResource Include="Content\controlpanel.css" />
     <EmbeddedResource Include="Views\Shared\SupervisorMainMenu.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_AdminLayout.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_ControlPanelLayout.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewHistory.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
     <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
