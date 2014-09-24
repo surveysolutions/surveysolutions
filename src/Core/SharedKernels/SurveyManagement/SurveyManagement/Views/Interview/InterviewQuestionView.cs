@@ -62,7 +62,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             {
                 this.Settings = new
                 {
-                    IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox
+                    IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox,
+                    IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue
                 };
             }
 
