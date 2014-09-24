@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Web;
 using Machine.Specifications;
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
             controller = CreateQuestionnaireController();
             SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
 
-            stream = GenerateStreamFromString("kafnvkanfkvnefv30293r09qwreflqlr");
+            stream = GenerateStreamFromString(Guid.NewGuid() + Environment.NewLine + Guid.NewGuid());
 
             stream.Position = 0;
             postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream && pf.FileName == "image.csv");
@@ -25,10 +26,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
         It should_add_error_message_to_temp_data = () =>
             controller.TempData["error"].ShouldEqual("CSV-file has wrong format or file is corrupted.");
 
-        Cleanup stuff = () =>
-        {
-            stream.Dispose();
-        };
+        Cleanup stuff = () => stream.Dispose();
 
         private static QuestionnaireController controller;
         private static HttpPostedFileBase postedFile;
