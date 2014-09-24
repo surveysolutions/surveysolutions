@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
         It should_enable_child_question = () =>
             eventContext.ShouldContainEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
 
-        private It should_disable_grandchild_question = () =>
+        It should_disable_grandchild_question = () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
 
         It should_not_remove_answer_from_self = () =>
@@ -112,13 +112,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
         It should_remove_dependent_answers_on_second_level_of_cascades_if_it_is_answered = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
 
-        private static Interview interview;
-        private static EventContext eventContext;
-        private static Guid parentSingleOptionQuestionId;
-        private static Guid childCascadedComboboxId;
-        private static Guid grandChildCascadedComboboxId;
-        private static Guid comboShouldNotBeRemoved;
-        private static Guid actorId;
+        static Interview interview;
+        static EventContext eventContext;
+        static Guid parentSingleOptionQuestionId;
+        static Guid childCascadedComboboxId;
+        static Guid grandChildCascadedComboboxId;
+        static Guid comboShouldNotBeRemoved;
+        static Guid actorId;
     }
 }
 
