@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
@@ -10,7 +11,6 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails.GridItems;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -48,13 +48,13 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             #region interview data initialization
             this.Status = interview.Status;
+            this.Title = questionnaire.Title;
             this.PropagateGroups(interview);
             this.SetAnswers(interview);
             this.DisableInterviewElements(interview);
             this.MarkAnswersAsInvalid(interview);
 
             this.FireSubstitutionEventsForPrefilledQuestions();
-            this.CreateInterviewTitle(questionnaire);
             #endregion
         }
 
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             : this(id)
         {
             #region interview structure initialization
-
+            this.Title = questionnaire.Title;
             questionnaire.ConnectChildrenWithParent();
 
             this.rosterStructure = rosterStructure;
@@ -78,7 +78,17 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     keySelector: grouping => grouping.Key,
                     elementSelector: grouping => grouping.Select(question => question.PublicKey).ToArray());
 
+
+            this.referencedQuestionToCascadingQuestionsMap = questionnaire
+                .Find<SingleQuestion>(question => question.CascadeFromQuestionId.HasValue)
+                .GroupBy(question => question.CascadeFromQuestionId.Value)
+                .ToDictionary(
+                    keySelector: grouping => grouping.Key,
+                    elementSelector: grouping => grouping.Select(question => question.PublicKey).ToArray());
+
             this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions = new Dictionary<Guid, HashSet<InterviewItemId>>();
+
+            this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions = new Dictionary<Guid, Dictionary<InterviewItemId, decimal>>();
 
             this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(questionnaire);
 
@@ -87,8 +97,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             #region interview data initialization
 
             this.CreateInterviewChapters(questionnaire);
-
-            this.CreateInterviewTitle(questionnaire);
 
             this.SubscribePrefilledQuestionsOnPropertiesChanges();
 
@@ -213,6 +221,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
                 if (IsQuestionReferencedByAnyLinkedQuestion(answeredQuestion.Id))
                     AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(answeredQuestion.Id, answeredQuestion.QuestionPropagationVector);
+
+                if (this.IsQuestionReferencedByAnyCascadingQuestion(answeredQuestion.Id))
+                    this.AddInstanceOfAnsweredQuestionUsableAsCascadingQuestion(answeredQuestion.Id, answeredQuestion.QuestionPropagationVector, Convert.ToDecimal(answeredQuestion.Answer));
             }
         }
 
@@ -259,17 +270,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 c => this.Screens[new InterviewItemId(c.PublicKey)]).OfType<QuestionnaireScreenViewModel>().ToList();
         }
 
-        private void CreateInterviewTitle(IQuestionnaireDocument questionnarie)
-        {
-            string featuredTitle = "";
-            foreach (var questionViewModel in this.FeaturedQuestions)
-            {
-                featuredTitle += string.Format("| {0} ", questionViewModel.Value.AnswerString);
-            }
-
-            this.Title = string.Format("{0} {1}", questionnarie.Title, featuredTitle);
-        }
-
         protected void BuildInterviewStructureFromTemplate(IGroup document)
         {
             List<IGroup> rout = new List<IGroup>();
@@ -307,7 +307,9 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         #region fields
 
         public Guid PublicKey { get; private set; }
-        public string Title { get; private set; }
+
+        public string Title { get; set; }
+
         public InterviewStatus Status { get; set; }
         public IDictionary<InterviewItemId, IQuestionnaireViewModel> Screens { get; protected set; }
         public IList<QuestionnaireScreenViewModel> Chapters { get; protected set; }
@@ -326,8 +328,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         private InterviewStatistics statistics;
         protected IDictionary<InterviewItemId, QuestionViewModel> Questions { get; set; }
         private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions;
+        private readonly Dictionary<Guid, Dictionary<InterviewItemId, decimal>> instancesOfAnsweredQuestionsUsableAsCascadingQuestions;
         private readonly Dictionary<Guid, ValueVector<Guid>> listOfHeadQuestionsMappedOnScope = new Dictionary<Guid, ValueVector<Guid>>();
         private readonly Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
+        internal readonly Dictionary<Guid, Guid[]> referencedQuestionToCascadingQuestionsMap;
         private readonly QuestionnaireRosterStructure rosterStructure;
         private readonly Dictionary<Guid, QuestionnairePropagatedScreenViewModel> propagatedScreenPrototypes =
             new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
@@ -338,7 +342,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         public IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; private set; }
         public IDictionary<InterviewItemId, AnsweredQuestionSynchronizationDto> SuperviorQuestions { get; private set; }
         public IDictionary<Guid, ValueVector<Guid>> SuperviorQuestionIds { get; private set; }
-        
+
         #endregion
 
         public void UpdatePropagateGroupsByTemplate(Guid publicKey, decimal[] outerScopePropagationVector, int count)
@@ -634,17 +638,52 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.NotifyAffectedLinkedQuestions(questionId);
         }
 
+        public virtual void AddInstanceOfAnsweredQuestionUsableAsCascadingQuestion(Guid questionId, decimal[] propagationVector, decimal selectedValue)
+        {
+            if (!this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.ContainsKey(questionId))
+                this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.Add(questionId, new Dictionary<InterviewItemId, decimal>());
+
+            var questionInstanceId = new InterviewItemId(questionId, propagationVector);
+
+            this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions[questionId][questionInstanceId] = selectedValue;
+
+            this.NotifyAffectedCascadingQuestions(questionId);
+        }
+
+        public virtual void RemoveInstanceOfAnsweredQuestionUsableAsCascadingQuestion(Guid questionId, decimal[] propagationVector)
+        {
+            if (!this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.ContainsKey(questionId))
+                return;
+
+            Console.WriteLine(questionId);
+
+            var questionInstanceId = new InterviewItemId(questionId, propagationVector);
+
+            this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions[questionId].Remove(questionInstanceId);
+
+            this.NotifyAffectedCascadingQuestions(questionId);
+        }
+
         private void NotifyAffectedLinkedQuestions(Guid referencedQuestionId)
         {
             this.referencedQuestionToLinkedQuestionsMap[referencedQuestionId]
-                .SelectMany(
-                    linkedQuestionId =>
-                        this.Questions.Values.OfType<LinkedQuestionViewModel>()
-                            .Where(questionViewModel => questionViewModel.PublicKey.Id == linkedQuestionId))
+                .SelectMany(linkedQuestionId => this.GetQuestionModelById<LinkedQuestionViewModel>(linkedQuestionId))
                 .ToList()
                 .ForEach(linkedQuestionViewModel => linkedQuestionViewModel.HandleAnswerListChange());
         }
 
+        private void NotifyAffectedCascadingQuestions(Guid referencedQuestionId)
+        {
+            if (!this.referencedQuestionToCascadingQuestionsMap.ContainsKey(referencedQuestionId))
+                return;
+
+            this.referencedQuestionToCascadingQuestionsMap[referencedQuestionId]
+                .SelectMany(cascadingQuestionId => this.GetQuestionModelById<CascadingComboboxQuestionViewModel>(cascadingQuestionId))
+                .ToList()
+                .ForEach(cascadingComboboxQuestionViewModel => cascadingComboboxQuestionViewModel.HandleAnswerListChange());
+        }
+
+       
         private void QuestionPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var question = sender as QuestionViewModel;
@@ -980,6 +1019,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                     return this.CreateFilteredComboboxQuestion(question);
                 }
 
+                if (questionViewType == QuestionType.SingleOption && question.CascadeFromQuestionId.HasValue)
+                {
+                    return this.CreateCascadingComboboxQuestion(question);
+                }
+
                 if (question.LinkedToQuestionId.HasValue)
                 {
                     return this.CreateLinkedQuestion(question, questionViewType);
@@ -1009,7 +1053,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType,
                 null,
-                true, question.Instructions,mask, null,
+                true, question.Instructions, mask, null,
                 true, question.Mandatory,
                 question.ValidationMessage,
                 question.StataExportCaption,
@@ -1053,8 +1097,8 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             var textListQuestion = question as TextListQuestion;
 
             return new TextListQuestionViewModel(
-                new InterviewItemId(question.PublicKey), 
-                GetQuestionRosterScope(question), 
+                new InterviewItemId(question.PublicKey),
+                GetQuestionRosterScope(question),
                 question.QuestionText,
                 newType,
                 true,
@@ -1077,18 +1121,36 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return new SelectebleQuestionViewModel(
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText,
                 newType, question.Answers.Select(
-                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage)).ToList(),
+                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, null)).ToList(),
                 true, question.Instructions, null,
                 true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
                 multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
+        private CascadingComboboxQuestionViewModel CreateCascadingComboboxQuestion(IQuestion question)
+        {
+            return new CascadingComboboxQuestionViewModel(
+                new InterviewItemId(question.PublicKey), 
+                GetQuestionRosterScope(question), 
+                question.QuestionText,
+                (questionRosterVecor) => this.GetFilteredAnswerOptionsForCascadingQuestion(question.CascadeFromQuestionId.Value, question.Answers, questionRosterVecor),
+                true, 
+                question.Instructions, 
+                null,
+                true, 
+                question.Mandatory, 
+                null, 
+                question.ValidationMessage, 
+                question.StataExportCaption, 
+                question.GetVariablesUsedInTitle());
+        }
+
         private FilteredComboboxQuestionViewModel CreateFilteredComboboxQuestion(IQuestion question)
         {
             return new FilteredComboboxQuestionViewModel(
                 new InterviewItemId(question.PublicKey), GetQuestionRosterScope(question), question.QuestionText, question.Answers.Select(
-                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage)).ToList(),
+                    a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, null)).ToList(),
                 true, question.Instructions, null,
                 true, question.Mandatory, null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle());
         }
@@ -1112,6 +1174,27 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
             result.Reverse();
             return new ValueVector<Guid>(result.ToArray());
+        }
+
+        protected IEnumerable<AnswerViewModel> GetFilteredAnswerOptionsForCascadingQuestion(Guid referencedQuestionId, List<Answer> answers, decimal[] rosterVector)
+        {
+            if (!this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.ContainsKey(referencedQuestionId))
+                return Enumerable.Empty<AnswerViewModel>();
+
+            InterviewItemId referencedQuestionItemId =
+                this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions[referencedQuestionId]
+                    .Keys
+                    .SingleOrDefault(x => SequenceBeginningEqual(rosterVector, x));
+
+            if (referencedQuestionItemId == default(InterviewItemId))
+                return Enumerable.Empty<AnswerViewModel>();
+
+            decimal filterValue = this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions[referencedQuestionId][referencedQuestionItemId];
+
+            return answers
+                .Where(x => decimal.Parse(x.ParentValue, CultureInfo.InvariantCulture) == filterValue)
+                .Select(x => new AnswerViewModel(x.PublicKey, x.AnswerText, x.AnswerValue, false, null))
+                .ToList();
         }
 
         protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId, decimal[] linkedQuestionRosterVector, ValueVector<Guid> linkedQuestionRosterScope)
@@ -1152,10 +1235,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                             this.BuildLinkedQuestionOptionTitle(linkedQuestionRosterVector, linkedQuestionRosterScope, questionInstance.QuestionRosterScope, questionInstance.PublicKey.InterviewItemPropagationVector, questionInstance.AnswerString)));
         }
 
-        private string BuildLinkedQuestionOptionTitle(decimal[] linkedQuestionRosterVector, 
-            ValueVector<Guid> linkedQuestionRosterScope, 
-            ValueVector<Guid> referensedQuestionRosterScopeVector, 
-            decimal[] referencedQuestionPropagationVector, 
+        private string BuildLinkedQuestionOptionTitle(decimal[] linkedQuestionRosterVector,
+            ValueVector<Guid> linkedQuestionRosterScope,
+            ValueVector<Guid> referensedQuestionRosterScopeVector,
+            decimal[] referencedQuestionPropagationVector,
             string referencedQuestionAnswer)
         {
             return LinkedQuestionUtils.BuildLinkedQuestionOptionTitle(
@@ -1164,11 +1247,11 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 {
                     var screenFromScope = this.Screens[new InterviewItemId(firstScreenInScopeId, firstScreeninScopeRosterVector)];
                     return screenFromScope.ScreenName;
-                }, 
-                referencedQuestionPropagationVector, 
+                },
+                referencedQuestionPropagationVector,
                 referensedQuestionRosterScopeVector,
-                linkedQuestionRosterVector, 
-                linkedQuestionRosterScope, 
+                linkedQuestionRosterVector,
+                linkedQuestionRosterScope,
                 this.rosterStructure);
         }
 
@@ -1190,6 +1273,23 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             return this.referencedQuestionToLinkedQuestionsMap.ContainsKey(questionId)
                 && this.referencedQuestionToLinkedQuestionsMap[questionId].Any();
+        }
+
+        public virtual bool IsQuestionReferencedByAnyCascadingQuestion(Guid questionId)
+        {
+            return this.referencedQuestionToCascadingQuestionsMap.ContainsKey(questionId)
+                && this.referencedQuestionToCascadingQuestionsMap[questionId].Any();
+        }
+
+        private IEnumerable<T> GetQuestionModelById<T>(Guid cascadingQuestionId) where T : QuestionViewModel
+        {
+            return this.Questions.Values.OfType<T>()
+                .Where(questionViewModel => questionViewModel.PublicKey.Id == cascadingQuestionId);
+        }
+
+        private static bool SequenceBeginningEqual(decimal[] linkedQuestionRosterVector, InterviewItemId x)
+        {
+            return x.InterviewItemPropagationVector.SequenceEqual(linkedQuestionRosterVector.Take(x.InterviewItemPropagationVector.Length));
         }
     }
 }

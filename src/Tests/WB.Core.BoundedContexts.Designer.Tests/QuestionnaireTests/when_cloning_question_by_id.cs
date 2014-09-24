@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-
             newQuestionAdded = new NewQuestionAdded
             {
                 PublicKey = sourceQuestionId, 
@@ -32,7 +31,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 ValidationMessage = "Val message",
                 Instructions = "Intructions",
                 LinkedToQuestionId = Guid.NewGuid(),
-                IsFilteredCombobox = true
+                IsFilteredCombobox = true,
+                CascadeFromQuestionId = Guid.NewGuid()
             };
             questionnaire.Apply(newQuestionAdded);
 
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             );
         
         // If we extend QuestionCloned be sure to add check in the validation above and increase counter here
-        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(27);
+        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(28);
 
         static Questionnaire questionnaire;
         static Guid questionId = Guid.Parse("11111111111111111111111111111111");

@@ -35,6 +35,21 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cirrious.CrossCore">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\net45\Cirrious.CrossCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.CrossCore.Wpf">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\net45\Cirrious.CrossCore.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\net45\Cirrious.MvvmCross.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Localization">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\net45\Cirrious.MvvmCross.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Wpf">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\net45\Cirrious.MvvmCross.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Machine.Specifications">
       <HintPath>..\..\..\packages\Machine.Specifications.0.8.1\lib\net45\Machine.Specifications.dll</HintPath>
     </Reference>
@@ -113,6 +128,7 @@
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
+    <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type_UpdateSingleOptionQuestion_with_options.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__DeleteQuestion__with_questionnaire_id_and_question_id.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup.cs" />
@@ -133,11 +149,16 @@
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_chapter_and_chapter_exists.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_18_options.cs" />
-    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_more_than_20_options.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_more_than_200_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_question_info_with_25_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_cascading_options.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_cascading_options_and_uploaded_file_has_wrong_csv_format.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_cascading_options_and_non_csv_file_was_uploaded.cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options_and_uploaded_file_has_wrong_csv_format.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_cascading_options_and_was_no_uploaded_file .cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options_and_was_no_uploaded_file.cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\QuestionnaireControllerTestContext.cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_options_and_non_csv_file_was_uploaded.cs" />
@@ -164,6 +185,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_one_day_before_and_after.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_zeroes_for_2_headquarters_statuses_and_for_completed_status.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_from_date_bigger_then_to_date.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_could_not_find_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_statistics_filter_without_data.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_statistics_view_and_from_is_more_than_to.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_3_days_with_incremental_data_for_each_count.cs" />
@@ -179,13 +201,21 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\InterviewControllerTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_under_headquarter_user.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_which_belong_to_another_supervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_file_which_is_absent.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_file_which_is_present.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_not_existing_interview_details.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\CommandTransformatorTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\CommandTransformatorTests\when_need_to_transform_CreateInterviewControllerCommand.cs" />
     <Compile Include="SharedKernels\Synchronization\DefaultBackupManagerTests.cs" />
     <Compile Include="SharedKernels\Synchronization\ReadSideChunkReaderTests.cs" />
     <Compile Include="SharedKernels\Synchronization\ReadSideChunkWriterTests.cs" />
     <Compile Include="SharedKernels\Synchronization\SimpleSynchronizationDataStorageTests.cs" />
     <Compile Include="SharedKernels\Synchronization\SyncManagerTests\SyncManagerTests.cs" />
     <Compile Include="SharedKernels\Synchronization\SyncProviderTests\SyncProviderTests.cs" />
+    <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\LocalOrDevelopmentAccessOnlyAttributeTestsContext.cs" />
+    <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_called_by_localhost.cs" />
+    <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_in_development.cs" />
+    <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_not_in_development_and_called_not_by_localhost.cs" />
     <Compile Include="Stub.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -30,7 +30,7 @@ namespace WB.UI.Designer.Api
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
-        private const int MaxCountOfOptionForFileredCombobox = 20;
+        private const int MaxCountOfOptionForFileredCombobox = 200;
 
         public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
@@ -89,14 +89,13 @@ namespace WB.UI.Designer.Api
             }
 
             bool shouldTruncateOptions = editQuestionView.Type == QuestionType.SingleOption
-                && editQuestionView.IsFilteredCombobox == true
+                && (editQuestionView.IsFilteredCombobox == true || !string.IsNullOrWhiteSpace(editQuestionView.CascadeFromQuestionId))
                 && editQuestionView.Options != null;
 
             if (shouldTruncateOptions)
             {
                 editQuestionView.WereOptionsTruncated = editQuestionView.Options.Length > MaxCountOfOptionForFileredCombobox;
-                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();
-                
+                editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();   
             }
 
             return editQuestionView;
@@ -150,6 +149,7 @@ namespace WB.UI.Designer.Api
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
             QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            var errorsCount = verificationErrors.Length;
             VerificationError[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
 
             if (!errors.Any())
@@ -178,7 +178,8 @@ namespace WB.UI.Designer.Api
 
             return new VerificationErrors
             {
-                Errors = errors
+                Errors = errors,
+                ErrorsCount = errorsCount
             };
         }
 

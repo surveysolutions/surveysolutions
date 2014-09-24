@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {

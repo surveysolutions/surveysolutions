@@ -217,6 +217,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             expressionProcessorStatePrototype.UpdateQrBarcodeAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
+        internal void Apply(PictureQuestionAnswered @event)
+        {
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.PictureFileName;
+            this.interviewState.AnsweredQuestions.Add(questionKey);
+        }
+
         private void Apply(NumericQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
@@ -830,6 +838,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId,questionnaireVersion, interviewStatus, featuredQuestionsMeta, true, null));
+            this.ApplyEvent(new InterviewStatusChanged(interviewStatus, string.Empty));
             this.ApplyValidationEvent(isValid);
         }
 
@@ -1332,6 +1341,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+                .Concat(questionnaire.GetAllChildCascadingQuestions())
         private static List<Identity> GetQuestionsToBeInvalidInJustCreatedInterview(IQuestionnaire questionnaire,
             List<Identity> groupsToBeDisabled, List<Identity> questionsToBeDisabled)
         {
@@ -1407,6 +1417,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQRBarcodeQuestion(this.interviewState, userId,
                 questionId, rosterVector, answerTime, answer, questionnaire);
+
+            this.ApplyInterviewChanges(interviewChanges);
+        }
+
+        public void AnswerPictureQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string pictureFileName)
+        {
+            ThrowIfInterviewHardDeleted();
+
+            var answeredQuestion = new Identity(questionId, rosterVector);
+
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
+            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+
+            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerPictureQuestion(userId,
+                questionId, rosterVector, answerTime, pictureFileName, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1539,6 +1567,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterVector, answerTime, latitude, longitude, accuracy, altitude, timestamp, answeredQuestion, questionnaire);
 
             this.ApplyInterviewChanges(interviewChanges);
+        }
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerPictureQuestion(Guid userId, Guid questionId, decimal[] rosterVector,
+            DateTime answerTime, string pictureFileName, IQuestionnaire questionnaire)
+        {
+            var isQuestionMandatory = questionnaire.IsQuestionMandatory(questionId);
+            var questionIdentity = new Identity(questionId, rosterVector);
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
+                questionnaire);
+
+            var answerChanges = new List<AnswerChange>()
+            {
+                new AnswerChange(AnswerChangeType.Picture, userId, questionId, rosterVector, answerTime, pictureFileName)
+            };
+
+            var answersDeclaredValid = new List<Identity>();
+            var answersDeclaredInvalid = new List<Identity>();
+
+            if (isQuestionMandatory && string.IsNullOrWhiteSpace(pictureFileName))
+            {
+                answersDeclaredInvalid.Add(questionIdentity);
+            }
+            else
+            {
+                answersDeclaredValid.Add(questionIdentity);
+            }
+
+            var validityChanges = new ValidityChanges(
+                answersDeclaredValid: answersDeclaredValid,
+                answersDeclaredInvalid: answersDeclaredInvalid);
+            return new InterviewChanges(answerChanges, null,
+                validityChanges,
+                null,
+                null,
+                rosterInstancesWithAffectedTitles,
+                pictureFileName);
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedPropagationVector)
@@ -1890,8 +1955,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (interviewChanges.RosterCalculationData != null)
                 this.ApplyRostersEvents(interviewChanges.RosterCalculationData);
 
-            if (interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling != null)
-                this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling);
+            if (interviewChanges.AnswersForLinkedQuestionsToRemove != null)
+                this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemove);
 
             if (interviewChanges.RosterInstancesWithAffectedTitles != null)
                 this.ApplyRosterRowsTitleChangedEvents(interviewChanges.RosterInstancesWithAffectedTitles,
@@ -1917,8 +1982,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (interviewChanges.RosterCalculationData != null)
                     this.ApplyRostersEvents(interviewChanges.RosterCalculationData);
 
-                if (interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling != null)
-                    this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemoveByDisabling);
+                if (interviewChanges.AnswersForLinkedQuestionsToRemove != null)
+                    this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersForLinkedQuestionsToRemove);
 
                 if (interviewChanges.RosterInstancesWithAffectedTitles != null)
                     this.ApplyRosterRowsTitleChangedEvents(interviewChanges.RosterInstancesWithAffectedTitles,
@@ -2108,6 +2173,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case AnswerChangeType.QRBarcode:
                         this.ApplyEvent(new QRBarcodeQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, (string)change.Answer));
                         break;
+                    case AnswerChangeType.Picture:
+                        this.ApplyEvent(new PictureQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, (string)change.Answer));
+                        break;
                     case AnswerChangeType.MultipleOptionsLinked:
                         this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, (decimal[][])change.Answer));
                         break;
@@ -2207,6 +2275,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
+            ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(questionId, selectedValue, questionnaire);
             if (applyStrongChecks)
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
@@ -2545,10 +2614,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 updateState);
         }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal selectedValue, IQuestionnaire questionnaire)
+        private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(InterviewStateDependentOnAnswers state, 
+            Guid userId,
+            Guid questionId, 
+            decimal[] rosterVector, 
+            DateTime answerTime,
+            decimal selectedValue,           
+            IQuestionnaire questionnaire)
         {
-            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue, answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
+            string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue, answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));           
 
             Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
 
@@ -2621,6 +2695,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
 
+            var questionIdentity = new Identity(questionId, rosterVector);
+            var previsousAnswer = GetEnabledQuestionAnswerSupportedInExpressions(state, questionIdentity,
+                questionnaire);
+            bool answerChanged = WasQuestionAnswered(state, questionIdentity) && (decimal) previsousAnswer != selectedValue;
+
+
+            
+            var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
+            
+            var answersToRemove = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading);
+
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(answerChangeType, userId, questionId, rosterVector, answerTime, answer)
@@ -2636,6 +2721,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answerFormattedAsRosterTitle);
         }
 
+        private IEnumerable<Identity> GetQuestionsToRemoveAnswersFromDependingOnCascading(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
+        {
+            IEnumerable<Guid> dependentQuesions = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionId);
+            var result = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, dependentQuesions, rosterVector, questionnaire, GetRosterInstanceIds);
+
+            foreach (var identity in result)
+            {
+                string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
+                if (state.AnsweredQuestions.Contains(questionKey))
+                {
+                    yield return identity;
+                }
+            }
+        }
         private void CalculateChangesByFeaturedQuestion(InterviewChangeStructures changeStructures, Guid userId,
             IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
             DateTime answersTime, Dictionary<Identity, object> newAnswers, decimal[] rosterVector = null)
@@ -2723,6 +2822,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 changeStructures.Changes.Add(interviewChanges);
             }
         }
+
+
+
+                var cascadingQuestionsToEnable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id);
+                IEnumerable<Identity> cascadingQuestionsToEnableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                    cascadingQuestionsToEnable, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
+
+                foreach (var dependentCascadingQuestion in cascadingQuestionsToEnableIdentities)
+                {
+                    if (!collectedQuestionsToBeDisabled.Contains(dependentCascadingQuestion) && 
+                        !collectedQuestionsToBeEnabled.Contains(dependentCascadingQuestion))
+                    {
+                        collectedQuestionsToBeEnabled.Add(dependentCascadingQuestion);
+                    }
+                }
+
+                var cascadingQuestionsToDisable = questionnaire.GetCascadingQuestionsThatDependUponQuestion(affectingQuestion.Id)
+                                                              .Except(questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id));
+
+                IEnumerable<Identity> cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                    cascadingQuestionsToDisable, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
+
+                foreach (var dependentCascadingQuestion in cascadingQuestionsToDisableIdentities)
+                {
+                    if (!collectedQuestionsToBeDisabled.Contains(dependentCascadingQuestion) &&
+                        !collectedQuestionsToBeEnabled.Contains(dependentCascadingQuestion))
+                    {
+                        collectedQuestionsToBeEnabled.Remove(dependentCascadingQuestion);
+                        collectedQuestionsToBeDisabled.Add(dependentCascadingQuestion);
+                    }
+                }
 
         private List<RosterCalculationData> CalculateFixedRostersData(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire,
             decimal[] outerRosterVector = null)
@@ -3185,6 +3315,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "For question {0} was provided selected value {1} as answer. But only following values are allowed: {2}.",
                     FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues)));
+        }
+
+        private static void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
+        {
+            Guid? cascadingId = questionnaire.GetCascadingQuestionParentId(questionId);
+
+            if (cascadingId.HasValue)
+            {
+                string parentValue = questionnaire.GetCascadingParentValue(questionId, value);
+                IEnumerable<decimal> answers = questionnaire.GetAnswerOptionsAsValues(cascadingId.Value);
+
+                bool answerExistsInParent = !answers.Contains(Convert.ToDecimal(parentValue));
+                if (answerExistsInParent)
+                    throw new InterviewException(string.Format(
+                        "For question {0} was provided selected value {1} as answer with parent value {2}, but this value not found in  Parent Question options",
+                        FormatQuestionForException(questionId, questionnaire), value, parentValue));
+            }
         }
 
         private static void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)

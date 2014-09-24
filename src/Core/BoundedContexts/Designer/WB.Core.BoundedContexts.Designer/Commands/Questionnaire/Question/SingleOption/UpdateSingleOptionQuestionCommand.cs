@@ -25,10 +25,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
             bool isPreFilled,
             Option[] options,
             Guid? linkedToQuestionId,
-            bool isFilteredCombobox)
+            bool isFilteredCombobox,
+            Guid? cascadeFromQuestionId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel: variableLabel)
+                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, 
+                instructions: instructions, variableLabel: variableLabel)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
@@ -41,9 +43,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
             this.IsFilteredCombobox = isFilteredCombobox;
+            this.CascadeFromQuestionId = cascadeFromQuestionId;
         }
 
         public bool IsFilteredCombobox { get; set; }
+
+        public Guid? CascadeFromQuestionId { get; set; }
 
         public QuestionScope Scope { get; set; }
 

@@ -92,11 +92,11 @@ namespace WB.UI.Shared.Android.Controls.Roster
 
         private void questionView_AnswerSaved(object sender, AnswerSavedEventArgs e)
         {
-            if (!this.questionView.IsCommentsEditorFocused && !this.multiAnswersTypes.Contains(this.Model.QuestionType))
+            if (!this.questionView.IsCommentsEditorFocused && !this.questionTypesWhichShouldNotCloseDialog.Contains(this.Model.QuestionType))
                 this.dialog.Dismiss();
         }
 
-        private readonly QuestionType[] multiAnswersTypes = {QuestionType.MultyOption, QuestionType.TextList};
+        private readonly QuestionType[] questionTypesWhichShouldNotCloseDialog = { QuestionType.MultyOption, QuestionType.TextList, QuestionType.Multimedia };
 
         protected override void Dispose(bool disposing)
         {

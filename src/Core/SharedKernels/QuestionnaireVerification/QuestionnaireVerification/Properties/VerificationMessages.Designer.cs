@@ -640,7 +640,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option titles must be unique.
+        ///   Looks up a localized string similar to Option titles must be unique..
         /// </summary>
         internal static string WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion {
             get {
@@ -649,7 +649,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option values must be unique.
+        ///   Looks up a localized string similar to Option values must be unique..
         /// </summary>
         internal static string WB0073_OptionValuesMustBeUniqueForCategoricalQuestion {
             get {
@@ -676,11 +676,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains more than 20 options..
+        ///   Looks up a localized string similar to Contains more than 200 options..
         /// </summary>
-        internal static string WB0076_CategoricalOneAnswerOptionsCountMoreThan20 {
+        internal static string WB0076_CategoricalOneAnswerOptionsCountMoreThan200 {
             get {
-                return ResourceManager.GetString("WB0076_CategoricalOneAnswerOptionsCountMoreThan20", resourceCulture);
+                return ResourceManager.GetString("WB0076_CategoricalOneAnswerOptionsCountMoreThan200", resourceCulture);
             }
         }
         
@@ -690,6 +690,114 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         internal static string WB0077_QuestionHasInvalidVariableName {
             get {
                 return ResourceManager.GetString("WB0077_QuestionHasInvalidVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multimedia question can be interviewers only..
+        /// </summary>
+        internal static string WB0078_MultimediaQuestionIsInterviewersOnly {
+            get {
+                return ResourceManager.GetString("WB0078_MultimediaQuestionIsInterviewersOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multimedia question cannot have a validation expression..
+        /// </summary>
+        internal static string WB0079_MultimediaShouldNotHaveValidationExpression {
+            get {
+                return ResourceManager.GetString("WB0079_MultimediaShouldNotHaveValidationExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multimedia questions cannot be used in validation expression..
+        /// </summary>
+        internal static string WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression {
+            get {
+                return ResourceManager.GetString("WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multimedia questions cannot be used in group&apos;s condition expression..
+        /// </summary>
+        internal static string WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition {
+            get {
+                return ResourceManager.GetString("WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multimedia questions cannot be used in question&apos;s condition expression..
+        /// </summary>
+        internal static string WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition {
+            get {
+                return ResourceManager.GetString("WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question with current type can not be used as roster title..
+        /// </summary>
+        internal static string WB0083_QuestionCannotBeUsedAsRosterTitle {
+            get {
+                return ResourceManager.GetString("WB0083_QuestionCannotBeUsedAsRosterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options in child cascading question should reference only existing option in parent question..
+        /// </summary>
+        internal static string WB0084_CascadingOptionsShouldHaveParent {
+            get {
+                return ResourceManager.GetString("WB0084_CascadingOptionsShouldHaveParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question should have deeper or the same level as it&apos;s parent question..
+        /// </summary>
+        internal static string WB0085_CascadingQuestionWrongParentLevel {
+            get {
+                return ResourceManager.GetString("WB0085_CascadingQuestionWrongParentLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading question references missing or supported type question..
+        /// </summary>
+        internal static string WB0086_ParentCascadingQuestionShouldExist {
+            get {
+                return ResourceManager.GetString("WB0086_ParentCascadingQuestionShouldExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cicrular references in cascading questions not allowed..
+        /// </summary>
+        internal static string WB0087_CascadingQuestionHasCicularReference {
+            get {
+                return ResourceManager.GetString("WB0087_CascadingQuestionHasCicularReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading question should have less than 10.000 options..
+        /// </summary>
+        internal static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
+            get {
+                return ResourceManager.GetString("WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading question should have unique value and parent value options list..
+        /// </summary>
+        internal static string WB0089_CascadingQuestionOptionWithParentShouldBeUnique {
+            get {
+                return ResourceManager.GetString("WB0089_CascadingQuestionOptionWithParentShouldBeUnique", resourceCulture);
             }
         }
     }

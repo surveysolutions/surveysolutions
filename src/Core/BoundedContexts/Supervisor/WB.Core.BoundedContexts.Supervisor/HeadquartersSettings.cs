@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Supervisor
         public string QuestionnaireAssemblyEndpoint { get; set; }
         public string AccessToken { get; set; }
         public Uri InterviewsPushUrl { get; set; }
+        public Uri FilePushUrl { get; set; }
 
         public HeadquartersSettings(
             Uri loginServiceEndpointUrl,
@@ -21,7 +22,8 @@ namespace WB.Core.BoundedContexts.Supervisor
             string questionnaireAssemblyEndpoint,
             string accessToken,
             Uri interviewsPushUrl,
-            Uri questionnaireChangedFeedUrl)
+            Uri questionnaireChangedFeedUrl,
+            Uri filePushUrl)
         {
             this.LoginServiceEndpointUrl = loginServiceEndpointUrl;
             this.UserChangedFeedUrl = userChangedFeedUrl;
@@ -31,6 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.AccessToken = accessToken;
             this.InterviewsPushUrl = interviewsPushUrl;
             this.QuestionnaireChangedFeedUrl = questionnaireChangedFeedUrl;
+            this.FilePushUrl = filePushUrl;
         }
     }
 }

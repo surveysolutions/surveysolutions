@@ -1,0 +1,160 @@
+﻿@using System.Linq
+@using WB.UI.Designer.BootstrapSupport
+@model IEnumerable<Main.Core.Entities.SubEntities.Option>
+@{
+    ViewBag.Title = "Edit cascading options";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="~/UpdatedDesigner/vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <style type="text/css">
+        #uploadForm input {
+            display: inline-block;
+        }
+
+        #applyOptionsError {
+            display: none;
+        }
+
+        .table {
+            margin-top: 10px;
+        }
+
+        .table.table-bordered.table-hover.table-condensed tr > td {
+            word-break: break-all;
+        }
+    </style>
+    @Scripts.Render("~/simplepage")
+    <script type="text/javascript">
+        function close_window() {
+            if (confirm("Close Window?")) {
+                close();
+            }
+        }
+        function apply() {
+            $.post("@Url.Action("ApplyCascadingOptions", "Questionnaire")", function (response) {
+                if (response.IsSuccess) {
+                    close();
+                } else {
+                    $("body").scrollTop(0);
+                    $("#applyOptionsErrorContent").html(response.Error);
+                    $('#applyOptionsError').fadeIn();
+                    setTimeout(function () { $('#applyOptionsError').fadeOut(); }, 10000);
+                }
+            });
+        }
+
+        var ajustNavPanels = function () {
+            $("body").css("paddingTop", $("#topNav").outerHeight() + 3);
+            $("body").css("paddingBottom", $("#bottomNav").outerHeight() + 3);
+        }
+
+        $(window).resize(function () {
+            ajustNavPanels();
+        });
+
+        $(document).ready(function () {
+            ajustNavPanels();
+
+            setTimeout(function () { $('.alert.alert-danger').fadeOut(); }, 10000);
+        });
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("EditCascadingOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <nav id="topNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div id="uploadForm" class="navbar-form navbar-left">
+                    <input type="file" title="Import" accept=".csv" name="csvFile">
+                    <button class="btn btn-default" type="submit">Upload</button>
+                </div>
+                <div class="pull-right">
+                    <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">Export</a>
+                </div>
+            </div>
+        </nav>
+    }
+
+    <div id="content" class="container">
+        <div id="applyOptionsError" class="alert alert-danger">
+            <div id="applyOptionsErrorContent"></div>
+        </div>
+        @foreach (string key in Alerts.ALL.Except(new[] { Alerts.ATTENTION }))
+        {
+            if (TempData.ContainsKey(key))
+            {
+                <div class="alert alert-danger">
+                    @Html.Raw(@TempData[key])
+                </div>
+            }
+        }
+        @if (Model != null && Model.Any())
+        {
+            <table class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr class="active">
+                        <td>Value</td>
+                        <td>Title</td>
+                        <td>Parent value</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var option in Model)
+                    {
+                        <tr>
+                            <td>@option.Value</td>
+                            <td>@option.Title</td>
+                            <td>@option.ParentValue</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="active">
+                        <td>Value</td>
+                        <td>Title</td>
+                        <td>Parent value</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <em>Value number</em>
+                        </td>
+                        <td>
+                            <em>Option title text</em>
+                        </td>
+                        <td>
+                            <em>Parent value number</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="center">
+                            <text>No options. Choose .csv file</text>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <div class="container">
+            <a class="btn btn-success navbar-btn" href="javascript:apply();">Apply</a>
+            <a class="btn btn-link navbar-btn" href="@Url.Action("ResetCascadingOptions", "Questionnaire")">Cancel</a>
+            <a class="btn btn-link navbar-btn pull-right" href="javascript:close_window();">Close</a>
+        </div>
+    </nav>
+</body>
+</html>

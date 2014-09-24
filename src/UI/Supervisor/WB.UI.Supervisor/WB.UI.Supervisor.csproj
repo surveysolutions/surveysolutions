@@ -315,7 +315,6 @@
     <Compile Include="Code\Bundling\StyleImagePathBundle.cs" />
     <Compile Include="Code\Bundling\StyleRelativePathTransform.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HQSyncController.cs" />
     <Compile Include="Filters\LongWebsiteDirectoryPathFilter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -335,6 +334,7 @@
     <Content Include="Content\favicon.png" />
     <Content Include="Content\images\glyphicons.png" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\Ira.Supervisor.Web.config">
       <SubType>Designer</SubType>
@@ -346,9 +346,14 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\bootstrap.css.map" />
     <Content Include="Configuration\Dima.Supervisor.Web.config" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="parameters.xml" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -364,11 +369,6 @@
     </Content>
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQSync\Synchronization.cshtml" />
-    <Content Include="Views\Error\AccessDenied.cshtml" />
-    <Content Include="Views\Error\Forbidden.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
-    <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <Content Include="Views\ControlPanel\Headquarters.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
@@ -384,6 +384,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="Views\Survey\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
