@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
             controller = CreateQuestionnaireController();
             SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
 
-            stream = GenerateStreamFromString(@"1,Street 1,2");
+            stream = GenerateStreamFromString("Value,Title,Parent value" + Environment.NewLine + @"1,Street 1,2");
 
             stream.Position = 0;
             postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream && pf.FileName == "data.csv");
