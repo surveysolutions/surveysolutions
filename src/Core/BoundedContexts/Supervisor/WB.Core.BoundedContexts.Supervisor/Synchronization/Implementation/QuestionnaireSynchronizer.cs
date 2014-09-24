@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                             byte[] questionnaireAssembly = this.headquartersQuestionnaireReader.GetAssemblyByUri(new Uri(questionnaireAssemblyUrl)).Result;
 
-                            string questionnaireAssemblyInBase64 = Convert.ToBase64String(questionnaireAssembly);
+                            string questionnaireAssemblyInBase64 = questionnaireAssembly != null ? Convert.ToBase64String(questionnaireAssembly) : null;
 
                             this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
