@@ -138,6 +138,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
         }
 
+        public bool IsCascadingQuestion(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).CascadeFromQuestionId.HasValue;
+        }
+
         public string GetQuestionTitle(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).QuestionText;
@@ -151,6 +156,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetGroupTitle(Guid groupId)
         {
             return this.GetGroupOrThrow(groupId).Title;
+        }
+
+        public Guid? GetCascadingId(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
         }
 
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
@@ -184,6 +194,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Answers
                 .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
                 .AnswerText;
+        }
+
+        public string GetAnswerOptionParentValue(Guid questionId, decimal answerOptionValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return answer option title for question with id '{0}' because it's type {1} does not support answer options.",
+                    questionId, question.QuestionType));
+
+            return question
+                .Answers
+                .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
+                .ParentValue;
         }
 
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
