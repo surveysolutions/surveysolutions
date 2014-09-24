@@ -383,6 +383,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                             : (answerAsDecimal.HasValue && (decimal) option == answerAsDecimal));
                     var selectedAnswer = avalibleOptions.FirstOrDefault(option => isSelectedOption(option.Value));
                     answerLabel = selectedAnswer == null ? string.Empty : selectedAnswer.Label;
+                    var isCascade = questionDto.Settings == null
+                        ? false
+                        : questionDto.Settings.GetType().GetProperty("IsCascade").GetValue(questionDto.Settings, null) ?? false;
+                    var isFilteredCombobox = questionDto.Settings == null
+                        ? false
+                        : questionDto.Settings.GetType().GetProperty("IsFilteredCombobox").GetValue(questionDto.Settings, null)??false;
                     questionModel = new SingleQuestionModel()
                     {
                         options =
@@ -401,9 +407,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                             isLinked
                                 ? string.Join(", ", answersAsDecimalOnLinkedQuestion)
                                 : answerAsDecimal.ToString(),
-                        isFilteredCombobox = questionDto.Settings == null
-                                ? false
-                                : questionDto.Settings.GetType().GetProperty("IsFilteredCombobox").GetValue(questionDto.Settings, null)??false,
+                        isFilteredCombobox = isFilteredCombobox,
+                        isCascade = isCascade,
                         answer = answerLabel
                     };
                     break;
@@ -564,6 +569,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class SingleQuestionModel : CategoricalQuestionModel
     {
         public bool isFilteredCombobox;
+        public bool isCascade;
         public string selectedOption { get; set; }
     }
     public class MultiQuestionModel : CategoricalQuestionModel
