@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
@@ -267,22 +268,26 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public ViewResult EditOptions(HttpPostedFileBase csvFile)
         {
-            this.GetOptionsFromStream(csvFile);
+            var configuration = new CsvConfiguration { HasHeaderRecord = false, TrimFields = true, IgnoreQuotes = true,  };
+            this.GetOptionsFromStream(csvFile, configuration);
+
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
         [HttpPost]
         public ViewResult EditCascadingOptions(HttpPostedFileBase csvFile)
         {
-            this.GetOptionsFromStream(csvFile);
+            var configuration = new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = true };
+            this.GetOptionsFromStream(csvFile, configuration);
+
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
-        private void GetOptionsFromStream(HttpPostedFileBase csvFile)
+        private void GetOptionsFromStream(HttpPostedFileBase csvFile, CsvConfiguration configuration)
         {
             try
             {
-                this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream);
+                this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, configuration);
             }
             catch (Exception)
             {
@@ -369,25 +374,27 @@ namespace WB.UI.Designer.Controllers
             public string QuestionTitle { get; set; }
         }
 
-        private IEnumerable<Option> ExtractOptionsFromStream(Stream inputStream)
+        private IEnumerable<Option> ExtractOptionsFromStream(Stream inputStream, CsvConfiguration configuration)
         {
             var importedOptions = new List<Option>();
 
             var csvReader = new CsvReader(new StreamReader(inputStream));
-            csvReader.Configuration.HasHeaderRecord = false;
-            csvReader.Configuration.TrimFields = true;
-            csvReader.Configuration.IgnoreQuotes = true;
+            csvReader.Configuration.HasHeaderRecord = configuration.HasHeaderRecord;
+            csvReader.Configuration.TrimFields = configuration.TrimFields;
+            csvReader.Configuration.IgnoreQuotes = configuration.IgnoreQuotes;
             
             using (csvReader)
             {
                 while (csvReader.Read())
                 {
-                    string parentValue;
-                    if (!csvReader.TryGetField(2, out parentValue))
+                    if (csvReader.Configuration.HasHeaderRecord)
                     {
-                        parentValue = null;
+                        importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField<string>("Value"), csvReader.GetField<string>("Title"), csvReader.GetField<string>("Parent value")));
                     }
-                    importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField(0), csvReader.GetField(1), parentValue));
+                    else
+                    {
+                        importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField(0), csvReader.GetField(1)));    
+                    }
                 }
             }
 
