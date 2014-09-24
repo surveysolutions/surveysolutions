@@ -25,21 +25,19 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsQuestionLinked(Guid questionId);
 
-        bool IsCascadingQuestion(Guid questionId);
-
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
 
         string GetGroupTitle(Guid groupId);
 
-        Guid? GetCascadingId(Guid questionId);
+        Guid? GetCascadingQuestionParentId(Guid questionId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
-        string GetAnswerOptionParentValue(Guid questionId, decimal answerOptionValue);
+        string GetCascadingParentValue(Guid questionId, decimal answerOptionValue);
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 

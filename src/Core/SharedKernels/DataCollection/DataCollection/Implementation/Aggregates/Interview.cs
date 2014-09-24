@@ -3602,17 +3602,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
         {
-            if (questionnaire.IsCascadingQuestion(questionId))
+            Guid? cascadingId = questionnaire.GetCascadingQuestionParentId(questionId);
+
+            if (cascadingId.HasValue)
             {
-                string parentValue = questionnaire.GetAnswerOptionParentValue(questionId, value);
-                Guid? cascadingId = questionnaire.GetCascadingId(questionId);
+                string parentValue = questionnaire.GetCascadingParentValue(questionId, value);
                 IEnumerable<decimal> answers = questionnaire.GetAnswerOptionsAsValues(cascadingId.Value);
 
-                bool parentValueIsNotOneOfAvailable = !answers.Contains(Convert.ToDecimal(parentValue));
-                if (parentValueIsNotOneOfAvailable)
+                bool answerExistsInParent = !answers.Contains(Convert.ToDecimal(parentValue));
+                if (answerExistsInParent)
                     throw new InterviewException(string.Format(
-                        "For question {0} was provided selected value {1} as answer with parent value {2}. But only following values are allowed in Parent Question: {2}.",
-                        FormatQuestionForException(questionId, questionnaire), value, parentValue, JoinDecimalsWithComma(answers)));
+                        "For question {0} was provided selected value {1} as answer with parent value {2}, but this value not found in  Parent Question options",
+                        FormatQuestionForException(questionId, questionnaire), value, parentValue));
             }
         }
 
