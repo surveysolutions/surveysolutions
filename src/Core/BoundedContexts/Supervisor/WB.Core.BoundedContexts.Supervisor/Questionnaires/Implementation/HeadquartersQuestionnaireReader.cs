@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -29,6 +30,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Questionnaires.Implementation
                 httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-msdownload"));
 
                 HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                    return null;
+
                 byte[] result = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
 
                 return result;
