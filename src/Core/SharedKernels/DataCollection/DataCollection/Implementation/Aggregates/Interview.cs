@@ -2488,6 +2488,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
+            ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(questionId, selectedValue, questionnaire);
             if (applyStrongChecks)
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
@@ -3597,6 +3598,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "For question {0} was provided selected value {1} as answer. But only following values are allowed: {2}.",
                     FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues)));
+        }
+
+        private static void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
+        {
+            if (questionnaire.IsCascadingQuestion(questionId))
+            {
+                string parentValue = questionnaire.GetAnswerOptionParentValue(questionId, value);
+                Guid? cascadingId = questionnaire.GetCascadingId(questionId);
+                IEnumerable<decimal> answers = questionnaire.GetAnswerOptionsAsValues(cascadingId.Value);
+
+                bool parentValueIsNotOneOfAvailable = !answers.Contains(Convert.ToDecimal(parentValue));
+                if (parentValueIsNotOneOfAvailable)
+                    throw new InterviewException(string.Format(
+                        "For question {0} was provided selected value {1} as answer with parent value {2}. But only following values are allowed in Parent Question: {2}.",
+                        FormatQuestionForException(questionId, questionnaire), value, parentValue, JoinDecimalsWithComma(answers)));
+            }
         }
 
         private static void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
