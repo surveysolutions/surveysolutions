@@ -62,10 +62,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Accessors
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
         {
-            string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-            var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+            byte[] assemblyAsByteArray = this.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
 
-            return Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(pathToSaveAssembly));
+            return Convert.ToBase64String(assemblyAsByteArray);
+        }
+
+        public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
+        {
+            string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
+            string pathToAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
+
+            return this.fileSystemAccessor.ReadAllBytes(pathToAssembly);
         }
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)
