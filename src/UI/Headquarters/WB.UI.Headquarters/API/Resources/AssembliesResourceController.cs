@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.Resources
 {
