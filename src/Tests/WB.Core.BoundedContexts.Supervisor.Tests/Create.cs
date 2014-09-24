@@ -92,6 +92,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             Uri usersChangedFeedUri = null,
             Uri interviewsFeedUri = null,
             string questionnaireDetailsEndpoint = "",
+            string questionnaireAssemblyEndpoint = "",
             string accessToken = "",
             Uri interviewsPushUrl = null)
         {
@@ -99,6 +100,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 usersChangedFeedUri ?? new Uri("http://localhost/"),
                 interviewsFeedUri ?? new Uri("http://localhost/"),
                 questionnaireDetailsEndpoint,
+                questionnaireAssemblyEndpoint,
                 accessToken,
                 interviewsPushUrl ?? new Uri("http://localhost"), new Uri("http://localhost"));
         }

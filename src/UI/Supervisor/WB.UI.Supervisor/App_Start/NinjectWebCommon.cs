@@ -121,6 +121,7 @@ namespace WB.UI.Supervisor.App_Start
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.UserChangedFeed"]),
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsFeed"]),
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireDetailsEndpoint"]).ToString(),
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireAssemblyEndpoint"]).ToString(),
                 WebConfigurationManager.AppSettings["Headquarters.AccessToken"],
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]),
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireChangedFeed"]));

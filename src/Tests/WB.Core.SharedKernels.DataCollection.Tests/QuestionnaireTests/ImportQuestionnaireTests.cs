@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false);
+                questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false, null);
 
                 // assert
                 Assert.That(GetLastEvent<PlainQuestionnaireRegistered>(eventContext).AllowCensusMode, Is.EqualTo(false));
@@ -249,7 +249,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire();
 
             // act and assert
-            Assert.Throws<QuestionnaireException>(() => questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false));
+            Assert.Throws<QuestionnaireException>(() => questionnaire.RegisterPlainQuestionnaire(document.PublicKey, 3, false, null));
         }
 
         [Test]

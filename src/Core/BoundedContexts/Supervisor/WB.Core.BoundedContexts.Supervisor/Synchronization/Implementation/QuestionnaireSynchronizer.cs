@@ -74,19 +74,33 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                             if (this.IsQuestionnnaireAlreadyStoredLocally(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion))
                                 break;
+
                             string questionnaireDetailsUrl = this.settings.QuestionnaireDetailsEndpoint
                                 .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
                                 .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
-                            this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL",
-                                questionnaireDetailsUrl));
-                            QuestionnaireDocument questionnaireDocument =
-                                this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
+
+                            string questionnaireAssemblyUrl = this.settings.QuestionnaireAssemblyEndpoint
+                                .Replace("{id}", questionnaireFeedEntry.QuestionnaireId.FormatGuid())
+                                .Replace("{version}", questionnaireFeedEntry.QuestionnaireVersion.ToString());
+
+                            this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire using {0} URL", questionnaireDetailsUrl));
+
+                            QuestionnaireDocument questionnaireDocument = this.headquartersQuestionnaireReader.GetQuestionnaireByUri(new Uri(questionnaireDetailsUrl)).Result;
+
+                            this.headquartersPullContext.PushMessage(string.Format("Loading questionnaire assembly using {0} URL", questionnaireAssemblyUrl));
+
+                            byte[] questionnaireAssembly = this.headquartersQuestionnaireReader.GetAssemblyByUri(new Uri(questionnaireAssemblyUrl)).Result;
+
+                            string questionnaireAssemblyInBase64 = Convert.ToBase64String(questionnaireAssembly);
 
                             this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion, questionnaireDocument);
+
                             this.executeCommand(new RegisterPlainQuestionnaire(questionnaireFeedEntry.QuestionnaireId,
                                 questionnaireFeedEntry.QuestionnaireVersion,
-                                questionnaireFeedEntry.EntryType == QuestionnaireEntryType.QuestionnaireCreatedInCensusMode));
+                                questionnaireFeedEntry.EntryType == QuestionnaireEntryType.QuestionnaireCreatedInCensusMode,
+                                questionnaireAssemblyInBase64));
+
                             break;
                     }
                     questionnaireFeedEntry.Processed = true;
