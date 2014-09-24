@@ -1,4 +1,7 @@
 ﻿<form role="form" id="question-editor" name="questionForm" unsaved-warning-form>
+    <div id="show-reload-details-promt" class="ng-cloak" ng-show="activeQuestion.shouldUserSeeReloadDetailsPromt">
+        <div class="inner"><a ng-click="loadQuestion();" href="javascript:void(0);">Reload</a> details of this question, please</div>
+    </div>
     <div class="form-holder">
 
         <div class="breadcrumbs-container"><div data-item-breadcrumbs data-crumbs="activeQuestion.breadcrumbs"></div></div>
@@ -184,12 +187,12 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <div ng-if="!activeQuestion.isFilteredCombobox || !activeQuestion.isCascadingCombobox" class="form-group"
                          ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
                 </div>
-                
+
                 <div>
                     <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked"
                          ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}"
@@ -228,7 +231,7 @@
                 </div>
                 <p class="help-block ng-cloak" ng-show="questionForm.linkedToQuestion.$error.required">
                     You must bind this question
-                </p
+                </p>
             </div>
         </script>
 

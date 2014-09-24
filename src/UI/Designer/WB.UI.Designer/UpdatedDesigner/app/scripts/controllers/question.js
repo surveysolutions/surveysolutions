@@ -52,7 +52,10 @@
                     $scope.setLinkSource(result.linkedToQuestionId);
                     $scope.setCascadeSource(result.cascadeFromQuestionId);
                     
+                    $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
+
                     $scope.questionForm.$setPristine();
+
                 };
 
                 $scope.loadQuestion = function () {
@@ -178,11 +181,15 @@
                 };
 
                 var openOptionsEditor = function () {
+                    $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
+
                     window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
                       "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
                 };
 
                 var openCascadeOptionsEditor = function () {
+                    $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
+
                     window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
                       "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
                 };
