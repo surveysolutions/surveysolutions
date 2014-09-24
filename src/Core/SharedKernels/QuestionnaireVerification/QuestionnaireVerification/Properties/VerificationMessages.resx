@@ -357,4 +357,10 @@
   <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
     <value>Cicrular references in cascading questions not allowed.</value>
   </data>
+  <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+    <value>Cascading question should have less than 10.000 options.</value>
+  </data>
+  <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+    <value>Cascading question should have unique value and parent value options list.</value>
+  </data>
 </root>

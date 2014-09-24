@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="CascadingDropdownTests\parent_cascading_question_should_exist.cs" />
+    <Compile Include="CascadingDropdownTests\when_cascading_question_has_10001_options.cs" />
+    <Compile Include="CascadingDropdownTests\when_cascading_question_have_repeating_pair_of_Value_and_ParentValue.cs" />
     <Compile Include="CascadingDropdownTests\when_cascading_question_references_parent_that_is_depper_that_it.cs" />
     <Compile Include="CascadingDropdownTests\when_cascading_references_makes_circular_reference.cs" />
     <Compile Include="CascadingDropdownTests\when_child_question_has_option_values_that_doesnt_exit_in_parent_question.cs" />
