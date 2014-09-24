@@ -23,7 +23,11 @@
             display: none;
         }
 
-        .table.table-striped.table-hover.table-condensed tr > td {
+        .table {
+            margin-top: 10px;
+        }
+
+        .table.table-bordered.table-hover.table-condensed tr > td {
             word-break: break-all;
         }
     </style>
@@ -94,9 +98,9 @@
         }
         @if (Model != null && Model.Any())
         {
-            <table class="table table-striped table-hover table-condensed">
+            <table class="table table-bordered table-hover table-condensed">
                 <thead>
-                    <tr>
+                    <tr class="active">
                         <td>Value</td>
                         <td>Title</td>
                         <td>Parent value</td>
@@ -116,7 +120,22 @@
         }
         else
         {
-            <text>No options. Choose .csv file</text>
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="active">
+                        <td>Value</td>
+                        <td>Title</td>
+                        <td>Parent value</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
         }
     </div>
     <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
