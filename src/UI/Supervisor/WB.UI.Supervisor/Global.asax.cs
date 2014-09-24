@@ -11,6 +11,7 @@ using NConfig;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Filters;
 
@@ -42,6 +43,7 @@ namespace WB.UI.Supervisor
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new LongWebsiteDirectoryPathFilter());
         }
