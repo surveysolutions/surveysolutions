@@ -36,17 +36,33 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer> {
                             new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "2" },
-                            new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 1", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 1", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 2", AnswerValue = "3", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                        }
+                    },
+                    new SingleQuestion
+                    {
+                        PublicKey = childCascadedComboboxId,
+                        QuestionType = QuestionType.SingleOption,
+                        StataExportCaption = "var2",
+                        CascadeFromQuestionId = parentSingleOptionQuestionId,
+                        Answers = new List<Answer> {
+                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
+                            new Answer { AnswerText = "child 1", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 1", AnswerValue = "3", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 2", AnswerValue = "4", PublicKey = Guid.NewGuid(), ParentValue = "2" },
                         }
                     }
                 );
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => verificationErrors = verifier.Verify(questionnaire);
+        Because of = () => verificationErrors = verifier.Verify(questionnaire).ToList();
 
         It should_return_WB0089_error = () => verificationErrors.First().Code.ShouldEqual("WB0089");
+
+        It should_return_one_error = () => verificationErrors.Count().ShouldEqual(1);
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;
