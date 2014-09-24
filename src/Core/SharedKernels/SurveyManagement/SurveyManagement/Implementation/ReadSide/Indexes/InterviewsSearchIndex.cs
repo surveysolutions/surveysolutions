@@ -16,6 +16,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                     interview.AnswersToFeaturedQuestions,
                                     interview.TeamLeadId,
                                     interview.ResponsibleId,
+                                    interview.ResponsibleName,
+                                    interview.HasErrors,
                                     interview.Status,
                                     interview.QuestionnaireVersion,
                                     interview.UpdateDate,
