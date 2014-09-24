@@ -191,7 +191,9 @@
                 </div>
                 
                 <div>
-                    <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked" class="form-group" ng-include="'CascadingComboBox-Template.html'" />
+                    <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked"
+                         ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}"
+                         class="form-group" ng-include="'CascadingComboBox-Template.html'" />
                 </div>
         </script>
 
@@ -259,8 +261,8 @@
                         </li>
                     </ul>
                 </div>
-                <p class="help-block ng-cloak" ng-show="questionForm.cascadeFromQuestion.$error.required">
-                    You must bind this question
+                <p class="help-block ng-cloak" ng-show="questionForm.cascadeFromQuestionId.$error.required">
+                    You must select the parent question
                 </p>
             </div>
         </script>
