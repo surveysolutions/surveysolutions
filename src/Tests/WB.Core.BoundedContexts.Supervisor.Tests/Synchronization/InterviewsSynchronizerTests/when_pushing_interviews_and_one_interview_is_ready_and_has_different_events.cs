@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 Create.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("77777777777777777777777777777777"), eventSourceId: interviewId, eventSequence: 7),
                 Create.CommittedEvent(origin: "hq-sync", eventIdentifier: Guid.Parse("88888888888888888888888888888888"), eventSourceId: interviewId, eventSequence: 8),
                 Create.CommittedEvent(origin: null, eventIdentifier: Guid.Parse("99999999999999999999999999999999"), eventSourceId: interviewId, eventSequence: 9),
-                Create.CommittedEvent(origin: "sync-meta", eventIdentifier: Guid.Parse("19999999999999999999999999999999"), eventSourceId: interviewId, eventSequence: 10)
+                Create.CommittedEvent(origin: "capi-sync", eventIdentifier: Guid.Parse("19999999999999999999999999999999"), eventSourceId: interviewId, eventSequence: 10)
             });
 
             eventsBeforeLastPush = new[]
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 Guid.Parse("88888888888888888888888888888888"),
             };
 
-            synchronizationMetaEvents = new[]
+            capiSynchronizationEvents = new[]
             {
                 Guid.Parse("19999999999999999999999999999999")
             };
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             events.Select(e => e.EventIdentifier).ShouldNotContain(hqSynchronizationEvents);
 
         It should_not_push_events_produced_by_synchronization_meta = () =>
-            events.Select(e => e.EventIdentifier).ShouldNotContain(synchronizationMetaEvents);
+            events.Select(e => e.EventIdentifier).ShouldNotContain(capiSynchronizationEvents);
 
         It should_push_only_events_with_empty_origin_after_last_push = () =>
             events.Select(e => e.EventIdentifier).ShouldContainOnly(eventsWithEmptyOriginAfterLastPush);
@@ -139,6 +139,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         private static Guid[] pushEvents;
         private static Guid[] hqSynchronizationEvents;
         private static Guid[] eventsWithEmptyOriginAfterLastPush;
-        private static Guid[] synchronizationMetaEvents;
+        private static Guid[] capiSynchronizationEvents;
     }
 }
