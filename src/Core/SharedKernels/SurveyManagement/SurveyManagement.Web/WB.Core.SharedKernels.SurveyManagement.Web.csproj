@@ -130,6 +130,7 @@
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />

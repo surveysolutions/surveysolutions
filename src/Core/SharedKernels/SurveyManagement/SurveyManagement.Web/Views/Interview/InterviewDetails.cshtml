@@ -14,31 +14,32 @@
 {
     @Scripts.Render("~/js/interview-general", "~/js/interview-details")
     <script type="text/javascript">
-        var urlReferrer = null;
-        @if (Request.UrlReferrer != null && Request.UrlReferrer.OriginalString.Contains("Interviews") && Request.UrlReferrer.OriginalString.Contains("Survey"))
+    var urlReferrer = null;
+    @if (Request.UrlReferrer != null && Request.UrlReferrer.OriginalString.Contains("Interviews") && Request.UrlReferrer.OriginalString.Contains("Survey"))
         {
             <text>urlReferrer = '@Html.Raw(Request.UrlReferrer)';</text>
         }
 
-        var settings = new Supervisor.VM.InterviewDetailsSettings();
-        settings.UserName = '@User.Identity.Name';
-        settings.UrlReferrer = urlReferrer;
+    var settings = new Supervisor.VM.InterviewDetailsSettings();
+    settings.UserName = '@User.Identity.Name';
+    settings.UrlReferrer = urlReferrer;
 
-        settings.Interview.InterviewId = '@Model.InterviewId';
-        settings.Interview.CurrentGroupId = '@Model.CurrentGroupId';
-        settings.Interview.CurrentPropagationKeyId = '@Model.CurrentPropagationKeyId';
+    settings.Interview.InterviewId = '@Model.InterviewId';
+    settings.Interview.CurrentGroupId = '@Model.CurrentGroupId';
+    settings.Interview.CurrentPropagationKeyId = '@Model.CurrentPropagationKeyId';
 
-        settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
-        settings.Urls.InterviewDetails = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewDetails" })';
-        settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"))';
+    settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
+    settings.Urls.InterviewDetails = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewDetails" })';
+    settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"))';
         settings.Urls.ChangeStateHistory = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "ChangeStateHistory" })';
-        settings.Urls.InterviewFile = '@Url.Action("InterviewFile", "Interview")';
 
-        $(function() {
-            window.model = new Supervisor.VM.InterviewDetails(settings);
-            ko.applyBindings(model);
-            model.load();
-        });
+    settings.Urls.InterviewFile = '@Url.RouteUrl("Default", new { httproute = "", controller = "Resource", action = "InterviewFile" })';
+
+    $(function () {
+        window.model = new Supervisor.VM.InterviewDetails(settings);
+        ko.applyBindings(model);
+        model.load();
+    });
     </script>
 
     <script type="text/html" id="SingleOptionReadOnly">
