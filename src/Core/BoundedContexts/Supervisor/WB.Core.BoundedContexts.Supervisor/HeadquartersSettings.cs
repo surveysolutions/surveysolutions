@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Supervisor
         public Uri InterviewsFeedUrl { get; set; }
         public Uri QuestionnaireChangedFeedUrl { get; set; }
         public string QuestionnaireDetailsEndpoint { get; set; }
+        public string QuestionnaireAssemblyEndpoint { get; set; }
         public string AccessToken { get; set; }
         public Uri InterviewsPushUrl { get; set; }
 
@@ -17,6 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             Uri userChangedFeedUrl,
             Uri interviewsFeedUrl,
             string questionnaireDetailsEndpoint,
+            string questionnaireAssemblyEndpoint,
             string accessToken,
             Uri interviewsPushUrl,
             Uri questionnaireChangedFeedUrl)
@@ -25,6 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             this.UserChangedFeedUrl = userChangedFeedUrl;
             this.InterviewsFeedUrl = interviewsFeedUrl;
             this.QuestionnaireDetailsEndpoint = questionnaireDetailsEndpoint;
+            this.QuestionnaireAssemblyEndpoint = questionnaireAssemblyEndpoint;
             this.AccessToken = accessToken;
             this.InterviewsPushUrl = interviewsPushUrl;
             this.QuestionnaireChangedFeedUrl = questionnaireChangedFeedUrl;

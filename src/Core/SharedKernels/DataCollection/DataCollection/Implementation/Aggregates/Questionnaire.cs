@@ -69,10 +69,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ImportFromQuestionnaireDocument(source);
         }
 
-        public Questionnaire(Guid id, long version, bool allowCensusMode)
+        public Questionnaire(Guid id, long version, bool allowCensusMode, string supportingAssembly)
             : base(id)
         {
-            this.RegisterPlainQuestionnaire(id, version, allowCensusMode);
+            this.RegisterPlainQuestionnaire(id, version, allowCensusMode, supportingAssembly);
         }
 
         public IQuestionnaire GetQuestionnaire()
@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new QuestionnaireDeleted() { QuestionnaireVersion = questionnaireVersion });
         }
 
-        public void RegisterPlainQuestionnaire(Guid id, long version, bool allowCensusMode)
+        public void RegisterPlainQuestionnaire(Guid id, long version, bool allowCensusMode, string supportingAssembly)
         {
             QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
@@ -150,6 +150,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.EventSourceId.FormatGuid(), version));
 
             this.ApplyEvent(new PlainQuestionnaireRegistered(version, allowCensusMode));
+
+            if (supportingAssembly != null && !string.IsNullOrWhiteSpace(supportingAssembly))
+            {
+                this.ApplyEvent(new QuestionnaireAssemblyImported { AssemblySourceInBase64 = supportingAssembly, Version = version });
+            }
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
