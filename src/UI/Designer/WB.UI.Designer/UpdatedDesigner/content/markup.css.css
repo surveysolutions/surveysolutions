@@ -7656,6 +7656,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   text-align: center;
   border-radius: 4px;
 }
+#show-reload-details-promt .inner a {
+  text-decoration: underline;
+}
 #verify-popover {
   display: none;
 }
