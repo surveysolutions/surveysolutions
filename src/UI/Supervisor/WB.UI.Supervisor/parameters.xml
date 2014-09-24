@@ -92,4 +92,10 @@
       scope="\\web.config$" 
       match="//system.serviceModel/client/endpoint/@address" />
   </parameter>
+  <parameter name="Show control panel"
+     defaultValue="false">
+  <parameterEntry kind="XmlFile" 
+    scope="\\web.config$" 
+    match="/configuration/appSettings/add[@key='IsDevelopmentEnvironment']/@value" />
+  </parameter>
 </parameters>

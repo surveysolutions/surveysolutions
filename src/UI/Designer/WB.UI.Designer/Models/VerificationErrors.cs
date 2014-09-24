@@ -8,5 +8,6 @@
         }
 
         public VerificationError[] Errors { get; set; }
+        public int ErrorsCount { get; set; }
     }
 }

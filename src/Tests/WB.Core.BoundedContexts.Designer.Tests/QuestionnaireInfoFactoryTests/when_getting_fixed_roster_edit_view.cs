@@ -78,7 +78,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
             result.NumericIntegerTitles.ElementAt(1).Id.ShouldContainOnly(q4Id.FormatGuid());
 
         It should_return_integer_questions_in_group_with_index_2_with_ids_contains_only_q7Id = () =>
-          result.NumericIntegerTitles.ElementAt(2).Id.ShouldContainOnly(q7Id.FormatGuid());
+            result.NumericIntegerTitles.ElementAt(2).Id.ShouldContainOnly(q7Id.FormatGuid());
+
+        It should_list_of_roster_title_do_not_countain_multiomedia_question_with_id_q8Id = () =>
+            result.NumericIntegerTitles.ShouldEachConformTo(q => q.Id != q8Id.FormatGuid());
 
         It should_return_grouped_list_of_integer_questions_with_two_pair = () =>
             result.NumericIntegerQuestions.Count.ShouldEqual(4);

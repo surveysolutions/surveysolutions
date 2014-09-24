@@ -8,9 +8,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
     public interface IDataExportService : IReadSideRepositoryCleaner
     {
         string GetFilePathToExportedCompressedData(Guid questionnaireId, long version);
+        string GetFilePathToExportedBinaryData(Guid questionnaireId, long version);
         void AddExportedDataByInterview(InterviewDataExportView interviewDataExportView);
         void AddInterviewActions(Guid questionnaireId, long questionnaireVersion, IEnumerable<InterviewActionExportView> actions);
-        void CreateExportedDataStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure);
+        void CreateExportStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure);
         void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion);
     }
 }

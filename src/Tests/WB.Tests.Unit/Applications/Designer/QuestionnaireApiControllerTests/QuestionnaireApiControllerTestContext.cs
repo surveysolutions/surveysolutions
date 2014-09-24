@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
         }
         internal static VerificationError[] CreateVerificationErrors()
         {
-            return new VerificationError[2]
+            return new VerificationError[3]
             {
                 new VerificationError
                 {
@@ -118,6 +118,21 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                             Type = QuestionnaireVerificationReferenceType.Question,
                             ItemId = Guid.NewGuid().FormatGuid(),
                             Title = "aaaaaaaaaaaaaaaaaaaaaa"
+                        }
+                    }
+                }
+                ,
+                new VerificationError
+                {
+                    Code = "ccc",
+                    Message = "ccccc",
+                    References = new List<VerificationReference>
+                    {
+                        new VerificationReference
+                        {
+                            Type = QuestionnaireVerificationReferenceType.Question,
+                            ItemId = Guid.NewGuid().FormatGuid(),
+                            Title = "ccccccccccccccccc"
                         }
                     }
                 }

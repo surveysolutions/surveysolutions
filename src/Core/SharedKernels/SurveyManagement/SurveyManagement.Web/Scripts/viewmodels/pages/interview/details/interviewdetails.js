@@ -18,6 +18,10 @@ Supervisor.VM.InterviewDetails = function (settings) {
     self.closeDetails = function() {
         $('body').removeClass('details-visible');
     };
+    self.getImageUrl = function(fileName) {
+        return settings.Urls.InterviewFile + "?interviewId=" + settings.Interview.InterviewId + "&fileName=" + fileName;
+    };
+
     self.showDetails = function(question, event) {
         event.stopPropagation();
         if (_.isNull(self.currentQuestion()) == false &&

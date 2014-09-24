@@ -13,6 +13,7 @@ using Main.Core.View.User;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Exceptions;
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly Func<string, string, bool> validateUserCredentials;
         private readonly Func<string, string, bool> checkIfUserIsInRole;
         private readonly ISupportedVersionProvider versionProvider;
+        private readonly IPlainInterviewFileStorage plainFileRepository;
 
         private string CapiFileName = "wbcapi.apk";
 
@@ -36,13 +38,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public SyncController(ISyncManager syncManager,
             ILogger logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory,
-            ISupportedVersionProvider versionProvider)
-            : this(syncManager, logger, viewFactory, versionProvider, Membership.ValidateUser, Roles.IsUserInRole) { }
+            ISupportedVersionProvider versionProvider, IPlainInterviewFileStorage plainFileRepository)
+            : this(syncManager, logger, viewFactory, versionProvider, Membership.ValidateUser, Roles.IsUserInRole, plainFileRepository) { }
 
-        public SyncController(ISyncManager syncManager, ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory, ISupportedVersionProvider versionProvider, Func<string, string, bool> validateUserCredentials, Func<string, string, bool> checkIfUserIsInRole)
+        public SyncController(ISyncManager syncManager, ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory,
+            ISupportedVersionProvider versionProvider, Func<string, string, bool> validateUserCredentials,
+            Func<string, string, bool> checkIfUserIsInRole, IPlainInterviewFileStorage plainFileRepository)
         {
             this.validateUserCredentials = validateUserCredentials;
             this.checkIfUserIsInRole = checkIfUserIsInRole;
+            this.plainFileRepository = plainFileRepository;
             this.versionProvider = versionProvider;
             this.syncManager = syncManager;
             this.logger = logger;
@@ -246,6 +251,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
 
             return result;
+        }
+         //In case of error of type missing or casting error we send correct response.
+        [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        public ActionResult PostFile(string login, string password, Guid interviewId)
+        {
+            UserView user = this.GetUserByNameAndPassword();
+            if (user == null)
+            {
+                return this.Json(false, JsonRequestBehavior.AllowGet);
+            }
+            try
+            {
+                if (this.Request.Files==null || this.Request.Files.Count == 0 || this.Request.Files[0] == null)
+                {
+                    return this.Json(false, JsonRequestBehavior.AllowGet);
+                }
+                using (var memoryStream = new MemoryStream())
+                {
+                    this.Request.Files[0].InputStream.CopyTo(memoryStream);
+                    var data = memoryStream.ToArray();
+                    plainFileRepository.StoreInterviewBinaryData(interviewId, this.Request.Files[0].FileName, data);
+                }
+                return this.Json(true, JsonRequestBehavior.AllowGet);
+            }
+             catch (Exception ex)
+             {
+                 this.logger.Fatal("Error on Sync.", ex);
+                 this.logger.Fatal("Exception message: " + ex.Message);
+                 this.logger.Fatal("Stack: " + ex.StackTrace);
+
+                 return this.Json(false, JsonRequestBehavior.AllowGet);
+             }
         }
 
         //In case of error of type missing or casting error we send correct response.

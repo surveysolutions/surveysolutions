@@ -26,7 +26,7 @@
                     $scope.verificationStatus.errors = [];
                     verificationService.verify($state.params.questionnaireId).success(function (result) {
                         $scope.verificationStatus.errors = result.errors;
-                        $scope.verificationStatus.errorsCount = result.errors.length;
+                        $scope.verificationStatus.errorsCount = result.errorsCount;
                         $scope.verificationStatus.time = new Date();
 
                         var verificationModal = $('#verification-modal');
@@ -58,7 +58,8 @@
                     TextList: 'icon-textlist',
                     QRBarcode: 'icon-qrbarcode',
                     Text: 'icon-text',
-                    SingleOption: 'icon-singleoption'
+                    SingleOption: 'icon-singleoption',
+                    Multimedia: 'icon-photo'
                 };
 
                 $scope.chapters = [];

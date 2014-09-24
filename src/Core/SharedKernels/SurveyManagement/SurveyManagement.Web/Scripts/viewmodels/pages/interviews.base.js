@@ -13,6 +13,7 @@
     self.SelectedTemplate = ko.observable('');
     self.SelectedResponsible = ko.observable('');
     self.SelectedStatus = ko.observable('');
+    self.SearchBy = ko.observable('');
     
     self.GetFilterMethod = function () {
 
@@ -24,7 +25,8 @@
         self.Url.query['templateVersion'] = selectedTemplate.version;
         self.Url.query['status'] = self.SelectedStatus() || "";
         self.Url.query['interviewerId'] = self.SelectedResponsible() || "";
-
+        self.Url.query['searchBy'] = self.SearchBy() || "";
+        
         if (Modernizr.history) {
             window.history.pushState({}, "Interviews", self.Url.toString());
         }
@@ -33,7 +35,8 @@
             TemplateId: selectedTemplate.templateId,
             TemplateVersion: selectedTemplate.version,
             ResponsibleId: self.SelectedResponsible,
-            Status: self.SelectedStatus
+            Status: self.SelectedStatus,
+            SearchBy: self.SearchBy
         };
     };
 
@@ -41,15 +44,18 @@
         self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
         self.SelectedStatus(self.QueryString['status']);
         self.SelectedResponsible(self.QueryString['interviewerId']);
+        self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
 
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
         self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
         self.Url.query['status'] = self.QueryString['status'] || "";
         self.Url.query['interviewerId'] = self.QueryString['interviewerId'] || "";
+        self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
 
         self.SelectedTemplate.subscribe(self.filter);
         self.SelectedResponsible.subscribe(self.filter);
         self.SelectedStatus.subscribe(self.filter);
+        self.SearchBy.subscribe(self.filter);
 
         self.search();
     };

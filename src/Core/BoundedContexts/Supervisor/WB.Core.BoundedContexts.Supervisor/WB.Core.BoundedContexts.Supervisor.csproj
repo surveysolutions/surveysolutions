@@ -97,7 +97,6 @@
     <Compile Include="Synchronization\HeadquartersSynchronizationContext.cs" />
     <Compile Include="Synchronization\ILocalFeedStorage.cs" />
     <Compile Include="Synchronization\ILocalUserFeedProcessor.cs" />
-    <Compile Include="Synchronization\Implementation\Constants.cs" />
     <Compile Include="Synchronization\Implementation\HeadquartersEntityReader.cs" />
     <Compile Include="Synchronization\Implementation\InterviewsSynchronizer.cs" />
     <Compile Include="Synchronization\Implementation\LocalFeedStorage.cs" />

@@ -72,6 +72,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\AnswerNumericRealQuestionCommand.cs">
       <Link>Commands\Interview\AnswerNumericRealQuestionCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\AnswerPictureQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerPictureQuestionCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Commands\Interview\AnswerQRBarcodeQuestionCommand.cs">
       <Link>Commands\Interview\AnswerQRBarcodeQuestionCommand.cs</Link>
     </Compile>
@@ -390,6 +393,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\NumericRealQuestionAnswered.cs">
       <Link>Events\Interview\NumericRealQuestionAnswered.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\PictureQuestionAnswered.cs">
+      <Link>Events\Interview\PictureQuestionAnswered.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QRBarcodeQuestionAnswered.cs">
       <Link>Events\Interview\QRBarcodeQuestionAnswered.cs</Link>
     </Compile>
@@ -543,6 +549,12 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\DomainQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\DomainQuestionnaireRepository.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\InterviewSynchronizationFileStorage.cs">
+      <Link>Implementation\Repositories\InterviewSynchronizationFileStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainInterviewFileStorage.cs">
+      <Link>Implementation\Repositories\PlainInterviewFileStorage.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Repositories\PlainQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\PlainQuestionnaireRepository.cs</Link>
     </Compile>
@@ -560,6 +572,12 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ReadSide\VersionedReadSideRepositoryWriterExtensions.cs">
       <Link>ReadSide\VersionedReadSideRepositoryWriterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IInterviewSynchronizationFileStorage.cs">
+      <Link>Repositories\IInterviewSynchronizationFileStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IPlainInterviewFileStorage.cs">
+      <Link>Repositories\IPlainInterviewFileStorage.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Repositories\IPlainQuestionnaireRepository.cs">
       <Link>Repositories\IPlainQuestionnaireRepository.cs</Link>
@@ -590,6 +608,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\ValueObjects\ValueVector.cs">
       <Link>ValueObjects\ValueVector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\BinaryData\InterviewBinaryDataDescriptor.cs">
+      <Link>Views\BinaryData\InterviewBinaryDataDescriptor.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Views\Interview\InterviewTextListAnswer.cs">
       <Link>Views\Interview\InterviewTextListAnswer.cs</Link>

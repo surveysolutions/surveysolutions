@@ -54,6 +54,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult LoginToDesigner(LogOnModel model)
         {
             if (this.ModelState.IsValid)

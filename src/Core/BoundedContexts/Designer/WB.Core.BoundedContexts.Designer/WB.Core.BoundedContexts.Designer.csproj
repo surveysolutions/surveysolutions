@@ -132,11 +132,13 @@
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\AddGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\CloneGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\UpdateGpsCoordinatesQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\Mulimedia\UpdateMultimediaQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\AddMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\CloneMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\UpdateMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\AddSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\CloneSingleOptionQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateCascadingComboboxOptionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateFilteredComboboxOptionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\TextList\CloneTextListQuestionCommand.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\IDynamicCompiler.cs" />
+    <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\InterviewCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
     <Compile Include="Events\Users\AccountDeleted.cs" />
@@ -285,6 +288,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Roster.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ExceptionMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\IJsonExportService.cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
@@ -328,6 +336,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GeoLocationDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GroupAndRosterDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\IQuestionDetailsViewMapper.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultimediaDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultiOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\NumericDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QrBarcodeDetailsView.cs" />
@@ -490,16 +499,18 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
+  <ItemGroup />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Roster.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ExceptionMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

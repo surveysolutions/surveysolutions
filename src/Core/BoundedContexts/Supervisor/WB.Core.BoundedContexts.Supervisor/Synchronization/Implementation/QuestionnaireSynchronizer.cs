@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -172,9 +173,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         "Failed to delete one or more interviews which were created from questionnaire {0} version {1}.",
                         id.FormatGuid(), version),
                     interviewDeletionErrors);
+
             this.executeCommand(new DeleteQuestionnaire(id, version));
             this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(id, version);
         }
+
         private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)
         {
             QuestionnaireDocument localQuestionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);

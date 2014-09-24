@@ -141,6 +141,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SampleBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
@@ -157,6 +158,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult PanelBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;

@@ -59,7 +59,7 @@ namespace WB.UI.Capi.Implementations.Activities
             this.ActionBar.SetCustomView(Resource.Layout.InterviewActionBar);
 
             var txtTitle = (TextView)this.ActionBar.CustomView.FindViewById(Resource.Id.txtTitle);
-            txtTitle.Text = this.Model.Title;
+            txtTitle.Text = CreateScreenTitle();
 
             var imgProgress = (ImageView)this.ActionBar.CustomView.FindViewById(Resource.Id.imgAnswerProgress);
 

@@ -6,6 +6,7 @@ using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Newtonsoft.Json.Linq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -19,25 +20,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
             get { return ServiceLocator.Current.GetInstance<IGlobalInfoProvider>(); }
         }
 
-        public ICommand TransformCommnadIfNeeded(string type, ICommand command)
+        public ICommand TransformCommnadIfNeeded(ICommand command)
         {
-            switch (type)
-            {
-                case "CreateInterviewCommand":
-                    command = this.GetCreateInterviewCommand((CreateInterviewControllerCommand)command);
-                    break;
-                case "AnswerDateTimeQuestionCommand":
-                case "AnswerMultipleOptionsQuestionCommand":
-                case "AnswerNumericRealQuestionCommand":
-                    break;
-                case "AnswerNumericIntegerQuestionCommand":
-                case "AnswerSingleOptionQuestionCommand":
-                case "AnswerTextQuestionCommand":
-                case "AnswerGeoLocationQuestionCommand":
-                case "AssignInterviewerCommand":
-                case "DeleteInterviewCommand":
-                    break;
-            }
+            TypeSwitch.Do(
+                command,
+                TypeSwitch.Case<CreateInterviewControllerCommand>(cmd => { command = this.GetCreateInterviewCommand(cmd); }));
+
             var interviewCommand = command as InterviewCommand;
             if (interviewCommand != null)
             {

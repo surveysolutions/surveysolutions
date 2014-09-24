@@ -211,11 +211,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\datepicker3.css" />
     <Content Include="Content\img\favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -233,11 +234,16 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\bootstrap.css.map" />
     <Content Include="Configuration\Dima.Headquarters.Web.config" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ko.datepicker.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Views\HQ\InterviewsChart.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="parameters.xml" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\jqPlot\changes.txt" />
@@ -441,15 +447,12 @@
     <Compile Include="Code\IdentityManager.cs" />
     <Compile Include="Code\IIdentityManager.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
-    <Compile Include="Code\Security\ITokenVerifier.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
-    <Compile Include="API\Filters\TokenValidationAuthorizationFilter.cs" />
     <Compile Include="API\Feeds\Constants.cs" />
     <Compile Include="API\Feeds\InterviewsFeedController.cs" />
     <Compile Include="API\Feeds\PagingExtensions.cs" />
     <Compile Include="API\Feeds\SyndicationFeedExtensions.cs" />
     <Compile Include="API\Feeds\UsersFeedController.cs" />
-    <Compile Include="API\Attributes\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="API\Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="API\Formatters\JsonNetFormatter.cs" />
     <Compile Include="API\Formatters\SyndicationFeedFormatter.cs" />
@@ -472,7 +475,6 @@
     <Compile Include="API\SyncController.cs" />
     <Compile Include="Controllers\SupervisorController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -492,7 +494,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\User\CreateHeadquarters.cshtml" />
     <None Include="Service References\PublicService\PublicService.wsdl" />
     <None Include="Service References\PublicService\PublicService.xsd">
       <SubType>Designer</SubType>

@@ -28,7 +28,7 @@
                     $scope.activeQuestion.maxAnswerCount = result.maxAnswerCount;
                     $scope.activeQuestion.maxAllowedAnswers = result.maxAllowedAnswers;
                     $scope.activeQuestion.areAnswersOrdered = result.areAnswersOrdered;
-                    $scope.activeQuestion.isFilteredCombobox = result.isFilteredCombobox;
+                    $scope.activeQuestion.isFilteredCombobox = result.isFilteredCombobox;                    
 
                     var options = result.options || [];
                     _.each(options, function (option) {
@@ -45,28 +45,33 @@
 
                     $scope.activeQuestion.questionScope = result.isPreFilled ? 'Prefilled' : result.questionScope;
 
-
                     $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
+                    $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
                     $scope.setQuestionType(result.type);
+
                     $scope.setLinkSource(result.linkedToQuestionId);
+                    $scope.setCascadeSource(result.cascadeFromQuestionId);
+                    
+                    $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
 
                     $scope.questionForm.$setPristine();
+
                 };
 
                 $scope.loadQuestion = function () {
-
                     questionnaireService.getQuestionDetailsById($state.params.questionnaireId, $state.params.itemId)
                         .success(function (result) {
                             $scope.initialQuestion = angular.copy(result);
                             dataBind(result);
-
                         });
                 };
 
                 $scope.saveQuestion = function (callback) {
                     if ($scope.questionForm.$valid) {
-                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion).success(function (result) {
+                        var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion);
+                        commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).success(function () {
                             $scope.initialQuestion = angular.copy($scope.activeQuestion);
+
                             $rootScope.$emit('questionUpdated', {
                                 itemId: $scope.activeQuestion.itemId,
                                 title: $scope.activeQuestion.title,
@@ -74,24 +79,48 @@
                                 type: $scope.activeQuestion.type,
                                 linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
                             });
-                            if ($scope.activeQuestion.type == "SingleOption" && !$scope.activeQuestion.isFilteredCombobox) {
+
+                            if ($scope.activeQuestion.type === "SingleOption" && !$scope.activeQuestion.isFilteredCombobox && !_.isEmpty($scope.activeQuestion.cascadeFromQuestionId)) {
                                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                             }
+
                             $scope.questionForm.$setPristine();
                             if (_.isFunction(callback)) {
                                 callback();
+                            }
+
+                            if (shouldGetOptionsOnServer) {
+                                $scope.loadQuestion();
                             }
                         });
                     }
                 };
 
+                var wasThereOptionsLooseWhileChanginQuestionProperties = function(initialQuestion, actualQuestion) {
+                    if (actualQuestion.type != "SingleOption")
+                        return false;
+
+                    if ((actualQuestion.wereOptionsTruncated || false) == false)
+                        return false;
+
+                    var wasItFiltered = initialQuestion.isFilteredCombobox || false;
+                    var wasItCascade = !_.isEmpty(initialQuestion.cascadeFromQuestionId);
+
+                    if ((wasItCascade && actualQuestion.isFilteredCombobox) || (
+                        wasItFiltered && !_.isEmpty(actualQuestion.cascadeFromQuestionId))) {
+                        return true;
+                    }
+
+                    return false;
+                }
+
                 $scope.setQuestionType = function (type) {
                     $scope.activeQuestion.type = type;
                     $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
-                    if (type == 'GpsCoordinates' && $scope.activeQuestion.questionScope == 'Prefilled') {
+                    if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Prefilled') {
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
-                    if (type != "SingleOption" && type != "MultyOption") {
+                    if (type !== "SingleOption" && type !== "MultyOption") {
                         $scope.setLinkSource(null);
                     }
                 };
@@ -108,6 +137,7 @@
                         "title": '',
                         "id": utilityService.guid()
                     });
+                    $scope.activeQuestion.optionsCount += 1;
                 };
 
                 $scope.editFilteredComboboxOptions = function () {
@@ -130,18 +160,48 @@
                     }
                 };
 
+                $scope.editCascadingComboboxOptions = function () {
+                    if ($scope.questionForm.$dirty) {
+                        var modalInstance = confirmService.open({
+                            title: "To open options editor all unsaved changes must be saved. Should we save them now?",
+                            okButtonTitle: "Save",
+                            cancelButtonTitle: "No, later"
+                        });
+
+                        modalInstance.result.then(function (confirmResult) {
+                            if (confirmResult === 'ok') {
+                                $scope.saveQuestion(function () {
+                                    openCascadeOptionsEditor();
+                                });
+                            }
+                        });
+                    } else {
+                        openCascadeOptionsEditor();
+                    }
+                };
+
                 var openOptionsEditor = function () {
+                    $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
+
                     window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
                       "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
-                }
+                };
+
+                var openCascadeOptionsEditor = function () {
+                    $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
+
+                    window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
+                      "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
+                };
 
                 $scope.removeOption = function (index) {
                     $scope.activeQuestion.options.splice(index, 1);
+                    $scope.activeQuestion.optionsCount -= 1;
                 };
 
                 $scope.changeQuestionScope = function (scope) {
                     $scope.activeQuestion.questionScope = scope.text;
-                    if ($scope.activeQuestion.questionScope == 'Prefilled') {
+                    if ($scope.activeQuestion.questionScope === 'Prefilled') {
                         $scope.activeQuestion.enablementCondition = '';
                     }
                 };
@@ -149,14 +209,34 @@
                 $scope.$watch('activeQuestion.isLinked', function (newValue) {
                     if (!newValue && $scope.activeQuestion) {
                         $scope.activeQuestion.linkedToQuestionId = null;
+                    }                    
+                });
+
+                $scope.$watch('activeQuestion.isCascade', function (newValue) {
+                    if ($scope.activeQuestion) {
+                        if (newValue) {
+                            $scope.activeQuestion.questionScope = 'Interviewer';
+                        } else {
+                            $scope.activeQuestion.cascadeFromQuestionId = null;
+                        }
                     }
                 });
 
                 $scope.setLinkSource = function (itemId) {
                     $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
+
                     if (itemId) {
                         $scope.activeQuestion.linkedToQuestionId = itemId;
                         $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+                    }
+                };
+
+                $scope.setCascadeSource = function (itemId) {
+                    $scope.activeQuestion.isCascade = !_.isEmpty(itemId);
+
+                    if (itemId) {                        
+                        $scope.activeQuestion.cascadeFromQuestionId = itemId;
+                        $scope.activeQuestion.cascadeFromQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.cascadeFromQuestionId });
                     }
                 };
 

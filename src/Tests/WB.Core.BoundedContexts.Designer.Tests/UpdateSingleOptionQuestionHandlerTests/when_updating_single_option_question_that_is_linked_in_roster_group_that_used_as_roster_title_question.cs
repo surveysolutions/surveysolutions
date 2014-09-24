@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     questionId: rosterTitleQuestionId,
                     title: title,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
@@ -51,7 +51,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     responsibleId: responsibleId,
                     options: options,
                     linkedToQuestionId: linkedToQuestionId,
-                    isFilteredCombobox: isFilteredCombobox));
+                    isFilteredCombobox: isFilteredCombobox,
+                    cascadeFromQuestionId: ñascadeFromQuestionId));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -80,5 +81,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static string validationMessage = "validation message";
         private static Option[] options = null;
         private static bool isFilteredCombobox = false;
+        private static Guid? ñascadeFromQuestionId = (Guid?)null;
     }
 }

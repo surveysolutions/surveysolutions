@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     internal class InterviewChanges
     {
         public InterviewChanges(List<AnswerChange> interviewByAnswerChanges, EnablementChanges enablementChanges, ValidityChanges validityChanges,
-            RosterCalculationData rosterCalculationData, List<Identity> answersForLinkedQuestionsToRemoveByDisabling,
+            RosterCalculationData rosterCalculationData, List<Identity> answersForLinkedQuestionsToRemove,
             List<RosterIdentity> rosterInstancesWithAffectedTitles, string answerAsRosterTitle)
         {
             this.AnswerAsRosterTitle = answerAsRosterTitle;
@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.EnablementChanges = enablementChanges;
             this.ValidityChanges = validityChanges;
             this.RosterCalculationData = rosterCalculationData;
-            this.AnswersForLinkedQuestionsToRemoveByDisabling = answersForLinkedQuestionsToRemoveByDisabling;
+            this.AnswersForLinkedQuestionsToRemove = answersForLinkedQuestionsToRemove;
             this.RosterInstancesWithAffectedTitles = rosterInstancesWithAffectedTitles;
         }
 
@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public EnablementChanges EnablementChanges { set; get; }
         public ValidityChanges ValidityChanges { set; get; }
         public RosterCalculationData RosterCalculationData { set; get; }
-        public List<Identity> AnswersForLinkedQuestionsToRemoveByDisabling { set; get; }
+        public List<Identity> AnswersForLinkedQuestionsToRemove { set; get; }
         public List<RosterIdentity> RosterInstancesWithAffectedTitles { set; get; }
     }
 }

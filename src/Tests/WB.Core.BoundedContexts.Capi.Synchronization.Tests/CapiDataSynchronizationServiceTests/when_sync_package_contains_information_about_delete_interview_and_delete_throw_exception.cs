@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
             changeLogManipulator = new Mock<IChangeLogManipulator>();
 
             cleanUpExecutorMock = new Mock<ICapiCleanUpService>();
-            cleanUpExecutorMock.Setup(x => x.DeleteInterveiw(interviewId)).Throws<NullReferenceException>();
+            cleanUpExecutorMock.Setup(x => x.DeleteInterview(interviewId)).Throws<NullReferenceException>();
 
             capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, null, null,
                 plainQuestionnaireRepositoryMock.Object, null, cleanUpExecutorMock.Object);
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
         It should_cleanup_data_for_interview =
             () =>
                 cleanUpExecutorMock.Verify(
-                    x => x.DeleteInterveiw(interviewId),
+                    x => x.DeleteInterview(interviewId),
                     Times.Once);
 
         It should_not_create_public_record_in_change_log_for_sync_item =

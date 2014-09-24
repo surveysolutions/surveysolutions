@@ -13,6 +13,7 @@ using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {
+    [RequireHttps]
     public class AccountController : Controller
     {
         private readonly IFormsAuthentication authentication;
@@ -39,6 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;

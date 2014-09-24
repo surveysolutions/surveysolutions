@@ -137,11 +137,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         ParentGroupId = g5Id,
                         ParentGroupsIds = new Guid[] { g5Id },
                         RosterScopeIds = new Guid[] {  }
+                    },
+                    new MultimediaDetailsView
+                    {
+                        Id = q8Id,
+                        Title = "Photo",
+                        ParentGroupId = g5Id,
+                        ParentGroupsIds = new Guid[] { g5Id },
+                        RosterScopeIds = new Guid[] {  }
                     }
                 },
                 StaticTexts = new List<StaticTextDetailsView>()
                 {
-                    new StaticTextDetailsView()
+                    new StaticTextDetailsView
                     {
                         Id = st1Id,
                         ParentGroupId = g1Id,
@@ -149,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         RosterScopeIds = new Guid[] { },
                         Text = "static text 1"
                     },
-                    new StaticTextDetailsView()
+                    new StaticTextDetailsView
                     {
                         Id = st2Id,
                         ParentGroupId = g4Id,
@@ -158,6 +166,57 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         Text = "static text 2"
                     }
                 }
+            };
+        }
+
+        protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionViewWithCascadingQuestions()
+        {
+            return new QuestionsAndGroupsCollectionView
+            {
+                Groups = new List<GroupAndRosterDetailsView>
+                {
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = g1Id,
+                        Title = "Chapter",
+                        ParentGroupId = Guid.Empty,
+                        ParentGroupsIds = new Guid[0],
+                        RosterScopeIds = new Guid[0]
+                    }
+                },
+                Questions = new List<QuestionDetailsView>
+                {
+                    new SingleOptionDetailsView
+                    {
+                        Id = q1Id,
+                        Title = "cascading_question",
+                        ParentGroupId = g1Id,
+                        VariableName = "list_question",
+                        ParentGroupsIds = new Guid[] { g1Id },
+                        RosterScopeIds = new Guid[] {  }
+                    },
+                    new SingleOptionDetailsView
+                    {
+                        Id = q2Id,
+                        Title = "cascading_question_2",
+                        ParentGroupId = g1Id,
+                        VariableName = "list_question",
+                        ParentGroupsIds = new Guid[] { g1Id },
+                        RosterScopeIds = new Guid[] {  },
+                        CascadeFromQuestionId = q1Id
+                    },
+                    new SingleOptionDetailsView
+                    {
+                        Id = q3Id,
+                        Title = "cascading_question_3",
+                        ParentGroupId = g1Id,
+                        VariableName = "list_question",
+                        ParentGroupsIds = new Guid[] {  g1Id },
+                        RosterScopeIds = new Guid[] { },
+                        CascadeFromQuestionId = q2Id
+                    }
+                },
+                StaticTexts = new List<StaticTextDetailsView>()
             };
         }
 
@@ -263,6 +322,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
         protected static Guid q5Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         protected static Guid q6Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         protected static Guid q7Id = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        protected static Guid q8Id = Guid.Parse("11EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         
         protected static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         protected static Guid st2Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

@@ -1,5 +1,4 @@
 ﻿@using System.Web.Optimization
-@using Newtonsoft.Json
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.DocumentFilter
 
 @{
@@ -10,7 +9,7 @@
 @section scripts
 {
     @Scripts.Render(
-    "~/Scripts/jqplot-area",
+        "~/Scripts/jqplot-area",
         "~/Scripts/bootstrap-datepicker.js",
         "~/Scripts/ko.datepicker.js",
         "~/Scripts/viewmodels/pages/interviews.base.js",
@@ -36,7 +35,7 @@
 
     <style type="text/css">
         table.jqplot-table-legend {
-            width: 100%;
+            width: 90%;
             border: none;
         }
         td.jqplot-table-legend.jqplot-table-legend-swatch.jqplot-seriesToggle {
@@ -73,15 +72,15 @@
         </li>
         <li class="list-group-item">
             <h4 class="list-group-item-heading">From</h4>
-            <div class="input-group date" data-bind="datepicker: FromDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, endDate: '+0d', forseParse: false }">
-                <input id="date-picker-from" type="text" class="form-control" disabled="disabled">
+            <div class="input-group date" data-bind="datepicker: FromDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2013', endDate: '+0d', forseParse: false }">
+                <input id="date-picker-from" type="text" class="form-control" readonly="readonly" data-bind="value: FromDate">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
             </div>
         </li>
         <li class="list-group-item">
             <h4 class="list-group-item-heading">To</h4>
-            <div class="input-group date" data-bind="datepicker: ToDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, endDate: '+0d', forseParse: false }">
-                <input id="date-picker-to" type="text" class="form-control" disabled="disabled">
+            <div class="input-group date" data-bind="datepicker: ToDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2013', endDate: '+0d', forseParse: false }">
+                <input id="date-picker-to" type="text" class="form-control" readonly="readonly" data-bind="value: ToDate">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
             </div>
             <br />

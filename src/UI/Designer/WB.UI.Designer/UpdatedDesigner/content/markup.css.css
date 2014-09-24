@@ -6335,6 +6335,9 @@ textarea {
 .icon-photo {
   background-position-y: -270px;
 }
+.icon-multimedia {
+  background-position-y: -270px;
+}
 .icon-statictext {
   background-position-y: -300px;
 }
@@ -7631,6 +7634,30 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 .dropdown ul.dropdown-menu > li > a:hover {
   background: #edeff1;
+}
+#show-reload-details-promt {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.6) url(i/loading-bg.png) repeat;
+  z-index: 20;
+}
+#show-reload-details-promt .inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 50px;
+  width: 50%;
+  margin: -25px 0 0 -25%;
+  line-height: 50px;
+  background: #fff;
+  text-align: center;
+  border-radius: 4px;
+}
+#show-reload-details-promt .inner a {
+  text-decoration: underline;
 }
 #verify-popover {
   display: none;

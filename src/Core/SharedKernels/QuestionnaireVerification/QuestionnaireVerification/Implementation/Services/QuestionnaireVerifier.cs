@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -27,6 +28,19 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         };
 
         private static readonly HashSet<QuestionType> WhiteListOfQuestionTypes = new HashSet<QuestionType>
+        {
+            QuestionType.SingleOption,
+            QuestionType.MultyOption,
+            QuestionType.Numeric,
+            QuestionType.DateTime,
+            QuestionType.GpsCoordinates,
+            QuestionType.Text,
+            QuestionType.TextList,
+            QuestionType.QRBarcode,
+            QuestionType.Multimedia
+        };
+
+        private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>
         {
             QuestionType.SingleOption,
             QuestionType.MultyOption,
@@ -142,7 +156,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
                     Verifier<IQuestion>(FilteredComboboxContainsMoreThan5000Options, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
-                    Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThan20, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan20),
+                    Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan200),
+                    Verifier<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
+                    Verifier<IMultimediaQuestion>(MultimediaShouldNotHaveValidationExpression, "WB0079", VerificationMessages.WB0079_MultimediaShouldNotHaveValidationExpression),
+                    Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInValidationExpression, "WB0080", VerificationMessages.WB0080_MultimediaQuestionsCannotBeUsedInValidationExpression),
+                    Verifier<IGroup, IComposite>(MultimediaQuestionsCannotBeUsedInGroupEnablementCondition, "WB0081", VerificationMessages.WB0081_MultimediaQuestionsCannotBeUsedInGroupEnablementCondition),
+                    Verifier<IQuestion, IComposite>(MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition, "WB0082", VerificationMessages.WB0082_MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition),
+                    Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
+                    Verifier<IQuestion, IComposite>(CascadingComboboxHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
+                    Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
+                    Verifier<IQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
+                    Verifier<SingleQuestion, SingleQuestion>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
+                    Verifier<SingleQuestion>(CascadingQuestionHasMoreThanAllowedOptions, "WB0088", VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers),
+                    Verifier<SingleQuestion>(CascadingQuestionOptionsWithParentValuesShouldBeUnique, "WB0089", VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
+
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -155,10 +182,117 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             }
         }
 
-        private bool CategoricalOneAnswerOptionsCountMoreThan20(IQuestion question)
+        private bool CascadingQuestionOptionsWithParentValuesShouldBeUnique(SingleQuestion question)
         {
-            return IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
-                   question.Answers != null && question.Answers.Count > 20;
+            if (question.Answers != null && question.CascadeFromQuestionId.HasValue)
+            {
+                var enumerable = question.Answers.Select(x => new {x.AnswerValue, x.ParentValue})
+                    .Distinct().ToList();
+                var uniqueCount = enumerable.Count();
+                var result = uniqueCount != question.Answers.Count;
+                return result;
+            }
+            return false;
+        }
+
+        private bool CascadingQuestionHasMoreThanAllowedOptions(SingleQuestion question)
+        {
+            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > 10000;
+        }
+
+        private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, QuestionnaireDocument questionnaire)
+        {
+            if (!question.CascadeFromQuestionId.HasValue)
+                return new EntityVerificationResult<SingleQuestion> { HasErrors = false };
+
+            var referencedEntities = new HashSet<SingleQuestion>();
+
+            Func<SingleQuestion, SingleQuestion> getParentCascadingQuestion = x => questionnaire.Find<SingleQuestion>(q =>
+                q.CascadeFromQuestionId.HasValue && q.PublicKey == x.CascadeFromQuestionId.Value)
+                .SingleOrDefault();
+            var cascadingAncestors = question.UnwrapReferences(getParentCascadingQuestion);
+
+            foreach (var ancestor in cascadingAncestors)
+            {
+                if (referencedEntities.Contains(ancestor))
+                {
+                    return new EntityVerificationResult<SingleQuestion>
+                    {
+                        HasErrors = true,
+                        ReferencedEntities = referencedEntities
+                    };
+                }
+
+                referencedEntities.Add(ancestor);
+            }
+
+            return new EntityVerificationResult<SingleQuestion> { HasErrors = false };
+        }
+
+        private bool CascadingQuestionReferencesMissingParent(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            if (!question.CascadeFromQuestionId.HasValue)
+                return false;
+
+            return questionnaire.Find<SingleQuestion>(question.CascadeFromQuestionId.Value) == null;
+        }
+
+        private EntityVerificationResult<IComposite> ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            if (!question.CascadeFromQuestionId.HasValue)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var parentQuestion = questionnaire
+                .Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
+            if (parentQuestion == null)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(parentQuestion, questionnaire);
+            if (rosterLevelForRoster == null)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster;
+            if (rosterLevelWithoutOwnRosterSizeQuestion.Length > 0)
+            {
+                rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster.Skip(1).ToArray();
+            }
+
+            if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(parentQuestion, rosterLevelWithoutOwnRosterSizeQuestion, questionnaire))
+            {
+                return new EntityVerificationResult<IComposite>
+                {
+                    HasErrors = true,
+                    ReferencedEntities = new IComposite[] { question, parentQuestion },
+                };
+            }
+
+            return new EntityVerificationResult<IComposite> { HasErrors = false };
+        }
+
+        private EntityVerificationResult<IComposite> CascadingComboboxHasNoParentOptions(IQuestion question, QuestionnaireDocument document)
+        {
+            if (!question.CascadeFromQuestionId.HasValue)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var parentQuestion = document.Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
+            if (parentQuestion == null)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var result = !question.Answers.All(childAnswer =>
+                parentQuestion.Answers.Any(
+                    parentAnswer => parentAnswer.AnswerValue == childAnswer.ParentValue));
+
+            return new EntityVerificationResult<IComposite>()
+            {
+                HasErrors = result,
+                ReferencedEntities = new List<IComposite> { question, parentQuestion }
+            };
+        }
+
+        private static bool CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount(IQuestion question)
+        {
+            return !question.CascadeFromQuestionId.HasValue && IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
+                   question.Answers != null && question.Answers.Count > 200;
         }
 
         private bool FilteredComboboxContainsMoreThan5000Options(IQuestion question)
@@ -183,7 +317,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question)
         {
-            if (question.Answers != null)
+            if (question.Answers != null && !question.CascadeFromQuestionId.HasValue)
             {
                 return question.Answers.Where(x => x.AnswerText != null).Select(x => x.AnswerText.Trim()).Distinct().Count() != question.Answers.Count;
             }
@@ -192,7 +326,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool OptionValuesMustBeUniqueForCategoricalQuestion(IQuestion question)
         {
-            if (question.Answers != null)
+            if (question.Answers != null && !question.CascadeFromQuestionId.HasValue)
             {
                 return question.Answers.Where(x => x.AnswerValue != null).Select(x => x.AnswerValue.Trim()).Distinct().Count() != question.Answers.Count;
             }
@@ -342,12 +476,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return true;
 
             return false;
-
-            //var rostersByRosterTitleQuestion =
-            //    questionnaire.Find<IGroup>(
-            //        g => g.RosterTitleQuestionId.HasValue && (g.RosterTitleQuestionId.Value == group.RosterTitleQuestionId.Value));
-
-            //return rostersByRosterTitleQuestion.Any(g => g.RosterSizeQuestionId.HasValue && (g.RosterSizeQuestionId.Value != group.RosterSizeQuestionId.Value));
         }
 
         private static bool GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion(IGroup group, QuestionnaireDocument questionnaire)
@@ -596,6 +724,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return IsPreFilledQuestion(question);
         }
 
+        private bool MultimediaQuestionIsInterviewersOnly(IMultimediaQuestion question)
+        {
+            return question.QuestionScope != QuestionScope.Interviewer;
+        }
+
         private static bool QRBarcodeQuestionIsSupervisorQuestion(IQRBarcodeQuestion question)
         {
             return IsSupervisorQuestion(question);
@@ -611,11 +744,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return !string.IsNullOrEmpty(question.ValidationExpression);
         }
 
+        private bool MultimediaShouldNotHaveValidationExpression(IMultimediaQuestion question)
+        {
+            return !string.IsNullOrEmpty(question.ValidationExpression);
+        }
+
         private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
         {
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
                 question, question.ValidationExpression, questionnaire,
                 isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
+        }
+
+        private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+                question, question.ValidationExpression, questionnaire,
+                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
         }
 
         private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
@@ -625,6 +770,34 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
+        private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInQuestionEnablementCondition(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+               question, question.ConditionExpression, questionnaire,
+               isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
+        }
+
+        private EntityVerificationResult<IComposite> QuestionsCannotBeUsedAsRosterTitle(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            var noErrors=new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            if (!group.RosterTitleQuestionId.HasValue)
+                return noErrors;
+
+            var rosterTitleQuestion = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == group.RosterTitleQuestionId.Value);
+            if (rosterTitleQuestion == null)
+                return noErrors;
+
+            if (QuestionTypesValidToBeRosterTitles.Contains(rosterTitleQuestion.QuestionType))
+                return noErrors;
+
+            return new EntityVerificationResult<IComposite>()
+            {
+                HasErrors = true,
+                ReferencedEntities = new IComposite[] { group, rosterTitleQuestion }
+            };
+        }
+
         private EntityVerificationResult<IComposite> QRBarcodeQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
         {
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
@@ -632,6 +805,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.QRBarcode);
         }
 
+        private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInGroupEnablementCondition(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
+               group, group.ConditionExpression, questionnaire,
+               isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
+        }
 
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
         {

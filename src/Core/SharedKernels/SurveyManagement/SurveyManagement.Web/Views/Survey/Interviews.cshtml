@@ -10,11 +10,11 @@
     @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/sv.interviews.js")
 
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new {}, Request.Url.Scheme))';
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new { }, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
         var $surveysUrl = '@Url.Action("Index", "Survey")';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
-        $(function () {
+        $(function() {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
             var model = new Supervisor.VM.SVInterviews('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })', $interviewsPageUrl, users, commandExecutionUrl);
             ko.applyBindings(model);
@@ -27,13 +27,23 @@
 {
     <h3 class="sinle-line-header">Interviews</h3>
 }
-
 @section  actionbar{
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-bind="disable: IsNothingSelected">Assign interviewer <span class="caret"></span></button>
-        <ul class="dropdown-menu" data-bind="foreach: Users">
-            <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
-        </ul>
+    <div class="form-inline">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-bind="disable: IsNothingSelected">Assign interviewer <span class="caret"></span></button>
+            <ul class="dropdown-menu" data-bind="foreach: Users">
+                <li><a href="javascript:void(0)" data-bind="click: $root.Assign, text: UserName">Action</a></li>
+            </ul>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="searchBox" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="button" data-bind="click: search">
+                    <i class="glyphicon glyphicon-search"></i>
+                </button>
+            </div>
+        </div>
     </div>
 }
 
@@ -83,8 +93,8 @@
                     <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
-                 <td>
-                    <input type="checkbox" data-bind="checked: HasErrors, enable: false"/>
+                <td>
+                    <input type="checkbox" data-bind="checked: HasErrors, enable: false" />
                 </td>
                 <td data-bind="text: Status"></td>
                 <td>

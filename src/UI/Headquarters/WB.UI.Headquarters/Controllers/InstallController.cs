@@ -24,6 +24,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Finish(UserModel model)
         {
             if (ModelState.IsValid)

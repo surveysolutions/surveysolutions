@@ -129,6 +129,7 @@
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />
@@ -356,8 +357,6 @@
     <EmbeddedResource Include="Views\Survey\Status.cshtml" />
     <EmbeddedResource Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
     <EmbeddedResource Include="Views\TabletReport\Packages.cshtml" />
-    <EmbeddedResource Include="Views\Shared\Error.cshtml" />
-    <EmbeddedResource Include="Views\Shared\AccessDenied.cshtml" />
     <EmbeddedResource Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <EmbeddedResource Include="Views\Shared\_alerts.cshtml" />
     <EmbeddedResource Include="Views\Shared\_ListViewPagingScript.cshtml" />
@@ -374,14 +373,21 @@
     <EmbeddedResource Include="Views\Interviewer\Create.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserEditForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserCreateForm.cshtml" />
-    <EmbeddedResource Include="Content\admin.css" />
+    <EmbeddedResource Include="Content\controlpanel.css" />
     <EmbeddedResource Include="Views\Shared\SupervisorMainMenu.cshtml" />
-    <EmbeddedResource Include="Views\Shared\_AdminLayout.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_ControlPanelLayout.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewHistory.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
     <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Settings.cshtml" />
+    <EmbeddedResource Include="Views\Shared\Clickjacking.cshtml" />
+    <EmbeddedResource Include="Views\Shared\GlobalSettings.cshtml" />
+    <EmbeddedResource Include="Views\Error\AccessDenied.cshtml" />
+    <EmbeddedResource Include="Views\Error\Forbidden.cshtml" />
+    <EmbeddedResource Include="Views\Error\Index.cshtml" />
+    <EmbeddedResource Include="Views\Error\NotFound.cshtml" />
+    <EmbeddedResource Include="Views\Error\WebsitePathIsTooLong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
@@ -444,7 +450,10 @@
     <EmbeddedResource Include="Content\app.css" />
     <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Content\img\no_image_found.jpg" />
+    <Content Include="Scripts\components\bindings.js" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />
   </ItemGroup>
