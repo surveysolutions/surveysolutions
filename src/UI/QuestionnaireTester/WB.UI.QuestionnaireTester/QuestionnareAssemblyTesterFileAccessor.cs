@@ -82,6 +82,11 @@ namespace WB.UI.QuestionnaireTester
             throw new NotImplementedException();
         }
 
+        public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
+        {
+            throw new NotImplementedException();
+        }
+
         private string GetFolderNameForTemplate(Guid questionnaireId, long questionnaireVersion)
         {
             return String.Format("dir-{0}-{1}", questionnaireId, questionnaireVersion);

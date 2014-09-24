@@ -71,6 +71,11 @@ namespace CAPI.Android.Core.Model
             throw new NotImplementedException();
         }
 
+        public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
+        {
+            throw new NotImplementedException();
+        }
+
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)
         {
             return String.Format("assembly_{0}_v{1}", questionnaireId, questionnaireVersion);

@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, metadata.Version, template);
             
-            this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode));
+            this.commandService.Execute(new RegisterPlainQuestionnaire(template.PublicKey, metadata.Version, metadata.AllowCensusMode, string.Empty));
         }
 
         private void DeleteQuestionnaire(SyncItem item)
