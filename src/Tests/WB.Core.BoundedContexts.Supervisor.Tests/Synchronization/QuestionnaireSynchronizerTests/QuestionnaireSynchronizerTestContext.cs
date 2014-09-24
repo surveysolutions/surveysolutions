@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
         {
             return new QuestionnaireSynchronizer(atomFeedReader ?? Mock.Of<IAtomFeedReader>(),
                 new HeadquartersSettings(new Uri("http://localhost"), new Uri("http://localhost"), new Uri("http://localhost"),
-                    "http://localhost", "http://localhost",
+                    "http://localhost", "http://localhost", "http://localhost",
                     new Uri("http://localhost"), new Uri("http://localhost")),
                 headquartersPullContext ?? new HeadquartersPullContext(Mock.Of<IPlainStorageAccessor<SynchronizationStatus>>()),
                 plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry>>(), Mock.Of<ILogger>(),
