@@ -126,6 +126,7 @@
     <Compile Include="Filters\ITokenVerifier.cs" />
     <Compile Include="Filters\LocalOrDevelopmentAccessOnlyAttribute.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenAttribute.cs" />
+    <Compile Include="Filters\NoCacheAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
     <Compile Include="MembershipProvider\Accounts\IAccountPasswordInfo.cs" />
