@@ -122,7 +122,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     areAnswersOrdered: false,
                     maxAllowedAnswers: null,
                     maxAnswerCount: null,
-                    isFilteredCombobox: null));
+                    isFilteredCombobox: null,
+                    cascadeFromQuestionId: null
+                    ));
         }
 
         private int? GetMaxValueFromQuestion(AbstractQuestion question)

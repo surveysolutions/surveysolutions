@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character. Length must be between 6 and 255 characters.
+        ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character.
         /// </summary>
         public static string PasswordErrorMessage {
             get {
@@ -120,6 +120,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string PasswordFieldName {
             get {
                 return ResourceManager.GetString("PasswordFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be at least {2} characters long.
+        /// </summary>
+        public static string PasswordLengthMessage {
+            get {
+                return ResourceManager.GetString("PasswordLengthMessage", resourceCulture);
             }
         }
         

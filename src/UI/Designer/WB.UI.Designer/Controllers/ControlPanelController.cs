@@ -1,10 +1,11 @@
 ﻿using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Controllers
 {
-    [AllowAnonymous]
+    [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : Controller
     {
         private readonly IServiceLocator serviceLocator;

@@ -11,9 +11,8 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    class when_verifying_questionnaire_with_filtered_combobox_and_options_count_more_than_5000 : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_filtered_combobox_and_options_count_more_than_5000 : QuestionnaireVerifierTestsContext
     {
-
         Establish context = () =>
         {
             int incrementer = 0;

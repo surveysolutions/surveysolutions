@@ -18,6 +18,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Extensions.Quartz;
 using Ninject.Web.Common;
+using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
@@ -39,7 +40,11 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Settings;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
@@ -124,7 +129,8 @@ namespace WB.UI.Supervisor.App_Start
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireAssemblyEndpoint"]).ToString(),
                 WebConfigurationManager.AppSettings["Headquarters.AccessToken"],
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireChangedFeed"]));
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireChangedFeed"]),
+                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.FilePushEndpoint"]));
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
@@ -141,14 +147,15 @@ namespace WB.UI.Supervisor.App_Start
                     LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
+            
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
+                new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
-                ModulesFactory.GetEventStoreModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
@@ -156,15 +163,18 @@ namespace WB.UI.Supervisor.App_Start
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
                 new QuestionnaireUpgraderModule(),
-                new SurveyManagementSharedKernelModule(
-                    AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
+
+            var eventStoreModule = ModulesFactory.GetEventStoreModule();
+            var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
+
+            kernel.Load(
+                eventStoreModule,
+                new SurveyManagementSharedKernelModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
-                    isDebug,
-                    applicationBuildVersion,
-                    interviewDetailsDataLoaderSettings),
-                new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
@@ -183,6 +193,12 @@ namespace WB.UI.Supervisor.App_Start
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
+
+            kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
+
+            kernel.Bind<ITokenVerifier>().To<ApiValidationAntiForgeryTokenVerifier>().InSingletonScope();
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
+                .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>();
 
             return kernel;
         }

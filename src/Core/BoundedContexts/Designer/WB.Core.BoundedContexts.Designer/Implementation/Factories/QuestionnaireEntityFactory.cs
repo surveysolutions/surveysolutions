@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.AreAnswersOrdered,
                 data.MaxAllowedAnswers,
                 data.MaxAnswerCount,
-                data.IsFilteredCombobox);
+                data.IsFilteredCombobox,
+                data.CascadeFromQuestionId);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
@@ -95,6 +96,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 case QuestionType.QRBarcode:
                     return new QRBarcodeQuestion();
 
+                case QuestionType.Multimedia:
+                    return new MultimediaQuestion();
+
                 default:
                     throw new NotSupportedException(string.Format("Question type is not supported: {0}", type));
             }
@@ -140,7 +144,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool? areAnswersOrdered,
             int? maxAllowedAnswers,
             int? masAnswerCount,
-            bool? isFilteredCombobox)
+            bool? isFilteredCombobox,
+            Guid? cascadeFromQuestionId)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -157,6 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
             question.IsFilteredCombobox = isFilteredCombobox;
+            question.CascadeFromQuestionId = cascadeFromQuestionId;
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)

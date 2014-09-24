@@ -21,6 +21,7 @@
     <div class="col-sm-offset-4 col-sm-3">
         @using (Html.BeginForm("LoginToDesigner", "Template", FormMethod.Post))
         {
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Login" })
                 <span class="help-block">@Html.ValidationMessageFor(m => m.UserName)</span>

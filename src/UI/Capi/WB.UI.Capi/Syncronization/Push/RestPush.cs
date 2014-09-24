@@ -1,14 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using RestSharp;
 using WB.Core.GenericSubdomains.Rest;
+using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.UI.Capi.Syncronization.Push
 {
     public class RestPush
     {
         private readonly IRestServiceWrapper webExecutor;
-        private const string getChunckPath = "sync/PostPackage";
+        private const string PostPackagePath = "sync/PostPackage";
+        private const string PostFilePath = "sync/PostFile";
         public RestPush(IRestServiceWrapper webExecutor)
         {
             this.webExecutor = webExecutor;
@@ -22,7 +25,7 @@ namespace WB.UI.Capi.Syncronization.Push
 
             try
             {
-                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(getChunckPath, ct,
+                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostPackagePath, ct,
                     content, login, password, null);
 
                 if (!result)
@@ -33,6 +36,25 @@ namespace WB.UI.Capi.Syncronization.Push
                 throw new SynchronizationException("Data sending was canceled");
             }
 
+        }
+
+        public bool PushBinary(string login, string password, byte[] data, string fileName, Guid interviewId, CancellationToken ct)
+        {
+            if (data==null)
+                throw new InvalidOperationException("data is empty");
+
+            try
+            {
+                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostFilePath, ct,
+                    data, fileName, login, password, null,
+                    new KeyValuePair<string, string>("interviewId", interviewId.FormatGuid()));
+
+                return result;
+            }
+            catch (RestException)
+            {
+                return false;
+            }
         }
     }
 }

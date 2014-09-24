@@ -99,7 +99,16 @@
         }
 
         self.IsAjaxComplete(false);
-        $.post(requestUrl, args, null, "json").done(function (data) {
+
+        var requestHeaders = {};
+        requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+        $.ajax({
+            url: requestUrl,
+            type: 'post',
+            data: args,
+            headers: requestHeaders,
+            dataType: 'json'}).done(function (data) {
             if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
                 onSuccess(data);
             }

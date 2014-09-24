@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Headquarter")]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(InterviewerModel model)
         {
             if (this.ModelState.IsValid)
@@ -72,6 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [Authorize(Roles = "Headquarter, Supervisor")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditModel model)
         {
             if (this.ModelState.IsValid)

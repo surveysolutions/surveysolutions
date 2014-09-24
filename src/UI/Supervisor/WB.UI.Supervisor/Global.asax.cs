@@ -9,7 +9,9 @@ using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
+using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Filters;
 
@@ -41,6 +43,7 @@ namespace WB.UI.Supervisor
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new LongWebsiteDirectoryPathFilter());
         }
@@ -74,6 +77,7 @@ namespace WB.UI.Supervisor
         protected void Application_Start()
         {
             this.logger.Info("Starting application.");
+            MvcHandler.DisableMvcResponseHeader = true;
 
             AppDomain current = AppDomain.CurrentDomain;
             current.UnhandledException += this.CurrentUnhandledException;
@@ -90,6 +94,8 @@ namespace WB.UI.Supervisor
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            DataAnnotationsConfig.RegisterAdapters();
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
@@ -157,6 +163,15 @@ namespace WB.UI.Supervisor
                 return;
             }
             ElmahDataFilter.Apply(e, ctx);
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            var application = sender as HttpApplication;
+            if (application != null && application.Context != null)
+            {
+                application.Context.Response.Headers.Remove("Server");
+            }
         }
     }
 }

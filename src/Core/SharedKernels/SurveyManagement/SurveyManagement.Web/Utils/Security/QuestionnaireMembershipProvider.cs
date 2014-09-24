@@ -320,6 +320,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
                           GetConfigValue(config["requiresQuestionAndAnswer"], "false"));
             _EnablePasswordRetrieval = Convert.ToBoolean(
                           GetConfigValue(config["enablePasswordRetrieval"], "false"));
+            _PasswordStrengthRegularExpression = GetConfigValue(config["passwordStrengthRegularExpression"], _PasswordStrengthRegularExpression);
 
         }
 

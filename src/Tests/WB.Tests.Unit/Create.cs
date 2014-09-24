@@ -1,6 +1,9 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using System.Collections.Generic;
+using Ncqrs.Commanding;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 
 namespace WB.Tests.Unit
 {
@@ -27,6 +30,13 @@ namespace WB.Tests.Unit
         public static RoslynExpressionProcessor RoslynExpressionProcessor()
         {
             return new RoslynExpressionProcessor();
+        }
+        public static CreateInterviewControllerCommand CreateInterviewControllerCommand()
+        {
+            return new CreateInterviewControllerCommand()
+            {
+                AnswersToFeaturedQuestions = new List<UntypedQuestionAnswer>()
+            };
         }
     }
 }

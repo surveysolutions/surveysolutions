@@ -87,6 +87,8 @@
 
         LinkedQuestionIsNotInPropagateGroup,
 
+        LinkedCategoricalQuestionCanNotBeFilledBySupervisor,
+
         NotCategoricalQuestionLinkedToAnoterQuestion,
 
         QuestionWithLinkedQuestionCanNotBeFeatured,
@@ -130,6 +132,12 @@
 
         QuestionIsNotAFilteredCombobox,
 
-        FilteredComboboxQuestionOptionsMaxLength
+        FilteredComboboxQuestionOptionsMaxLength,
+
+        CategoricalSingleOptionHasMoreThan200Options,
+
+        CategoricalCascadingOptionsCantContainsEmptyParentValueField,
+
+        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair
     }
 }

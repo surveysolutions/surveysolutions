@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         SingleOptionLinked,
         SingleOption,
         MultipleOptionsLinked,
-        MultipleOptions
+        MultipleOptions,
+        Picture
     }
 }

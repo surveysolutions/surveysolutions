@@ -1,13 +1,24 @@
 ﻿using System;
-using System.Web.Configuration;
+using Microsoft.Practices.ServiceLocation;
+using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Shared.Web.Settings
 {
-    public static class CoreSettings
+    public class CoreSettings
     {
+        private static IConfigurationManager config
+        {
+            get { return ServiceLocator.Current.GetInstance<IConfigurationManager>(); }
+        }
+
         public static StoreProviders EventStoreProvider
         {
-            get { return (StoreProviders) Enum.Parse(typeof(StoreProviders), WebConfigurationManager.AppSettings["Core.EventStoreProvider"], true); }
-        } 
+            get { return (StoreProviders)Enum.Parse(typeof(StoreProviders), config.AppSettings["Core.EventStoreProvider"], true); }
+        }
+
+        public static bool IsDevelopmentEnvironment
+        {
+            get { return bool.Parse(config.AppSettings["IsDevelopmentEnvironment"]); }
+        }
     }
 }

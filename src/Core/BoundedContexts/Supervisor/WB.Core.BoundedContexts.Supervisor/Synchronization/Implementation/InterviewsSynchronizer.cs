@@ -29,6 +29,8 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -52,6 +54,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
+        private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
@@ -69,7 +72,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             IJsonUtils jsonUtils,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter,
             IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryWriter,
-            Func<HttpMessageHandler> httpMessageHandler)
+            Func<HttpMessageHandler> httpMessageHandler, IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage)
         {
             if (feedReader == null) throw new ArgumentNullException("feedReader");
             if (settings == null) throw new ArgumentNullException("settings");
@@ -104,6 +107,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
             this.readyToSendInterviewsRepositoryWriter = readyToSendInterviewsRepositoryWriter;
             this.httpMessageHandler = httpMessageHandler;
+            this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
         }
 
         public void PullInterviewsForSupervisors(Guid[] supervisorIds)
@@ -194,7 +198,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             this.headquartersPullContext.PushMessage(string.Format("Applying interview rejected by HQ on {0} interview", interviewId));
 
-            if (!IsInterviewPresent(interviewDetails.Id))
+            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            if (interviewSummary == null)
 
             {
                 this.executeCommand(new CreateInterviewCreatedOnClientCommand(interviewId: interviewDetails.Id,
@@ -213,6 +218,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public void Push(Guid userId)
         {
+            this.PushInterviewData(userId);
+            this.PushInterviewFile();
+        }
+
+        private void PushInterviewData(Guid userId)
+        {
             this.headquartersPushContext.PushMessage("Getting interviews to be pushed.");
             List<Guid> interviewsToPush = this.GetInterviewsToPush();
             this.headquartersPushContext.PushMessage(string.Format("Found {0} interviews to push.", interviewsToPush.Count));
@@ -223,15 +234,48 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(), interviewIndex + 1, interviewsToPush.Count));
+                    this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(),
+                        interviewIndex + 1, interviewsToPush.Count));
                     this.PushInterview(interviewId, userId);
+                    this.interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
                     this.headquartersPushContext.PushMessage(string.Format("Interview {0} successfully pushed.", interviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {
                     this.logger.Error(string.Format("Failed to push interview {0} to Headquarters.", interviewId.FormatGuid()), exception);
-                    this.headquartersPushContext.PushError(string.Format("Failed to push interview {0}. Error message: {1}. Exception messages: {2}",
-                        interviewId.FormatGuid(), exception.Message, string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
+                    this.headquartersPushContext.PushError(string.Format(
+                        "Failed to push interview {0}. Error message: {1}. Exception messages: {2}",
+                        interviewId.FormatGuid(), exception.Message,
+                        string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
+                }
+            }
+        }
+
+        private void PushInterviewFile()
+        {
+            this.headquartersPushContext.PushMessage("Getting interviews files to be pushed.");
+            var files = this.interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
+            this.headquartersPushContext.PushMessage(string.Format("Found {0} files to push.", files.Count));
+
+            for (int interviewIndex = 0; interviewIndex < files.Count; interviewIndex++)
+            {
+                var interviewFile = files[interviewIndex];
+
+                try
+                {
+                    this.headquartersPushContext.PushMessage(string.Format("Pushing file {0} for interview {1} ({2} out of {3}).", interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
+                        interviewIndex + 1, files.Count));
+                    this.PushFile(interviewFile);
+                    this.interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
+                    this.headquartersPushContext.PushMessage(string.Format("Interview {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
+                }
+                catch (Exception exception)
+                {
+                    this.logger.Error(string.Format("Failed to push file {0} for interview {1} to Headquarters.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()), exception);
+                    this.headquartersPushContext.PushError(string.Format(
+                        "Failed to push file {0} for interview {1}. Error message: {2}. Exception messages: {3}",
+                        interviewFile.FileName, interviewFile.InterviewId.FormatGuid(), exception.Message,
+                        string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(x => x.Message))));
                 }
             }
         }
@@ -280,7 +324,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void HardDeleteInterview(string interviewId, string userId)
         {
             Guid interviewIdGuid = Guid.Parse(interviewId);
-            if (!IsInterviewPresent(interviewIdGuid))
+
+            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            if (interviewSummary == null)
                 return;
 
             Guid userIdGuid = Guid.Parse(userId);
@@ -418,6 +464,45 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
+        private void PushFile(InterviewBinaryDataDescriptor interviewFile)
+        {
+            using (var client = new HttpClient(this.httpMessageHandler()).AppendAuthToken(this.settings))
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post,
+                    string.Format("{0}?interviewId={1}&fileName={2}", this.settings.FilePushUrl, interviewFile.InterviewId,
+                        interviewFile.FileName))
+                { Content = new ByteArrayContent(interviewFile.Data) };
+                
+                
+                HttpResponseMessage response = client.SendAsync(request).Result;
+
+                string result = response.Content.ReadAsStringAsync().Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(string.Format("Failed to send  file {0} for interview {1}. Server response: {2}",
+                        interviewFile.FileName, interviewFile.InterviewId, result));
+                }
+
+                bool serverOperationSucceeded;
+
+                try
+                {
+                    serverOperationSucceeded = this.jsonUtils.Deserrialize<bool>(result);
+                }
+                catch (Exception exception)
+                {
+                    throw new Exception(
+                        string.Format("Failed to read server response while sending file {0} for interview {1}. Server response: {2}", interviewFile.FileName, interviewFile.InterviewId, result),
+                        exception);
+                }
+
+                if (!serverOperationSucceeded)
+                {
+                    throw new Exception(string.Format("Failed to send file {0} for interview {1} because server returned negative response.", interviewFile.FileName, interviewFile.InterviewId));
+                }
+            }
+        }
+
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
             List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, long.MaxValue).ToList();
@@ -427,7 +512,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             AggregateRootEvent[] eventsToSend = storedEvents
                 .Skip(countOfEventsSentToHeadquarters)
-                .Where(storedEvent => storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin)
+                .Where(
+                    storedEvent =>
+                        storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin &&
+                            storedEvent.Origin != Constants.SynchronizationMetaOrigin)
                 .Select(storedEvent => new AggregateRootEvent(storedEvent))
                 .ToArray();
 

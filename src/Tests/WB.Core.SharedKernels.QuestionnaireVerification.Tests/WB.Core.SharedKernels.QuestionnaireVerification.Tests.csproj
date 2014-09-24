@@ -65,6 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="CascadingDropdownTests\parent_cascading_question_should_exist.cs" />
+    <Compile Include="CascadingDropdownTests\when_cascading_question_has_10001_options.cs" />
+    <Compile Include="CascadingDropdownTests\when_cascading_question_have_repeating_pair_of_Value_and_ParentValue.cs" />
+    <Compile Include="CascadingDropdownTests\when_cascading_question_references_parent_that_is_depper_that_it.cs" />
+    <Compile Include="CascadingDropdownTests\when_cascading_references_makes_circular_reference.cs" />
+    <Compile Include="CascadingDropdownTests\when_child_question_has_option_values_that_doesnt_exit_in_parent_question.cs" />
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition_.cs" />
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition___.cs" />
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_group_inside_roster_that_has_condition_referencing_question_with_deeper_roster_level_.cs" />
@@ -105,6 +111,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_has_roster_with_not_unique_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_has_roster_with_variable_name_equal_to_questionnaire_title.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_that_references_itself_in_condition.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_multimedia_questions_with_supervisor_and_prefilled_scope_respectively.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_that_used_with__.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_linked_one_answer_question_without_options.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_count_more___.cs" />
@@ -113,10 +120,16 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_nullable_options.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_circular_references.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_with_1_option.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_options_count_more_than_20.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_categorical_one_answer_question_options_count_more_than_5000.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_filtered_combobox_and_options_count_more_than_5000.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_filtered_combobox_and_question_is_linked.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_empty_static_text.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_that_have_validation_expression.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_as_link_source.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_in_condition_expression.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_in_groups_condition_expression.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_in_substitution.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multimedia_question_which_used_in_validation_expression.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multi_question_without_options.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multi_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question-inside_roster_with_title_which_contains_roster_title_as_substitution_reference.cs" />
@@ -130,6 +143,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_validation_expression_and_without_validation_meassage.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_illegal_variable_name.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_variable_name_roster_title.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_by_question_that_have_roster_title_as_multimedia_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_by_question_that_have_roster_title_question_in_roster_with_other_scope.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_roster_group_that_contains_roster.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_qr_barcode_question_that_used_in_title_substitutions.cs" />
@@ -145,6 +159,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_prefilled.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_that_marked_as_filled_by_supervisor.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_MultiAnswer_question_with_custom_validation.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_single_option_and_options_count_more_than_200.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_TextList_question_with_maxAnswer_value_set_in_100.cs" />
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_MultiAnswer_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_MultiAnswer_question.cs" />
@@ -211,6 +226,10 @@
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
+      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
+      <Name>WB.Core.GenericSubdomains.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

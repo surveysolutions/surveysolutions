@@ -31,9 +31,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetGroupTitle(Guid groupId);
 
+        Guid? GetCascadingQuestionParentId(Guid questionId);
+
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
+
+        string GetCascadingParentValue(Guid questionId, decimal answerOptionValue);
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
@@ -88,5 +92,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
 
         Guid? GetRosterSizeQuestion(Guid rosterId);
+
+        IEnumerable<Guid> GetCascadingQuestionsThatDependUponQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetCascadingQuestionsThatDirectlyDependUponQuestion(Guid id);
+
+        IEnumerable<Guid> GetAllChildCascadingQuestions();
     }
 }

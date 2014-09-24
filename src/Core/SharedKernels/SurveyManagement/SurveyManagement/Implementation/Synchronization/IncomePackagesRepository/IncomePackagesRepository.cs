@@ -22,12 +22,14 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository
 {
-    internal class IncomePackagesRepository : IIncomePackagesRepository
+    internal class 
+        IncomePackagesRepository : IIncomePackagesRepository
     {
         private string incomingCapiPackagesDirectory;
         private string incomingCapiPackagesWithErrorsDirectory;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter;
         private readonly ILogger logger;
+        private readonly bool overrideReceivedEventTimeStamp;
         private readonly ICommandService commandService;
         private readonly SyncSettings syncSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -36,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
         private IEventDispatcher eventBus;
 
         public IncomePackagesRepository(ILogger logger, SyncSettings syncSettings, ICommandService commandService,
-            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter)
+            IFileSystemAccessor fileSystemAccessor, IJsonUtils jsonUtils, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepositoryWriter, bool overrideReceivedEventTimeStamp)
         {
             this.logger = logger;
             this.syncSettings = syncSettings;
@@ -44,6 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             this.fileSystemAccessor = fileSystemAccessor;
             this.jsonUtils = jsonUtils;
             this.interviewSummaryRepositoryWriter = interviewSummaryRepositoryWriter;
+            this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
 
             this.InitializeDirectoriesForCapiIncomePackages();
         }
@@ -94,12 +97,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                     this.commandService.Execute(new CreateInterviewCreatedOnClientCommand(interviewId: meta.PublicKey,
                         userId: meta.ResponsibleId, questionnaireId: meta.TemplateId,
                         questionnaireVersion: meta.TemplateVersion, status: (InterviewStatus) meta.Status,
-                        featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid));
+                        featuredQuestionsMeta: prefilledQuestions, isValid: meta.Valid), Constants.SynchronizationMetaOrigin);
 
                 }
                 else
-                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,meta.TemplateVersion,
-                        (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false));
+                    commandService.Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                        meta.TemplateVersion,
+                        (InterviewStatus)meta.Status, null, meta.Comments, meta.Valid, false), Constants.SynchronizationMetaOrigin);
 
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileName(meta.PublicKey), item.Content);
             }
@@ -108,6 +112,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                 this.logger.Error("error on handling incoming package,", ex);
                 this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(item.Id),this.jsonUtils.GetItemAsContent(item));
             }
+        }
+
+        private bool IsInterviewPresent(Guid interviewId)
+        {
+            var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
+            if (interviewSummary == null)
+                return false;
+            return !interviewSummary.IsDeleted;
         }
 
         private string GetItemFileName(Guid id)
@@ -128,6 +140,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             if (!this.fileSystemAccessor.IsFileExists(fileName))
                 return;
 
+            if (!IsInterviewPresent(id))
+            {
+                this.fileSystemAccessor.WriteAllText(this.GetItemFileNameForErrorStorage(id), this.fileSystemAccessor.ReadAllText(fileName));
+                this.fileSystemAccessor.DeleteFile(fileName);
+                return;
+            }
+
             var fileContent = this.fileSystemAccessor.ReadAllText(fileName);
 
             var items = this.jsonUtils.Deserrialize<AggregateRootEvent[]>(PackageHelper.DecompressString(fileContent));
@@ -145,10 +164,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
                 this.fileSystemAccessor.DeleteFile(fileName);
 
                 this.EventBus.Publish(incomeEvents);
-                if (this.syncSettings.ReevaluateInterviewWhenSynchronized)
-                {
-                    this.commandService.Execute(new ReevaluateSynchronizedInterview(id));
-                }
             }
             else
             {
@@ -185,9 +200,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.
             var i = sequence + 1;
             foreach (var aggregateRootEvent in stream)
             {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0));
+                uncommitedStream.Append(this.overrideReceivedEventTimeStamp
+                    ? aggregateRootEvent.CreateUncommitedEvent(i, 0, DateTime.UtcNow)
+                    : aggregateRootEvent.CreateUncommitedEvent(i, 0));
                 i++;
-            } 
+            }
             return uncommitedStream;
         }
     }

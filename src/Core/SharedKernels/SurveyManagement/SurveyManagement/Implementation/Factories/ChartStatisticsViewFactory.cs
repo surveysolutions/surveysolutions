@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Raven.Abstractions.Extensions;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -22,9 +21,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
-            var collectedStatistics = statisticsReader.GetById(GetStatisticsKey(input.QuestionnaireId, input.QuestionnaireVersion));
+            StatisticsGroupedByDateAndTemplate collectedStatistics = statisticsReader.GetById(GetStatisticsKey(input.QuestionnaireId, input.QuestionnaireVersion));
 
-            if (collectedStatistics.StatisticsByDate.Count == 0)
+            if (collectedStatistics == null || collectedStatistics.StatisticsByDate.Count == 0)
                 return new ChartStatisticsView { Lines = new object[0][][] };
 
             var minCollectedDate = collectedStatistics.StatisticsByDate.Keys.Min();

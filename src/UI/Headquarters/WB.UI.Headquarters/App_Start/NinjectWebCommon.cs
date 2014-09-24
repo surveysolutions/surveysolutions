@@ -43,6 +43,9 @@ using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WebActivatorEx;
@@ -121,32 +124,33 @@ namespace WB.UI.Headquarters
                     LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
-            var eventStoreModule = ModulesFactory.GetEventStoreModule();
-
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
+                new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 new QuestionnaireUpgraderModule(),
-                eventStoreModule,
-                new RavenReadSideInfrastructureModule(ravenSettings, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
+                new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled),
-                new SurveyManagementSharedKernelModule(
-                    AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled));
+
+            var eventStoreModule = ModulesFactory.GetEventStoreModule();
+            var overrideReceivedEventTimeStamp = CoreSettings.EventStoreProvider == StoreProviders.Raven;
+
+            kernel.Load(
+                eventStoreModule,
+                new SurveyManagementSharedKernelModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
-                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]),
-                    isDebug,
-                    applicationBuildVersion,
-                    interviewDetailsDataLoaderSettings));
+                    int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
@@ -165,6 +169,10 @@ namespace WB.UI.Headquarters
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .WhenControllerHas<TokenValidationAuthorizationAttribute>();
 
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(System.Web.Http.Filters.FilterScope.Controller)
+                .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
+                .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
+
             kernel.BindHttpFilter<HeadquarterFeatureOnlyFilter>(System.Web.Http.Filters.FilterScope.Controller)
                .WhenControllerHas<HeadquarterFeatureOnlyAttribute>();
 
@@ -173,6 +181,8 @@ namespace WB.UI.Headquarters
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
+
+            kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
 
 #warning dirty index registrations
             // SuccessMarker.Start(kernel);

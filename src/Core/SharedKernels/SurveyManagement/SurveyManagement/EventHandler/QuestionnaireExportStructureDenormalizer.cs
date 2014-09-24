@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             questionnaireDocument = questionnaireUpgradeService.CreateRostersVariableName(questionnaireDocument);
             var questionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, version);
-            this.dataExportService.CreateExportedDataStructureByTemplate(questionnaireExportStructure);
+            this.dataExportService.CreateExportStructureByTemplate(questionnaireExportStructure);
             this.readsideRepositoryWriter.Store(questionnaireExportStructure, id);
         }
     }

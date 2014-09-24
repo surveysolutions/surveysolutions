@@ -53,7 +53,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     responsibleId: responsibleId,
                     options: options,
                     linkedToQuestionId: linkedToQuestionId,
-                    isFilteredCombobox: isFilteredCombobox
+                    isFilteredCombobox: isFilteredCombobox,
+                    cascadeFromQuestionId: ñascadeFromQuestionId
                     ));
 
         private It should_throw_QuestionnaireException = () =>
@@ -85,5 +86,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
 
         private static Guid? linkedToQuestionId = (Guid?) null;
         private static bool isFilteredCombobox = false;
+        private static Guid? ñascadeFromQuestionId = (Guid?)null;
     }
 }

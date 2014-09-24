@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
 
             plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
 
-            headquartersPullContext = new HeadquartersPullContextTestable();
+            headquartersPullContext = new HeadquartersPullContextStub();
 
             var interviewsMock = new Mock<IQueryableReadSideRepositoryWriter<InterviewSummary>>();
             interviewsMock.Setup(x => x.QueryAll(Moq.It.IsAny<Expression<Func<InterviewSummary, bool>>>())).Returns(new[]
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.Questionnaire
         private static Mock<IHeadquartersQuestionnaireReader> headquartersQuestionnaireReaderMock;
         private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
         private static Mock<ICommandService> commandServiceMock;
-        private static HeadquartersPullContextTestable headquartersPullContext;
+        private static HeadquartersPullContextStub headquartersPullContext;
 
         private static Guid censusModeInterviewId=Guid.NewGuid();
         private static Guid hqCreatedInterviewId = Guid.NewGuid();

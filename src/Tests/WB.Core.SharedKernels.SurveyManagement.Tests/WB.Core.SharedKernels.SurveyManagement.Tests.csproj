@@ -140,6 +140,7 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultipleOptionsQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericIntegerQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericRealQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_PictureQuestionAnswered_received.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowAdded_event_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived.cs" />
@@ -213,6 +214,8 @@
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_questions_one_with_var_lable_other_without.cs" />
     <Compile Include="IncomePackagesRepositoryTests\IncomePackagesRepositoryTestContext.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_processing_item.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_Processing_Stored_Item_by_deleted_interview.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_Processing_Stored_Item_with_zero_events_inside.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_empty_content.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_metainfo_which_cant_be_desirialized.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_wasnt_created_on_tablet.cs" />
@@ -225,7 +228,9 @@
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_question_which_uses_roster_title_in_substitution_and_placed_in_nested_group.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_duplicate_values.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_integer_value_greater_then_allowed_max_value.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_multimedia_question.cs" />
     <Compile Include="QuestionDataParserTests\when_parsing_answer_on_numeric_int_roster_size_question_and_answer_is_negative.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_multimedia_question.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_int_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\CsvDataFileExportServiceTestContext.cs" />

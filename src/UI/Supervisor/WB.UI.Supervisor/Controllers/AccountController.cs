@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 
 namespace WB.UI.Supervisor.Controllers
 {
+    [RequireHttps]
     public class AccountController : Controller
     {
         private readonly IFormsAuthentication authentication;
@@ -45,6 +46,7 @@ namespace WB.UI.Supervisor.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
