@@ -1341,7 +1341,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-                .Concat(questionnaire.GetAllChildCascadingQuestions())
+                
         private static List<Identity> GetQuestionsToBeInvalidInJustCreatedInterview(IQuestionnaire questionnaire,
             List<Identity> groupsToBeDisabled, List<Identity> questionsToBeDisabled)
         {
@@ -2695,16 +2695,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
 
-            var questionIdentity = new Identity(questionId, rosterVector);
-            var previsousAnswer = GetEnabledQuestionAnswerSupportedInExpressions(state, questionIdentity,
+            if (answerChangeType == AnswerChangeType.SingleOption)
+            {
+                var questionIdentity = new Identity(questionId, rosterVector);
+                var previsousAnswer = GetEnabledQuestionAnswerSupportedInExpressions(state, questionIdentity,
                 questionnaire);
-            bool answerChanged = WasQuestionAnswered(state, questionIdentity) && (decimal) previsousAnswer != selectedValue;
-
-
+                bool answerChanged = WasQuestionAnswered(state, questionIdentity) && (decimal) previsousAnswer != (decimal) answer;
             
-            var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
-            
-            var answersToRemove = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading);
+                var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
+                answersForLinkedQuestionsToRemoveByDisabling = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading).ToList();
+            }
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
@@ -2823,8 +2823,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-
-
+        //TODO: should be resolved!!!
+/*       
                 var cascadingQuestionsToEnable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id);
                 IEnumerable<Identity> cascadingQuestionsToEnableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
                     cascadingQuestionsToEnable, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
@@ -2852,7 +2852,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         collectedQuestionsToBeEnabled.Remove(dependentCascadingQuestion);
                         collectedQuestionsToBeDisabled.Add(dependentCascadingQuestion);
                     }
-                }
+                }*/
 
         private List<RosterCalculationData> CalculateFixedRostersData(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire,
             decimal[] outerRosterVector = null)

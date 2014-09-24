@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
     {
         public static Questionnaire Questionnaire(Guid creatorId, QuestionnaireDocument document)
         {
-            return new Questionnaire(new Guid(), document, false);
+            return new Questionnaire(new Guid(), document, false, string.Empty);
         }
     }
 }
