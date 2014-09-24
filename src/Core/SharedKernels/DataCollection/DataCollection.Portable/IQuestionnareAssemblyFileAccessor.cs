@@ -10,6 +10,8 @@ namespace WB.Core.SharedKernels.DataCollection
 
         void RemoveAssembly(Guid questionnaireId, long questionnaireVersion);
 
-        string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion); 
+        string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion);
+
+        byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion);
     }
 }
