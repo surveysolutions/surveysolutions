@@ -165,7 +165,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
                     Verifier<IQuestion, IComposite>(CascadingComboboxHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
                     Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
-                    Verifier<IQuestion>(this.CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
+                    Verifier<IQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
+                    Verifier<IQuestion, IComposite>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
+
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
                     this.ErrorsByQuestionsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
@@ -176,6 +178,37 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByRostersWithDuplicateVariableName
                 };
             }
+        }
+
+        private static EntityVerificationResult<IComposite> CascadingHasCircularReference(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            if (!question.CascadeFromQuestionId.HasValue)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            var referencedQuestion = questionnaire.Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
+            var referencedEntities = new HashSet<IComposite> { referencedQuestion };
+
+            while (referencedQuestion != null && referencedQuestion.CascadeFromQuestionId.HasValue)
+            {
+                var nextParent = questionnaire.Find<SingleQuestion>(referencedQuestion.CascadeFromQuestionId.Value);
+                if (nextParent != null && nextParent.CascadeFromQuestionId.HasValue)
+                {
+                    if (referencedEntities.Contains(nextParent))
+                    {
+                        return new EntityVerificationResult<IComposite>
+                        {
+                            HasErrors = true,
+                            ReferencedEntities = referencedEntities
+                        };
+                    }
+                    referencedEntities.Add(nextParent);
+                    referencedQuestion = nextParent;
+                }
+                else
+                    break;
+            }
+
+            return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
         private bool CascadingQuestionReferencesMissingParent(IQuestion question, QuestionnaireDocument questionnaire)
