@@ -48,10 +48,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
             },
 
             {
-                "~/css/admin", new[]
+                "~/css/controlpanel", new[]
                 {
                     "~/Content/bootstrap.css",
-                    "~/Content/admin.css"
+                    "~/Content/controlpanel.css"
                 }
             }
         };
