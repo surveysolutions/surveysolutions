@@ -19,6 +19,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters
 {
@@ -36,6 +37,7 @@ namespace WB.UI.Headquarters
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new MaintenanceFilter());
             filters.Add(new SupervisorFunctionsEnabledAttribute());
