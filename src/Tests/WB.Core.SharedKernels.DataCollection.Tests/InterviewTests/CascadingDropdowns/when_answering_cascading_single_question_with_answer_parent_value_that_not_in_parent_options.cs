@@ -16,13 +16,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
     [Subject(typeof(Interview))]
     internal class when_answering_cascading_single_question_with_answer_parent_value_that_not_in_parent_options : InterviewTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
             childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
 
             var questionnaireId = Guid.NewGuid();
-            comboShouldNotBeRemoved = Guid.NewGuid();
             actorId = Guid.NewGuid();
 
             var questionnaire = Create.Questionnaire(actorId,
@@ -69,13 +68,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
         It should_throw_InterviewException = () =>
             exception.ShouldBeOfExactType<InterviewException>();
 
-        private static Exception exception;
-        private static Interview interview;
-        private static EventContext eventContext;
-        private static Guid parentSingleOptionQuestionId;
-        private static Guid childCascadedComboboxId;
-        private static Guid comboShouldNotBeRemoved;
-        private static Guid actorId;
+        It should_throw_exception_with_message_containting__not__valid__expression__ = () =>
+            new[] { "answer", "parent value", "not found" }.ShouldEachConformTo(
+                keyword => exception.Message.ToLower().Contains(keyword));
+
+        static Exception exception;
+        static Interview interview;
+        static EventContext eventContext;
+        static Guid parentSingleOptionQuestionId;
+        static Guid childCascadedComboboxId;
+        static Guid actorId;
     }
 }
-

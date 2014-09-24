@@ -137,12 +137,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
         }
-
-        public bool IsCascadingQuestion(Guid questionId)
-        {
-            return this.GetQuestionOrThrow(questionId).CascadeFromQuestionId.HasValue;
-        }
-
+        
         public string GetQuestionTitle(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).QuestionText;
@@ -158,7 +153,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetGroupOrThrow(groupId).Title;
         }
 
-        public Guid? GetCascadingId(Guid questionId)
+        public Guid? GetCascadingQuestionParentId(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
         }
@@ -196,7 +191,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .AnswerText;
         }
 
-        public string GetAnswerOptionParentValue(Guid questionId, decimal answerOptionValue)
+        public string GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
