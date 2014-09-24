@@ -186,8 +186,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             if (question.Answers != null && question.CascadeFromQuestionId.HasValue)
             {
-                var result = question.Answers.Select(x => new {x.AnswerValue, x.ParentValue})
-                    .Distinct().Count() == question.Answers.Count;
+                var enumerable = question.Answers.Select(x => new {x.AnswerValue, x.ParentValue})
+                    .Distinct().ToList();
+                var uniqueCount = enumerable.Count();
+                var result = uniqueCount != question.Answers.Count;
                 return result;
             }
             return false;
