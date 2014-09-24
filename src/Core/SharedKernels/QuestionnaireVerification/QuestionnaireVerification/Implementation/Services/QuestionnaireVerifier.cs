@@ -166,7 +166,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<IQuestion, IComposite>(CascadingComboboxHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
                     Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
                     Verifier<IQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
-                    Verifier<IQuestion, IComposite>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
+                    Verifier<SingleQuestion, SingleQuestion>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
 
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
@@ -180,35 +180,33 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             }
         }
 
-        private static EntityVerificationResult<IComposite> CascadingHasCircularReference(IQuestion question, QuestionnaireDocument questionnaire)
+        private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, QuestionnaireDocument questionnaire)
         {
             if (!question.CascadeFromQuestionId.HasValue)
-                return new EntityVerificationResult<IComposite> { HasErrors = false };
+                return new EntityVerificationResult<SingleQuestion> { HasErrors = false };
 
-            var referencedQuestion = questionnaire.Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
-            var referencedEntities = new HashSet<IComposite> { referencedQuestion };
+            var referencedEntities = new HashSet<SingleQuestion>();
 
-            while (referencedQuestion != null && referencedQuestion.CascadeFromQuestionId.HasValue)
+            Func<SingleQuestion, SingleQuestion> getParentCascadingQuestion = x => questionnaire.Find<SingleQuestion>(q =>
+                q.CascadeFromQuestionId.HasValue && q.PublicKey == x.CascadeFromQuestionId.Value)
+                .SingleOrDefault();
+            var cascadingAncestors = question.UnwrapReferences(getParentCascadingQuestion);
+
+            foreach (var ancestor in cascadingAncestors)
             {
-                var nextParent = questionnaire.Find<SingleQuestion>(referencedQuestion.CascadeFromQuestionId.Value);
-                if (nextParent != null && nextParent.CascadeFromQuestionId.HasValue)
+                if (referencedEntities.Contains(ancestor))
                 {
-                    if (referencedEntities.Contains(nextParent))
+                    return new EntityVerificationResult<SingleQuestion>
                     {
-                        return new EntityVerificationResult<IComposite>
-                        {
-                            HasErrors = true,
-                            ReferencedEntities = referencedEntities
-                        };
-                    }
-                    referencedEntities.Add(nextParent);
-                    referencedQuestion = nextParent;
+                        HasErrors = true,
+                        ReferencedEntities = referencedEntities
+                    };
                 }
-                else
-                    break;
+
+                referencedEntities.Add(ancestor);
             }
 
-            return new EntityVerificationResult<IComposite> { HasErrors = false };
+            return new EntityVerificationResult<SingleQuestion> { HasErrors = false };
         }
 
         private bool CascadingQuestionReferencesMissingParent(IQuestion question, QuestionnaireDocument questionnaire)
