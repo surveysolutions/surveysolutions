@@ -210,7 +210,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.OptionsCount = result.Options.Length;
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
             result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire);
-            result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire);
+            result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
             result.NotPrefilledQuestionScopeOptions = NotPrefilledQuestionScopeOptions;
@@ -293,10 +293,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return null;
         }
 
-        private List<DropdownQuestionView> GetSourcesOfSingleQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private List<DropdownQuestionView> GetSourcesOfSingleQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                x => x.Where(q => q is SingleOptionDetailsView)
+                x => x.Where(q => q.Id != questionId).Where(q => q is SingleOptionDetailsView)
                 .ToList();
 
             var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
