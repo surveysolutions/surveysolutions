@@ -42,6 +42,7 @@
     <Compile Include="AbstractInterviewExpressionState.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
+    <Compile Include="GeoLocation.cs" />
     <Compile Include="ExpressionProcessor.cs" />
     <Compile Include="Identity.cs" />
     <Compile Include="IdentityComparer.cs" />

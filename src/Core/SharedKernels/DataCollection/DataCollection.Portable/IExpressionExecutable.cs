@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection
         void UpdateQrBarcodeAnswer(Guid questionId, string answer);
         void UpdateSingleOptionAnswer(Guid questionId, decimal answer);
         void UpdateMultiOptionAnswer(Guid questionId, decimal[] answer);
-        void UpdateGeoLocationAnswer(Guid questionId, double latitude, double longitude, double precision);
+        void UpdateGeoLocationAnswer(Guid questionId, double latitude, double longitude, double precision, double altitude);
         void UpdateTextListAnswer(Guid questionId, Tuple<decimal, string>[] answers);
         void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] selectedPropagationVector);
         void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[][] selectedPropagationVectors);

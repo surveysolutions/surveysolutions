@@ -148,12 +148,12 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             targetLevel.UpdateMultiOptionAnswer(questionId, answer);
         }
 
-        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude, double accuracy)
+        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude, double accuracy, double altitude)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            targetLevel.UpdateGeoLocationAnswer(questionId, latitude,  longitude,  accuracy);
+            targetLevel.UpdateGeoLocationAnswer(questionId, latitude,  longitude,  accuracy, altitude);
         }
 
         public override void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
