@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             if (question.Answers != null && question.CascadeFromQuestionId.HasValue)
             {
-                var enumerable = question.Answers.Select(x => new {x.AnswerValue, x.ParentValue})
+                var enumerable = question.Answers.Select(x => new {x.AnswerText, x.ParentValue})
                     .Distinct().ToList();
                 var uniqueCount = enumerable.Count();
                 var result = uniqueCount != question.Answers.Count;
@@ -326,7 +326,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private bool OptionValuesMustBeUniqueForCategoricalQuestion(IQuestion question)
         {
-            if (question.Answers != null && !question.CascadeFromQuestionId.HasValue)
+            if (question.Answers != null)
             {
                 return question.Answers.Where(x => x.AnswerValue != null).Select(x => x.AnswerValue.Trim()).Distinct().Count() != question.Answers.Count;
             }
