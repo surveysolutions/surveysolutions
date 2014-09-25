@@ -5,7 +5,6 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using It = Machine.Specifications.It;
 
@@ -14,10 +13,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
     [Ignore("bulk test run failed on server build")]
     internal class when_expression_state_processes_condition_expressions_on_roster : CodeGenerationTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
-            eventContext = new EventContext();
-
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
@@ -36,25 +33,25 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             state.AddRoster(group1Id, new decimal[0], 1, null);
         };
 
-        private Because of = () =>
+        Because of = () =>
             state.ProcessConditionExpressions(out questionsToBeEnabled, out questionsToBeDisabled, out groupsToBeEnabled, out groupsToBeDisabled);
 
-        private It should_disabled_question_count_equal_0 = () =>
+        It should_disabled_question_count_equal_0 = () =>
             questionsToBeDisabled.Count.ShouldEqual(0);
 
-        private It should_enabled_question_count_equal_1 = () =>
+        It should_enabled_question_count_equal_1 = () =>
             questionsToBeEnabled.Count.ShouldEqual(1);
 
-        private It should_enabled_question_id_equal_ = () =>
+        It should_enabled_question_id_equal_ = () =>
             questionsToBeEnabled.Single().Id.ShouldEqual(questionId);
 
-        private It should_disabled_group_count_equal_1 = () =>
+        It should_disabled_group_count_equal_1 = () =>
             groupsToBeDisabled.Count.ShouldEqual(1);
 
-        private It should_disabled_group_id_equal_group1id = () =>
+        It should_disabled_group_id_equal_group1id = () =>
             groupsToBeDisabled.Single().Id.ShouldEqual(group1Id);
 
-        private It should_enable_group_count_equal_0 = () =>
+        It should_enable_group_count_equal_0 = () =>
             groupsToBeEnabled.Count.ShouldEqual(0);
 
 
@@ -68,7 +65,5 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         private static List<Identity> questionsToBeDisabled;
         private static List<Identity> groupsToBeEnabled;
         private static List<Identity> groupsToBeDisabled;
-
-        private static EventContext eventContext;
     }
 }
