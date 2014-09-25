@@ -136,27 +136,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     "\r\n            if (targetLevel == null) return;\r\n\r\n            targetLevel.Update" +
                     "MultiOptionAnswer(questionId, answer);\r\n        }\r\n\r\n        public override voi" +
                     "d UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitu" +
-                    "de, double longitude, double accuracy)\r\n        {\r\n            var targetLevel =" +
-                    " this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetL" +
-                    "evel == null) return;\r\n\r\n            targetLevel.UpdateGeoLocationAnswer(questio" +
-                    "nId, latitude,  longitude,  accuracy);\r\n        }\r\n\r\n        public override voi" +
-                    "d UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, s" +
-                    "tring>[] answers)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAn" +
-                    "dVector(questionId, rosterVector);\r\n            if (targetLevel == null) return;" +
-                    "\r\n\r\n            targetLevel.UpdateTextListAnswer(questionId, answers);\r\n        " +
-                    "}\r\n\r\n        public override void UpdateLinkedSingleOptionAnswer(Guid questionId" +
-                    ", decimal[] rosterVector, decimal[] selectedPropagationVector)\r\n        {\r\n     " +
-                    "       var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r" +
-                    "\n            if (targetLevel == null) return;\r\n            \r\n            targetL" +
-                    "evel.UpdateLinkedSingleOptionAnswer(questionId, selectedPropagationVector);\r\n   " +
-                    "     }\r\n\r\n        public override void UpdateLinkedMultiOptionAnswer(Guid questi" +
-                    "onId, decimal[] rosterVector, decimal[][] answer)\r\n        {\r\n            var ta" +
-                    "rgetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            " +
-                    "if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateLinkedMultiOpt" +
-                    "ionAnswer(questionId, answer);\r\n        }\r\n        \r\n        public override Dic" +
-                    "tionary<Guid, Guid[]> GetParentsMap()\r\n        {\r\n            return IdOf.parent" +
-                    "ScopeMap;\r\n        }\r\n\r\n        public override IInterviewExpressionState Clone(" +
-                    ")\r\n        {\r\n            return new ");
+                    "de, double longitude, double accuracy, double altitude)\r\n        {\r\n            " +
+                    "var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n      " +
+                    "      if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateGeoLocat" +
+                    "ionAnswer(questionId, latitude,  longitude,  accuracy, altitude);\r\n        }\r\n\r\n" +
+                    "        public override void UpdateTextListAnswer(Guid questionId, decimal[] ros" +
+                    "terVector, Tuple<decimal, string>[] answers)\r\n        {\r\n            var targetL" +
+                    "evel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (t" +
+                    "argetLevel == null) return;\r\n\r\n            targetLevel.UpdateTextListAnswer(ques" +
+                    "tionId, answers);\r\n        }\r\n\r\n        public override void UpdateLinkedSingleO" +
+                    "ptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagati" +
+                    "onVector)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVector(" +
+                    "questionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n      " +
+                    "      \r\n            targetLevel.UpdateLinkedSingleOptionAnswer(questionId, selec" +
+                    "tedPropagationVector);\r\n        }\r\n\r\n        public override void UpdateLinkedMu" +
+                    "ltiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] answer)\r\n  " +
+                    "      {\r\n            var targetLevel = this.GetRosterByIdAndVector(questionId, r" +
+                    "osterVector);\r\n            if (targetLevel == null) return;\r\n\r\n            targe" +
+                    "tLevel.UpdateLinkedMultiOptionAnswer(questionId, answer);\r\n        }\r\n        \r\n" +
+                    "        public override Dictionary<Guid, Guid[]> GetParentsMap()\r\n        {\r\n   " +
+                    "         return IdOf.parentScopeMap;\r\n        }\r\n\r\n        public override IInte" +
+                    "rviewExpressionState Clone()\r\n        {\r\n            return new ");
             
             #line 190 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireTemplateStructure.GeneratedClassName));

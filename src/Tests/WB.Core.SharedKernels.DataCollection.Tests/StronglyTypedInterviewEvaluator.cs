@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             }
         }
 
-        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude, double accuracy)
+        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude, double accuracy, double altitude)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
