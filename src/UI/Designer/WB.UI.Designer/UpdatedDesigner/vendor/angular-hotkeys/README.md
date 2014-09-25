@@ -5,6 +5,8 @@ Configuration-centric keyboard shortcuts for your Angular apps.
 [![Coverage Status](https://coveralls.io/repos/chieffancypants/angular-hotkeys/badge.png?branch=master)](https://coveralls.io/r/chieffancypants/angular-hotkeys?branch=master)
 ![Build Status](https://magnum-ci.com/status/89743485de3e7311dfc9793e26f39b41.png)
 
+**Requirements**: Angular 1.2+
+
 ### Features:
 - Define hotkeys on an entire route, automatically binding and unbinding them as you navigate
 - Automatic listing of shortcuts when users hit the `?` key
@@ -25,6 +27,8 @@ $ bower install chieffancypants/angular-hotkeys --save
 $ npm install angular-hotkeys --save
 ```
 
+
+*please use either the minified or unminified file in the `build` directory*
 
 ### Why I made this:
 Other projects out there rely too heavily on HTML markup for keyboard shortcuts.  For example:
@@ -69,7 +73,7 @@ You can either define hotkeys in your Controller, or in your Route configuration
 angular.module('myApp', ['ngRoute', 'cfp.hotkeys']);
 ```
 
-Behind the scenes, I'm using the [Mousetrap](https://github.com/ccampbell/mousetrap) library to manage the key bindings.  Check out the docs there for more information on what kind of key combinations can be used.
+Behind the scenes, I'm using the [Mousetrap](https://github.com/ccampbell/mousetrap) library to manage the key bindings.  Check out the docs there for more information on what kind of key combinations can be used.  This library is included in the files from the `build` directory, so there is no need to install and include Mousetrap separately.
 
 
 #### Binding hotkeys in controllers:
@@ -163,7 +167,7 @@ angular.module('myApp', ['cfp.hotkeys'])
 - `combo`: They keyboard combo (shortcut) you want to bind to
 - `description`: [OPTIONAL] The description for what the combo does and is only used for the Cheat Sheet.  If it is not supplied, it will not show up, and in effect, allows you to have unlisted hotkeys.
 - `callback`: The function to execute when the key(s) are pressed.  Passes along two arguments, `event` and `hotkey`
-- `action`: [OPTIONAL] The type of event to listen for, such as `keypress`, `keydown` or `keyup`
+- `action`: [OPTIONAL] The type of event to listen for, such as `keypress`, `keydown` or `keyup`. Usage of this parameter is discouraged as the underlying library will pick the most suitable option automatically. This should only be necessary in advanced situations.
 - `allowIn`: [OPTIONAL] an array of tag names to allow this combo in ('INPUT', 'SELECT', and/or 'TEXTAREA')
 
 ```js
@@ -209,3 +213,7 @@ hotkeys.add({
   }
 });
 ```
+
+## Credits:
+
+Muchas gracias to Craig Campbell for his [Mousetrap](https://github.com/ccampbell/mousetrap) library, which provides the underlying library for handling keyboard shortcuts.
