@@ -1307,9 +1307,6 @@
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\CONTRIBUTING.md" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\README.md" />
-    <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js.map">
-      <DependentUpon>ng-context-menu.min.js</DependentUpon>
-    </Content>
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.scss" />
     <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
