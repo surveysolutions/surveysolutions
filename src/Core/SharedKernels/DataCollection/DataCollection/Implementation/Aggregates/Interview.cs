@@ -725,6 +725,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             : base(id)
         {
             this.questionnaireId = questionnaireId;
+            this.questionnaireVersion = questionnaireVersion;
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
 
             var interviewChangeStructures = new InterviewChangeStructures();
@@ -765,8 +766,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             DateTime answersTime)
             : base(id)
         {
-            this.questionnaireId = questionnaireId;
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
+
+            this.questionnaireId = questionnaireId;
+            this.questionnaireVersion = questionnaire.Version;
 
             var interviewChangeStructures = new InterviewChangeStructures();
 
@@ -803,10 +806,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Interview(Guid id, Guid userId, Guid questionnaireId, long? questionnaireVersion, DateTime answersTime, Guid supervisorId)
             : base(id)
         {
-            this.questionnaireId = questionnaireId;
+            
             IQuestionnaire questionnaire = questionnaireVersion.HasValue
                 ? this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
                 : this.GetQuestionnaireOrThrow(questionnaireId);
+
+            this.questionnaireId = questionnaireId;
+            this.questionnaireVersion = questionnaire.Version;
 
             InterviewChangeStructures interviewChangeStructures = new InterviewChangeStructures();
 
@@ -835,6 +841,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             : base(id)
         {
             this.questionnaireId = questionnaireId;
+            this.questionnaireVersion = questionnaireVersion;
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId,questionnaireVersion, interviewStatus, featuredQuestionsMeta, true, null));
@@ -847,6 +854,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             : base(id)
         {
             this.questionnaireId = questionnaireId;
+            this.questionnaireVersion = questionnaireVersion;
             this.ApplySynchronizationMetadata(id, userId, questionnaireId,questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
 
