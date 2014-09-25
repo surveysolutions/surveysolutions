@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.WebClientExtensionsTests
 
         It should_not_change_auth_headers_of_client = () => client.DefaultRequestHeaders.Authorization.Scheme.ShouldEqual("authToken");
 
-        static HeadquartersSettings headquartersSettings;
+        static IHeadquartersSettings headquartersSettings;
         static HttpClient client; 
     }
 }

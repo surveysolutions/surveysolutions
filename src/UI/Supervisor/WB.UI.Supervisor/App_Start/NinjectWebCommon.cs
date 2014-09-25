@@ -121,16 +121,8 @@ namespace WB.UI.Supervisor.App_Start
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
 
-            var baseHqUrl = new Uri(WebConfigurationManager.AppSettings["Headquarters.BaseUrl"]);
-            var headquartersSettings = new HeadquartersSettings(
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.LoginServiceEndpoint"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.UserChangedFeed"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsFeed"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireDetailsEndpoint"]).ToString(),
-                WebConfigurationManager.AppSettings["Headquarters.AccessToken"],
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireChangedFeed"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.FilePushEndpoint"]));
+            var headquartersSettings = (HeadquartersSettings) System.Configuration.ConfigurationManager.GetSection(
+                "headquartersSettingsGroup/headquartersSettings");
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,

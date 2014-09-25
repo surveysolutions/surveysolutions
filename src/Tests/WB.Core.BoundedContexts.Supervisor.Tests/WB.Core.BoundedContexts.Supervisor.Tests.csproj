@@ -83,6 +83,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Net.Http" />
@@ -117,10 +118,8 @@
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_rejected_by_hq_interview_created_on_client.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_canceled_interview_which_is_present_on_supervisor.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pulling_rejected_by_hq_interview_in_light_delete_state_at_supervisor.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_file_and_responce_cant_be_dematerialized.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_file_without_errors.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_file_with_false_responce_from_server.cs" />
-    <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_file_with_unsuccessful_responce_from_server.cs" />
+    <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_file_with_unsuccessful_response_from_server.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interviews_and_no_interviews_are_ready.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interviews_and_one_interview_is_ready_and_has_different_events.cs" />
     <Compile Include="Synchronization\InterviewsSynchronizerTests\when_pushing_interview_and_interview_has_prefilled_question_and_was_client_created.cs" />
