@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public abstract void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer);
 
         public abstract void UpdateGeoLocationAnswer(Guid questionId, decimal[] propagationVector, double latitude, double longitude,
-            double accuracy);
+            double accuracy, double altitude);
 
         public abstract void UpdateTextListAnswer(Guid questionId, decimal[] propagationVector, Tuple<decimal, string>[] answers);
 

@@ -170,7 +170,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     var geoAnswer = question.Answer as GeoPosition;
                     if (geoAnswer != null)
                     {
-                        this.expressionProcessorStatePrototype.UpdateGeoLocationAnswer(question.Id, questionPropagationVector, geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy);
+                        this.expressionProcessorStatePrototype.UpdateGeoLocationAnswer(question.Id, questionPropagationVector, geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy, geoAnswer.Altitude);
                     }
                     if (question.Answer is DateTime)
                     {
@@ -298,7 +298,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            expressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.PropagationVector, @event.Latitude, @event.Longitude, @event.Accuracy);
+            expressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.PropagationVector, @event.Latitude, 
+                @event.Longitude, @event.Accuracy, @event.Altitude);
         }
 
         internal void Apply(TextListQuestionAnswered @event)
@@ -903,7 +904,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 expressionProcessorState.UpdateGeoLocationAnswer(answerChange.QuestionId, answerChange.RosterVector,
                                     answer.Latitude,
                                     answer.Longitude,
-                                    answer.Accuracy);
+                                    answer.Accuracy,
+                                    answer.Altitude);
                             }
                                 
                                 break;
@@ -2664,7 +2666,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
 
             Action<IInterviewExpressionState> updateState = expressionProcessorState => 
-                expressionProcessorState.UpdateGeoLocationAnswer(questionId, rosterVector, latitude, longitude, accuracy);
+                expressionProcessorState.UpdateGeoLocationAnswer(questionId, rosterVector, latitude, longitude, accuracy, altitude);
 
             return this.CalculateInterviewChangesOnAnswerQuestion(
                 state,

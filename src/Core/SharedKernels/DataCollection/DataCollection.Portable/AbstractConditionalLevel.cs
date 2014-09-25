@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection
         protected Dictionary<Guid, Action<decimal[]>> QuestionDecimal1DArrayUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<decimal[][]>> QuestionDecimal2DArrayUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<Tuple<decimal, string>[]>> QuestionTupleArrayUpdateMap { get; private set; }
-        protected Dictionary<Guid, Action<double, double, double>> QuestionGPSUpdateMap { get; private set; }
+        protected Dictionary<Guid, Action<GeoLocation>> QuestionGpsUpdateMap { get; private set; }
 
         protected Dictionary<Guid, Func<decimal[], Identity[], IExpressionExecutable>> RosterGenerators { get; set; }
 
@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection
             this.QuestionDecimal1DArrayUpdateMap = new Dictionary<Guid, Action<decimal[]>>();
             this.QuestionDecimal2DArrayUpdateMap = new Dictionary<Guid, Action<decimal[][]>>();
             this.QuestionDecimalUpdateMap = new Dictionary<Guid, Action<decimal?>>();
-            this.QuestionGPSUpdateMap = new Dictionary<Guid, Action<double, double, double>>();
+            this.QuestionGpsUpdateMap = new Dictionary<Guid, Action<GeoLocation>>();
             this.QuestionTupleArrayUpdateMap = new Dictionary<Guid, Action<Tuple<decimal, string>[]>>();
 
             this.RosterGenerators = new Dictionary<Guid, Func<decimal[], Identity[], IExpressionExecutable>>();
@@ -163,9 +163,9 @@ namespace WB.Core.SharedKernels.DataCollection
             this.QuestionDecimalUpdateMap.Add(id, action);
         }
 
-        protected void AddUpdaterToMap(Guid id, Action<double, double, double> action)
+        protected void AddUpdaterToMap(Guid id, Action<GeoLocation> action)
         {
-            this.QuestionGPSUpdateMap.Add(id, action);
+            this.QuestionGpsUpdateMap.Add(id, action);
         }
 
         protected void AddUpdaterToMap(Guid id, Action<Tuple<decimal, string>[]> action)
@@ -323,9 +323,9 @@ namespace WB.Core.SharedKernels.DataCollection
             this.QuestionDecimal1DArrayUpdateMap[questionId].Invoke(answer);
         }
 
-        public void UpdateGeoLocationAnswer(Guid questionId, double latitude, double longitude, double precision)
+        public void UpdateGeoLocationAnswer(Guid questionId, double latitude, double longitude, double precision, double altitude)
         {
-            this.QuestionGPSUpdateMap[questionId].Invoke(latitude, longitude, precision);
+            this.QuestionGpsUpdateMap[questionId].Invoke(new GeoLocation(latitude, longitude, precision, altitude));
         }
 
         public void UpdateTextListAnswer(Guid questionId, Tuple<decimal, string>[] answers)
