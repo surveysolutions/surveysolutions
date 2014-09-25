@@ -82,6 +82,6 @@
     "white"         : false,    // true: Check against strict whitespace and indentation rules
 
     // Custom Globals
-    "globals"       : { "angular": false }  // additional predefined global variables
+    "globals"       : { "angular": false, "_":  false }  // additional predefined global variables
 }
  
