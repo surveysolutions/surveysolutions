@@ -2821,7 +2821,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = new Identity(questionId, rosterVector);
             var previsousAnswer = GetEnabledQuestionAnswerSupportedInExpressions(state, questionIdentity,
                 questionnaire);
-            bool answerChanged = WasQuestionAnswered(state, questionIdentity) && (decimal) previsousAnswer != selectedValue;
+            bool answerChanged = WasQuestionAnswered(state, questionIdentity) && (decimal?)previsousAnswer != selectedValue;
 
             EnablementChanges enablementChanges = this.CalculateEnablementChanges(state,
                 answeredQuestion, selectedValue, questionnaire, GetRosterInstanceIds);
