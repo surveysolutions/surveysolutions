@@ -16,7 +16,12 @@ namespace WB.Core.SharedKernels.DataCollection.Views.BinaryData
         }
         public Guid InterviewId { get; private set; }
         public string FileName { get; private set; }
-        public byte[] Data { get { return getData(); } }
+
+        public byte[] GetData()
+        {
+            return this.getData();
+        }
+
         private readonly Func<byte[]> getData;
     }
 }
