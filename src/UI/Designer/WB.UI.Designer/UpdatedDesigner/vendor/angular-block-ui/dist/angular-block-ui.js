@@ -1,7 +1,13 @@
-/* Copyright (c) 2013-2014, Null McNull https://github.com/McNull, LICENSE: MIT */
-angular.module('blockUI', ['templates-angularBlockUI']);
+/*!
+   angular-block-ui v0.0.12
+   (c) 2014 (null) McNull https://github.com/McNull/angular-block-ui
+   License: MIT
+*/
+(function(angular) {
 
-angular.module('blockUI').config(function($provide, $httpProvider) {
+var blkUI = angular.module('blockUI', []);
+
+blkUI.config(["$provide", "$httpProvider", function($provide, $httpProvider) {
 
   $provide.decorator('$exceptionHandler', ['$delegate', '$injector',
     function($delegate, $injector) {
@@ -22,21 +28,24 @@ angular.module('blockUI').config(function($provide, $httpProvider) {
   ]);
 
   $httpProvider.interceptors.push('blockUIHttpInterceptor');
-});
+}]);
 
-angular.module('blockUI').run(function($document) {
-  $document.find('body').append('<div block-ui="main"></div>');
-});
+blkUI.run(["$document", "blockUIConfig", function($document, blockUIConfig) {
+  if(blockUIConfig.autoInjectBodyBlock) {
+    $document.find('body').append('<div block-ui="main"></div>');
+  }
+}]);
 
-angular.module('blockUI').provider('blockUIConfig', function() {
+blkUI.provider('blockUIConfig', function() {
 
   var _config = {
-    templateUrl: 'angular-block-ui/angular-block-ui.tmpl.html',
+    templateUrl: 'angular-block-ui/angular-block-ui.ng.html',
     delay: 250,
     message: "Loading ...",
     autoBlock: true,
     resetOnException: true,
-    requestFilter: angular.noop
+    requestFilter: angular.noop,
+    autoInjectBodyBlock: true
   };
 
   this.templateUrl = function(url) {
@@ -67,12 +76,16 @@ angular.module('blockUI').provider('blockUIConfig', function() {
     _config.requestFilter = filter;
   };
 
+  this.autoInjectBodyBlock = function(enabled) {
+    _config.autoInjectBodyBlock = enabled;
+  };
+
   this.$get = function() {
     return _config;
   };
 });
 
-angular.module('blockUI').directive('blockUi', function(blockUI, blockUIConfig, blockUiLinkFn) {
+blkUI.directive('blockUi', ["blockUI", "blockUIConfig", "blockUiLinkFn", function(blockUI, blockUIConfig, blockUiLinkFn) {
   return {
     scope: true,
     restrict: 'A',
@@ -80,7 +93,7 @@ angular.module('blockUI').directive('blockUi', function(blockUI, blockUIConfig, 
     template: blockUIConfig.template,
     link: blockUiLinkFn
   };
-}).factory('blockUiLinkFn', function(blockUI, blockUIUtils) {
+}]).factory('blockUiLinkFn', ["blockUI", "blockUIUtils", function(blockUI, blockUIUtils) {
 
   return function($scope, $element, $attrs) {
     
@@ -153,11 +166,15 @@ angular.module('blockUI').directive('blockUi', function(blockUI, blockUIConfig, 
       $element.addClass('block-ui');
       $parent.data('block-ui', srvInstance);
       $scope.state = srvInstance.state();
+      
+      $scope.$watch('state.blocking', function(value){
+        $parent.attr('aria-busy', value);
+      });
     }
   };
-});
+}]);
 
-angular.module('blockUI').factory('blockUIHttpInterceptor', function($q, $injector, blockUIConfig) {
+blkUI.factory('blockUIHttpInterceptor', ["$q", "$injector", "blockUIConfig", function($q, $injector, blockUIConfig) {
 
   var blockUI;
 
@@ -201,16 +218,16 @@ angular.module('blockUI').factory('blockUIHttpInterceptor', function($q, $inject
     requestError: error,
 
     response: function(response) {
-      stopBlockUI(response.config)
+      stopBlockUI(response.config);
       return response;
     },
 
     responseError: error
   };
 
-});
+}]);
 
-angular.module('blockUI').factory('blockUI', function(blockUIConfig, $timeout, blockUIUtils, $document) {
+blkUI.factory('blockUI', ["blockUIConfig", "$timeout", "blockUIUtils", "$document", function(blockUIConfig, $timeout, blockUIUtils, $document) {
 
   var $body = $document.find('body');
 
@@ -228,7 +245,14 @@ angular.module('blockUI').factory('blockUI', function(blockUIConfig, $timeout, b
     this._refs = 0;
 
     this.start = function(message) {
-      state.message = message || blockUIConfig.message;
+
+      if(state.blockCount > 0) {
+        message = message || state.message || blockUIConfig.message;
+      } else {
+        message = message || blockUIConfig.message;
+      }
+
+      state.message = message;
 
       state.blockCount++;
 
@@ -242,7 +266,17 @@ angular.module('blockUI').factory('blockUI', function(blockUIConfig, $timeout, b
         // to restore focus when we're done (reset)
 
         self._restoreFocus = $ae[0];
-        self._restoreFocus.blur();
+
+        // https://github.com/McNull/angular-block-ui/issues/13
+        // http://stackoverflow.com/questions/22698058/apply-already-in-progress-error-when-using-typeahead-plugin-found-to-be-relate
+        // Queue the blur after any ng-blur expression.
+
+        $timeout(function() {
+          // Ensure we still need to blur
+          if(self._restoreFocus) {
+            self._restoreFocus.blur();
+          }
+        });
       }
 
       if (!startPromise) {
@@ -264,7 +298,7 @@ angular.module('blockUI').factory('blockUI', function(blockUIConfig, $timeout, b
       state.blockCount = Math.max(0, --state.blockCount);
 
       if (state.blockCount === 0) {
-        this.reset(true);
+        self.reset(true);
       }
     };
 
@@ -395,10 +429,10 @@ angular.module('blockUI').factory('blockUI', function(blockUIConfig, $timeout, b
   mainBlock.instances = instances;
 
   return mainBlock;
-});
+}]);
 
 
-angular.module('blockUI').factory('blockUIUtils', function() {
+blkUI.factory('blockUIUtils', function() {
 
   var utils = {
     buildRegExp: function(pattern) {
@@ -442,13 +476,11 @@ angular.module('blockUI').factory('blockUIUtils', function() {
   return utils;
 
 });
-angular.module('templates-angularBlockUI', ['angular-block-ui/angular-block-ui.tmpl.html']);
-
-angular.module("angular-block-ui/angular-block-ui.tmpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("angular-block-ui/angular-block-ui.tmpl.html",
-    "<div ng-show=\"state.blockCount > 0\" class=\"block-ui-overlay\" ng-class=\"{ 'block-ui-visible': state.blocking }\"></div>\n" +
-    "<div ng-show=\"state.blocking\" class=\"block-ui-message-container\">\n" +
-    "  <div class=\"block-ui-message\">{{ state.message }}</div>  \n" +
-    "</div>\n" +
-    "");
+// Automatically generated.
+// This file is already embedded in your main javascript output, there's no need to include this file
+// manually in the index.html. This file is only here for your debugging pleasures.
+angular.module('blockUI').run(['$templateCache', function($templateCache){
+  $templateCache.put('angular-block-ui/angular-block-ui.ng.html', '<div ng-show=\"state.blockCount > 0\" class=\"block-ui-overlay\" ng-class=\"{ \'block-ui-visible\': state.blocking }\"></div><div ng-show=\"state.blocking\" class=\"block-ui-message-container\" aria-live=\"assertive\" aria-atomic=\"true\"><div class=\"block-ui-message\">{{ state.message }}</div></div>');
 }]);
+})(angular);
+//# sourceMappingURL=angular-block-ui.js.map

@@ -689,10 +689,10 @@
     <Content Include="UpdatedDesigner\test.html" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.css" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.min.css" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap-tpls.js" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap-tpls.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap.js" />
@@ -1291,8 +1291,6 @@
     <Content Include="UpdatedDesigner\data\editQuestion\3c0ff7a6d1614aa2b9af21aaa40cdb47.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\LICENSE" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\LICENSE" />
@@ -1349,6 +1347,10 @@
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.scss" />
     <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.css.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.js.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.js.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
