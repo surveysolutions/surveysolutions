@@ -32,16 +32,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTes
                 questionTitle: questionTitle, questionVariable: questionVariable,
                 questionConditionExpression: questionEnablementCondition));
 
-        It should_updated_question_be_not_null = () =>
+        It should_update_not_null_question = () =>
             GetQuestion().ShouldNotBeNull();
 
-        It should_updated_question_type_be_equal_to_Multimedia = () =>
+        It should_update_question_of_Multimedia_type = () =>
             GetQuestion().QuestionType.ShouldEqual(QuestionType.Multimedia);
 
-        It should_updated_question_title_be_equal_to_questionTitle = () =>
+        It should_update_question_title = () =>
             GetQuestion().Title.ShouldEqual(questionTitle);
 
-        It should_updated_question_variable_name_be_equal_to_questionVariable = () =>
+        It should_update_question_variable_name = () =>
             GetQuestion().Variable.ShouldEqual(questionVariable);
 
         private static PdfQuestionView GetQuestion()
