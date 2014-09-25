@@ -219,9 +219,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 case QuestionType.TextList:
                     return "Tuple<decimal, string>[]";
 
-                //TODO: should be fixed with custom type
                 case QuestionType.GpsCoordinates:
-                    return "decimal?";
+                    return "GeoLocation";
                 default:
                     throw new ArgumentException("Unknown question type.");
             }
