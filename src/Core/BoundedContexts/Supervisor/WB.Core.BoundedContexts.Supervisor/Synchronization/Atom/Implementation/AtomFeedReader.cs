@@ -13,10 +13,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
     internal class AtomFeedReader : IAtomFeedReader
     {
         private readonly Func<HttpMessageHandler> messageHandler;
-        private readonly HeadquartersSettings headquartersSettings;
+        private readonly IHeadquartersSettings headquartersSettings;
         private const string AtomXmlNamespace = "http://www.w3.org/2005/Atom";
 
-        public AtomFeedReader(Func<HttpMessageHandler> messageHandler, HeadquartersSettings settings)
+        public AtomFeedReader(Func<HttpMessageHandler> messageHandler, IHeadquartersSettings settings)
         {
             if (messageHandler == null) throw new ArgumentNullException("messageHandler");
             this.messageHandler = messageHandler;

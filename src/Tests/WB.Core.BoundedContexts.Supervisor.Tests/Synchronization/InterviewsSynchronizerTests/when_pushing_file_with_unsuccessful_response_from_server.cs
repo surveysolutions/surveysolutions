@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests
 {
-    internal class when_pushing_file_with_false_responce_from_server : InterviewsSynchronizerTestsContext
+    internal class when_pushing_file_with_unsuccessful_response_from_server : InterviewsSynchronizerTestsContext
     {
         Establish context = () =>
         {
@@ -32,12 +32,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 .Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .Returns(Task<HttpResponseMessage>.Factory.StartNew(() =>
-                    new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(positiveResponse) }))
+                    new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent(positiveResponse) }))
                 .Callback<HttpRequestMessage, CancellationToken>((message, token) =>
                     contentSentToHq = message.Content.ReadAsStringAsync().Result);
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
-               => utils.Deserrialize<bool>(positiveResponse) == false);
+               => utils.Deserrialize<bool>(positiveResponse) == true);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 httpMessageHandler: () => httpMessageHandler,

@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\WebClientExtensions.cs" />
+    <Compile Include="IHeadquartersSettings.cs" />
     <Compile Include="Interviews\IHeadquartersInterviewReader.cs" />
     <Compile Include="Interviews\Implementation\EventHandlers\ReadyToSendToHeadquartersInterviewDenormalizer.cs" />
     <Compile Include="Interviews\Implementation\HeadquartersInterviewReader.cs" />
@@ -117,7 +118,6 @@
     <Compile Include="Users\IHeadquartersLoginService.cs" />
     <Compile Include="Users\IHeadquartersUserReader.cs" />
     <Compile Include="Users\Implementation\HeadquartersLoginService.cs" />
-    <Compile Include="HeadquartersSettings.cs" />
     <Compile Include="Users\Implementation\HeadquartersUserReader.cs" />
   </ItemGroup>
   <ItemGroup>
