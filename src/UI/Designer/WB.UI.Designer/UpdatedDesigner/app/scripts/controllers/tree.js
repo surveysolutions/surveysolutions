@@ -397,8 +397,6 @@
                         $scope.items = result.items;
                         $scope.currentChapter = result;
                         connectTree();
-
-                        window.ContextMenuController.get().init();
                     });
             };
             $scope.refreshTree();
