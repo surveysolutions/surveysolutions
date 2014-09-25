@@ -40,7 +40,7 @@ gulp.task('devJs', function () {
    return gulp.src(paths.scripts)
       .pipe(plugins.jshint())
       .pipe(plugins.jshint.reporter('default'))
-      .pipe(jshint.reporter('fail'))
+      .pipe(plugins.jshint.reporter('fail'))
       .pipe(plugins.ngAnnotate())
       .pipe(plugins.uglify())
       .pipe(plugins.concat('app.js'))
