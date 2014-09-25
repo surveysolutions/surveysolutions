@@ -79,9 +79,9 @@
         $httpProvider.interceptors.push('errorReportingInterceptor');
         $httpProvider.interceptors.push('authorizationInterceptor');
     }])
-    .config(['blockUIConfigProvider', function(blockUiConfigProvider) {
-        blockUiConfigProvider.message('Please wait...');
-        blockUiConfigProvider.autoBlock(false);
+    .config(['blockUIConfig', function (blockUIConfig) {
+        blockUIConfig.message = 'Please wait...';
+        blockUIConfig.autoBlock = false;
     }])
     .config(['unsavedWarningsConfigProvider', function(unsavedWarningsConfigProvider) {
         unsavedWarningsConfigProvider.routeEvent = '$stateChangeStart';
