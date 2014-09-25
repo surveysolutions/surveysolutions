@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Accessors
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)
         {
-            return String.Format("assembly_{0}_v{1}", questionnaireId, questionnaireVersion);
+            return String.Format("assembly_{0}_v{1}.dll", questionnaireId, questionnaireVersion);
         }
     }
 }
