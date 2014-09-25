@@ -1,7 +1,6 @@
 ﻿angular.module('designerApp')
-    .controller('TreeCtrl', [
-        '$rootScope', '$scope', '$state', 'questionnaireService', 'commandService', 'verificationService', 'utilityService', 'confirmService', 'hotkeys', '$log',
-        function($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, $log) {
+    .controller('TreeCtrl', 
+        function($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys) {
             'use strict';
             var me = this;
 
@@ -17,9 +16,9 @@
                 staticText: 'statictext'
             };
 
-            $scope.itemTemplate = function(itemType){
+            $scope.itemTemplate = function(itemType) {
                 return 'views/tree' + itemType + '.html';
-            }
+            };
 
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
@@ -125,7 +124,7 @@
                     var itemToFind = getCurrentItem();
                     if (itemToFind) {
                         var parent = itemToFind.getParentItem();
-                        if (parent != null) {
+                        if (parent !== null) {
                             $state.go('questionnaire.chapter.' + getItemType(parent), {
                                 itemId: parent.itemId
                             });
@@ -265,7 +264,7 @@
             $scope.cloneStaticText = function(staticTextId) {
                 var itemIdToClone = staticTextId || $state.params.itemId;
                 var newId = utilityService.guid();
-                commandService.cloneStaticText($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
+                commandService.cloneStaticText($state.params.questionnaireId, itemIdToClone, newId).success(function() {
                     var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
                     var parentItem = clonnedItem.getParentItem() || $scope;
 
@@ -285,7 +284,7 @@
             $scope.cloneQuestion = function(questionId) {
                 var itemIdToClone = questionId || $state.params.itemId;
                 var newId = utilityService.guid();
-                commandService.cloneQuestion($state.params.questionnaireId, itemIdToClone, newId).success(function(result) {
+                commandService.cloneQuestion($state.params.questionnaireId, itemIdToClone, newId).success(function() {
                     var clonnedItem = questionnaireService.findItem($scope.items, itemIdToClone);
                     var parentItem = clonnedItem.getParentItem() || $scope;
 
@@ -310,7 +309,7 @@
                 var parentItem = clonnedItem.getParentItem() || $scope;
                 var indexOf = _.indexOf(parentItem.items, clonnedItem);
                 var newId = utilityService.guid();
-                commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function(result) {
+                commandService.cloneGroup($state.params.questionnaireId, itemIdToClone, indexOf + 1, newId).success(function() {
                     $scope.refreshTree();
                     var publishAdd = function(added) {
                         var children = added.items || [];
@@ -318,7 +317,7 @@
                         _.each(children, function(child) {
                             publishAdd(child);
                         });
-                    }
+                    };
 
                     publishAdd(clonnedItem);
                 });
@@ -331,7 +330,7 @@
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete).success(function(result) {
+                        commandService.deleteQuestion($state.params.questionnaireId, itemIdToDelete).success(function() {
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
                             $rootScope.$emit('questionDeleted');
@@ -348,14 +347,14 @@
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
                         commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                            .success(function (result) {
+                            .success(function () {
                                 var publishDelete = function (deleted) {
                                     var children = deleted.items || [];
                                     $rootScope.$emit(getItemType(deleted) + 'Deleted');
                                     _.each(children, function (child) {
                                         publishDelete(child);
                                     });
-                                }
+                                };
 
                                 publishDelete(questionnaireService.findItem($scope.items, itemIdToDelete));
 
@@ -382,7 +381,7 @@
                     moveCommand = questionnaireService.moveQuestion;
                 }
 
-                moveCommand(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function(result) {
+                moveCommand(itemToMoveId, 0, chapterId, $state.params.questionnaireId).success(function() {
                     questionnaireService.removeItemWithId($scope.items, itemToMoveId);
                     $scope.resetSelection();
                 });
@@ -401,12 +400,12 @@
 
                         window.ContextMenuController.get().init();
                     });
-            }
+            };
             $scope.refreshTree();
 
             $rootScope.$on('questionUpdated', function(event, data) {
                 var question = questionnaireService.findItem($scope.items, data.itemId);
-                if (question != null) {
+                if (question !== null) {
                     question.title = data.title;
                     question.variable = data.variable;
                     question.type = data.type;
@@ -416,7 +415,7 @@
 
             $rootScope.$on('staticTextUpdated', function(event, data) {
                 var staticText = questionnaireService.findItem($scope.items, data.itemId);
-                if (staticText != null) {
+                if (staticText !== null) {
                     staticText.text = data.text;
                 }
             });
@@ -427,14 +426,14 @@
                 }
 
                 var group = questionnaireService.findItem($scope.items, data.itemId);
-                if (group != null) {
+                if (group !== null) {
                     group.title = data.title;
                 }
             });
 
             $rootScope.$on('rosterUpdated', function(event, data) {
                 var roster = questionnaireService.findItem($scope.items, data.itemId);
-                if (roster != null) {
+                if (roster !== null) {
                     roster.title = data.title;
                     roster.variable = data.variable;
                 }
@@ -442,4 +441,4 @@
 
            
         }
-    ]);
+    );

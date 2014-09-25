@@ -43,22 +43,22 @@
                 $scope.selectNumericQuestion = function(numericId) {
                     $scope.activeRoster.rosterSizeNumericQuestionId = numericId;
                     $scope.selectedNumericQuestion = getSelected($scope.activeRoster.numerics, $scope.activeRoster.rosterSizeNumericQuestionId);
-                }
+                };
 
-                $scope.selectListQuestion = function (listId) {
+                $scope.selectListQuestion = function(listId) {
                     $scope.activeRoster.rosterSizeListQuestionId = listId;
                     $scope.selectedListQuestion = getSelected($scope.activeRoster.lists, $scope.activeRoster.rosterSizeListQuestionId);
-                }
+                };
 
-                $scope.selectMultiQuestion = function (multiId) {
+                $scope.selectMultiQuestion = function(multiId) {
                     $scope.activeRoster.rosterSizeMultiQuestionId = multiId;
                     $scope.selectedMultiQuestion = getSelected($scope.activeRoster.multiOption, $scope.activeRoster.rosterSizeMultiQuestionId);
-                }
+                };
 
-                $scope.selectTitleQuestion = function (titleQuestionId) {
+                $scope.selectTitleQuestion = function(titleQuestionId) {
                     $scope.activeRoster.rosterTitleQuestionId = titleQuestionId;
                     $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId);
-                }
+                };
 
 
                 $scope.updateRosterType = function (type) {

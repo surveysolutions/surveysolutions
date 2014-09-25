@@ -101,7 +101,7 @@
                         var resultItem = findFunc(item, itemId);
                         if (resultItem) {
                             return resultItem;
-                        };
+                        }
                     }
 
                     return null;

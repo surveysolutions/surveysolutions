@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('StaticTextCtrl', [
-            '$rootScope', '$scope', '$state', 'questionnaireService', 'commandService', '$log',
-            function ($rootScope, $scope, $state, questionnaireService, commandService, $log) {
+            '$rootScope', '$scope', '$state', 'questionnaireService', 'commandService',
+            function ($rootScope, $scope, $state, questionnaireService, commandService) {
 
                 var dataBind = function (result) {
                     $scope.activeStaticText = $scope.activeStaticText || {};
@@ -24,7 +24,7 @@
                 };
 
                 $scope.saveStaticText = function () {
-                    commandService.updateStaticText($state.params.questionnaireId, $scope.activeStaticText).success(function (result) {
+                    commandService.updateStaticText($state.params.questionnaireId, $scope.activeStaticText).success(function () {
                         $scope.initialStaticText = angular.copy($scope.activeStaticText);
                         $rootScope.$emit('staticTextUpdated', {
                             itemId: $scope.activeStaticText.itemId,

@@ -92,11 +92,11 @@
                 }
             };
 
-            var wasThereOptionsLooseWhileChanginQuestionProperties = function (initialQuestion, actualQuestion) {
+            var wasThereOptionsLooseWhileChanginQuestionProperties = function(initialQuestion, actualQuestion) {
                 if (actualQuestion.type != "SingleOption")
                     return false;
 
-                if ((actualQuestion.wereOptionsTruncated || false) == false)
+                if ((actualQuestion.wereOptionsTruncated || false) === false)
                     return false;
 
                 var wasItFiltered = initialQuestion.isFilteredCombobox || false;
@@ -108,7 +108,7 @@
                 }
 
                 return false;
-            }
+            };
 
             $scope.setQuestionType = function (type) {
                 $scope.activeQuestion.type = type;

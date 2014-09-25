@@ -7,7 +7,7 @@
                     crumbs: '='
                 },
                 templateUrl: 'views/itemBreadcrumbs.html',
-                link: function (scope, element, attrs) {
+                link: function (scope, element) {
                     element.addClass('breadcrumbs');
                 }
             };
