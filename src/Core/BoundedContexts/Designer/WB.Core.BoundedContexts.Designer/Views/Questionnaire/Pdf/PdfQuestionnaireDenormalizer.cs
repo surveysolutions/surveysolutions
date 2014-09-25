@@ -154,7 +154,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                                     .Select(x => new PdfAnswerView
                                         {
                                             Title = x.AnswerText,
-                                            AnswerValue = x.AnswerValue
+                                            AnswerValue = x.AnswerValue,
+                                            ParentValue = x.ParentValue
                                         }).ToList(),
                         Variable = @event.StataExportCaption
                     };
@@ -183,7 +184,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 existingQuestion.Answers = (@event.Answers ?? Enumerable.Empty<Answer>()).Select(x => new PdfAnswerView
                     {
                         Title = x.AnswerText,
-                        AnswerValue = x.AnswerValue
+                        AnswerValue = x.AnswerValue,
+                        ParentValue = x.ParentValue
                     }).ToList();
 
                 return questionnaire;
@@ -202,7 +204,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Answers = (@event.Answers ?? Enumerable.Empty<Answer>()).Select(x => new PdfAnswerView
                     {
                         Title = x.AnswerText,
-                        AnswerValue = x.AnswerValue
+                        AnswerValue = x.AnswerValue,
+                        ParentValue = x.ParentValue
                     }).ToList(),
                     Variable = @event.StataExportCaption
                 };
