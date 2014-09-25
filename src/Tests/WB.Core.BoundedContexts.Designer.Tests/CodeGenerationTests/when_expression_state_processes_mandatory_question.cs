@@ -4,7 +4,6 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using It = Machine.Specifications.It;
 
@@ -13,10 +12,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
     [Ignore("bulk test run failed on server build")]
     internal class when_expression_state_processes_mandatory_question : CodeGenerationTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
-            eventContext = new EventContext();
-
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
@@ -32,13 +29,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
         };
 
-        private Because of = () =>
+        Because of = () =>
             state.ProcessValidationExpressions(out questionsToBeValid, out questionsToBeInvalid);
 
-        private It should_valid_question_count_equal_4 = () =>
+        It should_valid_question_count_equal_4 = () =>
             questionsToBeValid.Count.ShouldEqual(4);
 
-        private It should_invalid_question_count_equal_0 = () =>
+        It should_invalid_question_count_equal_0 = () =>
             questionsToBeInvalid.Count.ShouldEqual(0);
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -53,7 +50,5 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
         private static List<Identity> questionsToBeValid;
         private static List<Identity> questionsToBeInvalid;
-        
-        private static EventContext eventContext;
     }
 }
