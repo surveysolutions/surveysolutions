@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
            result[0].FileName.ShouldEqual(file1);
 
         It should_result_first_item_data_be_equal_to_data1 = () =>
-         result[0].Data.ShouldEqual(data1);
+         result[0].GetData().ShouldEqual(data1);
 
         private static PlainInterviewFileStorage plainFileRepository;
 

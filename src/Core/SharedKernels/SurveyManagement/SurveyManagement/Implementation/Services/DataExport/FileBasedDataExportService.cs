@@ -220,7 +220,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             foreach (var file in filesToMove)
             {
-                fileSystemAccessor.WriteAllBytes(fileSystemAccessor.CombinePath(filesFolderForInterview, file.FileName), file.Data);
+                this.fileSystemAccessor.WriteAllBytes(this.fileSystemAccessor.CombinePath(filesFolderForInterview, file.FileName), file.GetData());
             }
         }
 

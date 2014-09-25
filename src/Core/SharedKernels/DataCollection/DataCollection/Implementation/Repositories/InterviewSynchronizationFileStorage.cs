@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             var files = this.plainInterviewFileStorage.GetBinaryFilesForInterview(interviewId);
             foreach (var file in files)
             {
-                fileSystemAccessor.WriteAllBytes(GetPathToFile(interviewId, file.FileName), file.Data);
+                this.fileSystemAccessor.WriteAllBytes(this.GetPathToFile(interviewId, file.FileName), file.GetData());
             }
         }
 
