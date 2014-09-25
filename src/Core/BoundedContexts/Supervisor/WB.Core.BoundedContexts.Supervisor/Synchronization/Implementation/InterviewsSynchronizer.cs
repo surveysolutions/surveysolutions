@@ -471,7 +471,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 var request = new HttpRequestMessage(HttpMethod.Post,
                     string.Format("{0}?interviewId={1}&fileName={2}", this.settings.FilePushUrl, interviewFile.InterviewId,
                         interviewFile.FileName))
-                { Content = new ByteArrayContent(interviewFile.Data) };
+                { Content = new ByteArrayContent(interviewFile.GetData()) };
                 
                 
                 HttpResponseMessage response = client.SendAsync(request).Result;

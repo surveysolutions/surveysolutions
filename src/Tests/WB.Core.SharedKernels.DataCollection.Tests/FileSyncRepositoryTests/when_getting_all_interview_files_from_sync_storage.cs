@@ -33,10 +33,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
             result.Count.ShouldEqual(2);
 
         It should_data_of_first_record_in_result_be_equal_to_data1 = () =>
-            result[0].Data.ShouldEqual(data1);
+            result[0].GetData().ShouldEqual(data1);
 
         It should_data_of_second_record_in_result_be_equal_to_data2 = () =>
-           result[1].Data.ShouldEqual(data2);
+           result[1].GetData().ShouldEqual(data2);
 
         private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private static IList<InterviewBinaryDataDescriptor> result; 
