@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
     internal class QuestionnaireSynchronizer : IQuestionnaireSynchronizer
     {
         private readonly IAtomFeedReader feedReader;
-        private readonly HeadquartersSettings settings;
+        private readonly IHeadquartersSettings settings;
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage;
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly Action<ICommand> executeCommand;
         private readonly ILogger logger;
 
-        public QuestionnaireSynchronizer(IAtomFeedReader feedReader, HeadquartersSettings settings,
+        public QuestionnaireSynchronizer(IAtomFeedReader feedReader, IHeadquartersSettings settings,
             HeadquartersPullContext headquartersPullContext, IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage, ILogger logger, IPlainQuestionnaireRepository plainQuestionnaireRepository,
 
             ICommandService commandService, IHeadquartersQuestionnaireReader headquartersQuestionnaireReader, IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
