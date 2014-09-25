@@ -67,7 +67,8 @@ namespace WB.UI.QuestionnaireTester
             }
 
             //generate unique new file name due to version is not valid for tester
-            var pathToSaveAssembly = Path.Combine(pathToFolder, Guid.NewGuid().ToString());
+            var fileName = string.Format("{0}.dll", Guid.NewGuid());
+            var pathToSaveAssembly = Path.Combine(pathToFolder, fileName);
 
             File.WriteAllBytes(pathToSaveAssembly, Convert.FromBase64String(assemblyAsBase64String));
         }

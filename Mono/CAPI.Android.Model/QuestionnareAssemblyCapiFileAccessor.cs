@@ -78,7 +78,7 @@ namespace CAPI.Android.Core.Model
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)
         {
-            return String.Format("assembly_{0}_v{1}", questionnaireId, questionnaireVersion);
+            return String.Format("assembly_{0}_v{1}.dll", questionnaireId, questionnaireVersion);
         }
 
         public string GetPathToBackupFile()
