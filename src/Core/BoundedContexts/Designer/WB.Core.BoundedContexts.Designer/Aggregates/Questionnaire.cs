@@ -2283,6 +2283,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
+            ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, isCascade: true);
+
             ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
 
             ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
@@ -2310,9 +2312,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 IsFilteredCombobox = categoricalOneAnswerQuestion.IsFilteredCombobox
             });
         }
-
-       
-
         #endregion
 
         #region Question: Numeric question command handlers
@@ -3307,7 +3306,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options)
+        private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options, bool isCascade = false)
         {
             if (options == null || !options.Any() || options.Count() < 2)
             {
@@ -3340,7 +3339,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
             }
 
-            if (!AreElementsUnique(options.Select(x => x.Title)))
+            if (!isCascade && !AreElementsUnique(options.Select(x => x.Title)))
             {
                 throw new QuestionnaireException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
             }
