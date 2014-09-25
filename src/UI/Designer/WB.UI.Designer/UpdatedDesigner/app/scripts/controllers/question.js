@@ -205,6 +205,7 @@
             $scope.$watch('activeQuestion.isLinked', function (newValue) {
                 if (!newValue && $scope.activeQuestion) {
                     $scope.activeQuestion.linkedToQuestionId = null;
+                    $scope.activeQuestion.linkedToQuestion = null;
                 }
             });
 
@@ -214,19 +215,18 @@
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     } else {
                         $scope.activeQuestion.cascadeFromQuestionId = null;
+                        $scope.activeQuestion.cascadeFromQuestion = null;
                     }
                 }
             });
 
             $scope.setLinkSource = function (itemId) {
                 $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
-                $scope.activeQuestion.linkedToQuestionId = itemId;
 
                 if (itemId) {
+                    $scope.activeQuestion.linkedToQuestionId = itemId;
                     $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
-                } else {
-                    $scope.activeQuestion.linkedToQuestion = null;
-                }
+                } 
             };
 
             $scope.setCascadeSource = function (itemId) {
