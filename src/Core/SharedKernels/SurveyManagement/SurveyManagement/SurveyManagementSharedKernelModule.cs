@@ -7,6 +7,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -105,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
 
             this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope().WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp);
-            this.Bind<IInterviewExpressionStateProvider>().To<WB.Core.SharedKernels.SurveyManagement.Implementation.QuestionnaireAssembly.InterviewExpressionStateProvider>().InSingletonScope();
+            this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>().InSingletonScope();
             
             //this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
         }

@@ -130,8 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection
             }
         }
 
-        public void ProcessConditionExpressions(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,
-            out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled)
+        public void ProcessConditionExpressions(out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled, out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled)
         {
             questionsToBeEnabled = new List<Identity>();
             questionsToBeDisabled = new List<Identity>();

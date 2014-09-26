@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaireMock.Object));
 
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStateProvider>(CreateInterviewExpressionStateProviderStub());
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(CreateInterviewExpressionStateProviderStub());
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 

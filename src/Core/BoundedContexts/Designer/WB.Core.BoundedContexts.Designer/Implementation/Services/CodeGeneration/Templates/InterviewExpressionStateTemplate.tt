@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         {
             var questionnaireLevelScope = new[] { IdOf.@__questionnaire };
             var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
-            var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GetTypeName()#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies);
+            var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies);
             this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
         }
 

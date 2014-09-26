@@ -19,10 +19,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             questionnaireDocument = CreateQuestionnaireDocumenteWithOneNumericIntegerQuestionAndRosters(questionnaireId, questionId, rosterId);
 
-            IInterviewExpressionStateProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
+            IInterviewExpressionStatePrototypeProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStateProvider>())
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
                 .Returns(interviewExpressionStateProvider);
 
             state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();

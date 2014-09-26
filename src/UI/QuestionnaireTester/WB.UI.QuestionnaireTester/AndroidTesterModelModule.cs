@@ -8,8 +8,8 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.QuestionnaireAssembly;
 
 namespace WB.UI.QuestionnaireTester
 {
@@ -42,7 +42,7 @@ namespace WB.UI.QuestionnaireTester
             this.Bind<IQuestionnareAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
 
             //this.kernel.Unbind<IInterviewExpressionStateProvider>();
-            this.Bind<IInterviewExpressionStateProvider>().To<InterviewExpressionStateProvider>().InSingletonScope();
+            this.Bind<IInterviewExpressionStatePrototypeProvider>().To<IInterviewExpressionStatePrototypeProvider>().InSingletonScope();
         }
     }
 }

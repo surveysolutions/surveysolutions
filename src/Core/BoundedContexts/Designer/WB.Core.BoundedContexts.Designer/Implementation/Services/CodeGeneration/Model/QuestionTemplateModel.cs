@@ -1,7 +1,7 @@
 using System;
 using Main.Core.Entities.SubEntities;
 
-namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
     public class QuestionTemplateModel : ITemplateModel
     {

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using Android.OS;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
@@ -17,7 +16,6 @@ using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Settings;
 using Main.Core.Documents;
 using Main.Core.View;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
@@ -34,8 +32,8 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.QuestionnaireAssembly;
 
 namespace CAPI.Android.Core.Model
 {
@@ -76,7 +74,7 @@ namespace CAPI.Android.Core.Model
             var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
 
             var assemblyFileAccessor = new QuestionnareAssemblyCapiFileAccessor(this.Kernel.Get<IFileSystemAccessor>());
-            var stateProvider = new InterviewExpressionStateProvider(assemblyFileAccessor);
+            var stateProvider = new InterviewExpressionStatePrototypeProvider(assemblyFileAccessor);
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
@@ -103,7 +101,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
 
             this.Bind<IQuestionnareAssemblyFileAccessor>().ToConstant(assemblyFileAccessor);
-            this.Bind<IInterviewExpressionStateProvider>().ToConstant(stateProvider);
+            this.Bind<IInterviewExpressionStatePrototypeProvider>().ToConstant(stateProvider);
 
             var backupable = new List<IBackupable>(){
                     evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,

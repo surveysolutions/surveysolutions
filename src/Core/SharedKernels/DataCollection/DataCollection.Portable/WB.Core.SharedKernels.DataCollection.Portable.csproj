@@ -40,16 +40,15 @@
   <ItemGroup>
     <Compile Include="AbstractConditionalLevel.cs" />
     <Compile Include="AbstractInterviewExpressionState.cs" />
+    <Compile Include="AbstractInterviewExpressionStateImpl.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="GeoLocation.cs" />
-    <Compile Include="ExpressionProcessor.cs" />
     <Compile Include="Identity.cs" />
     <Compile Include="IdentityComparer.cs" />
-    <Compile Include="IExpressionProcessor.cs" />
     <Compile Include="IInterviewEvaluator.cs" />
     <Compile Include="IInterviewExpressionState.cs" />
-    <Compile Include="IInterviewExpressionStateProvider.cs" />
+    <Compile Include="IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="IExpressionExecutable.cs" />
     <Compile Include="IQuestionnareAssemblyFileAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
