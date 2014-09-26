@@ -4,7 +4,7 @@ using System.Linq;
 
 // ReSharper disable InconsistentNaming
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
+namespace WB.Core.SharedKernels.DataCollection.Tests
 {
     public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState 
     {

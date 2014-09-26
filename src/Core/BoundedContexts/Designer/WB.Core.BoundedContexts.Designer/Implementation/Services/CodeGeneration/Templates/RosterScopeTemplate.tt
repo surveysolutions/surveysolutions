@@ -60,12 +60,12 @@
     
         private <#= Model.ParentTypeName#> @__parent;
 
-        <#foreach (var parentQuestion in Model.GetParentScope().GetAllQuestionsToTop()) 
+        <#foreach (var parentQuestion in Model.ParentScope.GetAllQuestionsToTop()) 
         {#>
         public <#=parentQuestion.GeneratedTypeName#> <#=parentQuestion.VariableName#> { get { return this.@__parent.<#=parentQuestion.VariableName#>; } }                                        
         <#}#>
 
-        <#foreach (var parentRoster in Model.GetParentScope().GetAllRostersToTop()) 
+        <#foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
         {#>
         public IEnumerable<<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@__parent.<#=parentRoster.VariableName#>; } }                                        
         <#}#>
@@ -187,7 +187,7 @@
              
         public void SetParent(IExpressionExecutable parentLevel)            
         {
-        <#if(Model.GetParentScope() != null)
+        <#if(Model.ParentScope != null)
         {#>
             this.@__parent = parentLevel as <#= Model.ParentTypeName#>;
         <# }#>

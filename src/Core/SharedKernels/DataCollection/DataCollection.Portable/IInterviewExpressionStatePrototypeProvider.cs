@@ -2,10 +2,8 @@
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public interface IInterviewExpressionStateProvider
+    public interface IInterviewExpressionStatePrototypeProvider
     {
         IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion);
-        
-        //void RemoveAssemblyFromCache(Guid questionnaireId, long questionnaireVersion);
     }
 }

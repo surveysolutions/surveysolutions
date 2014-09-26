@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 return this.expressionProcessorStatePrototypeInt ??
                     (this.expressionProcessorStatePrototypeInt =
-                        this.expressionProcessorStateProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion));
+                        this.ExpressionProcessorStatePrototypeProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion));
             }
 
             set
@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.wasCompleted = @event.InterviewData.WasCompleted;
 
             this.expressionProcessorStatePrototype = 
-                expressionProcessorStateProvider.GetExpressionState(@event.InterviewData.QuestionnaireId, @event.InterviewData.QuestionnaireVersion);
+                ExpressionProcessorStatePrototypeProvider.GetExpressionState(@event.InterviewData.QuestionnaireId, @event.InterviewData.QuestionnaireVersion);
 
             this.interviewState.AnswersSupportedInExpressions = @event.InterviewData.Answers == null
                 ? new Dictionary<string, object>()
@@ -637,24 +637,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IQuestionnaireRepository>(); }
         }
 
-        private IInterviewExpressionStateProvider expressionProcessorStateProvider
+        private IInterviewExpressionStatePrototypeProvider ExpressionProcessorStatePrototypeProvider
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IInterviewExpressionStateProvider>();
-            }
+            get { return ServiceLocator.Current.GetInstance<IInterviewExpressionStatePrototypeProvider>(); }
         }
-
-        private IExpressionProcessor expressionSharpProcessorInt = new ExpressionProcessor();
-        private IExpressionProcessor expressionSharpProcessor
-        {
-            get
-            {
-                //return ServiceLocator.Current.GetInstance<IExpressionProcessor>();
-                return expressionSharpProcessorInt;
-            }
-        }
-    
 
         #endregion
 
@@ -858,111 +844,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = questionnaireVersion;
             this.ApplySynchronizationMetadata(id, userId, questionnaireId,questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
         }
-
-        private InterviewChanges UpdateExpressionStateWithAnswersAndGetChanges(IEnumerable<InterviewChanges> interviewChangesItems,
-            IEnumerable<RosterCalculationData> rosterDatas)
-        {
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
-
-            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
-
-            foreach (var interviewChanges in interviewChangesItems)
-            {
-                if (interviewChanges.ValidityChanges != null)
-                {
-                    interviewChanges.ValidityChanges.AnswersDeclaredInvalid.Clear();
-                    interviewChanges.ValidityChanges.AnswersDeclaredValid.Clear();
-                }
-
-                if (interviewChanges.EnablementChanges != null)
-                {
-                    interviewChanges.EnablementChanges.QuestionsToBeDisabled.Clear();
-                    interviewChanges.EnablementChanges.QuestionsToBeEnabled.Clear();
-                    interviewChanges.EnablementChanges.GroupsToBeDisabled.Clear();
-                    interviewChanges.EnablementChanges.GroupsToBeEnabled.Clear();
-                }
-
-                if (interviewChanges.InterviewByAnswerChanges != null)
-                {
-                    foreach (var answerChange in interviewChanges.InterviewByAnswerChanges)
-                    {
-                        switch (answerChange.InterviewChangeType)
-                        {
-                            case AnswerChangeType.Text:
-                                expressionProcessorState.UpdateTextAnswer(answerChange.QuestionId, answerChange.RosterVector, (string)answerChange.Answer);
-                                break;
-                            case AnswerChangeType.DateTime:
-                                expressionProcessorState.UpdateDateAnswer(answerChange.QuestionId, answerChange.RosterVector, (DateTime)answerChange.Answer);
-                                break;
-                            case AnswerChangeType.TextList:
-                                expressionProcessorState.UpdateTextListAnswer(answerChange.QuestionId, answerChange.RosterVector, (Tuple<decimal, string>[])answerChange.Answer);
-                                break;
-                            case AnswerChangeType.GeoLocation:
-                            {
-                                var answer = answerChange.Answer as GeoLocationPoint;
-                                expressionProcessorState.UpdateGeoLocationAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                                    answer.Latitude,
-                                    answer.Longitude,
-                                    answer.Accuracy,
-                                    answer.Altitude);
-                            }
-                                
-                                break;
-                            case AnswerChangeType.QRBarcode:
-                                expressionProcessorState.UpdateQrBarcodeAnswer(answerChange.QuestionId, answerChange.RosterVector, (string)answerChange.Answer);
-                                break;
-                            case AnswerChangeType.NumericInteger:
-                                expressionProcessorState.UpdateIntAnswer(answerChange.QuestionId, answerChange.RosterVector, (int)answerChange.Answer);
-                                break;
-                            case AnswerChangeType.NumericReal:
-                                expressionProcessorState.UpdateDecimalAnswer(answerChange.QuestionId, answerChange.RosterVector, (decimal)answerChange.Answer);
-                                break;
-                            case AnswerChangeType.SingleOptionLinked:
-                                expressionProcessorState.UpdateLinkedSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector, (decimal[])answerChange.Answer);
-                                break;
-                            case AnswerChangeType.SingleOption:
-                                expressionProcessorState.UpdateSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector, (decimal)answerChange.Answer);
-                                break;
-                            case AnswerChangeType.MultipleOptionsLinked:
-                                expressionProcessorState.UpdateLinkedMultiOptionAnswer(answerChange.QuestionId, answerChange.RosterVector, (decimal[][])answerChange.Answer);
-                                break;
-                            case AnswerChangeType.MultipleOptions:
-                                expressionProcessorState.UpdateMultiOptionAnswer(answerChange.QuestionId, answerChange.RosterVector, (decimal[])answerChange.Answer);
-                                break;
-                        }
-                    }
-                }
-
-                if (interviewChanges.RosterCalculationData != null)
-                {
-                    interviewChanges.RosterCalculationData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-                    interviewChanges.RosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
-                }
-            }
-
-            foreach (var rosterData in rosterDatas)
-            {
-                rosterData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-                rosterData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
-            }
-
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled,
-                out questionsToBeEnabled, out questionsToBeDisabled);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid,
-                out answersDeclaredInvalid);
-
-            var enablementAndValidityChanges = new InterviewChanges(
-                null,
-                new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled),
-                new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
-                null,
-                null,
-                null,
-                null);
-            return enablementAndValidityChanges;
-        }
-
+        
         public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
             : base(id)
         {
@@ -1651,8 +1533,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
 
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
+            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
 
             var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
@@ -2413,8 +2295,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
+            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
 
             var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
@@ -2477,8 +2359,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
+            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
 
             var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
@@ -2554,9 +2436,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid,
-                out answersDeclaredInvalid);
+            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
 
             var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
@@ -2692,8 +2573,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             updateState(expressionProcessorState);
 
-            this.expressionSharpProcessor.ProcessConditionExpressions(expressionProcessorState, out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
-            this.expressionSharpProcessor.ProcessValidationExpressions(expressionProcessorState, out answersDeclaredValid, out answersDeclaredInvalid);
+            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling = this
                 .GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -2745,6 +2626,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
         }
+        
         private void CalculateChangesByFeaturedQuestion(InterviewChangeStructures changeStructures, Guid userId,
             IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
             DateTime answersTime, Dictionary<Identity, object> newAnswers, decimal[] rosterVector = null)
@@ -3832,6 +3714,115 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return state.RosterGroupInstanceIds.ContainsKey(groupKey)
                 ? state.RosterGroupInstanceIds[groupKey]
                 : new DistinctDecimalList();
+        }
+
+
+        private InterviewChanges UpdateExpressionStateWithAnswersAndGetChanges(IEnumerable<InterviewChanges> interviewChangesItems,
+            IEnumerable<RosterCalculationData> rosterDatas)
+        {
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
+
+            var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
+
+            foreach (var interviewChanges in interviewChangesItems)
+            {
+                if (interviewChanges.ValidityChanges != null)
+                {
+                    interviewChanges.ValidityChanges.Clear();
+                }
+
+                if (interviewChanges.EnablementChanges != null)
+                {
+                    interviewChanges.EnablementChanges.Clear();
+                }
+
+                if (interviewChanges.InterviewByAnswerChanges != null)
+                {
+                    foreach (var answerChange in interviewChanges.InterviewByAnswerChanges)
+                    {
+                        UpdateExpressionProcessorStateWithAnswerChange(answerChange, expressionProcessorState);
+                    }
+                }
+
+                if (interviewChanges.RosterCalculationData != null)
+                {
+                    interviewChanges.RosterCalculationData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+                    interviewChanges.RosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+                }
+            }
+
+            foreach (var rosterData in rosterDatas)
+            {
+                rosterData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+                rosterData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+            }
+
+            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
+
+            var enablementAndValidityChanges = new InterviewChanges(
+                null,
+                new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled),
+                new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+                null,
+                null,
+                null,
+                null);
+            return enablementAndValidityChanges;
+        }
+
+        private static void UpdateExpressionProcessorStateWithAnswerChange(AnswerChange answerChange,
+            IInterviewExpressionState expressionProcessorState)
+        {
+            switch (answerChange.InterviewChangeType)
+            {
+                case AnswerChangeType.Text:
+                    expressionProcessorState.UpdateTextAnswer(answerChange.QuestionId, answerChange.RosterVector, (string) answerChange.Answer);
+                    break;
+                case AnswerChangeType.DateTime:
+                    expressionProcessorState.UpdateDateAnswer(answerChange.QuestionId, answerChange.RosterVector, (DateTime) answerChange.Answer);
+                    break;
+                case AnswerChangeType.TextList:
+                    expressionProcessorState.UpdateTextListAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (Tuple<decimal, string>[]) answerChange.Answer);
+                    break;
+                case AnswerChangeType.GeoLocation:
+                {
+                    var answer = answerChange.Answer as GeoLocationPoint;
+                    expressionProcessorState.UpdateGeoLocationAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        answer.Latitude,
+                        answer.Longitude,
+                        answer.Accuracy,
+                        answer.Altitude);
+                }
+                    break;
+                case AnswerChangeType.QRBarcode:
+                    expressionProcessorState.UpdateQrBarcodeAnswer(answerChange.QuestionId, answerChange.RosterVector, (string) answerChange.Answer);
+                    break;
+                case AnswerChangeType.NumericInteger:
+                    expressionProcessorState.UpdateIntAnswer(answerChange.QuestionId, answerChange.RosterVector, (int) answerChange.Answer);
+                    break;
+                case AnswerChangeType.NumericReal:
+                    expressionProcessorState.UpdateDecimalAnswer(answerChange.QuestionId, answerChange.RosterVector, (decimal) answerChange.Answer);
+                    break;
+                case AnswerChangeType.SingleOptionLinked:
+                    expressionProcessorState.UpdateLinkedSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (decimal[]) answerChange.Answer);
+                    break;
+                case AnswerChangeType.SingleOption:
+                    expressionProcessorState.UpdateSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (decimal) answerChange.Answer);
+                    break;
+                case AnswerChangeType.MultipleOptionsLinked:
+                    expressionProcessorState.UpdateLinkedMultiOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (decimal[][]) answerChange.Answer);
+                    break;
+                case AnswerChangeType.MultipleOptions:
+                    expressionProcessorState.UpdateMultiOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (decimal[]) answerChange.Answer);
+                    break;
+            }
         }
 
         private bool HasInvalidAnswers()

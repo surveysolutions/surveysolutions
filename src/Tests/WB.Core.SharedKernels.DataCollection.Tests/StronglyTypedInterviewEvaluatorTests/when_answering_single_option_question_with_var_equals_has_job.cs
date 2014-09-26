@@ -28,60 +28,60 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.StronglyTypedInterviewEvalu
                 (_
                     => _.HasQuestion(questionId) == true
                         && _.GetQuestionType(questionId) == QuestionType.SingleOption
-                        && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { InterviewTests.StronglyTypedInterviewEvaluator.IdOf.hhMember }
+                        && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { StronglyTypedInterviewEvaluator.IdOf.hhMember }
                         && _.DoesQuestionSpecifyRosterTitle(questionId) == false
                         && _.GetAnswerOptionsAsValues(questionId) == new[] { 1m, 2m }
                         && _.GetAnswerOptionTitle(questionId, 1m) == "Yes"
                 );
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
-                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.questionnaire, questionnaire));
+                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(StronglyTypedInterviewEvaluator.IdOf.questionnaire, questionnaire));
 
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStateProvider>(CreateInterviewExpressionStateProviderStub());
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(CreateInterviewExpressionStateProviderStub());
 
-            interview = CreateInterview(questionnaireId: InterviewTests.StronglyTypedInterviewEvaluator.IdOf.questionnaire);
-            interview.Apply(new TextQuestionAnswered(userId, InterviewTests.StronglyTypedInterviewEvaluator.IdOf.id, emptyRosterVector, DateTime.Now, "Id"));
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, InterviewTests.StronglyTypedInterviewEvaluator.IdOf.persons_count, emptyRosterVector, DateTime.Now, 1));
+            interview = CreateInterview(questionnaireId: StronglyTypedInterviewEvaluator.IdOf.questionnaire);
+            interview.Apply(new TextQuestionAnswered(userId, StronglyTypedInterviewEvaluator.IdOf.id, emptyRosterVector, DateTime.Now, "Id"));
+            interview.Apply(new NumericIntegerQuestionAnswered(userId, StronglyTypedInterviewEvaluator.IdOf.persons_count, emptyRosterVector, DateTime.Now, 1));
             interview.Apply(new RosterInstancesAdded(new[]
             {
-                new AddedRosterInstance(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.hhMember, emptyRosterVector, 0.0m, sortIndex: null), 
-                new AddedRosterInstance(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.jobActivity, emptyRosterVector, 0.0m, sortIndex: null)
+                new AddedRosterInstance(StronglyTypedInterviewEvaluator.IdOf.hhMember, emptyRosterVector, 0.0m, sortIndex: null), 
+                new AddedRosterInstance(StronglyTypedInterviewEvaluator.IdOf.jobActivity, emptyRosterVector, 0.0m, sortIndex: null)
             }));
             interview.Apply(new QuestionsDisabled(new Events.Interview.Dtos.Identity[]
             {
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.person_id, rosterVector),
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.marital_status, rosterVector),
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.married_with, rosterVector),
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.food, rosterVector),
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.has_job, rosterVector),
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.job_title, rosterVector),
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.best_job_owner, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.person_id, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.marital_status, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.married_with, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.food, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.has_job, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.job_title, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.best_job_owner, rosterVector),
             }));
 
             interview.Apply(new GroupsDisabled(new Events.Interview.Dtos.Identity[]
             {
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.groupId, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.groupId, rosterVector),
             }));
-            interview.Apply(new TextQuestionAnswered(userId, InterviewTests.StronglyTypedInterviewEvaluator.IdOf.name, rosterVector, DateTime.Now, "aaa"));
+            interview.Apply(new TextQuestionAnswered(userId, StronglyTypedInterviewEvaluator.IdOf.name, rosterVector, DateTime.Now, "aaa"));
             interview.Apply(new QuestionsEnabled(new Events.Interview.Dtos.Identity[]
             {
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
             }));
             interview.Apply(new AnswersDeclaredInvalid(new Events.Interview.Dtos.Identity[]
             {
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.age, rosterVector),
             }));
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, InterviewTests.StronglyTypedInterviewEvaluator.IdOf.age, rosterVector, DateTime.Now, 20));
+            interview.Apply(new NumericIntegerQuestionAnswered(userId, StronglyTypedInterviewEvaluator.IdOf.age, rosterVector, DateTime.Now, 20));
             interview.Apply(new GroupsEnabled(new Events.Interview.Dtos.Identity[]
             {
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.groupId, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.groupId, rosterVector),
             }));
             interview.Apply(new QuestionsEnabled(new Events.Interview.Dtos.Identity[]
             {
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.has_job, rosterVector),
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.person_id, rosterVector),
-                new Events.Interview.Dtos.Identity(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.marital_status, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.has_job, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.person_id, rosterVector),
+                new Events.Interview.Dtos.Identity(StronglyTypedInterviewEvaluator.IdOf.marital_status, rosterVector),
             }));
             eventContext = new EventContext();
         };
@@ -100,13 +100,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.StronglyTypedInterviewEvalu
 
         It should_enable_job_title_question = () =>
             eventContext.GetEvent<QuestionsEnabled>().Questions.Select(q => q.Id)
-                .ShouldContainOnly(InterviewTests.StronglyTypedInterviewEvaluator.IdOf.job_title);
+                .ShouldContainOnly(StronglyTypedInterviewEvaluator.IdOf.job_title);
 
 
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;
-        private static Guid questionId = InterviewTests.StronglyTypedInterviewEvaluator.IdOf.has_job;
+        private static Guid questionId = StronglyTypedInterviewEvaluator.IdOf.has_job;
         private static decimal answer;
         private static decimal[] emptyRosterVector = new decimal[0];
         private static decimal[] rosterVector = new decimal[] { 0.0m };

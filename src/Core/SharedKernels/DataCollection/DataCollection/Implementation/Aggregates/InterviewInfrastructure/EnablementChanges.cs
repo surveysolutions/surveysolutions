@@ -40,5 +40,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return resultChanges;
         }
+
+        public void Clear()
+        {
+            this.GroupsToBeEnabled.Clear();
+            this.GroupsToBeDisabled.Clear();
+            this.QuestionsToBeEnabled.Clear();
+            this.QuestionsToBeDisabled.Clear();
+            
+        }
     }
 }

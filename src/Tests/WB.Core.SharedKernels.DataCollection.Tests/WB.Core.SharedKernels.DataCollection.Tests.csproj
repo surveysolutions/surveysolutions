@@ -92,6 +92,8 @@
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_textlist_roster_group.cs" />
     <Compile Include="FileSyncRepositoryTests\FileSyncRepositoryTestContext.cs" />
     <Compile Include="FileSyncRepositoryTests\when_getting_all_interview_files_from_sync_storage.cs" />
+    <Compile Include="InterviewExpressionStatePrototypeProviderTests\InterviewExpressionStatePrototypeProviderTestContext.cs" />
+    <Compile Include="InterviewExpressionStatePrototypeProviderTests\when_getting_expression_state.cs" />
     <Compile Include="InterviewItemIdTests.cs" />
     <Compile Include="InterviewItemIdTests\InterviewItemIdTestsContext.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_hashcodes_two_instances_with_same_id_and_propagation_vectors_0point0_and_0.cs" />

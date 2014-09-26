@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
@@ -78,8 +79,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             allGroups = new List<GroupTemplateModel>();
             allRosters = new List<RosterTemplateModel>();
 
-            var rostersToProcess = new Queue<Tuple<IGroup, IRosterScope>>();
-            rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(questionnaireDoc, questionnaireLevelModel));
+            var rostersToProcess = new Queue<Tuple<IGroup, RosterScopeBaseModel>>();
+            rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(questionnaireDoc, questionnaireLevelModel));
 
             while (rostersToProcess.Count != 0)
             {
@@ -138,7 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 ? childAsIGroup.PublicKey
                                 : childAsIGroup.RosterSizeQuestionId.Value;
 
-                            var currentRosterScope = currentScope.GetRosterScope().Select(t => t).ToList();
+                            var currentRosterScope = currentScope.RosterScope.Select(t => t).ToList();
                             currentRosterScope.Add(currentScopeId);
 
                             var varName = !String.IsNullOrWhiteSpace(childAsIGroup.VariableName)
@@ -159,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 GeneratedRosterScopeName = "@__" + varName + "_scope",
                             };
 
-                            rostersToProcess.Enqueue(new Tuple<IGroup, IRosterScope>(childAsIGroup, roster));
+                            rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(childAsIGroup, roster));
                             allRosters.Add(roster);
                             currentScope.Rosters.Add(roster);
                         }
