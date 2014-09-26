@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
         public InterviewsSearchIndex()
         {
             Map = interviews => from interview in interviews
+                                where interview.IsDeleted == false
                                 select new
                                 {
                                     interview.IsDeleted,
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
                                     interview.UpdateDate,
                                     interview.QuestionnaireId
                                 };
+            
             Analyze(x => x.AnswersToFeaturedQuestions, "Lucene.Net.Analysis.Standard.StandardAnalyzer");
             Index(x => x.AnswersToFeaturedQuestions, FieldIndexing.Analyzed);
             Index(x => x.IsDeleted, FieldIndexing.Analyzed);

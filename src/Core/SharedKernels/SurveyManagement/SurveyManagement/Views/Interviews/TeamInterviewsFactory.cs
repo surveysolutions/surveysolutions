@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
         {
             string indexName = typeof (InterviewsSearchIndex).Name;
 
-            var items = this.indexAccessor.Query<InterviewSummary>(indexName).Where(x => !x.IsDeleted);
+            var items = this.indexAccessor.Query<InterviewSummary>(indexName);
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
