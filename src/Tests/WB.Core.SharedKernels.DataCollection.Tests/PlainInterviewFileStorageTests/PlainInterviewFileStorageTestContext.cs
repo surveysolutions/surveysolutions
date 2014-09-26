@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.PlainInterviewFileStorageTests
 {
     [Subject(typeof(PlainInterviewFileStorage))]
-    class PlainFileRepositoryTestContext
+    class PlainInterviewFileStorageTestContext
     {
         protected static PlainInterviewFileStorage CreatePlainFileRepository(IFileSystemAccessor fileSystemAccessor = null)
         {

@@ -43,7 +43,6 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Drawable.donecountershape = global::WB.UI.QuestionnaireTester.Resource.Drawable.donecountershape;
 			global::WB.UI.Shared.Android.Resource.Drawable.errorwarningstyle = global::WB.UI.QuestionnaireTester.Resource.Drawable.errorwarningstyle;
 			global::WB.UI.Shared.Android.Resource.Drawable.grid_headerItem = global::WB.UI.QuestionnaireTester.Resource.Drawable.grid_headerItem;
-			global::WB.UI.Shared.Android.Resource.Drawable.no_image_found = global::WB.UI.QuestionnaireTester.Resource.Drawable.no_image_found;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionAnsweredShape = global::WB.UI.QuestionnaireTester.Resource.Drawable.questionAnsweredShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionDisabledShape = global::WB.UI.QuestionnaireTester.Resource.Drawable.questionDisabledShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionInvalidShape = global::WB.UI.QuestionnaireTester.Resource.Drawable.questionInvalidShape;
@@ -86,7 +85,6 @@ namespace WB.UI.QuestionnaireTester
 			global::WB.UI.Shared.Android.Resource.Id.tvTitle = global::WB.UI.QuestionnaireTester.Resource.Id.tvTitle;
 			global::WB.UI.Shared.Android.Resource.Id.vpContent = global::WB.UI.QuestionnaireTester.Resource.Id.vpContent;
 			global::WB.UI.Shared.Android.Resource.Layout.AbstractQuestionView = global::WB.UI.QuestionnaireTester.Resource.Layout.AbstractQuestionView;
-			global::WB.UI.Shared.Android.Resource.Layout.CascadingComboboxRowLayout = global::WB.UI.QuestionnaireTester.Resource.Layout.CascadingComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.Details = global::WB.UI.QuestionnaireTester.Resource.Layout.Details;
 			global::WB.UI.Shared.Android.Resource.Layout.FilteredComboboxRowLayout = global::WB.UI.QuestionnaireTester.Resource.Layout.FilteredComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::WB.UI.QuestionnaireTester.Resource.Layout.list_navigation_item;
@@ -398,7 +396,7 @@ namespace WB.UI.QuestionnaireTester
 			public const int ActionBarSearchable = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int CascadingComboboxRowLayout = 2130903043;
+			public const int cascadingcomboboxrowlayout = 2130903043;
 			
 			// aapt resource value: 0x7f030004
 			public const int CreateInterview = 2130903044;
