@@ -65,7 +65,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
         It should_return_error_with_referece_to_wrong_question = () =>
             verificationErrors.First().References.First().Id.ShouldEqual(childCascadedComboboxId);
 
-        It should_return_one_error = () => verificationErrors.Count().ShouldEqual(1);
+        It should_return_error_with_referece_to_question = () => 
+            verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;
