@@ -32,6 +32,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes
             Index(x => x.QuestionnaireVersion, FieldIndexing.NotAnalyzed);
             Index(x => x.UpdateDate, FieldIndexing.NotAnalyzed);
             Index(x => x.QuestionnaireId, FieldIndexing.NotAnalyzed);
+
+            Sort(x => x.UpdateDate, SortOptions.String);
         }
     }
 }
