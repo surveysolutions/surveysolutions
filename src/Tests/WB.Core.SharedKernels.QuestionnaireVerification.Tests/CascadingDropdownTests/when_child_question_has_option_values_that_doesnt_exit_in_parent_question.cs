@@ -53,6 +53,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
         It should_reference_question = () =>
             verificationErrors.First().References.ShouldContain(@ref => @ref.ItemId == childCascadedComboboxId.FormatGuid());
 
+        It should_return_error_with_referece_to_question = () => 
+            verificationErrors.First().References.ShouldEachConformTo(x => x.Type == QuestionnaireVerificationReferenceType.Question);
+
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;
         static QuestionnaireDocument questionnaire;
