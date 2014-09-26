@@ -58,6 +58,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
 
         It should_return_WB0088_error = () => verificationErrors.First().Code.ShouldEqual("WB0088");
 
+        It should_return_error_with_reference_to_question = () =>
+            verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+
+        It should_return_error_with_referece_to_question_with_error = () => 
+            verificationErrors.First().References.First().Id.ShouldEqual(childCascadedComboboxId);
+
         static QuestionnaireDocument questionnaire;
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;
