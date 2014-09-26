@@ -43,7 +43,6 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Drawable.donecountershape = global::WB.UI.Capi.Resource.Drawable.donecountershape;
 			global::WB.UI.Shared.Android.Resource.Drawable.errorwarningstyle = global::WB.UI.Capi.Resource.Drawable.errorwarningstyle;
 			global::WB.UI.Shared.Android.Resource.Drawable.grid_headerItem = global::WB.UI.Capi.Resource.Drawable.grid_headerItem;
-			global::WB.UI.Shared.Android.Resource.Drawable.no_image_found = global::WB.UI.Capi.Resource.Drawable.no_image_found;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionAnsweredShape = global::WB.UI.Capi.Resource.Drawable.questionAnsweredShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionDisabledShape = global::WB.UI.Capi.Resource.Drawable.questionDisabledShape;
 			global::WB.UI.Shared.Android.Resource.Drawable.questionInvalidShape = global::WB.UI.Capi.Resource.Drawable.questionInvalidShape;
@@ -86,7 +85,6 @@ namespace WB.UI.Capi
 			global::WB.UI.Shared.Android.Resource.Id.tvTitle = global::WB.UI.Capi.Resource.Id.tvTitle;
 			global::WB.UI.Shared.Android.Resource.Id.vpContent = global::WB.UI.Capi.Resource.Id.vpContent;
 			global::WB.UI.Shared.Android.Resource.Layout.AbstractQuestionView = global::WB.UI.Capi.Resource.Layout.AbstractQuestionView;
-			global::WB.UI.Shared.Android.Resource.Layout.CascadingComboboxRowLayout = global::WB.UI.Capi.Resource.Layout.CascadingComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.Details = global::WB.UI.Capi.Resource.Layout.Details;
 			global::WB.UI.Shared.Android.Resource.Layout.FilteredComboboxRowLayout = global::WB.UI.Capi.Resource.Layout.FilteredComboboxRowLayout;
 			global::WB.UI.Shared.Android.Resource.Layout.list_navigation_item = global::WB.UI.Capi.Resource.Layout.list_navigation_item;
@@ -476,7 +474,7 @@ namespace WB.UI.Capi
 			public const int ActionBar = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int CascadingComboboxRowLayout = 2130903042;
+			public const int cascadingcomboboxrowlayout = 2130903042;
 			
 			// aapt resource value: 0x7f030003
 			public const int CreateInterview = 2130903043;
