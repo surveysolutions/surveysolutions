@@ -51,7 +51,6 @@
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
 
                 $scope.questionForm.$setPristine();
-
             };
 
             $scope.loadQuestion = function () {
@@ -157,7 +156,8 @@
             };
 
             $scope.editCascadingComboboxOptions = function () {
-                if ($scope.questionForm.$dirty) {
+                var wasCascadeFromQuestionIdChanged = ($scope.activeQuestion.cascadeFromQuestionId != $scope.initialQuestion.cascadeFromQuestionId);
+                if ($scope.questionForm.$dirty || wasCascadeFromQuestionIdChanged) {
                     var modalInstance = confirmService.open({
                         title: "To open options editor all unsaved changes must be saved. Should we save them now?",
                         okButtonTitle: "Save",
