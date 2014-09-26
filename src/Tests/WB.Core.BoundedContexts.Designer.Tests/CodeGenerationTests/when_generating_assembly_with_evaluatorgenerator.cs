@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
     [Ignore("bulk test run failed fix")]
     internal class when_generating_assembly_with_evaluatorgenerator : CodeGenerationTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
@@ -22,16 +22,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             questionnaireDocument = CreateQuestionnaireForGeneration(id);
         };
 
-        private Because of = () =>
+        Because of = () =>
             emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
 
-        private It should_result_succeded = () =>
+        It should_result_succeded = () =>
             emitResult.Success.ShouldEqual(true);
 
-        private It should_result_errors_count = () =>
+        It should_result_errors_count = () =>
             emitResult.Diagnostics.Count.ShouldEqual(0);
 
-        private It should_assembly_length_greate_0 = () =>
+        It should_assembly_length_greate_0 = () =>
             resultAssembly.Length.ShouldBeGreaterThan(0);
 
         private static readonly Guid id = Guid.Parse("11111111111111111111111111111111");
