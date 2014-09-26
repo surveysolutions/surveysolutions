@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
@@ -23,6 +24,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return SyntaxFactory
                 .ParseSyntaxTree(code).GetRoot().ChildNodesAndTokens().TreeToEnumerable(_ => _.ChildNodesAndTokens())
                 .Where(IsIdentifierToken)
+                .Where(identifierToken => !IsFunction(identifierToken))
+                .Where(identifierToken => !IsPropertyOrMethod(identifierToken))
                 .Select(token => token.ToString())
                 .Distinct();
         }
@@ -35,8 +38,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)
         {
             return nodeOrToken.IsToken
-                && nodeOrToken.AsToken().CSharpKind() == SyntaxKind.IdentifierToken
+                && nodeOrToken.CSharpKind() == SyntaxKind.IdentifierToken
                 && nodeOrToken.Parent.CSharpKind() == SyntaxKind.IdentifierName;
+        }
+
+        private static bool IsFunction(SyntaxNodeOrToken identifierToken)
+        {
+            return identifierToken.Parent.Parent is InvocationExpressionSyntax;
+        }
+
+        private static bool IsPropertyOrMethod(SyntaxNodeOrToken identifierToken)
+        {
+            SyntaxNode identifierNameNode = identifierToken.Parent;
+
+            bool isPartOfMemberAccessChain = identifierNameNode.Parent is MemberAccessExpressionSyntax;
+
+            if (!isPartOfMemberAccessChain)
+                return false;
+
+            bool isFirstMemberInChain = identifierNameNode.Parent.ChildNodesAndTokens().First() == identifierNameNode;
+
+            return !isFirstMemberInChain;
         }
     }
 }
