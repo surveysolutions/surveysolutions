@@ -23,12 +23,12 @@
         {
             @Html.AntiForgeryToken()
             <div class="form-group">
-                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Login" })
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Login", autocomplete = "off" })
                 <span class="help-block">@Html.ValidationMessageFor(m => m.UserName)</span>
             </div>
 
             <div class="form-group">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", autocomplete = "off" })
                 <span class="help-block">@Html.ValidationMessageFor(m => m.Password)</span>
             </div>
             <div class="form-group">
