@@ -65,12 +65,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
         }
 
-        protected static IInterviewExpressionStateProvider CreateInterviewExpressionStateProviderStub()
+        protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub()
         {
             return new InterviewExpressionStateProviderForTests();
         }
 
-        public class InterviewExpressionStateProviderForTests : IInterviewExpressionStateProvider
+        public class InterviewExpressionStateProviderForTests : IInterviewExpressionStatePrototypeProvider
         {
             public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
             {

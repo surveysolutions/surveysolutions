@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -13,11 +10,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
-using IExpressionProcessor = WB.Core.SharedKernels.DataCollection.IExpressionProcessor;
 
 namespace WB.Tests.Integration.InterviewTests
 {
@@ -37,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests
                 .Returns(questionnaireRepository);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStateProvider>())
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
                 .Returns(CreateInterviewExpressionStateProviderStub(questionnaireId));
 
             return CreateInterview(questionnaireId: questionnaireId);
@@ -67,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests
                 && repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
         }
 
-        protected static IInterviewExpressionStateProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
+        protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
         {
             var expressionState = new Mock<IInterviewExpressionState>();
 
@@ -76,7 +69,7 @@ namespace WB.Tests.Integration.InterviewTests
             expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
             expressionState.Setup(_ => _.ProcessConditionExpressions(out emptyList, out emptyList, out emptyList, out emptyList));
             
-            return Mock.Of<IInterviewExpressionStateProvider>(
+            return Mock.Of<IInterviewExpressionStatePrototypeProvider>(
                     provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);
 
 

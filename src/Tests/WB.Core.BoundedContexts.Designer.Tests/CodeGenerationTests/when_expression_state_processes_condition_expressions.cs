@@ -20,11 +20,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             questionnaireDocument = CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(questionnaireId, questionId, group1Id);
 
-            IInterviewExpressionStateProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
+            IInterviewExpressionStatePrototypeProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
 
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStateProvider>())
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
                 .Returns(interviewExpressionStateProvider);
 
             state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         };
 
         Because of = () =>
-            state.ProcessConditionExpressions(out questionsToBeEnabled, out questionsToBeDisabled, out groupsToBeEnabled, out groupsToBeDisabled);
+            state.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
 
         It should_disabled_question_count_equal_0 = () =>
             questionsToBeDisabled.Count.ShouldEqual(0);

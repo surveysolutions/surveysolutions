@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -13,5 +12,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public List<Identity> AnswersDeclaredValid { get; private set; }
         public List<Identity> AnswersDeclaredInvalid { get; private set; }
+
+        public void Clear()
+        {
+            this.AnswersDeclaredInvalid.Clear();
+            this.AnswersDeclaredValid.Clear();
+        }
     }
 }

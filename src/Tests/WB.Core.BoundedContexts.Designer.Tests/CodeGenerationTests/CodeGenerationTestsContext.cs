@@ -380,12 +380,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             return questionnaireDocument;
         }
 
-        public static IInterviewExpressionStateProvider GetInterviewExpressionStateProvider(QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionStatePrototypeProvider GetInterviewExpressionStateProvider(QuestionnaireDocument questionnaireDocument)
         {
             return new InterviewExpressionStateTestingProvider(questionnaireDocument);
         }
 
-        private class InterviewExpressionStateTestingProvider : IInterviewExpressionStateProvider
+        private class InterviewExpressionStateTestingProvider : IInterviewExpressionStatePrototypeProvider
         {
             private IInterviewExpressionState interviewExpressionState;
 

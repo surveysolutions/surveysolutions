@@ -311,7 +311,7 @@ foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Mo
             this.Write(" @__parent;\r\n\r\n        ");
             
             #line 63 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var parentQuestion in Model.GetParentScope().GetAllQuestionsToTop()) 
+foreach (var parentQuestion in Model.ParentScope.GetAllQuestionsToTop()) 
         {
             
             #line default
@@ -347,7 +347,7 @@ foreach (var parentQuestion in Model.GetParentScope().GetAllQuestionsToTop())
             this.Write("\r\n        ");
             
             #line 68 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-foreach (var parentRoster in Model.GetParentScope().GetAllRostersToTop()) 
+foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
         {
             
             #line default
@@ -793,7 +793,7 @@ if(!string.IsNullOrWhiteSpace(@roster.Conditions))
         ");
             
             #line 190 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-if(Model.GetParentScope() != null)
+if(Model.ParentScope != null)
         {
             
             #line default
