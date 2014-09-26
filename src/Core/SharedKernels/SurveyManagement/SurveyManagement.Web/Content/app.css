@@ -374,3 +374,7 @@ input::-ms-clear {
     .tt-suggestion p {
         margin: 0;
     }
+
+#details .radio, .checkbox {
+    margin-left: 20px;
+}
