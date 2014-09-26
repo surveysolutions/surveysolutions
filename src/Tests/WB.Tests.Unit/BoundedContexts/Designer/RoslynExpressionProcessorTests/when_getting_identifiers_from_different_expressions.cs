@@ -21,6 +21,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.RoslynExpressionProcessorTests
                 { "r + r - r", new[] { "r" } },
                 { "c1 + \"s\"", new[] { "c1" } },
                 { "c2 + 's'", new[] { "c2" } },
+                { "mo1.Contains(1)", new[] { "mo1" } },
+                { "a.b() + x.y(z) + k(l) + w()", new[] { "a", "x", "z", "l" } },
+                { "a.x", new[] { "a" } },
             };
 
             analyzer = Create.RoslynExpressionProcessor();
