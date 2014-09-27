@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
             ICommandService commandService = null, IJsonUtils jsonUtils = null,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null, ICapiSynchronizationCacheService capiSynchronizationCacheService = null,
-            ICapiCleanUpService capiCleanUpService = null, IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor = null)
+            ICapiCleanUpService capiCleanUpService = null, IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null)
         {
             var mockOfCompressor = new Mock<IStringCompressor>();
             mockOfCompressor.Setup(x => x.DecompressString(Moq.It.IsAny<string>())).Returns<string>(s => s);
@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizat
                 capiCleanUpService ?? Mock.Of<ICapiCleanUpService>(),
                 Mock.Of<ILogger>(), capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(), 
                 mockOfCompressor.Object, jsonUtils ?? Mock.Of<IJsonUtils>(),
-                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnareAssemblyFileAccessor>());
+                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>());
         }
     }
 }

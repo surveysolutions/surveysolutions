@@ -15,9 +15,9 @@ namespace WB.UI.Headquarters.API.Resources
     [HeadquarterFeatureOnly]
     public class AssembliesResourceController : ApiController
     {
-        private readonly IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
-        public AssembliesResourceController(IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor)
+        public AssembliesResourceController(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
         }

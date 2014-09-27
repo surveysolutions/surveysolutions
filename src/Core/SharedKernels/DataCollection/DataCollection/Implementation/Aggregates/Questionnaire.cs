@@ -53,6 +53,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             get { return ServiceLocator.Current.GetInstance<IPlainQuestionnaireRepository>(); }
         }
 
+        public IQuestionnaireAssemblyFileAccessor QuestionnareAssemblyFileAccessor
+        {
+            get { return ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>(); }
+        }
+
+        
         #endregion
 
         public Questionnaire() { }
@@ -117,7 +123,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (supportingAssembly != null && !string.IsNullOrWhiteSpace(supportingAssembly))
             {
-                this.ApplyEvent(new QuestionnaireAssemblyImported { AssemblySourceInBase64 = supportingAssembly, Version = newVersion });
+                QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, supportingAssembly);
+                this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });
             }
         }
 
@@ -153,7 +160,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (supportingAssembly != null && !string.IsNullOrWhiteSpace(supportingAssembly))
             {
-                this.ApplyEvent(new QuestionnaireAssemblyImported { AssemblySourceInBase64 = supportingAssembly, Version = version });
+                QuestionnareAssemblyFileAccessor.StoreAssembly(EventSourceId, version, supportingAssembly);
+                this.ApplyEvent(new QuestionnaireAssemblyImported { Version = version });
             }
         }
 

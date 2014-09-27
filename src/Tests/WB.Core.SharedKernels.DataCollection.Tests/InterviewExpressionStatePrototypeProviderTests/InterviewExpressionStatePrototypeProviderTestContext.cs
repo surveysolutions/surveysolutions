@@ -8,15 +8,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
     [Subject(typeof(InterviewExpressionStatePrototypeProvider))]
     internal class InterviewExpressionStatePrototypeProviderTestContext
     {
-        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor)
+        protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor);
         }
 
 
-        protected static Mock<IQuestionnareAssemblyFileAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)
+        protected static Mock<IQuestionnaireAssemblyFileAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)
         {
-            var result = new Mock<IQuestionnareAssemblyFileAccessor>();
+            var result = new Mock<IQuestionnaireAssemblyFileAccessor>();
             result.Setup(x => x.GetFullPathToAssembly(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Returns(path);
 
