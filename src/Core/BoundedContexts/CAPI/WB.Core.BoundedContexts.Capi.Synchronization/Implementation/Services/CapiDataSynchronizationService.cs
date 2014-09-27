@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
         public CapiDataSynchronizationService(IChangeLogManipulator changelog, ICommandService commandService,
             IViewFactory<LoginViewInput, LoginView> loginViewFactory, IPlainQuestionnaireRepository questionnaireRepository,
             ICapiCleanUpService capiCleanUpService, ILogger logger, ICapiSynchronizationCacheService capiSynchronizationCacheService,
-            IStringCompressor stringCompressor, IJsonUtils jsonUtils, IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor)
+            IStringCompressor stringCompressor, IJsonUtils jsonUtils, IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStringCompressor stringCompressor;
         private readonly IJsonUtils jsonUtils;
-        private readonly IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
         public void SavePulledItem(SyncItem item)
         {
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
                 case SyncItemType.DeleteTemplate:
                     this.DeleteQuestionnaire(item);
                     break;
-                case SyncItemType.TemplateAssembly:
+                case SyncItemType.QuestionnaireAssembly:
                     this.UpdateAssembly(item);
                     break;
                 default: break;

@@ -9,6 +9,6 @@
         public const string Template = "t";
         public const string DeleteTemplate = "dt";
 
-        public const string TemplateAssembly = "ta";
+        public const string QuestionnaireAssembly = "ta";
     }
 }

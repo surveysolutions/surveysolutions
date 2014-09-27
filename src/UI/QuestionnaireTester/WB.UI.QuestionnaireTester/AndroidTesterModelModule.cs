@@ -39,7 +39,7 @@ namespace WB.UI.QuestionnaireTester
 
             this.Bind<IPlainStorageAccessor<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
 
-            this.Bind<IQuestionnareAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
+            this.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
 
             //this.kernel.Unbind<IInterviewExpressionStateProvider>();
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<IInterviewExpressionStatePrototypeProvider>().InSingletonScope();

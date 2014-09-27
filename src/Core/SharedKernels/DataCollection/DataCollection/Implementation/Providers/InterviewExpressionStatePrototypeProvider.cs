@@ -6,9 +6,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
     public class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider
     {
-        private readonly IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
-        public InterviewExpressionStatePrototypeProvider(IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor)
+        public InterviewExpressionStatePrototypeProvider(IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
         }

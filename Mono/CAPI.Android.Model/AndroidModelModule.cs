@@ -100,7 +100,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
 
-            this.Bind<IQuestionnareAssemblyFileAccessor>().ToConstant(assemblyFileAccessor);
+            this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstant(assemblyFileAccessor);
             this.Bind<IInterviewExpressionStatePrototypeProvider>().ToConstant(stateProvider);
 
             var backupable = new List<IBackupable>(){

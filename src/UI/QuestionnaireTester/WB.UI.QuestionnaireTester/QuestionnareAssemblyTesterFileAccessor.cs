@@ -6,9 +6,9 @@ using Environment = Android.OS.Environment;
 
 namespace WB.UI.QuestionnaireTester
 {
-    public class QuestionnareAssemblyTesterFileAccessor : IQuestionnareAssemblyFileAccessor
+    public class QuestionnareAssemblyTesterFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
-        private const string storeName = "ExpressionState";
+        private const string storeName = "QuestionnaireAssemblies";
         private readonly string pathToStore;
 
         public QuestionnareAssemblyTesterFileAccessor()

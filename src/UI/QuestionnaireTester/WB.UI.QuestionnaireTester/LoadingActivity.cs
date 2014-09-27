@@ -93,7 +93,7 @@ namespace WB.UI.QuestionnaireTester
                 string content = PackageHelper.DecompressString(template.Questionnaire);
                 var questionnaireDocument = JsonUtils.GetObject<QuestionnaireDocument>(content);
 
-                ServiceLocator.Current.GetInstance<IQuestionnareAssemblyFileAccessor>().StoreAssembly(questionnaireDocument.PublicKey, 0, template.QuestionnaireAssembly);
+                ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>().StoreAssembly(questionnaireDocument.PublicKey, 0, template.QuestionnaireAssembly);
 
                 NcqrsEnvironment.Get<ICommandService>().Execute(new ImportFromDesignerForTester(questionnaireDocument));
 

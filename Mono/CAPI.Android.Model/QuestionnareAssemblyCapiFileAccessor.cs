@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
@@ -8,9 +7,9 @@ using Environment = Android.OS.Environment;
 
 namespace CAPI.Android.Core.Model
 {
-    public class QuestionnareAssemblyCapiFileAccessor : IQuestionnareAssemblyFileAccessor, IBackupable
+    public class QuestionnareAssemblyCapiFileAccessor : IQuestionnaireAssemblyFileAccessor, IBackupable
     {
-        private const string storeName = "ExpressionState";
+        private const string storeName = "QuestionnaireAssemblies";
         private readonly string pathToStore;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -18,15 +17,15 @@ namespace CAPI.Android.Core.Model
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
-            var storageDirectory = Directory.Exists(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath)
+            var storageDirectory = fileSystemAccessor.IsDirectoryExists(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath)
                              ? Environment.ExternalStorageDirectory.AbsolutePath
                              : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
 
-            storageDirectory = Path.Combine(storageDirectory, storeName);
+            storageDirectory = fileSystemAccessor.CombinePath(storageDirectory, storeName);
 
-            if (!Directory.Exists(storageDirectory))
+            if (!fileSystemAccessor.IsDirectoryExists(storageDirectory))
             {
-                Directory.CreateDirectory(storageDirectory);
+                fileSystemAccessor.CreateDirectory(storageDirectory);
             }
 
             this.pathToStore = storageDirectory;
@@ -88,7 +87,7 @@ namespace CAPI.Android.Core.Model
 
         public void RestoreFromBackupFolder(string path)
         {
-            var dirWithCahngelog = Path.Combine(path, storeName);
+            var dirWithCahngelog = fileSystemAccessor.CombinePath(path, storeName);
 
             foreach (var file in Directory.EnumerateFiles(this.pathToStore))
             {

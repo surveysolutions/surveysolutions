@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Accessors
 {
-    public class QuestionnaireAssemblyFileAccessor : IQuestionnareAssemblyFileAccessor
+    public class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
         private const string FolderName = "QuestionnaireAssemblies";
         private readonly IFileSystemAccessor fileSystemAccessor;

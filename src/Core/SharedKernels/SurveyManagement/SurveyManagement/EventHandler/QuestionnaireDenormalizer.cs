@@ -21,14 +21,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor;
+        private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
 
         public QuestionnaireDenormalizer(
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, 
             ISynchronizationDataStorage synchronizationDataStorage,
             IQuestionnaireCacheInitializer questionnaireCacheInitializer,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IQuestionnareAssemblyFileAccessor questionnareAssemblyFileAccessor)
+            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor)
         {
             this.documentStorage = documentStorage;
             this.synchronizationDataStorage = synchronizationDataStorage;
@@ -97,8 +97,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt)
         {
-            this.questionnareAssemblyFileAccessor.StoreAssembly(evnt.EventSourceId, evnt.Payload.Version, evnt.Payload.AssemblySourceInBase64);
-            this.synchronizationDataStorage.SaveTemplateAssembly(evnt.EventSourceId, evnt.Payload.Version, evnt.Payload.AssemblySourceInBase64, evnt.EventTimeStamp);
+            var assemblyAsBase64String = this.questionnareAssemblyFileAccessor.GetAssemblyAsBase64String(evnt.EventSourceId, evnt.Payload.Version);
+
+            this.synchronizationDataStorage.SaveTemplateAssembly(evnt.EventSourceId, evnt.Payload.Version, assemblyAsBase64String, evnt.EventTimeStamp);
         }
     }
 }

@@ -162,7 +162,7 @@ namespace WB.Core.Synchronization.SyncStorage
             var syncItem = new SyncItem
             {
                 Id = publicKey.Combine(version),
-                ItemType = SyncItemType.TemplateAssembly,
+                ItemType = SyncItemType.QuestionnaireAssembly,
                 IsCompressed = UseCompressionForFiles,
                 Content = assemblyAsBase64String,
                 MetaInfo = GetItemAsContent(meta)
