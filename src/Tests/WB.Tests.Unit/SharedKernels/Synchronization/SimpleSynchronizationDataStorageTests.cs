@@ -197,17 +197,46 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             Assert.That(metaInformation.AllowCensusMode, Is.EqualTo(false));
         }
 
+
+        [Test]
+        public void SaveTemplateAssembly_()
+        {
+            // arrange
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
+            var questionnarieId = Guid.Parse("23333333-3333-3333-3333-333333333333");
+            var supervisorId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var version = 3;
+            var assemblyAsBase64String = "test_assembly";
+
+
+            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
+
+            // act
+            target.SaveTemplateAssembly(questionnarieId, version, assemblyAsBase64String, DateTime.Now);
+
+            // assert
+            var packageId = questionnarieId.Combine(version);
+            var result = target.GetLatestVersion(packageId);
+            var metaInformation = JsonConvert.DeserializeObject<QuestionnaireAssemblyMetadata>(result.MetaInfo);
+
+            Assert.That(result.ItemType, Is.EqualTo(SyncItemType.QuestionnaireAssembly));
+            Assert.That(result.Id, Is.EqualTo(packageId));
+            Assert.That(result.IsCompressed, Is.EqualTo(false));
+            Assert.That(result.Content, Is.EqualTo(assemblyAsBase64String));
+            Assert.That(metaInformation.Version, Is.EqualTo(version));
+        }
+
         private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisor(Guid supervisorId)
         {
-            return
-                CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, Guid.NewGuid());
-
+            return CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, Guid.NewGuid());
         }
+
         private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(Guid supervisorId, Guid userId, IMetaInfoBuilder metaInfoBuilder=null)
         {
             var inmemoryChunkStorage = new InMemoryChunkStorage();
-          
-           
             var userStorageMock = new Mock<IQueryableReadSideRepositoryWriter<UserDocument>>();
 
             var retval =
@@ -226,7 +255,8 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
                 Roles = new List<UserRoles>() { UserRoles.Supervisor }
             }, DateTime.Now);
             return retval;
-
         }
+        
+        
     }
 }

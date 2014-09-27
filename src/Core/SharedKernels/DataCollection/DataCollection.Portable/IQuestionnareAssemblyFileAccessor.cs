@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection
 {
-    public interface IQuestionnareAssemblyFileAccessor
+    public interface IQuestionnaireAssemblyFileAccessor
     {
         string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion);
 
