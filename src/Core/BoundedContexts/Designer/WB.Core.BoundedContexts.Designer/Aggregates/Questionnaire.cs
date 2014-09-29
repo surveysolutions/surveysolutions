@@ -1214,7 +1214,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             cascadeFromQuestionId: categoricalSingleQuestion.CascadeFromQuestionId,
                             options:
                                 categoricalSingleQuestion.Answers.Select(
-                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
+                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText, answer.ParentValue))
                                     .ToArray());
                         continue;
                     }
