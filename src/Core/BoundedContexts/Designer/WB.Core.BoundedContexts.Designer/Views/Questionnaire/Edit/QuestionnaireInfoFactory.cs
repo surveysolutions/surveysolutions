@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.Options = result.Options ?? new CategoricalOption[0];
             result.OptionsCount = result.Options.Length;
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
-            result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire);
+            result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
@@ -304,11 +304,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
                 x => x.Where(q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView || q is GeoLocationDetailsView)
-                .Where(q => q.RosterScopeIds.Length > 0)
+                .Where(q => q.RosterScopeIds.Length > 0 && q.Id != questionId)
                 .ToList();
 
             var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
