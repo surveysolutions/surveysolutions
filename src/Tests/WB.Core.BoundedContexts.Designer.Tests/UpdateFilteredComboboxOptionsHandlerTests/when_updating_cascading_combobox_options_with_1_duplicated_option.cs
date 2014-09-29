@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__value_required__ = () =>
-            new[] { "duplicate", "title + parentvalue" }.ShouldEachConformTo(
+            new[] { "duplicates", "title + parent value" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 

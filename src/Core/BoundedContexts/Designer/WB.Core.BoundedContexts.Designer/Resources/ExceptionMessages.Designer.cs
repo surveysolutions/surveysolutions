@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is at least one duplicate of Title + ParentValue pairs. List of option should not contains any duplicates of such type.
+        ///   Looks up a localized string similar to There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type..
         /// </summary>
         internal static string CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
             get {
