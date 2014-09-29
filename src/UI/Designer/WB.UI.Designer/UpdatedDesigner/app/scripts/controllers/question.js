@@ -2,7 +2,7 @@
     .controller('QuestionCtrl',
         function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService) {
             $scope.currentChapterId = $state.params.chapterId;
-
+            var dictionnaires = {};
             var dataBind = function (result) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
                 $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
@@ -19,6 +19,7 @@
                 $scope.activeQuestion.validationExpression = result.validationExpression;
                 $scope.activeQuestion.validationMessage = result.validationMessage;
                 $scope.activeQuestion.allQuestionScopeOptions = result.allQuestionScopeOptions;
+                dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
                 $scope.activeQuestion.notPrefilledQuestionScopeOptions = result.notPrefilledQuestionScopeOptions;
                 $scope.activeQuestion.instructions = result.instructions;
                 $scope.activeQuestion.maxAnswerCount = result.maxAnswerCount;
@@ -43,6 +44,7 @@
 
                 $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
+
                 $scope.setQuestionType(result.type);
 
                 $scope.setLinkSource(result.linkedToQuestionId);
@@ -112,6 +114,16 @@
             $scope.setQuestionType = function (type) {
                 $scope.activeQuestion.type = type;
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
+                $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
+
+                if (type === 'DateTime') {
+                    $scope.activeQuestion.allQuestionScopeOptions = _.filter($scope.activeQuestion.allQuestionScopeOptions, function (val) {
+                        return val.value !== 'Supervisor';
+                    });
+                    if ($scope.activeQuestion.questionScope === 'Supervisor') {
+                        $scope.activeQuestion.questionScope = 'Interviewer';
+                    }
+                }
                 if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Prefilled') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
