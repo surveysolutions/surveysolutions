@@ -6008,7 +6008,8 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
   font-size: 14px;
   font-weight: normal;
   color: #c1c7cb;
-  padding: 10px 15px;
+  padding: 0 15px;
+  height: 37px;
 }
 .wb-input.bg-white {
   background-color: white;
