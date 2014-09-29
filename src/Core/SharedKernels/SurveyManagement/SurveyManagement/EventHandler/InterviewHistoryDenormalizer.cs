@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
@@ -41,6 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<TextListQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
+        IEventHandler<PictureQuestionAnswered>,
         IEventHandler<AnswerCommented>,
 
         IEventHandler
@@ -215,6 +217,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.Payload.UserId,
                 CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer),
                     evnt.Payload.PropagationVector));
+        }
+
+        public void Handle(IPublishedEvent<PictureQuestionAnswered> evnt)
+        {
+            AddInterviewAction(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.AnswerTime, InterviewHistoricalAction.AnswerSet,
+               evnt.Payload.UserId,
+               CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.PictureFileName),
+                   evnt.Payload.PropagationVector));
         }
 
         public void Handle(IPublishedEvent<AnswerCommented> evnt)
