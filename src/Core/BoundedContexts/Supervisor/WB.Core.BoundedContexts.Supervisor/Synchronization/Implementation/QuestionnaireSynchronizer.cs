@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         id.FormatGuid(), version),
                     interviewDeletionErrors);
 
-            this.executeCommand(new DeleteQuestionnaire(id, version));
+            this.executeCommand(new DeleteQuestionnaire(id, version, null));
             this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(id, version);
         }
 
