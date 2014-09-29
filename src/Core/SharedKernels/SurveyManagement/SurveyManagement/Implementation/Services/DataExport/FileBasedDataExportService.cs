@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Ionic.Zip;
 using Ionic.Zlib;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
@@ -216,11 +217,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             fileSystemAccessor.CreateDirectory(filesFolderForInterview);
 
+            var questionsWithAnswersOnMultimediaQuestions = GetPresentFileNames(interviewDataExportView);
+
             var filesToMove = plainFileRepository.GetBinaryFilesForInterview(interviewDataExportView.InterviewId);
 
             foreach (var file in filesToMove)
             {
-                this.fileSystemAccessor.WriteAllBytes(this.fileSystemAccessor.CombinePath(filesFolderForInterview, file.FileName), file.GetData());
+                if (!questionsWithAnswersOnMultimediaQuestions.Contains(file.FileName))
+                    continue;
+
+                this.fileSystemAccessor.WriteAllBytes(this.fileSystemAccessor.CombinePath(filesFolderForInterview, file.FileName),
+                    file.GetData());
             }
         }
 
@@ -231,6 +238,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, questionnaireVersion, dataFolderForTemplatePath);
 
             this.dataFileExportService.AddActionRecords(actions, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
+        }
+
+        private string[] GetPresentFileNames(InterviewDataExportView interviewDataExportView)
+        {
+            var questionsWithAnswersOnMultimediaQuestions = interviewDataExportView.Levels.SelectMany(
+                level =>
+                    level.Records.SelectMany(
+                        record =>
+                            record.Questions.Where(
+                                question =>
+                                    question.QuestionType == QuestionType.Multimedia && question.Answers != null &&
+                                        question.Answers.Length > 0 && !string.IsNullOrEmpty(question.Answers[0]))));
+            
+            return questionsWithAnswersOnMultimediaQuestions.Select(a => a.Answers[0]).ToArray();
         }
 
         private void ThrowArgumentExceptionIfDataFolderMissing(Guid questionnaireId, long version, string dataDirectoryPath)
