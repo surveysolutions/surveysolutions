@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<GroupDeleted> evnt)
-        {
+        { 
             var groupId = evnt.Payload.GroupPublicKey.FormatGuid();
             var parentGroupView = this.FindParentOfEntity(questionnaireOrGroup: currentState,
                 entityId: groupId);
@@ -352,7 +352,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 var parentOfEntity = this.FindParentOfEntity(currentState, entityView.ItemId);
 
                 parentOfEntity.Items.Remove(entityView);
-                targetGroup.Items.Insert(Math.Min(evnt.Payload.TargetIndex, targetGroup.Items.Count), entityView);
+                targetGroup.Items.Insert(Math.Min(Math.Max(evnt.Payload.TargetIndex,0), targetGroup.Items.Count), entityView);
             }
 
             return currentState;
