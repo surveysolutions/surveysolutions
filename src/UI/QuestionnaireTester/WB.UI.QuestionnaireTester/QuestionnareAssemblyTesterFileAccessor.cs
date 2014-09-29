@@ -30,7 +30,7 @@ namespace WB.UI.QuestionnaireTester
 
         public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
         {
-            var folderName = GetFolderNameForTemplate(questionnaireId, questionnaireVersion);
+            var folderName = GetFolderNameForTemplate(questionnaireId);
             var assemblySearchPath = Path.Combine(pathToStore, folderName);
             var directory = new DirectoryInfo(assemblySearchPath);
 
@@ -42,10 +42,10 @@ namespace WB.UI.QuestionnaireTester
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64String)
         {
-            string folderName = GetFolderNameForTemplate(questionnaireId, questionnaireVersion);
+            string folderName = GetFolderNameForTemplate(questionnaireId);
             string pathToFolder = Path.Combine(pathToStore, folderName);
 
-            //version doesn't have scence to the tester
+            //version doesn't have sense to the tester
             //we are trying to delete old versions before saving the last one
             if (!Directory.Exists(pathToFolder))
             {
@@ -88,9 +88,9 @@ namespace WB.UI.QuestionnaireTester
             throw new NotImplementedException();
         }
 
-        private string GetFolderNameForTemplate(Guid questionnaireId, long questionnaireVersion)
+        private string GetFolderNameForTemplate(Guid questionnaireId)
         {
-            return String.Format("dir-{0}-{1}", questionnaireId, questionnaireVersion);
+            return String.Format("dir-{0}", questionnaireId);
         }
     }
 }
