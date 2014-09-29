@@ -261,7 +261,7 @@
                 };
 
 
-                commandService.cloneGroupWithoutChildren = function(questionnaireId, newId, chapter, chapterDescription) {
+                commandService.cloneGroupWithoutChildren = function(questionnaireId, newId, chapter) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "groupId": newId,

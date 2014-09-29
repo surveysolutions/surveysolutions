@@ -296,8 +296,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public ViewResult EditOptions(HttpPostedFileBase csvFile)
         {
-            var configuration = new CsvConfiguration { HasHeaderRecord = false, TrimFields = true, IgnoreQuotes = true,  };
-            this.GetOptionsFromStream(csvFile, configuration);
+            this.GetOptionsFromStream(csvFile);
 
             return this.View(this.questionWithOptionsViewModel.Options);
         }
@@ -305,17 +304,17 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public ViewResult EditCascadingOptions(HttpPostedFileBase csvFile)
         {
-            var configuration = new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = true };
-            this.GetOptionsFromStream(csvFile, configuration);
+            this.GetOptionsFromStream(csvFile, isCascade: true);
 
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
-        private void GetOptionsFromStream(HttpPostedFileBase csvFile, CsvConfiguration configuration)
+        private void GetOptionsFromStream(HttpPostedFileBase csvFile, bool isCascade = false)
         {
+            var configuration = new CsvConfiguration { HasHeaderRecord = false, TrimFields = true, IgnoreQuotes = true };
             try
             {
-                this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, configuration);
+                this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, configuration, isCascade);
             }
             catch (Exception)
             {
@@ -402,12 +401,12 @@ namespace WB.UI.Designer.Controllers
             public string QuestionTitle { get; set; }
         }
 
-        private IEnumerable<Option> ExtractOptionsFromStream(Stream inputStream, CsvConfiguration configuration)
+        private IEnumerable<Option> ExtractOptionsFromStream(Stream inputStream, CsvConfiguration configuration, bool isCascade)
         {
             var importedOptions = new List<Option>();
 
             var csvReader = new CsvReader(new StreamReader(inputStream));
-            csvReader.Configuration.HasHeaderRecord = configuration.HasHeaderRecord;
+            csvReader.Configuration.HasHeaderRecord = false;
             csvReader.Configuration.TrimFields = configuration.TrimFields;
             csvReader.Configuration.IgnoreQuotes = configuration.IgnoreQuotes;
             
@@ -415,9 +414,9 @@ namespace WB.UI.Designer.Controllers
             {
                 while (csvReader.Read())
                 {
-                    if (csvReader.Configuration.HasHeaderRecord)
+                    if (isCascade)
                     {
-                        importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField<string>("Value"), csvReader.GetField<string>("Title"), csvReader.GetField<string>("Parent value")));
+                        importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField(0), csvReader.GetField(1), csvReader.GetField(2)));
                     }
                     else
                     {

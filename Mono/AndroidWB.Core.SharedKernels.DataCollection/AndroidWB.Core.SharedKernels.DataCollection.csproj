@@ -465,6 +465,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\User\UserUnlockedBySupervisor.cs">
       <Link>Events\User\UserUnlockedBySupervisor.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Exceptions\DataCollectionException.cs">
+      <Link>Exceptions\DataCollectionException.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Exceptions\InterviewException.cs">
       <Link>Exceptions\InterviewException.cs</Link>
     </Compile>

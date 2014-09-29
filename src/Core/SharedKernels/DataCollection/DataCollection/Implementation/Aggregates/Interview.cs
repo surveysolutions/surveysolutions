@@ -2591,7 +2591,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var questionIdentity = new Identity(questionId, rosterVector);
                 var previsousAnswer = GetEnabledQuestionAnswerSupportedInExpressions(state, questionIdentity,
                 questionnaire);
-                bool answerChanged = WasQuestionAnswered(state, questionIdentity) && (decimal) previsousAnswer != (decimal) answer;
+                bool answerChanged = WasQuestionAnswered(state, questionIdentity) && (decimal?) previsousAnswer != (decimal?) answer;
             
                 var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
                 answersForLinkedQuestionsToRemoveByDisabling = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading).ToList();
@@ -3218,8 +3218,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 string parentValue = questionnaire.GetCascadingParentValue(questionId, value);
                 IEnumerable<decimal> answers = questionnaire.GetAnswerOptionsAsValues(cascadingId.Value);
 
-                bool answerExistsInParent = !answers.Contains(Convert.ToDecimal(parentValue));
-                if (answerExistsInParent)
+                bool answerNotExistsInParent = !answers.Contains(Convert.ToDecimal(parentValue));
+                if (answerNotExistsInParent)
                     throw new InterviewException(string.Format(
                         "For question {0} was provided selected value {1} as answer with parent value {2}, but this value not found in  Parent Question options",
                         FormatQuestionForException(questionId, questionnaire), value, parentValue));

@@ -1,0 +1,100 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using Main.Core.Entities;
+using Main.Core.View;
+using Ncqrs.Commanding.ServiceModel;
+using System.Linq;
+using System.Web.Http;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Shared.Web.Filters;
+
+namespace WB.UI.Headquarters.Controllers
+{
+    [Authorize(Roles = "Headquarter")]
+    [ApiValidationAntiForgeryToken]
+    public class QuestionnairesApiController : BaseApiController
+    {
+        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
+        private readonly IQueryableReadSideRepositoryWriter<InterviewSummary> interviews;
+
+        public QuestionnairesApiController(
+            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
+            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
+            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
+            : base(commandService, globalInfo, logger)
+        {
+            this.interviews = interviews;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+        }
+
+        [HttpPost]
+        public QuestionnaireBrowseView AllQuestionnaires(AllQuestionnairesListViewModel data)
+        {
+            var input = new QuestionnaireBrowseInputModel()
+            {
+                Orders = data.SortOrder  == null ? new List<OrderRequestItem>() : data.SortOrder.ToList()
+            };
+            if (data.Pager != null)
+            {
+                input.Page = data.Pager.Page;
+                input.PageSize = data.Pager.PageSize;
+            }
+
+            if (data.Request != null)
+            {
+                input.Filter = data.Request.Filter;
+            }
+
+            return this.questionnaireBrowseViewFactory.Load(input);
+        }
+
+        [HttpPost]
+        public JsonCommandResponse DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
+        {
+            var response = new JsonCommandResponse() { IsSuccess = true };
+
+            try
+            {
+                var interviewByQuestionnaire =
+                this.interviews.QueryAll(
+                    interview =>
+                        !interview.IsDeleted && interview.QuestionnaireId == request.QuestionnaireId &&
+                        interview.QuestionnaireVersion == request.Version);
+
+                foreach (var interviewSummary in interviewByQuestionnaire)
+                {
+                    this.CommandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
+                        this.GlobalInfo.GetCurrentUser().Id));
+                }
+                this.CommandService.Execute(new DeleteQuestionnaire(request.QuestionnaireId, request.Version));
+            }
+            catch (Exception e)
+            {
+                var domainEx = e.GetSelfOrInnerAs<DataCollectionException>();
+                if (domainEx == null)
+                {
+                    this.Logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(DeleteQuestionnaire)), e);
+                    throw;
+                }
+
+                response.DomainException = domainEx.Message;
+            }
+
+            
+            return response;
+        }
+    }
+}

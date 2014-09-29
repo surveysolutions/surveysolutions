@@ -26,6 +26,12 @@
                     <span>
                         @answer.Title
                     </span>
+                    @if (!string.IsNullOrWhiteSpace(answer.ParentValue))
+                    {
+                        <span>
+                            &nbsp;[@answer.ParentValue]
+                        </span>
+                    }
                 </li>
             }
         

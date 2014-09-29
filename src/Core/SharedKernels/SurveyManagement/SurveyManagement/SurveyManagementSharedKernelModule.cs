@@ -38,11 +38,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
         private readonly bool overrideReceivedEventTimeStamp;
+        private readonly string origin;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp)
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -52,6 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
             this.applicationBuildVersion = applicationBuildVersion;
             this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
+            this.origin = origin;
         }
 
         public override void Load()
@@ -105,10 +107,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
 
-            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope().WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp);
+            this.Bind<IIncomePackagesRepository>()
+                .To<IncomePackagesRepository>()
+                .InSingletonScope()
+                .WithConstructorArgument("overrideReceivedEventTimeStamp", overrideReceivedEventTimeStamp)
+                .WithConstructorArgument("origin", origin);
+                
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>().InSingletonScope();
-            
-            //this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
         }
 
         protected void AdditionalEventChecker(Guid interviewId)

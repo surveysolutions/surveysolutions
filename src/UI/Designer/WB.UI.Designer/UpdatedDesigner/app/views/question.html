@@ -1,6 +1,6 @@
 ﻿<form role="form" id="question-editor" name="questionForm" unsaved-warning-form>
     <div id="show-reload-details-promt" class="ng-cloak" ng-show="activeQuestion.shouldUserSeeReloadDetailsPromt">
-        <div class="inner">click <a ng-click="loadQuestion();" href="javascript:void(0);">Reload</a> details of this question, please</div>
+        <div class="inner">Click <a ng-click="loadQuestion();" href="javascript:void(0);">reload</a> to update options</div>
     </div>
     <div class="form-holder">
 
@@ -237,7 +237,7 @@
 
         <script type="text/ng-template" id="CascadingComboBox-Template.html">
             <div id="sourceOfLinkedQuestion" class="dropdown-with-breadcrumbs-and-icons">
-                <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestion" ng-required="true" />
+                <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden ng-required="true" />
                 <label for="singleOptionQuestionSource">Select parent question</label>
                 <div class="btn-group" dropdown>
                     <button class="btn dropdown-toggle" id="singleOptionQuestionSource" type="button">

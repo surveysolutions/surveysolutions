@@ -35,23 +35,23 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
                         StataExportCaption = "var1",
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer> {
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                            new Answer { AnswerText = "child 1", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
-                            new Answer { AnswerText = "child 1", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
-                            new Answer { AnswerText = "child 2", AnswerValue = "3", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 1", ParentValue = "1", AnswerValue = "1", PublicKey = Guid.NewGuid() },
+                            new Answer { AnswerText = "child 1", ParentValue = "2", AnswerValue = "2", PublicKey = Guid.NewGuid() },
+                            new Answer { AnswerText = "child 2", ParentValue = "2", AnswerValue = "3", PublicKey = Guid.NewGuid() },
+                            new Answer { AnswerText = "child 2", ParentValue = "2", AnswerValue = "4", PublicKey = Guid.NewGuid() },
                         }
                     },
                     new SingleQuestion
                     {
-                        PublicKey = childCascadedComboboxId,
+                        PublicKey = Guid.NewGuid(),
                         QuestionType = QuestionType.SingleOption,
                         StataExportCaption = "var2",
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer> {
                             new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                            new Answer { AnswerText = "child 1", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
-                            new Answer { AnswerText = "child 1", AnswerValue = "3", PublicKey = Guid.NewGuid(), ParentValue = "2" },
-                            new Answer { AnswerText = "child 2", AnswerValue = "4", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 3", AnswerValue = "3", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 4", AnswerValue = "4", PublicKey = Guid.NewGuid(), ParentValue = "2" },
                         }
                     }
                 );
@@ -62,7 +62,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
 
         It should_return_WB0089_error = () => verificationErrors.First().Code.ShouldEqual("WB0089");
 
-        It should_return_one_error = () => verificationErrors.Count().ShouldEqual(1);
+        It should_return_error_with_referece_to_wrong_question = () =>
+            verificationErrors.First().References.First().Id.ShouldEqual(childCascadedComboboxId);
+
+        It should_return_error_with_referece_to_question = () => 
+            verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;

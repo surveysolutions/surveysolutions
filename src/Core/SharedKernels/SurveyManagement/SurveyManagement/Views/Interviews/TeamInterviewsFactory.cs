@@ -23,9 +23,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 
         public TeamInterviewsView Load(TeamInterviewsInputModel input)
         {
-            string indexName = typeof (InterviewsSearchIndex).Name;
+             string indexName = typeof(InterviewsSearchIndex).Name;
 
-            var items = this.indexAccessor.Query<InterviewSummary>(indexName).Where(x => !x.IsDeleted);
+            var items = indexAccessor.Query<SeachIndexContent>(indexName);
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
@@ -51,12 +51,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                 ? items.Where(x => x.ResponsibleId == input.ResponsibleId)
                 : items.Where(x => x.TeamLeadId == input.ViewerId);
 
-            items = this.DefineOrderBy(items, input);
-
             var totalCount = items.Count();
-            var teamInterviewsViewItems = items.Skip((input.Page - 1) * input.PageSize)
-                .Take(input.PageSize)
-                .ToList()
+            var seachIndexContents = this.DefineOrderBy(items.AsProjection<InterviewSummary>(), input)
+                                         .Skip((input.Page - 1) * input.PageSize)
+                                         .Take(input.PageSize)
+                                         .ToList();
+
+            var teamInterviewsViewItems = seachIndexContents
                 .Select(x => new TeamInterviewsViewItem {
                     FeaturedQuestions = x.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion()
                     {

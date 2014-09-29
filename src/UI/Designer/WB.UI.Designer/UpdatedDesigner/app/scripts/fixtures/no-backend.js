@@ -1,5 +1,5 @@
 ﻿(function () {
-    if (!(document.URL.indexOf('nobackend') > 0)) {
+    if (document.URL.indexOf('nobackend') < 0) {
         return;
     }
 
@@ -83,7 +83,7 @@
             );
 
             //Comands
-            $httpBackend.whenPOST('../../command/execute').respond(function (method, url, data, headers) {
+            $httpBackend.whenPOST('../../command/execute').respond(function (method, url, data) {
                 if (!angular.fromJson(data).type.indexOf('Update')) {
                     return [200, { "Error": "Custom Validation Error From Api", "HasPermissions": true, "IsSuccess": false }, {}];
                 }

@@ -158,7 +158,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                             Answers = (childQuestion.Answers ?? new List<Answer>()).Select(x => new PdfAnswerView
                             {
                                 Title = x.AnswerText,
-                                AnswerValue = x.AnswerValue
+                                AnswerValue = x.AnswerValue,
+                                ParentValue = x.ParentValue
                             }).ToList(),
                             Variable = childQuestion.StataExportCaption
                         };

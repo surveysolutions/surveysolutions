@@ -51,7 +51,6 @@
       match="/configuration/appSettings/add[@key='EventStore.Password']/@value" />
    </parameter>
 
-
    <parameter name="Events database name"
       description="The database where the events will be stored"
       defaultValue="SupervisorEvents">
@@ -73,25 +72,13 @@
       scope="\\web.config$" 
       match="/configuration/appSettings/add[@key='Raven.Databases.PlainStorage']/@value" />
    </parameter>
-   <parameter name="Embeded Headquarters"
-      description="Does this Supervisor have Headquarters functions as well?"
-      defaultValue="true">
-   <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='HeadquartersFunctionsEnabled']/@value" />
-   </parameter>
    <parameter name="Headquarters location"
       description="Provide the address for the headquarters"
       defaultValue="http://localhost/Headquarters">
    <parameterEntry kind="XmlFile" 
       scope="\\web.config$" 
-      match="/configuration/appSettings/add[@key='Headquarters.BaseUrl']/@value" />
+      match="/configuration/headquartersSettingsGroup/headquartersSettings/@baseUrl" />
    </parameter>
-   <parameter name="Designer Endpoint Address" description="Please provide Designer address from which do import templates" defaultValue="https://localhost/Designer/PublicService.svc" tags="">
-    <parameterEntry kind="XmlFile" 
-      scope="\\web.config$" 
-      match="//system.serviceModel/client/endpoint/@address" />
-  </parameter>
   <parameter name="Show control panel"
      defaultValue="false">
   <parameterEntry kind="XmlFile" 

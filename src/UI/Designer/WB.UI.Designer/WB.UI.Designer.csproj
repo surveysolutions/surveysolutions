@@ -426,7 +426,6 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="UpdatedDesigner\app\scripts\components\contextMenu.js" />
     <Content Include="UpdatedDesigner\app\scripts\filters\escapeFilter.js" />
     <Content Include="UpdatedDesigner\app\views\treegroup.html" />
     <Content Include="UpdatedDesigner\app\views\treequestion.html" />
@@ -689,10 +688,10 @@
     <Content Include="UpdatedDesigner\test.html" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.css" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.min.css" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap-tpls.js" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap-tpls.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap.js" />
@@ -1054,31 +1053,6 @@
     <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.js" />
     <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.min.js" />
     <Content Include="UpdatedDesigner\vendor\lodash\LICENSE.txt" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\.gitignore" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\Gruntfile.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\mousetrap.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\mousetrap.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\bind-dictionary\mousetrap-bind-dictionary.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\bind-dictionary\mousetrap-bind-dictionary.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\global-bind\mousetrap-global-bind.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\global-bind\mousetrap-global-bind.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\pause\mousetrap-pause.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\pause\mousetrap-pause.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\mousetrap-record.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\mousetrap-record.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\tests\index.html" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\tests\jelly.css" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\tests\jelly.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\chai-1.6.0.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\jquery-1.7.2.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\key-event.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\mocha-1.9.0.css" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\mocha-1.9.0.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\sinon-1.7.1.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\sinon-chai-2.4.0.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\sinon-ie-1.7.1.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\mousetrap.html" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\test.mousetrap.js" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.js" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\azusa.jpg" />
@@ -1259,14 +1233,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\package.json" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\bind-dictionary\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\global-bind\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\pause\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\LICENSE" />
@@ -1291,8 +1257,6 @@
     <Content Include="UpdatedDesigner\data\editQuestion\3c0ff7a6d1614aa2b9af21aaa40cdb47.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\LICENSE" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\LICENSE" />
@@ -1343,12 +1307,13 @@
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\CONTRIBUTING.md" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\README.md" />
-    <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js.map">
-      <DependentUpon>ng-context-menu.min.js</DependentUpon>
-    </Content>
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.scss" />
     <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.css.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.js.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.js.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

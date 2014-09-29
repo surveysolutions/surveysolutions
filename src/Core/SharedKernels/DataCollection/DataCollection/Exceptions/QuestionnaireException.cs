@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Exceptions
 {
-    public class QuestionnaireException : Exception
+    public class QuestionnaireException : DataCollectionException
     {
         internal QuestionnaireException(string message)
             : base(message) {}

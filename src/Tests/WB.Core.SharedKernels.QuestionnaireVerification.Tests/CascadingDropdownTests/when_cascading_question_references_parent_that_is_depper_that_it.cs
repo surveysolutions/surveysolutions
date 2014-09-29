@@ -59,7 +59,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
 
         Because of = () => verificationErrors = verifier.Verify(questionnaire);
 
-        It should_return__WB0084_verification_error = () => verificationErrors.First().Code.ShouldEqual("WB0085");
+        It should_return_WB0084_verification_error = () => verificationErrors.First().Code.ShouldEqual("WB0085");
+
+        It should_return_error_with_reference_to_wrong_question = () => 
+            verificationErrors.First().References.First().Id.ShouldEqual(childCascadedComboboxId);
 
         static QuestionnaireDocument questionnaire;
         static Guid childCascadedComboboxId;
