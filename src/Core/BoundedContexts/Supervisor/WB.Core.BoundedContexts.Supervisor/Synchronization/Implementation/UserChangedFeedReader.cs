@@ -10,11 +10,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
     internal class UserChangedFeedReader : IUserChangedFeedReader
     {
-        private readonly HeadquartersSettings headquartersSettings;
+        private readonly IHeadquartersSettings headquartersSettings;
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly IAtomFeedReader atomReader;
 
-        public UserChangedFeedReader(HeadquartersSettings headquartersSettings, 
+        public UserChangedFeedReader(IHeadquartersSettings headquartersSettings, 
             Func<HttpMessageHandler> messageHandler,
             HeadquartersPullContext headquartersPullContext)
         {

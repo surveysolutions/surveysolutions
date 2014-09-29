@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Extensions
 {
     public static class WebClientExtensions
     {
-        public static HttpClient AppendAuthToken(this HttpClient client, HeadquartersSettings headquartersSettings)
+        public static HttpClient AppendAuthToken(this HttpClient client, IHeadquartersSettings headquartersSettings)
         {
             if (!string.IsNullOrWhiteSpace(headquartersSettings.AccessToken))
             {

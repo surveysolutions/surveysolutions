@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
     internal class InterviewsSynchronizer : IInterviewsSynchronizer
     {
         private readonly IAtomFeedReader feedReader;
-        private readonly HeadquartersSettings settings;
+        private readonly IHeadquartersSettings settings;
         private readonly ILogger logger;
         private readonly Action<ICommand> executeCommand;
         private readonly IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage;
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public InterviewsSynchronizer(
             IAtomFeedReader feedReader,
-            HeadquartersSettings settings, 
+            IHeadquartersSettings settings, 
             ILogger logger,
             ICommandService commandService,
             IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage, 
@@ -471,7 +471,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 var request = new HttpRequestMessage(HttpMethod.Post,
                     string.Format("{0}?interviewId={1}&fileName={2}", this.settings.FilePushUrl, interviewFile.InterviewId,
                         interviewFile.FileName))
-                { Content = new ByteArrayContent(interviewFile.Data) };
+                { Content = new ByteArrayContent(interviewFile.GetData()) };
                 
                 
                 HttpResponseMessage response = client.SendAsync(request).Result;
@@ -481,24 +481,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 {
                     throw new Exception(string.Format("Failed to send  file {0} for interview {1}. Server response: {2}",
                         interviewFile.FileName, interviewFile.InterviewId, result));
-                }
-
-                bool serverOperationSucceeded;
-
-                try
-                {
-                    serverOperationSucceeded = this.jsonUtils.Deserrialize<bool>(result);
-                }
-                catch (Exception exception)
-                {
-                    throw new Exception(
-                        string.Format("Failed to read server response while sending file {0} for interview {1}. Server response: {2}", interviewFile.FileName, interviewFile.InterviewId, result),
-                        exception);
-                }
-
-                if (!serverOperationSucceeded)
-                {
-                    throw new Exception(string.Format("Failed to send file {0} for interview {1} because server returned negative response.", interviewFile.FileName, interviewFile.InterviewId));
                 }
             }
         }
@@ -515,7 +497,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 .Where(
                     storedEvent =>
                         storedEvent.Origin != Constants.HeadquartersSynchronizationOrigin &&
-                            storedEvent.Origin != Constants.SynchronizationMetaOrigin)
+                            storedEvent.Origin != Constants.CapiSynchronizationOrigin)
                 .Select(storedEvent => new AggregateRootEvent(storedEvent))
                 .ToArray();
 

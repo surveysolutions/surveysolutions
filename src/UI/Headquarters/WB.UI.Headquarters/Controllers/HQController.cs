@@ -7,12 +7,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -34,8 +30,6 @@ namespace WB.UI.Headquarters.Controllers
     public class HQController : BaseController
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
-        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
-        private readonly IQueryableReadSideRepositoryWriter<InterviewSummary> interviews;
         private readonly ISampleImportService sampleImportService;
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
@@ -45,7 +39,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
             IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
             ISampleImportService sampleImportService,
@@ -53,11 +46,9 @@ namespace WB.UI.Headquarters.Controllers
                 allUsersAndQuestionnairesFactory,
             IPreloadingTemplateService preloadingTemplateService, IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
-            IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
+            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory)
             : base(commandService, provider, logger)
         {
-            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -65,50 +56,13 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
-            this.interviews = interviews;
             this.supervisorsFactory = supervisorsFactory;
         }
 
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
-
-            var model = new HQDashboardModel
-                {
-                    Questionnaires = this.questionnaireBrowseViewFactory.Load(
-                            new QuestionnaireBrowseInputModel() { PageSize = 1024 })
-                };
-            return this.View(model);
-        }
-
-        public ActionResult Delete(Guid id, long version)
-        {
-            var interviewByQuestionnaire =
-              this.interviews.QueryAll(i => !i.IsDeleted && i.QuestionnaireId == id && i.QuestionnaireVersion == version);
-
-            var interviewDeletionErrors = new List<Exception>();
-
-            foreach (var interviewSummary in interviewByQuestionnaire)
-            {
-                try
-                {
-                    this.CommandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId, this.GlobalInfo.GetCurrentUser().Id));
-                }
-                catch (Exception e)
-                {
-                    this.Logger.Error(e.Message, e);
-                    interviewDeletionErrors.Add(e);
-                }
-            }
-
-            if (interviewDeletionErrors.Any())
-                throw new AggregateException(
-                    string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.", id.FormatGuid(), version),
-                    interviewDeletionErrors);
-
-            this.CommandService.Execute(new DeleteQuestionnaire(id, version));
-
-            return this.RedirectToAction("Index");
+            return this.View();
         }
 
         public ActionResult Interviews(Guid? questionnaireId)

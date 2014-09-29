@@ -34,6 +34,7 @@ using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -120,17 +121,9 @@ namespace WB.UI.Supervisor.App_Start
             var schedulerSettings = new SchedulerSettings(LegacyOptions.SchedulerEnabled,
                 int.Parse(WebConfigurationManager.AppSettings["Scheduler.HqSynchronizationInterval"]));
 
-            var baseHqUrl = new Uri(WebConfigurationManager.AppSettings["Headquarters.BaseUrl"]);
-            var headquartersSettings = new HeadquartersSettings(
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.LoginServiceEndpoint"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.UserChangedFeed"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsFeed"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireDetailsEndpoint"]).ToString(),
+            var headquartersSettings = (HeadquartersSettings) System.Configuration.ConfigurationManager.GetSection(
+                "headquartersSettingsGroup/headquartersSettings");
                 new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireAssemblyEndpoint"]).ToString(),
-                WebConfigurationManager.AppSettings["Headquarters.AccessToken"],
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.InterviewsPushEndpoint"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireChangedFeed"]),
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.FilePushEndpoint"]));
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
@@ -174,7 +167,7 @@ namespace WB.UI.Supervisor.App_Start
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Major"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Minor"]),
                     int.Parse(WebConfigurationManager.AppSettings["SupportedQuestionnaireVersion.Patch"]), isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp));
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings, overrideReceivedEventTimeStamp, Constants.CapiSynchronizationOrigin));
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);

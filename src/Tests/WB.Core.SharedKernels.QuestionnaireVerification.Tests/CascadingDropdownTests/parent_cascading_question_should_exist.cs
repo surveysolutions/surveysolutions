@@ -15,8 +15,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
     {
         Establish context = () =>
         {
+            questionId = Guid.NewGuid();
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion
             {
+                PublicKey = questionId,
                 QuestionType = QuestionType.SingleOption,
                 CascadeFromQuestionId = Guid.NewGuid(),
                 StataExportCaption = "var",
@@ -34,9 +36,16 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
 
         It should_return_WB0086_verification_error = () => verificationErrors.First().Code.ShouldEqual("WB0086");
 
+        It should_return_reference_to_question = () => 
+            verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+
+        It should_return_reference_with_id_of_question = () =>
+            verificationErrors.First().References.First().Id.ShouldEqual(questionId);
+
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
         static IEnumerable<QuestionnaireVerificationError> verificationErrors;
+        static Guid questionId;
     }
 }
 

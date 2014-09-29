@@ -130,6 +130,7 @@
     <Compile Include="Events\Questionnaire\QuestionnaireAssemblyImported.cs" />
     <Compile Include="Events\User\UserLockedBySupervisor.cs" />
     <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
+    <Compile Include="Exceptions\DataCollectionException.cs" />
     <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />

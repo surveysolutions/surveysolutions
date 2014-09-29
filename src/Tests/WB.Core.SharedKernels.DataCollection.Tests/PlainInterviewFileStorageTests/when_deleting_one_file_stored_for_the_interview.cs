@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
@@ -10,21 +6,23 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.PlainInterviewFileStorageTests
 {
-    internal class when_getting_data_for_existing_file : PlainFileRepositoryTestContext
+    internal class when_deleting_one_file_stored_for_the_interview : PlainInterviewFileStorageTestContext
     {
         Establish context = () =>
         {
             FileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
-            FileSystemAccessorMock.Setup(x => x.ReadAllBytes(Moq.It.IsAny<string>())).Returns(data1);
+
             plainFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
+
+            plainFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
         };
 
-        Because of = () => result =plainFileRepository.GetInterviewBinaryData(interviewId, fileName1);
+        Because of = () => plainFileRepository.RemoveInterviewBinaryData(interviewId, fileName1);
 
-        It should_result_Be_equal_to_data1 = () =>
-            result.ShouldEqual(data1);
+        It should_file_be_deleted_from_file_system = () =>
+            FileSystemAccessorMock.Verify(x=>x.DeleteFile(Moq.It.Is<string>(name=>name.Contains(fileName1) && name.Contains(interviewId.FormatGuid()))));
 
         private static PlainInterviewFileStorage plainFileRepository;
 
@@ -32,8 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
 
         private static Guid interviewId = Guid.NewGuid();
         private static string fileName1 = "file1";
-        private static byte[] data1 = new byte[] { 1 };
 
-        private static byte[] result;
+        private static byte[] data1 = new byte[] { 1 };
     }
 }
