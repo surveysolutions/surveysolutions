@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         It should_not_log_errors = () =>
             loggerMock.Verify(logger => logger.Error(it.IsAny<string>(), it.IsAny<Exception>()), Times.Never);
 
-        It should_interview_files_be_moved_to_sync_storage = () =>
+        It should_move_interview_files_into_sync_storage = () =>
           fileSyncRepository.Verify(x=>x.MoveInterviewsBinaryDataToSyncFolder(interviewId), Times.Once);
 
         It should_mark_interview_as_sent_to_hq_using_hq_synchronization_origin = () =>

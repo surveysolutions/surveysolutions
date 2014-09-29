@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Utility;
 using Main.Core.View;
 using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
@@ -21,12 +24,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         {
             string indexName = typeof(InterviewsSearchIndex).Name;
 
-            var items = this.indexAccessor.Query<InterviewSummary>(indexName)
-                                          .Where(x => !x.IsDeleted);
-
+            var items = indexAccessor.Query<SeachIndexContent>(indexName);
+            
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Search(x => x.AnswersToFeaturedQuestions, input.SearchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards, options: SearchOptions.And);
+                items = items.Search(x => x.FeaturedQuestionsWithAnswers, input.SearchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards, options: SearchOptions.And);
             }
 
             if (input.Status.HasValue)
@@ -49,9 +51,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 items = items.Where(x => x.QuestionnaireVersion == input.QuestionnaireVersion);
             }
 
-            var interviewItems = this.DefineOrderBy(items, input)
+            List<InterviewSummary> interviewItems = this.DefineOrderBy(items.AsProjection<InterviewSummary>(), input)
                             .Skip((input.Page - 1) * input.PageSize)
-                            .Take(input.PageSize).ToList();
+                            .Take(input.PageSize)
+                            .ToList();
 
             var result = new AllInterviewsView
             {

@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         Because of = () =>
             interviewsSynchronizer.Push(userId);
 
-        It should_sent_file_be_removed_from_sync_storage = () =>
+        It should_remove_sent_file_from_sync_storage = () =>
           fileSyncRepository.Verify(x => x.RemoveBinaryDataFromSyncFolder(interviewId,fileName), Times.Once);
 
         private static Mock<IInterviewSynchronizationFileStorage> fileSyncRepository = new Mock<IInterviewSynchronizationFileStorage>();

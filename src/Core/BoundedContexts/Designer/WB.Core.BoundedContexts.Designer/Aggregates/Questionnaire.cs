@@ -1223,6 +1223,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                                     .ToArray());
                         continue;
                     }
+
+                    var multimediaQuestion = question as IMultimediaQuestion;
+                    if (multimediaQuestion != null)
+                    {
+                        this.ApplyMultimediaQuestionClonedEvent(questionId: itemId, targetIndex: itemTargetIndex,
+                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
+                            title: title,
+                            isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            instructions: instructions,
+                            sourceQuestionId: sourceItemId, responsibleId: responsibleId);
+                        continue;
+                    }
                 }
 
                 var staticText = questionnaireItem as IStaticText;
@@ -2288,6 +2300,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
+            ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, isCascade: true);
+
             ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
 
             ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
@@ -2315,9 +2329,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 IsFilteredCombobox = categoricalOneAnswerQuestion.IsFilteredCombobox
             });
         }
-
-       
-
         #endregion
 
         #region Question: Numeric question command handlers
@@ -3311,7 +3322,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options)
+        private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options, bool isCascade = false)
         {
             if (options == null || !options.Any() || options.Count() < 2)
             {
@@ -3344,7 +3355,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
             }
 
-            if (!AreElementsUnique(options.Select(x => x.Title)))
+            if (!isCascade && !AreElementsUnique(options.Select(x => x.Title)))
             {
                 throw new QuestionnaireException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
             }
@@ -4575,6 +4586,42 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
+                ResponsibleId = responsibleId
+            });
+        }
+
+        private void ApplyMultimediaQuestionClonedEvent(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
+            bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
+            Guid responsibleId)
+        {
+            this.ApplyEvent(new QuestionCloned
+            {
+                PublicKey = questionId,
+                GroupPublicKey = parentGroupId,
+                QuestionText = title,
+                QuestionType = QuestionType.Multimedia,
+                StataExportCaption = variableName,
+                VariableLabel = variableLabel,
+                Mandatory = isMandatory,
+                Featured = false,
+                Capital = false,
+                QuestionScope = QuestionScope.Interviewer,
+                ConditionExpression = enablementCondition,
+                Instructions = instructions,
+                SourceQuestionId = sourceQuestionId,
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId
+            });
+
+            this.ApplyEvent(new MultimediaQuestionUpdated()
+            {
+                QuestionId = questionId,
+                Title = title,
+                VariableName = variableName,
+                VariableLabel = variableLabel,
+                IsMandatory = isMandatory,
+                EnablementCondition = enablementCondition,
+                Instructions = instructions,
                 ResponsibleId = responsibleId
             });
         }

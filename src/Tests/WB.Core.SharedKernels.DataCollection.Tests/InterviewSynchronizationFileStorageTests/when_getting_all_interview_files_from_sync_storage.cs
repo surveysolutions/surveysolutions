@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewSynchronizationFileStorageTests
 {
-    internal class when_getting_all_interview_files_from_sync_storage : FileSyncRepositoryTestContext
+    internal class when_getting_all_interview_files_from_sync_storage : InterviewSynchronizationFileStorageTestContext
     {
         Establish context = () =>
         {
@@ -29,14 +25,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
 
         Because of = () => result = interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
 
-        It should_result_has_2_files = () =>
+        It should_2_files_be_returned = () =>
             result.Count.ShouldEqual(2);
 
-        It should_data_of_first_record_in_result_be_equal_to_data1 = () =>
-            result[0].Data.ShouldEqual(data1);
+        It should_content_of_first_file_be_equal_to_data1 = () =>
+            result[0].GetData().ShouldEqual(data1);
 
-        It should_data_of_second_record_in_result_be_equal_to_data2 = () =>
-           result[1].Data.ShouldEqual(data2);
+        It should_content_of_second_file_be_equal_to_data2 = () =>
+           result[1].GetData().ShouldEqual(data2);
 
         private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private static IList<InterviewBinaryDataDescriptor> result; 

@@ -1,35 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.PlainInterviewFileStorageTests
 {
-    internal class when_getting_files_for_not_existing_interview : PlainFileRepositoryTestContext
+    internal class when_storing_file_for_interview : PlainInterviewFileStorageTestContext
     {
         Establish context = () =>
         {
             plainFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
         };
 
-        Because of = () => result = plainFileRepository.GetBinaryFilesForInterview(interviewId);
+        Because of = () => plainFileRepository.StoreInterviewBinaryData(interviewId, fileName1, data1);
 
-        It should_result_count_Be_equal_to_0 = () =>
-            result.Count.ShouldEqual(0);
+        It should_file_be_stored_on_file_system_once = () =>
+            FileSystemAccessorMock.Verify(x =>  x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid())), data1), Times.Once);
 
         private static PlainInterviewFileStorage plainFileRepository;
 
         private static readonly Mock<IFileSystemAccessor> FileSystemAccessorMock = CreateIFileSystemAccessorMock();
 
         private static Guid interviewId = Guid.NewGuid();
-
-        private static IList<InterviewBinaryDataDescriptor> result;
+        private static string fileName1 = "file1";
+        private static byte[] data1 = new byte[] { 1 };
     }
 }

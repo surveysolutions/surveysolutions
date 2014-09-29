@@ -63,14 +63,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.CascadingDropdow
 
         It should_return_WB0087_error = () => verificationErrors.First().Code.ShouldEqual("WB0087");
 
-        It should_return_references_to_cycled_entities = () => verificationErrors.First().References.Count().ShouldEqual(3);
+        It should_return_references_to_cycled_entities = () => 
+            verificationErrors.SelectMany(x => x.References).ShouldEachConformTo(x =>
+                new[]{parentSingleOptionQuestionId, childCascadedComboboxId, grandChildCascadingQuestion}.Contains(x.Id));
 
-        private static Guid parentSingleOptionQuestionId;
-        private static Guid childCascadedComboboxId;
-        private static QuestionnaireDocument questionnaire;
-        private static QuestionnaireVerifier verifier;
-        private static Guid grandChildCascadingQuestion;
-        private static IEnumerable<QuestionnaireVerificationError> verificationErrors;
+        It should_return_errors_with_references_to_questions = () => 
+            verificationErrors.SelectMany(x => x.References)
+                              .ShouldEachConformTo(x => x.Type == QuestionnaireVerificationReferenceType.Question);
+
+        static Guid parentSingleOptionQuestionId;
+        static Guid childCascadedComboboxId;
+        static QuestionnaireDocument questionnaire;
+        static QuestionnaireVerifier verifier;
+        static Guid grandChildCascadingQuestion;
+        static IEnumerable<QuestionnaireVerificationError> verificationErrors;
     }
 }
 

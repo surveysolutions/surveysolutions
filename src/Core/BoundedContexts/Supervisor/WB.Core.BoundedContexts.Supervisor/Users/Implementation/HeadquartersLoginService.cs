@@ -23,13 +23,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
         private readonly ILogger logger;
         private readonly Action<ICommand> executeCommand;
         private readonly Func<HttpMessageHandler> messageHandler;
-        private readonly HeadquartersSettings headquartersSettings;
+        private readonly IHeadquartersSettings headquartersSettings;
         private readonly IHeadquartersUserReader headquartersUserReader;
 
         public HeadquartersLoginService(ILogger logger, 
             ICommandService commandService,
             Func<HttpMessageHandler> messageHandler,
-            HeadquartersSettings headquartersSettings,
+            IHeadquartersSettings headquartersSettings,
             IHeadquartersUserReader headquartersUserReader)
         {
             if (logger == null) throw new ArgumentNullException("logger");

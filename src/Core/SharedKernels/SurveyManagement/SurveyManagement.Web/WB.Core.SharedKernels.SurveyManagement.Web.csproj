@@ -130,6 +130,10 @@
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
+    <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
+    <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />
@@ -451,8 +455,9 @@
     <EmbeddedResource Include="Content\bootstrap-mvc-validation.css" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\questionnaires.js" />
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
-    <Content Include="Scripts\components\bindings.js" />
+    <EmbeddedResource Include="Scripts\components\bindings.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\interviewdetails.js" />

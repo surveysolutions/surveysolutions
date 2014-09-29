@@ -72,8 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/query-string.js",
                     "~/Scripts/supervisor.framework.js",
                     "~/Scripts/viewmodels/viewmodelbase.js",
-                    "~/Scripts/viewmodels/pagebase.js",
-                    "~/Scripts/components/bindings.js",
+                    "~/Scripts/viewmodels/pagebase.js"
                 }
             },
             {
@@ -87,7 +86,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 "~/js/list", new[]
                 {
                     "~/Scripts/ko.pager.js",
-                    "~/Scripts/viewmodels/listview.js"
+                    "~/Scripts/viewmodels/listview.js",
+                    "~/Scripts/components/bindings.js"
                 }
             },
             {

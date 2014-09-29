@@ -3,13 +3,11 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Tests.PlainFileRepositoryTests;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewSynchronizationFileStorageTests
 {
-    internal class when_files_is_deleted_from_sync_storage : FileSyncRepositoryTestContext
+    internal class when_file_is_deleted_from_sync_storage : InterviewSynchronizationFileStorageTestContext
     {
         Establish context = () =>
         {
@@ -19,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
 
         Because of = () => interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewId, fileName1);
 
-        It should_one_file_be_deleted = () =>
+        It should_one_file_be_deleted_from_file_system = () =>
             fileSystemAccessorMock.Verify(x=>x.DeleteFile(Moq.It.IsAny<string>()), Times.Once);
 
         private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;

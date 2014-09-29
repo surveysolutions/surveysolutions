@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.FileSyncRepositoryTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewSynchronizationFileStorageTests
 {
     [Subject(typeof(InterviewSynchronizationFileStorage))]
-    internal class FileSyncRepositoryTestContext
+    internal class InterviewSynchronizationFileStorageTestContext
     {
         protected static InterviewSynchronizationFileStorage CreateFileSyncRepository(IPlainInterviewFileStorage plainFileRepository = null, IFileSystemAccessor fileSystemAccessor = null)
         {

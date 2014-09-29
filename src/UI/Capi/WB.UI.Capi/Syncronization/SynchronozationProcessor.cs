@@ -162,7 +162,7 @@ namespace WB.UI.Capi.Syncronization
                 {
                     this.ExitIfCanceled();
 
-                    var result = this.push.PushBinary(this.credentials.Login, this.credentials.Password, binaryData.Data, binaryData.FileName,
+                    var result = this.push.PushBinary(this.credentials.Login, this.credentials.Password, binaryData.GetData(), binaryData.FileName,
                         binaryData.InterviewId, this.ct);
                     
                     if(result)
