@@ -43,7 +43,7 @@
                 if (response.IsSuccess) {
                     close();
                 } else {
-                    $("body").scrollTop(0);
+                    $(document).scrollTop(0);
                     $("#applyOptionsErrorContent").html(response.Error);
                     $('#applyOptionsError').fadeIn();
                     setTimeout(function () { $('#applyOptionsError').fadeOut(); }, 10000);
