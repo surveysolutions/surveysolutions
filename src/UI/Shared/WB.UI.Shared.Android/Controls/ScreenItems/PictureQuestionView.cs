@@ -49,21 +49,22 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 wrapper.Orientation = Orientation.Horizontal;
 
                 this.llWrapper.AddView(wrapper);
-               
-                var imageLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WrapContent,4);
+
+                var imageLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent, 9);
                 
                 this.ivImage = new ImageView(this.Context) { LayoutParameters = imageLayoutParams };
                 ivImage.SetAdjustViewBounds(true);
-                ivImage.SetScaleType(ImageView.ScaleType.Center);
                 wrapper.AddView(this.ivImage);
 
-                var buttonLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WrapContent,1);
+                var buttonLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                    ViewGroup.LayoutParams.WrapContent, 1);
 
-                var button = new Button(this.Context) { Text = this.IsPicturePresent() ? this.Remove : this.TakePicture, LayoutParameters = buttonLayoutParams };
+                var button = new Button(this.Context) { LayoutParameters = buttonLayoutParams };
+
+                SetIcon(button, this.IsPicturePresent() ? Remove : TakePicture);
                 button.Click += this.BtnTakePictureClick;
+                
                 wrapper.AddView(button);
-
-
                 
                 this.PutAnswerStoredInModelToUI();
             }
@@ -79,9 +80,10 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IMvxPictureChooserTask pictureChooserTask;
+        private const int TakePicture = global::Android.Resource.Drawable.IcMenuCamera;
+        private const int Remove = global::Android.Resource.Drawable.IcMenuDelete;
+
         protected readonly ImageView ivImage;
-        private readonly string TakePicture = "Take Picture";
-        private readonly string Remove = "Remove";
 
         protected ValueQuestionViewModel TypedMode
         {
@@ -106,8 +108,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.QuestionnairePublicKey, Model.AnswerString);
                 ivImage.SetImageDrawable(null);
                 this.SavePictureToAR(string.Empty);
-
-                button.Text = TakePicture;
+                SetIcon(button, TakePicture);
             }
             else
             {
@@ -130,7 +131,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             Bitmap bitmap = BitmapFactory.DecodeByteArray(data, 0, data.Length);
             ivImage.SetImageBitmap(bitmap);
             this.SavePictureToAR(pictureFileName);
-            button.Text = Remove;
+            SetIcon(button, Remove);
+        }
+
+        private void SetIcon(Button button, int iconId)
+        {
+            var img = this.Context.Resources.GetDrawable(iconId);
+            
+            button.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
         }
 
         private void SavePictureToAR(string pictureFileName)
