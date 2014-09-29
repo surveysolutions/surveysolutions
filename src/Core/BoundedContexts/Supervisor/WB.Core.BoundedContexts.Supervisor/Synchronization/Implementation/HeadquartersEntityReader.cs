@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
     internal class HeadquartersEntityReader
     {
         private readonly IJsonUtils jsonUtils;
-        private readonly IHeadquartersSettings headquartersSettings;
+        protected readonly IHeadquartersSettings headquartersSettings;
 
 
         public HeadquartersEntityReader(IJsonUtils jsonUtils, IHeadquartersSettings headquartersSettings)
