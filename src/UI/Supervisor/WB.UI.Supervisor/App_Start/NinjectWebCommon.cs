@@ -123,7 +123,6 @@ namespace WB.UI.Supervisor.App_Start
 
             var headquartersSettings = (HeadquartersSettings) System.Configuration.ConfigurationManager.GetSection(
                 "headquartersSettingsGroup/headquartersSettings");
-                new Uri(baseHqUrl, WebConfigurationManager.AppSettings["Headquarters.QuestionnaireAssemblyEndpoint"]).ToString(),
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
