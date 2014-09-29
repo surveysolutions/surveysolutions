@@ -69,6 +69,7 @@
     <Compile Include="CascadingDropdownTests\when_cascading_question_has_10001_options.cs" />
     <Compile Include="CascadingDropdownTests\when_cascading_question_have_repeating_pair_of_Value_and_ParentValue.cs" />
     <Compile Include="CascadingDropdownTests\when_cascading_question_references_parent_that_is_depper_that_it.cs" />
+    <Compile Include="CascadingDropdownTests\when_cascading_question_is_in_roster_with_its_parent.cs" />
     <Compile Include="CascadingDropdownTests\when_cascading_references_makes_circular_reference.cs" />
     <Compile Include="CascadingDropdownTests\when_child_question_has_option_values_that_doesnt_exit_in_parent_question.cs" />
     <Compile Include="CustomEnablementConditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition_.cs" />
