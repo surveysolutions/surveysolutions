@@ -84,10 +84,10 @@
         <AbsolutePath>\\DATA\\.*</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
-      <MsDeploySkipRules Include="SkipDATAFolder">
+      <MsDeploySkipRules Include="SkipInterviewDataFolder">
         <SkipAction>Delete</SkipAction>
         <ObjectName>dirPath</ObjectName>
-        <AbsolutePath>\\DATA$</AbsolutePath>
+        <AbsolutePath>\\InterviewData$</AbsolutePath>
         <XPath></XPath>
       </MsDeploySkipRules>
       <MsDeploySkipRules Include="SkipExportedFiles">
