@@ -242,22 +242,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (!question.CascadeFromQuestionId.HasValue)
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            var parentQuestion = questionnaire
-                .Find<SingleQuestion>(question.CascadeFromQuestionId.Value);
+            var parentQuestion = questionnaire.Find<IQuestion>(question.CascadeFromQuestionId.Value);
             if (parentQuestion == null)
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            var rosterLevelForRoster = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(parentQuestion, questionnaire);
-            if (rosterLevelForRoster == null)
+            var parentRosters = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(parentQuestion, questionnaire);
+            if (parentRosters == null)
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            var rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster;
-            if (rosterLevelWithoutOwnRosterSizeQuestion.Length > 0)
-            {
-                rosterLevelWithoutOwnRosterSizeQuestion = rosterLevelForRoster.Skip(1).ToArray();
-            }
+            var questionRosters = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire);
 
-            if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(parentQuestion, rosterLevelWithoutOwnRosterSizeQuestion, questionnaire))
+            if (parentRosters.Length > questionRosters.Length || parentRosters.Where((parentGuid, i) => questionRosters[i] != parentGuid).Any())
             {
                 return new EntityVerificationResult<IComposite>
                 {
