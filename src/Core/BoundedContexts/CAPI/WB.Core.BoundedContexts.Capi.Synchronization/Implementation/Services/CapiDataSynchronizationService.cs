@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             try
             {
 
-                this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version));
+                this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
             }
             catch (Exception exception)
             {

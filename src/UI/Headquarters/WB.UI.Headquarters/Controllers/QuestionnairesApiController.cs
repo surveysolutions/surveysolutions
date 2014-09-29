@@ -79,7 +79,8 @@ namespace WB.UI.Headquarters.Controllers
                     this.CommandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
                         this.GlobalInfo.GetCurrentUser().Id));
                 }
-                this.CommandService.Execute(new DeleteQuestionnaire(request.QuestionnaireId, request.Version));
+                this.CommandService.Execute(new DeleteQuestionnaire(request.QuestionnaireId, request.Version,
+                    this.GlobalInfo.GetCurrentUser().Id));
             }
             catch (Exception e)
             {
