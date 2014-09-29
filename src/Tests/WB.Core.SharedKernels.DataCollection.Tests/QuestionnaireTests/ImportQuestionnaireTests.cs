@@ -132,9 +132,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported_Then_QuestionnaireDeleted_Event_is_Published()
         {
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaire();
-            var newState = CreateQuestionnaireDocumentWithOneChapter();
             var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            var newState = CreateQuestionnaireDocumentWithOneChapter();
 
             using (var eventContext = new EventContext())
             {
@@ -260,13 +260,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                var responsibleId = Guid.Parse("11111111111111111111111111111111");
+                Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
-                questionnaire.DeleteQuestionnaire(2, null);
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
+                questionnaire.ImportFromDesigner(responsibleId, document, false);
+                questionnaire.DeleteQuestionnaire(2, responsibleId);
+                questionnaire.ImportFromDesigner(responsibleId, document, false);
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(3));

@@ -1,4 +1,5 @@
-﻿using Main.Core.Documents;
+﻿using System;
+using Main.Core.Documents;
 
 namespace Main.Core.Events.Questionnaire
 {
@@ -7,5 +8,6 @@ namespace Main.Core.Events.Questionnaire
         public QuestionnaireDocument Source { get; set; }
         public bool AllowCensusMode { get; set; }
         public long? Version { get; set; }
+        public Guid? ResponsibleId { get; set; }
     }
 }
