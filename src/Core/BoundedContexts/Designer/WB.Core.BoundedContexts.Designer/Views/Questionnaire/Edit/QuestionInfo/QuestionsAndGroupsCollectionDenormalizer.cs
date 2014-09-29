@@ -221,11 +221,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 return null;
             }
 
-            if (evnt.Payload.GroupKey == null)
-            {
-                return currentState;
-            }
-
             var question = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
             if (question != null)
             {
@@ -244,7 +239,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
             if (group != null)
             {
-                group.ParentGroupId = evnt.Payload.GroupKey ?? Guid.Empty;
+                group.ParentGroupId = evnt.Payload.GroupKey ?? evnt.EventSourceId;
                 UpdateBreadcrumbs(currentState, group, group.Id);
 
                 var descendantGroups = this.GetAllDescendantGroups(currentState, group.Id);
