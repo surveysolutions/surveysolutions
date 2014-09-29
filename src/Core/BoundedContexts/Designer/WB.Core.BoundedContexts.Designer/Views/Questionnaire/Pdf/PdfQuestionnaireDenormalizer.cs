@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
-        IEventHandler<StaticTextDeleted>, IEventHandler
+        IEventHandler<StaticTextDeleted>,
+        IEventHandler
     {
         private readonly IQuestionnaireDocumentUpgrader updrader;
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
@@ -181,6 +182,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                 existingQuestion.Title = @event.QuestionText;
                 existingQuestion.QuestionType = @event.QuestionType;
+                existingQuestion.Variable = @event.StataExportCaption;
+
                 existingQuestion.Answers = (@event.Answers ?? Enumerable.Empty<Answer>()).Select(x => new PdfAnswerView
                     {
                         Title = x.AnswerText,
