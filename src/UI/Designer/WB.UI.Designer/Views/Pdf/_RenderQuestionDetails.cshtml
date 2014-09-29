@@ -16,7 +16,7 @@
 
     @if (Model.Answers.Count > 0) {
         <ul class="answer-options">
-            @foreach (PdfAnswerView answer in this.Model.Answers)
+            @foreach (PdfAnswerView answer in this.Model.Answers.Take(20))
             {
                 <li>
                     <input type="@(Model.QuestionType == QuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
