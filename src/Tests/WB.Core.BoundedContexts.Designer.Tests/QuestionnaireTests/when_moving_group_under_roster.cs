@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static Guid parentRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static int targetIndex = 1;
+        private static int targetIndex = 0;
         private static EventContext eventContext;
     }
 }

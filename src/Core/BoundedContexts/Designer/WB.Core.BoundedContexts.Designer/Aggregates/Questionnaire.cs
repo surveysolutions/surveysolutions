@@ -1361,6 +1361,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             // if we don't have a target group we would like to move source group into root of questionnaire
             var targetGroup = targetGroupId.HasValue ? this.GetGroupById(targetGroupId.Value) : this.innerDocument;
 
+            this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceGroup.GetParent() as IGroup);
+
             this.ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(sourceGroup, targetGroup);
             this.ThrowIfSourceGroupContainsInvalidRosterSizeQuestions(sourceGroup, targetGroup);
             this.ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(sourceGroup, targetGroup);
@@ -1371,7 +1373,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId, rosterFixedTitles: sourceGroup.RosterFixedTitles,
                 rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId,
                 rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey));
-
             this.ApplyEvent(new QuestionnaireItemMoved
             {
                 PublicKey = groupId,
@@ -1610,6 +1611,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             var targetGroup = this.innerDocument.Find<IGroup>(targetGroupId);
+
+            this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, question.GetParent() as IGroup);
+
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption,
                 questionId, question.Featured, targetGroup);
 
@@ -2741,6 +2745,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(targetEntityId);
             this.ThrowIfChapterHasMoreThanAllowedLimit(targetEntityId);
 
+            // if we don't have a target group we would like to move source group into root of questionnaire
+            var targetGroup = this.GetGroupById(targetEntityId);
+            var sourceStaticText = this.innerDocument.Find<IStaticText>(entityId);
+            this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceStaticText.GetParent() as IGroup);
+
             this.ApplyEvent(new QuestionnaireItemMoved
             {
                 PublicKey = entityId,
@@ -2909,6 +2918,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
 
             this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(sourceGroup);
+        }
+
+        private void ThrowIfTargetIndexIsNotAcceptable(int targetIndex, IGroup targetGroup, IGroup parentGroup)
+        {
+            var maxAcceptableIndex = targetGroup.Children.Count;
+            if (parentGroup != null && targetGroup.PublicKey == parentGroup.PublicKey)
+                maxAcceptableIndex--;
+
+            if (targetIndex < 0 || maxAcceptableIndex < targetIndex)
+                throw new QuestionnaireException(
+                   string.Format(
+                       "You can't move to group {0}  because it position {1} in not acceptable",
+                       FormatGroupForException(targetGroup.PublicKey, this.innerDocument), targetIndex));
         }
 
         private void ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(IGroup sourceGroup, IGroup targetGroup)
