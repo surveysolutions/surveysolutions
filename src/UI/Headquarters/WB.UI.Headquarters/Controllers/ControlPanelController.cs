@@ -1,9 +1,19 @@
 ﻿using System;
 using System.ServiceModel;
 using System.Web.Mvc;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
+using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters.PublicService;
 using WB.UI.Shared.Web.Filters;
@@ -11,14 +21,21 @@ using WB.UI.Shared.Web.Filters;
 namespace WB.UI.Headquarters.Controllers
 {
     [LocalOrDevelopmentAccessOnly]
-    public class ControlPanelController : Controller
+    public class ControlPanelController : BaseController
     {
         private readonly IServiceLocator serviceLocator;
         private readonly IIncomePackagesRepository incomePackagesRepository;
-        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository)
+        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+
+        public ControlPanelController(IServiceLocator serviceLocator, IIncomePackagesRepository incomePackagesRepository,
+            ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
+            IViewFactory<UserViewInputModel, UserView> userViewFactory)
+            : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
             this.incomePackagesRepository = incomePackagesRepository;
+
+            this.userViewFactory = userViewFactory;
         }
 
         /// <remarks>
@@ -181,6 +198,46 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult InterviewDetails()
         {
             return this.View();
+        }
+
+        public ActionResult CreateHeadquarters()
+        {
+            return this.View(new UserModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateHeadquarters(UserModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                UserView userToCheck =
+                    this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
+                if (userToCheck == null)
+                {
+                    try
+                    {
+                        this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
+                            userName: model.UserName,
+                            password: SimpleHash.ComputeHash(model.Password), email: model.Email,
+                            isLockedBySupervisor: false,
+                            isLockedByHQ: false, roles: new[] {UserRoles.Headquarter}, supervsor: null));
+                        return this.RedirectToAction("LogOn", "Account");
+                    }
+                    catch (Exception ex)
+                    {
+                        var userErrorMessage = "Error when creating headquarters user";
+                        this.Error(userErrorMessage);
+                        this.Logger.Fatal(userErrorMessage, ex);
+                    }
+                }
+                else
+                {
+                    this.Error("User name already exists. Please enter a different user name.");
+                }
+            }
+
+            return View(model);
         }
     }
 }
