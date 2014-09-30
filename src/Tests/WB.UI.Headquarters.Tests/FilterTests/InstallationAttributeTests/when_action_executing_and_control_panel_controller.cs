@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.Tests.FilterTests.InstallationAttributeTests
             exception =
                 Catch.Exception(
                     () =>
-                        attribute.OnActionExecuting(CreateFilterContext(new ControlPanelController(null, null))));
+                        attribute.OnActionExecuting(CreateFilterContext(new ControlPanelController(null, null, null, null, null, null))));
 
         It should_exception_be_null = () =>
             exception.ShouldBeNull();
