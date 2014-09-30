@@ -249,6 +249,9 @@
     <Compile Include="QuestionnaireTests\when_cloning_text_question_by_id.cs" />
     <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_with_cascading_options.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_group_inside_the_same_parent_to_position_which_is_bigger_then_parent_children_count.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_group_to_negative_position.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_group_to_position_which_is_bigger_then_group_children_count.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_numeric_question_and_question_is_null.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_filtered_combobox.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_multimedia_questioin.cs" />
