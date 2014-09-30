@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to At least one options contains empty value in ParentValue column.
+        ///   Looks up a localized string similar to Options in cascading question can not have empty ParentValue column.
         /// </summary>
         internal static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
             get {
