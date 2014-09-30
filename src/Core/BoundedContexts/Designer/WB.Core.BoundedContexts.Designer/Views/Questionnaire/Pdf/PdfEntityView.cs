@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public int Depth { get; set; }
 
+        public string VariableName { get; set; }
 
         public List<PdfEntityView> Children { get; set; }
 

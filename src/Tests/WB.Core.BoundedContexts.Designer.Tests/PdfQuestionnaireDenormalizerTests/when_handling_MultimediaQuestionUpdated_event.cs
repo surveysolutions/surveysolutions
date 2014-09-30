@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTes
             GetQuestion().Title.ShouldEqual(questionTitle);
 
         It should_update_question_variable_name = () =>
-            GetQuestion().Variable.ShouldEqual(questionVariable);
+            GetQuestion().VariableName.ShouldEqual(questionVariable);
 
         private static PdfQuestionView GetQuestion()
         {
