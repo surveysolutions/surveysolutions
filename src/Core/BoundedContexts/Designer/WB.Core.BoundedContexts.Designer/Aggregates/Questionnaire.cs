@@ -2176,7 +2176,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             Answer[] answers;
 
-            ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, true);
+            //ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, true);
 
             if (options == null && (isFilteredCombobox || cascadeFromQuestionId.HasValue))
             {
