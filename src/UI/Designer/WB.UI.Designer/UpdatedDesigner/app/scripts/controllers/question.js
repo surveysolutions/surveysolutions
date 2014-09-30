@@ -132,7 +132,7 @@
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
                 }
-                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Prefilled') {
+                if (type === 'GpsCoordinates') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
                 if (type !== "SingleOption" && type !== "MultyOption") {
