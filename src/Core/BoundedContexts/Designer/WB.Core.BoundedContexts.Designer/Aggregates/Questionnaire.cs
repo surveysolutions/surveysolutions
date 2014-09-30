@@ -2176,6 +2176,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             Answer[] answers;
 
+            ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, true);
+
             if (options == null && (isFilteredCombobox || cascadeFromQuestionId.HasValue))
             {
                 IQuestion question = this.GetQuestion(questionId);
@@ -3342,7 +3344,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options, bool isCascade = false)
         {
-            if (options == null || !options.Any() || options.Count() < 2)
+            if ((options == null || !options.Any() || options.Count() < 2) && !isCascade)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorEmpty, "Question with options should have two options at least");
