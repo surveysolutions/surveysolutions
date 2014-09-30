@@ -279,7 +279,7 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplateExt.cs" />
     <Compile Include="Services\IQuestionnaireWrapper.cs" />
-    <Compile Include="Implementation\Services\JsonExportService.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireExportService .cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Implementation\Services\QuestionnaireDocumentWrapper.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVersioner.cs" />
@@ -295,7 +295,7 @@
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
-    <Compile Include="Services\IJsonExportService.cs" />
+    <Compile Include="Services\IQuestionnaireExportService .cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
     <Compile Include="Services\IQuestionnaireVersioner.cs" />
     <Compile Include="Services\TemplateInfo.cs" />

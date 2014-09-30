@@ -9,13 +9,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.JsonExportServiceTests
 {
     internal class JsonExportServiceTestContext
     {
-        protected static JsonExportService CreateJsonExportService(
+        protected static QuestionnaireExportService CreateQuestionnaireExportService(
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVersioner versioner = null)
         {
-            return new JsonExportService(
-                questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
-                versioner ?? Mock.Of<IQuestionnaireVersioner>());
+            return new QuestionnaireExportService(versioner ?? Mock.Of<IQuestionnaireVersioner>());
         }
 
         protected static IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> CreateQuestionnaireViewFactory()

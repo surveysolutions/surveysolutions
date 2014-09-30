@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Api
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IJsonExportService exportService;
+        private readonly IQuestionnaireExportService exportService;
         private readonly ILogger logger;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
@@ -38,7 +38,7 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IJsonExportService exportService,
+            IQuestionnaireExportService exportService,
             ILogger logger)
         {
             this.userHelper = userHelper;
