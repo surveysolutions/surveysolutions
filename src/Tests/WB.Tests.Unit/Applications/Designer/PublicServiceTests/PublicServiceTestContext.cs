@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 {
     internal class PublicServiceTestContext
     {
-        protected static PublicService CreatePublicService(IJsonExportService exportService = null,
+        protected static PublicService CreatePublicService(IQuestionnaireExportService exportService = null,
             IStringCompressor zipUtils = null,
             IMembershipUserService userHelper = null,
             IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory = null,
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             IQuestionnaireVerifier questionnaireVerifier = null,
             IExpressionProcessorGenerator expressionProcessorGenerator = null)
         {
-            return new PublicService(exportService ?? Mock.Of<IJsonExportService>(),
+            return new PublicService(exportService ?? Mock.Of<IQuestionnaireExportService>(),
                 zipUtils ?? Mock.Of<IStringCompressor>(),
                 userHelper ?? Mock.Of<IMembershipUserService>(),
                 viewFactory ?? Mock.Of<IViewFactory<QuestionnaireListInputModel, QuestionnaireListView>>(),

@@ -25,18 +25,6 @@ namespace WB.UI.Designer.Services
         RemoteFileInfo DownloadQuestionnaire(DownloadQuestionnaireRequest request);
 
         /// <summary>
-        /// The download questionnaire source.
-        /// </summary>
-        /// <param name="request">
-        /// The request.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        [OperationContract]
-        string DownloadQuestionnaireSource(Guid request);
-
-        /// <summary>
         /// The dummy.
         /// </summary>
         [OperationContract]

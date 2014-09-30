@@ -2,9 +2,11 @@
 using System.Web;
 using System.Web.Mvc;
 using Main.Core.Documents;
+using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
@@ -15,25 +17,32 @@ namespace WB.UI.Designer.Controllers
     public class SynchronizationController : BaseController
     {
         private readonly ICommandService commandService;
-        private readonly IJsonExportService exportService;
+        private readonly IQuestionnaireExportService exportService;
         private readonly IStringCompressor zipUtils;
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
         public SynchronizationController(
             ICommandService commandService,
             IMembershipUserService userHelper,
             IStringCompressor zipUtils,
-            IJsonExportService exportService)
+            IQuestionnaireExportService exportService,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory)
             : base(userHelper)
         {
             this.commandService = commandService;
             this.zipUtils = zipUtils;
             this.exportService = exportService;
+            this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
         [HttpGet]
         public FileStreamResult Export(Guid id)
         {
-            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(id);
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if (questionnaireView == null)
+                return null;
+
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
 
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {

@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 
             var templateInfo = CreateTemplateInfo(version);
 
-            exportService = Mock.Of<IJsonExportService>(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()) == templateInfo);
+            exportService = Mock.Of<IQuestionnaireExportService>(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()) == templateInfo);
 
             var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
             service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory);
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 
         private static QuestionnaireVersion version = new QuestionnaireVersion(1,0,0);
         private static DownloadQuestionnaireRequest request;
-        private static IJsonExportService exportService;
+        private static IQuestionnaireExportService exportService;
         private static IPublicService service;
         private static Exception exception;
     }
