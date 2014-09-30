@@ -4,11 +4,13 @@ using System.IO.Compression;
 using System.Web;
 using System.Web.Mvc;
 using Main.Core.Documents;
+using Main.Core.View;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Controllers;
@@ -22,16 +24,19 @@ namespace WB.Tests.Unit.Applications.Designer
     {
         protected Mock<ICommandService> CommandServiceMock;
         protected Mock<IStringCompressor> ZipUtilsMock;
-        protected Mock<IJsonExportService> ExportServiceMock;
+        protected Mock<IQuestionnaireExportService> ExportServiceMock;
         protected Mock<IMembershipUserService> UserHelperMock;
-        
+        protected Mock<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>> questionnaireViewFactoryMock;
+
         [SetUp]
         public void Setup()
         {
             this.CommandServiceMock=new Mock<ICommandService>();
             this.ZipUtilsMock = new Mock<IStringCompressor>();
-            this.ExportServiceMock = new Mock<IJsonExportService>();
-            this.UserHelperMock=new Mock<IMembershipUserService>();
+            this.ExportServiceMock = new Mock<IQuestionnaireExportService>();
+            this.UserHelperMock = new Mock<IMembershipUserService>();
+            this.questionnaireViewFactoryMock =  new Mock<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>();
+            
             AssemblyContext.SetupServiceLocator();
         }
 
@@ -89,13 +94,18 @@ namespace WB.Tests.Unit.Applications.Designer
             SynchronizationController controller = this.CreateSynchronizationController();
             Guid templateId = Guid.NewGuid();
             TemplateInfo dataForZip = new TemplateInfo() { Source = "zipped data", Title = "template" };
-            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(templateId)).Returns(dataForZip);
+
+            var doc = new QuestionnaireDocument();
+            var view = new QuestionnaireView(doc);
+            this.questionnaireViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns(view);
+
+            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(dataForZip);
             this.ZipUtilsMock.Setup(x => x.Compress(dataForZip.Source)).Returns(new MemoryStream());
             // act
             controller.Export(templateId);
 
             // assert
-            this.ExportServiceMock.Verify(x => x.GetQuestionnaireTemplateInfo(templateId), Times.Once());
+            this.ExportServiceMock.Verify(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()), Times.Once());
             this.ZipUtilsMock.Verify(x => x.Compress(dataForZip.Source), Times.Once());
         }
 
@@ -105,10 +115,17 @@ namespace WB.Tests.Unit.Applications.Designer
         public void Export_When_TemplateIsAbsent_Then_NullisReturned(string data)
         {
             // arrange
-            SynchronizationController target = this.CreateSynchronizationController();
+            
             Guid templateId = Guid.NewGuid();
-            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(templateId))
-                             .Returns(new TemplateInfo() { Source = data });
+            var template = new TemplateInfo() { Source = data };
+
+            var doc = new QuestionnaireDocument();
+            var view = new QuestionnaireView(doc);
+            this.questionnaireViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns(view);
+
+            this.ExportServiceMock.Setup(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>())).Returns(template);
+
+            SynchronizationController target = this.CreateSynchronizationController();
 
             // act
             var result = target.Export(templateId);
@@ -121,7 +138,9 @@ namespace WB.Tests.Unit.Applications.Designer
         {
             return new SynchronizationController(this.CommandServiceMock.Object,
                                                  this.UserHelperMock.Object,
-                                                 this.ZipUtilsMock.Object, this.ExportServiceMock.Object);
+                                                 this.ZipUtilsMock.Object, 
+                                                 this.ExportServiceMock.Object,
+                                                 this.questionnaireViewFactoryMock.Object);
         }
     }
 }

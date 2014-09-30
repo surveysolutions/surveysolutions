@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using Main.Core.View;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -18,7 +17,7 @@ namespace WB.UI.Designer.Services
 {
     public class PublicService : IPublicService
     {
-        private readonly IJsonExportService exportService;
+        private readonly IQuestionnaireExportService exportService;
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory;
@@ -29,7 +28,7 @@ namespace WB.UI.Designer.Services
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         public PublicService(
-            IJsonExportService exportService,
+            IQuestionnaireExportService exportService,
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
             IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory,
@@ -51,9 +50,7 @@ namespace WB.UI.Designer.Services
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
             if (questionnaireView == null)
             {
-                var message = String.Format("Requested questionnaire id={0} was not found",
-                        request.QuestionnaireId);
-
+                var message = String.Format("Requested questionnaire id={0} was not found", request.QuestionnaireId);
                 throw new FaultException(message, new FaultCode("TemplateNotFound"));
             }
 
@@ -61,8 +58,7 @@ namespace WB.UI.Designer.Services
 
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
-                var message = String.Format("Requested questionnaire cannot be processed",
-                        request.QuestionnaireId);
+                var message = String.Format("Requested questionnaire id={0} cannot be processed", request.QuestionnaireId);
 
                 throw new FaultException(message, new FaultCode("TemplateProcessingError"));
             }
@@ -78,18 +74,16 @@ namespace WB.UI.Designer.Services
 
                 throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
-
             
             var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
 
             if (questoinnaireErrors.Any())
             {
                 var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify and fix them on Designer.",
-                        questionnaireView.Title);
+                        templateInfo.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
-
             
             GenerationResult generationResult;
             string resultAssembly;
@@ -110,7 +104,7 @@ namespace WB.UI.Designer.Services
             if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
             {
                 var message = String.Format("Requested questionnaire \"{0}\" has errors. Please verify template on Designer.",
-                    questionnaireView.Title);
+                    templateInfo.Title);
 
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
@@ -124,18 +118,6 @@ namespace WB.UI.Designer.Services
                 FileByteStream = stream,
                 SupportingAssembly = resultAssembly  //move it from header to the body
             };
-        }
-
-        public string DownloadQuestionnaireSource(Guid request)
-        {
-            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request));
-            if (questionnaireView == null)
-            {
-                return string.Empty;
-            }
-
-            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
-            return templateInfo == null ? string.Empty : templateInfo.Source;
         }
 
         public void Dummy()
