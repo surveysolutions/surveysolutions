@@ -116,6 +116,11 @@
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
                 $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
 
+
+                if (type === 'TextList') {
+                    $scope.activeQuestion.questionScope = 'Interviewer';
+                }
+
                 if (type === 'DateTime') {
                     $scope.activeQuestion.allQuestionScopeOptions = _.filter($scope.activeQuestion.allQuestionScopeOptions, function (val) {
                         return val.value !== 'Supervisor';
