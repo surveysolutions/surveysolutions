@@ -41,7 +41,7 @@ namespace WB.UI.QuestionnaireTester
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
 
-            //this.kernel.Unbind<IInterviewExpressionStateProvider>();
+
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>().InSingletonScope();
         }
     }

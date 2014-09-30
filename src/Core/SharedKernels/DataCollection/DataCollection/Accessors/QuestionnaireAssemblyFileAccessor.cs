@@ -2,13 +2,11 @@
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Accessors
+namespace WB.Core.SharedKernels.DataCollection.Accessors
 {
     public class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
-        private const string FolderName = "QuestionnaireAssemblies";
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToStore;
 
@@ -17,11 +15,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Accessors
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
-        public QuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor, string folderPath)
+        public QuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor, string folderPath, string assemblyDirectoryName)
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
-            this.pathToStore = fileSystemAccessor.CombinePath(folderPath, FolderName);
+            this.pathToStore = fileSystemAccessor.CombinePath(folderPath, assemblyDirectoryName);
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToStore))
                 fileSystemAccessor.CreateDirectory(this.pathToStore);
         }

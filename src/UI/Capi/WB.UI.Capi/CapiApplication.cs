@@ -39,9 +39,11 @@ using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -248,17 +250,18 @@ namespace WB.UI.Capi
             
             const string SynchronizationFolder = "SYNC";
             const string InterviewFilesFolder = "InterviewData";
-            
+            const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
+
             this.kernel = new StandardKernel(
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new RestAndroidModule(),
                 new FileInfrastructureModule(),
-                new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder }),
+                new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }),
                 new ErrorReportingModule(basePath),
                 new AndroidLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, syncDirectoryName: SynchronizationFolder,
-                    dataDirectoryName: InterviewFilesFolder),
+                    dataDirectoryName: InterviewFilesFolder, questionnaireAssembliesFolder: QuestionnaireAssembliesFolder),
                 new ExpressionProcessorModule());
 
             CrashManager.Initialize(this);
@@ -267,6 +270,10 @@ namespace WB.UI.Capi
             this.kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+
+            this.kernel.Bind<IQuestionnaireAssemblyFileAccessor>()
+                .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", basePath).WithConstructorArgument("assemblyDirectoryName", QuestionnaireAssembliesFolder);
+            this.kernel.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
 
             NcqrsInit.Init(this.kernel);
        

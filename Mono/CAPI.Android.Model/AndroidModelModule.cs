@@ -73,9 +73,6 @@ namespace CAPI.Android.Core.Model
 
             var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<InterviewViewModel>();
 
-            var assemblyFileAccessor = new QuestionnareAssemblyCapiFileAccessor(this.Kernel.Get<IFileSystemAccessor>());
-            var stateProvider = new InterviewExpressionStatePrototypeProvider(assemblyFileAccessor);
-
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
@@ -99,14 +96,12 @@ namespace CAPI.Android.Core.Model
             this.Bind<ICapiSynchronizationCacheService>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
-
-            this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstant(assemblyFileAccessor);
-            this.Bind<IInterviewExpressionStatePrototypeProvider>().ToConstant(stateProvider);
-
-            var backupable = new List<IBackupable>(){
+            
+            var backupable = new List<IBackupable>()
+            {
                     evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
-                    bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore, assemblyFileAccessor
-                };
+                    bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
+            };
 
             foreach (var folderToBackup in foldersToBackup)
             {

@@ -19,6 +19,8 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly IChunkWriter chunkStorageWriter;
         private readonly IChunkReader chunkStorageReader;
 
+        public static Guid AssemblySeed = new Guid("371EF2E6-BF1D-4E36-927D-2AC13C41EF7B");
+
         private const bool UseCompression = true;
         private const bool UseCompressionForFiles = false;
 
@@ -161,7 +163,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             var syncItem = new SyncItem
             {
-                Id = publicKey.Combine(version),
+                Id = publicKey.Combine(AssemblySeed).Combine(version),
                 ItemType = SyncItemType.QuestionnaireAssembly,
                 IsCompressed = UseCompressionForFiles,
                 Content = assemblyAsBase64String,
