@@ -218,7 +218,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization
             target.SaveTemplateAssembly(questionnarieId, version, assemblyAsBase64String, DateTime.Now);
 
             // assert
-            var packageId = questionnarieId.Combine(version);
+            var packageId = questionnarieId.Combine(SimpleSynchronizationDataStorage.AssemblySeed).Combine(version);
             var result = target.GetLatestVersion(packageId);
             var metaInformation = JsonConvert.DeserializeObject<QuestionnaireAssemblyMetadata>(result.MetaInfo);
 

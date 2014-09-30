@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
         {
             string assemblyFile = this.questionnareAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
             
-            //path is chached
+            //path is cached
             //if assembly was loaded from this path it won't be loaded again 
             var compiledAssembly = Assembly.LoadFrom(assemblyFile);
 
@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 SingleOrDefault(type => !(type.IsAbstract || type.IsGenericTypeDefinition || type.IsInterface) && type.GetInterfaces().Contains(typeof(IInterviewExpressionState)));
 
             if (interviewExpressionStateType == null)
-                throw new Exception("Type impementing IInterviewExpressionState was not found");
+                throw new Exception("Type implementing IInterviewExpressionState was not found");
 
             var interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
 
