@@ -30,14 +30,7 @@ namespace WB.UI.QuestionnaireTester
 
         public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
         {
-            var folderName = GetFolderNameForTemplate(questionnaireId);
-            var assemblySearchPath = Path.Combine(pathToStore, folderName);
-            var directory = new DirectoryInfo(assemblySearchPath);
-
-            //temporary solution to locate assembly for tester
-            string assemblyFilePath = directory.GetFiles().OrderByDescending(f => f.LastWriteTime).First().FullName;
-
-            return assemblyFilePath;
+            return GetFullPathToAssembly(questionnaireId);
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64String)
@@ -75,22 +68,34 @@ namespace WB.UI.QuestionnaireTester
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
-            throw new NotImplementedException();
+            
         }
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
         {
-            throw new NotImplementedException();
+            byte[] assemblyAsByteArray = this.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
+
+            return Convert.ToBase64String(assemblyAsByteArray);
         }
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
-            throw new NotImplementedException();
+            return File.ReadAllBytes(GetFullPathToAssembly(questionnaireId));
         }
 
         private string GetFolderNameForTemplate(Guid questionnaireId)
         {
             return String.Format("dir-{0}", questionnaireId);
+        }
+
+        private string GetFullPathToAssembly(Guid questionnaireId)
+        {
+            var folderName = GetFolderNameForTemplate(questionnaireId);
+            var assemblySearchPath = Path.Combine(pathToStore, folderName);
+            var directory = new DirectoryInfo(assemblySearchPath);
+
+            return directory.GetFiles().OrderByDescending(f => f.LastWriteTime).First().FullName;
+
         }
     }
 }
