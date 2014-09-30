@@ -31,13 +31,13 @@
             <div class="form-group input-variable-name col-xs-4 pull-right">
                 <label for="edit-group-title" class="wb-label">Variable name<help key="variableName" /></label><br>
                 <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable"
-                       class="form-control">
+                       class="form-control" maxlength="32">
             </div>
         </div>
 
         <div class="form-group">
             <label for="edit-group-title" class="wb-label">Variable label<help key="variableLabel" /></label><br>
-            <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control">
+            <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" maxlength="80">
         </div>
 
         <div class="form-group">
