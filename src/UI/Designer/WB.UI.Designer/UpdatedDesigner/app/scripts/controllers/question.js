@@ -103,8 +103,11 @@
                 var wasItFiltered = initialQuestion.isFilteredCombobox || false;
                 var wasItCascade = !_.isEmpty(initialQuestion.cascadeFromQuestionId);
 
-                if ((wasItCascade && actualQuestion.isFilteredCombobox) || (
-                    wasItFiltered && !_.isEmpty(actualQuestion.cascadeFromQuestionId))) {
+                if (
+                    (wasItCascade && actualQuestion.isFilteredCombobox) ||
+                    (wasItCascade && !_.isEmpty(initialQuestion.cascadeFromQuestionId)) ||
+                    (wasItFiltered && !_.isEmpty(actualQuestion.cascadeFromQuestionId)) 
+                    ){
                     return true;
                 }
 
