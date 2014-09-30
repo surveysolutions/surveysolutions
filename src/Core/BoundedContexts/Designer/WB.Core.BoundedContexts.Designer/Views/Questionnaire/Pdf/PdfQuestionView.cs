@@ -63,8 +63,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             });
         }
 
-        public string Variable { get; set; }
-
         public bool GetHasCondition()
         {
             return !string.IsNullOrWhiteSpace(this.ConditionExpression);
