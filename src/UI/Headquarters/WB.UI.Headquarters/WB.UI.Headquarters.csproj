@@ -399,6 +399,7 @@
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
     <Content Include="Views\HQ\VerifySample.cshtml" />
+    <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -479,7 +480,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Injections\HeadquartersRegistry.cs" />
-    <Compile Include="Models\HeadquartersModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\PublicService\Reference.cs">
       <AutoGen>True</AutoGen>
