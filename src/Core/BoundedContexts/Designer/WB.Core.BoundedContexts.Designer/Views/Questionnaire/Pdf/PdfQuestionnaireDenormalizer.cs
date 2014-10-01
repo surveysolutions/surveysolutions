@@ -433,7 +433,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 Title = questionnaireDocument.Title,
                 CreationDate = questionnaireDocument.CreationDate,
-                CreatedBy = accountView != null ? accountView.UserName : "n/a"
+                CreatedBy = accountView != null ? accountView.UserName : "n/a",
+                PublicId = questionnaireDocument.PublicKey
             };
 
             pdf.FillFrom(questionnaireDocument);
