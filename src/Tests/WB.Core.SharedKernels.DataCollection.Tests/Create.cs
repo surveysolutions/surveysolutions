@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
+using Moq;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests
 {
@@ -25,6 +28,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
         public static Identity Identity(Guid id, decimal[] rosterVector)
         {
             return new Identity(id, rosterVector);
+        }
+
+        public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
+            Guid questionnaireId, IQuestionnaire questionaire = null)
+        {
+            questionaire = questionaire ?? Mock.Of<IQuestionnaire>();
+
+            return Mock.Of<IQuestionnaireRepository>(repository
+                => repository.GetQuestionnaire(questionnaireId) == questionaire
+                && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire
+                && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
         }
     }
 }
