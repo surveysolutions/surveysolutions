@@ -43,6 +43,7 @@ namespace WB.UI.Supervisor
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new LongWebsiteDirectoryPathFilter());

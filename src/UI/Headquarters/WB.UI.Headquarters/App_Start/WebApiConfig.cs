@@ -2,6 +2,7 @@
 using System.Web.Http;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Formatters;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters
 {
@@ -19,6 +20,8 @@ namespace WB.UI.Headquarters
 
             //support json for browser requests
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+
+            config.MessageHandlers.Add(new EnforceHttpsHandler());
         }
     }
 }
