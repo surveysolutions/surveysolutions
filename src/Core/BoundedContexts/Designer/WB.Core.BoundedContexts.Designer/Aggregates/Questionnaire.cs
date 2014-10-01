@@ -2194,6 +2194,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
                 ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, isCascade: true);
                 ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
+                this.ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(options);
                 ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
             }
 
@@ -2305,11 +2306,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void UpdateCascadingComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
             ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, isCascade: true);
 
             ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
+
+            ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(options);
 
             ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
 
@@ -3545,6 +3548,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.CategoricalCascadingOptionsCantContainsEmptyParentValueField,
                     ExceptionMessages.CategoricalCascadingOptionsCantContainsEmptyParentValueField);
+            }
+        }
+
+        private void ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(Option[] options)
+        {
+            decimal d;
+            if (options.Select(x => x.ParentValue).Any(number => !Decimal.TryParse(number, out d)))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.CategoricalCascadingOptionsCantContainsNotDecimalParentValueField,
+                    ExceptionMessages.CategoricalCascadingOptionsCantContainsNotDecimalParentValueField);
             }
         }
 
