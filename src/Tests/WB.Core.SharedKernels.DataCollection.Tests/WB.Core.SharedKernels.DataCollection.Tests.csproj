@@ -114,6 +114,7 @@
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_assembly_as_byte_array.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_assembly_as_base_64_string.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_storing_assembly.cs" />
+    <Compile Include="Setup.cs" />
     <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />

@@ -59,12 +59,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
         {
-            questionaire = questionaire ?? Mock.Of<IQuestionnaire>();
-
-            return Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
+            return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
         }
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub()
@@ -82,9 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
         {
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<TInstance>())
-                .Returns(instance);
+            Setup.InstanceToMockedServiceLocator(instance);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
@@ -99,19 +92,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             }
 
             return result;
-        }
-
-        protected static void SetupSelfCloningInterviewExpressionStateStubWithProviderToMockedServiceLocator(
-            Guid questionnaireId, Expression<Func<IInterviewExpressionState, bool>> expressionStateMoqPredicate)
-        {
-            var expressionState = Mock.Of<IInterviewExpressionState>(expressionStateMoqPredicate);
-
-            Mock.Get(expressionState).Setup(_ => _.Clone()).Returns(() => expressionState);
-
-            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
-                => _.GetExpressionState(questionnaireId, It.IsAny<long>()) == expressionState);
-
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(interviewExpressionStatePrototypeProvider);
         }
     }
 }

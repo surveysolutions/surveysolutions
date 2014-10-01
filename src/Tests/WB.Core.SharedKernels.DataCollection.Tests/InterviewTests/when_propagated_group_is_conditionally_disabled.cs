@@ -20,6 +20,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_propagated_group_is_conditionally_disabled : InterviewTestsContext
     {
         Establish context = () =>
@@ -31,25 +32,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
            
             questionWhichIsForcesPropagationId = Guid.Parse("22222222222222222222222222222222");
 
-
-            var questionnaire = Mock.Of<IQuestionnaire>(_
+            Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
                 => _.HasQuestion(questionWhichIsForcesPropagationId) == true
                 && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
-                && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
-
-                && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIsForcesPropagationId) == new[] { propagatedGroupId }
-
-                && _.HasGroup(propagatedGroupId) == true
-                && _.GetRosterLevelForGroup(propagatedGroupId)==1
-                && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new[] { propagatedGroupId });
-
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
-                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
+                && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true);
 
             var enablementChanges = Create.EnablementChanges(
                 groupsToBeDisabled: new List<Identity> { Create.Identity(propagatedGroupId, Empty.RosterVector) });
 
-            SetupSelfCloningInterviewExpressionStateStubWithProviderToMockedServiceLocator(questionnaireId, _
+            Setup.SelfCloningInterviewExpressionStateStubWithProviderToMockedServiceLocator(questionnaireId, _
                 => _.ProcessEnablementConditions() == enablementChanges);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
