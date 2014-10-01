@@ -36,25 +36,25 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         };
 
         Because of = () =>
-            state.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            enablementChanges = state.ProcessEnablementConditions();
 
         It should_disabled_question_count_equal_0 = () =>
-            questionsToBeDisabled.Count.ShouldEqual(0);
+            enablementChanges.QuestionsToBeDisabled.Count.ShouldEqual(0);
 
         It should_enabled_question_count_equal_2 = () =>
-            questionsToBeEnabled.Count.ShouldEqual(2);
+            enablementChanges.QuestionsToBeEnabled.Count.ShouldEqual(2);
 
         It should_disabled_group_count_equal_1 = () =>
-            groupsToBeDisabled.Count.ShouldEqual(1);
+            enablementChanges.GroupsToBeDisabled.Count.ShouldEqual(1);
 
         It should_disabled_group_id_equal_group2id = () =>
-            groupsToBeDisabled.Single().Id.ShouldEqual(group2Id);
+            enablementChanges.GroupsToBeDisabled.Single().Id.ShouldEqual(group2Id);
 
         It should_disabled_group_vector_equal_group2id = () =>
-            groupsToBeDisabled.Single().RosterVector.ShouldEqual(new decimal[]{1, 1});
+            enablementChanges.GroupsToBeDisabled.Single().RosterVector.ShouldEqual(new decimal[] { 1, 1 });
 
         It should_enable_group_count_equal_1 = () =>
-            groupsToBeEnabled.Count.ShouldEqual(1);
+            enablementChanges.GroupsToBeEnabled.Count.ShouldEqual(1);
         
         private static Guid questionnaireId = Guid.Parse("21111111111111111111111111111111");
         private static Guid question1Id = Guid.Parse("11111111111111111111111111111112");
@@ -65,9 +65,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         private static QuestionnaireDocument questionnaireDocument;
 
         private static IInterviewExpressionState state;
-        private static List<Identity> questionsToBeEnabled;
-        private static List<Identity> questionsToBeDisabled;
-        private static List<Identity> groupsToBeEnabled;
-        private static List<Identity> groupsToBeDisabled;
+        private static EnablementChanges enablementChanges;
     }
 }

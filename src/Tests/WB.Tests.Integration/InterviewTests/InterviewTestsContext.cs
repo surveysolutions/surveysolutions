@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests
             var emptyList = new List<Identity>();
 
             expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
-            expressionState.Setup(_ => _.ProcessConditionExpressions(out emptyList, out emptyList, out emptyList, out emptyList));
+            expressionState.Setup(_ => _.ProcessEnablementConditions() == new EnablementChanges(emptyList, emptyList, emptyList, emptyList));
             
             return Mock.Of<IInterviewExpressionStatePrototypeProvider>(
                     provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);
