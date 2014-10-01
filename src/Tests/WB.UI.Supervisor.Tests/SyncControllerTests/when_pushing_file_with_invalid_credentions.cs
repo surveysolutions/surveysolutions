@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Main.Core.View;
@@ -24,12 +25,16 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
         };
 
         Because of = () =>
-            result = (JsonResult)controller.PostFile("login","password",Guid.NewGuid());
+            exception = Catch.Exception(() =>
+                (JsonResult)controller.PostFile("login", "password", Guid.NewGuid())) as HttpException;
 
-        It should_return_false_result = () =>
-            ((bool) result.Data).ShouldEqual(false);
+        It should_http_exception_be_rised = () =>
+            exception.ShouldNotBeNull();
+
+        It should_exception_http_code_be_equal_to_403 = () =>
+            exception.GetHttpCode().ShouldEqual(403);
 
         private static SyncController controller;
-        private static JsonResult result;
+        private static HttpException exception;
     }
 }

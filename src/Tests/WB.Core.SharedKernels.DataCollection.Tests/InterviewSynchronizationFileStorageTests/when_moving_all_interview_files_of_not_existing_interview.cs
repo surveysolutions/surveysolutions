@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewSynchronizationFil
 
         Because of = () => interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
 
-        It should_0_files_be_create_at_sync_storage = () =>
+        It should_not_put_files_into_sync_storage = () =>
            fileSystemAccessorMock.Verify(x=>x.WriteAllBytes(Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Never);
 
         private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
