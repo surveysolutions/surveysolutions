@@ -65,7 +65,7 @@
 
             $scope.saveQuestion = function (callback) {
                 if ($scope.questionForm.$valid) {
-                    var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion);
+                    var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion) && $scope.activeQuestion.isCascade;
                     commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).success(function () {
                         $scope.initialQuestion = angular.copy($scope.activeQuestion);
 
