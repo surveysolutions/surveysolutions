@@ -1078,17 +1078,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var @group = questionnaireItem as IGroup;
                 if (@group != null)
                 {
-                    this.FillGroup(groupId: itemId, parentGroupId: groupId, responsibleId: responsibleId,
-                        sourceGroup: @group, targetIndex: itemTargetIndex);
+                    this.FillGroup(groupId: itemId, 
+                        parentGroupId: groupId, 
+                        responsibleId: responsibleId,
+                        sourceGroup: @group, 
+                        targetIndex: itemTargetIndex);
                     continue;
                 }
 
                 var question = questionnaireItem as IQuestion;
                 if (question != null)
                 {
-
                     var variableName = string.Empty;
-                    var variableLabel = string.Empty;
+                    var variableLabel = question.VariableLabel;
                     var title = question.QuestionText;
                     var isMandatory = question.Mandatory;
                     var enablementCondition = question.ConditionExpression;
@@ -1098,14 +1100,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     if (numericQuestion != null)
                     {
                         this.ApplyNumericQuestionCloneEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
+                            variableName: variableName, 
+                            variableLabel: variableLabel, 
+                            parentGroupId: groupId,
                             title: title,
-                            isMandatory: isMandatory, isPreFilled: numericQuestion.Featured,
-                            scope: numericQuestion.QuestionScope, enablementCondition: enablementCondition,
+                            isMandatory: isMandatory, 
+                            isPreFilled: numericQuestion.Featured,
+                            scope: numericQuestion.QuestionScope, 
+                            enablementCondition: enablementCondition,
                             validationExpression: numericQuestion.ValidationExpression,
-                            validationMessage: numericQuestion.ValidationMessage, instructions: instructions,
-                            sourceQuestionId: sourceItemId, responsibleId: responsibleId,
-                            maxValue: numericQuestion.MaxValue, isInteger: numericQuestion.IsInteger,
+                            validationMessage: numericQuestion.ValidationMessage, 
+                            instructions: instructions,
+                            sourceQuestionId: sourceItemId,
+                            responsibleId: responsibleId,
+                            maxValue: numericQuestion.MaxValue, 
+                            isInteger: numericQuestion.IsInteger,
                             countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces);
                         continue;
                     }
