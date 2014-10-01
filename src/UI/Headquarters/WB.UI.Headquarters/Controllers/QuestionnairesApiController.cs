@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using Main.Core.Entities;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
@@ -66,35 +64,52 @@ namespace WB.UI.Headquarters.Controllers
         {
             var response = new JsonCommandResponse() { IsSuccess = true };
 
-            try
-            {
-                var interviewByQuestionnaire =
+            var interviewByQuestionnaire =
                 this.interviews.QueryAll(
                     interview =>
                         !interview.IsDeleted && interview.QuestionnaireId == request.QuestionnaireId &&
                         interview.QuestionnaireVersion == request.Version);
 
-                foreach (var interviewSummary in interviewByQuestionnaire)
+            var hasInterviewDeletionExceptions = false;
+            foreach (var interviewSummary in interviewByQuestionnaire)
+            {
+                try
                 {
                     this.CommandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
                         this.GlobalInfo.GetCurrentUser().Id));
                 }
-                this.CommandService.Execute(new DeleteQuestionnaire(request.QuestionnaireId, request.Version,
-                    this.GlobalInfo.GetCurrentUser().Id));
-            }
-            catch (Exception e)
-            {
-                var domainEx = e.GetSelfOrInnerAs<DataCollectionException>();
-                if (domainEx == null)
+                catch (Exception e)
                 {
-                    this.Logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(DeleteQuestionnaire)), e);
-                    throw;
+                    hasInterviewDeletionExceptions = true;
                 }
 
-                response.DomainException = domainEx.Message;
             }
 
-            
+            if (hasInterviewDeletionExceptions)
+            {
+                response.DomainException = string.Format("Failed to delete one or more interviews which were created from questionnaire {0} version {1}.",
+                        request.QuestionnaireId.FormatGuid(), request.Version);
+            }
+            else
+            {
+                try
+                {
+                    this.CommandService.Execute(new DeleteQuestionnaire(request.QuestionnaireId, request.Version,
+                        this.GlobalInfo.GetCurrentUser().Id));
+                }
+                catch (Exception e)
+                {
+                    var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
+                    if (domainEx == null)
+                    {
+                        this.Logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(DeleteQuestionnaire)), e);
+                        throw;
+                    }
+
+                    response.DomainException = domainEx.Message;
+                }    
+            }
+
             return response;
         }
     }
