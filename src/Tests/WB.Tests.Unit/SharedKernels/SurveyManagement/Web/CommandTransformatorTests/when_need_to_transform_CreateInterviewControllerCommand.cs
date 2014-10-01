@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.CommandTransformatorT
         Because of = () =>
             command = commandTransformator.TransformCommnadIfNeeded(command);
 
-        It should_command_be_type_of_CreateInterviewCommand = () =>
+        It should_return_command_of_CreateInterviewCommand_type = () =>
             command.ShouldBeOfExactType<CreateInterviewCommand>();
 
         private static CommandTransformator commandTransformator;
