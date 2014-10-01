@@ -43,6 +43,7 @@ using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -261,7 +262,7 @@ namespace WB.UI.Capi
                 new ErrorReportingModule(basePath),
                 new AndroidLoggingModule(),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, syncDirectoryName: SynchronizationFolder,
-                    dataDirectoryName: InterviewFilesFolder, questionnaireAssembliesFolder: QuestionnaireAssembliesFolder),
+                    dataDirectoryName: InterviewFilesFolder),
                 new ExpressionProcessorModule());
 
             CrashManager.Initialize(this);

@@ -49,9 +49,7 @@
     <Compile Include="IdentityComparer.cs" />
     <Compile Include="IInterviewEvaluator.cs" />
     <Compile Include="IInterviewExpressionState.cs" />
-    <Compile Include="IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="IExpressionExecutable.cs" />
-    <Compile Include="IQuestionnareAssemblyFileAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>

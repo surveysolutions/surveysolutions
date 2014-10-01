@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Shared.Web.Filters;
 

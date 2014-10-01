@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContext.Capi.Synchronization.Tests.CapiDataSynchronizationServiceTests
