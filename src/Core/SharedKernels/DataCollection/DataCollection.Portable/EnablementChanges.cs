@@ -5,6 +5,8 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class EnablementChanges
     {
+        internal EnablementChanges() : this(null, null, null, null) {}
+
         public EnablementChanges(List<Identity> groupsToBeDisabled, List<Identity> groupsToBeEnabled,
             List<Identity> questionsToBeDisabled, List<Identity> questionsToBeEnabled)
         {
