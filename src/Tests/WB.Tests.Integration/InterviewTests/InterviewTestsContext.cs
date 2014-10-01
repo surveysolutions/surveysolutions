@@ -67,12 +67,10 @@ namespace WB.Tests.Integration.InterviewTests
             var emptyList = new List<Identity>();
 
             expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
-            expressionState.Setup(_ => _.ProcessEnablementConditions() == new EnablementChanges(emptyList, emptyList, emptyList, emptyList));
+            expressionState.Setup(_ => _.ProcessEnablementConditions()).Returns(new EnablementChanges(emptyList, emptyList, emptyList, emptyList));
             
             return Mock.Of<IInterviewExpressionStatePrototypeProvider>(
-                    provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);
-
-
+                provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
