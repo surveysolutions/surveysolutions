@@ -2176,20 +2176,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             Answer[] answers;
 
-            //ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, true);
-
             if (options == null && (isFilteredCombobox || cascadeFromQuestionId.HasValue))
             {
                 IQuestion question = this.GetQuestion(questionId);
-                answers = question.Answers.ToArray();
+                answers = question.Answers.ToArray();                
             }
             else
             {
-                answers = ConvertOptionsToAnswers(options);
+                answers = ConvertOptionsToAnswers(options);                
             }
 
             PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+
+            if (options != null && cascadeFromQuestionId.HasValue)
+            {
+                this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+                ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, isCascade: true);
+                ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
+                ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
+            }
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
