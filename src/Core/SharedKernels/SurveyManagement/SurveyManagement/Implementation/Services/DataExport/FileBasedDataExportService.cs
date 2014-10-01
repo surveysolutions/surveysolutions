@@ -217,17 +217,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             fileSystemAccessor.CreateDirectory(filesFolderForInterview);
 
-            var questionsWithAnswersOnMultimediaQuestions = GetPresentFileNames(interviewDataExportView);
+            var questionsWithAnswersOnMultimediaQuestions = this.GetAllMultimediaQuestionFileNames(interviewDataExportView);
 
-            var filesToMove = plainFileRepository.GetBinaryFilesForInterview(interviewDataExportView.InterviewId);
-
-            foreach (var file in filesToMove)
+            foreach (var questionWithAnswersOnMultimediaQuestions in questionsWithAnswersOnMultimediaQuestions)
             {
-                if (!questionsWithAnswersOnMultimediaQuestions.Contains(file.FileName))
-                    continue;
+                var fileContent = plainFileRepository.GetInterviewBinaryData(interviewDataExportView.InterviewId,
+                    questionWithAnswersOnMultimediaQuestions);
 
-                this.fileSystemAccessor.WriteAllBytes(this.fileSystemAccessor.CombinePath(filesFolderForInterview, file.FileName),
-                    file.GetData());
+                if (fileContent == null || fileContent.Length == 0)
+                {
+                    logger.Error(string.Format("file content is missing for file name {0} interview {1}", questionWithAnswersOnMultimediaQuestions, interviewDataExportView.InterviewId));
+                    continue;
+                }
+
+                this.fileSystemAccessor.WriteAllBytes(this.fileSystemAccessor.CombinePath(filesFolderForInterview, questionWithAnswersOnMultimediaQuestions), fileContent);
             }
         }
 
@@ -240,7 +243,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.dataFileExportService.AddActionRecords(actions, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
         }
 
-        private string[] GetPresentFileNames(InterviewDataExportView interviewDataExportView)
+        private string[] GetAllMultimediaQuestionFileNames(InterviewDataExportView interviewDataExportView)
         {
             var questionsWithAnswersOnMultimediaQuestions = interviewDataExportView.Levels.SelectMany(
                 level =>

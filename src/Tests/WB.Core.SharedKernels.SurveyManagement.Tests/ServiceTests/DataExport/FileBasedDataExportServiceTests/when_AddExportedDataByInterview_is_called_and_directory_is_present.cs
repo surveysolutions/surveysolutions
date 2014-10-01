@@ -42,8 +42,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
                 new[] { interviewLevelToExport });
 
             plainFileRepositoryMock = new Mock<IPlainInterviewFileStorage>();
-            plainFileRepositoryMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
-                .Returns(new List<InterviewBinaryDataDescriptor> { new InterviewBinaryDataDescriptor(interviewId, fileName, () => data) });
+            plainFileRepositoryMock.Setup(x => x.GetInterviewBinaryData(interviewId, fileName))
+                .Returns(data);
             fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object, plainFileRepository: plainFileRepositoryMock.Object);
         };
 
