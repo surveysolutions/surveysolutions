@@ -88,6 +88,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Options in cascading question can not have not numeric value in ParentValue column.
+        /// </summary>
+        internal static string CategoricalCascadingOptionsCantContainsNotDecimalParentValueField {
+            get {
+                return ResourceManager.GetString("CategoricalCascadingOptionsCantContainsNotDecimalParentValueField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type..
         /// </summary>
         internal static string CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {

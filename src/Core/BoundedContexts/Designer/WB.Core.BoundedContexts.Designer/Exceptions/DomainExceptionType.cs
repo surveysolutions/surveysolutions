@@ -138,6 +138,8 @@
 
         CategoricalCascadingOptionsCantContainsEmptyParentValueField,
 
+        CategoricalCascadingOptionsCantContainsNotDecimalParentValueField,
+
         CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair
     }
 }
