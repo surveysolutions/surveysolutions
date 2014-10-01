@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new MaintenanceFilter());
