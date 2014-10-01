@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using It = Moq.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
@@ -97,6 +99,19 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             }
 
             return result;
+        }
+
+        protected static void SetupSelfCloningInterviewExpressionStateStubWithProviderToMockedServiceLocator(
+            Guid questionnaireId, Expression<Func<IInterviewExpressionState, bool>> expressionStateMoqPredicate)
+        {
+            var expressionState = Mock.Of<IInterviewExpressionState>(expressionStateMoqPredicate);
+
+            Mock.Get(expressionState).Setup(_ => _.Clone()).Returns(() => expressionState);
+
+            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
+                => _.GetExpressionState(questionnaireId, It.IsAny<long>()) == expressionState);
+
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(interviewExpressionStatePrototypeProvider);
         }
     }
 }
