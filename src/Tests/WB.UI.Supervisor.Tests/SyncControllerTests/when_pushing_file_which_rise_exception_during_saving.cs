@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Main.Core.View;
@@ -28,13 +29,17 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
         };
 
         Because of = () =>
-            result = (JsonResult)controller.PostFile("login", "password", iterviewId);
+            exception = Catch.Exception(() =>
+                controller.PostFile("login", "password", iterviewId)) as HttpException;
 
-        It should_return_false_result = () =>
-            ((bool)result.Data).ShouldEqual(false);
+        It should_exception_be_not_null = () =>
+            exception.ShouldNotBeNull();
+
+        It should_exception_http_code_be_equal_to_500 = () =>
+            exception.GetHttpCode().ShouldEqual(500);
 
         private static SyncController controller;
-        private static JsonResult result;
+        private static HttpException exception;
         private static Mock<IPlainInterviewFileStorage> plainFileRepository;
         private static Guid iterviewId = Guid.NewGuid();
         private static string fileName = "file name";
