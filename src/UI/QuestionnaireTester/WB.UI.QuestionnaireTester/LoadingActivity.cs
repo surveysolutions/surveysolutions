@@ -105,7 +105,7 @@ namespace WB.UI.QuestionnaireTester
             catch (Exception e)
             {
                 logger.Error(e.Message, e);
-                ShowLongToastInUIThread("Template is invalid for current version of Tester. Please return to Designer and change it.");
+                ShowLongToastInUIThread("Template is not valid for current version of Tester.");
                 
                 return false;
             }
