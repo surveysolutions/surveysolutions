@@ -1529,14 +1529,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             ThrowIfInterviewHardDeleted();
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
 
-            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
-
-            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
             this.ApplyEnablementChangesEvents(enablementChanges);
 
@@ -2280,7 +2277,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             RosterCalculationData rosterCalculationData = CalculateRosterData(state, questionnaire, rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer, getRosterInstanceIds);
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
 
@@ -2295,10 +2291,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
-
-            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -2324,7 +2318,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire)
         {
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
             List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId).ToList();
 
@@ -2359,10 +2352,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
-
-            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
@@ -2392,7 +2383,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
         {
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
             var selectedValues = answers.Select(x => x.Item1).ToArray();
             var rosterInstanceIds = new DistinctDecimalList(selectedValues.ToList());
@@ -2436,10 +2426,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
-
-            var enablementChanges = new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
                 questionnaire);
@@ -2567,20 +2555,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Action<IInterviewExpressionState> updateState)
         {
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
 
             updateState(expressionProcessorState);
 
-            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling = this
                 .GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
                     state,
-                    groupsToBeDisabled,
-                    questionsToBeDisabled,
+                    enablementChanges.GroupsToBeDisabled,
+                    enablementChanges.QuestionsToBeDisabled,
                     questionnaire,
                     GetRosterInstanceIds);
 
@@ -2604,7 +2591,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return new InterviewChanges(
                 interviewByAnswerChange,
-                new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled),
+                enablementChanges,
                 new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
                 null,
                 answersForLinkedQuestionsToRemoveByDisabling,
@@ -3721,7 +3708,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<RosterCalculationData> rosterDatas)
         {
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            List<Identity> questionsToBeEnabled, questionsToBeDisabled, groupsToBeEnabled, groupsToBeDisabled;
 
             var expressionProcessorState = this.expressionProcessorStatePrototype.Clone();
 
@@ -3758,12 +3744,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
             }
 
-            expressionProcessorState.ProcessConditionExpressions(out groupsToBeEnabled, out groupsToBeDisabled, out questionsToBeEnabled, out questionsToBeDisabled);
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
 
             var enablementAndValidityChanges = new InterviewChanges(
                 null,
-                new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled),
+                enablementChanges,
                 new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
                 null,
                 null,

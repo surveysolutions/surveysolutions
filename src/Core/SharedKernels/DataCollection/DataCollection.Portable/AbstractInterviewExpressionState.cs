@@ -130,12 +130,12 @@ namespace WB.Core.SharedKernels.DataCollection
             }
         }
 
-        public void ProcessConditionExpressions(out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled, out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled)
+        public EnablementChanges ProcessEnablementConditions()
         {
-            questionsToBeEnabled = new List<Identity>();
-            questionsToBeDisabled = new List<Identity>();
-            groupsToBeEnabled = new List<Identity>();
-            groupsToBeDisabled = new List<Identity>();
+            var questionsToBeEnabled = new List<Identity>();
+            var questionsToBeDisabled = new List<Identity>();
+            var groupsToBeEnabled = new List<Identity>();
+            var groupsToBeDisabled = new List<Identity>();
 
             //order by scope depth starting from top
             //conditionally lower scope could depend only from upper scope
@@ -154,6 +154,8 @@ namespace WB.Core.SharedKernels.DataCollection
                 groupsToBeEnabled.AddRange(groupsToBeEnabledArray);
                 groupsToBeDisabled.AddRange(groupsToBeDisabledArray);
             }
+
+            return new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
         }
 
         public IEnumerable<IExpressionExecutable> GetRosterInstances(Identity[] rosterKey, Guid scopeId)
