@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewSynchronizationFil
 
         Because of = () => interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewId, fileName1);
 
-        It should_one_file_be_deleted_from_file_system = () =>
+        It should_delete_one_file = () =>
             fileSystemAccessorMock.Verify(x=>x.DeleteFile(Moq.It.IsAny<string>()), Times.Once);
 
         private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
