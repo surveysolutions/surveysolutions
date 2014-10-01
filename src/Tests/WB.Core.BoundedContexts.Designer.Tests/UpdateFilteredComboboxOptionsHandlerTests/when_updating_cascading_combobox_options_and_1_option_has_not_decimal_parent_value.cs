@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__empty____parentvalue__ = () =>
+        It should_throw_exception_with_message_containting__not_numeric____parentvalue__ = () =>
             new[] { "not numeric", "parentvalue" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
