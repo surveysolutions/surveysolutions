@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
+namespace WB.Core.SharedKernels.DataCollection
 {
-    internal class EnablementChanges
+    public class EnablementChanges
     {
         public EnablementChanges(List<Identity> groupsToBeDisabled, List<Identity> groupsToBeEnabled,
             List<Identity> questionsToBeDisabled, List<Identity> questionsToBeEnabled)
@@ -47,7 +47,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.GroupsToBeDisabled.Clear();
             this.QuestionsToBeEnabled.Clear();
             this.QuestionsToBeDisabled.Clear();
-            
         }
     }
 }
