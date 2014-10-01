@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.SharedKernels.DataCollection
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Accessors
 {
     public interface IQuestionnaireAssemblyFileAccessor
     {

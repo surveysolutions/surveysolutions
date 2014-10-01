@@ -32,6 +32,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;

@@ -2,6 +2,7 @@
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
 namespace WB.Core.SharedKernels.DataCollection.Accessors
 {

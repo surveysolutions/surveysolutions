@@ -15,9 +15,9 @@ using WB.Core.BoundedContexts.Capi.ModelUtils;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.QuestionnaireTester

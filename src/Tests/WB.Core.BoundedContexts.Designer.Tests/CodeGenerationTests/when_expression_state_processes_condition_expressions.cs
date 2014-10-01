@@ -20,15 +20,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             questionnaireDocument = CreateQuestionnairDocumenteWithTwoNumericIntegerQuestionAndConditionalGroup(questionnaireId, questionId, group1Id);
 
-            IInterviewExpressionStatePrototypeProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
-
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(interviewExpressionStateProvider);
-
-            state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();
-
+            state = GetInterviewExpressionState(questionnaireDocument);
+            
             state.UpdateIntAnswer(questionId, new decimal[0], 4);
         };
 

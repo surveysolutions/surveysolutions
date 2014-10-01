@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 

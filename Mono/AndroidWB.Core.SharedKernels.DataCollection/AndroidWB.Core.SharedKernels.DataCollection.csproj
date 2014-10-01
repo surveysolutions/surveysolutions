@@ -486,6 +486,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Factories\IQuestionnaireRosterStructureFactory.cs">
       <Link>Factories\IQuestionnaireRosterStructureFactory.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs">
+      <Link>Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\Interview.cs">
       <Link>Implementation\Aggregates\Interview.cs</Link>
     </Compile>
@@ -539,6 +542,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Factories\QuestionnaireRosterStructureFactory.cs">
       <Link>Implementation\Factories\QuestionnaireRosterStructureFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Providers\IInterviewExpressionStatePrototypeProvider.cs">
+      <Link>Implementation\Providers\IInterviewExpressionStatePrototypeProvider.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs">
       <Link>Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs</Link>

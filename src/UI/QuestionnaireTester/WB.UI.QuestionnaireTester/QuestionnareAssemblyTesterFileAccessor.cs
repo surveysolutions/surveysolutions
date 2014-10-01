@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using Environment = Android.OS.Environment;
 
 namespace WB.UI.QuestionnaireTester

@@ -11,19 +11,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<QuestionTemplateModel> AllQuestions { set; get; }
         public List<GroupTemplateModel> AllGroups { set; get; }
         public List<RosterTemplateModel> AllRosters { set; get; }
-
         public string GeneratedClassName { set; get; }
         public Dictionary<string, string> GeneratedScopesTypeNames { set; get; }
-
         public Dictionary<string, List<RosterTemplateModel>> RostersGroupedByScope { set; get; }
+        public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { set; get; }
+        public Dictionary<string, Guid> VariableNames { set; get; }
 
         public Dictionary<Guid, List<Guid>> ConditionalDependencies { set; get; }
         public Dictionary<Guid, List<Guid>> StructuralDependencies { set; get; }
-
-        public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { set; get; }
-
-        public Dictionary<string, Guid> VariableNames { set; get; }
-
 
         public List<Tuple<string, string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions,
             List<GroupTemplateModel> groups, List<RosterTemplateModel> rosters = null)

@@ -14,14 +14,13 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 {

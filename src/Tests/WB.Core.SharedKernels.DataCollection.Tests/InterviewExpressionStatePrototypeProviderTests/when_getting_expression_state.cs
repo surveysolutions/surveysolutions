@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using It = Machine.Specifications.It;
 
