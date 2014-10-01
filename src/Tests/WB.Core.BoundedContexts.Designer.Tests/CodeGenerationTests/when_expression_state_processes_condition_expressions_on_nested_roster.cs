@@ -19,16 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
             questionnaireDocument = CreateQuestionnairDocumenteHavingNestedRosterWithConditions(questionnaireId, question1Id, group1Id, question2Id, group2Id);
-
-            IInterviewExpressionStatePrototypeProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
-
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(interviewExpressionStateProvider);
-
-            state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();
-
+            state = GetInterviewExpressionState(questionnaireDocument);
+            
             state.UpdateIntAnswer(question1Id, new decimal[0], 1);
             state.AddRoster(group1Id, new decimal[0], 1, null);
             state.UpdateIntAnswer(question2Id, new decimal[]{1}, 1);

@@ -18,15 +18,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
             questionnaireDocument = CreateQuestionnaireDocumenteHavingMandatoryQuestions(questionnaireId, question1Id, question2Id, question3Id, question4Id);
-
-            IInterviewExpressionStatePrototypeProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(interviewExpressionStateProvider);
-
-            state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();
-
+            state = GetInterviewExpressionState(questionnaireDocument);
+            
         };
 
         Because of = () =>

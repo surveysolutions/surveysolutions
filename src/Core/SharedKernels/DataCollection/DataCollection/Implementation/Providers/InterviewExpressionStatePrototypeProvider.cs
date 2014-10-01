@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {

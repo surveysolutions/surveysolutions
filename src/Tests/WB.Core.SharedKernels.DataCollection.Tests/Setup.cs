@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests

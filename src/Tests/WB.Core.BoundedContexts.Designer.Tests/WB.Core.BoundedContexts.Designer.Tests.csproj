@@ -225,6 +225,8 @@
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="CloneStaticTextHandlerTests\when_cloning_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="CloneTextQuestionHandlerTests\when_cloning_text_question_and_variable_name_is_null.cs" />
+    <Compile Include="CodeGenerationModelTests\CodeGenerationModelTestsContext.cs" />
+    <Compile Include="CodeGenerationModelTests\when_getting_ordered_list_by_condition_dependency.cs" />
     <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions_on_scope_roster.cs" />
     <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions_on_nested_roster.cs" />
     <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions_on_roster.cs" />

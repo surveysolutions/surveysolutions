@@ -18,14 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
             questionnaireDocument = CreateQuestionnaireDocumenteWithOneNumericIntegerQuestionAndRosters(questionnaireId, questionId, rosterId);
-
-            IInterviewExpressionStatePrototypeProvider interviewExpressionStateProvider = GetInterviewExpressionStateProvider(questionnaireDocument);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(interviewExpressionStateProvider);
-
-            state = interviewExpressionStateProvider.GetExpressionState(questionnaireId, 0).Clone();
+            state = GetInterviewExpressionState(questionnaireDocument);
 
             state.UpdateIntAnswer(questionId, new decimal[0], 4);
             state.AddRoster(rosterId, new decimal[0], 1, null);

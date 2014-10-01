@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Machine.Specifications.Annotations;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -380,51 +381,37 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             return questionnaireDocument;
         }
 
-        public static IInterviewExpressionStatePrototypeProvider GetInterviewExpressionStateProvider(QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
-            return new InterviewExpressionStateTestingProvider(questionnaireDocument);
-        }
+            var expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
 
-        private class InterviewExpressionStateTestingProvider : IInterviewExpressionStatePrototypeProvider
-        {
-            private IInterviewExpressionState interviewExpressionState;
+            string resultAssembly;
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
 
-            public InterviewExpressionStateTestingProvider(QuestionnaireDocument questionnaireDocument)
+            var filePath = Path.GetTempFileName();
+
+            if (emitResult.Success && !string.IsNullOrEmpty(resultAssembly))
             {
-                var expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+                File.WriteAllBytes(filePath, Convert.FromBase64String(resultAssembly));
 
-                string resultAssembly;
-                var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+                var compiledAssembly = Assembly.LoadFrom(filePath);
 
-                var filePath = Path.GetTempFileName();
+                Type interviewExpressionStateType =
+                    compiledAssembly.GetTypes()
+                        .FirstOrDefault(type => type.GetInterfaces().Contains(typeof (IInterviewExpressionState)));
 
-                if (emitResult.Success == true && !string.IsNullOrEmpty(resultAssembly))
-                {
-                    File.WriteAllBytes(filePath, Convert.FromBase64String(resultAssembly));
+                if (interviewExpressionStateType == null)
+                    throw new Exception("Type InterviewExpressionState was not found");
 
-                    var compiledAssembly = Assembly.LoadFrom(filePath);
+                var interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
 
-                    Type interviewExpressionStateType =
-                        compiledAssembly.GetTypes()
-                            .FirstOrDefault(type => type.GetInterfaces().Contains(typeof (IInterviewExpressionState)));
-
-                    if (interviewExpressionStateType == null)
-                        throw new Exception("Type InterviewExpressionState was not found");
-
-                    this.interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
-                }
-                else
-                {
+                if (interviewExpressionState == null)
                     throw new Exception("Error on IInterviewExpressionState generation");
-                }
+
+                return interviewExpressionState;
             }
 
-
-            public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
-            {
-                return this.interviewExpressionState.Clone();
-            }
-            
+            throw new Exception("Error on IInterviewExpressionState generation");
         }
     }
 }

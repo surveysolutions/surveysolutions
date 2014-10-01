@@ -31,6 +31,7 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispa
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
