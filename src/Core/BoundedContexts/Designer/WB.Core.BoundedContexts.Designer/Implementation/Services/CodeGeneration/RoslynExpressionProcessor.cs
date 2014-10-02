@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .ParseSyntaxTree(code).GetRoot().ChildNodesAndTokens().TreeToEnumerable(_ => _.ChildNodesAndTokens())
                 .Where(IsIdentifierToken)
                 .Where(identifierToken => !IsFunction(identifierToken))
+                .Where(identifierToken => !IsConstructorCall(identifierToken))
                 .Where(identifierToken => !IsPropertyOrMethod(identifierToken))
                 .Select(token => token.ToString())
                 .Distinct();
@@ -45,6 +46,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private static bool IsFunction(SyntaxNodeOrToken identifierToken)
         {
             return identifierToken.Parent.Parent is InvocationExpressionSyntax;
+        }
+
+        private static bool IsConstructorCall(SyntaxNodeOrToken identifierToken)
+        {
+            return identifierToken.Parent.Parent is ObjectCreationExpressionSyntax;
         }
 
         private static bool IsPropertyOrMethod(SyntaxNodeOrToken identifierToken)
