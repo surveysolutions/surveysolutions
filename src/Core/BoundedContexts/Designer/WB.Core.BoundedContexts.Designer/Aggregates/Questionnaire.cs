@@ -2197,21 +2197,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
-
-            if (options != null && cascadeFromQuestionId.HasValue)
-            {
-                this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-                ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, isCascade: true);
-                ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
-                this.ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(options);
-                ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
-            }
-
+            
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
-            if (isFilteredCombobox)
+            if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {
                 var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
                 answers = categoricalOneAnswerQuestion != null ? categoricalOneAnswerQuestion.Answers.ToArray() : null;
