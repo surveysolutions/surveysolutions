@@ -56,7 +56,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         {
 
             this.tempSampleCreationStorage.Store(new SampleCreationStatus(id), id);
-            new Task(() => this.CreateInterviewInternal(questionnaireId, version, id, (preloadedDataService) => preloadedDataService.CreatePreloadedDataDtoFromSampleData(data), responsibleHeadquarterId, responsibleSupervisorId))
+            new Task(() => this.CreateInterviewInternal(questionnaireId, 
+                    version, 
+                    id, 
+                    preloadedDataService => preloadedDataService.CreatePreloadedDataDtoFromSampleData(data), 
+                    responsibleHeadquarterId, 
+                    responsibleSupervisorId))
                 .Start();
         }
 
@@ -65,8 +70,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return this.tempSampleCreationStorage.GetByName(id);
         }
 
-        private void CreateInterviewInternal(Guid questionnaireId, long version, string id, Func<IPreloadedDataService, PreloadedDataDto[]> preloadedDataDtoCreator/*PreloadedDataByFile[] data*/,
-            Guid responsibleHeadquarterId, Guid responsibleSupervisorId)
+        private void CreateInterviewInternal(Guid questionnaireId, 
+            long version, 
+            string id, 
+            Func<IPreloadedDataService, PreloadedDataDto[]> preloadedDataDtoCreator,
+            Guid responsibleHeadquarterId, 
+            Guid responsibleSupervisorId)
         {
             var result = this.GetSampleCreationStatus(id);
 
