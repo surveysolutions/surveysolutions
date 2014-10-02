@@ -44,13 +44,14 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             this.cascadingCombobox = new AutoCompleteTextView(this.Context)
             {
-                Threshold = 1, 
+                Threshold = 0, 
                 ImeOptions = ImeAction.Done
             };
 
             this.cascadingCombobox.SetSelectAllOnFocus(true);
             this.cascadingCombobox.SetSingleLine(true);
             this.cascadingCombobox.ItemClick += this.cascadingCombobox_ItemClick;
+            this.cascadingCombobox.FocusChange += this.cascadingCombobox_FocusChange;
 
             this.adapter = new ArrayAdapter<String>(
                 this.Context, 
@@ -60,6 +61,17 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.cascadingCombobox.Adapter = this.adapter;
             
             this.llWrapper.AddView(this.cascadingCombobox);
+
+            this.llWrapper.Focusable = true;
+            this.llWrapper.FocusableInTouchMode = true;
+        }
+
+        private void cascadingCombobox_FocusChange(object sender, FocusChangeEventArgs e)
+        {
+            if (e.HasFocus)
+            {
+                this.cascadingCombobox.ShowDropDown();
+            }
         }
 
         void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -69,6 +81,9 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             {
                 adapter.Clear();
                 adapter.AddAll(this.Answers.Select(option => option.Title).ToList());
+                this.cascadingCombobox.DismissDropDown();
+                this.cascadingCombobox.ClearListSelection();
+                this.cascadingCombobox.Text = string.Empty;
             }
             bool answerRemovedChanged = e.PropertyName == "AnswerRemoved";
             if (answerRemovedChanged)
