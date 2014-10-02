@@ -47,6 +47,7 @@
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
+                $scope.questionForm.$setPristine();
             }
 
             var dataBind = function (result) {
@@ -56,6 +57,7 @@
 
                 $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
+                $scope.questionForm.$setPristine();
             };
 
             $scope.loadQuestion = function () {
