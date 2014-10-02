@@ -14,12 +14,12 @@ namespace WB.Core.SharedKernels.DataCollection
             throw new NotImplementedException();
         }
 
-        public override void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer)
+        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer)
         {
             throw new NotImplementedException();
         }

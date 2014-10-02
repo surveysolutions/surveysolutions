@@ -149,11 +149,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     decimal[] questionPropagationVector = question.QuestionPropagationVector;
                     if (question.Answer is long)
                     {
-                        this.ExpressionProcessorStatePrototype.UpdateIntAnswer(question.Id, questionPropagationVector, (long)question.Answer);
+                        this.ExpressionProcessorStatePrototype.UpdateNumericIntegerAnswer(question.Id, questionPropagationVector, (long)question.Answer);
                     }
                     if (question.Answer is decimal)
                     {
-                        this.ExpressionProcessorStatePrototype.UpdateDecimalAnswer(question.Id, questionPropagationVector, Convert.ToDecimal(question.Answer));
+                        this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(question.Id, questionPropagationVector, Convert.ToDouble(question.Answer));
                         this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(question.Id, questionPropagationVector, Convert.ToDecimal(question.Answer));
                     }
                     var answer = question.Answer as string;
@@ -233,7 +233,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            this.ExpressionProcessorStatePrototype.UpdateDecimalAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
+            this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(@event.QuestionId, @event.PropagationVector, (double) @event.Answer);
         }
 
         internal void Apply(NumericRealQuestionAnswered @event)
@@ -243,7 +243,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            this.ExpressionProcessorStatePrototype.UpdateDecimalAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
+            this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(@event.QuestionId, @event.PropagationVector, (double) @event.Answer);
         }
 
         internal void Apply(NumericIntegerQuestionAnswered @event)
@@ -253,7 +253,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.Answer;
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
-            this.ExpressionProcessorStatePrototype.UpdateIntAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
+            this.ExpressionProcessorStatePrototype.UpdateNumericIntegerAnswer(@event.QuestionId, @event.PropagationVector, @event.Answer);
         }
 
         internal void Apply(DateTimeQuestionAnswered @event)
@@ -2282,7 +2282,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             //Update State
-            expressionProcessorState.UpdateIntAnswer(questionId, rosterVector, answer);
+            expressionProcessorState.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
 
             var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterCalculationData);
@@ -2483,7 +2483,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
-            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateDecimalAnswer(questionId, rosterVector, answer);
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateNumericRealAnswer(questionId, rosterVector, (double)answer);
 
             return this.CalculateInterviewChangesOnAnswerQuestion(
                 state,
@@ -3788,10 +3788,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     expressionProcessorState.UpdateQrBarcodeAnswer(answerChange.QuestionId, answerChange.RosterVector, (string) answerChange.Answer);
                     break;
                 case AnswerChangeType.NumericInteger:
-                    expressionProcessorState.UpdateIntAnswer(answerChange.QuestionId, answerChange.RosterVector, (int) answerChange.Answer);
+                    expressionProcessorState.UpdateNumericIntegerAnswer(answerChange.QuestionId, answerChange.RosterVector, (int) answerChange.Answer);
                     break;
                 case AnswerChangeType.NumericReal:
-                    expressionProcessorState.UpdateDecimalAnswer(answerChange.QuestionId, answerChange.RosterVector, (decimal) answerChange.Answer);
+                    expressionProcessorState.UpdateNumericRealAnswer(answerChange.QuestionId, answerChange.RosterVector, (double) answerChange.Answer);
                     break;
                 case AnswerChangeType.SingleOptionLinked:
                     expressionProcessorState.UpdateLinkedSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,

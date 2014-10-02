@@ -172,7 +172,7 @@ namespace WB.UI.Designer.Api
                 var processorGenerationErrors = generationResult.Success
                     ? new QuestionnaireVerificationError[0]
                     : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
-
+                errorsCount = generationResult.Diagnostics.Count;
                 errors = verificationErrorsMapper.EnrichVerificationErrors(processorGenerationErrors, questionnaireDocument);
             }
 

@@ -92,20 +92,20 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             }
         }
 
-        public override void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer)
+        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            targetLevel.UpdateIntAnswer(questionId, answer);
+            targetLevel.UpdateNumericIntegerAnswer(questionId, answer);
         }
 
-        public override void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
 
-            targetLevel.UpdateDecimalAnswer(questionId, answer);
+            targetLevel.UpdateNumericRealAnswer(questionId, answer);
         }
 
         public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)

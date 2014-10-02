@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             }
         }
 
-        public override void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer)
+        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             }
         }
 
-        public override void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -749,14 +749,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                 return this.times_per_week > 0 && this.times_per_week < 7 * 5;
             }
 
-            public decimal? price_for_food
+            public double? price_for_food
             {
                 get { return this.price_for_food_state.State == State.Enabled ? this.priceForFood : null; }
                 set { this.priceForFood = value; }
             }
 
             private ConditionalState price_for_food_state = new ConditionalState(IdOf.price_for_food);
-            private decimal? priceForFood;
+            private double? priceForFood;
 
             private bool price_for_food_IsEnabledIf()
             {
