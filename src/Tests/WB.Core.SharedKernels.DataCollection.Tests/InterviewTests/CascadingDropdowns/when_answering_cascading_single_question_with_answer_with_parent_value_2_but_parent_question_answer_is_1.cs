@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -13,7 +13,8 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDropdowns
 {
-    internal class when_answering_cascading_single_question_with_answer_parent_value_that_not_in_parent_options : InterviewTestsContext
+    [Ignore("KP-4259")]
+    internal class when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1 : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -30,10 +31,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
                         PublicKey = parentSingleOptionQuestionId,
                         QuestionType = QuestionType.SingleOption,
                         Answers = new List<Answer>
-                                        {
-                                            new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                                            new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
-                                        }
+                        {
+                            new Answer { AnswerText = "parent option 1", AnswerValue = "1", PublicKey = Guid.NewGuid() },
+                            new Answer { AnswerText = "parent option 2", AnswerValue = "2", PublicKey = Guid.NewGuid() }
+                        }
                     },
                     new SingleQuestion
                     {
@@ -42,7 +43,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer>
                         {
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "3" }
+                            new Answer { AnswerText = "child 1 for parent option 1", AnswerValue = "1.1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
+                            new Answer { AnswerText = "child 2 for parent option 1", AnswerValue = "1.2", PublicKey = Guid.NewGuid(), ParentValue = "1" },
+
+                            new Answer { AnswerText = "child 1 for parent option 2", AnswerValue = "2.1", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 2 for parent option 2", AnswerValue = "2.2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                            new Answer { AnswerText = "child 3 for parent option 2", AnswerValue = "2.3", PublicKey = Guid.NewGuid(), ParentValue = "2" },
                         }
                     }));
 
@@ -55,20 +61,20 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
-            
+
             eventContext = new EventContext();
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 1)
-            );
+                interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 2.2m)
+                );
 
         It should_throw_InterviewException = () =>
             exception.ShouldBeOfExactType<InterviewException>();
 
-        It should_throw_exception_with_message_containting__not__valid__expression__ = () =>
-            new[] { "answer", "parent value", "not found" }.ShouldEachConformTo(
+        It should_throw_exception_with_message_containting__answer____parent_value____incorrect__ = () =>
+            new[] { "answer", "parent value", "incorrect" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         static Exception exception;
