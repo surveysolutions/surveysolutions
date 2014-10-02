@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             questionnaireDocument = CreateQuestionnairDocumenteHavingRosterWithConditions(questionnaireId, questionId, group1Id);
             state = GetInterviewExpressionState(questionnaireDocument);
 
-            state.UpdateIntAnswer(questionId, new decimal[0], 1);
+            state.UpdateNumericIntegerAnswer(questionId, new decimal[0], 1);
             state.AddRoster(group1Id, new decimal[0], 1, null);
         };
 

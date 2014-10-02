@@ -203,7 +203,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     return "long?";
 
                 case QuestionType.Numeric:
-                    return (question as NumericQuestion).IsInteger ? "long?" : "decimal?";
+                    return (question as NumericQuestion).IsInteger ? "long?" : "double?";
 
                 case QuestionType.QRBarcode:
                     return "string";

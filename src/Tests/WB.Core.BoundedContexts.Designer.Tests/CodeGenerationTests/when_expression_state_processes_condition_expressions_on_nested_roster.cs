@@ -21,9 +21,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             questionnaireDocument = CreateQuestionnairDocumenteHavingNestedRosterWithConditions(questionnaireId, question1Id, group1Id, question2Id, group2Id);
             state = GetInterviewExpressionState(questionnaireDocument);
             
-            state.UpdateIntAnswer(question1Id, new decimal[0], 1);
+            state.UpdateNumericIntegerAnswer(question1Id, new decimal[0], 1);
             state.AddRoster(group1Id, new decimal[0], 1, null);
-            state.UpdateIntAnswer(question2Id, new decimal[]{1}, 1);
+            state.UpdateNumericIntegerAnswer(question2Id, new decimal[]{1}, 1);
             state.AddRoster(group2Id, new decimal[]{1}, 1, null);
         };
 
