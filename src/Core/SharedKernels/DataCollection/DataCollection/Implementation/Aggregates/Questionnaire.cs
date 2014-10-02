@@ -148,9 +148,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
                     this.EventSourceId.FormatGuid(), questionnaireVersion));
 
-            var plainQuestionnaire = (PlainQuestionnaire)availableVersions[questionnaireVersion];
-
-            var createdById = plainQuestionnaire.ResponsibleId;
+            var createdById = availableVersions[questionnaireVersion].ResponsibleId;
             if (createdById.HasValue && createdById != responsibleId)
             {
                 throw new QuestionnaireException(

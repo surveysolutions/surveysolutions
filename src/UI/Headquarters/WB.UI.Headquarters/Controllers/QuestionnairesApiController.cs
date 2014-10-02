@@ -78,8 +78,9 @@ namespace WB.UI.Headquarters.Controllers
                     this.CommandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
                         this.GlobalInfo.GetCurrentUser().Id));
                 }
-                catch
+                catch(Exception e)
                 {
+                    this.Logger.Error(string.Format("Error on command of type ({0}) handling ", typeof(HardDeleteInterview)), e);
                     hasInterviewDeletionExceptions = true;
                 }
 

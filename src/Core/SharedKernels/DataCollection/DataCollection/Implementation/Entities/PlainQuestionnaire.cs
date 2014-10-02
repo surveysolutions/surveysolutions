@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             get { return this.innerDocument; }
         }
 
-        internal Guid? ResponsibleId
+        public Guid? ResponsibleId
         {
             get { return this.responsibleId; }
         }
