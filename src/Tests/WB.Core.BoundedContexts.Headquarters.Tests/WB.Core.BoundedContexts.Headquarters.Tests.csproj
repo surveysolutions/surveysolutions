@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Create.cs" />
+    <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_interview_approved_by_hq.cs" />
     <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_interview_deleted_on_hq.cs" />
     <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_interview_hard_deleted_on_hq.cs" />
     <Compile Include="Interviews\InterviewsFeedDenormalizerTests\when_interview_rejected.cs" />
