@@ -8,7 +8,7 @@ namespace WB.UI.QuestionnaireTester
 {
     public class QuestionnareAssemblyTesterFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
-        private const string storeName = "QuestionnaireAssemblies";
+        private const string StoreName = "QuestionnaireAssemblies";
         private readonly string pathToStore;
 
         public QuestionnareAssemblyTesterFileAccessor()
@@ -17,7 +17,7 @@ namespace WB.UI.QuestionnaireTester
                              ? Environment.ExternalStorageDirectory.AbsolutePath
                              : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
 
-            storageDirectory = Path.Combine(storageDirectory, storeName);
+            storageDirectory = Path.Combine(storageDirectory, StoreName);
 
             if (!Directory.Exists(storageDirectory))
             {

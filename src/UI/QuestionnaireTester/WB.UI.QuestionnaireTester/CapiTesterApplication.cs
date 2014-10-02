@@ -238,8 +238,11 @@ namespace WB.UI.QuestionnaireTester
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
-            kernel.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
+            //fix it
+            kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
+            kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<WB.UI.QuestionnaireTester.QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
+            kernel.Unbind<IInterviewExpressionStatePrototypeProvider>();
+            kernel.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>().InSingletonScope();
 
             NcqrsInit.Init(this.kernel);
 
