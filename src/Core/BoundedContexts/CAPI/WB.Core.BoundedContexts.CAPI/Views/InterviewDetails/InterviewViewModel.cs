@@ -655,8 +655,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             if (!this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.ContainsKey(questionId))
                 return;
 
-            Console.WriteLine(questionId);
-
             var questionInstanceId = new InterviewItemId(questionId, propagationVector);
 
             this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions[questionId].Remove(questionInstanceId);
