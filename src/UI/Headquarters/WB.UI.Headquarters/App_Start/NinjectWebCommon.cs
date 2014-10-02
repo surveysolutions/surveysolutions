@@ -164,6 +164,10 @@ namespace WB.UI.Headquarters
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
+
+            //fix it
+            kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
+            kernel.Unbind<IInterviewExpressionStatePrototypeProvider>();
             kernel.Bind<IQuestionnaireAssemblyFileAccessor>()
                 .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", basePath).WithConstructorArgument("assemblyDirectoryName", QuestionnaireAssembliesFolder);
             kernel.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
