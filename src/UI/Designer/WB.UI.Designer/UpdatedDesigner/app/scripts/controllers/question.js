@@ -3,56 +3,59 @@
         function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
-            var dataBind = function (result) {
+            var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
-                $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
+                $scope.activeQuestion.breadcrumbs = question.breadcrumbs;
 
                 $scope.activeQuestion.itemId = $state.params.itemId;
 
-                $scope.activeQuestion.variable = result.variableName || result.variable;
-                $scope.activeQuestion.variableLabel = result.variableLabel;
-                $scope.activeQuestion.mask = result.mask;
-                $scope.activeQuestion.questionTypeOptions = result.questionTypeOptions;
-                $scope.activeQuestion.title = result.title;
-                $scope.activeQuestion.isMandatory = result.isMandatory;
-                $scope.activeQuestion.enablementCondition = result.enablementCondition;
-                $scope.activeQuestion.validationExpression = result.validationExpression;
-                $scope.activeQuestion.validationMessage = result.validationMessage;
-                $scope.activeQuestion.allQuestionScopeOptions = result.allQuestionScopeOptions;
-                dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
-                $scope.activeQuestion.notPrefilledQuestionScopeOptions = result.notPrefilledQuestionScopeOptions;
-                $scope.activeQuestion.instructions = result.instructions;
-                $scope.activeQuestion.maxAnswerCount = result.maxAnswerCount;
-                $scope.activeQuestion.maxAllowedAnswers = result.maxAllowedAnswers;
-                $scope.activeQuestion.areAnswersOrdered = result.areAnswersOrdered;
-                $scope.activeQuestion.isFilteredCombobox = result.isFilteredCombobox;
+                $scope.activeQuestion.variable = question.variableName || question.variable;
+                $scope.activeQuestion.variableLabel = question.variableLabel;
+                $scope.activeQuestion.mask = question.mask;
+                $scope.activeQuestion.questionTypeOptions = question.questionTypeOptions;
+                $scope.activeQuestion.title = question.title;
+                $scope.activeQuestion.isMandatory = question.isMandatory;
+                $scope.activeQuestion.enablementCondition = question.enablementCondition;
+                $scope.activeQuestion.validationExpression = question.validationExpression;
+                $scope.activeQuestion.validationMessage = question.validationMessage;
+                $scope.activeQuestion.allQuestionScopeOptions = question.allQuestionScopeOptions;
+                $scope.activeQuestion.notPrefilledQuestionScopeOptions = question.notPrefilledQuestionScopeOptions;
+                $scope.activeQuestion.instructions = question.instructions;
+                $scope.activeQuestion.maxAnswerCount = question.maxAnswerCount;
+                $scope.activeQuestion.maxAllowedAnswers = question.maxAllowedAnswers;
+                $scope.activeQuestion.areAnswersOrdered = question.areAnswersOrdered;
+                $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
 
-                var options = result.options || [];
+                var options = question.options || [];
                 _.each(options, function (option) {
                     option.id = utilityService.guid();
                 });
 
                 $scope.activeQuestion.options = options;
-                $scope.activeQuestion.optionsCount = result.optionsCount || 0;
+                $scope.activeQuestion.optionsCount = question.optionsCount || 0;
 
-                $scope.activeQuestion.wereOptionsTruncated = result.wereOptionsTruncated || false;
-                $scope.activeQuestion.isInteger = result.isInteger;
-                $scope.activeQuestion.maxValue = result.maxValue;
-                $scope.activeQuestion.countOfDecimalPlaces = result.countOfDecimalPlaces;
+                $scope.activeQuestion.wereOptionsTruncated = question.wereOptionsTruncated || false;
+                $scope.activeQuestion.isInteger = question.isInteger;
+                $scope.activeQuestion.maxValue = question.maxValue;
+                $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
-                $scope.activeQuestion.questionScope = result.isPreFilled ? 'Prefilled' : result.questionScope;
+                $scope.activeQuestion.questionScope = question.isPreFilled ? 'Prefilled' : question.questionScope;
+
+                $scope.setQuestionType(question.type);
+
+                $scope.setLinkSource(question.linkedToQuestionId);
+                $scope.setCascadeSource(question.cascadeFromQuestionId);
+
+                $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
+            }
+
+            var dataBind = function (result) {
+                dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
+
+                bindQuestion(result);
 
                 $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
-
-                $scope.setQuestionType(result.type);
-
-                $scope.setLinkSource(result.linkedToQuestionId);
-                $scope.setCascadeSource(result.cascadeFromQuestionId);
-
-                $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
-
-                $scope.questionForm.$setPristine();
             };
 
             $scope.loadQuestion = function () {
@@ -142,7 +145,7 @@
 
             $scope.cancelQuestion = function () {
                 var temp = angular.copy($scope.initialQuestion);
-                dataBind(temp);
+                bindQuestion(temp);
                 $scope.questionForm.$setPristine();
             };
 
