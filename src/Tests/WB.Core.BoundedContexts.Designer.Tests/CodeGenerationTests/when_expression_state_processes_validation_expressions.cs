@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             questionnaireDocument = CreateQuestionnaireDocumenteWithOneNumericIntegerQuestionAndRosters(questionnaireId, questionId, rosterId);
             state = GetInterviewExpressionState(questionnaireDocument);
 
-            state.UpdateIntAnswer(questionId, new decimal[0], 4);
+            state.UpdateNumericIntegerAnswer(questionId, new decimal[0], 4);
             state.AddRoster(rosterId, new decimal[0], 1, null);
         };
 

@@ -27,8 +27,8 @@ namespace WB.Core.SharedKernels.DataCollection
         void DeclareAnswerValid(Guid questionId);
         void DeclareAnswerInvalid(Guid questionId);
 
-        void UpdateIntAnswer(Guid questionId, long answer);
-        void UpdateDecimalAnswer(Guid questionId, decimal answer);
+        void UpdateNumericIntegerAnswer(Guid questionId, long answer);
+        void UpdateNumericRealAnswer(Guid questionId, double answer);
         void UpdateDateTimeAnswer(Guid questionId, DateTime answer);
         void UpdateTextAnswer(Guid questionId, string answer);
         void UpdateQrBarcodeAnswer(Guid questionId, string answer);

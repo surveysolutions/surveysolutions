@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 
             state = GetInterviewExpressionState(questionnaireDocument);
             
-            state.UpdateIntAnswer(questionId, new decimal[0], 4);
+            state.UpdateNumericIntegerAnswer(questionId, new decimal[0], 4);
         };
 
         Because of = () =>

@@ -6,7 +6,7 @@ using Environment = Android.OS.Environment;
 
 namespace WB.UI.QuestionnaireTester
 {
-    public class QuestionnareAssemblyTesterFileAccessor : IQuestionnaireAssemblyFileAccessor
+    internal class QuestionnareAssemblyTesterFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
         private const string StoreName = "QuestionnaireAssemblies";
         private readonly string pathToStore;

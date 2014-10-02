@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection
         protected Dictionary<Guid, Action<string>> QuestionStringUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<long?>> QuestionLongUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<decimal?>> QuestionDecimalUpdateMap { get; private set; }
+        protected Dictionary<Guid, Action<double?>> QuestionDoubleUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<DateTime?>> QuestionDateTimeUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<decimal[]>> QuestionDecimal1DArrayUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<decimal[][]>> QuestionDecimal2DArrayUpdateMap { get; private set; }
@@ -60,6 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection
             this.QuestionDecimal1DArrayUpdateMap = new Dictionary<Guid, Action<decimal[]>>();
             this.QuestionDecimal2DArrayUpdateMap = new Dictionary<Guid, Action<decimal[][]>>();
             this.QuestionDecimalUpdateMap = new Dictionary<Guid, Action<decimal?>>();
+            this.QuestionDoubleUpdateMap = new Dictionary<Guid, Action<double?>>();
             this.QuestionGpsUpdateMap = new Dictionary<Guid, Action<GeoLocation>>();
             this.QuestionTupleArrayUpdateMap = new Dictionary<Guid, Action<Tuple<decimal, string>[]>>();
 
@@ -161,6 +163,11 @@ namespace WB.Core.SharedKernels.DataCollection
         protected void AddUpdaterToMap(Guid id, Action<decimal?> action)
         {
             this.QuestionDecimalUpdateMap.Add(id, action);
+        }
+
+        protected void AddUpdaterToMap(Guid id, Action<double?> action)
+        {
+            this.QuestionDoubleUpdateMap.Add(id, action);
         }
 
         protected void AddUpdaterToMap(Guid id, Action<GeoLocation> action)
@@ -293,16 +300,16 @@ namespace WB.Core.SharedKernels.DataCollection
             this.QuestionStringUpdateMap[questionId].Invoke(answer);
         }
 
-        public void UpdateIntAnswer(Guid questionId, long answer)
+        public void UpdateNumericIntegerAnswer(Guid questionId, long answer)
         {
             this.QuestionLongUpdateMap[questionId].Invoke(answer);
         }
 
-        public void UpdateDecimalAnswer(Guid questionId, decimal answer)
+        public void UpdateNumericRealAnswer(Guid questionId, double answer)
         {
-            this.QuestionDecimalUpdateMap[questionId].Invoke(answer);
+            this.QuestionDoubleUpdateMap[questionId].Invoke(answer);
         }
-
+        
         public void UpdateDateTimeAnswer(Guid questionId, DateTime answer)
         {
             this.QuestionDateTimeUpdateMap[questionId].Invoke(answer);

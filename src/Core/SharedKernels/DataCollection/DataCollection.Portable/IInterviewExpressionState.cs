@@ -5,8 +5,8 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public interface IInterviewExpressionState
     {
-        void UpdateIntAnswer(Guid questionId, decimal[] rosterVector, long answer);
-        void UpdateDecimalAnswer(Guid questionId, decimal[] rosterVector, decimal answer);
+        void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer);
+        void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer);
         void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer);
         void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer);
         void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer);
