@@ -272,6 +272,10 @@ namespace WB.UI.Capi
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
+            //fix it
+            kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
+            kernel.Unbind<IInterviewExpressionStatePrototypeProvider>();
+
             this.kernel.Bind<IQuestionnaireAssemblyFileAccessor>()
                 .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", basePath).WithConstructorArgument("assemblyDirectoryName", QuestionnaireAssembliesFolder);
             this.kernel.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
