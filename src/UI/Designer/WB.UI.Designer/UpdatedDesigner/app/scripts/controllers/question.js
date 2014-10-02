@@ -53,10 +53,10 @@
             var dataBind = function (result) {
                 dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
 
-                bindQuestion(result);
-
                 $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
+                
+                bindQuestion(result);
                 $scope.questionForm.$setPristine();
             };
 
