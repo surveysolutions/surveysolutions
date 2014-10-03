@@ -33,7 +33,7 @@
     </a>
 </li>
 <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
-    <a href="@Url.Action("Index", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> @MainMenu.Questionnaires</a>
+    <a href="@Url.Action("Index", "HQ", new { area = "" })"><i class="glyphicon glyphicon-list-alt"></i> @MainMenu.Questionnaires</a>
 </li>
 <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
