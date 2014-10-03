@@ -182,6 +182,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         ParentGroupId = Guid.Empty,
                         ParentGroupsIds = new Guid[0],
                         RosterScopeIds = new Guid[0]
+                    },
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = g2Id,
+                        Title = "Roster",
+                        IsRoster = true,
+                        RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+                        RosterFixedTitles = new[] { "1", "2", "3" },
+                        ParentGroupId = g1Id,
+                        ParentGroupsIds = new Guid[] { g1Id },
+                        RosterScopeIds = new Guid[] { q2Id }
                     }
                 },
                 Questions = new List<QuestionDetailsView>
@@ -214,7 +225,28 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireInfoFactoryTests
                         ParentGroupsIds = new Guid[] {  g1Id },
                         RosterScopeIds = new Guid[] { },
                         CascadeFromQuestionId = q2Id
-                    }
+                    },
+                    new NumericDetailsView
+                    {
+                        Id = q4Id,
+                        IsInteger = true,
+                        Title = "Integer 1",
+                        MaxValue = 20,
+                        ParentGroupId = g2Id,
+                        VariableName = "int",
+                        ParentGroupsIds = new Guid[] { g2Id },
+                        RosterScopeIds = new Guid[] {  g2Id }
+                    },
+                    new SingleOptionDetailsView
+                    {
+                        Id = q5Id,
+                        Title = "linked",
+                        ParentGroupId = g2Id,
+                        VariableName = "linked_question",
+                        ParentGroupsIds = new Guid[] { g2Id },
+                        RosterScopeIds = new Guid[] { g2Id },
+                        LinkedToQuestionId = q4Id
+                    },
                 },
                 StaticTexts = new List<StaticTextDetailsView>()
             };

@@ -2830,6 +2830,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(state,
                     enablementChanges.GroupsToBeDisabled, enablementChanges.QuestionsToBeDisabled, questionnaire, GetRosterInstanceIds);
 
+            var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
+
+            var answersToRemove = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading);
+
             Func<Identity, bool?> getNewQuestionState =
                 question =>
                 {
@@ -2839,10 +2843,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 };
 
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswerConcerningDisabling =
-                (currentState, question) =>
-                    AreEqual(question, answeredQuestion)
-                        ? selectedValue
-                        : GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
+                delegate(InterviewStateDependentOnAnswers currentState, Identity question)
+                {
+                    if (AreEqual(question, answeredQuestion))
+                        return selectedValue;
+
+                    if (answersToRemove.Any(q => AreEqual(q, question)))
+                        return null;
+
+                    return GetAnswerSupportedInExpressionsForEnabledOrNull(state, question, getNewQuestionState);
+                };
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(state,
@@ -2855,10 +2865,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(selectedValue,
                 answerOptionValue => questionnaire.GetAnswerOptionTitle(questionId, answerOptionValue));
 
-            var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
-            
-            var answersToRemove = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading);
-
+   
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(AnswerChangeType.SingleOption, userId, questionId, rosterVector, answerTime, selectedValue)
@@ -3108,7 +3115,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         collectedQuestionsToBeDisabled.Add(dependentCascadingQuestion);
                     }
                 }
-
             }
 
             questionsToBeDisabled = collectedQuestionsToBeDisabled;
@@ -4011,6 +4017,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(state,
                     questionnaire, enablementChanges.GroupsToBeEnabled, enablementChanges.QuestionsToBeEnabled, getRosterInstanceIds);
 
+            IEnumerable<Identity> cascadingQuestionsToRevalidateIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(answeredQuestion.Id), answeredQuestion.RosterVector, questionnaire, getRosterInstanceIds);
+
             IEnumerable<Identity> questionsWithCustomValidationDependentOnEnablementChanges =
                 GetQuestionsWithCustomValidationDependentOnEnablementChanges(state, questionnaire, enablementChanges, getRosterInstanceIds);
 
@@ -4018,6 +4027,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 dependentQuestions
                     .Concat(mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions)
                     .Concat(questionsWithCustomValidationDependentOnEnablementChanges)
+                    .Concat(cascadingQuestionsToRevalidateIdentities)
                     .Distinct(new IdentityComparer())
                     .ToList();
 
