@@ -169,6 +169,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     Verifier<SingleQuestion, SingleQuestion>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
                     Verifier<SingleQuestion>(CascadingQuestionHasMoreThanAllowedOptions, "WB0088", VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers),
                     Verifier<SingleQuestion>(CascadingQuestionOptionsWithParentValuesShouldBeUnique, "WB0089", VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
+                    Verifier<IQuestion>(LinkedQuestionIsInterviewersOnly, "WB0090", VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
 
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
@@ -707,9 +708,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return IsPreFilledQuestion(question);
         }
 
+        private static bool LinkedQuestionIsInterviewersOnly(IQuestion question)
+        {
+            if (!question.LinkedToQuestionId.HasValue)
+                return false;
+
+            return question.QuestionScope != QuestionScope.Interviewer || IsPreFilledQuestion(question);
+        }
+
         private bool MultimediaQuestionIsInterviewersOnly(IMultimediaQuestion question)
         {
-            return question.QuestionScope != QuestionScope.Interviewer;
+            return question.QuestionScope != QuestionScope.Interviewer || IsPreFilledQuestion(question);
         }
 
         private static bool QRBarcodeQuestionIsSupervisorQuestion(IQRBarcodeQuestion question)

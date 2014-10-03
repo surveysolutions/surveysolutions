@@ -3246,7 +3246,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 //this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId);
                 this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured);
-                this.ThrowIfLinkedCategoricalQuestionIsFilledBySupervisor(scope);
+                this.ThrowIfLinkedCategoricalQuestionIsNotFilledByInterviewer(scope);
             }
             else if (isFilteredCombobox != true && !(cascadeFromQuestionId.HasValue))
             {
@@ -3341,9 +3341,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfLinkedCategoricalQuestionIsFilledBySupervisor(QuestionScope scope)
+        private void ThrowIfLinkedCategoricalQuestionIsNotFilledByInterviewer(QuestionScope scope)
         {
-            if (scope == QuestionScope.Supervisor)
+            if (scope != QuestionScope.Interviewer)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.LinkedCategoricalQuestionCanNotBeFilledBySupervisor,
