@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Main.Core;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.UI.Designer.Services;
+using WB.UI.Designer.WebServices;
 
 namespace WB.UI.Designer.Code
 {

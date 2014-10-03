@@ -5,8 +5,8 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
-using WB.UI.Designer.Services;
-using WB.UI.Designer.Services.Questionnaire;
+using WB.UI.Designer.WebServices;
+using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests

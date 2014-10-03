@@ -2,7 +2,7 @@
 using System.IO;
 using System.ServiceModel;
 
-namespace WB.UI.Designer.Services
+namespace WB.UI.Designer.WebServices
 {
     [MessageContract]
     public class RemoteFileInfo : IDisposable
