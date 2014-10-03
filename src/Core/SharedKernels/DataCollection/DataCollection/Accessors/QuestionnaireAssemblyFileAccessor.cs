@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
 namespace WB.Core.SharedKernels.DataCollection.Accessors
 {
-    public class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
+    internal class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToStore;

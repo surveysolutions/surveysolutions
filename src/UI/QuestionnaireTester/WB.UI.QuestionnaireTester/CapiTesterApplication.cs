@@ -33,7 +33,6 @@ using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -238,11 +237,8 @@ namespace WB.UI.QuestionnaireTester
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            //fix it
             kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
-            kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<WB.UI.QuestionnaireTester.QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
-            kernel.Unbind<IInterviewExpressionStatePrototypeProvider>();
-            kernel.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>().InSingletonScope();
+            kernel.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnareAssemblyTesterFileAccessor>().InSingletonScope();
 
             NcqrsInit.Init(this.kernel);
 

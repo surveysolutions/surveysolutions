@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
-    public class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider
+    internal class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider
     {
         private static ILogger Logger
         {
