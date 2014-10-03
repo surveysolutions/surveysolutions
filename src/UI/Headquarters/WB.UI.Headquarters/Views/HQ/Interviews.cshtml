@@ -9,7 +9,7 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/hq.interviews.js")
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new { }, Request.Url.Scheme))';
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new { area="" }, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
