@@ -81,7 +81,7 @@
         self.SendRequest(self.ServiceUrl, params, function(data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
             self.ItemsSummary(data.ItemsSummary);
-        });
+        }, true);
     };
     
     self.SelectedItems = ko.computed(function () {
