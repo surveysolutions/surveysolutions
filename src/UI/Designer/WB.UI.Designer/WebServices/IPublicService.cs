@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ServiceModel;
-using WB.UI.Designer.Services.Questionnaire;
+using WB.UI.Designer.WebServices.Questionnaire;
 
-namespace WB.UI.Designer.Services
+namespace WB.UI.Designer.WebServices
 {
     /// <summary>
     ///     The PublicService interface.
