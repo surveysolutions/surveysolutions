@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CascadingComboboxTests
     {
         Establish context = () =>
         {
-            Func<decimal[], IEnumerable<AnswerViewModel>> getAnswerOptions = (questionRosterVecor) => new List<AnswerViewModel>
+            Func<decimal[], object, IEnumerable<AnswerViewModel>> getAnswerOptions = (questionRosterVecor, selectedAnswer) => new List<AnswerViewModel>
             {
                 new AnswerViewModel(Guid.NewGuid(), "o 1", "1", false, null),
                 new AnswerViewModel(Guid.NewGuid(), "o 2", "2", false, null),

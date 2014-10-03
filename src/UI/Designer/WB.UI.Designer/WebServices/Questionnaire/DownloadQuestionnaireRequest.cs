@@ -2,7 +2,7 @@
 using System.ServiceModel;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
-namespace WB.UI.Designer.Services.Questionnaire
+namespace WB.UI.Designer.WebServices.Questionnaire
 {
     /// <summary>
     /// The download questionnaire request.

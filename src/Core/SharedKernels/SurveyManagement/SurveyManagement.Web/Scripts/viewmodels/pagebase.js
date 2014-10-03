@@ -92,8 +92,9 @@
         }
     };
 
-    self.SendRequest = function (requestUrl, args, onSuccess) {
-        if (!self.IsAjaxComplete()) {
+    self.SendRequest = function (requestUrl, args, onSuccess, skipInProgressCheck) {
+
+        if (!skipInProgressCheck && !self.IsAjaxComplete()) {
             self.CheckForRequestComplete();
             return;
         }

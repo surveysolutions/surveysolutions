@@ -12,24 +12,27 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests.CascadigOpti
     {
         Establish context = () =>
         {
-            rootGroupId = Guid.NewGuid();
-            actorId = Guid.NewGuid();
+            rootGroupId = Guid.Parse("00000000000000000000000000000000");
+            actorId = Guid.Parse("11111111111111111111111111111111");
             questionnaire = CreateQuestionnaireWithOneGroup(actorId, groupId: rootGroupId);
 
-            parentQuestionId = Guid.NewGuid();
-            updatedQuestionId = Guid.NewGuid();
+            parentQuestionId = Guid.Parse("22222222222222222222222222222222");
+            updatedQuestionId = Guid.Parse("33333333333333333333333333333333");
 
             questionnaire.Apply(new NewQuestionAdded
             {
                 PublicKey = parentQuestionId,
                 QuestionType = QuestionType.SingleOption,
-                Answers = new Answer[] { new Answer
-                {
-                    AnswerText = "one", 
-                    AnswerValue = "1", 
-                    PublicKey = Guid.NewGuid()
-                } }
+                Answers = new[] {
+                    new Answer
+                    {
+                        AnswerText = "one",
+                        AnswerValue = "1",
+                        PublicKey = Guid.NewGuid()
+                    }
+                }
             });
+
             questionnaire.Apply(new NewQuestionAdded
             {
                 PublicKey = updatedQuestionId,

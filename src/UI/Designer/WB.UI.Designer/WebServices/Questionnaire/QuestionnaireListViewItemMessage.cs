@@ -2,7 +2,7 @@ using System;
 using System.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 
-namespace WB.UI.Designer.Services.Questionnaire
+namespace WB.UI.Designer.WebServices.Questionnaire
 {
     /// <summary>
     ///     The questionnaire browse item.
