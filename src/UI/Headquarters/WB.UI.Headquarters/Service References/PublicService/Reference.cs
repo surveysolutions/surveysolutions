@@ -93,7 +93,7 @@ namespace WB.UI.Headquarters.PublicService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireListViewItemMessage", Namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.Services.Questionnaire")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireListViewItemMessage", Namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire")]
     [System.SerializableAttribute()]
     public partial class QuestionnaireListViewItemMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
