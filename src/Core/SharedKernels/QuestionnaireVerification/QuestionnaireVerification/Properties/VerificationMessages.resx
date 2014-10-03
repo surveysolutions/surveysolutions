@@ -363,4 +363,7 @@
   <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
     <value>Cascading question should have unique value and parent value options list.</value>
   </data>
+  <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Linked question can be interviewers only.</value>
+  </data>
 </root>

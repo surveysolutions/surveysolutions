@@ -800,5 +800,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0089_CascadingQuestionOptionWithParentShouldBeUnique", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linked question can be interviewers only..
+        /// </summary>
+        internal static string WB0090_LinkedQuestionIsInterviewersOnly {
+            get {
+                return ResourceManager.GetString("WB0090_LinkedQuestionIsInterviewersOnly", resourceCulture);
+            }
+        }
     }
 }
