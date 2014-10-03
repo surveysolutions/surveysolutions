@@ -8,38 +8,38 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePrototypeProviderTests
 {
-    [Ignore("bulk test run failed on server build")]
     internal class when_getting_expression_state : InterviewExpressionStatePrototypeProviderTestContext
     {
         Establish context = () =>
         {
-            var path = typeof (IInterviewExpressionState).Assembly.Location;
-
-            var result = new Mock<IQuestionnaireAssemblyFileAccessor>();
-            result.Setup(x => x.GetFullPathToAssembly(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns(path);
-
-            var questionnareAssemblyFileAccessorMock = CreateIQuestionnareAssemblyFileAccessorMock(path);
-
-            interviewExpressionStatePrototype = CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object);
+            appDomainContext = AppDomainContext.Create();
         };
 
         Because of = () =>
-            //result = RemoteFunc.Invoke(
-            //    AppDomainContext.Create().Domain,
-            //    interviewExpressionStatePrototype,
-            //    id,
-            //    version,
-            //    (p, i, v) => p.GetExpressionState(i, v));
-            result = interviewExpressionStatePrototype.GetExpressionState(id, version);
+            isResultNotNull = RemoteFunc.Invoke(appDomainContext.Domain, () =>
+            {
+                Guid id = Guid.Parse("33332222111100000000111122223333");
+                long version = 3;
+
+                var path = typeof (IInterviewExpressionState).Assembly.Location;
+
+                var questionnareAssemblyFileAccessorMock = CreateIQuestionnareAssemblyFileAccessorMock(path);
+
+                var interviewExpressionStatePrototype = CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object);
+
+                return interviewExpressionStatePrototype.GetExpressionState(id, version) != null;
+            });
 
         It should_provide_not_null_value = () =>
-            result.ShouldNotBeNull();
+            isResultNotNull.ShouldBeTrue();
 
-        private static InterviewExpressionStatePrototypeProvider interviewExpressionStatePrototype;
-        private static Guid id = Guid.Parse("33332222111100000000111122223333");
-        private static long version = 3;
+        Cleanup stuff = () =>
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        };
 
-        private static IInterviewExpressionState result;
+        private static AppDomainContext appDomainContext;
+        private static bool isResultNotNull;
     }
 }
