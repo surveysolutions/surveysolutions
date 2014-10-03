@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Capi.Tests.CascadingComboboxTests
 {
     internal class CascadingComboboxQuestionViewTestContext
     {
-        protected static CascadingComboboxQuestionViewModel CreateCascadingComboboxQuestionViewModel(Func<decimal[], IEnumerable<AnswerViewModel>> getAnswerOptions)
+        protected static CascadingComboboxQuestionViewModel CreateCascadingComboboxQuestionViewModel(Func<decimal[], object, IEnumerable<AnswerViewModel>> getAnswerOptions)
         {
             return new CascadingComboboxQuestionViewModel(
                 new InterviewItemId(Guid.NewGuid()),
