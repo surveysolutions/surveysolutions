@@ -296,8 +296,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         private List<DropdownQuestionView> GetSourcesOfSingleQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                x => x.Where(q => q.Id != questionId).Where(q => q is SingleOptionDetailsView)
-                .ToList();
+                x => x.Where(q => q.Id != questionId)
+                    .Where(q => q is SingleOptionDetailsView)
+                    .Where(q => !(q as SingleOptionDetailsView).LinkedToQuestionId.HasValue)
+                    .ToList();
 
             var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
 
