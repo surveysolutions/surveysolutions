@@ -1,4 +1,5 @@
 ﻿using System;
+using AppDomainToolkit;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -10,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
     [Ignore("bulk test run failed on server build")]
     internal class when_getting_expression_state : InterviewExpressionStatePrototypeProviderTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             var path = typeof (IInterviewExpressionState).Assembly.Location;
 
@@ -23,14 +24,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
             interviewExpressionStatePrototype = CreateInterviewExpressionStatePrototype(questionnareAssemblyFileAccessorMock.Object);
         };
 
-        private Because of = () =>
-                result = interviewExpressionStatePrototype.GetExpressionState(id, version);
-/*
-            RunInAnotherAppDomain(() =>
-    {
-        result = interviewExpressionStatePrototype.GetExpressionState(id, version);
-    });
-*/
+        Because of = () =>
+            //result = RemoteFunc.Invoke(
+            //    AppDomainContext.Create().Domain,
+            //    interviewExpressionStatePrototype,
+            //    id,
+            //    version,
+            //    (p, i, v) => p.GetExpressionState(i, v));
+            result = interviewExpressionStatePrototype.GetExpressionState(id, version);
 
         It should_provide_not_null_value = () =>
             result.ShouldNotBeNull();
