@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
-      <HintPath>..\..\..\..\lib\Ionic.Zip.dll</HintPath>
+      <HintPath>..\..\..\..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
