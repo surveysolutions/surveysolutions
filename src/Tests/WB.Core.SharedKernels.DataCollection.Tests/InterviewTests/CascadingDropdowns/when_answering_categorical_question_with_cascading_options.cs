@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
                     {
                         PublicKey = childCascadedComboboxId,
                         QuestionType = QuestionType.SingleOption,
+                        Mandatory = true,
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer>
                         {
@@ -96,6 +97,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
 
         It should_enable_child_question = () =>
             eventContext.ShouldContainEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
+
+        It should_invalidate_child_question = () =>
+            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
 
         It should_disable_grandchild_question = () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
