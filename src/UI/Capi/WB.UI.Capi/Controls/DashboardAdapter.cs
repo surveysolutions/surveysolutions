@@ -57,7 +57,7 @@ namespace WB.UI.Capi.Controls
                     if(target == null)
                         return;
 
-                    this.deleteHandler.Invoke(dataItem.PublicKey, target.Parent as View);
+                    this.deleteHandler.Invoke(dataItem.PublicKey, view);
                 };
             }
 
