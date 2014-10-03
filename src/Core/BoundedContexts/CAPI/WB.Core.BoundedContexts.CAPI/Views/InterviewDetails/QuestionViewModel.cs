@@ -165,6 +165,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 this.RaisePropertyChanged("Status");
             }
 
+            this.RaisePropertyChanged("AnswerRemoved");
             this.RaisePropertyChanged("AnswerString");
             this.RaisePropertyChanged("IsMandatoryAndEmpty");
         }

@@ -107,10 +107,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             }
 
             base.RemoveAnswer();
-
-            this.Status &= ~QuestionStatus.Answered;
-            this.RaisePropertyChanged("Status");
-            this.RaisePropertyChanged("AnswerRemoved");
         }
 
         private void UpdateOptionsList()
