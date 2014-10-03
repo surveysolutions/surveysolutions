@@ -13,7 +13,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-using Ninject.Modules;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
@@ -24,12 +23,8 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -46,7 +41,6 @@ using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
-using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
@@ -129,7 +123,7 @@ namespace WB.UI.Headquarters
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
             var basePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-            const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
+            //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -163,15 +157,7 @@ namespace WB.UI.Headquarters
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
-
-            //fix it
-            kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
-            kernel.Unbind<IInterviewExpressionStatePrototypeProvider>();
-            kernel.Bind<IQuestionnaireAssemblyFileAccessor>()
-                .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", basePath).WithConstructorArgument("assemblyDirectoryName", QuestionnaireAssembliesFolder);
-            kernel.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
-
+            
             PrepareNcqrsInfrastucture(kernel);
 
             var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(),

@@ -261,8 +261,9 @@ namespace WB.UI.Capi
                 new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }),
                 new ErrorReportingModule(basePath),
                 new AndroidLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, syncDirectoryName: SynchronizationFolder,
-                    dataDirectoryName: InterviewFilesFolder),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, 
+                    syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder, 
+                    questionnaireAssembliesFolder : QuestionnaireAssembliesFolder),
                 new ExpressionProcessorModule());
 
             CrashManager.Initialize(this);
@@ -271,15 +272,7 @@ namespace WB.UI.Capi
             this.kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
-
-            //fix it
-            kernel.Unbind<IQuestionnaireAssemblyFileAccessor>();
-            kernel.Unbind<IInterviewExpressionStatePrototypeProvider>();
-
-            this.kernel.Bind<IQuestionnaireAssemblyFileAccessor>()
-                .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", basePath).WithConstructorArgument("assemblyDirectoryName", QuestionnaireAssembliesFolder);
-            this.kernel.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
-
+            
             NcqrsInit.Init(this.kernel);
        
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
