@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             InterviewItemId publicKey, 
             ValueVector<Guid> questionRosterScope,
             string text,
-            Func<decimal[], IEnumerable<AnswerViewModel>> getAnswerOptions,
+            Func<decimal[], object, IEnumerable<AnswerViewModel>> getAnswerOptions,
             bool enabled,
             string instructions,
             string comments,
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             this.getAnswerOptions = getAnswerOptions;
         }
 
-        private readonly Func<decimal[], IEnumerable<AnswerViewModel>> getAnswerOptions;
+        private readonly Func<decimal[], object, IEnumerable<AnswerViewModel>> getAnswerOptions;
 
         internal IEnumerable<AnswerViewModel> filteredAnswers;
 
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         private void UpdateOptionsList()
         {
-            this.filteredAnswers = this.getAnswerOptions(this.PublicKey.InterviewItemPropagationVector);
+            this.filteredAnswers = this.getAnswerOptions(this.PublicKey.InterviewItemPropagationVector, this.AnswerObject);
         }
     }
 }
