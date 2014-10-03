@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests.CascadigOptions
 {
-    public class when_updating_question_with_cascading_options_setting_linked_and_cascading : QuestionnaireTestsContext
+    internal class when_updating_question_with_empty_cascading_options : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -34,9 +35,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests.CascadigOpti
                 PublicKey = updatedQuestionId,
                 QuestionType = QuestionType.SingleOption,
             });
+
+            eventContext = new EventContext();
         };
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.UpdateSingleOptionQuestion(
+        Because of = () => questionnaire.UpdateSingleOptionQuestion(
             updatedQuestionId,
             "title",
             "var",
@@ -49,24 +52,29 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests.CascadigOpti
             null,
             null,
             actorId,
-            new Option[]{}, 
-            parentQuestionId,
+            new[]
+            {
+                new Option(Guid.NewGuid(), String.Empty, String.Empty, (decimal?)null), 
+                new Option(Guid.NewGuid(), String.Empty, String.Empty, (decimal?)null), 
+                new Option(Guid.NewGuid(), String.Empty, String.Empty, (decimal?)null) 
+            }, 
+            null,
             false,
-            parentQuestionId
-            ));
+            cascadeFromQuestionId: parentQuestionId
+            );
 
-        It should_not_allow_to_set_both_linked_and_cascading_qestion_at_the_same_time = () =>
+        private Cleanup stuff = () =>
         {
-            var ex = exception as QuestionnaireException;
-            ex.ShouldNotBeNull();
-
-            new []{"cascading", "linked", "same", "time"}.ShouldEachConformTo(keyword => ex.Message.ToLower().Contains(keyword));
+            eventContext.Dispose();
+            eventContext = null;
         };
 
+        It should_raise_QuestionChanged_event_with_variable_name_specified = () =>
+            eventContext.GetSingleEvent<QuestionChanged>().Answers.Count().ShouldEqual(0);
 
+        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid parentQuestionId;
-        private static Exception exception;
         private static Guid rootGroupId;
         private static Guid updatedQuestionId;
         private static Guid actorId;
