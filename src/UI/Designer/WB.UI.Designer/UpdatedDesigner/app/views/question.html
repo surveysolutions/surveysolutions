@@ -154,7 +154,7 @@
                                      'other': 'Edit {} options'}">
                         </ng-pluralize>
                     </a>
-                    <a ng-if="activeQuestion.isCascade"
+                    <a ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== ''"
                        href="javascript:void(0);"
                        class="btn btn-link"
                        ng-click="editCascadingComboboxOptions()">
