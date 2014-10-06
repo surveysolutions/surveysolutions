@@ -42,8 +42,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 version = version_3;
 
             int multimediaQuestionCount = this.GetMultimediaQuestionsCount(questionnaire);
-            if (multimediaQuestionCount > 0 && version < version_3)
-                version = version_3;
+            if (multimediaQuestionCount > 0 && version < version_4)
+                version = version_4;
 
             int cascadingQuestionCount = this.GetCascadingQuestionsCount(questionnaire);
             if (cascadingQuestionCount > 0 && version < version_4)
