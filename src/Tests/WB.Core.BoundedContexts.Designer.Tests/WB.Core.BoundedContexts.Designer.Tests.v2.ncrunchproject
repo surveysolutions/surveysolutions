@@ -22,5 +22,28 @@
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
   <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
+  <IgnoredTests>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions</FixtureName>
+    </FixtureTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions_on_nested_roster</FixtureName>
+    </FixtureTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions_on_roster</FixtureName>
+    </FixtureTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions_on_scope_roster</FixtureName>
+    </FixtureTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_mandatory_question</FixtureName>
+    </FixtureTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_validation_expressions</FixtureName>
+    </FixtureTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_generating_assembly_with_evaluatorgenerator</FixtureName>
+    </FixtureTestSelector>
+  </IgnoredTests>
   <HiddenWarnings>AbnormalReferenceResolution;LongTestTimesWithoutParallelExecution</HiddenWarnings>
 </ProjectConfiguration>
