@@ -40,11 +40,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
             if (!File.Exists(fullFilePath))
                 return null;
 
+            string fileContent;
             lock (GetLockObject(fullFilePath))
             {
-                var fileContent = File.ReadAllText(fullFilePath);
-                return this.jsonSerrializer.Deserrialize<T>(fileContent);
+                fileContent = File.ReadAllText(fullFilePath);
+                
             }
+            return this.jsonSerrializer.Deserrialize<T>(fileContent);
         }
 
         private static object GetLockObject(string path)
