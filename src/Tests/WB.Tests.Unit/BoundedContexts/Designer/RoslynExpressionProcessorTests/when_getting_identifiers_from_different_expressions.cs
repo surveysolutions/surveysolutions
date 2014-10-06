@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.RoslynExpressionProcessorTests
                 { "a.b() + x.y(z) + k(l) + w()", new[] { "a", "x", "z", "l" } },
                 { "a.x", new[] { "a" } },
                 { "x_date > new DateTime(2014, 08, 19)", new[] { "x_date" } },
+                { "if then else", new[] { "then" } },
             };
 
             analyzer = Create.RoslynExpressionProcessor();
