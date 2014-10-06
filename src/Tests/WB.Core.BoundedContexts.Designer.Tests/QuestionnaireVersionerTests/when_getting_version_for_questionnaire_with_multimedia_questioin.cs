@@ -78,8 +78,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVersionerTests
         Because of = () =>
             version = versioner.GetVersion(questionnaire);
 
-        It should_set_Major_property_to_3 = () =>
-            version.Major.ShouldEqual(3);
+        It should_set_Major_property_to_4 = () =>
+            version.Major.ShouldEqual(4);
 
         It should_set_Minor_property_to_0 = () =>
             version.Minor.ShouldEqual(0);
