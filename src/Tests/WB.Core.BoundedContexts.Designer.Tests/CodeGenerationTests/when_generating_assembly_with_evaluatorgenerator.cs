@@ -1,4 +1,5 @@
 ﻿using System;
+using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
@@ -9,37 +10,60 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
 {
-    [Ignore("bulk test run failed fix")]
     internal class when_generating_assembly_with_evaluatorgenerator : CodeGenerationTestsContext
     {
         Establish context = () =>
         {
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
-
-            expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
-
-            questionnaireDocument = CreateQuestionnaireForGeneration(id);
+            appDomainContext = AppDomainContext.Create();
         };
 
         Because of = () =>
-            emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+            results = RemoteFunc.Invoke(appDomainContext.Domain, () =>
+            {
+                Guid id = Guid.Parse("11111111111111111111111111111111");
+                string resultAssembly;
+
+                var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+                ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+
+                IExpressionProcessorGenerator expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+
+                QuestionnaireDocument questionnaireDocument = CreateQuestionnaireForGeneration(id);
+
+                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+
+                return new InvokeResults
+                {
+                    Success = emitResult.Success,
+                    DiagnosticsCount = emitResult.Diagnostics.Count,
+                    AssemblyLength = resultAssembly.Length,
+                };
+            });
 
         It should_result_succeded = () =>
-            emitResult.Success.ShouldEqual(true);
+            results.Success.ShouldEqual(true);
 
         It should_result_errors_count = () =>
-            emitResult.Diagnostics.Count.ShouldEqual(0);
+            results.DiagnosticsCount.ShouldEqual(0);
 
         It should_assembly_length_greate_0 = () =>
-            resultAssembly.Length.ShouldBeGreaterThan(0);
+            results.AssemblyLength.ShouldBeGreaterThan(0);
 
-        private static readonly Guid id = Guid.Parse("11111111111111111111111111111111");
-        private static string resultAssembly;
-        private static GenerationResult emitResult;
+        Cleanup stuff = () =>
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        };
 
-        private static QuestionnaireDocument questionnaireDocument;
+        private static AppDomainContext appDomainContext;
+        private static InvokeResults results;
 
-        private static IExpressionProcessorGenerator expressionProcessorGenerator;
+        [Serializable]
+        internal class InvokeResults
+        {
+            public bool Success { get; set; }
+            public int DiagnosticsCount { get; set; }
+            public int AssemblyLength { get; set; }
+        }
     }
 }
