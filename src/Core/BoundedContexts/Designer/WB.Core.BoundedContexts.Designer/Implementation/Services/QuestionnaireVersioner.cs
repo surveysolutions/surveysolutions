@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static readonly QuestionnaireVersion version_1_6_2 = new QuestionnaireVersion(1, 6, 2);
         private static readonly QuestionnaireVersion version_2_2_0 = new QuestionnaireVersion(2, 2, 0);
         private static readonly QuestionnaireVersion version_3 = new QuestionnaireVersion(3, 0, 0);
+        private static readonly QuestionnaireVersion version_4 = new QuestionnaireVersion(4, 0, 0);
 
 
         public QuestionnaireVersion GetVersion(QuestionnaireDocument questionnaire)
@@ -44,6 +45,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (multimediaQuestionCount > 0 && version < version_3)
                 version = version_3;
 
+            int cascadingQuestionCount = this.GetCascadingQuestionsCount(questionnaire);
+            if (cascadingQuestionCount > 0 && version < version_4)
+                version = version_4;
+
             return version;
         }
 
@@ -52,6 +57,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return
                 questionnaire.Find<SingleQuestion>(
                     question => question.IsFilteredCombobox.HasValue && question.IsFilteredCombobox.Value).Count();
+        }
+
+        private int GetCascadingQuestionsCount(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Find<SingleQuestion>(question => question.CascadeFromQuestionId.HasValue).Count();
         }
 
         private int GetMultimediaQuestionsCount(QuestionnaireDocument questionnaire)
