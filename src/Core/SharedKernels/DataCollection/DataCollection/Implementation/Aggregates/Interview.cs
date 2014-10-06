@@ -455,6 +455,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState.LinkedMultipleOptionsAnswers,
                 this.interviewState.TextListAnswers,
                 this.interviewState.AnsweredQuestions,
+                this.interviewState.AnswerComments,
                 this.interviewState.DisabledGroups,
                 this.interviewState.DisabledQuestions,
                 this.interviewState.RosterGroupInstanceIds,
@@ -473,6 +474,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.LinkedMultipleOptionsAnswers = snapshot.LinkedMultipleOptionsAnswers;
             this.interviewState.TextListAnswers = snapshot.TextListAnswers;
             this.interviewState.AnsweredQuestions = snapshot.AnsweredQuestions;
+            this.interviewState.AnswerComments = snapshot.AnswerComments;
             this.interviewState.DisabledGroups = snapshot.DisabledGroups;
             this.interviewState.DisabledQuestions = snapshot.DisabledQuestions;
             this.interviewState.RosterGroupInstanceIds = snapshot.RosterGroupInstanceIds;
