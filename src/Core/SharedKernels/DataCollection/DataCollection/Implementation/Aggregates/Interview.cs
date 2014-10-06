@@ -1443,7 +1443,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
+            CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
                 this.interviewState);
 
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
@@ -2485,10 +2485,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
+            ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
-            ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(questionId, selectedValue, questionnaire);
+            ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(this.interviewState, answeredQuestion, rosterVector, selectedValue, questionnaire);
             if (applyStrongChecks)
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
@@ -3606,21 +3606,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues)));
         }
 
-        private static void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
+        private void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(InterviewStateDependentOnAnswers interviewState, Identity answeredQuestion, decimal[] rosterVector, decimal value, IQuestionnaire questionnaire)
         {
+            var questionId = answeredQuestion.Id;
             Guid? cascadingId = questionnaire.GetCascadingQuestionParentId(questionId);
 
-            if (cascadingId.HasValue)
-            {
-                string parentValue = questionnaire.GetCascadingParentValue(questionId, value);
-                IEnumerable<decimal> answers = questionnaire.GetAnswerOptionsAsValues(cascadingId.Value);
+            if (!cascadingId.HasValue) return;
+            
+            string parentValue = questionnaire.GetCascadingParentValue(questionId, value);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(cascadingId.Value, rosterVector);
+            var answer = interviewState.AnswersSupportedInExpressions[questionKey];
+            var stringAnswer = AnswerUtils.AnswerToString(answer);
 
-                bool answerNotExistsInParent = !answers.Contains(Convert.ToDecimal(parentValue));
-                if (answerNotExistsInParent)
-                    throw new InterviewException(string.Format(
-                        "For question {0} was provided selected value {1} as answer with parent value {2}, but this value not found in  Parent Question options",
-                        FormatQuestionForException(questionId, questionnaire), value, parentValue));
-            }
+            var answerNotExistsInParent = stringAnswer != parentValue;
+            if (answerNotExistsInParent)
+                throw new InterviewException(string.Format(
+                    "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}",
+                    FormatQuestionForException(questionId, questionnaire), value, parentValue, stringAnswer));
         }
 
         private static void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
