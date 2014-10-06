@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateCascadingComboboxOptionsH
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateFilteredComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
+                questionnaire.UpdateCascadingComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
