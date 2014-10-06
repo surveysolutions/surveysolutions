@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public InterviewState(Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             Dictionary<string, object> answersSupportedInExpressions, Dictionary<string, Tuple<Guid, decimal[], decimal[]>> linkedSingleOptionAnswers,
             Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers, Dictionary<string, Tuple<decimal, string>[]> textListAnswers,
-            HashSet<string> answeredQuestions,
+            HashSet<string> answeredQuestions,List<AnswerComment> answerComments,
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, DistinctDecimalList> rosterGroupInstanceIds,
             HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted)
         {
@@ -25,6 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             this.LinkedMultipleOptionsAnswers = linkedMultipleOptionsAnswers;
             this.TextListAnswers = textListAnswers;
             this.AnsweredQuestions = answeredQuestions;
+            this.AnswerComments = answerComments;
             this.DisabledGroups = disabledGroups;
             this.DisabledQuestions = disabledQuestions;
             this.RosterGroupInstanceIds = rosterGroupInstanceIds;
@@ -40,6 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public Dictionary<string, Tuple<Guid, decimal[], decimal[]>> LinkedSingleOptionAnswers { get; private set; }
         public Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> LinkedMultipleOptionsAnswers { get; private set; }
         public HashSet<string> AnsweredQuestions { get; private set; }
+        public List<AnswerComment> AnswerComments { get; private set; }
         public HashSet<string> DisabledGroups { get; private set; }
         public HashSet<string> DisabledQuestions { get; private set; }
         public Dictionary<string, DistinctDecimalList> RosterGroupInstanceIds { get; private set; }
