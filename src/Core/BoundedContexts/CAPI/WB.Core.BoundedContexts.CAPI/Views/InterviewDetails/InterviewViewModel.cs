@@ -1192,13 +1192,15 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return answers
                 .Where(x => InvariantDecimalParse(x.ParentValue) == filterValue)
                 .Select(x => new AnswerViewModel(x.PublicKey, x.AnswerText, x.AnswerValue, selectedAnswer != null &&
-                    InvariantDecimalParse(x.AnswerValue).Equals(InvariantDecimalParse(selectedAnswer)), null))
+                    (InvariantDecimalParse(x.AnswerValue) == 
+                    InvariantDecimalParse(selectedAnswer is decimal[] ? ((decimal[])selectedAnswer)[0].ToString(CultureInfo.InvariantCulture) :
+                    ((decimal)selectedAnswer).ToString(CultureInfo.InvariantCulture))), null))
                 .ToList();
         }
 
-        private static decimal InvariantDecimalParse(object selectedAnswer)
+        private static decimal InvariantDecimalParse(string stringValue)
         {
-            return decimal.Parse(selectedAnswer.ToString(), CultureInfo.InvariantCulture);
+            return decimal.Parse(stringValue, CultureInfo.InvariantCulture);
         }
 
         protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId, decimal[] linkedQuestionRosterVector, ValueVector<Guid> linkedQuestionRosterScope)
