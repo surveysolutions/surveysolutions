@@ -13,16 +13,16 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDropdowns
 {
-    [Ignore("KP-4259")]
+    //[Ignore("KP-4259")]
     internal class when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1 : InterviewTestsContext
     {
         Establish context = () =>
         {
-            parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
-            childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
+            parentSingleOptionQuestionId = Guid.Parse("00000000000000000000000000000000");
+            childCascadedComboboxId = Guid.Parse("11111111111111111111111111111111");
 
-            var questionnaireId = Guid.NewGuid();
-            actorId = Guid.NewGuid();
+            var questionnaireId = Guid.Parse("22222222222222222222222222222222");
+            actorId = Guid.Parse("33333333333333333333333333333333");
 
             var questionnaire = Create.Questionnaire(actorId,
                 CreateQuestionnaireDocumentWithOneChapter(
@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
             exception.ShouldBeOfExactType<InterviewException>();
 
         It should_throw_exception_with_message_containting__answer____parent_value____incorrect__ = () =>
-            new[] { "answer", "parent value", "incorrect" }.ShouldEachConformTo(
+            new[] { "answer", "parent value", "do not correspond" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         static Exception exception;
