@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
-    public interface IInterviewExpressionStatePrototypeProvider
+    internal interface IInterviewExpressionStatePrototypeProvider
     {
         IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion);
     }
