@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .Where(identifierToken => !IsConstructorCall(identifierToken))
                 .Where(identifierToken => !IsPropertyOrMethod(identifierToken))
                 .Select(token => token.ToString())
+                .Where(identifier => identifier != string.Empty)
                 .Distinct();
         }
 
