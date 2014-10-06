@@ -1007,7 +1007,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 PublicKey = groupId,
                 GroupText = title,
-                VariableName = variableName,
+                VariableName = null,
                 ParentGroupPublicKey = parentGroupId,
                 Description = description,
                 ConditionExpression = condition,
