@@ -3095,8 +3095,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (var dependentCascadingQuestion in cascadingQuestionsToEnableIdentities)
                 {
-                    if (!collectedQuestionsToBeDisabled.Contains(dependentCascadingQuestion) && 
-                        !collectedQuestionsToBeEnabled.Contains(dependentCascadingQuestion))
+                    if (!collectedQuestionsToBeDisabled.Any(q => AreEqual(q, dependentCascadingQuestion)) &&
+                        !collectedQuestionsToBeEnabled.Any(q => AreEqual(q, dependentCascadingQuestion)))
                     {
                         collectedQuestionsToBeEnabled.Add(dependentCascadingQuestion);
                     }
@@ -3110,8 +3110,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (var dependentCascadingQuestion in cascadingQuestionsToDisableIdentities)
                 {
-                    if (!collectedQuestionsToBeDisabled.Contains(dependentCascadingQuestion) &&
-                        !collectedQuestionsToBeEnabled.Contains(dependentCascadingQuestion))
+                    if (!collectedQuestionsToBeDisabled.Any(q => AreEqual(q, (dependentCascadingQuestion))) &&
+                        !collectedQuestionsToBeEnabled.Any(q => AreEqual(q, (dependentCascadingQuestion))))
                     {
                         collectedQuestionsToBeEnabled.Remove(dependentCascadingQuestion);
                         collectedQuestionsToBeDisabled.Add(dependentCascadingQuestion);

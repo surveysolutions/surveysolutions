@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -10,12 +10,13 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDropdowns
 {
     [Subject(typeof(Interview))]
-    internal class when_answering_categorical_question_with_cascading_options : InterviewTestsContext
+    internal class when_answering_categorical_question_with_cascading_options_with_mandatory_child_under_condition_expression : InterviewTestsContext
     {
         private Establish context = () =>
         {
@@ -28,10 +29,20 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
             var nonAnsweredCombo = Guid.NewGuid();
             comboShouldNotBeRemoved = Guid.NewGuid();
             actorId = Guid.NewGuid();
+
+            var expressionProcessor = new Mock<IExpressionProcessor>();
+            expressionProcessor.Setup(x => x.GetIdentifiersUsedInExpression("[q1]==2"))
+                .Returns(new[] { "q1" });
+
+            Mock.Get(ServiceLocator.Current)
+             .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+             .Returns(expressionProcessor.Object);
+
             Questionnaire questionnaire = Create.Questionnaire(actorId,
                 CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion
                 {
                     PublicKey = parentSingleOptionQuestionId,
+                    StataExportCaption = "q1",
                     QuestionType = QuestionType.SingleOption,
                     Answers = new List<Answer>
                     {
@@ -43,12 +54,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
                     {
                         PublicKey = childCascadedComboboxId,
                         QuestionType = QuestionType.SingleOption,
-                        StataExportCaption = "q1",
+                        StataExportCaption = "q5",
                         Mandatory = true,
+                        ConditionExpression = "[q1]==2",
                         CascadeFromQuestionId = parentSingleOptionQuestionId,
                         Answers = new List<Answer>
                         {
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1"},
+                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
                             new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" }
                         }
                     },
@@ -60,7 +72,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
                         StataExportCaption = "q2",
                         Answers = new List<Answer>
                         {
-                            new Answer { AnswerText = "grand child", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1"}
+                            new Answer { AnswerText = "grand child", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" }
                         }
                     },
                     new SingleQuestion
@@ -68,7 +80,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
                         PublicKey = nonAnsweredCombo,
                         QuestionType = QuestionType.SingleOption,
                         StataExportCaption = "q3",
-                        Answers = new List<Answer> {
+                        Answers = new List<Answer>
+                        {
                             new Answer { AnswerText = "other cascade", AnswerValue = "1", PublicKey = Guid.NewGuid() }
                         }
                     },
@@ -78,12 +91,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
                         QuestionType = QuestionType.SingleOption,
                         StataExportCaption = "q4",
                         CascadeFromQuestionId = nonAnsweredCombo,
-                        Answers = new List<Answer> {
+                        Answers = new List<Answer>
+                        {
                             new Answer { AnswerText = "blue", AnswerValue = "1", PublicKey = Guid.NewGuid() }
                         }
                     }));
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire());
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
+                questionnaire.GetQuestionnaire());
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
@@ -93,29 +108,32 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
 
             interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
             interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 1);
-            
+
             eventContext = new EventContext();
         };
 
         Because of = () => interview.AnswerSingleOptionQuestion(Guid.NewGuid(), parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 2);
 
-        It should_enable_child_question = () =>
-            eventContext.ShouldContainEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
+        private It should_not_enable_any_question = () =>
+            eventContext.ShouldNotContainEvent<QuestionsEnabled>(x => x.Questions.Single(q => q.Id == childCascadedComboboxId) != null);
 
         It should_invalidate_child_question = () =>
-            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
+            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(x => x.Questions.Single(q => q.Id == childCascadedComboboxId) != null);
+
+        It should_disable_child_question = () =>
+            eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Single(q => q.Id == childCascadedComboboxId) != null);
 
         It should_disable_grandchild_question = () =>
-            eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
+            eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Single(q => q.Id == grandChildCascadedComboboxId) != null);
 
         It should_not_remove_answer_from_self = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == parentSingleOptionQuestionId));
 
-        It should_not_remove_answer_from_not_related_question = () => 
+        It should_not_remove_answer_from_not_related_question = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == comboShouldNotBeRemoved));
 
         It should_remove_dependent_answers = () =>
-            eventContext.ShouldContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
+            eventContext.ShouldContainEvent<AnswersRemoved>(x => x.Questions.SingleOrDefault(q => q.Id == childCascadedComboboxId) != null);
 
         It should_remove_dependent_answers_on_second_level_of_cascades_if_it_is_answered = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
@@ -129,4 +147,3 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
         static Guid actorId;
     }
 }
-
