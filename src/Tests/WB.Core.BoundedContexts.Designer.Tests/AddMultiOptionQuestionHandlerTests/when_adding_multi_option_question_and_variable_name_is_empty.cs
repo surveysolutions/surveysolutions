@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddMultiOptionQuestionHandlerTe
                     parentGroupId: chapterId,
                     title: title,
                     variableName: emptyVariableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,
