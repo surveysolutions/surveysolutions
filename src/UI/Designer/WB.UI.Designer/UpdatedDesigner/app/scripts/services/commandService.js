@@ -73,7 +73,7 @@
                         instructions: question.instructions
                     };
 
-                    var doesQuestionSupportScopes = question.type != 'TextList' && question.type != 'QRBarcode';
+                    var doesQuestionSupportScopes = question.type != 'TextList' && question.type != 'QRBarcode' && !question.isLinked;
 
                     if (doesQuestionSupportScopes) {
                         var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
