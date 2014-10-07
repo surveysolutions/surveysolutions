@@ -2,17 +2,19 @@
 using System.Web.Mvc;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
     [Authorize(Roles = "Headquarter, Supervisor")]
+    [ApiValidationAntiForgeryToken]
     public class CommandApiController : BaseApiController
     {
         private readonly ICommandDeserializer commandDeserializer;
@@ -52,8 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
                     response.CommandId = concreteCommand.CommandIdentifier;
-                    ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(request.Type,
-                        concreteCommand);
+                    ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(concreteCommand);
                     this.CommandService.Execute(transformedCommand);
 
                     response.IsSuccess = true;

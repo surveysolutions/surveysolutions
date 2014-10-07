@@ -53,7 +53,8 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<InterviewForTestingCreated>,
         IEventHandler<InterviewOnClientCreated>,
-        IEventHandler<QRBarcodeQuestionAnswered>
+        IEventHandler<QRBarcodeQuestionAnswered>,
+        IEventHandler<PictureQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -164,6 +165,12 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
                            evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<PictureQuestionAnswered> evnt)
+        {
+            this.SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                          evnt.Payload.PictureFileName);
         }
         
         public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)

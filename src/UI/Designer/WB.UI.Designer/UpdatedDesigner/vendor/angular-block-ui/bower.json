@@ -1,43 +1,61 @@
 {
   "name": "angular-block-ui",
-  "version": "0.0.8",
+  "description": "An AngularJS module that allows you to block user interaction on AJAX requests.",
+  "version": "0.1.0-beta.5",
   "keywords": [
     "angular",
     "angularjs",
     "block",
     "block-ui",
-    "blockui"
+    "blockui",
+    "loading"
   ],
   "authors": [
     "Null McNull <no@spam.org>"
   ],
-  "description": "An AngularJS module that allows you to block user interaction on AJAX requests.",
   "license": "MIT",
-  "main": "package/**/*",
   "ignore": [
     "**/.*",
-    "*.sublime-project",
-    "gruntfile.js",
-    "package.json",
-    "package.sh",
     "node_modules",
-    "vendor",
-    "dist",
-    "grunt",
-    "karma",
-    "server",
+    "bower_components",
+    "gulp-tasks",
     "src",
-    "tmp"
+    "dest",
+    "/build-config.js",
+    "/gulpfile.js",
+    "/package.json",
+    "/README.md",
+    "/karma.conf.js"
+  ],
+  "main": [
+    "dist/angular-block-ui.js",
+    "dist/angular-block-ui.css"
   ],
   "dependencies": {
-    "angular": "~1.2.4"
+    "angular": "~1.2.21"
   },
   "devDependencies": {
-    "angular-route": "~1.2.4",
-    "angular-resource": "~1.2.4",
-    "lodash": "~2.4.1",
-    "angular-mocks": "~1.2.4",
+    "angular-route": "~1.2.21",
+    "bootstrap": "~3.2.0",
+    "jquery": "1.*",
+    "respond": "~1.4.2",
+    "html5shiv": "~3.7.2",
+    "angular-resource": "~1.2.22",
     "showdown": "~0.3.1",
-    "bootstrap-css": "~3.1.1"
+    "angular-mocks": "~1.2.22",
+    "angular-inform": "~0.0.8",
+    "angular-animate": "~1.2.22",
+    "animate.css": "~3.2.0"
+  },
+  "overrides": {
+    "respond": {
+      "main": "dest/respond.min.js"
+    },
+    "showdown": {
+      "main": "compressed/showdown.js"
+    },
+    "angular-mocks": {
+      "ignore": true
+    }
   }
 }

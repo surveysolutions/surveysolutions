@@ -15,3 +15,16 @@
 {
 	background: url('../Content/img/sort_desc.png') no-repeat center right !important;
 }
+
+.margin-right-5 {
+    margin-right: 5px;
+}
+
+.fit-column-by-content {
+   width:1%;
+   white-space:nowrap;
+}
+
+.column-40 {
+    width: 40%;
+}

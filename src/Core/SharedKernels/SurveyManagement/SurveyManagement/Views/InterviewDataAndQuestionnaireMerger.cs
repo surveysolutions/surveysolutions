@@ -337,7 +337,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                     {
                         decimal selectedValue = Convert.ToDecimal(interviewQuestion.Answer);
 
-                        IAnswer selectedAnswer =
+                        var selectedAnswer =
                             question.Answers.SingleOrDefault(option => Convert.ToDecimal(option.AnswerValue) == selectedValue);
 
                         return selectedAnswer != null ? selectedAnswer.AnswerText : null;

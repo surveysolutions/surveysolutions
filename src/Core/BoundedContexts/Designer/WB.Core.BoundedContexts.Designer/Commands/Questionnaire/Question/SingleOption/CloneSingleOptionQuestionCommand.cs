@@ -28,7 +28,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
             bool isPreFilled,
             Option[] options,
             Guid? linkedToQuestionId,
-            bool isFilteredCombobox)
+            bool isFilteredCombobox,
+            Guid? cascadeFromQuestionId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,
                 parentGroupId: parentGroupId,
@@ -44,6 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
                     .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
+            this.CascadeFromQuestionId = cascadeFromQuestionId;
             this.IsFilteredCombobox = isFilteredCombobox;
         }
 
@@ -58,6 +60,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
         public bool IsPreFilled { get; set; }
 
         public Guid? LinkedToQuestionId { get; set; }
+
+        public Guid? CascadeFromQuestionId { get; set; }
 
         public Option[] Options { get; set; }
     }

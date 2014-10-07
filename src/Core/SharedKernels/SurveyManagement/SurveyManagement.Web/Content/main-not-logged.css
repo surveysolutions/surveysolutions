@@ -1,4 +1,9 @@
-﻿.form-signin {
+﻿/*Clickjacking protection*/
+body {
+    display: none;
+}
+
+.form-signin {
     max-width: 650px;
     margin: 140px auto 20px;
 }

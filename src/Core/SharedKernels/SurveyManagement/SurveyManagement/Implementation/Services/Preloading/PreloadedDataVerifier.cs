@@ -450,6 +450,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                                                 string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
                                                 levelData.FileName));
                                     break;
+                                case ValueParsingResult.UnsupportedMultimediaQuestion:
+                                    yield return
+                                        new PreloadedDataVerificationError("PL0023",
+                                            PreloadingVerificationMessages.PL0023_UnsupportedMultimediaQuestion,
+                                            new PreloadedDataVerificationReference(answerIndex, y,
+                                                PreloadedDataVerificationReferenceType.Cell,
+                                                string.Format("{0}:{1}", levelData.Header[answerIndex], row[answerIndex]),
+                                                levelData.FileName));
+                                    break;
                                 case ValueParsingResult.GeneralErrorOccured:
                                 default:
                                     yield return

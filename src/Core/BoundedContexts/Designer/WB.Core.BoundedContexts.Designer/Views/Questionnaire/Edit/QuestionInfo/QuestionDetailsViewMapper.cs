@@ -56,6 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 var singleoptionQuestionView = ((SingleOptionDetailsView)questionView);
                 singleoptionQuestionView.LinkedToQuestionId = singleoptionQuestion.LinkedToQuestionId;
                 singleoptionQuestionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
+                singleoptionQuestionView.CascadeFromQuestionId = singleoptionQuestion.CascadeFromQuestionId;
                 singleoptionQuestionView.Options = this.CreateCategoricalOptions(singleoptionQuestion.Answers);
                 return singleoptionQuestionView;
             }
@@ -86,11 +87,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             if (answers == null)
                 return null;
+
             return EventConverter.GetValidAnswersCollection(answers.ToArray()).Select(x => new CategoricalOption
-            {
-                Title = x.AnswerText,
-                Value = decimal.Parse(x.AnswerValue)
-            }).ToArray();
+                {
+                    Title = x.AnswerText,
+                    Value = decimal.Parse(x.AnswerValue),
+                    ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) ? (decimal?)null : Convert.ToDecimal(x.ParentValue)
+                }
+            ).ToArray();
         }
 
         private static QuestionDetailsView CreateQuestionByType(QuestionType type)
@@ -120,6 +124,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
                 case QuestionType.QRBarcode:
                     return new QrBarcodeDetailsView();
+
+                case QuestionType.Multimedia:
+                    return new MultimediaDetailsView();
             }
 
             return null;

@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
     internal class QuestionnaireSynchronizer : IQuestionnaireSynchronizer
     {
         private readonly IAtomFeedReader feedReader;
-        private readonly HeadquartersSettings settings;
+        private readonly IHeadquartersSettings settings;
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage;
@@ -32,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly Action<ICommand> executeCommand;
         private readonly ILogger logger;
 
-        public QuestionnaireSynchronizer(IAtomFeedReader feedReader, HeadquartersSettings settings,
+        public QuestionnaireSynchronizer(IAtomFeedReader feedReader, IHeadquartersSettings settings,
             HeadquartersPullContext headquartersPullContext, IQueryablePlainStorageAccessor<LocalQuestionnaireFeedEntry> plainStorage, ILogger logger, IPlainQuestionnaireRepository plainQuestionnaireRepository,
 
             ICommandService commandService, IHeadquartersQuestionnaireReader headquartersQuestionnaireReader, IQueryableReadSideRepositoryWriter<InterviewSummary> interviews)
@@ -158,9 +159,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         "Failed to delete one or more interviews which were created from questionnaire {0} version {1}.",
                         id.FormatGuid(), version),
                     interviewDeletionErrors);
-            this.executeCommand(new DeleteQuestionnaire(id, version));
+
+            this.executeCommand(new DeleteQuestionnaire(id, version, null));
             this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(id, version);
         }
+
         private bool IsQuestionnnaireAlreadyStoredLocally(Guid id, long version)
         {
             QuestionnaireDocument localQuestionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);

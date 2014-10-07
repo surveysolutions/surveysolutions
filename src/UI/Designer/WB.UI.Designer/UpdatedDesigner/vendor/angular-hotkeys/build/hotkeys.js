@@ -1,5 +1,5 @@
 /*! 
- * angular-hotkeys v1.4.0
+ * angular-hotkeys v1.4.5
  * https://chieffancypants.github.io/angular-hotkeys
  * Copyright (c) 2014 Wes Cruver
  * License: MIT
@@ -26,10 +26,17 @@
     this.includeCheatSheet = true;
 
     /**
+     * Configurable setting for the cheat sheet title
+     * @type {String}
+     */
+
+    this.templateTitle = 'Keyboard Shortcuts:';
+
+    /**
      * Cheat sheet template in the event you want to totally customize it.
      * @type {String}
      */
-    this.template = '<div class="cfp-hotkeys-container fade" ng-class="{in: helpVisible}"><div class="cfp-hotkeys">' +
+    this.template = '<div class="cfp-hotkeys-container fade" ng-class="{in: helpVisible}" style="display: none;"><div class="cfp-hotkeys">' +
                       '<h4 class="cfp-hotkeys-title">{{ title }}</h4>' +
                       '<table><tbody>' +
                         '<tr ng-repeat="hotkey in hotkeys | filter:{ description: \'!$$undefined$$\' }">' +
@@ -39,7 +46,7 @@
                           '<td class="cfp-hotkeys-text">{{ hotkey.description }}</td>' +
                         '</tr>' +
                       '</tbody></table>' +
-                      '<div class="cfp-hotkeys-close" ng-click="helpVisible = false">×</div>' +
+                      '<div class="cfp-hotkeys-close" ng-click="toggleCheatSheet()">×</div>' +
                     '</div></div>';
 
     /**
@@ -169,7 +176,14 @@
        * Holds the title string for the help menu
        * @type {String}
        */
-      scope.title = 'Keyboard Shortcuts:';
+      scope.title = this.templateTitle;
+
+      /**
+       * Expose toggleCheatSheet to hotkeys scope so we can call it using
+       * ng-click from the template
+       * @type {function}
+       */
+      scope.toggleCheatSheet = toggleCheatSheet;
 
 
       /**
@@ -185,7 +199,7 @@
       $rootScope.$on('$routeChangeSuccess', function (event, route) {
         purgeHotkeys();
 
-        if (route.hotkeys) {
+        if (route && route.hotkeys) {
           angular.forEach(route.hotkeys, function (hotkey) {
             // a string was given, which implies this is a function that is to be
             // $eval()'d within that controller's scope
@@ -382,9 +396,10 @@
 
         Mousetrap.unbind(combo);
 
-        if (combo instanceof Array) {
+        if (angular.isArray(combo)) {
           var retStatus = true;
-          for (var i = 0; i < combo.length; i++) {
+          var i = combo.length;
+          while (i--) {
             retStatus = _del(combo[i]) && retStatus;
           }
           return retStatus;
@@ -434,17 +449,20 @@
        * @param  {Object} scope The scope to bind to
        */
       function bindTo (scope) {
-        // Add the scope to the list of bound scopes
-        boundScopes[scope.$id] = [];
+        // Only initialize once to allow multiple calls for same scope.
+        if (!(scope.$id in boundScopes)) {
 
-        scope.$on('$destroy', function () {
-          var i = boundScopes[scope.$id].length;
-          while (i--) {
-            _del(boundScopes[scope.$id][i]);
-            delete boundScopes[scope.$id][i];
-          }
-        });
+          // Add the scope to the list of bound scopes
+          boundScopes[scope.$id] = [];
 
+          scope.$on('$destroy', function () {
+            var i = boundScopes[scope.$id].length;
+            while (i--) {
+              _del(boundScopes[scope.$id][i]);
+              delete boundScopes[scope.$id][i];
+            }
+          });
+        }
         // return an object with an add function so we can keep track of the
         // hotkeys and their scope that we added via this chaining method
         return {
@@ -502,10 +520,11 @@
         bindTo                : bindTo,
         template              : this.template,
         toggleCheatSheet      : toggleCheatSheet,
-        includeCheatSheat     : this.includeCheatSheat,
+        includeCheatSheet     : this.includeCheatSheet,
         cheatSheetHotkey      : this.cheatSheetHotkey,
         cheatSheetDescription : this.cheatSheetDescription,
-        purgeHotkeys          : purgeHotkeys
+        purgeHotkeys          : purgeHotkeys,
+        templateTitle         : this.templateTitle
       };
 
       return publicApi;
@@ -513,7 +532,7 @@
     }];
   })
 
-  .directive('hotkey', function (hotkeys) {
+  .directive('hotkey', ['hotkeys', function (hotkeys) {
     return {
       restrict: 'A',
       link: function (scope, el, attrs) {
@@ -521,7 +540,7 @@
 
         angular.forEach(scope.$eval(attrs.hotkey), function (func, hotkey) {
           // split and trim the hotkeys string into array
-          allowIn = attrs.hotkeyAllowIn.split(/[\s,]+/);
+          allowIn = typeof attrs.hotkeyAllowIn === "string" ? attrs.hotkeyAllowIn.split(/[\s,]+/) : [];
 
           key = hotkey;
 
@@ -540,12 +559,12 @@
         });
       }
     };
-  })
+  }])
 
-  .run(function(hotkeys) {
+  .run(['hotkeys', function(hotkeys) {
     // force hotkeys to run by injecting it. Without this, hotkeys only runs
     // when a controller or something else asks for it via DI.
-  });
+  }]);
 
 })();
 

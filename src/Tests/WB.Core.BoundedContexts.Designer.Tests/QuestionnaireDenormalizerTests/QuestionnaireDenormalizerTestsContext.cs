@@ -16,7 +16,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
@@ -95,6 +94,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
                 PublicKey = questionId,
                 QuestionText = title,
                 QuestionType = QuestionType.QRBarcode,
+                ConditionExpression = enablementCondition,
+                Mandatory = isMandatory,
+                StataExportCaption = variableName,
+                Instructions = instructions
+            };
+        }
+
+        protected static IQuestion CreateMultimediaQuestion(Guid questionId, string enablementCondition, bool isMandatory, string instructions, string title, string variableName)
+        {
+            return new MultimediaQuestion()
+            {
+                PublicKey = questionId,
+                QuestionText = title,
+                QuestionType = QuestionType.Multimedia,
                 ConditionExpression = enablementCondition,
                 Mandatory = isMandatory,
                 StataExportCaption = variableName,

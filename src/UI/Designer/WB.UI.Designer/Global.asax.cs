@@ -9,6 +9,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Controllers;
+using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using NConfig;
 using Elmah;
@@ -35,7 +36,7 @@ namespace WB.UI.Designer
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            ValidatorsConfig.Register();
+            DataAnnotationsConfig.RegisterAdapters();
 
             //BundleTable.EnableOptimizations = true;
         }

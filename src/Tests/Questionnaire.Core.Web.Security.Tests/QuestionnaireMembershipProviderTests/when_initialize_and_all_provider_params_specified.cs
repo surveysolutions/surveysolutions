@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using Machine.Specifications;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using It = Machine.Specifications.It;
 
 namespace Questionnaire.Core.Web.Security.Tests.QuestionnaireMembershipProviderTests
@@ -41,6 +42,9 @@ namespace Questionnaire.Core.Web.Security.Tests.QuestionnaireMembershipProviderT
         It should_MinRequiredNonAlphanumericCharacters_be_equal_to_specified_MinRequiredNonalphanumericCharacters = () =>
             provider.MinRequiredNonAlphanumericCharacters.ShouldEqual(MinRequiredNonalphanumericCharacters);
 
+        It should_PasswordStrengthRegularExpression_be_equal_to_specified_PasswordStrengthRegularExpression = () =>
+            provider.PasswordStrengthRegularExpression.ShouldEqual(PasswordStrengthRegularExpression);
+
         private static QuestionnaireMembershipProvider provider;
 
         private const string ApplicationName ="app name";
@@ -52,6 +56,7 @@ namespace Questionnaire.Core.Web.Security.Tests.QuestionnaireMembershipProviderT
         private const int PasswordAttemptWindow = 100;
         private const int MinRequiredPasswordLength = 10;
         private const int MinRequiredNonalphanumericCharacters = 5;
+        private const string PasswordStrengthRegularExpression = "some expression";
 
         private static NameValueCollection config = new NameValueCollection()
         {
@@ -64,6 +69,7 @@ namespace Questionnaire.Core.Web.Security.Tests.QuestionnaireMembershipProviderT
             {"passwordAttemptWindow", PasswordAttemptWindow.ToString()},
             {"minRequiredPasswordLength", MinRequiredPasswordLength.ToString()},
             {"minRequiredNonalphanumericCharacters", MinRequiredNonalphanumericCharacters.ToString()},
+            {"passwordStrengthRegularExpression", PasswordStrengthRegularExpression},
         };
     }
 }

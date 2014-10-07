@@ -13,7 +13,6 @@ namespace Main.Core.Entities.SubEntities
     {
         protected AbstractQuestion()
         {
-            this.Cards = new List<Image>();
             this.Answers = new List<Answer>();
         }
 
@@ -28,8 +27,6 @@ namespace Main.Core.Entities.SubEntities
         public List<Answer> Answers { get; set; }
 
         public bool Capital { get; set; }
-
-        public List<Image> Cards { get; set; }
 
         public List<IComposite> Children
         {
@@ -126,31 +123,22 @@ namespace Main.Core.Entities.SubEntities
 
         public string ValidationMessage { get; set; }
 
+        /// <summary>
+        /// Id of parent question to cascade from 
+        /// </summary>
+        public Guid? CascadeFromQuestionId { get; set; }
+
         public Guid? LinkedToQuestionId { get; set; }
+        
         public bool? IsFilteredCombobox { get; set; }
-
+        
         public abstract void AddAnswer(Answer answer);
-
-        public void AddCard(Image card)
-        {
-            if (this.Cards == null)
-            {
-                this.Cards = new List<Image>();
-            }
-
-            this.Cards.Add(card);
-        }
 
         public virtual IComposite Clone()
         {
             var question = this.MemberwiseClone() as IQuestion;
 
             question.SetParent(null);
-
-            if (this.Cards != null)
-            {
-                question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
-            }
 
             if (this.ConditionalDependentGroups != null)
             {
@@ -192,7 +180,6 @@ namespace Main.Core.Entities.SubEntities
 
         public void ConnectChildrenWithParent()
         {
-            //// do nothing
         }
 
         public abstract T Find<T>(Guid publicKey) where T : class, IComposite;
@@ -200,31 +187,6 @@ namespace Main.Core.Entities.SubEntities
         public abstract IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
 
         public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
-
-        public Image RemoveCard(Guid imageKey)
-        {
-            if (this.Cards == null)
-            {
-                this.Cards = new List<Image>();
-            }
-
-            Image card = this.Cards.Single(c => c.PublicKey == imageKey);
-            this.Cards.Remove(card);
-            return card;
-        }
-
-        public void UpdateCard(Guid imageKey, string title, string desc)
-        {
-            if (this.Cards == null)
-            {
-                this.Cards = new List<Image>();
-            }
-
-            Image card = this.Cards.Single(c => c.PublicKey == imageKey);
-
-            card.Title = title;
-            card.Description = desc;
-        }
 
         public IEnumerable<string> GetVariablesUsedInTitle()
         {

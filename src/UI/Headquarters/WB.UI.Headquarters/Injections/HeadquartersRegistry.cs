@@ -4,13 +4,13 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using Main.Core;
-using Questionnaire.Core.Web.Security;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Injections

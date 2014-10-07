@@ -37,3 +37,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.0.0 (build 1)")]
 
 [assembly: InternalsVisibleTo("WB.Core.BoundedContexts.Capi.Tests")]
+[assembly: InternalsVisibleTo("WB.Tests.Unit")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]

@@ -6,6 +6,9 @@ using Main.Core.Entities.Composite;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
+    /// <summary>
+    /// Single option question
+    /// </summary>
     public class SingleQuestion : AbstractQuestion
     {
         public SingleQuestion()

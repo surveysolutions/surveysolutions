@@ -2,9 +2,11 @@
 using System.Web.Http;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.UI.Headquarters.Models;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
+    [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
         private readonly InterviewDetailsDataProcessorContext interviewDetailsDataProcessorContext;

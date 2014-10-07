@@ -11,6 +11,7 @@
     <AssemblyName>WB.UI.Headquarters.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -136,6 +137,8 @@
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_and_exception_occured.cs" />
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_empty_id.cs" />
     <Compile Include="ImportExportControllerTests\when_GetExportedDataAsync_is_called_with_not_empty_id.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedFilesAsync_is_called.cs" />
+    <Compile Include="ImportExportControllerTests\when_GetExportedFilesAsync_is_called_and_exception_occured.cs" />
     <Compile Include="InstallControllerTests\InstallControllerTestsContext.cs" />
     <Compile Include="InstallControllerTests\when_finish_installation_and_command_service_throws_exception.cs" />
     <Compile Include="InstallControllerTests\when_finish_installation.cs" />
@@ -164,10 +167,6 @@
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
-      <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
-      <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>

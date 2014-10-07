@@ -154,9 +154,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Group.cs">
       <Link>Entities\SubEntities\Group.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IAnswer.cs">
-      <Link>Entities\SubEntities\IAnswer.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IConditional.cs">
       <Link>Entities\SubEntities\IConditional.cs</Link>
     </Compile>
@@ -205,6 +202,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IAutoPropagateQuestion.cs">
       <Link>Entities\SubEntities\Question\IAutoPropagateQuestion.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IMultimediaQuestion.cs">
+      <Link>Entities\SubEntities\Question\IMultimediaQuestion.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IMultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\IMultyOptionsQuestion.cs</Link>
     </Compile>
@@ -216,6 +216,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\ITextListQuestion.cs">
       <Link>Entities\SubEntities\Question\ITextListQuestion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\MultimediaQuestion.cs">
+      <Link>Entities\SubEntities\Question\MultimediaQuestion.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\MultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\MultyOptionsQuestion.cs</Link>
@@ -351,18 +354,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\User\UserViewInputModel.cs">
       <Link>View\User\UserViewInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\WCF\AuthorizationPacket.cs">
-      <Link>WCF\AuthorizationPacket.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\WCF\BaseAuthorizationService.cs">
-      <Link>WCF\BaseAuthorizationService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\WCF\IAuthorizationPacket.cs">
-      <Link>WCF\IAuthorizationPacket.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\WCF\IAuthorizationService.cs">
-      <Link>WCF\IAuthorizationService.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

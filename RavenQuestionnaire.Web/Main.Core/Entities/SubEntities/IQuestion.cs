@@ -12,7 +12,6 @@ namespace Main.Core.Entities.SubEntities
         List<Answer> Answers { get; set; }
         Order AnswerOrder { get; set; }
         bool Capital { get; set; }
-        List<Image> Cards { get; set; }
         bool Featured { get; set; }
         string Instructions { get; set; }
         bool Mandatory { get; set; }
@@ -36,6 +35,8 @@ namespace Main.Core.Entities.SubEntities
         List<Guid> QuestionIdsInvolvedInCustomValidationOfQuestion { get; set; }
 
         Guid? LinkedToQuestionId { get; set; }
+
+        Guid? CascadeFromQuestionId { get; set; }
 
         bool? IsFilteredCombobox { get; set; }
 

@@ -3,7 +3,7 @@
 @using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 <div class="question no-page-break">
     <span>
-        @Model.ItemNumber &nbsp;&nbsp; @Model.Title <span class="variable-name">@Model.Variable</span>
+        @Model.ItemNumber &nbsp;&nbsp; @Model.Title <span class="variable-name">@Model.VariableName</span>
         @if (Model.GetHasCondition())
         {
             <a href="#@("c" + Model.ItemNumber)" id="@("cq" + Model.ItemNumber)">[c @Model.ItemNumber]</a>
@@ -16,7 +16,7 @@
 
     @if (Model.Answers.Count > 0) {
         <ul class="answer-options">
-            @foreach (PdfAnswerView answer in this.Model.Answers)
+            @foreach (PdfAnswerView answer in this.Model.Answers.Take(20))
             {
                 <li>
                     <input type="@(Model.QuestionType == QuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
@@ -26,6 +26,12 @@
                     <span>
                         @answer.Title
                     </span>
+                    @if (!string.IsNullOrWhiteSpace(answer.ParentValue))
+                    {
+                        <span>
+                            &nbsp;[@answer.ParentValue]
+                        </span>
+                    }
                 </li>
             }
         

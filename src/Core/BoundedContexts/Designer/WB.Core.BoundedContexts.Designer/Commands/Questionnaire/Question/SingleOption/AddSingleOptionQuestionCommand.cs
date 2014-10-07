@@ -26,7 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
             bool isPreFilled,
             Option[] options,
             Guid? linkedToQuestionId,
-            bool isFilteredCombobox)
+            bool isFilteredCombobox,
+            Guid? cascadeFromQuestionId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions,
@@ -43,6 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
             this.Options = options;
             this.LinkedToQuestionId = linkedToQuestionId;
             this.IsFilteredCombobox = isFilteredCombobox;
+            this.CascadeFromQuestionId = cascadeFromQuestionId;
         }
 
         public bool IsFilteredCombobox { get; set; }
@@ -58,5 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Singl
         public Guid? LinkedToQuestionId { get; set; }
 
         public Option[] Options { get; set; }
+
+        public Guid? CascadeFromQuestionId { get; set; }
     }
 }

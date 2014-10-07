@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Android.OS;
 using AndroidNcqrs.Eventing.Storage.SQLite;
@@ -40,10 +41,12 @@ namespace CAPI.Android.Core.Model
         private const string EventStoreDatabaseName = "EventStore";
         private const string PlainStoreName = "PlainStore";
         private readonly string basePath;
+        private readonly string[] foldersToBackup;
 
-        public AndroidModelModule(string basePath)
+        public AndroidModelModule(string basePath, string[] foldersToBackup)
         {
             this.basePath = basePath;
+            this.foldersToBackup = foldersToBackup;
         }
 
         public override void Load()
@@ -92,15 +95,21 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
 
+            var backupable = new List<IBackupable>(){
+                    evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
+                    bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
+                };
+
+            foreach (var folderToBackup in foldersToBackup)
+            {
+                backupable.Add(new FolderBackupable(basePath, folderToBackup));
+            }
+
             this.Bind<IBackup>()
                 .To<DefaultBackup>()
                 .InSingletonScope()
-                .WithConstructorArgument("basePath", basePath)
-                .WithConstructorArgument("backupables", new IBackupable[]
-                {
-                    evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
-                    bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore
-                });
+                .WithConstructorArgument("basePath", Environment.ExternalStorageDirectory.AbsolutePath)
+                .WithConstructorArgument("backupables", backupable.ToArray());
         }
     }
 }

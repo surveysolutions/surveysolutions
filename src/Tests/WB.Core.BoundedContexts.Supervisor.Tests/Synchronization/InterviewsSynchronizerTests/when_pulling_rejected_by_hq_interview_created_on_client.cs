@@ -27,6 +27,7 @@ using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
@@ -37,9 +38,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
     {
         private Establish context = () =>
         {
-            userDocumentStorageMock.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<UserDocument>, IQueryable<UserDocument>>>()))
-                .Returns(new [] { new UserDocument() }.AsQueryable());
-
             userDocumentStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
               .Returns(new UserDocument());
 
@@ -72,7 +70,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         };
 
         Because of = () =>
-            interviewsSynchronizer.Pull();
+            interviewsSynchronizer.PullInterviewsForSupervisors(new[] { Guid.NewGuid() });
 
 
         It should_CreateInterviewCreatedOnClientCommand_be_called_once = () =>

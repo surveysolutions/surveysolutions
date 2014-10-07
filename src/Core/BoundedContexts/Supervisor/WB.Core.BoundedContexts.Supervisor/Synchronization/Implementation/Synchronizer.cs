@@ -76,10 +76,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 this.headquartersPullContext.PushMessage(string.Format("Saving {0} new events to local storage", newEvents.Count));
                 this.localFeedStorage.Store(newEvents);
 
-                this.localUserFeedProcessor.Process();
+                var supervisorIds = this.localUserFeedProcessor.PullUsersAndReturnListOfSynchronizedSupervisorsId();
 
                 this.questionnaireSynchronizer.Pull();
-                this.interviewsSynchronizer.Pull();
+                this.interviewsSynchronizer.PullInterviewsForSupervisors(supervisorIds);
             }
             finally
             {

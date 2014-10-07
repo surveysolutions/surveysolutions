@@ -6008,7 +6008,8 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
   font-size: 14px;
   font-weight: normal;
   color: #c1c7cb;
-  padding: 10px 15px;
+  padding: 0 15px;
+  height: 37px;
 }
 .wb-input.bg-white {
   background-color: white;
@@ -6333,6 +6334,9 @@ textarea {
   background-position-y: -210px;
 }
 .icon-photo {
+  background-position-y: -270px;
+}
+.icon-multimedia {
   background-position-y: -270px;
 }
 .icon-statictext {
@@ -7631,6 +7635,30 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 .dropdown ul.dropdown-menu > li > a:hover {
   background: #edeff1;
+}
+#show-reload-details-promt {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.6) url(i/loading-bg.png) repeat;
+  z-index: 20;
+}
+#show-reload-details-promt .inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 50px;
+  width: 50%;
+  margin: -25px 0 0 -25%;
+  line-height: 50px;
+  background: #fff;
+  text-align: center;
+  border-radius: 4px;
+}
+#show-reload-details-promt .inner a {
+  text-decoration: underline;
 }
 #verify-popover {
   display: none;

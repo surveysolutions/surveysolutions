@@ -3,7 +3,7 @@
 <div class="form-group">
     @Html.LabelFor(x => x.UserName, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-2">
-        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", autocomplete = "off" })
     </div>
     <div class="col-sm-4">
         @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-block" })
@@ -12,7 +12,7 @@
 <div class="form-group">
     @Html.LabelFor(x => x.Password, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-2">
-        @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+        @Html.PasswordFor(x => x.Password, new { @class = "form-control", autocomplete = "off" })
     </div>
     <div class="col-sm-4">
         @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-block" })

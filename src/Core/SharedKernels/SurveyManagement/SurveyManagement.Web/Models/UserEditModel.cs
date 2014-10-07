@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
+using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
@@ -11,9 +12,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         public string UserName { get; set; }
 
-        [RegularExpression("(?=^.{6,255}$)((?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]))^.*",
-            ErrorMessageResourceName = "PasswordErrorMessage", ErrorMessageResourceType = typeof (FieldsAndValidations))
-        ]
+        [PasswordStringLength(100, ErrorMessageResourceName = "PasswordLengthMessage", ErrorMessageResourceType = typeof(FieldsAndValidations))]
+        [PasswordRegularExpression(ErrorMessageResourceName = "PasswordErrorMessage", ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [DataType(DataType.Password)]
         [Display(Name = "PasswordFieldName", ResourceType = typeof (FieldsAndValidations), Order = 1)]
         public string Password { get; set; }

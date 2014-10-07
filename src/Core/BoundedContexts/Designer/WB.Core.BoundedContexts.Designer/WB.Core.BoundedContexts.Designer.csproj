@@ -119,11 +119,13 @@
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\AddGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\CloneGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\UpdateGpsCoordinatesQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\Mulimedia\UpdateMultimediaQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\AddMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\CloneMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\UpdateMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\AddSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\CloneSingleOptionQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateCascadingComboboxOptionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateFilteredComboboxOptionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\SingleOption\UpdateSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\TextList\CloneTextListQuestionCommand.cs" />
@@ -159,6 +161,23 @@
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Events\Users\AccountConfirmed.cs" />
+    <Compile Include="Events\Users\AccountDeleted.cs" />
+    <Compile Include="Events\Users\AccountLocked.cs" />
+    <Compile Include="Events\Users\AccountLoginFailed.cs" />
+    <Compile Include="Events\Users\AccountOnlineUpdated.cs" />
+    <Compile Include="Events\Users\AccountPasswordChanged.cs" />
+    <Compile Include="Events\Users\AccountPasswordQuestionAndAnswerChanged.cs" />
+    <Compile Include="Events\Users\AccountPasswordReset.cs" />
+    <Compile Include="Events\Users\AccountPasswordResetTokenChanged.cs" />
+    <Compile Include="Events\Users\AccountRegistered.cs" />
+    <Compile Include="Events\Users\AccountRoleAdded.cs" />
+    <Compile Include="Events\Users\AccountRoleRemoved.cs" />
+    <Compile Include="Events\Users\AccountUnlocked.cs" />
+    <Compile Include="Events\Users\AccountUpdated.cs" />
+    <Compile Include="Events\Users\AccountValidated.cs" />
+    <Compile Include="Events\Users\UserLoggedIn.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
@@ -221,6 +240,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Roster.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ExceptionMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\IJsonExportService.cs" />
     <Compile Include="Services\IQuestionnaireDocumentUpgrader.cs" />
@@ -264,6 +288,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GeoLocationDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GroupAndRosterDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\IQuestionDetailsViewMapper.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultimediaDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultiOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\NumericDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QrBarcodeDetailsView.cs" />
@@ -375,10 +400,6 @@
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
-      <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
-      <Name>WB.UI.Designer.Providers.CQRS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
@@ -403,10 +424,6 @@
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
-      <Project>{8c4b0e67-8c0a-4222-8646-3cf3131cade5}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
@@ -418,13 +435,16 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Properties\Roster.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ExceptionMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

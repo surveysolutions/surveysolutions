@@ -2,8 +2,8 @@ using System;
 using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Supervisor.Controllers;
 using It = Machine.Specifications.It;
 

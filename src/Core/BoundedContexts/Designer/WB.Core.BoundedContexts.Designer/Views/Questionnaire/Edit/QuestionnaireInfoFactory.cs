@@ -79,6 +79,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 Value = "QRBarcode",
                 Text = "QR Barcode"
+            },
+            new SelectOption
+            {
+                Value = "Multimedia",
+                Text = "Multimedia"
             }
         };
 
@@ -204,7 +209,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.Options = result.Options ?? new CategoricalOption[0];
             result.OptionsCount = result.Options.Length;
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
-            result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire);
+            result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
+            result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
             result.NotPrefilledQuestionScopeOptions = NotPrefilledQuestionScopeOptions;
@@ -256,6 +262,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                                                               .GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
                                                               .Map(singleOptionDetailsView);
                     editQuestionView.LinkedToQuestionId = Monads.Maybe(() => singleOptionDetailsView.LinkedToQuestionId.FormatGuid());
+                    editQuestionView.CascadeFromQuestionId = Monads.Maybe(() => singleOptionDetailsView.CascadeFromQuestionId.FormatGuid());
                     return editQuestionView;
                 case QuestionType.Text:
                     return
@@ -279,15 +286,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 case QuestionType.QRBarcode:
                     return ObjectMapperManager.DefaultInstance.GetMapper<QrBarcodeDetailsView, NewEditQuestionView>()
                         .Map(question as QrBarcodeDetailsView);
+                case QuestionType.Multimedia:
+                    return ObjectMapperManager.DefaultInstance.GetMapper<MultimediaDetailsView, NewEditQuestionView>()
+                        .Map(question as MultimediaDetailsView);
             }
             return null;
         }
 
-        private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection)
+        private List<DropdownQuestionView> GetSourcesOfSingleQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
+        {
+            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
+                x => x.Where(q => q.Id != questionId)
+                    .Where(q => q is SingleOptionDetailsView)
+                    .Where(q => !(q as SingleOptionDetailsView).LinkedToQuestionId.HasValue)
+                    .ToList();
+
+            var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
+
+            return result;
+        }
+
+        private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
                 x => x.Where(q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView || q is GeoLocationDetailsView)
-                .Where(q => q.RosterScopeIds.Length > 0)
+                .Where(q => q.RosterScopeIds.Length > 0 && q.Id != questionId)
                 .ToList();
 
             var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
@@ -299,7 +322,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             GroupAndRosterDetailsView roster)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                q => q.Where(x => x.ParentGroupId == roster.Id).ToList();
+                q => q.Where(x => x.ParentGroupId == roster.Id && x.Type!=QuestionType.Multimedia).ToList();
 
             return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
         }

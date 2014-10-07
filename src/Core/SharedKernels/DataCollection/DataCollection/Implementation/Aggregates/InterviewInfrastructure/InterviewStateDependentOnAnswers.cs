@@ -50,9 +50,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyRosterData(changes.RosterCalculationData);
             }
 
-            if (changes.AnswersForLinkedQuestionsToRemoveByDisabling != null)
+            if (changes.AnswersForLinkedQuestionsToRemove != null)
             {
-                this.RemoveAnswers(Identity.ToEventIdentities(changes.AnswersForLinkedQuestionsToRemoveByDisabling));
+                this.RemoveAnswers(Identity.ToEventIdentities(changes.AnswersForLinkedQuestionsToRemove));
             }
         }
 

@@ -1,0 +1,56 @@
+﻿@using System.Web.Optimization
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@model WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory.InterviewHistoryView
+           
+
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+    ViewBag.Title = "Index";
+}
+
+<div class="page-header">
+    <h2>Interview History</h2>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-condensed table-break-words questionnaires-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Action</th>
+                <th>Parameters</th>
+                <th>Originator</th>
+                <th>Role</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Records)
+            {
+                <tr>
+                    <td>
+                        @item.Index
+                    </td>
+                    <td>
+                        @item.Action
+                    </td>
+                    <td>
+                        @foreach (var parameter in item.Parameters)
+                        {
+                            <small>@parameter.Key: </small>@parameter.Value
+                            <br/>
+                        }
+                    </td>
+                    <td>
+                        @item.OriginatorName
+                    </td>
+                    <td>
+                        @item.OriginatorRole
+                    </td>
+                    <td>
+                        @item.Timestamp
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

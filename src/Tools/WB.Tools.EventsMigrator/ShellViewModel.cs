@@ -36,8 +36,8 @@ namespace WB.Tools.EventsMigrator
             ServerAddress = "http://localhost:8080";
             RavenDatabaseName = "hq-dev";
             EventStoreIP = "127.0.0.1";
-            EventStoreHttpPort = 3213;
-            EventStoreTcpPort = 3215;
+            EventStoreHttpPort = 2113;
+            EventStoreTcpPort = 1113;
             eventStoreLogin = "admin";
             eventStorePassword = "changeit";
             CanTransfer = true;

@@ -48,7 +48,7 @@
                 var chapter = _.find($scope.questionnaire.chapters, { itemId: idToClone });
                 var targetIndex = _.indexOf($scope.questionnaire.chapters, chapter) + 1;
 
-                commandService.cloneGroup($state.params.questionnaireId, idToClone, targetIndex, newId).success(function (result) {
+                commandService.cloneGroup($state.params.questionnaireId, idToClone, targetIndex, newId).success(function () {
                     var newChapter = {
                         title: chapter.title,
                         itemId: newId
@@ -67,7 +67,7 @@
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
                         commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
-                            .success(function (result) {
+                            .success(function () {
                                 var index = $scope.questionnaire.chapters.indexOf(chapter);
                                 if (index > -1) {
                                     $scope.questionnaire.chapters.splice(index, 1);
@@ -98,7 +98,7 @@
 
             $rootScope.$on('groupUpdated', function (event, data) {
                 var chapter = questionnaireService.findItem($scope.questionnaire.chapters, data.itemId);
-                if (chapter != null) {
+                if (chapter !== null) {
                     chapter.title = data.title;
                 }
             });

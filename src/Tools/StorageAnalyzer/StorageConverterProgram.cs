@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Runtime.InteropServices;
 using NConfig;
-using Ncqrs.Eventing.Storage.RavenDB;
-using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Raven.Abstractions.Data;
-using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Indexes;
+using WB.Core.Infrastructure.Storage.Raven;
 
 namespace StorageAnalyzer
 {

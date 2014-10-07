@@ -97,6 +97,7 @@
     <Compile Include="Authorization\SyncCredentials.cs" />
     <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="Backup\DefaultBackup.cs" />
+    <Compile Include="Backup\FolderBackupable.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />

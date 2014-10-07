@@ -9,7 +9,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -19,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 input.QuestionnaireVersion = data.Request.TemplateVersion;
                 input.TeamLeadId = data.Request.ResponsibleId;
                 input.Status = data.Request.Status;
+                input.SearchBy = data.Request.SearchBy;
             }
 
             return this.allInterviewsViewFactory.Load(input);
@@ -90,6 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 input.QuestionnaireVersion = data.Request.TemplateVersion;
                 input.ResponsibleId = data.Request.ResponsibleId;
                 input.Status = data.Request.Status;
+                input.SearchBy = data.Request.SearchBy;
             }
 
             return this.teamInterviewViewFactory.Load(input);
@@ -381,6 +383,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                             : (answerAsDecimal.HasValue && (decimal) option == answerAsDecimal));
                     var selectedAnswer = avalibleOptions.FirstOrDefault(option => isSelectedOption(option.Value));
                     answerLabel = selectedAnswer == null ? string.Empty : selectedAnswer.Label;
+                    var isCascade = questionDto.Settings == null
+                        ? false
+                        : questionDto.Settings.GetType().GetProperty("IsCascade").GetValue(questionDto.Settings, null) ?? false;
+                    var isFilteredCombobox = questionDto.Settings == null
+                        ? false
+                        : questionDto.Settings.GetType().GetProperty("IsFilteredCombobox").GetValue(questionDto.Settings, null)??false;
                     questionModel = new SingleQuestionModel()
                     {
                         options =
@@ -399,9 +407,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                             isLinked
                                 ? string.Join(", ", answersAsDecimalOnLinkedQuestion)
                                 : answerAsDecimal.ToString(),
-                        isFilteredCombobox = questionDto.Settings == null
-                                ? false
-                                : questionDto.Settings.GetType().GetProperty("IsFilteredCombobox").GetValue(questionDto.Settings, null)??false,
+                        isFilteredCombobox = isFilteredCombobox,
+                        isCascade = isCascade,
                         answer = answerLabel
                     };
                     break;
@@ -412,6 +419,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                             questionDto.Options.Select(
                                 option =>
                                     new OptionModel(uid) {value = option.Value.ToString(), label = option.Label})
+                    };
+                    break;
+                case QuestionType.Multimedia:
+                    questionModel = new PictureQuestionModel()
+                    {
+                        pictureFileName = answerAsString
                     };
                     break;
             }
@@ -538,6 +551,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string answer { set; get; }
         public string mask { set; get; }
     }
+    public class PictureQuestionModel : QuestionModel
+    {
+        public string pictureFileName { set; get; }
+    }
     public class NumericQuestionModel : TextQuestionModel
     {
         public bool isInteger = true;
@@ -552,6 +569,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class SingleQuestionModel : CategoricalQuestionModel
     {
         public bool isFilteredCombobox;
+        public bool isCascade;
         public string selectedOption { get; set; }
     }
     public class MultiQuestionModel : CategoricalQuestionModel

@@ -91,13 +91,14 @@ namespace WB.Tools.CapiDataGenerator.Models
                 incomingCapiPackagesWithErrorsDirectoryName: ConfigurationManager.AppSettings["Synchronization.IncomingCapiPackagesWithErrorsDirectory"],
                 incomingCapiPackageFileNameExtension: ConfigurationManager.AppSettings["Synchronization.IncomingCapiPackageFileNameExtension"]);
 
+            var basePath = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             new StandardKernel(
                 new RavenReadSideInfrastructureModule(ravenSupervisorSettings),
                 new SynchronizationModule(synchronizationSettings),
                 new RavenPlainStorageInfrastructureModule(ravenSupervisorSettings),
                 new CapiDataGeneratorRegistry(),
-                new NLogLoggingModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false),
+                new NLogLoggingModule(basePath),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new ExpressionProcessorModule(),
                 new QuestionnaireVerificationModule(),
                 new FileInfrastructureModule(),
