@@ -44,11 +44,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 };
             });
 
-        It should_valid_question_count_equal_4 = () =>
-            results.ValidQuestionsCount.ShouldEqual(4);
+        It should_valid_question_count_equal_0 = () =>
+            results.ValidQuestionsCount.ShouldEqual(0);
 
-        It should_invalid_question_count_equal_0 = () =>
-            results.InvalidQuestionsCount.ShouldEqual(0);
+        It should_invalid_question_count_equal_4 = () =>
+            results.InvalidQuestionsCount.ShouldEqual(4);
 
         Cleanup stuff = () =>
         {
