@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer.Models
+﻿using WB.UI.Shared.Web.DataAnnotations;
+
+namespace WB.UI.Designer.Models
 {
     using System.ComponentModel.DataAnnotations;
 

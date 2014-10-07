@@ -4,11 +4,10 @@ using System.IO;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
-using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Threading;
-using SynchronizationMessages.Export;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Threading;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -82,6 +81,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     try
                     {
                         this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedCompressedData(id, version);
+                    }
+                    catch (Exception exc)
+                    {
+                        this.logger.Error("Error occurred during export. " + exc.Message, exc);
+                        this.AsyncManager.Parameters["result"] = null;
+                    }
+                });
+        }
+
+        public ActionResult GetExportedFilesCompleted(string result)
+        {
+            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
+        }
+
+        [Authorize(Roles = "Headquarter")]
+        public void GetExportedFilesAsync(Guid id, long version)
+        {
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager,
+                () =>
+                {
+                    try
+                    {
+                        this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedBinaryData(id, version);
                     }
                     catch (Exception exc)
                     {

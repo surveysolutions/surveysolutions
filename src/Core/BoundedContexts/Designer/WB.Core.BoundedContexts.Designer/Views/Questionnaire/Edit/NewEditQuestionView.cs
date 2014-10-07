@@ -7,10 +7,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
     public class NewEditQuestionView
     {
-        //public QuestionDetailsView Question { get; set; }
         public NewEditQuestionView()
         {
             this.SourceOfLinkedQuestions = new List<DropdownQuestionView>();
+            this.SourceOfSingleQuestions = new List<DropdownQuestionView>();
         }
 
         public Guid Id { get; set; }
@@ -38,11 +38,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? CountOfDecimalPlaces { get; set; }
         public int? MaxAnswerCount { get; set; }
         public bool? IsFilteredCombobox { get; set; }
+        public string CascadeFromQuestionId { get; set; }
 
         public List<DropdownQuestionView> SourceOfLinkedQuestions { get; set; }
+        public List<DropdownQuestionView> SourceOfSingleQuestions { get; set; }
+
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] AllQuestionScopeOptions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] NotPrefilledQuestionScopeOptions { get; set; }
+        
         public Breadcrumb[] Breadcrumbs { get; set; }
         public bool WereOptionsTruncated { get; set; }
         public int OptionsCount { get; set; }

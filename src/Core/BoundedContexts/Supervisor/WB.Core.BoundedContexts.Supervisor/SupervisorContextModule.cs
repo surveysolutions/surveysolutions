@@ -18,10 +18,10 @@ namespace WB.Core.BoundedContexts.Supervisor
 {
     public class SupervisorBoundedContextModule : NinjectModule
     {
-        private readonly HeadquartersSettings headquartersSettings;
+        private readonly IHeadquartersSettings headquartersSettings;
         private readonly SchedulerSettings schedulerSettings;
 
-        public SupervisorBoundedContextModule(HeadquartersSettings headquartersSettings,
+        public SupervisorBoundedContextModule(IHeadquartersSettings headquartersSettings,
             SchedulerSettings schedulerSettings)
         {
             this.headquartersSettings = headquartersSettings;
@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor
 
         public override void Load()
         {
-            this.Bind<HeadquartersSettings>().ToConstant(this.headquartersSettings);
+            this.Bind<IHeadquartersSettings>().ToConstant(this.headquartersSettings);
             this.Bind<IHeadquartersLoginService>().To<HeadquartersLoginService>();
             this.Bind<ILocalFeedStorage>().To<LocalFeedStorage>();
             this.Bind<ISynchronizer>().To<Synchronizer>();

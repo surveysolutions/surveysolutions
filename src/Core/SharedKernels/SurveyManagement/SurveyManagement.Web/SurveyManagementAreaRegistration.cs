@@ -48,10 +48,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
             },
 
             {
-                "~/css/admin", new[]
+                "~/css/controlpanel", new[]
                 {
                     "~/Content/bootstrap.css",
-                    "~/Content/admin.css"
+                    "~/Content/controlpanel.css"
                 }
             }
         };
@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/query-string.js",
                     "~/Scripts/supervisor.framework.js",
                     "~/Scripts/viewmodels/viewmodelbase.js",
-                    "~/Scripts/viewmodels/pagebase.js",
+                    "~/Scripts/viewmodels/pagebase.js"
                 }
             },
             {
@@ -86,7 +86,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 "~/js/list", new[]
                 {
                     "~/Scripts/ko.pager.js",
-                    "~/Scripts/viewmodels/listview.js"
+                    "~/Scripts/viewmodels/listview.js",
+                    "~/Scripts/components/bindings.js"
                 }
             },
             {
@@ -169,11 +170,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 "BackupRoute",
                 "Backup/{action}/{id}",
                 new { controller = "Backup", action = "Index", id = UrlParameter.Optional });
-
-            context.MapRoute(
-                "HQRoute",
-                "HQ/{action}/{id}",
-                new { controller = "HQ", action = "Index", id = UrlParameter.Optional });
 
             context.MapRoute(
                 "ImportExportRoute",

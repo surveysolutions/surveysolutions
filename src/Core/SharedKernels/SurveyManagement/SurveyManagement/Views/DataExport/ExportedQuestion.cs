@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -12,16 +13,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         {
         }
 
-        public ExportedQuestion(Guid questionId, string[] answers)
+        public ExportedQuestion(Guid questionId, QuestionType questionType, string[] answers)
         {
             this.QuestionId = questionId;
+            this.QuestionType = questionType;
             this.Answers = answers;
         }
 
         public ExportedQuestion(InterviewQuestion question, ExportedHeaderItem header)
         {
             this.QuestionId = question.Id;
-
+            this.QuestionType = header.QuestionType;
             this.Answers = this.GetAnswers(question, header);
 
             if (this.Answers.Length != header.ColumnNames.Length)
@@ -32,6 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         }
 
         public Guid QuestionId { get; set; }
+        public QuestionType QuestionType { get; set; }
         public string[] Answers { get; set; }
 
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)

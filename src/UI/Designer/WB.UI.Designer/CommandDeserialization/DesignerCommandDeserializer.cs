@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.DateTime;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.GpsCoordinates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Mulimedia;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.MultiOption;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.Numeric;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.QRBarcode;
@@ -51,6 +52,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateDateTimeQuestion", typeof (UpdateDateTimeQuestionCommand) },
                     { "UpdateTextListQuestion", typeof (UpdateTextListQuestionCommand) },
                     { "UpdateQRBarcodeQuestion", typeof (UpdateQRBarcodeQuestionCommand) },
+                    { "UpdateMultimediaQuestion", typeof (UpdateMultimediaQuestionCommand) },
                     { "UpdateMultiOptionQuestion", typeof (UpdateMultiOptionQuestionCommand) },
                     { "UpdateSingleOptionQuestion", typeof (UpdateSingleOptionQuestionCommand) },
                     { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestionCommand) },

@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
         {
         }
 
-        public FeaturedAnswerView(IAnswer answer)
+        public FeaturedAnswerView(Answer answer)
         {
             this.Id = answer.PublicKey;
             this.Title = answer.AnswerText;

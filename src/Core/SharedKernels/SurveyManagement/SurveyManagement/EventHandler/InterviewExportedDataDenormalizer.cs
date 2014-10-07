@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var exportStructure = this.questionnaireExportStructureWriter.GetById(interview.Document.QuestionnaireId,
                 interview.Document.QuestionnaireVersion);
 
-            var interviewDataExportView = new InterviewDataExportView(interview.Document.QuestionnaireId,
+            var interviewDataExportView = new InterviewDataExportView(evnt.EventSourceId, interview.Document.QuestionnaireId,
                 interview.Document.QuestionnaireVersion,
                 exportStructure.HeaderToLevelMap.Values.Select(
                     exportStructureForLevel =>
@@ -194,7 +194,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     {
                         ansnwers.Add(string.Empty);
                     }
-                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, ansnwers.ToArray());
+                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, headerItem.QuestionType, ansnwers.ToArray());
                 }
                 else
                 {

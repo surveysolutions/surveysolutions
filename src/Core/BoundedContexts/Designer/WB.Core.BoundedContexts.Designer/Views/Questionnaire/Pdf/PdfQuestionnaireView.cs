@@ -132,6 +132,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     {
                         PublicId = childGroup.PublicKey,
                         Title = childGroup.Title,
+                        VariableName = childGroup.VariableName,
                         Depth = 1
                     };
                     this.AddGroup(pdfGroupView, null);
@@ -158,10 +159,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                             Answers = (childQuestion.Answers ?? new List<Answer>()).Select(x => new PdfAnswerView
                             {
                                 Title = x.AnswerText,
-                                AnswerType = x.AnswerType,
-                                AnswerValue = x.AnswerValue
+                                AnswerValue = x.AnswerValue,
+                                ParentValue = x.ParentValue
                             }).ToList(),
-                            Variable = childQuestion.StataExportCaption
+                            VariableName = childQuestion.StataExportCaption
                         };
 
                         newQuestion.ConditionExpression = childQuestion.ConditionExpression;
@@ -182,7 +183,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                         var pdfGroupView = new PdfGroupView {
                             PublicId = childGroup.PublicKey, 
                             Title = childGroup.Title, 
-                            Depth = this.GetEntityDepth(item.PublicKey) + 1
+                            Depth = this.GetEntityDepth(item.PublicKey) + 1,
+                            VariableName = childGroup.VariableName
                         };
                         this.AddGroup(pdfGroupView, group.PublicId);
                         Fill(pdfGroupView, child);

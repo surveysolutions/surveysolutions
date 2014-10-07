@@ -1,3 +1,5 @@
+using WB.UI.Shared.Web.Filters;
+
 namespace WB.UI.Headquarters.API.Attributes
 {
     public class SimpleTokenVerifier : ITokenVerifier

@@ -209,6 +209,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionsAndGroupsCollectionDen
             });
         }
 
+        protected static IPublishedEvent<MultimediaQuestionUpdated> CreateMultimediaQuestionUpdatedEvent(Guid questionId)
+        {
+            return ToPublishedEvent(new MultimediaQuestionUpdated()
+            {
+                QuestionId = questionId,
+            });
+        }
+
         protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null)
         {
             return ToPublishedEvent(new StaticTextUpdated()

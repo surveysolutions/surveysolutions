@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
@@ -37,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
 
         protected static ExportedQuestion CreateExportedQuestion(string[] answers = null)
         {
-            return new ExportedQuestion(Guid.NewGuid(), answers ?? new string[0]);
+            return new ExportedQuestion(Guid.NewGuid(), QuestionType.Text,  answers ?? new string[0]);
         }
 
         protected static InterviewActionExportView CreateInterviewActionExportView(string interviewId,

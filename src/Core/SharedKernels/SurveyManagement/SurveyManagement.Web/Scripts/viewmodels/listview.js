@@ -1,41 +1,4 @@
-﻿ko.bindingHandlers.sortby = {
-    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-        var listView = bindingContext.$root;
-
-        var value = valueAccessor();
-
-        var sort = "sorting";
-        var sortAsc = "sorting-up";
-        var sortDesc = "sorting-down";
-
-        var refreshUI = function () {
-
-            $(element).addClass(sort);
-
-            $(element).removeClass(sortAsc);
-            $(element).removeClass(sortDesc);
-
-            if (listView.SortOrder() == value) {
-                if (listView.SortDirection()) {
-                    $(element).addClass(sortAsc);
-                } else {
-                    $(element).addClass(sortDesc);
-                }
-            }
-        };
-
-        listView.SortOrder.subscribe(refreshUI);
-        listView.SortDirection.subscribe(refreshUI);
-
-        $(element).click(function () {
-            listView.sort(value);
-        });
-
-        refreshUI();
-    }
-};
-
-Supervisor.VM.ListView = function (serviceUrl, commandExecutionUrl) {
+﻿Supervisor.VM.ListView = function (serviceUrl, commandExecutionUrl) {
     Supervisor.VM.ListView.superclass.constructor.apply(this, [commandExecutionUrl]);
     
     var self = this;
@@ -118,7 +81,7 @@ Supervisor.VM.ListView = function (serviceUrl, commandExecutionUrl) {
         self.SendRequest(self.ServiceUrl, params, function(data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
             self.ItemsSummary(data.ItemsSummary);
-        });
+        }, true);
     };
     
     self.SelectedItems = ko.computed(function () {

@@ -225,9 +225,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
-    <Compile Include="App_Start\ValidatorsConfig.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
-    <Compile Include="Code\ConfigurationManager\MembershipProviderSettings.cs" />
     <Compile Include="Code\AccountRepositoryFactory.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
@@ -239,8 +237,6 @@
     <Compile Include="Code\Exceptions\CustomHandleErrorFilter.cs" />
     <Compile Include="Code\IQuestionnaireHelper.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
-    <Compile Include="Code\PasswordRegularExpressionAttribute.cs" />
-    <Compile Include="Code\PasswordStringLengthAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
     <Compile Include="Code\VerificationErrorsMapper.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
@@ -307,7 +303,6 @@
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
-    <Compile Include="Code\PasswordPolicyFactory.cs" />
     <Compile Include="Pdf\OSUtil.cs" />
     <Compile Include="Pdf\PdfConvert.cs" />
     <Compile Include="Pdf\PdfConvertEnvironment.cs" />
@@ -318,6 +313,13 @@
     <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="WebServices\IPublicService.cs" />
+    <Compile Include="WebServices\PublicService.cs" />
+    <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
+    <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
+    <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />
+    <Compile Include="WebServices\Questionnaire\QuestionnaireListViewMessage.cs" />
+    <Compile Include="WebServices\RemoteFileInfo.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
   </ItemGroup>
@@ -331,6 +333,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="UpdatedDesigner\content\wb-options-window.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -424,7 +427,6 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="UpdatedDesigner\app\scripts\components\contextMenu.js" />
     <Content Include="UpdatedDesigner\app\scripts\filters\escapeFilter.js" />
     <Content Include="UpdatedDesigner\app\views\treegroup.html" />
     <Content Include="UpdatedDesigner\app\views\treequestion.html" />
@@ -491,6 +493,7 @@
     <Content Include="UpdatedDesigner\content\i\d-loading.gif" />
     <Content Include="UpdatedDesigner\content\i\d-normal.gif" />
     <Content Include="UpdatedDesigner\content\i\icons.png" />
+    <Content Include="UpdatedDesigner\content\i\loading-bg.png" />
     <Content Include="UpdatedDesigner\content\i\popover-arrow.png" />
     <Content Include="UpdatedDesigner\content\i\section-collapse-glyph.png" />
     <Content Include="UpdatedDesigner\content\lib\wb-vars.css.css" />
@@ -686,10 +689,10 @@
     <Content Include="UpdatedDesigner\test.html" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.css" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.js" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.min.css" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\angular-block-ui.min.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.js" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.css" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap-tpls.js" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap-tpls.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-bootstrap\ui-bootstrap.js" />
@@ -1051,31 +1054,6 @@
     <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.js" />
     <Content Include="UpdatedDesigner\vendor\lodash\dist\lodash.underscore.min.js" />
     <Content Include="UpdatedDesigner\vendor\lodash\LICENSE.txt" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\.gitignore" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\Gruntfile.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\mousetrap.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\mousetrap.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\bind-dictionary\mousetrap-bind-dictionary.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\bind-dictionary\mousetrap-bind-dictionary.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\global-bind\mousetrap-global-bind.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\global-bind\mousetrap-global-bind.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\pause\mousetrap-pause.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\pause\mousetrap-pause.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\mousetrap-record.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\mousetrap-record.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\tests\index.html" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\tests\jelly.css" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\tests\jelly.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\chai-1.6.0.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\jquery-1.7.2.min.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\key-event.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\mocha-1.9.0.css" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\mocha-1.9.0.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\sinon-1.7.1.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\sinon-chai-2.4.0.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\libs\sinon-ie-1.7.1.js" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\mousetrap.html" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\tests\test.mousetrap.js" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.js" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\azusa.jpg" />
@@ -1256,14 +1234,6 @@
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-loading-bar\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\.bower.json" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\package.json" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\bind-dictionary\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\global-bind\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\pause\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\plugins\record\README.md" />
-    <Content Include="UpdatedDesigner\vendor\mousetrap\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-pines-notify\LICENSE" />
@@ -1288,8 +1258,6 @@
     <Content Include="UpdatedDesigner\data\editQuestion\3c0ff7a6d1614aa2b9af21aaa40cdb47.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\bower.json" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\LICENSE" />
-    <Content Include="UpdatedDesigner\vendor\angular-block-ui\README.md" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-hotkeys\LICENSE" />
@@ -1340,11 +1308,13 @@
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\CONTRIBUTING.md" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\README.md" />
-    <Content Include="UpdatedDesigner\vendor\ng-context-menu\dist\ng-context-menu.min.js.map">
-      <DependentUpon>ng-context-menu.min.js</DependentUpon>
-    </Content>
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\source\angular-ui-tree.scss" />
+    <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.css.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.js.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.js.map" />
+    <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1400,10 +1370,6 @@
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
-      <Project>{8C4B0E67-8C0A-4222-8646-3CF3131CADE5}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
       <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
@@ -1419,10 +1385,6 @@
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
-      <Project>{8263ca84-bfb5-4a7b-ae31-f5fc5b05e7c1}</Project>
-      <Name>WB.UI.Designer.WebServices</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -21,5 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
         public InterviewStatus? Status { get; set; }
 
         public Guid ViewerId { get; set; }
+
+        public string SearchBy { get; set; }
     }
 }

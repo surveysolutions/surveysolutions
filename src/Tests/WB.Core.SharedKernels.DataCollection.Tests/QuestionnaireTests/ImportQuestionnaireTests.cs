@@ -129,22 +129,42 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
 
         [Test]
-        public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported_Then_QuestionnaireDeleted_Event_is_Published()
+        public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported_with_specified_version_Then_QuestionnaireDeleted_Event_is_Published_with_specified_version()
         {
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaire();
+            var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
             var newState = CreateQuestionnaireDocumentWithOneChapter();
-            var userId = Guid.NewGuid();
 
             using (var eventContext = new EventContext())
             {
-                questionnaire.ImportFromDesigner(userId, newState, false);
+                questionnaire.ImportFromDesigner(responsibleId, newState, false);
                 // act
-                questionnaire.DeleteQuestionnaire(1);
+                questionnaire.DeleteQuestionnaire(1, responsibleId);
                 // assert
                 var lastEvent = GetLastEvent<QuestionnaireDeleted>(eventContext);
             
                 Assert.That(lastEvent.QuestionnaireVersion, Is.EqualTo(1));
+            }
+        }
+
+        [Test]
+        public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported_with_specified_responsible_Then_QuestionnaireDeleted_Event_is_Published_with_specified_responsible()
+        {
+            // arrange
+            var responsibleId = Guid.Parse("11111111111111111111111111111111");
+            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            var newState = CreateQuestionnaireDocumentWithOneChapter();
+
+            using (var eventContext = new EventContext())
+            {
+                questionnaire.ImportFromDesigner(responsibleId, newState, false);
+                // act
+                questionnaire.DeleteQuestionnaire(1, responsibleId);
+                // assert
+                var lastEvent = GetLastEvent<QuestionnaireDeleted>(eventContext);
+
+                Assert.That(lastEvent.ResponsibleId, Is.EqualTo(responsibleId));
             }
         }
 
@@ -156,7 +176,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
             // act
 
-            Assert.Throws<QuestionnaireException>(() => questionnaire.DeleteQuestionnaire(2));
+            Assert.Throws<QuestionnaireException>(() => questionnaire.DeleteQuestionnaire(2, null));
         }
 
         [Test]
@@ -259,13 +279,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                var responsibleId = Guid.Parse("11111111111111111111111111111111");
+                Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
-                questionnaire.DeleteQuestionnaire(2);
-                questionnaire.ImportFromDesigner(Guid.NewGuid(), document, false);
+                questionnaire.ImportFromDesigner(responsibleId, document, false);
+                questionnaire.DeleteQuestionnaire(2, responsibleId);
+                questionnaire.ImportFromDesigner(responsibleId, document, false);
 
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(3));

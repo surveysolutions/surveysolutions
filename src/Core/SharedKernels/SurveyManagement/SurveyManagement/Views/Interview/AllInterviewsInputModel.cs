@@ -14,5 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public InterviewStatus? Status { get; set; }
 
         public long? QuestionnaireVersion { get; set; }
+
+        public string SearchBy { get; set; }
     }
 }

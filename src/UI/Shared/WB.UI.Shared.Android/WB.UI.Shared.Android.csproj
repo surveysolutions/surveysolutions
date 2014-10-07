@@ -67,6 +67,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.Droid.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -120,6 +127,7 @@
     <Compile Include="Bindings\MandatoryValidationMessageBinding.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
+    <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Controls\Breadcrumbs.cs" />
     <Compile Include="Controls\IScreenChanging.cs" />
     <Compile Include="Controls\MaskedEditTextControl\MaskedWatcher.cs" />
@@ -135,9 +143,11 @@
     <Compile Include="Controls\ScreenItems\AbstractSingleOptionQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\ScreenItems\AutoPropagateQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\CascadingComboboxQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\IAnswerProgressIndicator.cs" />
     <Compile Include="Controls\ScreenItems\AnswerProgressIndicator.cs" />
     <Compile Include="Controls\ScreenItems\FilteredComboboxQuestionView.cs" />
+    <Compile Include="Controls\ScreenItems\PictureQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\StaticTextView.cs" />
     <Compile Include="Controls\ScreenItems\QRBarcodeQuestionView.cs" />
     <Compile Include="Controls\ScreenItems\DateQuestionView.cs" />
@@ -195,6 +205,9 @@
     <AndroidResource Include="Resources\Layout\FilteredComboboxRowLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\CascadingComboboxRowLayout.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Values\Strings.xml" />
@@ -246,6 +259,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
+  </ItemGroup>
+   <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\no_image_found.jpg" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml">

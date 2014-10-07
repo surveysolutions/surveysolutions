@@ -185,4 +185,7 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>Roster size question cannot have negative values.</value>
   </data>
+  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
+    <value>Multimedia question is not supported in data preloading.</value>
+  </data>
 </root>

@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CapiBoundedContextModule.cs" />
+    <Compile Include="EventHandler\AnswerOptionsForCascadingQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\AnswerOptionsForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewViewModelDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="UI\MaskFormatter\MaskedFormatter.cs" />
     <Compile Include="Views\InterviewDetails\AnswerViewModel.cs" />
     <Compile Include="Views\InterviewDetails\BreadCrumbsUtils.cs" />
+    <Compile Include="Views\InterviewDetails\CascadingComboboxQuestionViewModel.cs" />
     <Compile Include="Views\InterviewDetails\CommentDocument.cs" />
     <Compile Include="Views\InterviewDetails\GridItems\HeaderItem.cs" />
     <Compile Include="Views\InterviewDetails\InterviewViewModel.cs" />

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
+using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
@@ -17,7 +18,9 @@ using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters
 {
@@ -35,6 +38,8 @@ namespace WB.UI.Headquarters
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new RequireSecureConnectionAttribute());
+            filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new MaintenanceFilter());
             filters.Add(new SupervisorFunctionsEnabledAttribute());
@@ -70,6 +75,7 @@ namespace WB.UI.Headquarters
         protected void Application_Start()
         {
             this.logger.Info("Starting application.");
+            MvcHandler.DisableMvcResponseHeader = true;
 
             AppDomain current = AppDomain.CurrentDomain;
             current.UnhandledException += this.CurrentUnhandledException;
@@ -87,9 +93,13 @@ namespace WB.UI.Headquarters
             RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
             RegisterRoutes(RouteTable.Routes);
 
+            DataAnnotationsConfig.RegisterAdapters();
+
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+
+            AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
         }
 
         private static void RegisterVirtualPathProvider()
@@ -153,6 +163,15 @@ namespace WB.UI.Headquarters
                 return;
             }
             ElmahDataFilter.Apply(e, ctx);
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            var application = sender as HttpApplication;
+            if (application != null && application.Context != null)
+            {
+                application.Context.Response.Headers.Remove("Server");
+            }
         }
     }
 }

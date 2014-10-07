@@ -11,6 +11,7 @@
     <AssemblyName>WB.Core.SharedKernels.SurveyManagement.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -139,6 +140,7 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultipleOptionsQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericIntegerQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_NumericRealQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
+    <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_PictureQuestionAnswered_received.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_QRBarcodeQuestionAnswered_received.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowAdded_event_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived.cs" />
@@ -211,6 +213,7 @@
     <Compile Include="EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
     <Compile Include="Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_2_questions_one_with_var_lable_other_without.cs" />
     <Compile Include="IncomePackagesRepositoryTests\IncomePackagesRepositoryTestContext.cs" />
+    <Compile Include="IncomePackagesRepositoryTests\when_processing_item.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_Processing_Stored_Item_by_deleted_interview.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_Processing_Stored_Item_with_zero_events_inside.cs" />
     <Compile Include="IncomePackagesRepositoryTests\when_StoreIncomingItem_called_and_item_has_empty_content.cs" />
@@ -225,7 +228,9 @@
     <Compile Include="Merger\when_merging_questionnaire_and_interview_data_with_question_which_uses_roster_title_in_substitution_and_placed_in_nested_group.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_duplicate_values.cs" />
     <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_incorrect_integer_value_greater_then_allowed_max_value.cs" />
+    <Compile Include="PreloadedDataVerifierTests\when_verifying_preloaded_data_with_multimedia_question.cs" />
     <Compile Include="QuestionDataParserTests\when_parsing_answer_on_numeric_int_roster_size_question_and_answer_is_negative.cs" />
+    <Compile Include="QuestionDataParserTests\when_pasing_answer_on_multimedia_question.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_int_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_numeric_real_question_and_answer_is_greater_then_allowed.cs" />
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\CsvDataFileExportServiceTestContext.cs" />
@@ -235,6 +240,7 @@
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_AddRecord_called_for_interview_export_view.cs" />
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewActionFileName_is_called.cs" />
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewExportedDataFileName_called_for_level_name.cs" />
+    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_disabled.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_DeleteExportedDataForQuestionnaireVersion_is_called_and_directory_is_present.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
@@ -443,10 +449,6 @@
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader\WB.Core.SharedKernels.QuestionnaireUpgrader.csproj">
-      <Project>{8C4B0E67-8C0A-4222-8646-3CF3131CADE5}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireUpgrader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
       <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>

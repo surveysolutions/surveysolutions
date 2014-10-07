@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
         }
 
-        public EditAnswerView(IAnswer answer)
+        public EditAnswerView(Answer answer)
         {
             this.Id = answer.PublicKey;
             this.Title = answer.AnswerText;

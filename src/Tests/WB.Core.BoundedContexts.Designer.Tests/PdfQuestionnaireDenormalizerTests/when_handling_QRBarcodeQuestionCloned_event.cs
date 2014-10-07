@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfQuestionnaireDenormalizerTes
             GetQuestion().Title.ShouldEqual(questionTitle);
 
         It should_question_title_be_equal_to_specified_var_name = () =>
-            GetQuestion().Variable.ShouldEqual(questionVariable);
+            GetQuestion().VariableName.ShouldEqual(questionVariable);
 
         It should_question_title_be_equal_to_specified_enablement_condition = () =>
             GetQuestion().ConditionExpression.ShouldEqual(questionEnablementCondition);

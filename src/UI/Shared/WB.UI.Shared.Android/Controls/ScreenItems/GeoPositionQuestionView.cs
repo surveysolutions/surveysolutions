@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.locationText = new TextView(this.Context);
             this.locationText.SetTypeface(null, TypefaceStyle.Bold);
 
-            this.InitializeTextAndButtonView(this.locationText, "Get Location", this.GetLocation);
+            this.InitializeViewAndButtonView(this.locationText, "Get Location", this.GetLocation);
 
             this.PutAnswerStoredInModelToUI();
         }

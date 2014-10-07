@@ -8,27 +8,32 @@
     </a>
     <ul class="dropdown-menu">
         <li class="@(page == MenuItem.Surveys ? "active" : "")">
-            <a href="@Url.Action("SurveysAndStatuses", "HQ")">@MainMenu.SurveysAndStatuses</a>
+            <a href="@Url.Action("SurveysAndStatuses", "HQ", new { area = "" })">@MainMenu.SurveysAndStatuses</a>
         </li>
         <li class="@(page == MenuItem.Summary ? "active" : "")">
-            <a href="@Url.Action("SupervisorsAndStatuses", "HQ")">@MainMenu.TeamsAndStatuses</a>
+            <a href="@Url.Action("SupervisorsAndStatuses", "HQ", new { area = "" })">@MainMenu.TeamsAndStatuses</a>
         </li>
         <li class="@(page == MenuItem.MapReport ? "active" : "")">
-            <a href="@Url.Action("MapReport", "HQ")">@MainMenu.MapReport</a>
+            <a href="@Url.Action("MapReport", "HQ", new { area = "" })">@MainMenu.MapReport</a>
         </li>
         <li class="@(page == MenuItem.InterviewsChart ? "active" : "")">
-            <a href="@Url.Action("InterviewsChart", "HQ")">@MainMenu.CumulativeChart</a>
+            <a href="@Url.Action("InterviewsChart", "HQ", new { area = "" })">@MainMenu.CumulativeChart</a>
         </li>
     </ul>
 </li>
 <li class="@(page == MenuItem.Docs ? "active" : "")">
-    <a href="@Url.Action("Interviews", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> @MainMenu.Interviews</a>
+    <a href="@Url.Action("Interviews", "HQ", new {area=""})">
+        <i class="glyphicon glyphicon-list-alt"></i>
+        @MainMenu.Interviews
+    </a>
 </li>
 <li class="@(page == MenuItem.Teams ? "active" : "")">
-    <a href="@Url.Action("Index", "Supervisor", new { area = string.Empty })"><i class="glyphicon glyphicon-user"></i> @MainMenu.Supervisors</a>
+    <a href="@Url.Action("Index", "Supervisor", new { area = string.Empty })">
+        <i class="glyphicon glyphicon-user"></i> @MainMenu.Supervisors
+    </a>
 </li>
 <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
-    <a href="@Url.Action("Index", "HQ")"><i class="glyphicon glyphicon-list-alt"></i> @MainMenu.Questionnaires</a>
+    <a href="@Url.Action("Index", "HQ", new { area = "" })"><i class="glyphicon glyphicon-list-alt"></i> @MainMenu.Questionnaires</a>
 </li>
 <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">

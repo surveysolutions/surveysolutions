@@ -9,5 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public long? TemplateVersion { get; set; }
         public Guid? ResponsibleId { get; set; }
         public InterviewStatus? Status { get; set; }
+        public string SearchBy { get; set; }
     }
 }

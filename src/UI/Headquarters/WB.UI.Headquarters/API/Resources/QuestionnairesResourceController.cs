@@ -7,10 +7,11 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Formatters;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.Resources
 {
-    [TokenValidationAuthorizationAttribute]
+    [TokenValidationAuthorization]
     [RoutePrefix("api/resources/questionnaires/v1")]
     [HeadquarterFeatureOnly]
     public class QuestionnairesResourceController : ApiController

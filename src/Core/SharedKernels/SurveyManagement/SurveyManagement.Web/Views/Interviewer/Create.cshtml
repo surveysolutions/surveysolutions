@@ -12,13 +12,14 @@
         $('#umbrella').hide();
 </script>
 }
-
+@Html.Partial("_alerts")
 <div class="page-header">
     <h2>Create interviewer</h2>
 </div>
 
 
 <form class="form-horizontal" method="POST">
+    @Html.AntiForgeryToken()
     @{
         this.Html.RenderPartial("UserCreateForm");
     }

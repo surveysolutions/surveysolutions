@@ -38,3 +38,4 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.QuestionnaireVerification.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: InternalsVisibleTo("WB.Tools.QuestionnaireDocumentsConverter")]

@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
     {
         public LabelItem() {}
 
-        public LabelItem(IAnswer answer)
+        public LabelItem(Answer answer)
         {
             this.PublicKey = answer.PublicKey;
             this.Caption = answer.AnswerValue ?? answer.AnswerText;
