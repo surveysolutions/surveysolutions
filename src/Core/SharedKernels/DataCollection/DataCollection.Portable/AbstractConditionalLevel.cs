@@ -274,19 +274,19 @@ namespace WB.Core.SharedKernels.DataCollection
             return true;
         }
 
-        protected bool IsEmptyAnswer(string answer)
+        protected bool IsAnswerEmpty(string answer)
         {
             return string.IsNullOrWhiteSpace(answer);
         }
 
-        protected bool IsEmptyAnswer<TY>(TY? answer) where TY : struct
+        protected bool IsAnswerEmpty<TY>(TY? answer) where TY : struct
         {
-            return answer.HasValue;
+            return !answer.HasValue;
         }
 
-        protected bool IsEmptyAnswer<TY>(TY[] answer) where TY : struct
+        protected bool IsAnswerEmpty<TY>(TY[] answer) where TY : struct
         {
-            return answer != null && answer.Length > 0;
+            return answer == null || answer.Length > 0;
         }
 
         public void CalculateConditionChanges(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,

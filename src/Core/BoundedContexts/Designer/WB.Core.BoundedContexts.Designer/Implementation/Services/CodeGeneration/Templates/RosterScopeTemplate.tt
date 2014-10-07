@@ -99,7 +99,7 @@
         
         <#foreach (var question in Model.Questions) 
         {#>            
-        private <#=question.GeneratedTypeName#> <#=question.GeneratedMemberName#>;
+        private <#=question.GeneratedTypeName#> <#=question.GeneratedMemberName#> = null;
         private ConditionalState <#= question.GeneratedStateName#> = new ConditionalState(IdOf.<#=question.GeneratedIdName#>);
         public <#=question.GeneratedTypeName#> <#=question.VariableName#>
         {
@@ -125,7 +125,7 @@
         {#>        
         private bool <#=question.GeneratedMandatoryMethodName#>()
         {
-            return !this.IsEmptyAnswer(<#=question.VariableName#>);
+            return !this.IsAnswerEmpty(<#=question.VariableName#>);
         }
         <# }#>
         <# }#>

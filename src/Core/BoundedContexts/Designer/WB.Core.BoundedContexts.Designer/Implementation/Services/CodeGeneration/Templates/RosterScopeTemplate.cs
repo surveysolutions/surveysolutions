@@ -461,7 +461,7 @@ foreach (var question in Model.Questions)
             
             #line default
             #line hidden
-            this.Write(";\r\n        private ConditionalState ");
+            this.Write(" = null;\r\n        private ConditionalState ");
             
             #line 103 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
@@ -583,7 +583,7 @@ if(question.IsMandatory)
             
             #line default
             #line hidden
-            this.Write("()\r\n        {\r\n            return !this.IsEmptyAnswer(");
+            this.Write("()\r\n        {\r\n            return !this.IsAnswerEmpty(");
             
             #line 128 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
