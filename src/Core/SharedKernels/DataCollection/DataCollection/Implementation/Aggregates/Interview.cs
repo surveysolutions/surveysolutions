@@ -1951,7 +1951,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void HardDelete(Guid userId)
         {
-            ThrowIfInterviewHardDeleted();
+            if (this.wasHardDeleted)
+                return;
+
             this.ApplyEvent(new InterviewHardDeleted(userId));
         }
 
