@@ -1,0 +1,84 @@
+﻿@using Lucene.Net.Index
+@using Mono.CSharp
+@using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
+@using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
+@using WB.Core.SharedKernels.SurveyManagement.Views.User
+@model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedDataVerificationErrorsView
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+    ViewBag.Title = "Index";
+}
+<div class="row-fluid">
+    @if (Model.Errors.Length > 0)
+    {
+        <div style="height: 500px; overflow-y: scroll;">
+            <table class="table table-striped table-bordered table-condensed table-break-words">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Message</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Errors)
+                    {
+                        <tr>
+                            <th>@item.Code</th>
+                            <th>@item.Message</th>
+                            <th>
+                                @foreach (var reference in item.References)
+                                {
+                                    if (!string.IsNullOrEmpty(@reference.Content))
+                                    {
+                                        <span>@reference.Type : @reference.Content</span>
+                                        <br />
+                                    }
+                                    if (reference.PositionX.HasValue)
+                                    {
+                                        <span>Column: @reference.PositionX</span>
+                                        <br />
+                                    }
+
+                                    if (reference.PositionY.HasValue)
+                                    {
+                                        <span>Row: @reference.PositionY</span>
+                                        <br />
+                                    }
+
+                                    <span>File name: @reference.DataFile </span>
+
+                                }
+                                <br />
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <a href="@Url.Action("BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version })" class="btn btn-primary"><i class="icon-white"></i>Upload new data</a>
+    }
+    else
+    {
+        <h3>Data is valid</h3>
+        using (Html.BeginForm(Model.PreloadedContentType == PreloadedContentType.Sample ? "ImportSampleData" : "ImportPanelData", "HQ", new { id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
+        {
+            <fieldset class="form-horizontal">
+                <div class="control-group">
+                    <div class="control-label">Select responsible</div>
+                    <div class="controls">
+                        <select name="responsibleSupervisor" class="input-block-level">
+                            @foreach (UserListItem item in ViewBag.SupervisorList)
+                            {
+                                <option value="@item.UserId">@item.UserName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-large btn-primary pull-right" type="submit">Create sample from this data</button>
+                </div>
+            </fieldset>
+        }
+    }
+</div>

@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
@@ -46,7 +47,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersPullContext = headquartersPullContext;
         }
 
-        public void Process()
+        public Guid[] PullUsersAndReturnListOfSynchronizedSupervisorsId()
         {
             var localSupervisors = users.Query(_ => _.Where(x => x.Roles.Contains(UserRoles.Supervisor)));
 
@@ -61,6 +62,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.ProcessOneUserChanges(userChanges);
                 }
             }
+            return localSupervisors.Select(s => s.PublicKey).ToArray();
         }
 
         private void ProcessOneUserChanges(IEnumerable<LocalUserChangedFeedEntry> userChanges)

@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
                     parentGroupId: chapterId,
                     title: titleWithSubstitutionToSelf,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,
@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
                     responsibleId: responsibleId,
                     options: options,
                     linkedToQuestionId: linkedToQuestionId,
+                    cascadeFromQuestionId: cascadeFromQuestionId,
                     isFilteredCombobox: isFilteredCombobox));
 
         It should_throw_QuestionnaireException = () =>
@@ -42,7 +43,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
         It should_throw_exception_with_message_containting__title__contains__self__ = () =>
             new[] { "title", "contains", "self" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
-
 
         private static Questionnaire questionnaire;
         private static Exception exception;
@@ -59,6 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddSingleOptionQuestionHandlerT
         private static string validationMessage = "";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
+        private static Guid? cascadeFromQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = false;
     }
 }

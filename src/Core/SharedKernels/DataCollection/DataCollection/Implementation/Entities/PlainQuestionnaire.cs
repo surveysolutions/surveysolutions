@@ -10,6 +10,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
@@ -24,6 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private readonly QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private readonly Func<long> getVersion;
+        private readonly Guid? responsibleId;
 
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<Guid, IGroup> groupCache = null;
@@ -45,6 +47,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         internal QuestionnaireDocument QuestionnaireDocument
         {
             get { return this.innerDocument; }
+        }
+
+        public Guid? ResponsibleId
+        {
+            get { return this.responsibleId; }
         }
 
         internal Dictionary<Guid, IQuestion> QuestionCache
@@ -85,20 +92,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         #endregion
 
 
-        public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion)
+        public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion, Guid? responsibleId)
         {
             InitializeQuestionnaireDocument(document);
 
             this.innerDocument = document;
             this.getVersion = getVersion;
+            this.responsibleId = responsibleId;
         }
 
         public PlainQuestionnaire(QuestionnaireDocument document, long version)
-            : this(document, () => version) {}
+            : this(document, () => version, null) { }
+
+        public PlainQuestionnaire(QuestionnaireDocument document, long version, Guid? responsibleId)
+            : this(document, () => version, responsibleId) { }
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion,
-            Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache)
-            : this(document, getVersion)
+            Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache, Guid? responsibleId)
+            : this(document, getVersion, responsibleId)
         {
             this.groupCache = groupCache;
             this.questionCache = questionCache;
@@ -136,7 +147,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
         }
-
+        
         public string GetQuestionTitle(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).QuestionText;
@@ -150,6 +161,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetGroupTitle(Guid groupId)
         {
             return this.GetGroupOrThrow(groupId).Title;
+        }
+
+        public Guid? GetCascadingQuestionParentId(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
         }
 
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
@@ -185,6 +201,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .AnswerText;
         }
 
+        public string GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return answer option title for question with id '{0}' because it's type {1} does not support answer options.",
+                    questionId, question.QuestionType));
+
+            return question
+                .Answers
+                .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
+                .ParentValue;
+        }
+
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -195,7 +229,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     "Cannot return maximum for selected answers for question with id '{0}' because it's type {1} does not support that parameter.",
                     questionId, question.QuestionType));
 
-            return ((IMultyOptionsQuestion) question).MaxAllowedAnswers;
+            return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
         }
 
         public bool IsCustomValidationDefined(Guid questionId)
@@ -533,11 +567,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId)
         {
             var roster = this.GetGroupOrThrow(rosterId);
-            
+
             var nestedRosters = new List<Guid>();
             var nestedGroups = new Queue<IGroup>(roster.Children.OfType<IGroup>());
 
-            while (nestedGroups.Count>0)
+            while (nestedGroups.Count > 0)
             {
                 var currentGroup = nestedGroups.Dequeue();
                 if (IsRosterGroup(currentGroup))
@@ -558,6 +592,59 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var roster = this.GetGroupOrThrow(rosterId);
             return roster.RosterSizeQuestionId;
+        }
+
+        public IEnumerable<Guid> GetCascadingQuestionsThatDependUponQuestion(Guid questionId)
+        {
+            var result = new List<Guid>();
+            var foundItems = new List<Guid>{questionId};
+            bool itemsAdded = true;
+
+            while (itemsAdded)
+            {
+                itemsAdded = false;
+                foreach (var foundItem in foundItems)
+                {
+                    foundItems = this.QuestionnaireDocument.Children
+                        .TreeToEnumerable(x => x.Children)
+                        .Where(x =>
+                        {
+                            var question = x as SingleQuestion;
+                            var isCascadingQuestion = question != null &&
+                                question.CascadeFromQuestionId.HasValue;
+                            if (isCascadingQuestion)
+                            {
+                                return question.CascadeFromQuestionId == foundItem;
+                            }
+                            return false;
+                        }).Select(x => x.PublicKey).ToList();
+
+                    itemsAdded = itemsAdded || foundItems.Count > 0;
+                    result.AddRange(foundItems);
+                }
+            }
+
+            return result;
+        }
+
+        public IEnumerable<Guid> GetCascadingQuestionsThatDirectlyDependUponQuestion(Guid id)
+        {
+            return this.QuestionnaireDocument.Children.TreeToEnumerable(_ => _.Children)
+                .Where(x =>
+                {
+                    var question = x as AbstractQuestion;
+                    return question != null && question.CascadeFromQuestionId.HasValue && question.CascadeFromQuestionId.Value == id;
+                }).Select(x => x.PublicKey);
+        }
+
+        public IEnumerable<Guid> GetAllChildCascadingQuestions()
+        {
+            return this.QuestionnaireDocument.Children.TreeToEnumerable(_ => _.Children)
+                .Where(x =>
+                {
+                    var question = x as AbstractQuestion;
+                    return question != null && question.CascadeFromQuestionId.HasValue;
+                }).Select(x => x.PublicKey);
         }
 
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
@@ -663,7 +750,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            var parentGroup = (IGroup) question.GetParent();
+            var parentGroup = (IGroup)question.GetParent();
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
@@ -680,7 +767,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             while (group != document)
             {
                 parentGroups.Add(group);
-                group = (IGroup) group.GetParent();
+                group = (IGroup)group.GetParent();
             }
 
             return parentGroups;

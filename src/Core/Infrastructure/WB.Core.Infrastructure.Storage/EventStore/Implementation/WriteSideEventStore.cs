@@ -33,8 +33,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         private readonly UserCredentials credentials;
         internal static readonly string EventsCategory = "WB";
         private static readonly string EventsPrefix = EventsCategory + "-";
-        private IEventStoreConnection connection;
+        private readonly IEventStoreConnection connection;
         bool disposed;
+        private readonly TimeSpan defaultTimeout;
 
         internal const string AllEventsStream = "all_wb";
 
@@ -43,6 +44,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             this.connectionSettings = connectionSettings;
             this.credentials = new UserCredentials(this.connectionSettings.Login, this.connectionSettings.Password);
             this.connection = this.GetConnection();
+            this.defaultTimeout = TimeSpan.FromSeconds(5);
         }
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
@@ -117,9 +119,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 var eventData = this.BuildEventData(@event);
 
-                int expected = (int)(@event.EventSequence == 1 ? ExpectedVersion.Any : @event.EventSequence - 2);
+                int expected = (int)(@event.EventSequence - 2);
                 connection.AppendToStreamAsync(EventsPrefix + @event.EventSourceId.FormatGuid(), expected, this.credentials, eventData)
-                    .Wait(TimeSpan.FromSeconds(2));
+                    .Wait(this.defaultTimeout);
             }
         }
 
@@ -189,7 +191,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 var eventStoreConnection =
                     EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(this.connectionSettings.ServerIP),
                         this.connectionSettings.ServerTcpPort));
-                eventStoreConnection.ConnectAsync().Wait(TimeSpan.FromSeconds(5));
+                eventStoreConnection.ConnectAsync().Wait(this.defaultTimeout);
                 return eventStoreConnection;
             }
             return this.connection;

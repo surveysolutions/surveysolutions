@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Web.Http;
-using System.Web.Http.Dispatcher;
+using WB.UI.Shared.Web.Filters;
 
 
 namespace WB.UI.Supervisor.App_Start
@@ -24,7 +24,7 @@ namespace WB.UI.Supervisor.App_Start
             //support json for browser requests
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
-            //config.MessageHandlers.Add(new BasicAuthMessageHandler());
+            config.MessageHandlers.Add(new EnforceHttpsHandler());
         }
     }
 }

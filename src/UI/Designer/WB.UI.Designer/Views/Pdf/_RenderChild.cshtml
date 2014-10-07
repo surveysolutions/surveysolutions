@@ -2,10 +2,10 @@
 @model WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfEntityView
 
 <div>
-    
+
     @if (this.Model is PdfQuestionView)
     {
-        Html.RenderPartial("_RenderQuestionDetails", (PdfQuestionView) this.Model);
+        Html.RenderPartial("_RenderQuestionDetails", (PdfQuestionView)this.Model);
     }
     else if (this.Model is PdfStaticTextView)
     {
@@ -13,7 +13,8 @@
     }
     else
     {
-        @Html.Raw(string.Format("<h{0}><span>{2} &nbsp;&nbsp;&nbsp;</span>{1}</h{0}>", Math.Min(4, Model.Depth), Html.Encode(Model.Title), Html.Encode(Model.ItemNumber)))
+        @Html.Raw(string.Format("<h{0}><span>{2} &nbsp;&nbsp;&nbsp;</span>{1} <span class=\"variable-name\">{3}</span></h{0}>",
+            Math.Min(4, Model.Depth), Html.Encode(Model.Title), Html.Encode(Model.ItemNumber), Html.Encode(Model.VariableName)))
     }
 
     @if (this.Model.Children.Count > 0)

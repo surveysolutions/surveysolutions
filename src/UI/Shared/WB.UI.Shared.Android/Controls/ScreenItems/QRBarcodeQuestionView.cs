@@ -31,7 +31,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             this.qrBarcodeView = new TextView(this.Context);
             this.qrBarcodeView.SetTypeface(null, TypefaceStyle.Bold);
 
-            this.InitializeTextAndButtonView(this.qrBarcodeView, "Scan", this.ScanQRBarcode);
+            this.InitializeViewAndButtonView(this.qrBarcodeView, "Scan", this.ScanQRBarcode);
 
             this.PutAnswerStoredInModelToUI();
         }

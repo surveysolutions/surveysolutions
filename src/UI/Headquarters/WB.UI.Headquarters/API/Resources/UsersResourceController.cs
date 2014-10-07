@@ -9,10 +9,11 @@ using Main.Core.View.User;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 using WB.UI.Headquarters.API.Attributes;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.Resources
 {
-    [TokenValidationAuthorizationAttribute]
+    [TokenValidationAuthorization]
     [RoutePrefix("api/resources/users/v1")]
     [HeadquarterFeatureOnly]
     public class UsersResourceController : ApiController

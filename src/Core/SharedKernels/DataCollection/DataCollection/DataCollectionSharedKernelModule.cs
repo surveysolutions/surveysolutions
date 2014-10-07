@@ -12,10 +12,16 @@ namespace WB.Core.SharedKernels.DataCollection
     public class DataCollectionSharedKernelModule : NinjectModule
     {
         private readonly bool usePlainQuestionnaireRepository;
+        private readonly string basePath;
+        private readonly string syncDirectoryName;
+        private readonly string dataDirectoryName;
 
-        public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository)
+        public DataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository, string basePath, string syncDirectoryName = "SYNC", string dataDirectoryName = "InterviewData")
         {
             this.usePlainQuestionnaireRepository = usePlainQuestionnaireRepository;
+            this.basePath = basePath;
+            this.syncDirectoryName = syncDirectoryName;
+            this.dataDirectoryName = dataDirectoryName;
         }
 
         public override void Load()
@@ -37,6 +43,12 @@ namespace WB.Core.SharedKernels.DataCollection
             this.Bind(typeof(IVersionedReadSideRepositoryReader<>)).To(typeof(VersionedReadSideRepositoryReader<>));
 
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
+
+            this.Bind<IPlainInterviewFileStorage>()
+              .To<PlainInterviewFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("dataDirectoryName", this.dataDirectoryName);
+
+            this.Bind<IInterviewSynchronizationFileStorage>()
+            .To<InterviewSynchronizationFileStorage>().InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.basePath).WithConstructorArgument("syncDirectoryName", this.syncDirectoryName);
         }
     }
 }

@@ -3,11 +3,11 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
-using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Security;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models;
 
@@ -39,6 +39,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;

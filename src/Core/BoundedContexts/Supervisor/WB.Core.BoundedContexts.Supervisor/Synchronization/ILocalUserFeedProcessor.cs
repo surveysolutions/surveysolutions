@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public interface ILocalUserFeedProcessor
     {
-        void Process();
+        Guid[] PullUsersAndReturnListOfSynchronizedSupervisorsId();
     }
 }

@@ -40,7 +40,7 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+    <Reference Include="Ionic.Zip, Version=1.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\lib\Ionic.Zip.dll</HintPath>
     </Reference>
@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\WebClientExtensions.cs" />
+    <Compile Include="IHeadquartersSettings.cs" />
     <Compile Include="Interviews\IHeadquartersInterviewReader.cs" />
     <Compile Include="Interviews\Implementation\EventHandlers\ReadyToSendToHeadquartersInterviewDenormalizer.cs" />
     <Compile Include="Interviews\Implementation\HeadquartersInterviewReader.cs" />
@@ -97,7 +98,6 @@
     <Compile Include="Synchronization\HeadquartersSynchronizationContext.cs" />
     <Compile Include="Synchronization\ILocalFeedStorage.cs" />
     <Compile Include="Synchronization\ILocalUserFeedProcessor.cs" />
-    <Compile Include="Synchronization\Implementation\Constants.cs" />
     <Compile Include="Synchronization\Implementation\HeadquartersEntityReader.cs" />
     <Compile Include="Synchronization\Implementation\InterviewsSynchronizer.cs" />
     <Compile Include="Synchronization\Implementation\LocalFeedStorage.cs" />
@@ -118,7 +118,6 @@
     <Compile Include="Users\IHeadquartersLoginService.cs" />
     <Compile Include="Users\IHeadquartersUserReader.cs" />
     <Compile Include="Users\Implementation\HeadquartersLoginService.cs" />
-    <Compile Include="HeadquartersSettings.cs" />
     <Compile Include="Users\Implementation\HeadquartersUserReader.cs" />
   </ItemGroup>
   <ItemGroup>

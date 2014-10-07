@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using Main.Core.Documents;
 using Moq;
@@ -19,6 +20,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests
@@ -29,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             Func<HttpMessageHandler> messageHandler = null,
             ILogger logger = null,
             ICommandService commandService = null,
-            HeadquartersSettings headquartersSettings = null)
+            IHeadquartersSettings headquartersSettings = null)
         {
             return new HeadquartersLoginService(logger ?? Substitute.For<ILogger>(),
                 commandService ?? Substitute.For<ICommandService>(),
@@ -38,7 +40,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 headquartersUserReader ?? Substitute.For<IHeadquartersUserReader>());
         }
 
-        public static UserChangedFeedReader UserChangedFeedReader(HeadquartersSettings settings = null,
+        public static UserChangedFeedReader UserChangedFeedReader(IHeadquartersSettings settings = null,
             Func<HttpMessageHandler> messageHandler = null)
         {
             return new UserChangedFeedReader(settings ?? HeadquartersSettings(),
@@ -64,10 +66,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             IJsonUtils jsonUtils = null,
             ICommandService commandService = null,
             HeadquartersPushContext headquartersPushContext = null,
-            IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage=null,
-            IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage=null,
-            IHeadquartersInterviewReader headquartersInterviewReader=null,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository=null)
+            IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage = null,
+            IQueryablePlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
+            IHeadquartersInterviewReader headquartersInterviewReader = null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage = null)
         {
             return new InterviewsSynchronizer(
                 Mock.Of<IAtomFeedReader>(),
@@ -76,7 +79,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 commandService ?? Mock.Of<ICommandService>(),
                 plainStorage ?? Mock.Of<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>(),
                 userDocumentStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
-                plainQuestionnaireRepository?? Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())==new QuestionnaireDocument()),
+                plainQuestionnaireRepository ??
+                    Mock.Of<IPlainQuestionnaireRepository>(
+                        _ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == new QuestionnaireDocument()),
                 Mock.Of<IHeadquartersQuestionnaireReader>(),
                 headquartersInterviewReader ?? Mock.Of<IHeadquartersInterviewReader>(),
                 HeadquartersPullContext(),
@@ -85,22 +90,30 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 jsonUtils ?? Mock.Of<IJsonUtils>(),
                 interviewSummaryRepositoryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 readyToSendInterviewsRepositoryWriter ?? Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(),
-                httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>());
+                httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
+                interviewSynchronizationFileStorage ??
+                    Mock.Of<IInterviewSynchronizationFileStorage>(
+                        _ => _.GetBinaryFilesFromSyncFolder() == new List<InterviewBinaryDataDescriptor>()));
         }
 
-        public static HeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,
+        public static IHeadquartersSettings HeadquartersSettings(Uri loginServiceUri = null,
             Uri usersChangedFeedUri = null,
             Uri interviewsFeedUri = null,
             string questionnaireDetailsEndpoint = "",
             string accessToken = "",
             Uri interviewsPushUrl = null)
         {
-            return new HeadquartersSettings(loginServiceUri ?? new Uri("http://localhost/"),
-                usersChangedFeedUri ?? new Uri("http://localhost/"),
-                interviewsFeedUri ?? new Uri("http://localhost/"),
-                questionnaireDetailsEndpoint,
-                accessToken,
-                interviewsPushUrl ?? new Uri("http://localhost"), new Uri("http://localhost"));
+            var headquartersSettingsMock = new Mock<IHeadquartersSettings>();
+            headquartersSettingsMock.SetupGet(x => x.BaseHqUrl).Returns(loginServiceUri ?? new Uri("http://localhost/"));
+            headquartersSettingsMock.SetupGet(x => x.UserChangedFeedUrl).Returns(usersChangedFeedUri ?? new Uri("http://localhost/"));
+            headquartersSettingsMock.SetupGet(x => x.InterviewsFeedUrl).Returns(interviewsFeedUri ?? new Uri("http://localhost/"));
+            headquartersSettingsMock.SetupGet(x => x.QuestionnaireDetailsEndpoint).Returns(questionnaireDetailsEndpoint);
+            headquartersSettingsMock.SetupGet(x => x.AccessToken).Returns(accessToken);
+            headquartersSettingsMock.SetupGet(x => x.InterviewsPushUrl).Returns(interviewsPushUrl ?? new Uri("http://localhost/"));
+            headquartersSettingsMock.SetupGet(x => x.FilePushUrl).Returns( new Uri("http://localhost/"));
+            headquartersSettingsMock.SetupGet(x => x.QuestionnaireChangedFeedUrl).Returns(new Uri("http://localhost/"));
+            headquartersSettingsMock.SetupGet(x => x.LoginServiceEndpointUrl).Returns(new Uri("http://localhost/"));
+            return headquartersSettingsMock.Object;
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null,

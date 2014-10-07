@@ -58,6 +58,64 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             return this.HandlerResponse<T>(response);
         }
 
+        public T ExecuteRestRequestAsync<T>(string url, CancellationToken ct, byte[] file, string fileName, string login, string password,
+            string method,
+            params KeyValuePair<string, string>[] additionalParams)
+        {
+            var restClient = this.BuildRestClient(login, password);
+
+            var request = this.BuildRequest(url, additionalParams, file, fileName, this.GetRequestMethod(method));
+
+            IRestResponse response = null;
+
+            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
+
+            while (response == null)
+            {
+                if (ct.IsCancellationRequested)
+                {
+                    token.Abort();
+                    throw new RestException("Operation was canceled.");
+                }
+            }
+
+            return this.HandlerResponse<T>(response);
+        }
+
+        public void ExecuteRestRequestAsync(string url, CancellationToken ct, byte[] file, string fileName, string login, string password,
+           string method,
+           params KeyValuePair<string, string>[] additionalParams)
+        {
+            var restClient = this.BuildRestClient(login, password);
+
+            var request = this.BuildRequest(url, additionalParams, file, fileName, this.GetRequestMethod(method));
+
+            IRestResponse response = null;
+
+            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
+
+            while (response == null)
+            {
+                if (ct.IsCancellationRequested)
+                {
+                    token.Abort();
+                    throw new RestException("Operation was canceled.");
+                }
+            } 
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var exception = new Exception(string.Format("Target returned unsupported result with status {0},{1}", response.StatusCode, response.StatusDescription));
+
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                    exception = new AuthenticationException("User is not authorized.");
+
+                this.logger.Error("Sync error. Response status:" + response.StatusCode, exception);
+
+                throw exception;
+            }
+        }
+
         public T ExecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, string login, string password, string method,
             params KeyValuePair<string, string>[] additionalParams)
         {
@@ -147,12 +205,29 @@ namespace WB.Core.GenericSubdomains.Rest.Android
                 //request.AddBody(requestBody);
                 request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             }
-            else
+
+            foreach (var additionalParam in additionalParams)
             {
-                foreach (var additionalParam in additionalParams)
-                {
-                    request.AddParameter(additionalParam.Key, additionalParam.Value);
-                }
+                request.AddParameter(additionalParam.Key, additionalParam.Value);
+            }
+
+            return request;
+        }
+        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams, byte[] file,string fileName, RestSharp.Method method)
+        {
+            var request = new RestRequest(url, method);
+            request.RequestFormat = DataFormat.Json;
+
+            request.AddHeader("Accept-Encoding", "gzip,deflate");
+
+            if (file != null && file.Length>0)
+            {
+                request.AddFile(fileName, file, fileName);
+            }
+
+            foreach (var additionalParam in additionalParams)
+            {
+                request.AddParameter(additionalParam.Key, additionalParam.Value);
             }
 
             return request;

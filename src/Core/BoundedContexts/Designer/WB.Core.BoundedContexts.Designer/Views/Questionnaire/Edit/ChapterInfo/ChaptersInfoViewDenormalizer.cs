@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionAdded>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionUpdated>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionCloned>,
+        IUpdateHandler<GroupInfoView, MultimediaQuestionUpdated>,
         IUpdateHandler<GroupInfoView, StaticTextAdded>,
         IUpdateHandler<GroupInfoView, StaticTextUpdated>,
         IUpdateHandler<GroupInfoView, StaticTextCloned>,
@@ -293,6 +294,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionId: evnt.Payload.QuestionId.FormatGuid(),
                 questionTitle: evnt.Payload.Title,
                 questionType: QuestionType.QRBarcode,
+                questionVariable: evnt.Payload.VariableName,
+                questionConditionExpression: evnt.Payload.EnablementCondition,
+                linkedToQuestionId: null);
+
+            return currentState;
+        }
+
+        public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<MultimediaQuestionUpdated> evnt)
+        {
+            this.UpdateQuestion(questionnaire: currentState,
+                questionId: evnt.Payload.QuestionId.FormatGuid(),
+                questionTitle: evnt.Payload.Title,
+                questionType: QuestionType.Multimedia,
                 questionVariable: evnt.Payload.VariableName,
                 questionConditionExpression: evnt.Payload.EnablementCondition,
                 linkedToQuestionId: null);

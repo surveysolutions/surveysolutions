@@ -94,7 +94,7 @@ namespace WB.UI.Shared.Android.Activities
                 this.screenId = this.Model.Chapters.FirstOrDefault().ScreenId;
             }
 
-            this.Title = this.Model.Title;
+            this.Title = CreateScreenTitle();
 
             if (bundle == null)
             {
@@ -131,6 +131,13 @@ namespace WB.UI.Shared.Android.Activities
         {
             this.lNavigationContainer.LayoutParameters = new RelativeLayout.LayoutParams(this.ScreenWidth/2,
                 this.lNavigationContainer.LayoutParameters.Height);
+        }
+
+        protected virtual string CreateScreenTitle()
+        {
+            return string.Format("{0} {1}", this.Model.Title,
+                string.Join("|",
+                    this.Model.FeaturedQuestions.Values.Where(q => !string.IsNullOrEmpty(q.AnswerString)).Select(q => q.AnswerString)));
         }
 
         public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)

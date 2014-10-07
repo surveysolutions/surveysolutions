@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.QuestionnaireUpgrader.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 {
@@ -28,9 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<NumericQuestionAdded>,
         IEventHandler<NumericQuestionCloned>,
         IEventHandler<NumericQuestionChanged>,
-        IEventHandler<ImageUpdated>,
-        IEventHandler<ImageUploaded>,
-        IEventHandler<ImageDeleted>,
         IEventHandler<GroupDeleted>,
         IEventHandler<GroupUpdated>,
         IEventHandler<GroupBecameARoster>,
@@ -48,6 +44,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<QRBarcodeQuestionAdded>,
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<QRBarcodeQuestionCloned>,
+
+        IEventHandler<MultimediaQuestionUpdated>,
 
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
@@ -356,38 +354,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             UpdateQuestion(evnt, EventConverter.TextListQuestionChangedToQuestionData(evnt));
         }
         
-        public void Handle(IPublishedEvent<ImageUpdated> evnt)
-        {
-            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
-            question.UpdateCard(evnt.Payload.ImageKey, evnt.Payload.Title, evnt.Payload.Description);
-            this.UpdateQuestionnaire(evnt, item);
-        }
-
-        public void Handle(IPublishedEvent<ImageUploaded> evnt)
-        {
-            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            var newImage = new Image
-                               {
-                                   PublicKey = evnt.Payload.ImagePublicKey,
-                                   Title = evnt.Payload.Title,
-                                   Description = evnt.Payload.Description,
-                                   CreationDate = DateTime.Now
-                               };
-            var question = item.Find<AbstractQuestion>(evnt.Payload.PublicKey);
-            question.AddCard(newImage);
-            this.UpdateQuestionnaire(evnt, item);
-        }
-
-        public void Handle(IPublishedEvent<ImageDeleted> evnt)
-        {
-            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
-
-            question.RemoveCard(evnt.Payload.ImageKey);
-            this.UpdateQuestionnaire(evnt, item);
-        }
-
         public void Handle(IPublishedEvent<GroupDeleted> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
@@ -501,6 +467,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QRBarcodeQuestionCloned e = evnt.Payload;
             CloneQuestion(evnt, e.ParentGroupId, e.TargetIndex,EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
+        }
+
+        public void Handle(IPublishedEvent<MultimediaQuestionUpdated> evnt)
+        {
+            UpdateQuestion(evnt, EventConverter.MultimediaQuestionUpdatedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<StaticTextAdded> evnt)

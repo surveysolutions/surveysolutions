@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 {
@@ -98,7 +99,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
 
             try
             {
-                this.capiCleanUpService.DeleteInterveiw(questionnarieId);
+                this.capiCleanUpService.DeleteInterview(questionnarieId);
             }
 
             #warning replace catch with propper handler of absent questionnaries
@@ -184,7 +185,7 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             try
             {
 
-                this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version));
+                this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
             }
             catch (Exception exception)
             {

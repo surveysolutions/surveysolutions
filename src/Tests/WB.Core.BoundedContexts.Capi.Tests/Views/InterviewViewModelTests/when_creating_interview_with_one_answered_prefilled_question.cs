@@ -43,8 +43,14 @@ namespace WB.Core.BoundedContexts.Capi.Tests.Views.InterviewViewModelTests
             interviewViewModel = CreateInterviewViewModel(questionnaire, rosterStructure,
                 interviewSynchronizationDto);
 
-        It should_answeredQuestions_in_statistic_cont_has_zero_elements = () =>
-            interviewViewModel.Title.ShouldEqual(string.Format("{0} | {1} ", testTemplate, answerForNumeric));
+        It should_interview_title_be_equal_to_questionnaire_title = () =>
+            interviewViewModel.Title.ShouldEqual(testTemplate);
+
+        It should_interview_has_1_prefilled_question = () =>
+            interviewViewModel.FeaturedQuestions.Count.ShouldEqual(1);
+
+        It should_interview_has_1_prefilled_question_with_answer_equal_to_answerForNumeric = () =>
+            interviewViewModel.FeaturedQuestions[new InterviewItemId(answeredQuestionId)].AnswerString.ShouldEqual(answerForNumeric.ToString());
 
         It should_invalidQuestions_in_statistic_be_empty = () =>
             interviewViewModel.Statistics.InvalidQuestions.ShouldBeEmpty();

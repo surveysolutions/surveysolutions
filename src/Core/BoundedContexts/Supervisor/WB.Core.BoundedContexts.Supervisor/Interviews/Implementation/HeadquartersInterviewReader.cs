@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Interviews.Implementation
 {
     internal class HeadquartersInterviewReader : HeadquartersEntityReader, IHeadquartersInterviewReader
     {
-        public HeadquartersInterviewReader(IJsonUtils jsonUtils, HeadquartersSettings headquartersSettings)
+        public HeadquartersInterviewReader(IJsonUtils jsonUtils, IHeadquartersSettings headquartersSettings)
             : base(jsonUtils, headquartersSettings) {}
 
         public async Task<InterviewSynchronizationDto> GetInterviewByUri(Uri headquartersInterviewUri)

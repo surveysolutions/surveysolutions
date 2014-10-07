@@ -1,4 +1,6 @@
-﻿namespace Questionnaire.Core.Web.Security.Tests.QuestionaireRoleProviderTests
+﻿using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
+
+namespace Questionnaire.Core.Web.Security.Tests.QuestionaireRoleProviderTests
 {
     internal class QuestionnaireRoleProviderTestsContext
     {

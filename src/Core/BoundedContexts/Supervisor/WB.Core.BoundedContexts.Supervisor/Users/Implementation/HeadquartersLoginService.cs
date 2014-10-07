@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Users;
 
 namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
@@ -22,13 +23,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
         private readonly ILogger logger;
         private readonly Action<ICommand> executeCommand;
         private readonly Func<HttpMessageHandler> messageHandler;
-        private readonly HeadquartersSettings headquartersSettings;
+        private readonly IHeadquartersSettings headquartersSettings;
         private readonly IHeadquartersUserReader headquartersUserReader;
 
         public HeadquartersLoginService(ILogger logger, 
             ICommandService commandService,
             Func<HttpMessageHandler> messageHandler,
-            HeadquartersSettings headquartersSettings,
+            IHeadquartersSettings headquartersSettings,
             IHeadquartersUserReader headquartersUserReader)
         {
             if (logger == null) throw new ArgumentNullException("logger");

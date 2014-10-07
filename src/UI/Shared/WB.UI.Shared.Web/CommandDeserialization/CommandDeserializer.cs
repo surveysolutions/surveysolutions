@@ -12,12 +12,10 @@ namespace WB.UI.Shared.Web.CommandDeserialization
         protected abstract Dictionary<string, Type> KnownCommandTypes { get; }
         private readonly ILogger logger;
 
-
         protected CommandDeserializer()
         {
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
-
 
         public ICommand Deserialize(string commandType, string serializedCommand)
         {
