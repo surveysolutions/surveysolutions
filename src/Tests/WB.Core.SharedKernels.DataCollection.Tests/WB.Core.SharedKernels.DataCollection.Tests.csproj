@@ -137,6 +137,7 @@
     <Compile Include="InterviewTests\when_creating_interview_with_pre_filled_question_of_allowed_type_for_tester.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_pre_filled_question_of_allowed_type.cs" />
     <Compile Include="InterviewTests\when_hard_delete_interview.cs" />
+    <Compile Include="InterviewTests\when_hard_delete_interview_which_was_hard_deleted_before.cs" />
     <Compile Include="InterviewTests\when_hqreject_interview_in_incorrect_status.cs" />
     <Compile Include="InterviewTests\when_hqreject_interview.cs" />
     <Compile Include="InterviewTests\when_hqapprove_interview.cs" />
