@@ -3626,12 +3626,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (!cascadingId.HasValue) return;
             
-            string parentValue = questionnaire.GetCascadingParentValue(questionId, value);
+            decimal parentValue = questionnaire.GetCascadingParentValue(questionId, value);
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(cascadingId.Value, rosterVector);
             var answer = interviewState.AnswersSupportedInExpressions[questionKey];
             var stringAnswer = AnswerUtils.AnswerToString(answer);
 
-            var answerNotExistsInParent = stringAnswer != parentValue;
+            var answerNotExistsInParent = Convert.ToDecimal(stringAnswer) != parentValue;
             if (answerNotExistsInParent)
                 throw new InterviewException(string.Format(
                     "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}",
