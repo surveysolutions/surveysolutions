@@ -3078,9 +3078,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     bool isNewStateEnabled = this.ShouldQuestionBeEnabledByCustomEnablementCondition(state, dependentQuestion, questionnaire, getAnswer);
                     bool isOldStateEnabled = !IsQuestionDisabled(state, dependentQuestion);
+
+                    bool parentAnswered = true;
+                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(dependentQuestion.Id);
+                    if (cascadingQuestionParentId.HasValue)
+                    {
+                        KeyValuePair<string, Identity> parentInstance = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingQuestionParentId.Value, dependentQuestion.RosterVector, questionnaire);
+                        parentAnswered = state.AnsweredQuestions.Contains(ConversionHelper.ConvertIdentityToString(parentInstance.Value));
+                    }
+
                     PutToCorrespondingListAccordingToEnablementStateChange(dependentQuestion,
                         collectedQuestionsToBeEnabled, collectedQuestionsToBeDisabled,
-                        isNewStateEnabled: isNewStateEnabled,
+                        isNewStateEnabled: isNewStateEnabled && parentAnswered,
                         isOldStateEnabled: isOldStateEnabled);
 
                     processedQuestionKeys.Add(ConversionHelper.ConvertIdAndRosterVectorToString(dependentQuestion.Id, dependentQuestion.RosterVector));
@@ -3958,10 +3967,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
             InterviewStateDependentOnAnswers state,
-            Identity answeredQuestion, IQuestionnaire questionnaire, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
+            Identity answeredQuestion, IQuestionnaire questionnaire, 
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
             Func<Identity, bool?> getNewQuestionStatus,
             EnablementChanges enablementChanges,
-            out List<Identity> questionsToBeDeclaredValid, out List<Identity> questionsToBeDeclaredInvalid)
+            out List<Identity> questionsToBeDeclaredValid,
+            out List<Identity> questionsToBeDeclaredInvalid)
         {
             questionsToBeDeclaredValid = new List<Identity>();
             questionsToBeDeclaredInvalid = new List<Identity>();

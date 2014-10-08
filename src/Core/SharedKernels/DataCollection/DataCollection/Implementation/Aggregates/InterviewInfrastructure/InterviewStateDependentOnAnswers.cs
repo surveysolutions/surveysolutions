@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ValidAnsweredQuestions = new HashSet<string>();
             this.InvalidAnsweredQuestions = new HashSet<string>();
             this.AnswerComments = new List<AnswerComment>();
+            this.DisabledByConditionQuestions = new HashSet<string>();
         }
 
         public Dictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -33,6 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Dictionary<string, DistinctDecimalList> RosterGroupInstanceIds { set; get; }
         public HashSet<string> ValidAnsweredQuestions { set; get; }
         public HashSet<string> InvalidAnsweredQuestions { set; get; }
+        public HashSet<string> DisabledByConditionQuestions { get; set; }
         public List<AnswerComment> AnswerComments { get; set; }
 
         public void ApplyInterviewChanges(InterviewChanges changes)
