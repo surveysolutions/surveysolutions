@@ -23,9 +23,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             return (T)eventContext.Events.Last(e => e.Payload is T).Payload;
         }
 
+        public static Questionnaire CreateQuestionnaire(Guid creatorId)
+        {
+            return new Questionnaire(creatorId, new QuestionnaireDocument(), false);
+        }
+
         public static Questionnaire CreateQuestionnaire()
         {
-            return new Questionnaire(new Guid(), new QuestionnaireDocument(), false, string.Empty);
+            return CreateQuestionnaire(new Guid(), new QuestionnaireDocument());
         }
 
         public static Questionnaire CreateQuestionnaire(Guid creatorId, QuestionnaireDocument document)

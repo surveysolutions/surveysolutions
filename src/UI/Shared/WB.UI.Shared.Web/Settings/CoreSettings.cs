@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Practices.ServiceLocation;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Shared.Web.Settings
 {
@@ -18,7 +19,7 @@ namespace WB.UI.Shared.Web.Settings
 
         public static bool IsDevelopmentEnvironment
         {
-            get { return bool.Parse(config.AppSettings["IsDevelopmentEnvironment"]); }
+            get { return config.AppSettings["IsDevelopmentEnvironment"].ToBool(false); }
         }
     }
 }

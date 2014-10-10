@@ -127,7 +127,7 @@
     <value>At least one options contains empty value in ParentValue column</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>There is at least one duplicate of Title + ParentValue pairs. List of option should not contains any duplicates of such type</value>
+    <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
   </data>
   <data name="ShouldCascadeFromExistingQuestion" xml:space="preserve">
     <value>Question to cascade from should exist in questionnaire</value>

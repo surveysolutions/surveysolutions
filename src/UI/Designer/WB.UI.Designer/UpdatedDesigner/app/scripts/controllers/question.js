@@ -2,7 +2,7 @@
     .controller('QuestionCtrl',
         function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys) {
             $scope.currentChapterId = $state.params.chapterId;
-            
+            var dictionnaires = {};
             hotkeys.bindTo($scope)
               .add({
                   combo: 'ctrl+s',
@@ -13,7 +13,6 @@
                       event.preventDefault();
                   }
               });
-
             var dataBind = function (result) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
                 $scope.activeQuestion.breadcrumbs = result.breadcrumbs;
@@ -30,6 +29,7 @@
                 $scope.activeQuestion.validationExpression = result.validationExpression;
                 $scope.activeQuestion.validationMessage = result.validationMessage;
                 $scope.activeQuestion.allQuestionScopeOptions = result.allQuestionScopeOptions;
+                dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
                 $scope.activeQuestion.notPrefilledQuestionScopeOptions = result.notPrefilledQuestionScopeOptions;
                 $scope.activeQuestion.instructions = result.instructions;
                 $scope.activeQuestion.maxAnswerCount = result.maxAnswerCount;
@@ -54,6 +54,7 @@
 
                 $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
+
                 $scope.setQuestionType(result.type);
 
                 $scope.setLinkSource(result.linkedToQuestionId);
@@ -112,8 +113,11 @@
                 var wasItFiltered = initialQuestion.isFilteredCombobox || false;
                 var wasItCascade = !_.isEmpty(initialQuestion.cascadeFromQuestionId);
 
-                if ((wasItCascade && actualQuestion.isFilteredCombobox) || (
-                    wasItFiltered && !_.isEmpty(actualQuestion.cascadeFromQuestionId))) {
+                if (
+                    (wasItCascade && actualQuestion.isFilteredCombobox) ||
+                    (wasItCascade && !_.isEmpty(initialQuestion.cascadeFromQuestionId)) ||
+                    (wasItFiltered && !_.isEmpty(actualQuestion.cascadeFromQuestionId)) 
+                    ){
                     return true;
                 }
 
@@ -123,6 +127,21 @@
             $scope.setQuestionType = function (type) {
                 $scope.activeQuestion.type = type;
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
+                $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
+
+
+                if (type === 'TextList') {
+                    $scope.activeQuestion.questionScope = 'Interviewer';
+                }
+
+                if (type === 'DateTime') {
+                    $scope.activeQuestion.allQuestionScopeOptions = _.filter($scope.activeQuestion.allQuestionScopeOptions, function (val) {
+                        return val.value !== 'Supervisor';
+                    });
+                    if ($scope.activeQuestion.questionScope === 'Supervisor') {
+                        $scope.activeQuestion.questionScope = 'Interviewer';
+                    }
+                }
                 if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Prefilled') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
