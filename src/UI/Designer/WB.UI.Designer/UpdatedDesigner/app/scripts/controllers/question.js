@@ -1,7 +1,18 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService) {
+        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys) {
             $scope.currentChapterId = $state.params.chapterId;
+            
+            hotkeys.bindTo($scope)
+              .add({
+                  combo: 'ctrl+s',
+                  description: 'Save current question',
+                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                  callback: function (event) {
+                      $scope.saveQuestion();
+                      event.preventDefault();
+                  }
+              });
 
             var dataBind = function (result) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
