@@ -1,4 +1,6 @@
-﻿namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
+﻿using System;
+
+namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
 {
     public class QuestionnaireDeleted
     {

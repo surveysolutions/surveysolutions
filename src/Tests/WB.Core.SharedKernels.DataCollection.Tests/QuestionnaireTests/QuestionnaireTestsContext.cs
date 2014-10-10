@@ -23,19 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             return (T)eventContext.Events.Last(e => e.Payload is T).Payload;
         }
 
-        public static Questionnaire CreateQuestionnaire(Guid creatorId)
+        public static Questionnaire CreateQuestionnaire(Guid? creatorId = null, QuestionnaireDocument document = null)
         {
-            return new Questionnaire(creatorId, new QuestionnaireDocument(), false);
-        }
-
-        public static Questionnaire CreateQuestionnaire()
-        {
-            return CreateQuestionnaire(new Guid(), new QuestionnaireDocument());
-        }
-
-        public static Questionnaire CreateQuestionnaire(Guid creatorId, QuestionnaireDocument document)
-        {
-            return new Questionnaire(new Guid(), document, false, string.Empty);
+            return new Questionnaire(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, string.Empty);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
