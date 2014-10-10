@@ -13,7 +13,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToRoslynConverterTests
             expectedResults = new Dictionary<string, string>
             {
                 { "[a] > 0", "a > 0" },
+                { "[a] > 0 and [b] < 3", "(a > 0) && (b < 3)" },
                 { "[x] = [y]", "x == y" },
+                { "contains([prob_school],8)", "prob_school.Contains(8)" },
             };
 
             converter = Create.NCalcToRoslynConverter();

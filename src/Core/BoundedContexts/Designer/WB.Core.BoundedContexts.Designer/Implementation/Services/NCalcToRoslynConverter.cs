@@ -166,25 +166,48 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             public override void Visit(Function function)
             {
-                this.builder.Append(function.Identifier.Name);
+                bool isContainsFunction = function.Identifier.Name.Trim().ToLower() == "contains" && function.Expressions.Length == 2;
 
-                this.builder.Append("(");
-
-                for (int i = 0; i < function.Expressions.Length; i++)
+                if (isContainsFunction)
                 {
-                    function.Expressions[i].Accept(this);
-                    if (i < function.Expressions.Length - 1)
-                    {
-                        this.builder.Remove(this.builder.Length - 1, 1);
-                        this.builder.Append(", ");
-                    }
+                    function.Expressions[0].Accept(this);
+
+                    TrimEndingSpaces(this.builder);
+
+                    this.builder.Append(".Contains(");
+
+                    function.Expressions[1].Accept(this);
+
+                    TrimEndingSpaces(this.builder);
+
+                    this.builder.Append(") ");
                 }
+                else
+                {
+                    this.builder.Append(function.Identifier.Name);
 
-                // trim spaces before adding a closing paren
-                while (this.builder[this.builder.Length - 1] == ' ')
-                    this.builder.Remove(this.builder.Length - 1, 1);
+                    this.builder.Append("(");
 
-                this.builder.Append(") ");
+                    for (int i = 0; i < function.Expressions.Length; i++)
+                    {
+                        function.Expressions[i].Accept(this);
+                        if (i < function.Expressions.Length - 1)
+                        {
+                            this.builder.Remove(this.builder.Length - 1, 1);
+                            this.builder.Append(", ");
+                        }
+                    }
+
+                    TrimEndingSpaces(this.builder);
+
+                    this.builder.Append(") ");
+                }
+            }
+
+            private static void TrimEndingSpaces(StringBuilder stringBuilder)
+            {
+                while (stringBuilder[stringBuilder.Length - 1] == ' ')
+                    stringBuilder.Remove(stringBuilder.Length - 1, 1);
             }
 
             public override void Visit(Identifier parameter)
@@ -192,7 +215,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 this.builder.Append(parameter.Name).Append(" ");
             }
 
-            protected void EncapsulateNoValue(LogicalExpression expression)
+            private void EncapsulateNoValue(LogicalExpression expression)
             {
                 if (expression is ValueExpression || expression is Identifier)
                 {
