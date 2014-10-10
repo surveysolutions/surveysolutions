@@ -3623,19 +3623,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var questionId = answeredQuestion.Id;
             Guid? cascadingId = questionnaire.GetCascadingQuestionParentId(questionId);
-
-            if (!cascadingId.HasValue) return;
             
-            decimal parentValue = questionnaire.GetCascadingParentValue(questionId, value);
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(cascadingId.Value, rosterVector);
-            var answer = interviewState.AnswersSupportedInExpressions[questionKey];
-            var stringAnswer = AnswerUtils.AnswerToString(answer);
+            if (!cascadingId.HasValue) return;
 
-            var answerNotExistsInParent = Convert.ToDecimal(stringAnswer) != parentValue;
+            decimal childParentValue = questionnaire.GetCascadingParentValue(questionId, value);
+
+            var questionIdentity = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingId.Value, rosterVector, questionnaire).Value;
+            string questionKey = ConversionHelper.ConvertIdentityToString(questionIdentity);
+
+            if (!interviewState.AnswersSupportedInExpressions.ContainsKey(questionKey))
+                return;
+            
+            object answer = interviewState.AnswersSupportedInExpressions[questionKey];
+            string parentAnswer = AnswerUtils.AnswerToString(answer);
+
+            var answerNotExistsInParent = Convert.ToDecimal(parentAnswer) != childParentValue;
             if (answerNotExistsInParent)
                 throw new InterviewException(string.Format(
                     "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}",
-                    FormatQuestionForException(questionId, questionnaire), value, parentValue, stringAnswer));
+                    FormatQuestionForException(questionId, questionnaire), value, childParentValue, parentAnswer));
         }
 
         private static void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
