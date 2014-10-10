@@ -2520,10 +2520,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewChanges CalculateInterviewChangesOnAnswerQRBarcodeQuestion(InterviewStateDependentOnAnswers state,
             Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
-            var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
-
-            var answersToRemove = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading);
-
         {
             Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateQrBarcodeAnswer(questionId, rosterVector, answer);
 
@@ -3521,10 +3517,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-            IEnumerable<Identity> cascadingQuestionsToRevalidateIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(answeredQuestion.Id), answeredQuestion.RosterVector, questionnaire, getRosterInstanceIds);
-
-                    .Concat(cascadingQuestionsToRevalidateIdentities)
         private List<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(InterviewStateDependentOnAnswers state,
             IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
             IQuestionnaire questionnaire)

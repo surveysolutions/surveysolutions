@@ -6,8 +6,8 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
-using WB.UI.Designer.Services;
-using WB.UI.Designer.Services.Questionnaire;
+using WB.UI.Designer.WebServices;
+using WB.UI.Designer.WebServices.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
