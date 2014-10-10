@@ -313,13 +313,13 @@
     <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocationModule.cs" />
-    <Compile Include="Services\IPublicService.cs" />
-    <Compile Include="Services\PublicService.cs" />
-    <Compile Include="Services\Questionnaire\DownloadQuestionnaireRequest.cs" />
-    <Compile Include="Services\Questionnaire\QuestionnaireListRequest.cs" />
-    <Compile Include="Services\Questionnaire\QuestionnaireListViewItemMessage.cs" />
-    <Compile Include="Services\Questionnaire\QuestionnaireListViewMessage.cs" />
-    <Compile Include="Services\RemoteFileInfo.cs" />
+    <Compile Include="WebServices\IPublicService.cs" />
+    <Compile Include="WebServices\PublicService.cs" />
+    <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
+    <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
+    <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />
+    <Compile Include="WebServices\Questionnaire\QuestionnaireListViewMessage.cs" />
+    <Compile Include="WebServices\RemoteFileInfo.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
   </ItemGroup>
