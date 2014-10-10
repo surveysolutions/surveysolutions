@@ -195,6 +195,7 @@
     <Compile Include="Events\Users\UserLoggedIn.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ITemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynExpressionProcessor.cs" />
+    <Compile Include="Implementation\Services\NCalcToRoslynConverter.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
@@ -441,6 +442,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
+      <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
+      <Name>NCalc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
