@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
+using System.Threading;
 using WB.Core.Infrastructure;
 using WB.Core.SharedKernel.Utils.Serialization;
 
@@ -7,6 +9,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
 {
     internal class FileTemporaryDataStorage<T> : ITemporaryDataStorage<T> where T : class
     {
+        static ConcurrentDictionary<string, object> lockedFiles = new ConcurrentDictionary<string, object>();
         private readonly string rootPath;
         private readonly IJsonUtils jsonSerrializer;
 
@@ -19,10 +22,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
             : this(jsonSerrializer, AppDomain.CurrentDomain.GetData("DataDirectory").ToString())
         {
         }
+
         public void Store(T payload, string name)
         {
             var path = this.GetOrCreateObjectStoreFolder();
-            File.WriteAllText(this.GetItemFileName(path, name), this.jsonSerrializer.GetItemAsContent(payload));
+
+            lock (GetLockObject(path))
+            {
+                File.WriteAllText(this.GetItemFileName(path, name), this.jsonSerrializer.GetItemAsContent(payload));
+            }
         }
 
         public T GetByName(string name)
@@ -31,14 +39,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
             var fullFilePath = Path.Combine(path, name);
             if (!File.Exists(fullFilePath))
                 return null;
-            var fileContent = File.ReadAllText(fullFilePath);
 
-            return this.jsonSerrializer.Deserrialize<T>(fileContent);
+            lock (GetLockObject(fullFilePath))
+            {
+                var fileContent = File.ReadAllText(fullFilePath);
+                return this.jsonSerrializer.Deserrialize<T>(fileContent);
+            }
+        }
+
+        private static object GetLockObject(string path)
+        {
+            if (!lockedFiles.ContainsKey(path))
+                lockedFiles[path] = new object();
+
+            return lockedFiles[path];
         }
 
         private string GetOrCreateObjectStoreFolder()
         {
-            var path = Path.Combine(this.rootPath, typeof (T).Name);
+            var path = Path.Combine(this.rootPath, typeof(T).Name);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             return path;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
+using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
@@ -37,6 +38,7 @@ namespace WB.UI.Headquarters
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new MaintenanceFilter());
@@ -96,6 +98,8 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+
+            AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
         }
 
         private static void RegisterVirtualPathProvider()

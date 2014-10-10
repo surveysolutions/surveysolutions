@@ -269,6 +269,9 @@
     <Compile Include="QuestionnaireTests\when_cloning_text_question_by_id.cs" />
     <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_with_cascading_options.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_group_inside_the_same_parent_to_position_which_is_bigger_then_parent_children_count.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_group_to_negative_position.cs" />
+    <Compile Include="QuestionnaireTests\when_moving_group_to_position_which_is_bigger_then_group_children_count.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_numeric_question_and_question_is_null.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_filtered_combobox.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_multimedia_questioin.cs" />
@@ -286,6 +289,7 @@
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_and_1_option_has_empty_parent_value.cs" />
+    <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_and_1_option_has_not_decimal_parent_value.cs" />
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_with_1_duplicated_option.cs" />
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_some_of_option_titles_not_unique.cs" />
     <Compile Include="UpdateFilteredComboboxOptionsHandlerTests\when_updating_filtered_combobox_options_and_1_option_have_empty_title.cs" />

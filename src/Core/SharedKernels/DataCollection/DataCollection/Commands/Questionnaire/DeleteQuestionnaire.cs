@@ -19,6 +19,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
         [AggregateRootId]
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }
-        private Guid? ResponsibleId { get; set; }
+        public Guid? ResponsibleId { get; set; }
     }
 }

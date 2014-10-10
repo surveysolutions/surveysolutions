@@ -85,4 +85,16 @@
     scope="\\web.config$" 
     match="/configuration/appSettings/add[@key='IsDevelopmentEnvironment']/@value" />
   </parameter>
+  <parameter name="Enable SSL"
+      defaultValue="false">
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/appSettings/add[@key='IsHttpsRequired']/@value" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/system.web/httpCookies/@requireSSL" />
+   <parameterEntry kind="XmlFile" 
+      scope="\\web.config$" 
+      match="/configuration/system.web/authentication/forms/@requireSSL" />
+   </parameter>
 </parameters>

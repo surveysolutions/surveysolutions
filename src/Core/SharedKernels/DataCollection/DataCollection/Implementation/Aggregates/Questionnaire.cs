@@ -153,16 +153,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
                     this.EventSourceId.FormatGuid(), questionnaireVersion));
 
-            var plainQuestionnaire = availableVersions[questionnaireVersion] as PlainQuestionnaire;
-            if (plainQuestionnaire != null)
+            var createdById = availableVersions[questionnaireVersion].ResponsibleId;
+            if (createdById.HasValue && createdById != responsibleId)
             {
-                var createdById = plainQuestionnaire.ResponsibleId;
-                if (createdById.HasValue && createdById != responsibleId)
-                {
-                    throw new QuestionnaireException(
-                        string.Format("You don't have permissions to delete this questionnaire."));
-                }
+                throw new QuestionnaireException(
+                    string.Format("You don't have permissions to delete this questionnaire."));
             }
+
 
             this.ApplyEvent(new QuestionnaireDeleted()
             {

@@ -3,7 +3,7 @@
 @using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 <div class="question no-page-break">
     <span>
-        @Model.ItemNumber &nbsp;&nbsp; @Model.Title <span class="variable-name">@Model.Variable</span>
+        @Model.ItemNumber &nbsp;&nbsp; @Model.Title <span class="variable-name">@Model.VariableName</span>
         @if (Model.GetHasCondition())
         {
             <a href="#@("c" + Model.ItemNumber)" id="@("cq" + Model.ItemNumber)">[c @Model.ItemNumber]</a>

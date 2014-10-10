@@ -38,23 +38,14 @@ namespace WB.UI.Capi.Syncronization.Push
 
         }
 
-        public bool PushBinary(string login, string password, byte[] data, string fileName, Guid interviewId, CancellationToken ct)
+        public void PushBinary(string login, string password, byte[] data, string fileName, Guid interviewId, CancellationToken ct)
         {
-            if (data==null)
+            if (data == null)
                 throw new InvalidOperationException("data is empty");
 
-            try
-            {
-                bool result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostFilePath, ct,
-                    data, fileName, login, password, null,
-                    new KeyValuePair<string, string>("interviewId", interviewId.FormatGuid()));
-
-                return result;
-            }
-            catch (RestException)
-            {
-                return false;
-            }
+            this.webExecutor.ExecuteRestRequestAsync<bool>(PostFilePath, ct,
+                data, fileName, login, password, null,
+                new KeyValuePair<string, string>("interviewId", interviewId.FormatGuid()));
         }
     }
 }

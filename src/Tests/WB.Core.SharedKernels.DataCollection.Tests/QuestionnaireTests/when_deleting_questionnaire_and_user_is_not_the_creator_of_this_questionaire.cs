@@ -6,7 +6,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
-    internal class when_delete_questionnaire_and_user_dont_have_permissions_to_do_it : QuestionnaireTestsContext
+    internal class when_deleting_questionnaire_and_user_is_not_the_creator_of_this_questionaire : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
         It should_exception_be_type_of_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        private It should_throw_exception_with_message_containting__dont_have_permissions__ = () =>
+        It should_throw_exception_with_message_containting__dont_have_permissions__ = () =>
             new[] { "don't", "have", "permissions" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Guid responsibleId = Guid.Parse("11111111111111111111111111111111");
