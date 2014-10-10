@@ -9,11 +9,11 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
-using WB.UI.Designer.Services.Questionnaire;
+using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
 
-namespace WB.UI.Designer.Services
+namespace WB.UI.Designer.WebServices
 {
     public class PublicService : IPublicService
     {

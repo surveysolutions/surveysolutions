@@ -26,11 +26,11 @@
                 </button>
                 @if (User.IsInRole("Headquarter"))
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "HQ")">Headquarters</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "HQ", new { area = "" })">Headquarters</a>
                 }
                 else
                 {
-                    <a class="navbar-brand" href="@Url.Action("Index", "Survey")">Supervisor</a>
+                    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new { area = "" })">Supervisor</a>
                 }
             </div>
             <div class="collapse navbar-collapse">
