@@ -34,8 +34,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                 new Dictionary<string, Tuple<decimal, string>[]>(), new HashSet<string>(),
                 answerComments ?? new List<AnswerComment>(),
                 new HashSet<string>(),
-                new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(), new HashSet<string>(
-                    ), new HashSet<string>(), true);
+                new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(),
+                new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionState>());
         }
 
         public static Identity Identity(Guid id, decimal[] rosterVector)
