@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
-        string GetCascadingParentValue(Guid questionId, decimal answerOptionValue);
+        decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue);
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 

@@ -1012,7 +1012,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 PublicKey = groupId,
                 GroupText = title,
-                VariableName = variableName,
+                VariableName = null,
                 ParentGroupPublicKey = parentGroupId,
                 Description = description,
                 ConditionExpression = condition,
@@ -3357,7 +3357,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options, bool isCascade = false)
         {
-            if ((options == null || !options.Any() || options.Count() < 2) && !isCascade)
+            if ((options == null || !options.Any() || options.Count() < 2))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorEmpty, "Question with options should have two options at least");

@@ -4,7 +4,9 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests
 {
@@ -23,6 +25,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                 groupsToBeEnabled ?? new List<Identity>(),
                 questionsToBeDisabled ?? new List<Identity>(),
                 questionsToBeEnabled ?? new List<Identity>());
+        }
+
+        public static InterviewState InterviewState(InterviewStatus? status =null,List<AnswerComment> answerComments = null)
+        {
+            return new InterviewState(Guid.NewGuid(), 1, status ?? InterviewStatus.SupervisorAssigned, new Dictionary<string, object>(),
+                new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>(), new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>(),
+                new Dictionary<string, Tuple<decimal, string>[]>(), new HashSet<string>(),
+                answerComments ?? new List<AnswerComment>(),
+                new HashSet<string>(),
+                new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(), new HashSet<string>(
+                    ), new HashSet<string>(), true);
         }
 
         public static Identity Identity(Guid id, decimal[] rosterVector)

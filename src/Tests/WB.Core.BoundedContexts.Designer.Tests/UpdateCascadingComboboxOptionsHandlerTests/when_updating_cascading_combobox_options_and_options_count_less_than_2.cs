@@ -6,9 +6,9 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
-namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandlerTests
+namespace WB.Core.BoundedContexts.Designer.Tests.UpdateCascadingComboboxOptionsHandlerTests
 {
-    internal class when_updating_cascading_combobox_options_with_1_duplicated_option : QuestionnaireTestsContext
+    internal class when_updating_cascading_combobox_options_and_options_count_less_than_2 : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -28,13 +28,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     new Answer { AnswerText = "Option 2", AnswerValue = "2" }
                 }
             });
-            questionnaire.Apply(new NewQuestionAdded
+            questionnaire.Apply(new NewQuestionAdded()
             {
                 PublicKey = questionId,
                 GroupPublicKey = chapterId,
                 QuestionType = QuestionType.SingleOption,
                 QuestionText = "text",
-                StataExportCaption = "var2",
+                StataExportCaption = "var",
+                IsFilteredCombobox = false,
                 ResponsibleId = responsibleId,
                 CascadeFromQuestionId = parentQuestionId
             });
@@ -47,10 +48,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__duplicates____title_plus_parent_value__ = () =>
-            new[] { "duplicates", "title + parent value" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
+        It should_throw_exception_with_message_containting__should_have_two_options_at_least__ = () =>
+             new[] { "should have", "two options at least" }.ShouldEachConformTo(
+                    keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Questionnaire questionnaire;
         private static Exception exception;
@@ -58,11 +58,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static Guid parentQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static Option[] options =
-        {
-            new Option(Guid.NewGuid(), "1", "Option 1", "1"), 
-            new Option(Guid.NewGuid(), "2", "Option 2", "2"),
-            new Option(Guid.NewGuid(), "3", "Option 2", "2")
-        };
+        private static Option[] options = new[] { new Option(Guid.NewGuid(), "1", "Option 1") };
     }
 }
