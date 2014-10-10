@@ -267,7 +267,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                         interviewIndex + 1, files.Count));
                     this.PushFile(interviewFile);
                     this.interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
-                    this.headquartersPushContext.PushMessage(string.Format("Interview {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
+                    this.headquartersPushContext.PushMessage(string.Format("File {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
                 }
                 catch (Exception exception)
                 {

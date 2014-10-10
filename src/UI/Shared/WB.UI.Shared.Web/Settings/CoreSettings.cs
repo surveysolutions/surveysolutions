@@ -21,5 +21,10 @@ namespace WB.UI.Shared.Web.Settings
         {
             get { return config.AppSettings["IsDevelopmentEnvironment"].ToBool(false); }
         }
+
+        public static bool IsHttpsRequired
+        {
+            get { return config.AppSettings["IsHttpsRequired"].ToBool(true); }
+        }
     }
 }

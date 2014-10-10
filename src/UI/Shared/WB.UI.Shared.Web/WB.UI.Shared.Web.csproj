@@ -122,8 +122,10 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
+    <Compile Include="Filters\EnforceHttpsHandler.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
     <Compile Include="Filters\ITokenVerifier.cs" />
+    <Compile Include="Filters\RequireSecureConnectionAttribute.cs" />
     <Compile Include="Filters\LocalOrDevelopmentAccessOnlyAttribute.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenAttribute.cs" />
     <Compile Include="Filters\NoCacheAttribute.cs" />

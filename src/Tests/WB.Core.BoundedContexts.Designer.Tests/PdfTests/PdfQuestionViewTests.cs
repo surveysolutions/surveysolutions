@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.PdfTests
                 Title = "question text",
                 QuestionType = QuestionType.Text,
                 Answers = new List<PdfAnswerView>(),
-                Variable = stataCaption,
+                VariableName = stataCaption,
                 ValidationExpression = validationExpression,
                 ConditionExpression = conditionExpression
             };

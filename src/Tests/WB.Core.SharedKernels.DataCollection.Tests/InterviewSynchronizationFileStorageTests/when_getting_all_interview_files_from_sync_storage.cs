@@ -25,13 +25,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewSynchronizationFil
 
         Because of = () => result = interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
 
-        It should_2_files_be_returned = () =>
+        It should_return_2_files = () =>
             result.Count.ShouldEqual(2);
 
-        It should_content_of_first_file_be_equal_to_data1 = () =>
+        It should_return_first_record_with_data1 = () =>
             result[0].GetData().ShouldEqual(data1);
 
-        It should_content_of_second_file_be_equal_to_data2 = () =>
+        It should_return_second_record_with_data2 = () =>
            result[1].GetData().ShouldEqual(data2);
 
         private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;

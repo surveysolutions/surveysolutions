@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using System.Web.Compilation;
+using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Http.Filters;
 using System.Web.SessionState;
@@ -43,6 +44,7 @@ namespace WB.UI.Supervisor
         
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new RequireSecureConnectionAttribute());
             filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new LongWebsiteDirectoryPathFilter());
@@ -100,6 +102,8 @@ namespace WB.UI.Supervisor
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+
+            AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
         }
 
         private static void RegisterVirtualPathProvider()
