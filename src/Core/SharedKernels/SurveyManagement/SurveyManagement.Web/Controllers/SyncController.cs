@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -260,30 +261,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             UserView user = this.GetUserByNameAndPassword();
             if (user == null)
             {
-                return this.Json(false, JsonRequestBehavior.AllowGet);
+                throw new HttpException((int)HttpStatusCode.Forbidden, "user wasn't unauthorized");
+            }
+
+            if (this.Request.Files == null || this.Request.Files.Count == 0 || this.Request.Files[0] == null)
+            {
+                throw new HttpException((int) HttpStatusCode.NoContent, "file is absent");
             }
             try
             {
-                if (this.Request.Files==null || this.Request.Files.Count == 0 || this.Request.Files[0] == null)
-                {
-                    return this.Json(false, JsonRequestBehavior.AllowGet);
-                }
                 using (var memoryStream = new MemoryStream())
                 {
                     this.Request.Files[0].InputStream.CopyTo(memoryStream);
                     var data = memoryStream.ToArray();
                     plainFileRepository.StoreInterviewBinaryData(interviewId, this.Request.Files[0].FileName, data);
                 }
-                return this.Json(true, JsonRequestBehavior.AllowGet);
+                return this.Json(JsonRequestBehavior.AllowGet);
             }
-             catch (Exception ex)
-             {
-                 this.logger.Fatal("Error on Sync.", ex);
-                 this.logger.Fatal("Exception message: " + ex.Message);
-                 this.logger.Fatal("Stack: " + ex.StackTrace);
-
-                 return this.Json(false, JsonRequestBehavior.AllowGet);
-             }
+            catch (Exception ex)
+            {
+                this.logger.Fatal("Error on Sync.", ex);
+                this.logger.Fatal("Exception message: " + ex.Message);
+                this.logger.Fatal("Stack: " + ex.StackTrace);
+                throw new HttpException((int) HttpStatusCode.InternalServerError, ex.Message, ex);
+            }
         }
 
         //In case of error of type missing or casting error we send correct response.

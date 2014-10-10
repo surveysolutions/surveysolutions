@@ -1,9 +1,12 @@
 ﻿@using System.Web.Optimization
+@using Main.Core.Entities.SubEntities
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.UserModel
 
 @{
-    ViewBag.Title = "Finish installation";
-    Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
+    this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+    ViewBag.Title = "Control Panel: Create Headquarters User";
+    var roles = UserRoles.Supervisor.ToSelectList();
 }
 
 @section scripts
@@ -12,11 +15,11 @@
 }
 
 <div class="page-header">
-    <h2>Finish installation</h2>
-    To complete installation, please, create new headquarters user
+    <h3>
+        Create Headquarters User
+    </h3>
 </div>
-
-
+@Html.Partial("_alerts")
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()

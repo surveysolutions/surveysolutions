@@ -26,13 +26,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewSynchronizationFil
 
         Because of = () => interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
 
-        It should_2_files_be_stored_in_sync_storage = () =>
+        It should_store_2_files_in_sync_storage = () =>
             fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Exactly(2));
 
-        It should_first_stored_file_has_InterviewId_equal_to_interviewId = () =>
+        It should_store_first_file_with_InterviewId_in_sync_storage = () =>
             fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name=> name.Contains(interviewId.FormatGuid())), data1), Times.Once);
 
-        It should_second_stored_file_has_InterviewId_equal_to_interviewId = () =>
+        It should_store_second_file_with_InterviewId_in_sync_storage = () =>
            fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(interviewId.FormatGuid())), data2), Times.Once);
 
         private static InterviewSynchronizationFileStorage interviewSynchronizationFileStorage;

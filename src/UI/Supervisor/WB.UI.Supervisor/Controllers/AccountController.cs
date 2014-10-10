@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 
 namespace WB.UI.Supervisor.Controllers
 {
-    [RequireHttps]
     public class AccountController : Controller
     {
         private readonly IFormsAuthentication authentication;

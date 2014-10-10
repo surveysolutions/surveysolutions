@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Exceptions
 {
-    public class InterviewException : DataCollectionException
+    public class InterviewException : Exception
     {
         internal InterviewException(string message)
             : base(message) {}

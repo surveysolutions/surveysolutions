@@ -82,6 +82,40 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             return this.HandlerResponse<T>(response);
         }
 
+        public void ExecuteRestRequestAsync(string url, CancellationToken ct, byte[] file, string fileName, string login, string password,
+           string method,
+           params KeyValuePair<string, string>[] additionalParams)
+        {
+            var restClient = this.BuildRestClient(login, password);
+
+            var request = this.BuildRequest(url, additionalParams, file, fileName, this.GetRequestMethod(method));
+
+            IRestResponse response = null;
+
+            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
+
+            while (response == null)
+            {
+                if (ct.IsCancellationRequested)
+                {
+                    token.Abort();
+                    throw new RestException("Operation was canceled.");
+                }
+            } 
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var exception = new Exception(string.Format("Target returned unsupported result with status {0},{1}", response.StatusCode, response.StatusDescription));
+
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                    exception = new AuthenticationException("User is not authorized.");
+
+                this.logger.Error("Sync error. Response status:" + response.StatusCode, exception);
+
+                throw exception;
+            }
+        }
+
         public T ExecuteRestRequestAsync<T>(string url, CancellationToken ct, object requestBody, string login, string password, string method,
             params KeyValuePair<string, string>[] additionalParams)
         {

@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         public IEnumerable<UsersViewItem> Responsibles
         {
-            get { return this.responsibles; }
+            get { return this.responsibles.OrderBy(x => x.UserName); }
             set { this.responsibles = value; }
         }
 

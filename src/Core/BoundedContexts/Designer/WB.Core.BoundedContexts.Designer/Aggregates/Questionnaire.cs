@@ -1083,17 +1083,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var @group = questionnaireItem as IGroup;
                 if (@group != null)
                 {
-                    this.FillGroup(groupId: itemId, parentGroupId: groupId, responsibleId: responsibleId,
-                        sourceGroup: @group, targetIndex: itemTargetIndex);
+                    this.FillGroup(groupId: itemId, 
+                        parentGroupId: groupId, 
+                        responsibleId: responsibleId,
+                        sourceGroup: @group, 
+                        targetIndex: itemTargetIndex);
                     continue;
                 }
 
                 var question = questionnaireItem as IQuestion;
                 if (question != null)
                 {
-
                     var variableName = string.Empty;
-                    var variableLabel = string.Empty;
+                    var variableLabel = question.VariableLabel;
                     var title = question.QuestionText;
                     var isMandatory = question.Mandatory;
                     var enablementCondition = question.ConditionExpression;
@@ -1103,14 +1105,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     if (numericQuestion != null)
                     {
                         this.ApplyNumericQuestionCloneEvent(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
+                            variableName: variableName, 
+                            variableLabel: variableLabel, 
+                            parentGroupId: groupId,
                             title: title,
-                            isMandatory: isMandatory, isPreFilled: numericQuestion.Featured,
-                            scope: numericQuestion.QuestionScope, enablementCondition: enablementCondition,
+                            isMandatory: isMandatory, 
+                            isPreFilled: numericQuestion.Featured,
+                            scope: numericQuestion.QuestionScope, 
+                            enablementCondition: enablementCondition,
                             validationExpression: numericQuestion.ValidationExpression,
-                            validationMessage: numericQuestion.ValidationMessage, instructions: instructions,
-                            sourceQuestionId: sourceItemId, responsibleId: responsibleId,
-                            maxValue: numericQuestion.MaxValue, isInteger: numericQuestion.IsInteger,
+                            validationMessage: numericQuestion.ValidationMessage, 
+                            instructions: instructions,
+                            sourceQuestionId: sourceItemId,
+                            responsibleId: responsibleId,
+                            maxValue: numericQuestion.MaxValue, 
+                            isInteger: numericQuestion.IsInteger,
                             countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces);
                         continue;
                     }
@@ -1366,6 +1375,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             // if we don't have a target group we would like to move source group into root of questionnaire
             var targetGroup = targetGroupId.HasValue ? this.GetGroupById(targetGroupId.Value) : this.innerDocument;
 
+            this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceGroup.GetParent() as IGroup);
+
             this.ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(sourceGroup, targetGroup);
             this.ThrowIfSourceGroupContainsInvalidRosterSizeQuestions(sourceGroup, targetGroup);
             this.ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(sourceGroup, targetGroup);
@@ -1376,7 +1387,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId, rosterFixedTitles: sourceGroup.RosterFixedTitles,
                 rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId,
                 rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey));
-
             this.ApplyEvent(new QuestionnaireItemMoved
             {
                 PublicKey = groupId,
@@ -1615,6 +1625,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             var targetGroup = this.innerDocument.Find<IGroup>(targetGroupId);
+
+            this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, question.GetParent() as IGroup);
+
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption,
                 questionId, question.Featured, targetGroup);
 
@@ -2180,21 +2193,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (options == null && (isFilteredCombobox || cascadeFromQuestionId.HasValue))
             {
                 IQuestion question = this.GetQuestion(questionId);
-                answers = question.Answers.ToArray();
+                answers = question.Answers.ToArray();                
             }
             else
             {
-                answers = ConvertOptionsToAnswers(options);
+                answers = ConvertOptionsToAnswers(options);                
             }
 
             PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
-
+            
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
-            if (isFilteredCombobox)
+            if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {
                 var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
                 answers = categoricalOneAnswerQuestion != null ? categoricalOneAnswerQuestion.Answers.ToArray() : null;
@@ -2298,11 +2311,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void UpdateCascadingComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
             ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, isCascade: true);
 
             ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
+
+            ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(options);
 
             ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
 
@@ -2746,6 +2761,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(targetEntityId);
             this.ThrowIfChapterHasMoreThanAllowedLimit(targetEntityId);
 
+            // if we don't have a target group we would like to move source group into root of questionnaire
+            var targetGroup = this.GetGroupById(targetEntityId);
+            var sourceStaticText = this.innerDocument.Find<IStaticText>(entityId);
+            this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceStaticText.GetParent() as IGroup);
+
             this.ApplyEvent(new QuestionnaireItemMoved
             {
                 PublicKey = entityId,
@@ -2914,6 +2934,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
 
             this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(sourceGroup);
+        }
+
+        private void ThrowIfTargetIndexIsNotAcceptable(int targetIndex, IGroup targetGroup, IGroup parentGroup)
+        {
+            var maxAcceptableIndex = targetGroup.Children.Count;
+            if (parentGroup != null && targetGroup.PublicKey == parentGroup.PublicKey)
+                maxAcceptableIndex--;
+
+            if (targetIndex < 0 || maxAcceptableIndex < targetIndex)
+                throw new QuestionnaireException(
+                   string.Format(
+                       "You can't move to group {0}  because it position {1} in not acceptable",
+                       FormatGroupForException(targetGroup.PublicKey, this.innerDocument), targetIndex));
         }
 
         private void ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(IGroup sourceGroup, IGroup targetGroup)
@@ -3324,7 +3357,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options, bool isCascade = false)
         {
-            if (options == null || !options.Any() || options.Count() < 2)
+            if ((options == null || !options.Any() || options.Count() < 2) && !isCascade)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.SelectorEmpty, "Question with options should have two options at least");
@@ -3519,6 +3552,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.CategoricalCascadingOptionsCantContainsEmptyParentValueField,
                     ExceptionMessages.CategoricalCascadingOptionsCantContainsEmptyParentValueField);
+            }
+        }
+
+        private void ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(Option[] options)
+        {
+            decimal d;
+            if (options.Select(x => x.ParentValue).Any(number => !Decimal.TryParse(number, out d)))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.CategoricalCascadingOptionsCantContainsNotDecimalParentValueField,
+                    ExceptionMessages.CategoricalCascadingOptionsCantContainsNotDecimalParentValueField);
             }
         }
 
