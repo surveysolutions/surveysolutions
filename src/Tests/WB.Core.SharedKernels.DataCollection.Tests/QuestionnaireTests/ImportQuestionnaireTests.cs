@@ -158,7 +158,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
             using (var eventContext = new EventContext())
             {
-                questionnaire.ImportFromDesigner(responsibleId, newState, false);
+                questionnaire.ImportFromDesigner(responsibleId, newState, false, null);
                 // act
                 questionnaire.DeleteQuestionnaire(1, responsibleId);
                 // assert
