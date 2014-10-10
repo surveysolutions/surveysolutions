@@ -655,8 +655,6 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             if (!this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.ContainsKey(questionId))
                 return;
 
-            Console.WriteLine(questionId);
-
             var questionInstanceId = new InterviewItemId(questionId, propagationVector);
 
             this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions[questionId].Remove(questionInstanceId);
@@ -1134,7 +1132,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 new InterviewItemId(question.PublicKey), 
                 GetQuestionRosterScope(question), 
                 question.QuestionText,
-                (questionRosterVecor) => this.GetFilteredAnswerOptionsForCascadingQuestion(question.CascadeFromQuestionId.Value, question.Answers, questionRosterVecor),
+                (questionRosterVecor, selectedAnswer) => this.GetFilteredAnswerOptionsForCascadingQuestion(question.CascadeFromQuestionId.Value, question.Answers, questionRosterVecor, selectedAnswer),
                 true, 
                 question.Instructions, 
                 null,
@@ -1176,7 +1174,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
             return new ValueVector<Guid>(result.ToArray());
         }
 
-        protected IEnumerable<AnswerViewModel> GetFilteredAnswerOptionsForCascadingQuestion(Guid referencedQuestionId, List<Answer> answers, decimal[] rosterVector)
+        protected IEnumerable<AnswerViewModel> GetFilteredAnswerOptionsForCascadingQuestion(Guid referencedQuestionId, List<Answer> answers, decimal[] rosterVector, object selectedAnswer)
         {
             if (!this.instancesOfAnsweredQuestionsUsableAsCascadingQuestions.ContainsKey(referencedQuestionId))
                 return Enumerable.Empty<AnswerViewModel>();
@@ -1193,7 +1191,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
             return answers
                 .Where(x => decimal.Parse(x.ParentValue, CultureInfo.InvariantCulture) == filterValue)
-                .Select(x => new AnswerViewModel(x.PublicKey, x.AnswerText, x.AnswerValue, false, null))
+                .Select(x => new AnswerViewModel(x.PublicKey, x.AnswerText, x.AnswerValue, selectedAnswer != null && x.AnswerValue.Equals(selectedAnswer.ToString()), null))
                 .ToList();
         }
 
