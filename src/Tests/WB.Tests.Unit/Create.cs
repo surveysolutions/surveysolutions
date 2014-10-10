@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using System.Collections.Generic;
 using Ncqrs.Commanding;
@@ -37,6 +38,11 @@ namespace WB.Tests.Unit
             {
                 AnswersToFeaturedQuestions = new List<UntypedQuestionAnswer>()
             };
+        }
+
+        public static NCalcToRoslynConverter NCalcToRoslynConverter()
+        {
+            return new NCalcToRoslynConverter();
         }
     }
 }
