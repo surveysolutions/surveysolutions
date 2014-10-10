@@ -593,6 +593,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState.LinkedMultipleOptionsAnswers,
                 this.interviewState.TextListAnswers,
                 this.interviewState.AnsweredQuestions,
+                this.interviewState.AnswerComments,
                 this.interviewState.DisabledGroups,
                 this.interviewState.DisabledQuestions,
                 this.interviewState.RosterGroupInstanceIds,
@@ -613,6 +614,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.LinkedMultipleOptionsAnswers = snapshot.LinkedMultipleOptionsAnswers;
             this.interviewState.TextListAnswers = snapshot.TextListAnswers;
             this.interviewState.AnsweredQuestions = snapshot.AnsweredQuestions;
+            this.interviewState.AnswerComments = snapshot.AnswerComments;
             this.interviewState.DisabledGroups = snapshot.DisabledGroups;
             this.interviewState.DisabledQuestions = snapshot.DisabledQuestions;
             this.interviewState.RosterGroupInstanceIds = snapshot.RosterGroupInstanceIds;
@@ -1422,7 +1424,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
+            CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
                 this.interviewState);
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(this.interviewState, userId,
@@ -1614,7 +1616,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void HardDelete(Guid userId)
         {
-            ThrowIfInterviewHardDeleted();
+            if (this.wasHardDeleted)
+                return;
+
             this.ApplyEvent(new InterviewHardDeleted(userId));
         }
 
@@ -2165,10 +2169,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            this.ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
+            ThrowIfRosterVectorIsIncorrect(currentInterviewState, questionId, rosterVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
-            ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(questionId, selectedValue, questionnaire);
+            ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(this.interviewState, answeredQuestion, rosterVector, selectedValue, questionnaire);
             if (applyStrongChecks)
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
@@ -2707,14 +2711,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         //TODO: should be resolved!!!
 /*       
+
+                    bool parentAnsweredOrNoParent = true;
+                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(dependentQuestion.Id);
+                    if (cascadingQuestionParentId.HasValue)
+                    {
+                        KeyValuePair<string, Identity> parentInstance = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingQuestionParentId.Value, dependentQuestion.RosterVector, questionnaire);
+                        parentAnsweredOrNoParent = state.AnsweredQuestions.Contains(ConversionHelper.ConvertIdentityToString(parentInstance.Value));
+                    }
+
                 var cascadingQuestionsToEnable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id);
                 IEnumerable<Identity> cascadingQuestionsToEnableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
                     cascadingQuestionsToEnable, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
 
                 foreach (var dependentCascadingQuestion in cascadingQuestionsToEnableIdentities)
                 {
-                    if (!collectedQuestionsToBeDisabled.Contains(dependentCascadingQuestion) && 
-                        !collectedQuestionsToBeEnabled.Contains(dependentCascadingQuestion))
+                    if (!collectedQuestionsToBeDisabled.Any(q => AreEqual(q, dependentCascadingQuestion)) &&
+                        !collectedQuestionsToBeEnabled.Any(q => AreEqual(q, dependentCascadingQuestion)))
                     {
                         collectedQuestionsToBeEnabled.Add(dependentCascadingQuestion);
                     }
@@ -2728,8 +2741,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (var dependentCascadingQuestion in cascadingQuestionsToDisableIdentities)
                 {
-                    if (!collectedQuestionsToBeDisabled.Contains(dependentCascadingQuestion) &&
-                        !collectedQuestionsToBeEnabled.Contains(dependentCascadingQuestion))
+                    if (!collectedQuestionsToBeDisabled.Any(q => AreEqual(q, (dependentCascadingQuestion))) &&
+                        !collectedQuestionsToBeEnabled.Any(q => AreEqual(q, (dependentCascadingQuestion))))
                     {
                         collectedQuestionsToBeEnabled.Remove(dependentCascadingQuestion);
                         collectedQuestionsToBeDisabled.Add(dependentCascadingQuestion);
@@ -3199,21 +3212,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues)));
         }
 
-        private static void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
+        private void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(InterviewStateDependentOnAnswers interviewState, Identity answeredQuestion, decimal[] rosterVector, decimal value, IQuestionnaire questionnaire)
         {
+            var questionId = answeredQuestion.Id;
             Guid? cascadingId = questionnaire.GetCascadingQuestionParentId(questionId);
 
-            if (cascadingId.HasValue)
-            {
-                string parentValue = questionnaire.GetCascadingParentValue(questionId, value);
-                IEnumerable<decimal> answers = questionnaire.GetAnswerOptionsAsValues(cascadingId.Value);
+            if (!cascadingId.HasValue) return;
+            
+            decimal parentValue = questionnaire.GetCascadingParentValue(questionId, value);
+            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(cascadingId.Value, rosterVector);
+            var answer = interviewState.AnswersSupportedInExpressions[questionKey];
+            var stringAnswer = AnswerUtils.AnswerToString(answer);
 
-                bool answerNotExistsInParent = !answers.Contains(Convert.ToDecimal(parentValue));
-                if (answerNotExistsInParent)
-                    throw new InterviewException(string.Format(
-                        "For question {0} was provided selected value {1} as answer with parent value {2}, but this value not found in  Parent Question options",
-                        FormatQuestionForException(questionId, questionnaire), value, parentValue));
-            }
+            var answerNotExistsInParent = Convert.ToDecimal(stringAnswer) != parentValue;
+            if (answerNotExistsInParent)
+                throw new InterviewException(string.Format(
+                    "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}",
+                    FormatQuestionForException(questionId, questionnaire), value, parentValue, stringAnswer));
         }
 
         private static void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
@@ -3516,6 +3531,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
         }
+
+
 
         private List<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(InterviewStateDependentOnAnswers state,
             IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
