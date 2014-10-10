@@ -92,7 +92,10 @@
                             linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
                         });
 
-                        if ($scope.activeQuestion.type === "SingleOption" && !$scope.activeQuestion.isFilteredCombobox && !_.isEmpty($scope.activeQuestion.cascadeFromQuestionId)) {
+                        var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
+                        var notIsCascadingCombobox = _.isEmpty($scope.activeQuestion.cascadeFromQuestionId);
+
+                        if ($scope.activeQuestion.type === "SingleOption" && notIsFilteredCombobox && notIsCascadingCombobox) {
                             $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                         }
 

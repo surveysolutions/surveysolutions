@@ -42,7 +42,7 @@
 
         <div class="form-group">
             <label for="edit-question-title" class="wb-label">Title</label><br>
-            <textarea id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" placeholder="Question text" msd-elastic></textarea>
+            <textarea id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" msd-elastic></textarea>
 
             <div class="question-type-specific-block"
                  ng-include="activeQuestion.type + '-template.html'"
@@ -155,7 +155,7 @@
                                      'other': 'Edit {} options'}">
                         </ng-pluralize>
                     </a>
-                    <a ng-if="activeQuestion.isCascade"
+                    <a ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== ''"
                        href="javascript:void(0);"
                        class="btn btn-link"
                        ng-click="editCascadingComboboxOptions()">
@@ -343,7 +343,7 @@
         <script type="text/ng-template" id="Text-template.html">
             <div class="form-group">
                 <label for="edit-mask">Mask <help key="mask" /></label>
-                <input id="edit-mask" type="text" ng-model="activeQuestion.mask" class="form-control" placeholder="Mask">
+                <input id="edit-mask" type="text" ng-model="activeQuestion.mask" class="form-control">
             </div>
         </script>
 
