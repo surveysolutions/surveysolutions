@@ -240,6 +240,7 @@
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_AddRecord_called_for_interview_export_view.cs" />
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewActionFileName_is_called.cs" />
     <Compile Include="ServiceTests\DataExport\CsvDataFileExportServiceTests\when_GetInterviewExportedDataFileName_called_for_level_name.cs" />
+    <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_disabled.cs" />
     <Compile Include="ServiceTests\DataExport\FileBasedDataExportServiceTests\when_DeleteExportedDataForQuestionnaireVersion_is_called_and_directory_is_present.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />

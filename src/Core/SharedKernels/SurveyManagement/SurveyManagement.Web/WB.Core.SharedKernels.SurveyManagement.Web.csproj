@@ -392,6 +392,7 @@
     <EmbeddedResource Include="Views\Error\Index.cshtml" />
     <EmbeddedResource Include="Views\Error\NotFound.cshtml" />
     <EmbeddedResource Include="Views\Error\WebsitePathIsTooLong.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_LayoutForErrorPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

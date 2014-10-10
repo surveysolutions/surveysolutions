@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private readonly QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private readonly Func<long> getVersion;
+        private readonly Guid? responsibleId;
 
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<Guid, IGroup> groupCache = null;
@@ -28,6 +29,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         internal QuestionnaireDocument QuestionnaireDocument
         {
             get { return this.innerDocument; }
+        }
+
+        internal Guid? ResponsibleId
+        {
+            get { return this.responsibleId; }
         }
 
         internal Dictionary<Guid, IQuestion> QuestionCache
@@ -58,20 +64,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         #endregion
 
-        public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion)
+        public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion, Guid? responsibleId)
         {
             InitializeQuestionnaireDocument(document);
 
             this.innerDocument = document;
             this.getVersion = getVersion;
+            this.responsibleId = responsibleId;
         }
 
         public PlainQuestionnaire(QuestionnaireDocument document, long version)
-            : this(document, () => version) { }
+            : this(document, () => version, null) { }
+
+        public PlainQuestionnaire(QuestionnaireDocument document, long version, Guid? responsibleId)
+            : this(document, () => version, responsibleId) { }
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion,
-            Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache)
-            : this(document, getVersion)
+            Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache, Guid? responsibleId)
+            : this(document, getVersion, responsibleId)
         {
             this.groupCache = groupCache;
             this.questionCache = questionCache;

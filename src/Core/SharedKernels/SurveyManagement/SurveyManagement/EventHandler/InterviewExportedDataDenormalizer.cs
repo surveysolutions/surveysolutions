@@ -194,7 +194,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     {
                         ansnwers.Add(string.Empty);
                     }
-                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, ansnwers.ToArray());
+                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, headerItem.QuestionType, ansnwers.ToArray());
                 }
                 else
                 {

@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected internal void Apply(TemplateImported e)
         {
             var templateVersion = e.Version ?? (this.Version + 1);
-            availableVersions[templateVersion] = new PlainQuestionnaire(e.Source, () => templateVersion);
+            availableVersions[templateVersion] = new PlainQuestionnaire(e.Source, () => templateVersion, e.ResponsibleId);
         }
 
         protected internal void Apply(QuestionnaireDeleted e)
@@ -120,7 +120,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
 
             var newVersion = GetNextVersion();
-            this.ApplyEvent(new TemplateImported { Source = document, AllowCensusMode = allowCensusMode, Version = newVersion });
+            
+            this.ApplyEvent(new TemplateImported
+            {
+                Source = document,
+                AllowCensusMode = allowCensusMode,
+                Version = GetNextVersion(),
+                ResponsibleId = createdBy
+            });
 
             if (supportingAssembly != null && !string.IsNullOrWhiteSpace(supportingAssembly))
             {
@@ -139,13 +146,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ImportFromQuestionnaireDocument(source);
         }
 
-        public void DeleteQuestionnaire(long questionnaireVersion)
+        public void DeleteQuestionnaire(long questionnaireVersion, Guid? responsibleId)
         {
             if(!availableVersions.ContainsKey(questionnaireVersion))
                 throw new QuestionnaireException(string.Format(
                     "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
                     this.EventSourceId.FormatGuid(), questionnaireVersion));
-            this.ApplyEvent(new QuestionnaireDeleted() { QuestionnaireVersion = questionnaireVersion });
+
+            var plainQuestionnaire = availableVersions[questionnaireVersion] as PlainQuestionnaire;
+            if (plainQuestionnaire != null)
+            {
+                var createdById = plainQuestionnaire.ResponsibleId;
+                if (createdById.HasValue && createdById != responsibleId)
+                {
+                    throw new QuestionnaireException(
+                        string.Format("You don't have permissions to delete this questionnaire."));
+                }
+            }
+
+            this.ApplyEvent(new QuestionnaireDeleted()
+            {
+                QuestionnaireVersion = questionnaireVersion,
+                ResponsibleId = responsibleId
+            });
         }
 
         public void RegisterPlainQuestionnaire(Guid id, long version, bool allowCensusMode, string supportingAssembly)

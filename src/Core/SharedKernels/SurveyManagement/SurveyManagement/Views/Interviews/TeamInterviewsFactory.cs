@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Search(x => x.AnswersToFeaturedQuestions, input.SearchBy);
+                items = items.Search(x => x.FeaturedQuestionsWithAnswers, input.SearchBy, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards, options: SearchOptions.And);
             }
 
             if (input.Status.HasValue)
