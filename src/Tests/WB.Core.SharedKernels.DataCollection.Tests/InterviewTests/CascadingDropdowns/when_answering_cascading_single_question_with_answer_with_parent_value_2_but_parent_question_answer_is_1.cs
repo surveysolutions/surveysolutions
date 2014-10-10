@@ -13,6 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDropdowns
 {
+    [Ignore("Cascading")]
     internal class when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1 : InterviewTestsContext
     {
         Establish context = () =>

@@ -15,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDropdowns
 {
-    [Subject(typeof(Interview))]
+    [Ignore("Cascading")]
     internal class when_answering_categorical_question_with_cascading_options_with_mandatory_child_under_condition_expression : InterviewTestsContext
     {
         private Establish context = () =>
