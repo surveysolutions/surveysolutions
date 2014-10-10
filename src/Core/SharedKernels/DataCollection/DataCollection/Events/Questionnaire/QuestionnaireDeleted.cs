@@ -3,5 +3,6 @@
     public class QuestionnaireDeleted
     {
         public long QuestionnaireVersion { get; set; }
+        public Guid? ResponsibleId { get; set; }
     }
 }

@@ -13,13 +13,12 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.FileBasedDataExportServiceTests
 {
-    internal class when_AddExportedDataByInterview_is_called_and_directory_is_present : FileBasedDataExportServiceTestContext
+    internal class when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_disabled : FileBasedDataExportServiceTestContext
     {
         Establish context = () =>
         {
@@ -35,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
                 new[]
                 {
                     new InterviewDataExportRecord(interviewId, "name.tex", new string[0], new string[0],
-                        new[] { new ExportedQuestion(Guid.NewGuid(), QuestionType.Multimedia, new[] { fileName }), })
+                        new[] { new ExportedQuestion(Guid.NewGuid(), QuestionType.Multimedia, new[] { "" }), })
                 });
 
             interviewToExport = new InterviewDataExportView(interviewId, Guid.NewGuid(), 1,
@@ -54,13 +53,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             interviewExportServiceMock.Verify(x => x.GetInterviewExportedDataFileName("1st"), Times.Once());
 
         It should_data_by_level_be_stored_once = () =>
-            interviewExportServiceMock.Verify(x => x.AddRecord(interviewLevelToExport,Moq.It.IsAny<string>()), Times.Once());
+            interviewExportServiceMock.Verify(x => x.AddRecord(interviewLevelToExport, Moq.It.IsAny<string>()), Times.Once());
 
-        It should_files_by_interview_be_stored = () =>
-            fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(fileName)),data), Times.Once());
+        It should_not_be_stored_multimedia_file_which_is_answer_on_disabled_question = () =>
+            fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(fileName)), data), Times.Never);
 
         private static FileBasedDataExportService fileBasedDataExportService;
-        
+
         private static Mock<IDataFileExportService> interviewExportServiceMock;
         private static Mock<IPlainInterviewFileStorage> plainFileRepositoryMock;
         private static InterviewDataExportView interviewToExport;
