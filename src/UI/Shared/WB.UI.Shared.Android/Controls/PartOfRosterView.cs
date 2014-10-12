@@ -81,6 +81,7 @@ namespace WB.UI.Shared.Android.Controls
                     instructionsBuilder.Show();
                 };
             }
+            headerItemView.SetSingleLine(true);
             headerItemView.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
             return headerItemView;
         }
