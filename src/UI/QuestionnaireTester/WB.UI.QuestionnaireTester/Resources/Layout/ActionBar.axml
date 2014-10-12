@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@android:color/background_light">
+    android:layout_height="fill_parent">
 
   <ImageView android:id="@+id/imgAnswerProgress"
       android:src="@drawable/answer_progress_indicator"
@@ -17,7 +16,7 @@
       android:id="@+id/tvTitlte"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
-      android:textColor="@android:color/black"
+      android:textColor="@android:color/white"
       android:textSize="18sp"
       android:gravity="center_vertical|left"
       android:layout_marginLeft="50dp"
