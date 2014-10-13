@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using NCalc;
@@ -11,7 +12,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         internal class RoslynSerializationVisitor : LogicalExpressionVisitor
         {
+            private readonly Dictionary<string, string> customIdentifierMappings;
             private readonly StringBuilder builder = new StringBuilder();
+
+            public RoslynSerializationVisitor(Dictionary<string, string> customIdentifierMappings)
+            {
+                this.customIdentifierMappings = customIdentifierMappings ?? new Dictionary<string, string>();
+            }
 
             public string GetResultRoslynExpression()
             {
@@ -212,7 +219,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             public override void Visit(Identifier parameter)
             {
-                this.builder.Append(parameter.Name).Append(" ");
+                string ncalcIdentifier = parameter.Name;
+
+                string roslynIdentifier = customIdentifierMappings.ContainsKey(ncalcIdentifier)
+                    ? customIdentifierMappings[ncalcIdentifier]
+                    : ncalcIdentifier;
+
+                this.builder.Append(roslynIdentifier).Append(" ");
             }
 
             private void EncapsulateNoValue(LogicalExpression expression)
@@ -235,11 +248,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        public string Convert(string ncalcExpression)
+        public string Convert(string ncalcExpression, Dictionary<string, string> customMappings)
         {
             LogicalExpression ncalcExpressionTree = ParseExpressionOrThrow(ncalcExpression);
 
-            var roslynSerializationVisitor = new RoslynSerializationVisitor();
+            var roslynSerializationVisitor = new RoslynSerializationVisitor(customMappings);
 
             ncalcExpressionTree.Accept(roslynSerializationVisitor);
 

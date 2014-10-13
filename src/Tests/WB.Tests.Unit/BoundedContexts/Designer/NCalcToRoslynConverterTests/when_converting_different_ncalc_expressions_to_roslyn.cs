@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -22,7 +23,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToRoslynConverterTests
         };
 
         Because of = () =>
-            results = expectedResults.Keys.Select(converter.Convert).ToArray();
+            results = expectedResults
+                .Keys
+                .Select(ncalcExpression => converter.Convert(ncalcExpression, customMappings: null))
+                .ToArray();
 
         It should_return_only_expected_expressions = () =>
             results.ShouldEqual(expectedResults.Values.ToArray());
