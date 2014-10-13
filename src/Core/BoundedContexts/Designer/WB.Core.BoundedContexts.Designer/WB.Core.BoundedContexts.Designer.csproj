@@ -132,6 +132,7 @@
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\AddGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\CloneGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\GpsCoordinates\UpdateGpsCoordinatesQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\MigrateExpressionsToCSharp.cs" />
     <Compile Include="Commands\Questionnaire\Question\Mulimedia\UpdateMultimediaQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\AddMultiOptionQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MultiOption\CloneMultiOptionQuestionCommand.cs" />

@@ -940,6 +940,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
+        public void MigrateExpressionsToCSharp() { }
+
         #endregion
 
         #region Group command handlers
