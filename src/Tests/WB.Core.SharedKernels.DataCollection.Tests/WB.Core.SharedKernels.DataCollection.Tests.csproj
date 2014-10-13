@@ -99,6 +99,7 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewItemIdTests\when_parsing_interview_item_id_with_guid_and_propagation_vector.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_from_roster_with_child_parent.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_integer_number.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_decimal_number.cs" />
