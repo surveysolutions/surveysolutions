@@ -175,9 +175,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
+            var question = this.GetQuestionOrThrow(questionId);
 
-            bool questionTypeDoesNotSupportAnswerOptions
+            var questionTypeDoesNotSupportAnswerOptions
                 = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
 
             if (questionTypeDoesNotSupportAnswerOptions)
