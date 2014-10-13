@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -7,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -15,6 +17,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests
 {
     internal static class Create
     {
+        public class Event
+        {
+            public static TemplateImported TemplateImported(QuestionnaireDocument questionnaireDocument)
+            {
+                return new TemplateImported { Source = questionnaireDocument };
+            }
+        }
+
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
             where T : class
         {
@@ -493,6 +503,48 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 publicKey: questionnaireId ?? Guid.Parse("ddddaaaaaaaaaaaaaaaaaaaaaaaabbbb"),
                 title: title,
                 createdBy: responsibleId ?? Guid.Parse("ddddccccccccccccccccccccccccbbbb"));
+        }
+
+        public static EventContext EventContext()
+        {
+            return new EventContext();
+        }
+
+        public static Questionnaire QuestionnaireUsingQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
+        {
+            Questionnaire questionnaire = Create.Questionnaire();
+
+            questionnaire.Apply(Create.Event.TemplateImported(questionnaireDocument));
+
+            return questionnaire;
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocument(IEnumerable<IComposite> children = null)
+        {
+            return new QuestionnaireDocument
+            {
+                PublicKey = Guid.NewGuid(),
+                Children = children != null ? children.ToList() : new List<IComposite>(),
+            };
+        }
+
+        public static Group Chapter(IEnumerable<IComposite> children = null)
+        {
+            return new Group("Chapter X")
+            {
+                PublicKey = Guid.NewGuid(),
+                Children = children != null ? children.ToList() : new List<IComposite>(),
+            };
+        }
+
+        public static IQuestion Question(string enablementCondition = null, string validationExpression = null)
+        {
+            return new TextQuestion("Question X")
+            {
+                PublicKey = Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+            };
         }
     }
 }
