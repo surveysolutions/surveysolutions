@@ -24,9 +24,6 @@
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
   <IgnoredTests>
     <FixtureTestSelector>
-      <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions</FixtureName>
-    </FixtureTestSelector>
-    <FixtureTestSelector>
       <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions_on_nested_roster</FixtureName>
     </FixtureTestSelector>
     <FixtureTestSelector>
@@ -43,6 +40,18 @@
     </FixtureTestSelector>
     <FixtureTestSelector>
       <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_generating_assembly_with_evaluatorgenerator</FixtureName>
+    </FixtureTestSelector>
+    <NamedTestSelector>
+      <TestName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions.should_disabled_question_count_equal_0</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions.should_enable_group_count_equal_0</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions.should_enabled_question_count_equal_1</TestName>
+    </NamedTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests.when_expression_state_processes_condition_expressions</FixtureName>
     </FixtureTestSelector>
   </IgnoredTests>
   <HiddenWarnings>AbnormalReferenceResolution;LongTestTimesWithoutParallelExecution</HiddenWarnings>
