@@ -40,9 +40,9 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static NCalcToRoslynConverter NCalcToRoslynConverter()
+        public static NCalcToCSharpConverter NCalcToCSharpConverter()
         {
-            return new NCalcToRoslynConverter();
+            return new NCalcToCSharpConverter();
         }
     }
 }
