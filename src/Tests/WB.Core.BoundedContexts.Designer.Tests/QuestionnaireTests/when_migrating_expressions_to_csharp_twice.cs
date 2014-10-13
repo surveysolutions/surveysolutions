@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    public class when_migrating_expressions_to_csharp_twice : QuestionnaireTestsContext
+    internal class when_migrating_expressions_to_csharp_twice : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
