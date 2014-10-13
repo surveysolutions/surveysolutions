@@ -26,6 +26,7 @@
     <FixtureTestSelector>
       <FixtureName>WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePrototypeProviderTests.when_getting_expression_state</FixtureName>
     </FixtureTestSelector>
+    <AllTestsSelector />
   </IgnoredTests>
   <HiddenWarnings>LongTestTimesWithoutParallelExecution</HiddenWarnings>
 </ProjectConfiguration>
