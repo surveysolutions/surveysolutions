@@ -269,6 +269,7 @@
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_multimedia_question.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_text_question_by_id.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_all_questions_have_empty_expressions.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_twice.cs" />
     <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_with_cascading_options_setting_linked_and_cascading.cs" />

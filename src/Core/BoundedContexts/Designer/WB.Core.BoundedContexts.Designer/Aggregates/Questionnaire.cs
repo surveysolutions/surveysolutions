@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
-        private void Apply(TemplateImported e)
+        internal void Apply(TemplateImported e)
         {
             var upgradedDocument = QuestionnaireDocumentUpgrader.TranslatePropagatePropertiesToRosterProperties(e.Source);
             this.innerDocument = upgradedDocument;
