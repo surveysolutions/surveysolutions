@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests
+namespace WB.Tests.Unit
 {
     internal static class StringExtensions
     {
