@@ -269,6 +269,7 @@
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_multimedia_question.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_text_question_by_id.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_twice.cs" />
     <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_with_cascading_options_setting_linked_and_cascading.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_inside_the_same_parent_to_position_which_is_bigger_then_parent_children_count.cs" />
@@ -289,6 +290,7 @@
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_all_parameters_specified.cs" />
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="DeleteStaticTextHandlerTests\when_deleting_static_text_and_user_dont_have_permissions.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_variable_name_is_null.cs" />
     <Compile Include="UpdateCascadingComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_and_1_option_dont_have_a_value.cs" />
     <Compile Include="UpdateCascadingComboboxOptionsHandlerTests\when_updating_cascading_combobox_options_and_1_option_have_empty_title.cs" />

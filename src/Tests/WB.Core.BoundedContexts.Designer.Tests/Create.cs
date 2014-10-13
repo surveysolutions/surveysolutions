@@ -8,6 +8,7 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests
@@ -483,6 +484,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 Title = questionTitle,
                 EnablementCondition = questionConditionExpression
             });
+        }
+
+        public static Questionnaire Questionnaire(Guid? questionnaireId = null,
+            string title = "Questionnnaire Title", Guid? responsibleId = null)
+        {
+            return new Questionnaire(
+                publicKey: questionnaireId ?? Guid.Parse("ddddaaaaaaaaaaaaaaaaaaaaaaaabbbb"),
+                title: title,
+                createdBy: responsibleId ?? Guid.Parse("ddddccccccccccccccccccccccccbbbb"));
         }
     }
 }
