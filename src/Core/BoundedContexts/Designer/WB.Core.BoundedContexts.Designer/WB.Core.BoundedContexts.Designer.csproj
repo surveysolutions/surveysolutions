@@ -195,7 +195,7 @@
     <Compile Include="Events\Users\UserLoggedIn.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ITemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynExpressionProcessor.cs" />
-    <Compile Include="Implementation\Services\NCalcToRoslynConverter.cs" />
+    <Compile Include="Implementation\Services\NCalcToCSharpConverter.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />

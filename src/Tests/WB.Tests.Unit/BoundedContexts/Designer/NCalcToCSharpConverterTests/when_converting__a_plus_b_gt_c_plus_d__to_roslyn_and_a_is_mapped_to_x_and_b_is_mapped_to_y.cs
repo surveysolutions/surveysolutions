@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToRoslynConverterTests
+namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToCSharpConverterTests
 {
     internal class when_converting__a_plus_b_gt_c_plus_d__to_roslyn_and_a_is_mapped_to_x_and_b_is_mapped_to_y
     {
         Establish context = () =>
         {
-            converter = Create.NCalcToRoslynConverter();
+            converter = Create.NCalcToCSharpConverter();
         };
 
         Because of = () =>
@@ -24,6 +24,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToRoslynConverterTests
             result.ShouldEqual("(x + y) > (c + d)");
 
         private static string result;
-        private static NCalcToRoslynConverter converter;
+        private static NCalcToCSharpConverter converter;
     }
 }

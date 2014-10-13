@@ -5,7 +5,7 @@ using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToRoslynConverterTests
+namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToCSharpConverterTests
 {
     internal class when_converting_different_ncalc_expressions_to_roslyn
     {
@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToRoslynConverterTests
                 { "contains([prob_school],8)", "prob_school.Contains(8)" },
             };
 
-            converter = Create.NCalcToRoslynConverter();
+            converter = Create.NCalcToCSharpConverter();
         };
 
         Because of = () =>
@@ -33,6 +33,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToRoslynConverterTests
 
         private static string[] results;
         private static Dictionary<string, string> expectedResults;
-        private static NCalcToRoslynConverter converter;
+        private static NCalcToCSharpConverter converter;
     }
 }

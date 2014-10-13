@@ -8,19 +8,19 @@ using ValueType = NCalc.Domain.ValueType;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    internal class NCalcToRoslynConverter
+    internal class NCalcToCSharpConverter
     {
-        internal class RoslynSerializationVisitor : LogicalExpressionVisitor
+        internal class CSharpSerializationVisitor : LogicalExpressionVisitor
         {
             private readonly Dictionary<string, string> customIdentifierMappings;
             private readonly StringBuilder builder = new StringBuilder();
 
-            public RoslynSerializationVisitor(Dictionary<string, string> customIdentifierMappings)
+            public CSharpSerializationVisitor(Dictionary<string, string> customIdentifierMappings)
             {
                 this.customIdentifierMappings = customIdentifierMappings ?? new Dictionary<string, string>();
             }
 
-            public string GetResultRoslynExpression()
+            public string GetResultCSharpExpression()
             {
                 return this.builder.ToString().Trim();
             }
@@ -252,11 +252,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             LogicalExpression ncalcExpressionTree = ParseExpressionOrThrow(ncalcExpression);
 
-            var roslynSerializationVisitor = new RoslynSerializationVisitor(customMappings);
+            var roslynSerializationVisitor = new CSharpSerializationVisitor(customMappings);
 
             ncalcExpressionTree.Accept(roslynSerializationVisitor);
 
-            string roslynExpression = roslynSerializationVisitor.GetResultRoslynExpression();
+            string roslynExpression = roslynSerializationVisitor.GetResultCSharpExpression();
 
             return roslynExpression;
         }
