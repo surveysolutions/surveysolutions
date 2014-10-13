@@ -176,8 +176,8 @@
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="BoundedContexts\Designer\NCalcToRoslynConverterTests\when_converting_different_ncalc_expressions_to_roslyn.cs" />
-    <Compile Include="BoundedContexts\Designer\NCalcToRoslynConverterTests\when_converting__a_plus_b_gt_c_plus_d__to_roslyn_and_a_is_mapped_to_x_and_b_is_mapped_to_y.cs" />
+    <Compile Include="BoundedContexts\Designer\NCalcToCSharpConverterTests\when_converting__a_plus_b_gt_c_plus_d__to_roslyn_and_a_is_mapped_to_x_and_b_is_mapped_to_y.cs" />
+    <Compile Include="BoundedContexts\Designer\NCalcToCSharpConverterTests\when_converting_different_ncalc_expressions_to_roslyn.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\PdfQuestionnaireViewTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_entity_and_root_id_is_used_as_parent_group_id.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_group_specifying_root_id_as_parent.cs" />
