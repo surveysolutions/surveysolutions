@@ -66,6 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region State
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+        private bool wasExpressionsMigrationPerformed = false;
 
         private void Apply(SharedPersonToQuestionnaireAdded e)
         {
@@ -86,6 +87,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(QuestionnaireDeleted e)
         {
             this.innerDocument.IsDeleted = true;
+        }
+
+        private void Apply(ExpressionsMigratedToCSharp e)
+        {
+            this.wasExpressionsMigrationPerformed = true;
         }
 
         private void Apply(GroupDeleted e)
@@ -774,13 +780,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return new QuestionnaireState
             {
                 QuestionnaireDocument = this.innerDocument,
-                Version = this.Version
+                Version = this.Version,
+                WasExpressionsMigrationPerformed = wasExpressionsMigrationPerformed,
             };
         }
 
         public void RestoreFromSnapshot(QuestionnaireState snapshot)
         {
             this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
+            this.wasExpressionsMigrationPerformed = snapshot.WasExpressionsMigrationPerformed;
         }
 
         private static int? DetermineActualMaxValueForGenericQuestion(QuestionType questionType, int legacyMaxValue)
@@ -940,7 +948,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
-        public void MigrateExpressionsToCSharp() { }
+        public void MigrateExpressionsToCSharp()
+        {
+            this.ThrowIfExpressionsAreAlreadyMigrated();
+
+            this.ApplyEvent(new ExpressionsMigratedToCSharp());
+        }
 
         #endregion
 
@@ -3994,6 +4007,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("Filtered combobox question {0} contains more than {1} options",
                         FormatQuestionForException(questionId, this.innerDocument), maxFilteredComboboxOptionsCount));
             }
+        }
+
+        private void ThrowIfExpressionsAreAlreadyMigrated()
+        {
+            if (this.wasExpressionsMigrationPerformed)
+                throw new QuestionnaireException("Expressions are already migrated to C#.");
         }
 
         #endregion
