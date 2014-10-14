@@ -23,10 +23,9 @@
   <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
   <IgnoredTests>
-    <FixtureTestSelector>
-      <FixtureName>WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePrototypeProviderTests.when_getting_expression_state</FixtureName>
-    </FixtureTestSelector>
-    <AllTestsSelector />
+    <NamedTestSelector>
+      <TestName>WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePrototypeProviderTests.when_getting_expression_state.should_provide_not_null_value</TestName>
+    </NamedTestSelector>
   </IgnoredTests>
   <HiddenWarnings>LongTestTimesWithoutParallelExecution</HiddenWarnings>
 </ProjectConfiguration>
