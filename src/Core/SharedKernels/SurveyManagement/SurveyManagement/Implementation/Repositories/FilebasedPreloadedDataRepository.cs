@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.SampleRecordsAccessors;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 
@@ -103,6 +99,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             return null;
         }
 
+        public void DeletePreloadedDataOfSample(string id)
+        {
+            var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
+            if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
+                return;
+
+            fileSystemAccessor.DeleteDirectory(currentFolderPath);
+        }
+
         public PreloadedDataByFile[] GetPreloadedDataOfPanel(string id)
         {
             var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
@@ -111,6 +116,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
 
             var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
             return this.TryToGetPreloadedDataFromZipArchive(filesInDirectory, id, currentFolderPath);
+        }
+
+        public void DeletePreloadedDataOfPanel(string id)
+        {
+            throw new NotImplementedException();
         }
 
         private IEnumerable<string> GetFiles(string id)
