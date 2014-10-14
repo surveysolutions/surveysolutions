@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.UI.Designer.WebServices.Questionnaire
 {

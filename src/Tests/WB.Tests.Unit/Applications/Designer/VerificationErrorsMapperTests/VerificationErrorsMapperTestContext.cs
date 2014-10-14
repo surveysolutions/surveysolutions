@@ -4,7 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.Code;
 
 namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests

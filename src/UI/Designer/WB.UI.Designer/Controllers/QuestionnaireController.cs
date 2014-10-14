@@ -19,12 +19,11 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOpt
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;

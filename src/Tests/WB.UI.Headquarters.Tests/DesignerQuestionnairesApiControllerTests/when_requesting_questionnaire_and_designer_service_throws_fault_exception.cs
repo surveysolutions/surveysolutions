@@ -1,15 +1,13 @@
 using System;
 using System.ServiceModel;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.PublicService;
-using WB.UI.Headquarters.Models;
 using It = Machine.Specifications.It;
-using QuestionnaireVersion = WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.QuestionnaireVersion;
 
 namespace WB.UI.Headquarters.Tests.DesignerQuestionnairesApiControllerTests
 {
@@ -17,10 +15,16 @@ namespace WB.UI.Headquarters.Tests.DesignerQuestionnairesApiControllerTests
     {
         Establish context = () =>
         {
-            var supportedVerstion = new QuestionnaireVersion(1, 2, 3);
-            request = new DesignerQuestionnairesApiController.ImportQuestionnaireRequest{ QuestionnaireId = questionnaireId };
+            var supportedVerstion = new ApplicationVersionSettings()
+            {
+                SupportedQuestionnaireVersionMajor = 1,
+                SupportedQuestionnaireVersionMinor = 2,
+                SupportedQuestionnaireVersionPatch = 3
+            };
+            request = new ImportQuestionnaireRequest{ QuestionnaireId = questionnaireId };
 
-            var versionProvider = Mock.Of<ISupportedVersionProvider>(x => x.GetSupportedQuestionnaireVersion() == supportedVerstion);
+            var versionProvider = new Mock<ISupportedVersionProvider>();
+            versionProvider.Setup(x => x.GetSupportedQuestionnaireVersion()).Returns(supportedVerstion);
 
             var service = new Mock<IPublicService>();
 
@@ -31,7 +35,7 @@ namespace WB.UI.Headquarters.Tests.DesignerQuestionnairesApiControllerTests
 
             controller = CreateDesignerQuestionnairesApiController(
                 getDesignerService: x => service.Object,
-                supportedVersionProvider: versionProvider);
+                supportedVersionProvider: versionProvider.Object);
         };
 
         Because of = () =>
@@ -59,7 +63,7 @@ namespace WB.UI.Headquarters.Tests.DesignerQuestionnairesApiControllerTests
         private static string someFaultReason = "some fault reason";
         private static DownloadQuestionnaireRequest downloadRequest;
         private static DesignerQuestionnairesApiController controller;
-        private static DesignerQuestionnairesApiController.ImportQuestionnaireRequest request;
+        private static ImportQuestionnaireRequest request;
         private static QuestionnaireVerificationResponse response;
     }
 }

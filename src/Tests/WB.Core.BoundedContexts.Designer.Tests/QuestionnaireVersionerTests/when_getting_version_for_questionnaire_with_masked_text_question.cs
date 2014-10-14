@@ -7,7 +7,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVersionerTests
 {

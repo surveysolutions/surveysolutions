@@ -244,10 +244,6 @@
       <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
-      <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
