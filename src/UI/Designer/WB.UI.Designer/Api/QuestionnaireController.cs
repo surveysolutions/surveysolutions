@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -25,7 +27,6 @@ namespace WB.UI.Designer.Api
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
-        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
@@ -37,8 +38,7 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IVerificationErrorsMapper verificationErrorsMapper,
-            IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IExpressionProcessorGenerator expressionProcessorGenerator)
+            IQuestionnaireInfoFactory questionnaireInfoFactory)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
@@ -46,7 +46,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.verificationErrorsMapper = verificationErrorsMapper;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
-            this.expressionProcessorGenerator = expressionProcessorGenerator;
+
         }
 
         [HttpGet]
@@ -151,30 +151,6 @@ namespace WB.UI.Designer.Api
             QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
             var errorsCount = verificationErrors.Length;
             VerificationError[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
-
-            if (!errors.Any())
-            {
-                GenerationResult generationResult;
-                try
-                {
-                    string resultAssembly;
-                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
-                }
-                catch (Exception)
-                {
-                    generationResult = new GenerationResult()
-                    {
-                        Success = false,
-                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
-                    };
-                }
-                //errors shouldn't be displayed as is 
-                var processorGenerationErrors = generationResult.Success
-                    ? new QuestionnaireVerificationError[0]
-                    : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
-                errorsCount = generationResult.Diagnostics.Count;
-                errors = verificationErrorsMapper.EnrichVerificationErrors(processorGenerationErrors, questionnaireDocument);
-            }
 
             return new VerificationErrors
             {
