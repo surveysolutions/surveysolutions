@@ -107,21 +107,20 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
-            interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 1);
 
             eventContext = new EventContext();
         };
 
         Because of = () => interview.AnswerSingleOptionQuestion(Guid.NewGuid(), parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 2);
 
-        private It should_not_enable_any_question = () =>
+        It should_not_enable_any_question = () =>
             eventContext.ShouldNotContainEvent<QuestionsEnabled>(x => x.Questions.Single(q => q.Id == childCascadedComboboxId) != null);
 
-        It should_invalidate_child_question = () =>
-            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(x => x.Questions.Single(q => q.Id == childCascadedComboboxId) != null);
+        It should_not_declare_child_as_valid = () =>
+            eventContext.ShouldNotContainEvent<AnswersDeclaredValid>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
 
-        It should_disable_child_question = () =>
-            eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Single(q => q.Id == childCascadedComboboxId) != null);
+        It should_not_enable_child_question = () =>
+            eventContext.ShouldNotContainEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
 
         It should_disable_grandchild_question = () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Single(q => q.Id == grandChildCascadedComboboxId) != null);
@@ -131,9 +130,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
 
         It should_not_remove_answer_from_not_related_question = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == comboShouldNotBeRemoved));
-
-        It should_remove_dependent_answers = () =>
-            eventContext.ShouldContainEvent<AnswersRemoved>(x => x.Questions.SingleOrDefault(q => q.Id == childCascadedComboboxId) != null);
 
         It should_remove_dependent_answers_on_second_level_of_cascades_if_it_is_answered = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));

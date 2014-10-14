@@ -201,11 +201,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .AnswerText;
         }
 
-        public string GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
+        public decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
+            var question = this.GetQuestionOrThrow(questionId);
 
-            bool questionTypeDoesNotSupportAnswerOptions
+            var questionTypeDoesNotSupportAnswerOptions
                 = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
 
             if (questionTypeDoesNotSupportAnswerOptions)
@@ -213,10 +213,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     "Cannot return answer option title for question with id '{0}' because it's type {1} does not support answer options.",
                     questionId, question.QuestionType));
 
-            return question
+            var stringParentAnswer = question
                 .Answers
                 .Single(answer => answerOptionValue == this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
                 .ParentValue;
+
+            decimal parsedValue;
+
+            if (!decimal.TryParse(stringParentAnswer, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
+                throw new QuestionnaireException(string.Format(
+                    "Cannot parse parent answer option value '{0}' as decimal. Question id: '{1}'.",
+                    stringParentAnswer, questionId));
+
+            return parsedValue;
         }
 
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
