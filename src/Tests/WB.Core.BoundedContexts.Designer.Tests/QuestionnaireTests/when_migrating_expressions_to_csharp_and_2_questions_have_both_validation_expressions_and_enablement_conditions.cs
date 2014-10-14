@@ -41,7 +41,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = Create.EventContext();
         };
 
-
         Because of = () =>
             questionnaire.MigrateExpressionsToCSharp();
 

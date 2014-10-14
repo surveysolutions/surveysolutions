@@ -4531,7 +4531,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private static bool HasEnablementConditionOrValidationExpression(IQuestion question)
         {
             return !string.IsNullOrWhiteSpace(question.ConditionExpression)
-                && !string.IsNullOrWhiteSpace(question.ValidationExpression);
+                || !string.IsNullOrWhiteSpace(question.ValidationExpression);
         }
 
 
