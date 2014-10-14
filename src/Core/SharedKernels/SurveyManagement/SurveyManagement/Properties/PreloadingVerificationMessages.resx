@@ -188,4 +188,7 @@
   <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
     <value>Multimedia question is not supported in data preloading.</value>
   </data>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>Preloading data was not found</value>
+  </data>
 </root>
