@@ -3078,9 +3078,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     bool isNewStateEnabled = this.ShouldQuestionBeEnabledByCustomEnablementCondition(state, dependentQuestion, questionnaire, getAnswer);
                     bool isOldStateEnabled = !IsQuestionDisabled(state, dependentQuestion);
+
+                    bool parentAnsweredOrNoParent = true;
+                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(dependentQuestion.Id);
+                    if (cascadingQuestionParentId.HasValue)
+                    {
+                        KeyValuePair<string, Identity> parentInstance = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingQuestionParentId.Value, dependentQuestion.RosterVector, questionnaire);
+                        parentAnsweredOrNoParent = state.AnsweredQuestions.Contains(ConversionHelper.ConvertIdentityToString(parentInstance.Value));
+                    }
+
                     PutToCorrespondingListAccordingToEnablementStateChange(dependentQuestion,
                         collectedQuestionsToBeEnabled, collectedQuestionsToBeDisabled,
-                        isNewStateEnabled: isNewStateEnabled,
+                        isNewStateEnabled: isNewStateEnabled && parentAnsweredOrNoParent,
                         isOldStateEnabled: isOldStateEnabled);
 
                     processedQuestionKeys.Add(ConversionHelper.ConvertIdAndRosterVectorToString(dependentQuestion.Id, dependentQuestion.RosterVector));
@@ -3614,19 +3623,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var questionId = answeredQuestion.Id;
             Guid? cascadingId = questionnaire.GetCascadingQuestionParentId(questionId);
-
-            if (!cascadingId.HasValue) return;
             
-            string parentValue = questionnaire.GetCascadingParentValue(questionId, value);
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(cascadingId.Value, rosterVector);
-            var answer = interviewState.AnswersSupportedInExpressions[questionKey];
-            var stringAnswer = AnswerUtils.AnswerToString(answer);
+            if (!cascadingId.HasValue) return;
 
-            var answerNotExistsInParent = stringAnswer != parentValue;
+            decimal childParentValue = questionnaire.GetCascadingParentValue(questionId, value);
+
+            var questionIdentity = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingId.Value, rosterVector, questionnaire).Value;
+            string questionKey = ConversionHelper.ConvertIdentityToString(questionIdentity);
+
+            if (!interviewState.AnswersSupportedInExpressions.ContainsKey(questionKey))
+                return;
+            
+            object answer = interviewState.AnswersSupportedInExpressions[questionKey];
+            string parentAnswer = AnswerUtils.AnswerToString(answer);
+
+            var answerNotExistsInParent = Convert.ToDecimal(parentAnswer) != childParentValue;
             if (answerNotExistsInParent)
                 throw new InterviewException(string.Format(
                     "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}",
-                    FormatQuestionForException(questionId, questionnaire), value, parentValue, stringAnswer));
+                    FormatQuestionForException(questionId, questionnaire), value, childParentValue, parentAnswer));
         }
 
         private static void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
@@ -3958,10 +3973,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void PerformValidationOfAnsweredQuestionAndDependentQuestionsAndJustEnabledQuestions(
             InterviewStateDependentOnAnswers state,
-            Identity answeredQuestion, IQuestionnaire questionnaire, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
+            Identity answeredQuestion, IQuestionnaire questionnaire, 
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
             Func<Identity, bool?> getNewQuestionStatus,
             EnablementChanges enablementChanges,
-            out List<Identity> questionsToBeDeclaredValid, out List<Identity> questionsToBeDeclaredInvalid)
+            out List<Identity> questionsToBeDeclaredValid,
+            out List<Identity> questionsToBeDeclaredInvalid)
         {
             questionsToBeDeclaredValid = new List<Identity>();
             questionsToBeDeclaredInvalid = new List<Identity>();
