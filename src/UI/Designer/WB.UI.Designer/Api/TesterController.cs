@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Exceptions;

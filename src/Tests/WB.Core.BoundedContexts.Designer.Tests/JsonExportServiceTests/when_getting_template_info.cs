@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.JsonExportServiceTests

@@ -131,7 +131,6 @@
     <Compile Include="Events\Questionnaire\QuestionnaireAssemblyImported.cs" />
     <Compile Include="Events\User\UserLockedBySupervisor.cs" />
     <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
-    <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs" />
@@ -300,10 +299,6 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
-      <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
       <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>

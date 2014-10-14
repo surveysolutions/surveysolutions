@@ -5,7 +5,7 @@ using Machine.Specifications.Utility;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using It = Machine.Specifications.It;

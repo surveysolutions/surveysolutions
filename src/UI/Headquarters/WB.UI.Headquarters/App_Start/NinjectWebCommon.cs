@@ -26,7 +26,6 @@ using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispa
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -132,7 +131,6 @@ namespace WB.UI.Headquarters
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new ExpressionProcessorModule(),
-                new QuestionnaireVerificationModule(),
                 new QuestionnaireUpgraderModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
