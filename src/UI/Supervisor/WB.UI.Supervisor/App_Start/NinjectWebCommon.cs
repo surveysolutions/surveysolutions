@@ -34,7 +34,6 @@ using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -152,14 +151,12 @@ namespace WB.UI.Supervisor.App_Start
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new ExpressionProcessorModule(),
-                new QuestionnaireVerificationModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new QuestionnaireUpgraderModule(),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();

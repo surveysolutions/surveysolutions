@@ -1,5 +1,5 @@
 ﻿using Main.Core.Documents;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
