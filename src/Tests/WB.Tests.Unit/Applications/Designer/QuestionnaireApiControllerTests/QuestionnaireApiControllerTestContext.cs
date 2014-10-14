@@ -6,7 +6,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
@@ -27,8 +26,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IVerificationErrorsMapper verificationErrorsMapper = null,
-            IQuestionnaireInfoFactory questionnaireInfoFactory = null,
-            IExpressionProcessorGenerator expressionProcessorGenerator = null)
+            IQuestionnaireInfoFactory questionnaireInfoFactory = null)
         {
             var questionnaireController = new QuestionnaireController(
                 chapterInfoViewFactory ?? Mock.Of<IChapterInfoViewFactory>(),
@@ -36,8 +34,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
-                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
-                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>());
+                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>());
 
             return questionnaireController;
         }
