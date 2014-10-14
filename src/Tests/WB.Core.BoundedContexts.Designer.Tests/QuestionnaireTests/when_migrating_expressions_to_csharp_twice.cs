@@ -9,6 +9,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
     {
         Establish context = () =>
         {
+            Setup.SimpleQuestionnaireDocumentUpgraderToMockedServiceLocator();
+
             questionnaire = Create.Questionnaire();
         };
 
