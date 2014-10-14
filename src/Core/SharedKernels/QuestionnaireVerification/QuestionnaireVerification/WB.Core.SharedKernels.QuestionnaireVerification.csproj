@@ -50,6 +50,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WB.Core.BoundedContexts.Designer">
+      <HintPath>..\..\..\..\UI\Designer\WB.UI.Designer\Bin\WB.Core.BoundedContexts.Designer.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />

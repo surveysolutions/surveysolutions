@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -87,14 +88,17 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
-            ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider)
+            ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
+            IExpressionProcessorGenerator expressionProcessorGenerator)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.substitutionService = substitutionService;
             this.keywordsProvider = keywordsProvider;
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -104,8 +108,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return new[]
                 {
                     Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
-                    // obsolete, should be replaced with compiler: Verifier<IQuestion>(this.CustomValidationExpressionHasIncorrectSyntax, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
-                    // obsolete, should be replaced with compiler: Verifier<IComposite>(this.CustomEnablementConditionHasIncorrectSyntax, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
                     Verifier<IMultyOptionsQuestion>(this.CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
@@ -178,9 +180,87 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
-                    ErrorsByRostersWithDuplicateVariableName
+                    ErrorsByRostersWithDuplicateVariableName,
+                    ErrorsByConditionExpressions,
+                    ErrorsByValidationExpressions
                 };
             }
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionExpressions(QuestionnaireDocument questionnaire)
+        {
+            var clonedQuestionnaire = GetQuestionnaireDocumentWithEmptyConditionsAndValidations(questionnaire);
+
+            foreach (var questionnaireItem in questionnaire.Find<IComposite>(item => !string.IsNullOrEmpty(GetCustomEnablementCondition(item))))
+            {
+                var clonedGroupOrQuestion = clonedQuestionnaire.Find<IComposite>(questionnaireItem.PublicKey);
+
+                SetCustomEnablementCondition(clonedGroupOrQuestion, GetCustomEnablementCondition(questionnaireItem));
+
+                if (IsQuestionnaireDocumentValid(clonedQuestionnaire)) continue;
+
+                SetCustomEnablementCondition(clonedGroupOrQuestion, string.Empty);
+                yield return ConditionExpressionSyntaxError(questionnaireItem);
+            }
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByValidationExpressions(QuestionnaireDocument questionnaire)
+        {
+            var clonedQuestionnaire = GetQuestionnaireDocumentWithEmptyConditionsAndValidations(questionnaire);
+
+            foreach (var questionnaireItem in questionnaire.Find<IQuestion>(item => !string.IsNullOrEmpty(item.ValidationExpression)))
+            {
+                var clonedQuestion = clonedQuestionnaire.Find<IQuestion>(questionnaireItem.PublicKey);
+
+                clonedQuestion.ValidationExpression = questionnaireItem.ValidationExpression;
+
+                if (IsQuestionnaireDocumentValid(clonedQuestionnaire)) continue;
+
+                clonedQuestion.ValidationExpression =  string.Empty;
+                yield return ValidationExpressionSyntaxError(questionnaireItem);
+            }
+        }
+
+        private bool IsQuestionnaireDocumentValid(QuestionnaireDocument questionnaire)
+        {
+            string resultAssembly;
+            var generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, out resultAssembly);
+
+            return generationResult.Success;
+        }
+
+        private static void SetCustomEnablementCondition(IComposite questionnaireItem, string enablementCondition)
+        {
+            var group = questionnaireItem as IGroup;
+            if (group != null)
+            {
+                group.ConditionExpression = enablementCondition;
+            }
+            var question = questionnaireItem as IQuestion;
+            if (question != null)
+            {
+                question.ConditionExpression = enablementCondition;
+            }
+        }
+
+        private static QuestionnaireDocument GetQuestionnaireDocumentWithEmptyConditionsAndValidations(QuestionnaireDocument questionnaireDocument)
+        {
+            var clonedQuestionnaire = questionnaireDocument.Clone();
+            foreach (var questionnaireItem in clonedQuestionnaire.Find<IComposite>(item => true))
+            {
+                var group = questionnaireItem as IGroup;
+                if (group != null)
+                {
+                    group.ConditionExpression = string.Empty;
+                }
+                var question = questionnaireItem as IQuestion;
+                if (question != null)
+                {
+                    question.ConditionExpression = string.Empty;
+                    question.ValidationExpression = string.Empty;
+                }
+            }
+            return clonedQuestionnaire;
         }
 
         private bool CascadingQuestionOptionsWithParentValuesShouldBeUnique(SingleQuestion question)
@@ -1393,6 +1473,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return new QuestionnaireVerificationError("WB0062",
                 VerificationMessages.WB0062_VariableNameForQuestionIsNotUnique,
                 CreateReference(sourseQuestion));
+        }
+
+        private static QuestionnaireVerificationError ConditionExpressionSyntaxError(IComposite groupOrQuestion)
+        {
+            return new QuestionnaireVerificationError("WB0003",
+                VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax,
+                CreateReference(groupOrQuestion));
+        }
+
+        private static QuestionnaireVerificationError ValidationExpressionSyntaxError(IQuestion question)
+        {
+            return new QuestionnaireVerificationError("WB0002",
+                VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax,
+                CreateReference(question));
         }
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,

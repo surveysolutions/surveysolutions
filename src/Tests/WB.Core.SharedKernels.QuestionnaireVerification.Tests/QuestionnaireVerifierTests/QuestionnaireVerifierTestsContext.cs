@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -18,15 +19,22 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
     internal class QuestionnaireVerifierTestsContext
     {
         protected static QuestionnaireVerifier CreateQuestionnaireVerifier(IExpressionProcessor expressionProcessor = null,
-            ISubstitutionService substitutionService = null, IKeywordsProvider keywordsProvider = null)
+            ISubstitutionService substitutionService = null, IKeywordsProvider keywordsProvider = null, IExpressionProcessorGenerator expressionProcessorGenerator = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
 
+            var questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
+            string generationResult;
+            questionnireExpressionProcessorGeneratorMock.Setup(
+                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), out generationResult))
+                .Returns(new GenerationResult() {Success = true});
+
             return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, 
                 fileSystemAccessorMock.Object,
                 substitutionService ?? new SubstitutionService(),
-                keywordsProvider ?? new KeywordsProvider());
+                keywordsProvider ?? new KeywordsProvider(),
+                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
