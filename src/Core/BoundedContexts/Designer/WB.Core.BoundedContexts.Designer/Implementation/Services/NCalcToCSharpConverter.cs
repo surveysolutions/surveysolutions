@@ -8,7 +8,7 @@ using ValueType = NCalc.Domain.ValueType;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    internal class NCalcToCSharpConverter
+    internal class NCalcToCSharpConverter : INCalcToCSharpConverter
     {
         internal class CSharpSerializationVisitor : LogicalExpressionVisitor
         {

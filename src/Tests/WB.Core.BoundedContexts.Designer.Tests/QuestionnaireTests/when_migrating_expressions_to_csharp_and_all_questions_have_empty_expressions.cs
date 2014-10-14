@@ -3,7 +3,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -14,7 +13,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
     {
         Establish context = () =>
         {
-            QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocument(children: new[]
+            Setup.SimpleQuestionnaireDocumentUpgraderToMockedServiceLocator();
+
+            questionnaire = Create.Questionnaire(Create.QuestionnaireDocument(children: new[]
             {
                 Create.Chapter(children: new[]
                 {
@@ -22,9 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     Create.Question(enablementCondition: "", validationExpression: ""),
                     Create.Question(enablementCondition: null, validationExpression: null),
                 }),
-            });
-
-            questionnaire = Create.QuestionnaireUsingQuestionnaireDocument(questionnaireDocument);
+            }));
 
             eventContext = Create.EventContext();
         };

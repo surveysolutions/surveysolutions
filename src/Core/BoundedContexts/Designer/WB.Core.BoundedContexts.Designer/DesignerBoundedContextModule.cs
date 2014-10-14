@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionnaireDocumentUpgrader>().To<QuestionnaireDocumentUpgrader>().InSingletonScope();
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IQuestionnaireVersioner>().To<QuestionnaireVersioner>().InSingletonScope();
+            this.Bind<INCalcToCSharpConverter>().To<NCalcToCSharpConverter>();
 
             this.Unbind<IExpressionProcessor>();
             this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();

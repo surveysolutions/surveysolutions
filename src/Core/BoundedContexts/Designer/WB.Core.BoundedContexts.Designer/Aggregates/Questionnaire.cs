@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Logging;
@@ -825,6 +826,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
         }
 
+        private INCalcToCSharpConverter NCalcToCSharpConverter
+        {
+            get { return ServiceLocator.Current.GetInstance<INCalcToCSharpConverter>(); }
+        }
+
         protected ISubstitutionService SubstitutionService
         {
             get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
@@ -887,6 +893,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
             : base(source.PublicKey)
         {
+            this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
+
             ImportQuestionnaire(createdBy, source);
         }
 
@@ -951,6 +959,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void MigrateExpressionsToCSharp()
         {
             this.ThrowIfExpressionsAreAlreadyMigrated();
+
+
+            IEnumerable<IQuestion> questionsToMigrate = this.innerDocument.Find<IQuestion>(HasEnablementConditionOrValidationExpression);
+
+            Dictionary<string, string> customMappings = this.BuildCustomMappingsFromIdsToIdentifiers();
+
+            List<QuestionChanged> questionChangedEvents = questionsToMigrate
+                .Select(question => this.MigrateQuestionToRoslyn(question, customMappings))
+                .ToList();
+
+
+            questionChangedEvents.ForEach(this.ApplyEvent);
 
             this.ApplyEvent(new ExpressionsMigratedToCSharp());
         }
@@ -4446,6 +4466,74 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ? @group.Title ?? "<<NO GROUP TITLE>>"
                 : "<<MISSING GROUP>>";
         }
+
+
+        private QuestionChanged MigrateQuestionToRoslyn(IQuestion question, Dictionary<string, string> customMappings)
+        {
+            UpdateCustomMappingsWithContextQuestion(customMappings, question);
+
+            string enablementCondition = this.ConvertExpressionToCSharpIfNotEmpty(question.ConditionExpression, customMappings);
+            string validationExpression = this.ConvertExpressionToCSharpIfNotEmpty(question.ValidationExpression, customMappings);
+
+            return new QuestionChanged
+            {
+                PublicKey = question.PublicKey,
+
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+
+                QuestionType = question.QuestionType,
+                Featured = question.Featured,
+                Instructions = question.Instructions,
+                Mandatory = question.Mandatory,
+                Capital = question.Capital,
+                QuestionText = question.QuestionText,
+                QuestionScope = question.QuestionScope,
+                StataExportCaption = question.StataExportCaption,
+                VariableLabel = question.VariableLabel,
+                ValidationMessage = question.ValidationMessage,
+                AnswerOrder = question.AnswerOrder,
+                Answers = question.Answers.ToArray(),
+
+                // TODO: TLK: support question-specific properties
+                Triggers = null,
+                LinkedToQuestionId = null,
+                IsInteger = null,
+                AreAnswersOrdered = null,
+                MaxAllowedAnswers = null,
+                Mask = null,
+                IsFilteredCombobox = null,
+                CascadeFromQuestionId = null,
+            };
+        }
+
+        private string ConvertExpressionToCSharpIfNotEmpty(string expression, Dictionary<string, string> customMappings)
+        {
+            return string.IsNullOrWhiteSpace(expression)
+                ? expression
+                : this.NCalcToCSharpConverter.Convert(expression, customMappings);
+        }
+
+        private static void UpdateCustomMappingsWithContextQuestion(Dictionary<string, string> customMappings, IQuestion contextQuestion)
+        {
+            customMappings["this"] = contextQuestion.StataExportCaption;
+        }
+
+        private Dictionary<string, string> BuildCustomMappingsFromIdsToIdentifiers()
+        {
+            return this.innerDocument
+                .Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.StataExportCaption))
+                .ToDictionary(
+                    question => question.PublicKey.ToString(),
+                    question => question.StataExportCaption);
+        }
+
+        private static bool HasEnablementConditionOrValidationExpression(IQuestion question)
+        {
+            return !string.IsNullOrWhiteSpace(question.ConditionExpression)
+                && !string.IsNullOrWhiteSpace(question.ValidationExpression);
+        }
+
 
         #endregion
 

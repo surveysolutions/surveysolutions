@@ -505,18 +505,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 createdBy: responsibleId ?? Guid.Parse("ddddccccccccccccccccccccccccbbbb"));
         }
 
+        public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument, Guid? responsibleId = null)
+        {
+            return new Questionnaire(
+                createdBy: responsibleId ?? Guid.NewGuid(),
+                source: questionnaireDocument);
+        }
+
         public static EventContext EventContext()
         {
             return new EventContext();
-        }
-
-        public static Questionnaire QuestionnaireUsingQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
-        {
-            Questionnaire questionnaire = Create.Questionnaire();
-
-            questionnaire.Apply(Create.Event.TemplateImported(questionnaireDocument));
-
-            return questionnaire;
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(IEnumerable<IComposite> children = null)
@@ -537,11 +535,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             };
         }
 
-        public static IQuestion Question(string enablementCondition = null, string validationExpression = null)
+        public static IQuestion Question(Guid? questionId = null, string enablementCondition = null, string validationExpression = null)
         {
             return new TextQuestion("Question X")
             {
-                PublicKey = Guid.NewGuid(),
+                PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
             };
