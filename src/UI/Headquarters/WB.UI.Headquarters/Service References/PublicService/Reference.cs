@@ -211,10 +211,10 @@ namespace WB.UI.Headquarters.PublicService {
     public partial class RemoteFileInfo {
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
-        public string FileName;
+        public long Length;
         
         [System.ServiceModel.MessageHeaderAttribute(Namespace="http://tempuri.org/")]
-        public long Length;
+        public string SupportingAssembly;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
         public System.IO.Stream FileByteStream;
@@ -222,9 +222,9 @@ namespace WB.UI.Headquarters.PublicService {
         public RemoteFileInfo() {
         }
         
-        public RemoteFileInfo(string FileName, long Length, System.IO.Stream FileByteStream) {
-            this.FileName = FileName;
+        public RemoteFileInfo(long Length, string SupportingAssembly, System.IO.Stream FileByteStream) {
             this.Length = Length;
+            this.SupportingAssembly = SupportingAssembly;
             this.FileByteStream = FileByteStream;
         }
     }
@@ -323,14 +323,14 @@ namespace WB.UI.Headquarters.PublicService {
             return base.Channel.DownloadQuestionnaire(request);
         }
         
-        public string DownloadQuestionnaire(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicService.QuestionnaireVersion SupportedQuestionnaireVersion, out long Length, out System.IO.Stream FileByteStream) {
+        public long DownloadQuestionnaire(System.Guid QuestionnaireId, WB.UI.Headquarters.PublicService.QuestionnaireVersion SupportedQuestionnaireVersion, out string SupportingAssembly, out System.IO.Stream FileByteStream) {
             WB.UI.Headquarters.PublicService.DownloadQuestionnaireRequest inValue = new WB.UI.Headquarters.PublicService.DownloadQuestionnaireRequest();
             inValue.QuestionnaireId = QuestionnaireId;
             inValue.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
             WB.UI.Headquarters.PublicService.RemoteFileInfo retVal = ((WB.UI.Headquarters.PublicService.IPublicService)(this)).DownloadQuestionnaire(inValue);
-            Length = retVal.Length;
+            SupportingAssembly = retVal.SupportingAssembly;
             FileByteStream = retVal.FileByteStream;
-            return retVal.FileName;
+            return retVal.Length;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

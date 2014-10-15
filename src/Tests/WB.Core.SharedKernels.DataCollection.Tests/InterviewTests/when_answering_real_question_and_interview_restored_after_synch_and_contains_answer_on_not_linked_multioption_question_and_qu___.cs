@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -43,25 +44,25 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                 && _.HasQuestion(answeredQuestionId) == true
                 && _.GetQuestionType(answeredQuestionId) == QuestionType.Numeric
-                && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeredQuestionId) == new[] { multyOptionAnsweredQuestionId }
+               // && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeredQuestionId) == new[] { multyOptionAnsweredQuestionId }
             ));
 
             questionnaireMock
                 .Setup(x => x.GetQuestionReferencedByLinkedQuestion(multyOptionAnsweredQuestionId))
                 .Throws(new QuestionnaireException("not a linked"));
 
-            var expressionProcessor = new Mock<IExpressionProcessor>();
+            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
             
             expressionProcessor
                 .Setup(x => x.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()))
                 .Returns(false);
 
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
-
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor.Object);
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaireMock.Object));
 
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(CreateInterviewExpressionStateProviderStub());
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 

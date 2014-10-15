@@ -15,6 +15,7 @@ using it = Moq.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAndValidness
 {
+    [Ignore("C#")]
     internal class when_answering_integer_question_A_which_enables_B_which_makes_C_valid_and_B_was_disabled_and_answered_and_C_was_invalid_and_answered : InterviewTestsContext
     {
         Establish context = () =>
@@ -29,30 +30,30 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
                 && _.GetQuestionType(it.Is(abcQuestionId)) == QuestionType.Numeric
                 && _.IsQuestionInteger(it.Is(abcQuestionId)) == true
 
-                && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { questionBId }
-                && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionBId) == new[] { questionAId }
+               // && _.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { questionBId }
+               // && _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(questionBId) == new[] { questionAId }
 
-                && _.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questionBId) == new[] { questionCId }
-                && _.GetQuestionsInvolvedInCustomValidation(questionCId) == new[] { questionBId }
+                //&& _.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questionBId) == new[] { questionCId }
+                //&& _.GetQuestionsInvolvedInCustomValidation(questionCId) == new[] { questionBId }
 
                 && _.GetQuestionVariableName(questionAId) == "a"
                 && _.GetQuestionVariableName(questionBId) == "b"
             );
 
-            var expressionProcessor = Mock.Of<IExpressionProcessor>
+            var expressionProcessor = Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>
             (_
                 => _.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()) == true
             );
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire));
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new NumericIntegerQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, 4400));
-            interview.Apply(new QuestionsDisabled(new[] { new Identity(questionBId, emptyRosterVector) }));
+            interview.Apply(new QuestionsDisabled(new[] { new WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity(questionBId, emptyRosterVector) }));
             interview.Apply(new NumericIntegerQuestionAnswered(userId, questionCId, emptyRosterVector, DateTime.Now, 42));
-            interview.Apply(new AnswersDeclaredInvalid(new[] { new Identity(questionCId, emptyRosterVector) }));
+            interview.Apply(new AnswersDeclaredInvalid(new[] { new WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity(questionCId, emptyRosterVector) }));
 
             eventContext = new EventContext();
         };

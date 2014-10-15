@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Tests.Integration.InterviewTests
 {
@@ -33,6 +29,10 @@ namespace WB.Tests.Integration.InterviewTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(CreateInterviewExpressionStateProviderStub(questionnaireId));
 
             return CreateInterview(questionnaireId: questionnaireId);
         }
@@ -61,6 +61,19 @@ namespace WB.Tests.Integration.InterviewTests
                 && repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
         }
 
+        protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
+        {
+            var expressionState = new Mock<IInterviewExpressionState>();
+
+            var emptyList = new List<Identity>();
+
+            expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
+            expressionState.Setup(_ => _.ProcessEnablementConditions()).Returns(new EnablementChanges(emptyList, emptyList, emptyList, emptyList));
+            
+            return Mock.Of<IInterviewExpressionStatePrototypeProvider>(
+                provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);
+        }
+
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
             var result = new QuestionnaireDocument();
@@ -81,5 +94,6 @@ namespace WB.Tests.Integration.InterviewTests
                 .Setup(locator => locator.GetInstance<TInstance>())
                 .Returns(instance);
         }
+
     }
 }

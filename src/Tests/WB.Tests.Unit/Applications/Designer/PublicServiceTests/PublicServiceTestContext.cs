@@ -1,10 +1,12 @@
 ﻿using System;
+using Main.Core.Documents;
 using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Membership;
@@ -13,15 +15,21 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 {
     internal class PublicServiceTestContext
     {
-        protected static PublicService CreatePublicService(IJsonExportService exportService = null,
+        protected static PublicService CreatePublicService(IQuestionnaireExportService exportService = null,
             IStringCompressor zipUtils = null,
             IMembershipUserService userHelper = null,
-            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory = null)
+            IViewFactory<QuestionnaireListInputModel, QuestionnaireListView> viewFactory = null,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
+            IQuestionnaireVerifier questionnaireVerifier = null,
+            IExpressionProcessorGenerator expressionProcessorGenerator = null)
         {
-            return new PublicService(exportService ?? Mock.Of<IJsonExportService>(),
+            return new PublicService(exportService ?? Mock.Of<IQuestionnaireExportService>(),
                 zipUtils ?? Mock.Of<IStringCompressor>(),
                 userHelper ?? Mock.Of<IMembershipUserService>(),
-                viewFactory ?? Mock.Of<IViewFactory<QuestionnaireListInputModel, QuestionnaireListView>>());
+                viewFactory ?? Mock.Of<IViewFactory<QuestionnaireListInputModel, QuestionnaireListView>>(),
+                questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
+                questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
+                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>());
         }
 
         protected static TemplateInfo CreateTemplateInfo(QuestionnaireVersion version)
@@ -42,6 +50,15 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
                 SupportedQuestionnaireVersion = supportedQuestionnaireVersion,
                 QuestionnaireId = questionnaireId
             };
+        }
+
+        protected static IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> CreateQuestionnaireViewFactory(Guid id)
+        {
+            var questionnaire = new QuestionnaireDocument();
+            var questionnaireView = new QuestionnaireView(questionnaire);
+            var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
+
+            return questionnaireViewFactory;
         }
     }
 }

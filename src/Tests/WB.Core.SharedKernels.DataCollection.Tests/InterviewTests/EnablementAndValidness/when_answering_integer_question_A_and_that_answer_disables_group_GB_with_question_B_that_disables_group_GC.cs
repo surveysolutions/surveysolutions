@@ -14,6 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAndValidness
 {
+    [Ignore("C#")]
     internal class when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_that_disables_group_GC : InterviewTestsContext
     {
         Establish context = () =>
@@ -40,15 +41,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
                     => _.HasQuestion(Moq.It.Is(abQuestionId)) == true
                         && _.GetQuestionType(Moq.It.Is(abQuestionId)) == QuestionType.Numeric
                         && _.IsQuestionInteger(Moq.It.Is(abQuestionId)) == true
-                        && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { groupGBId }
-                        && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new[] { groupGCId }
+                        //&& _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionAId) == new[] { groupGBId }
+                        //&& _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBId) == new[] { groupGCId }
 
                         && _.GetAllUnderlyingQuestions(groupGBId) == new[] { questionBId }
 
                         && _.GetCustomEnablementConditionForGroup(groupGBId) == groupGBEnablementCondition
                         && _.GetCustomEnablementConditionForGroup(groupGCId) == groupGCEnablementCondition
-                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGBId) == new[] { questionAId }
-                        && _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGCId) == new[] { questionBId }
+                        //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGBId) == new[] { questionAId }
+                        //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(groupGCId) == new[] { questionBId }
 
                         && _.GetQuestionVariableName(questionAId) == questionAVariableName
                         && _.GetQuestionVariableName(questionBId) == questionBVariableName
@@ -56,7 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
                         && _.GetAllParentGroupsForQuestion(questionBId) == new[] { groupGBId }
                 );
 
-            expressionProcessor = Mock.Of<IExpressionProcessor>
+            expressionProcessor = Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>
                 (_
                     => _.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()) == true
                         && _.EvaluateBooleanExpression(groupGBEnablementCondition, Moq.It.IsAny<Func<string, object>>()) == false
@@ -71,7 +72,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire));
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.Apply(new NumericIntegerQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, 42));
@@ -101,7 +102,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.EnablementAn
         static Interview interview;
         static Guid userId;
         static decimal[] emptyRosterVector;
-        static IExpressionProcessor expressionProcessor;
+        static SharedKernels.ExpressionProcessor.Services.IExpressionProcessor expressionProcessor;
         static Func<string, object> funcSuppliedWhenEvaluatingGroupGCEnablementCondition;
         static string questionBVariableName;
         static Guid groupGBId;

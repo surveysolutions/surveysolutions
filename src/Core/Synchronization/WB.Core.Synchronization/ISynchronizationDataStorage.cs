@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization
 {
@@ -18,5 +16,6 @@ namespace WB.Core.Synchronization
         SyncItem GetLatestVersion(Guid id);
         IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(DateTime timestamp, Guid userId);
         void DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, DateTime timestamp);
+        void SaveTemplateAssembly(Guid publicKey, long version, string assemblyAsBase64String, DateTime timestamp);
     }
 }

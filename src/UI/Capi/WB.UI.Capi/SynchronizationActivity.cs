@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
-using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Utility;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
@@ -17,7 +16,6 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
@@ -25,10 +23,10 @@ using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
@@ -255,8 +253,10 @@ namespace WB.UI.Capi
                         CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
                         CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), cleaner, ServiceLocator.Current.GetInstance<ILogger>(),
                         CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(), CapiApplication.Kernel.Get<IStringCompressor>(),
-                        CapiApplication.Kernel.Get<IJsonUtils>()),
-                    cleaner, CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>());
+                        CapiApplication.Kernel.Get<IJsonUtils>(), CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>()),
+                        cleaner, 
+                        CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(),
+                        CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>());
             }
             catch (Exception ex)
             {

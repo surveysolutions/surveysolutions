@@ -16,6 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_creating_interview_and_questionnaire_has_question_marked_as_mandatory : InterviewTestsContext
     {
         private Establish context = () =>
