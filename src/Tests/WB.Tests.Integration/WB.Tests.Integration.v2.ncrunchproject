@@ -22,4 +22,9 @@
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
   <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
+  <IgnoredTests>
+    <FixtureTestSelector>
+      <FixtureName>WB.Tests.Integration.LanguageTests.when_answering_on_question_which_is_part_of_condition_expression_in_another_question</FixtureName>
+    </FixtureTestSelector>
+  </IgnoredTests>
 </ProjectConfiguration>

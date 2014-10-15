@@ -965,7 +965,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             Dictionary<string, string> customMappings = this.BuildCustomMappingsFromIdsToIdentifiers();
 
-            List<QuestionChanged> questionChangedEvents = questionsToMigrate
+            List<AbstractQuestionDataEvent> questionChangedEvents = questionsToMigrate
                 .Select(question => this.MigrateQuestionToRoslyn(question, customMappings))
                 .ToList();
 
@@ -4468,12 +4468,44 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        private QuestionChanged MigrateQuestionToRoslyn(IQuestion question, Dictionary<string, string> customMappings)
+        private AbstractQuestionDataEvent MigrateQuestionToRoslyn(IQuestion question, Dictionary<string, string> customMappings)
         {
             UpdateCustomMappingsWithContextQuestion(customMappings, question);
 
             string enablementCondition = this.ConvertExpressionToCSharpIfNotEmpty(question.ConditionExpression, customMappings);
             string validationExpression = this.ConvertExpressionToCSharpIfNotEmpty(question.ValidationExpression, customMappings);
+
+            if (question is INumericQuestion)
+            {
+                var numericQuestion = (INumericQuestion) question;
+
+                return new NumericQuestionChanged
+                {
+                    PublicKey = question.PublicKey,
+
+                    ConditionExpression = enablementCondition,
+                    ValidationExpression = validationExpression,
+
+                    Featured = question.Featured,
+                    Instructions = question.Instructions,
+                    Mandatory = question.Mandatory,
+                    Capital = question.Capital,
+                    QuestionText = question.QuestionText,
+                    QuestionScope = question.QuestionScope,
+                    StataExportCaption = question.StataExportCaption,
+                    VariableLabel = question.VariableLabel,
+                    ValidationMessage = question.ValidationMessage,
+
+                    MaxAllowedValue = numericQuestion.MaxValue,
+                    IsInteger = numericQuestion.IsInteger,
+                    CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces,
+
+                    // obsolete:
+                    // Triggers
+                    // IsAutopropagating
+                    // MaxValue
+                };
+            }
 
             return new QuestionChanged
             {
@@ -4495,15 +4527,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AnswerOrder = question.AnswerOrder,
                 Answers = question.Answers.ToArray(),
 
-                // TODO: TLK: support question-specific properties
-                Triggers = null,
+                // questiontype-specific properties specified here:
                 LinkedToQuestionId = null,
-                IsInteger = null,
                 AreAnswersOrdered = null,
                 MaxAllowedAnswers = null,
                 Mask = null,
                 IsFilteredCombobox = null,
                 CascadeFromQuestionId = null,
+
+                // obsolete or not appliable:
+                // ResponsibleId
+                // GroupPublicKey
+                // TargetGroupKey
+                // IsInteger
+                // MaxValue
+                // Triggers
             };
         }
 
