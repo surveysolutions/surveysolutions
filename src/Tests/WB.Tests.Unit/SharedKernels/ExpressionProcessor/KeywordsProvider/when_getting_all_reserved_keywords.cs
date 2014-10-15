@@ -50,7 +50,6 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProvider
         private static readonly string[] ReservedKeywords =
             CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).ToArray();
 
-
         private static IEnumerable<string> result;
         private static IKeywordsProvider keywordsProvider;
     }

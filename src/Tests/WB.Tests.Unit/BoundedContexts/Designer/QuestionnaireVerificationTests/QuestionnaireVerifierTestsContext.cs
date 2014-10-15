@@ -30,10 +30,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), out generationResult))
                 .Returns(new GenerationResult() {Success = true});
 
+            var substitutionServiceInstance = new SubstitutionService();
+
             return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, 
                 fileSystemAccessorMock.Object,
-                substitutionService ?? new SubstitutionService(),
-                keywordsProvider ?? new KeywordsProvider(),
+                substitutionService ?? substitutionServiceInstance,
+                keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object);
         }
 
