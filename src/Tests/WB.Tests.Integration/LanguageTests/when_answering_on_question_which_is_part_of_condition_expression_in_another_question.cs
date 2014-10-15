@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -10,6 +11,7 @@ using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -69,11 +71,11 @@ namespace WB.Tests.Integration.LanguageTests
 
                 IInterviewExpressionState state = GetInterviewExpressionState(questionnaireDocument);
 
-                var st = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(questionnaireId, questionaire.Version) == state);
+                var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(questionnaireId, questionaire.Version) == state);
 
                 Mock.Get(ServiceLocator.Current)
                     .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                    .Returns(st);
+                    .Returns(statePrototypeProvider);
 
                 var interview = new Interview(
                     new Guid("A0A0A0A0B0B0B0B0A0A0A0A0B0B0B0B0"),
@@ -88,20 +90,14 @@ namespace WB.Tests.Integration.LanguageTests
 
                 interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 4);
 
-                EnablementChanges enablementChanges = state.ProcessEnablementConditions();
+                var questionsEnabledEvent = eventContext.Events.First(b => b.Payload is QuestionsEnabled);
+                var result = ((QuestionsEnabled) questionsEnabledEvent.Payload).Questions.FirstOrDefault(q => q.Id == question2Id);
 
-                return new InvokeResults
-                {
-                    QuestionsToBeDisabledCount = enablementChanges.QuestionsToBeDisabled.Count,
-                    QuestionsToBeEnabledCount = enablementChanges.QuestionsToBeEnabled.Count
-                };
+                return new InvokeResults { Questions2Enabled = result != null};
             });
 
         It should_disabled_question_count_equal_0 = () =>
-            results.QuestionsToBeDisabledCount.ShouldEqual(0);
-
-        It should_enabled_question_count_equal_1 = () =>
-            results.QuestionsToBeEnabledCount.ShouldEqual(1);
+            results.Questions2Enabled.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -115,8 +111,7 @@ namespace WB.Tests.Integration.LanguageTests
         [Serializable]
         internal class InvokeResults
         {
-            public int QuestionsToBeDisabledCount { get; set; }
-            public int QuestionsToBeEnabledCount { get; set; }
+            public bool Questions2Enabled { get; set; }
         }
     }
 }
