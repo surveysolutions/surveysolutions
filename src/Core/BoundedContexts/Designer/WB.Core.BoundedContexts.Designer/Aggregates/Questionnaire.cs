@@ -965,7 +965,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             Dictionary<string, string> customMappings = this.BuildCustomMappingsFromIdsToIdentifiers();
 
-            List<AbstractQuestionDataEvent> questionChangedEvents = questionsToMigrate
+            List<QuestionnaireActiveEvent> questionChangedEvents = questionsToMigrate
                 .Select(question => this.MigrateQuestionToRoslyn(question, customMappings))
                 .ToList();
 
@@ -4468,7 +4468,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        private AbstractQuestionDataEvent MigrateQuestionToRoslyn(IQuestion question, Dictionary<string, string> customMappings)
+        private QuestionnaireActiveEvent MigrateQuestionToRoslyn(IQuestion question, Dictionary<string, string> customMappings)
         {
             UpdateCustomMappingsWithContextQuestion(customMappings, question);
 
@@ -4507,6 +4507,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 };
             }
 
+            if (question is ITextListQuestion)
+            {
+                var textListQuestion = (ITextListQuestion) question;
+
+                return new TextListQuestionChanged
+                {
+                    PublicKey = question.PublicKey,
+
+                    ConditionExpression = enablementCondition,
+
+                    Instructions = question.Instructions,
+                    Mandatory = question.Mandatory,
+                    QuestionText = question.QuestionText,
+                    StataExportCaption = question.StataExportCaption,
+                    VariableLabel = question.VariableLabel,
+
+                    MaxAnswerCount = textListQuestion.MaxAnswerCount,
+                };
+            }
+
             return new QuestionChanged
             {
                 PublicKey = question.PublicKey,
@@ -4527,7 +4547,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AnswerOrder = question.AnswerOrder,
                 Answers = question.Answers.ToArray(),
 
-                // questiontype-specific properties specified here:
+                // questiontype-specific properties:
                 LinkedToQuestionId = null,
                 AreAnswersOrdered = null,
                 MaxAllowedAnswers = null,

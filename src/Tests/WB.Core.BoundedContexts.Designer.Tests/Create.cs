@@ -545,7 +545,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             };
         }
 
-        public static IQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+        public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool isInteger = false, int? countOfDecimalPlaces = null, int? maxValue = null)
         {
             return new NumericQuestion("Question N")
@@ -556,6 +556,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
                 MaxValue = maxValue,
+            };
+        }
+
+        public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            int? maxAnswerCount = null)
+        {
+            return new TextListQuestion("Question TL")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                MaxAnswerCount = maxAnswerCount,
             };
         }
     }
