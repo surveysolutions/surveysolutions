@@ -40,13 +40,13 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
         };
 
         private static readonly List<string> ReservedKeywords =
-            CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).ToList();
+            CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).Distinct().ToList();
 
         public string[] GetAllReservedKeywords()
         {
             var reservedKeywords = ReservedKeywords.ToList();
             reservedKeywords.Add(substitutionService.RosterTitleSubstitutionReference);
-            return ReservedKeywords.Distinct().ToArray();
+            return reservedKeywords.Distinct().ToArray();
         }
     }
 }

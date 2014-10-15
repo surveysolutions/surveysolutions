@@ -9,7 +9,14 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProvider
     {
         Establish context = () =>
         {
-            keywordsProvider = CreateKeywordsProvider();
+            var substitutionService = CreateSubstitutionService();
+            keywordsProvider = CreateKeywordsProvider(substitutionService);
+
+            var reservedKeywords = CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).ToList();
+            reservedKeywords.Add(substitutionService.RosterTitleSubstitutionReference);
+
+            ReservedKeywords = reservedKeywords.Distinct().ToArray();
+
         };
 
         Because of = () =>
@@ -47,8 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProvider
             "all", "and", "by", "eq", "ge", "gt", "le", "lt", "ne", "not", "or", "to", "with"
         };
 
-        private static readonly string[] ReservedKeywords =
-            CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).ToArray();
+        private static string[] ReservedKeywords;
 
         private static IEnumerable<string> result;
         private static IKeywordsProvider keywordsProvider;
