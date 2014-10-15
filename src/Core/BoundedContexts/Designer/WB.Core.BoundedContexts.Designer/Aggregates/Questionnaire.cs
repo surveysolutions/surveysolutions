@@ -4528,6 +4528,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             var questionAsTextQuestion = question as TextQuestion;
+            var questionAsMultipleOptionsQuestion = question as IMultyOptionsQuestion;
 
             return new QuestionChanged
             {
@@ -4553,8 +4554,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 CascadeFromQuestionId = question.CascadeFromQuestionId,
 
                 // questiontype-specific properties:
-                AreAnswersOrdered = null,
-                MaxAllowedAnswers = null,
+                AreAnswersOrdered = Monads.Maybe(() => questionAsMultipleOptionsQuestion.AreAnswersOrdered),
+                MaxAllowedAnswers = Monads.Maybe(() => questionAsMultipleOptionsQuestion.MaxAllowedAnswers),
                 Mask = Monads.Maybe(() => questionAsTextQuestion.Mask),
 
                 // obsolete or not appliable:
