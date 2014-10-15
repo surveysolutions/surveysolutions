@@ -56,9 +56,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WB.Core.SharedKernels.QuestionnaireVerification">
-      <HintPath>..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\bin\Debug\WB.Core.SharedKernels.QuestionnaireVerification.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineSettings.cs" />
