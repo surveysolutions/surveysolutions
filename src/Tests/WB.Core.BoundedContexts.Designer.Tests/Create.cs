@@ -582,5 +582,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 Mask = mask,
             };
         }
+
+        public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null)
+        {
+            return new MultyOptionsQuestion("Question MO")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                AreAnswersOrdered = areAnswersOrdered,
+                MaxAllowedAnswers = maxAllowedAnswers,
+            };
+        }
     }
 }
