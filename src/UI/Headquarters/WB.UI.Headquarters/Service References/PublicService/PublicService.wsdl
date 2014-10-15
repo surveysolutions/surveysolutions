@@ -50,7 +50,7 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects" />
+      <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WB.Core.BoundedContexts.Designer.ValueObjects" />
       <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/Message" />
       <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" />
     </xsd:schema>
@@ -68,12 +68,6 @@
   <wsdl:message name="RemoteFileInfo_Headers">
     <wsdl:part name="Length" element="tns:Length" />
     <wsdl:part name="SupportingAssembly" element="tns:SupportingAssembly" />
-  </wsdl:message>
-  <wsdl:message name="IPublicService_DownloadQuestionnaireSource_InputMessage">
-    <wsdl:part name="parameters" element="tns:DownloadQuestionnaireSource" />
-  </wsdl:message>
-  <wsdl:message name="IPublicService_DownloadQuestionnaireSource_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DownloadQuestionnaireSourceResponse" />
   </wsdl:message>
   <wsdl:message name="IPublicService_Dummy_InputMessage">
     <wsdl:part name="parameters" element="tns:Dummy" />
@@ -104,10 +98,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaire" name="DownloadQuestionnaireRequest" message="tns:DownloadQuestionnaireRequest" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse" name="RemoteFileInfo" message="tns:RemoteFileInfo" />
     </wsdl:operation>
-    <wsdl:operation name="DownloadQuestionnaireSource">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource" message="tns:IPublicService_DownloadQuestionnaireSource_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse" message="tns:IPublicService_DownloadQuestionnaireSource_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="Dummy">
       <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/Dummy" message="tns:IPublicService_Dummy_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/DummyResponse" message="tns:IPublicService_Dummy_OutputMessage" />
@@ -130,15 +120,6 @@
       <wsdl:output name="RemoteFileInfo">
         <soap12:header message="tns:RemoteFileInfo_Headers" part="Length" use="literal" />
         <soap12:header message="tns:RemoteFileInfo_Headers" part="SupportingAssembly" use="literal" />
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="DownloadQuestionnaireSource">
-      <soap12:operation soapAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSource" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

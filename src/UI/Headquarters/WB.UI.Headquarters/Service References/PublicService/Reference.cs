@@ -15,8 +15,8 @@ namespace WB.UI.Headquarters.PublicService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireVersion", Namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.QuestionnaireVerifi" +
-        "cation.ValueObjects")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireVersion", Namespace="http://schemas.datacontract.org/2004/07/WB.Core.BoundedContexts.Designer.ValueObj" +
+        "ects")]
     [System.SerializableAttribute()]
     public partial class QuestionnaireVersion : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -162,12 +162,6 @@ namespace WB.UI.Headquarters.PublicService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaire", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse")]
         System.Threading.Tasks.Task<WB.UI.Headquarters.PublicService.RemoteFileInfo> DownloadQuestionnaireAsync(WB.UI.Headquarters.PublicService.DownloadQuestionnaireRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse")]
-        string DownloadQuestionnaireSource(System.Guid request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource", ReplyAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse")]
-        System.Threading.Tasks.Task<string> DownloadQuestionnaireSourceAsync(System.Guid request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPublicService/Dummy", ReplyAction="http://tempuri.org/IPublicService/DummyResponse")]
         void Dummy();
@@ -343,14 +337,6 @@ namespace WB.UI.Headquarters.PublicService {
             inValue.QuestionnaireId = QuestionnaireId;
             inValue.SupportedQuestionnaireVersion = SupportedQuestionnaireVersion;
             return ((WB.UI.Headquarters.PublicService.IPublicService)(this)).DownloadQuestionnaireAsync(inValue);
-        }
-        
-        public string DownloadQuestionnaireSource(System.Guid request) {
-            return base.Channel.DownloadQuestionnaireSource(request);
-        }
-        
-        public System.Threading.Tasks.Task<string> DownloadQuestionnaireSourceAsync(System.Guid request) {
-            return base.Channel.DownloadQuestionnaireSourceAsync(request);
         }
         
         public void Dummy() {
