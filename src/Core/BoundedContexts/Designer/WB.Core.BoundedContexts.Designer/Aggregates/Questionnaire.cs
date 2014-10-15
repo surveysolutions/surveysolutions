@@ -3221,10 +3221,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
             }
-
-            var keywords = new[] { "this", SubstitutionService.RosterTitleSubstitutionReference };
-
-            keywords = VariableNameValidator.GetAllReservedKeywords().Union(keywords).ToArray();
+            
+            var keywords = VariableNameValidator.GetAllReservedKeywords();
 
             foreach (var keyword in keywords.Where(keyword => stataCaption.ToLower() == keyword)) {
                 throw new QuestionnaireException(

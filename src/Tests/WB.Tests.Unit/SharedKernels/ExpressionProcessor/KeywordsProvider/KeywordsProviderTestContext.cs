@@ -6,7 +6,8 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProvider
     {
         protected static IKeywordsProvider CreateKeywordsProvider()
         {
-            return new Core.SharedKernels.ExpressionProcessor.Implementation.Services.KeywordsProvider();
+            var substitutionService = new Core.SharedKernels.ExpressionProcessor.Implementation.Services.SubstitutionService();
+            return new Core.SharedKernels.ExpressionProcessor.Implementation.Services.KeywordsProvider(substitutionService);
         }
     }
 }
