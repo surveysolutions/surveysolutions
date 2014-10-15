@@ -4527,6 +4527,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 };
             }
 
+            var questionAsTextQuestion = question as TextQuestion;
+
             return new QuestionChanged
             {
                 PublicKey = question.PublicKey,
@@ -4546,14 +4548,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = question.ValidationMessage,
                 AnswerOrder = question.AnswerOrder,
                 Answers = question.Answers.ToArray(),
+                LinkedToQuestionId = question.LinkedToQuestionId,
+                IsFilteredCombobox = question.IsFilteredCombobox,
+                CascadeFromQuestionId = question.CascadeFromQuestionId,
 
                 // questiontype-specific properties:
-                LinkedToQuestionId = null,
                 AreAnswersOrdered = null,
                 MaxAllowedAnswers = null,
-                Mask = null,
-                IsFilteredCombobox = null,
-                CascadeFromQuestionId = null,
+                Mask = Monads.Maybe(() => questionAsTextQuestion.Mask),
 
                 // obsolete or not appliable:
                 // ResponsibleId
