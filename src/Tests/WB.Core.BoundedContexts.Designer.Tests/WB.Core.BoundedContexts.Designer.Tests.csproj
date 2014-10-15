@@ -275,6 +275,7 @@
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_question_has_validation_expression_but_enablement_condition_is_empty.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_for_numeric_question_and_IsInteger_equals_true_and_CountOfDecimalPlaces_equals_3_and_MaxValue_equals_1000.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_for_textlist_question_and_MaxAnswerCount_equals_42.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_for_text_question_and_Mask_equals_asterisk.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_twice.cs" />
     <Compile Include="QuestionnaireTests\when_moving_chapter_with_roster_inside_and_groster_has_question_with_rostertitle_in_substitution.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_with_cascading_options_setting_linked_and_cascading.cs" />

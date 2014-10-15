@@ -570,5 +570,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 MaxAnswerCount = maxAnswerCount,
             };
         }
+
+        public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            string mask = null)
+        {
+            return new TextQuestion("Question T")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                Mask = mask,
+            };
+        }
     }
 }
