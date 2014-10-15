@@ -17,6 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_reevaluating_interview_with_mandatory_question_inside_recently_enabled_group : InterviewTestsContext
     {
         Establish context = () =>
@@ -29,11 +30,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             conditionallyRecentlyEnabledGroupId = Guid.Parse("43333333333333333333333333333333");
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                                                        _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyRecentlyEnabledGroupId }
-                                                        && _.GetAllMandatoryQuestions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId }
+                                                        /*_.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyRecentlyEnabledGroupId }
+                                                        && */_.GetAllMandatoryQuestions() == new Guid[] { conditionallyRecentlyEnabledMandatoryQuestionId }
                                                         && _.GetAllParentGroupsForQuestion(conditionallyRecentlyEnabledMandatoryQuestionId) == new Guid[] { conditionallyRecentlyEnabledGroupId });
 
-            var expressionProcessor = new Mock<IExpressionProcessor>();
+            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             //setup expression processor throw exception
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
@@ -47,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(questionnaireRepository);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+                .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
                 .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);

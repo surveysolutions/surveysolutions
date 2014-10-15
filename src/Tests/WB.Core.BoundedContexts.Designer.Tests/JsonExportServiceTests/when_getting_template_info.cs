@@ -3,9 +3,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.JsonExportServiceTests
@@ -14,14 +12,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.JsonExportServiceTests
     {
         Establish context = () =>
         {
-            var questionnaire = new QuestionnaireDocument();
-            var questionnaireStorage = Mock.Of<IReadSideRepositoryReader<QuestionnaireDocument>>(x => x.GetById(questionnaireId.FormatGuid()) == questionnaire);
             var versioner = Mock.Of<IQuestionnaireVersioner>(x => x.GetVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
-            exportService = CreateJsonExportService(questionnaireStorage: questionnaireStorage, versioner: versioner);
+            exportService = CreateQuestionnaireExportService(versioner: versioner);
         };
 
+        
         Because of = () =>
-            info = exportService.GetQuestionnaireTemplate(questionnaireId);
+            info = exportService.GetQuestionnaireTemplateInfo(new QuestionnaireDocument());
 
         It should_return_info_with_version = () => 
             info.Version.ShouldNotBeNull();
@@ -35,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.JsonExportServiceTests
         It should_return_info_with_Patch_equals_3 = () =>
             info.Version.Patch.ShouldEqual(3);
 
-        private static IJsonExportService exportService;
+        private static IQuestionnaireExportService exportService;
         private static QuestionnaireVersion version = new QuestionnaireVersion(1, 2, 3);
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static TemplateInfo info;

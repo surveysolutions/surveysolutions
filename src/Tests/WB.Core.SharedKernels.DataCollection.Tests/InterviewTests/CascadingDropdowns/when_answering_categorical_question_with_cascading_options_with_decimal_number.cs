@@ -14,9 +14,10 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDropdowns
 {
+    [Ignore("Cascading")]
     internal class when_answering_categorical_question_with_cascading_options_with_decimal_number : InterviewTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             var questionnaireId = Guid.Parse("88888888888888888888888888888888");
             actorId = Guid.Parse("99999999999999999999999999999999");

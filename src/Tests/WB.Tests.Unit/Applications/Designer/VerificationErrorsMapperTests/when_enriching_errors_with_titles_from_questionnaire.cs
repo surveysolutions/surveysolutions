@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
 

@@ -379,7 +379,6 @@
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_mapped_on_any_option.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="QuestionDataParserTests\when_pasing_answer_on_text_question.cs" />
-    <Compile Include="QuestionnaireCacheInitializerTests\when_initialize_caches_for_questionnaire_with_question_which_has_enablement_condition.cs" />
     <Compile Include="QuestionnaireQuestionInfoFactoryTests\QuestionnaireQuestionInfoFactoryTestContext.cs" />
     <Compile Include="QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions.cs" />
     <Compile Include="QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions_and_questionnaire_is_absent.cs" />
@@ -449,10 +448,6 @@
     <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
-      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29a132b5-a573-40d2-9e8f-2871e95d7766}</Project>

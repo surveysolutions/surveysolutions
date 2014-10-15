@@ -6,13 +6,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
-                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>()
-                );
+                questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>());
+
             return questionnaireController;
         }
 

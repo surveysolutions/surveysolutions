@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -17,6 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_answering_autopropagatable_question_which_triggers_group_propagation_with_mandatory_question : InterviewTestsContext
     {
         Establish context = () =>
@@ -39,12 +38,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                                                         && _.HasGroup(propagatedGroupId) == true
                                                         && _.GetRosterLevelForGroup(propagatedGroupId) == 1
-                                                        && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
+                                                        //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
                                                         && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new Guid[] { propagatedGroupId }
 
                                                         && _.GetRosterLevelForQuestion(mandatoryQuestionId)==1
                                                         && _.GetRostersFromTopToSpecifiedQuestion(mandatoryQuestionId) == new Guid[] { propagatedGroupId }
-                                                        && _.GetUnderlyingMandatoryQuestions(propagatedGroupId) == new Guid[]{mandatoryQuestionId});
+                                                        //&& _.GetUnderlyingMandatoryQuestions(propagatedGroupId) == new Guid[]{mandatoryQuestionId}
+                                                        );
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionnaire);

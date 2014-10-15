@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
@@ -30,32 +31,16 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
            
             questionWhichIsForcesPropagationId = Guid.Parse("22222222222222222222222222222222");
 
+            Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
+                => _.HasQuestion(questionWhichIsForcesPropagationId) == true
+                && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
+                && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true);
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
+            var enablementChanges = Create.EnablementChanges(
+                groupsToBeDisabled: new List<Identity> { Create.Identity(propagatedGroupId, Empty.RosterVector) });
 
-                                                        => _.HasQuestion(questionWhichIsForcesPropagationId) == true
-                                                        && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
-                                                        && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
-                                                        && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
-
-                                                        && _.HasGroup(propagatedGroupId) == true
-                                                        && _.GetRosterLevelForGroup(propagatedGroupId)==1
-                                                        && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(propagatedGroupId) == new Guid[] { propagatedGroupId }
-                                                        && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new Guid[] { propagatedGroupId });
-
-            var expressionProcessor = new Mock<IExpressionProcessor>();
-            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>())).Returns(false);
-
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionnaire);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
-                .Returns(expressionProcessor.Object);
+            Setup.SelfCloningInterviewExpressionStateStubWithProviderToMockedServiceLocator(questionnaireId, _
+                => _.ProcessEnablementConditions() == enablementChanges);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
@@ -70,7 +55,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         Because of = () =>
            interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new decimal[] { }, DateTime.Now, 1);
-
 
         It should_raise_GroupsDisabled_event_with_GroupId_equal_to_propagatedGroupId_with_disablement_condition = () =>
             eventContext.ShouldContainEvent<GroupsDisabled>(@event
