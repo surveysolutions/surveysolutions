@@ -18,6 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression : InterviewTestsContext
     {
         Establish context = () =>
@@ -30,12 +31,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                                                        _.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { conditionallyInvalidQuestionId }
-                                                        && _.HasQuestion(conditionallyInvalidQuestionId)==true
+                                                        /*_.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { conditionallyInvalidQuestionId }
+                                                        && */_.HasQuestion(conditionallyInvalidQuestionId)==true
                                                         && _.GetQuestionType(conditionallyInvalidQuestionId)==QuestionType.Text
                                                         && _.IsCustomValidationDefined(conditionallyInvalidQuestionId) == true);
 
-            var expressionProcessor = new Mock<IExpressionProcessor>();
+            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             //setup expression processor throw exception
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
@@ -45,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                                                                 questionaire);
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
             interview.AnswerTextQuestion(userId, conditionallyInvalidQuestionId, new decimal[0], DateTime.Now, "answer");

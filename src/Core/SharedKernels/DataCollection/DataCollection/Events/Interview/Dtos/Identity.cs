@@ -21,5 +21,33 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
         {
             return string.Format("{0}<{1}>", this.Id.FormatGuid(), string.Join("-", this.RosterVector));
         }
+
+        public static Identity ToEventIdentity(DataCollection.Identity identity)
+        {
+            return new Identity(identity.Id, identity.RosterVector);
+        }
+
+        public static IEnumerable<Identity> ToEventIdentities(IEnumerable<DataCollection.Identity> identities)
+        {
+            return identities.Select(ToEventIdentity).ToArray();
+        }
+
+        public static DataCollection.Identity ToIdentity(Identity identity)
+        {
+            return new DataCollection.Identity(identity.Id, identity.RosterVector);
+        }
+
+        public static IEnumerable<DataCollection.Identity> ToIdentities(IEnumerable<Identity> identities)
+        {
+            return identities.Select(ToIdentity).ToArray();
+        }
+    }
+
+    public static class IdentityExtentions
+    {
+        public static IEnumerable<DataCollection.Identity> ToIdentities(this IEnumerable<Identity> identities)
+        {
+            return Identity.ToIdentities(identities);
+        }
     }
 }

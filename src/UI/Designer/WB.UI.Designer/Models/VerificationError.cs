@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.UI.Designer.Models
 {

@@ -1,10 +1,10 @@
-﻿using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+﻿using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services
 {
     public interface ISupportedVersionProvider
     {
-        QuestionnaireVersion GetSupportedQuestionnaireVersion();
+        ApplicationVersionSettings GetSupportedQuestionnaireVersion();
 
         int? GetApplicationBuildNumber();
     }

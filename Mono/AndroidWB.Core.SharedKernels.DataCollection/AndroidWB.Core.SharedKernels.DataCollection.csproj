@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Accessors\QuestionnaireAssemblyFileAccessor.cs">
+      <Link>Accessors\QuestionnaireAssemblyFileAccessor.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Aggregates\IQuestionnaire.cs">
       <Link>Aggregates\IQuestionnaire.cs</Link>
     </Compile>
@@ -450,6 +453,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\PlainQuestionnaireRegistered.cs">
       <Link>Events\Questionnaire\PlainQuestionnaireRegistered.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\QuestionnaireAssemblyImported.cs">
+      <Link>Events\Questionnaire\QuestionnaireAssemblyImported.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Questionnaire\QuestionnaireDeleted.cs">
       <Link>Events\Questionnaire\QuestionnaireDeleted.cs</Link>
     </Compile>
@@ -468,14 +474,14 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Exceptions\QuestionnaireException.cs">
       <Link>Exceptions\QuestionnaireException.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Exceptions\QuestionnaireVerificationException.cs">
-      <Link>Exceptions\QuestionnaireVerificationException.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Factories\IQuestionnaireFactory.cs">
       <Link>Factories\IQuestionnaireFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Factories\IQuestionnaireRosterStructureFactory.cs">
       <Link>Factories\IQuestionnaireRosterStructureFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs">
+      <Link>Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\Interview.cs">
       <Link>Implementation\Aggregates\Interview.cs</Link>
@@ -486,20 +492,11 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\InterviewInfrastructure\AnswerComment.cs">
       <Link>Implementation\Aggregates\InterviewInfrastructure\AnswerComment.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\InterviewInfrastructure\ConversionHelper.cs">
-      <Link>Implementation\Aggregates\InterviewInfrastructure\ConversionHelper.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\InterviewInfrastructure\DistinctDecimalList.cs">
       <Link>Implementation\Aggregates\InterviewInfrastructure\DistinctDecimalList.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\InterviewInfrastructure\EnablementChanges.cs">
-      <Link>Implementation\Aggregates\InterviewInfrastructure\EnablementChanges.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs">
       <Link>Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\InterviewInfrastructure\Identity.cs">
-      <Link>Implementation\Aggregates\InterviewInfrastructure\Identity.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs">
       <Link>Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs</Link>
@@ -539,6 +536,12 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Factories\QuestionnaireRosterStructureFactory.cs">
       <Link>Implementation\Factories\QuestionnaireRosterStructureFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Providers\IInterviewExpressionStatePrototypeProvider.cs">
+      <Link>Implementation\Providers\IInterviewExpressionStatePrototypeProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs">
+      <Link>Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Implementation\ReadSide\VersionedReadSideRepositoryReader.cs">
       <Link>Implementation\ReadSide\VersionedReadSideRepositoryReader.cs</Link>
@@ -672,6 +675,10 @@
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
@@ -683,14 +690,6 @@
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
-      <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
-      <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\QuestionnaireVerification.Android\WB.Core.SharedKernels.QuestionnaireVerification.Android.csproj">
-      <Project>{2f566dd5-1692-4890-9ff7-bcb21b8c372b}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification.Android</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -704,7 +703,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

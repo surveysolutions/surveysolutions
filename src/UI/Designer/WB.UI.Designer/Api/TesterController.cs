@@ -5,12 +5,12 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Exceptions;
@@ -24,9 +24,10 @@ namespace WB.UI.Designer.Api
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IJsonExportService exportService;
+        private readonly IQuestionnaireExportService exportService;
         private readonly ILogger logger;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
@@ -36,7 +37,7 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IJsonExportService exportService,
+            IQuestionnaireExportService exportService,
             ILogger logger)
         {
             this.userHelper = userHelper;
@@ -46,6 +47,9 @@ namespace WB.UI.Designer.Api
             this.logger = logger;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireVerifier = questionnaireVerifier;
+
+            //inject it
+            this.expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
         }
         
         [HttpGet]
@@ -122,6 +126,8 @@ namespace WB.UI.Designer.Api
 
             var questionnaireSyncPackage = new QuestionnaireCommunicationPackage();
 
+            string resultAssembly;
+
             var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
             if (questoinnaireErrors.Any())
             {
@@ -130,8 +136,34 @@ namespace WB.UI.Designer.Api
 
                 return questionnaireSyncPackage;
             }
+            else
+            {
+                GenerationResult generationResult;
+                try
+                {
+                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+                }
+                catch (Exception)
+                {
+                    generationResult = new GenerationResult()
+                    {
+                        Success = false,
+                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                    };
+                    resultAssembly = string.Empty;
+                }
 
-            var templateInfo = this.exportService.GetQuestionnaireTemplate(questionnaireView.Source);
+                if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
+                {
+                    questionnaireSyncPackage.IsErrorOccured = true;
+                    questionnaireSyncPackage.ErrorMessage = "Questionnaire is invalid. Please Verify it on Designer.";
+
+                    return questionnaireSyncPackage;
+                }
+            }
+            
+
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
                 questionnaireSyncPackage.IsErrorOccured = true;
@@ -142,6 +174,7 @@ namespace WB.UI.Designer.Api
 
             var template = PackageHelper.CompressString(templateInfo.Source);
             questionnaireSyncPackage.Questionnaire = template;
+            questionnaireSyncPackage.QuestionnaireAssembly = resultAssembly;
 
             return questionnaireSyncPackage;
         }

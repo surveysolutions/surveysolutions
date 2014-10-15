@@ -3,5 +3,6 @@
     public class QuestionnaireCommunicationPackage : BasePackage
     {
         public string Questionnaire { get; set; }
+        public string QuestionnaireAssembly { get; set; }
     }
 }

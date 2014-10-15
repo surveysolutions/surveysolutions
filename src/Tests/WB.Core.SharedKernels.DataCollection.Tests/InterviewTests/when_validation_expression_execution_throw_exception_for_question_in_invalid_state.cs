@@ -18,6 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#")]
     internal class when_validation_expression_execution_throw_exception_for_question_in_valid_state : InterviewTestsContext
     {
         Establish context = () =>
@@ -31,12 +32,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>(_
                                                         => _.HasQuestion(validatingQuestionId) == true
                                                         && _.GetQuestionType(validatingQuestionId) == QuestionType.Numeric
-                                                        && _.GetQuestionsInvolvedInCustomValidation(validatingQuestionId) == new [] { validatingQuestionId }
+                                                        //&& _.GetQuestionsInvolvedInCustomValidation(validatingQuestionId) == new [] { validatingQuestionId }
                                                         && _.IsCustomValidationDefined(validatingQuestionId)==true
 
                                                         && _.GetQuestionVariableName(validatingQuestionId) == "var name"
                                                         );
-            var expressionProcessor = new Mock<IExpressionProcessor>();
+            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionnaire);
@@ -46,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(questionnaireRepository);
 
             Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+                .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
                 .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);

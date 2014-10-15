@@ -8,6 +8,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
@@ -49,6 +50,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
+
+
+            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
+                CreateInterviewExpressionStateProviderStub());
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 

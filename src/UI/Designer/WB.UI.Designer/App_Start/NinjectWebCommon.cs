@@ -21,7 +21,6 @@ using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
@@ -78,17 +77,15 @@ namespace WB.UI.Designer.App_Start
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (DesignerReportQuestionnaireListViewItem).Assembly),
                 new DesignerCommandDeserializationModule(),
-                new DesignerBoundedContextModule(),
                 new ExpressionProcessorModule(),
+                new DesignerBoundedContextModule(),
                 new QuestionnaireVerificationModule(),
-                new QuestionnaireUpgraderModule(),
                 new MembershipModule(),
                 new MainModule(),
-                 new FileInfrastructureModule(),
+                new FileInfrastructureModule(),
                 new DesignerRegistry()
                 );
             kernel.Load(ModulesFactory.GetEventStoreModule());
-
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             

@@ -14,8 +14,8 @@ using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.WriteSide;
-using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.Tools.QuestionnaireDocumentsConverter
 {

@@ -22,4 +22,10 @@
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
   <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
+  <IgnoredTests>
+    <NamedTestSelector>
+      <TestName>WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePrototypeProviderTests.when_getting_expression_state.should_provide_not_null_value</TestName>
+    </NamedTestSelector>
+  </IgnoredTests>
+  <HiddenWarnings>LongTestTimesWithoutParallelExecution</HiddenWarnings>
 </ProjectConfiguration>

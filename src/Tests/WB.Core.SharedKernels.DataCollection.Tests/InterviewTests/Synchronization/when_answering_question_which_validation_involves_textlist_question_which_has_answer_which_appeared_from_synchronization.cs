@@ -14,6 +14,7 @@ using it = Moq.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronization
 {
+    [Ignore("C#")]
     internal class when_answering_question_which_validation_involves_textlist_question_which_has_answer_which_appeared_from_synchronization : InterviewTestsContext
     {
         Establish context = () =>
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
                 && _.HasQuestion(answeredQuestion) == true
                 && _.GetQuestionType(answeredQuestion) == QuestionType.Text
                 && _.IsCustomValidationDefined(answeredQuestion) == true
-                && _.GetQuestionsInvolvedInCustomValidation(answeredQuestion) == new[] { textListQuestion, answeredQuestion }
+               // && _.GetQuestionsInvolvedInCustomValidation(answeredQuestion) == new[] { textListQuestion, answeredQuestion }
 
                 && _.GetQuestionVariableName(answeredQuestion) == answeredQuestiontVariableName
                 && _.GetQuestionVariableName(textListQuestion) == textlistVariableName
@@ -41,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
                 CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
 
-            var expressionProcessor = Mock.Of<IExpressionProcessor>();
+            var expressionProcessor = Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             Mock.Get(expressionProcessor)
                 .Setup(_ => _.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()))
@@ -50,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.Synchronizat
                     textListAnswerProvidedToExpressionProcessor = getValueForIdentifier(textlistVariableName);
                 });
 
-            SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor);
+            SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor);
 
             Tuple<decimal, string>[] textListAnswer = new[] { Tuple.Create((decimal) 1, "one"), Tuple.Create((decimal) 2, "two") };
 

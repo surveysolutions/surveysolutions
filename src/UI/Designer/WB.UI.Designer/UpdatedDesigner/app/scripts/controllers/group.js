@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('GroupCtrl',
-        function ($rootScope, $scope, $stateParams, questionnaireService, commandService) {
+        function ($rootScope, $scope, $stateParams, questionnaireService, commandService, hotkeys) {
             $scope.currentChapterId = $stateParams.chapterId;
             hotkeys.bindTo($scope)
              .add({
