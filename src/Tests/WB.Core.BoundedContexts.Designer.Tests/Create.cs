@@ -544,5 +544,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 ValidationExpression = validationExpression,
             };
         }
+
+        public static IQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            bool isInteger = false, int? countOfDecimalPlaces = null, int? maxValue = null)
+        {
+            return new NumericQuestion("Question N")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                IsInteger = isInteger,
+                CountOfDecimalPlaces = countOfDecimalPlaces,
+                MaxValue = maxValue,
+            };
+        }
     }
 }
