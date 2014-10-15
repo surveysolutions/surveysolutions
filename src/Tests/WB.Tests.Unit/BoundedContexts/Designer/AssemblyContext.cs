@@ -12,13 +12,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer
         {
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
 
+            var substitutionService = new SubstitutionService();
             serviceLocatorMock
                 .Setup(locator => locator.GetInstance<ISubstitutionService>())
-                .Returns(new SubstitutionService());
+                .Returns(substitutionService);
 
             serviceLocatorMock
                 .Setup(locator => locator.GetInstance<IKeywordsProvider>())
-                .Returns(new KeywordsProvider());
+                .Returns(new KeywordsProvider(substitutionService));
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }

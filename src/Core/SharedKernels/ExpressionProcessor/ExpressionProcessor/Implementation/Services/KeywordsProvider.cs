@@ -1,11 +1,19 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
 {
     public class KeywordsProvider : IKeywordsProvider
     {
-        private static readonly string[] CSharpKeyWords = new[]
+        public KeywordsProvider(ISubstitutionService substitutionService)
+        {
+            this.substitutionService = substitutionService;
+        }
+
+        private readonly ISubstitutionService substitutionService;
+
+        private static readonly List<string> CSharpKeyWords = new List<string>()
         {
             "abstract", "as", "base", "bool", "break", "byte", "case",
             "catch", "char", "checked", "class", "const", "continue", "decimal",
@@ -20,23 +28,25 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
             "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"
         };
 
-        private static readonly string[] StataVariableRestrictions = new[]
+        private static readonly List<string> StataVariableRestrictions = new List<string>()
         {
             "_all", "_b", "byte", "_coef", "_cons", "double", "float", "if", "in", "int", "long", "_n", "_pi",
             "_pred", "_rc", "_skip", "strl", "using", "with"
         };
 
-        private static readonly string[] SpssReservedKeywords = new[]
+        private static readonly List<string> SpssReservedKeywords = new List<string>()
         {
             "all", "and", "by", "eq", "ge", "gt", "le", "lt", "ne", "not", "or", "to", "with"
         };
 
-        private static readonly string[] ReservedKeywords =
-            CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).ToArray();
+        private static readonly List<string> ReservedKeywords =
+            CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).ToList();
 
         public string[] GetAllReservedKeywords()
         {
-            return ReservedKeywords;
+            var reservedKeywords = ReservedKeywords.ToList();
+            reservedKeywords.Add(substitutionService.RosterTitleSubstitutionReference);
+            return ReservedKeywords.Distinct().ToArray();
         }
     }
 }
