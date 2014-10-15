@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="Create.cs" />
     <Compile Include="InterviewStatistics\Create.cs" />
     <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
