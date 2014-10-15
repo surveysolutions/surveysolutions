@@ -79,6 +79,10 @@
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.20.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.Bcl.Immutable.1.1.20-beta\lib\portable-net45+win8\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
@@ -232,6 +236,9 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_references_itself_in_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_multimedia_questions_with_supervisor_and_prefilled_scope_respectively.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_orphan_roster_groups_they_must_be_treated_as_grops_with_separate_roster_levels.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_and_group_with_incorrect_syntax_in_enablement_conditions_.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_incorrect_syntax_in_validation_condition.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_incorrect_syntax_in_enablement_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_questions_and_1_group_having_enablement_conditions_with_incorrect_syntax_and____.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_questions_and_one_group_all_referencing_not_existing_question_by_var_name_in___.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_questions_and_one_group_all_referencing_not_existing_question_in_enablement_c___.cs" />
