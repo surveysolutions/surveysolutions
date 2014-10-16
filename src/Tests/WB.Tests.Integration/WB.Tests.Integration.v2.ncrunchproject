@@ -26,5 +26,8 @@
     <FixtureTestSelector>
       <FixtureName>WB.Tests.Integration.LanguageTests.when_answering_on_question_which_is_part_of_condition_expression_in_another_question</FixtureName>
     </FixtureTestSelector>
+    <NamedTestSelector>
+      <TestName>WB.Tests.Integration.LanguageTests.when_answering_on_question_condition_expression_throws_exception.should_enable_second_question</TestName>
+    </NamedTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>
