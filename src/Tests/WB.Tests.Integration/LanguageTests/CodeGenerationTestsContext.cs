@@ -9,7 +9,6 @@ using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -18,7 +17,7 @@ namespace WB.Tests.Integration.LanguageTests
 {
     internal class CodeGenerationTestsContext
     {
-        protected static Interview SetupInterview(Guid actorId, QuestionnaireDocument questionnaireDocument, Guid questionnaireId)
+        protected static Interview SetupInterview(Guid actorId, QuestionnaireDocument questionnaireDocument, Guid questionnaireId, List<object> evnts)
         {
             var questionnaire = Create.Questionnaire(actorId, questionnaireDocument);
 
@@ -33,7 +32,11 @@ namespace WB.Tests.Integration.LanguageTests
 
             SetupRoslyn(questionnaireDocument);
 
-            return Create.Interview(questionnaireId: questionnaireId);
+            var interview = Create.Interview(questionnaireId: questionnaireId);
+
+            ApplyAllEvents(interview, evnts);
+
+            return interview;
         }
 
         public static void ApplyAllEvents(Interview interview, List<object> evnts)

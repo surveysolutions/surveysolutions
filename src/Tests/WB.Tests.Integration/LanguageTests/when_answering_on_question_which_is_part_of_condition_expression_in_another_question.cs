@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using It = Machine.Specifications.It;
@@ -26,31 +24,29 @@ namespace WB.Tests.Integration.LanguageTests
                 var question1Id = Guid.Parse("11111111111111111111111111111111");
                 var question2Id = Guid.Parse("22222222222222222222222222222222");
 
-                var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+                Setup.SetupMockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.NumericIntegerQuestion(question1Id, "q1"),
                     Create.NumericIntegerQuestion(question2Id, "q2", "q1 > 3")
                );
 
-                var interview = SetupInterview(actorId, questionnaireDocument, questionnaireId);
-
-                ApplyAllEvents(interview, new List<object>
+                var interview = SetupInterview(actorId, questionnaireDocument, questionnaireId, new List<object>
                     {
                         new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 1),
                         new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 2),
                         new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 3)
-                    }
-                );
+                    });
 
-                var eventContext = new EventContext();
+                var result = new InvokeResults();
 
-                interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 4);
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 4);
+                    result.Questions2Enabled = GetFirstEventByType<QuestionsEnabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) != null;
+                }
 
-                var result = GetFirstEventByType<QuestionsEnabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id);
-
-                return new InvokeResults { Questions2Enabled = result != null};
+                return result;
             });
 
         It should_enable_second_question = () =>
