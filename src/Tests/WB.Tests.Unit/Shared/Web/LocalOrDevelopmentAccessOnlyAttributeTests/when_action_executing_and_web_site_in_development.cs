@@ -10,7 +10,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
 {
-    [Ignore("Cascading")]
     internal class when_action_executing_and_web_site_in_development : LocalOrDevelopmentAccessOnlyAttributeTestsContext
     {
         Establish context = () =>
