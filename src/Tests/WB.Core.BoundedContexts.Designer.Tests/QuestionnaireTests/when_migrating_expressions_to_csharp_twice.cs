@@ -17,8 +17,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         Because of = () =>
             exception = Catch.Exception(() =>
             {
-                questionnaire.MigrateExpressionsToCSharp(new Guid());
-                questionnaire.MigrateExpressionsToCSharp(new Guid());
+                questionnaire.MigrateExpressionsToCSharp();
+                questionnaire.MigrateExpressionsToCSharp();
             });
 
         It should_throw_QuestionnaireException = () =>
