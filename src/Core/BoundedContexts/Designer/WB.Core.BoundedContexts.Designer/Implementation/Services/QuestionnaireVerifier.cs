@@ -425,10 +425,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question)
         {
-            var keywords = keywordsProvider.GetAllReservedKeywords();
-            bool isReservedKeyword = keywords.Contains(question.StataExportCaption);
-
-            return isReservedKeyword || question.StataExportCaption == substitutionService.RosterTitleSubstitutionReference;
+            return keywordsProvider.GetAllReservedKeywords().Contains(question.StataExportCaption);
         }
 
         private bool RosterHasVariableNameReservedForServiceNeeds(IGroup roster)
