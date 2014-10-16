@@ -956,7 +956,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
-        public void MigrateExpressionsToCSharp(Guid responsibleId)
+        public void MigrateExpressionsToCSharp()
         {
             this.ThrowIfExpressionsAreAlreadyMigrated();
 
