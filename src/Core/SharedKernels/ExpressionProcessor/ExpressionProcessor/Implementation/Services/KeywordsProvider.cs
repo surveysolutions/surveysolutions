@@ -8,10 +8,14 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
     {
         public KeywordsProvider(ISubstitutionService substitutionService)
         {
-            this.substitutionService = substitutionService;
+            reservedKeywords = CSharpKeyWords
+                .Union(StataVariableRestrictions)
+                .Union(SpssReservedKeywords)
+                .Union(new[] { substitutionService.RosterTitleSubstitutionReference })
+                .ToArray();
         }
 
-        private readonly ISubstitutionService substitutionService;
+        private readonly string[] reservedKeywords;
 
         private static readonly List<string> CSharpKeyWords = new List<string>()
         {
@@ -38,15 +42,10 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
         {
             "all", "and", "by", "eq", "ge", "gt", "le", "lt", "ne", "not", "or", "to", "with"
         };
-
-        private static readonly List<string> ReservedKeywords =
-            CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).Distinct().ToList();
-
+        
         public string[] GetAllReservedKeywords()
         {
-            var reservedKeywords = ReservedKeywords.ToList();
-            reservedKeywords.Add(substitutionService.RosterTitleSubstitutionReference);
-            return reservedKeywords.Distinct().ToArray();
+            return reservedKeywords;
         }
     }
 }
