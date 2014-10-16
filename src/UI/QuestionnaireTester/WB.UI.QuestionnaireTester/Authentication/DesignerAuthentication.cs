@@ -35,7 +35,7 @@ namespace WB.UI.QuestionnaireTester.Authentication
             return false;
         }
 
-        public bool LogOn(string userName, string password)
+        public bool LogOn(string userName, string password, bool wasPasswordHashed = false)
         {
             return LogOn(userName, password, new CancellationToken());
         }
