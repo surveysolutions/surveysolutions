@@ -76,6 +76,7 @@
     <Compile Include="Create.cs" />
     <Compile Include="InterviewStatistics\Create.cs" />
     <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
+    <Compile Include="Setup.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_6_interviews_created_and_then_deleted_all_together.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_a_lot_of_events_applying.cs" />
