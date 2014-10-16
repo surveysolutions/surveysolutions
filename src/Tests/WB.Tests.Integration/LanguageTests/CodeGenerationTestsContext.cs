@@ -33,13 +33,21 @@ namespace WB.Tests.Integration.LanguageTests
 
             SetupRoslyn(questionnaireDocument);
 
-            var interview = Create.Interview(questionnaireId: questionnaireId);
-            return interview;
+            return Create.Interview(questionnaireId: questionnaireId);
         }
 
-        public static QuestionsEnabled GetQuestionEnabledEvent(IEnumerable<UncommittedEvent> events)
+        public static void ApplyAllEvents(Interview interview, List<object> evnts)
         {
-            return ((QuestionsEnabled)events.First(b => b.Payload is QuestionsEnabled).Payload);
+            foreach (var evnt in evnts)
+            {
+                interview.Apply((dynamic)evnt);
+            }
+        }
+
+        public static T GetFirstEventByType<T>(IEnumerable<UncommittedEvent> events)
+            where T : class
+        {
+            return ((T)events.First(b => b.Payload is T).Payload);
         }
 
         public static void SetupRoslyn(QuestionnaireDocument questionnaireDocument)

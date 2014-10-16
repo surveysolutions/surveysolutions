@@ -1,16 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using Ncqrs.Eventing;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.LanguageTests
@@ -40,11 +36,19 @@ namespace WB.Tests.Integration.LanguageTests
 
                 var interview = SetupInterview(actorId, questionnaireDocument, questionnaireId);
 
+                ApplyAllEvents(interview, new List<object>
+                    {
+                        new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 1),
+                        new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 2),
+                        new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 3)
+                    }
+                );
+
                 var eventContext = new EventContext();
 
                 interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 4);
 
-                var result = GetQuestionEnabledEvent(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id);
+                var result = GetFirstEventByType<QuestionsEnabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id);
 
                 return new InvokeResults { Questions2Enabled = result != null};
             });
