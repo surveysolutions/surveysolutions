@@ -3818,7 +3818,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     expressionProcessorState.UpdateNumericIntegerAnswer(answerChange.QuestionId, answerChange.RosterVector, (int) answerChange.Answer);
                     break;
                 case AnswerChangeType.NumericReal:
-                    expressionProcessorState.UpdateNumericRealAnswer(answerChange.QuestionId, answerChange.RosterVector, (double) answerChange.Answer);
+                    expressionProcessorState.UpdateNumericRealAnswer(answerChange.QuestionId, answerChange.RosterVector, Convert.ToDouble(answerChange.Answer));
                     break;
                 case AnswerChangeType.SingleOptionLinked:
                     expressionProcessorState.UpdateLinkedSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
