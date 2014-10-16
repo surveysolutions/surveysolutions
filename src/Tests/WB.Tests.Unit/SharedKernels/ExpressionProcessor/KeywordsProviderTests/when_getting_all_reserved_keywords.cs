@@ -3,7 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
-namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProvider
+namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProviderTests
 {
     internal class when_getting_all_reserved_keywords : KeywordsProviderTestContext
     {
@@ -12,10 +12,11 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProvider
             var substitutionService = CreateSubstitutionService();
             keywordsProvider = CreateKeywordsProvider(substitutionService);
 
-            var reservedKeywords = CSharpKeyWords.Union(StataVariableRestrictions).Union(SpssReservedKeywords).ToList();
-            reservedKeywords.Add(substitutionService.RosterTitleSubstitutionReference);
-
-            ReservedKeywords = reservedKeywords.Distinct().ToArray();
+            reservedKeywords = CSharpKeyWords
+                .Union(StataVariableRestrictions)
+                .Union(SpssReservedKeywords)
+                .Union(new[] { substitutionService.RosterTitleSubstitutionReference })
+                .ToArray();
 
         };
 
@@ -23,10 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProvider
             result = keywordsProvider.GetAllReservedKeywords();
 
         It should_contain_fixed_number = () =>
-            result.Count().ShouldEqual(ReservedKeywords.Count());
+            result.Count().ShouldEqual(reservedKeywords.Count());
 
         It should_contain_only_predefined_keywords = () =>
-            result.ShouldContainOnly(ReservedKeywords);
+            result.ShouldContainOnly(reservedKeywords);
 
         private static readonly string[] CSharpKeyWords = new[]
         {
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.KeywordsProvider
             "all", "and", "by", "eq", "ge", "gt", "le", "lt", "ne", "not", "or", "to", "with"
         };
 
-        private static string[] ReservedKeywords;
+        private static string[] reservedKeywords;
 
         private static IEnumerable<string> result;
         private static IKeywordsProvider keywordsProvider;
