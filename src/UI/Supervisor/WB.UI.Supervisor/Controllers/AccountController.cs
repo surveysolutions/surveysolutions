@@ -45,7 +45,6 @@ namespace WB.UI.Supervisor.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
