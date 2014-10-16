@@ -961,15 +961,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfExpressionsAreAlreadyMigrated();
 
 
-            IEnumerable<IQuestion> questionsToMigrate = this.innerDocument.Find<IQuestion>(HasEnablementConditionOrValidationExpression);
-
             Dictionary<string, string> customMappings = this.BuildCustomMappingsFromIdsToIdentifiers();
 
-            List<QuestionnaireActiveEvent> questionChangedEvents = questionsToMigrate
+            List<GroupUpdated> groupChangedEvents = this.innerDocument
+                .Find<IGroup>(HasEnablementCondition)
+                .Select(group => this.MigrateGroupToRoslyn(group, customMappings))
+                .ToList();
+
+            List<QuestionnaireActiveEvent> questionChangedEvents = this.innerDocument
+                .Find<IQuestion>(HasEnablementConditionOrValidationExpression)
                 .Select(question => this.MigrateQuestionToRoslyn(question, customMappings))
                 .ToList();
 
 
+            groupChangedEvents.ForEach(this.ApplyEvent);
             questionChangedEvents.ForEach(this.ApplyEvent);
 
             this.ApplyEvent(new ExpressionsMigratedToCSharp());
@@ -4466,6 +4471,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
+        private GroupUpdated MigrateGroupToRoslyn(IGroup group, Dictionary<string, string> customMappings)
+        {
+            string enablementCondition = this.ConvertExpressionToCSharpIfNotEmpty(group.ConditionExpression, customMappings);
+
+            return new GroupUpdated
+            {
+                GroupPublicKey = group.PublicKey,
+
+                ConditionExpression = enablementCondition,
+
+                GroupText = group.Title,
+                VariableName = group.VariableName,
+                Description = group.Description,
+
+                // not appliable:
+                // ResponsibleId
+            };
+        }
+
         private QuestionnaireActiveEvent MigrateQuestionToRoslyn(IQuestion question, Dictionary<string, string> customMappings)
         {
             UpdateCustomMappingsWithContextQuestion(customMappings, question);
@@ -4585,6 +4609,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 .ToDictionary(
                     question => question.PublicKey.ToString(),
                     question => question.StataExportCaption);
+        }
+
+        private static bool HasEnablementCondition(IGroup group)
+        {
+            return !string.IsNullOrWhiteSpace(@group.ConditionExpression);
         }
 
         private static bool HasEnablementConditionOrValidationExpression(IQuestion question)
