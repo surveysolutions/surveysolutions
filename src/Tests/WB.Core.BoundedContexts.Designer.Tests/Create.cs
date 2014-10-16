@@ -526,12 +526,32 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             };
         }
 
-        public static Group Chapter(IEnumerable<IComposite> children = null)
+        public static Group Chapter(string title = "Chapter X", IEnumerable<IComposite> children = null)
         {
-            return new Group("Chapter X")
+            return Create.Group(
+                title: title,
+                children: children);
+        }
+
+        public static Group Roster(Guid? rosterId = null, string title = "Roster X", string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            return Create.Group(
+                groupId: rosterId,
+                title: title,
+                isRoster: true,
+                enablementCondition: enablementCondition,
+                children: children);
+        }
+
+        public static Group Group(Guid? groupId = null, string title = "Group X", bool isRoster = false, string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            return new Group(title)
             {
-                PublicKey = Guid.NewGuid(),
+                PublicKey = groupId ?? Guid.NewGuid(),
                 Children = children != null ? children.ToList() : new List<IComposite>(),
+                IsRoster = isRoster,
             };
         }
 
