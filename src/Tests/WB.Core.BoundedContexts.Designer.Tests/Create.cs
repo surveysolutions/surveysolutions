@@ -550,8 +550,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             return new Group(title)
             {
                 PublicKey = groupId ?? Guid.NewGuid(),
-                Children = children != null ? children.ToList() : new List<IComposite>(),
                 IsRoster = isRoster,
+                ConditionExpression = enablementCondition,
+                Children = children != null ? children.ToList() : new List<IComposite>(),
             };
         }
 
