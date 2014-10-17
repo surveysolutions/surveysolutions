@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     {
         Establish context = () =>
         {
-            dataFileExportServiceMock=new Mock<IDataFileExportService>();
+            dataFileExportServiceMock=new Mock<IDataExportWriter>();
             dataFileExportServiceMock.Setup(x => x.GetInterviewActionFileName()).Returns("file.csv");
 
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         private static FileBasedDataExportService fileBasedDataExportService;
         private static InterviewDataExportException raisedException;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
-        private static Mock<IDataFileExportService> dataFileExportServiceMock;
+        private static Mock<IDataExportWriter> dataFileExportServiceMock;
         private static QuestionnaireExportStructure questionnaireExportStructure= new QuestionnaireExportStructure();
     }
 }
