@@ -20,14 +20,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
     [Subject(typeof(PreloadingTemplateService))]
     internal class PreloadingTemplateServiceTestContext
     {
-        protected static PreloadingTemplateService CreatePreloadingTemplateService(IDataFileExportService dataFileExportService = null,
+        protected static PreloadingTemplateService CreatePreloadingTemplateService(IDataExportWriter dataExportWriter = null,
             QuestionnaireExportStructure questionnaireExportStructure = null, IFileSystemAccessor fileSystemAccessor=null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object;
             return new PreloadingTemplateService(currentFileSystemAccessor,
                 Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>(
                     _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireExportStructure), "",
-                dataFileExportService ?? CreateIDataFileExportServiceMock().Object,
+                dataExportWriter ?? CreateIDataFileExportServiceMock().Object,
                 Mock.Of<IArchiveUtils>());
         }
 
@@ -43,9 +43,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
             return fileSystemAccessorMock;
         }
 
-        protected static Mock<IDataFileExportService> CreateIDataFileExportServiceMock()
+        protected static Mock<IDataExportWriter> CreateIDataFileExportServiceMock()
         {
-            var dataFileExportServiceMock = new Mock<IDataFileExportService>();
+            var dataFileExportServiceMock = new Mock<IDataExportWriter>();
             dataFileExportServiceMock.Setup(x => x.GetInterviewExportedDataFileName(Moq.It.IsAny<string>()))
                 .Returns<string>(levelName => levelName);
             return dataFileExportServiceMock;

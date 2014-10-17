@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private const string ExportedFilesFolderName = "ExportedFiles";
         private readonly string pathToExportedData;
         private readonly string pathToExportedFiles;
-        private readonly IDataFileExportService dataFileExportService;
+        private readonly IDataExportWriter dataExportWriter;
         private readonly IEnvironmentContentService environmentContentService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
@@ -31,11 +31,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public FileBasedDataExportService(
             IReadSideRepositoryCleanerRegistry cleanerRegistry, 
             string folderPath,
-            IDataFileExportService dataFileExportService, 
+            IDataExportWriter dataExportWriter, 
             IEnvironmentContentService environmentContentService,
             IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository)
         {
-            this.dataFileExportService = dataFileExportService;
+            this.dataExportWriter = dataExportWriter;
             this.environmentContentService = environmentContentService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
@@ -76,7 +76,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
-                zip.AddDirectory(dataDirectoryPath);
+
+                zip.AddFiles(dataExportWriter.GetAllDataFiles(dataDirectoryPath),"");
+
+                foreach (var contentFile in fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Where(fileName => fileName.EndsWith("." + environmentContentService.ContentFileNameExtension)))
+                {
+                    zip.AddFile(contentFile,"");
+                }
+                
+                zip.Save(archiveFilePath);
+            }
+
+            return archiveFilePath;
+        }
+
+        public string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version)
+        {
+            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
+
+            this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, version, dataDirectoryPath);
+
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.pathToExportedData, string.Format("{0}Approved.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
+
+            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
+                this.fileSystemAccessor.DeleteFile(archiveFilePath);
+
+            using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
+            {
+                zip.CompressionLevel = CompressionLevel.BestCompression;
+
+                zip.AddFiles(dataExportWriter.GetApprovedDataFiles(dataDirectoryPath), "");
+
+                foreach (var contentFile in fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Where(fileName => fileName.EndsWith("." + environmentContentService.ContentFileNameExtension)))
+                {
+                    zip.AddFile(contentFile, "");
+                }
+
                 zip.Save(archiveFilePath);
             }
 
@@ -163,18 +198,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 string levelFileName = headerStructureForLevel.LevelName;
 
-                var interviewExportedDataFileName = this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName);
+                var interviewExportedDataFileName = this.dataExportWriter.GetInterviewExportedDataFileName(levelFileName);
                 var contentOfAdditionalFileName = this.environmentContentService.GetEnvironmentContentFileName(levelFileName);
 
-                this.dataFileExportService.CreateHeader(headerStructureForLevel,
+                this.dataExportWriter.CreateHeader(headerStructureForLevel,
                     this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, interviewExportedDataFileName));
 
                 this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel, interviewExportedDataFileName,
                     this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, contentOfAdditionalFileName));
             }
 
-            this.dataFileExportService.CreateHeaderForActionFile(this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath,
-                this.dataFileExportService.GetInterviewActionFileName()));
+            this.dataExportWriter.CreateHeaderForActionFile(this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath,
+                this.dataExportWriter.GetInterviewActionFileName()));
         }
 
         public void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion)
@@ -202,7 +237,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 string levelFileName = interviewDataExportLevelView.LevelName;
 
-                this.dataFileExportService.AddRecord(interviewDataExportLevelView, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewExportedDataFileName(levelFileName)));
+                this.dataExportWriter.AddRecords(interviewDataExportLevelView, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataExportWriter.GetInterviewExportedDataFileName(levelFileName)));
             }
 
             var filesFolderForTemplatePath = this.GetFolderPathOfFilesByQuestionnaire(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
@@ -234,13 +269,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        public void AddInterviewActions(Guid questionnaireId, long questionnaireVersion, IEnumerable<InterviewActionExportView> actions)
+        public void AddInterviewAction(Guid questionnaireId, long questionnaireVersion, InterviewActionExportView action)
         {
             var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
 
             this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, questionnaireVersion, dataFolderForTemplatePath);
 
-            this.dataFileExportService.AddActionRecords(actions, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataFileExportService.GetInterviewActionFileName()));
+            this.dataExportWriter.AddActionRecord(action, this.fileSystemAccessor.CombinePath(dataFolderForTemplatePath, this.dataExportWriter.GetInterviewActionFileName()));
         }
 
         private string[] GetAllMultimediaQuestionFileNames(InterviewDataExportView interviewDataExportView)

@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     internal class PreloadingTemplateService : IPreloadingTemplateService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IDataFileExportService dataFileExportService;
+        private readonly IDataExportWriter dataExportWriter;
         private readonly IArchiveUtils archiveUtils;
         private const string FolderName = "PreLoadingTemplates";
         private readonly string path;
@@ -29,11 +29,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public PreloadingTemplateService(IFileSystemAccessor fileSystemAccessor,
             IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage, string folderPath,
-            IDataFileExportService dataFileExportService, IArchiveUtils archiveUtils)
+            IDataExportWriter dataExportWriter, IArchiveUtils archiveUtils)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
-            this.dataFileExportService = dataFileExportService;
+            this.dataExportWriter = dataExportWriter;
             this.archiveUtils = archiveUtils;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -61,9 +61,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
               foreach (var header in questionnaire.HeaderToLevelMap.Values)
             {
                 var interviewTemplateFilePath = this.fileSystemAccessor.CombinePath(dataDirectoryPath,
-                    dataFileExportService.GetInterviewExportedDataFileName(header.LevelName));
+                    this.dataExportWriter.GetInterviewExportedDataFileName(header.LevelName));
 
-                dataFileExportService.CreateHeader(header, interviewTemplateFilePath);
+                this.dataExportWriter.CreateHeader(header, interviewTemplateFilePath);
             }
             archiveUtils.ZipDirectory(dataDirectoryPath, archiveFilePath);
 

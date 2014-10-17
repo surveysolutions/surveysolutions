@@ -18,11 +18,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
         Establish context = () =>
         {
             csvWriterServiceMock = new Mock<ICsvWriterService>();
-            csvDataFileExportService = CreateCsvDataFileExportService(null, csvWriterServiceMock.Object);
+            csvDataExportWriter = CreateCsvDataFileExportService(null, csvWriterServiceMock.Object);
         };
 
         Because of = () =>
-            csvDataFileExportService.CreateHeaderForActionFile(filePath);
+            csvDataExportWriter.CreateHeaderForActionFile(filePath);
 
         It should_write_Id_once = () =>
             csvWriterServiceMock.Verify(x => x.WriteField("Id"), Times.Once);
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
         It should_write_Time_once = () =>
           csvWriterServiceMock.Verify(x => x.WriteField("Time"), Times.Once);
 
-        private static CsvDataFileExportService csvDataFileExportService;
+        private static CsvDataExportWriter csvDataExportWriter;
         private static Mock<ICsvWriterService> csvWriterServiceMock;
         private static readonly string filePath = "file path";
     }
