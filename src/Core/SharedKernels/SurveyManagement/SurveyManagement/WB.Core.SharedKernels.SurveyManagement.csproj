@@ -11,6 +11,7 @@
     <AssemblyName>WB.Core.SharedKernels.SurveyManagement</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>1b505a62</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,8 +71,14 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\..\..\..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -116,6 +123,7 @@
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
+    <Compile Include="Implementation\Services\DataExport\SqlCeDataExportWriter.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomePackagesRepository\IncomePackagesRepository.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoader.cs" />
@@ -129,7 +137,7 @@
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
-    <Compile Include="Implementation\Services\DataExport\CsvDataFileExportService.cs" />
+    <Compile Include="Implementation\Services\DataExport\CsvDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\FileBasedDataExportService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileType.cs" />
     <Compile Include="Implementation\Services\DataExport\InterviewDataExportException.cs" />
@@ -153,7 +161,7 @@
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IDataExportService.cs" />
-    <Compile Include="Services\IDataFileExportService.cs" />
+    <Compile Include="Services\IDataExportWriter.cs" />
     <Compile Include="Services\IEnvironmentContentService.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
@@ -388,8 +396,14 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+    xcopy /s /y "C:\Work\WBCAPI\packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+    xcopy /s /y "C:\Work\WBCAPI\packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
