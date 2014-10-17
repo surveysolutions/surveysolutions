@@ -18,11 +18,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
         Establish context = () =>
         {
             csvWriterServiceMock=new Mock<ICsvWriterService>();
-            csvDataFileExportService = CreateCsvDataFileExportService(null, csvWriterServiceMock.Object);
+            csvDataExportWriter = CreateCsvDataFileExportService(null, csvWriterServiceMock.Object);
         };
 
         Because of = () =>
-            csvDataFileExportService.AddRecord(
+            csvDataExportWriter.AddRecords(
                 CreateInterviewDataExportLevelView(new[]
                 {
                     CreateInterviewDataExportRecord(recordId,new[] { CreateExportedQuestion(new[] { answer }) }, new[] { reference },
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
         It should_write_parent_level_once = () =>
             csvWriterServiceMock.Verify(x => x.WriteField(parentLevel), Times.Once);
 
-        private static CsvDataFileExportService csvDataFileExportService;
+        private static CsvDataExportWriter csvDataExportWriter;
         private static Mock<ICsvWriterService> csvWriterServiceMock;
         private static readonly string recordId = "record Id";
         private static readonly string reference = "reference";

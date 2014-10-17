@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
         private static PreloadingTemplateService preloadingTemplateService;
         private static string result;
         private static QuestionnaireExportStructure questionnaireExportStructure;
-        private static Mock<IDataFileExportService> dataFileExportService;
+        private static Mock<IDataExportWriter> dataFileExportService;
         private static Guid questionnaireId=Guid.NewGuid();
     }
 }
