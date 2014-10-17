@@ -23,7 +23,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         Establish context = () =>
         {
             dataExportService = new Mock<IDataExportService>();
-            interviewActionLogWriter = new Mock<IReadSideRepositoryWriter<InterviewActionLog>>();
             questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>());
             foreach (var questionAnswered in ListOfQuestionAnsweredEventsHandledByDenormalizer)
             {
@@ -32,27 +31,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                 interviewActionLog.Actions.Add(CreateInterviewActionExportView(interviewId,
                     InterviewExportedAction.InterviewerAssigned));
 
-                interviewActionLogWriter.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(interviewActionLog);
-
                 eventsAndInterviewActionLog.Add(interviewId,
                   new Tuple<QuestionAnswered, InterviewActionLog>(questionAnswered, interviewActionLog));
             }
 
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
-                CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name", Roles = new List<UserRoles>{UserRoles.Operator}}, interviewActionLogWriter.Object);
+                CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name", Roles = new List<UserRoles>{UserRoles.Operator}});
         };
 
         Because of = () => HandleQuestionAnsweredEventsByDenormalizer(interviewExportedDataDenormalizer, eventsAndInterviewActionLog);
 
-        It should_FirstAnswerSet_action__be_last_in_list_of_actions_for_each_event = () => eventsAndInterviewActionLog.ShouldContainInterviewActionLog(i => i.Actions.Select(a => a.Action).Contains(InterviewExportedAction.FirstAnswerSet));
-
-        It should_store_InterviewActionLog_for_each_event =
-            () => eventsAndInterviewActionLog.ShouldCallStoreForWriter(interviewActionLogWriter, Times.Once());
+        It should_FirstAnswerSet_action_be_added_to_dataExport = () =>
+           dataExportService.Verify(
+               x =>
+                   x.AddInterviewAction(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>(),
+                       Moq.It.Is<InterviewActionExportView>(view => view.Action == InterviewExportedAction.FirstAnswerSet)));
 
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static QuestionnaireDocument questionnarie;
-        private static Mock<IReadSideRepositoryWriter<InterviewActionLog>> interviewActionLogWriter;
         private static Mock<IDataExportService> dataExportService;
         private static Dictionary<Guid, Tuple<QuestionAnswered, InterviewActionLog>> eventsAndInterviewActionLog = new Dictionary<Guid, Tuple<QuestionAnswered, InterviewActionLog>>();
     }

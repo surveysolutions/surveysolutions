@@ -22,32 +22,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         Establish context = () =>
         {
             dataExportService = new Mock<IDataExportService>();
-            interviewActionLogWriter = new Mock<IReadSideRepositoryWriter<InterviewActionLog>>();
             questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>());
-
-            interviewActionLog = new InterviewActionLog(interviewId, new List<InterviewActionExportView>());
-            interviewActionLogWriter.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(interviewActionLog);
 
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
-                CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name", Roles = new List<UserRoles>{UserRoles.Supervisor}}, interviewActionLogWriter.Object);
+                CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name", Roles = new List<UserRoles>{UserRoles.Supervisor}});
         };
 
         Because of = () =>
             interviewExportedDataDenormalizer.Handle(CreatePublishableEvent(() => new InterviewRejected(Guid.NewGuid(), "comment"),
                 interviewId));
 
-        It should_RejectedBySupervisor_action_be_present_in_list_of_actions = () =>
-            interviewActionLog.Actions[0].Action.ShouldEqual(InterviewExportedAction.RejectedBySupervisor);
-
-        It should_InterviewActionLog_be_stored_once = () =>
-           interviewActionLogWriter.Verify(x => x.Store(interviewActionLog, interviewId.FormatGuid()), Times.Once);
+        It should_RejectedBySupervisor_action_be_added_to_dataExport = () =>
+            dataExportService.Verify(
+           x =>
+               x.AddInterviewAction(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>(),
+                   Moq.It.Is<InterviewActionExportView>(view => view.Action == InterviewExportedAction.RejectedBySupervisor)));
 
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static QuestionnaireDocument questionnarie;
-        private static Mock<IReadSideRepositoryWriter<InterviewActionLog>> interviewActionLogWriter;
         private static Mock<IDataExportService> dataExportService;
         private static Guid interviewId = Guid.NewGuid();
-        private static InterviewActionLog interviewActionLog;
     }
 }
