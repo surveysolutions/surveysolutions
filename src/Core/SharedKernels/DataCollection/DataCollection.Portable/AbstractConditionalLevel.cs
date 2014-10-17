@@ -300,6 +300,12 @@ namespace WB.Core.SharedKernels.DataCollection
             this.EvaluateConditions(out questionsToBeEnabled, out questionsToBeDisabled, out groupsToBeEnabled, out groupsToBeDisabled);
         }
 
+        public void UpdateMediaAnswer(Guid questionId, string answer)
+        {
+            if (this.QuestionStringUpdateMap.ContainsKey(questionId))
+                this.QuestionStringUpdateMap[questionId].Invoke(answer);
+        }
+
         public void UpdateTextAnswer(Guid questionId, string answer)
         {
             if (this.QuestionStringUpdateMap.ContainsKey(questionId))
