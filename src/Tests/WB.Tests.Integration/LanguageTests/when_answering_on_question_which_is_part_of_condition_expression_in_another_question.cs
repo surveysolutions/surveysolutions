@@ -43,6 +43,7 @@ namespace WB.Tests.Integration.LanguageTests
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 4);
+
                     result.Questions2Enabled = GetFirstEventByType<QuestionsEnabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) != null;
                 }
 

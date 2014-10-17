@@ -36,7 +36,7 @@ namespace WB.Tests.Integration
             return questionnaireDocument;
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid id, string variable, string conditition = null)
+        public static NumericQuestion NumericIntegerQuestion(Guid id, string variable, string conditition = null, string validationExpression = null)
         {
             return new NumericQuestion
             {
@@ -44,7 +44,8 @@ namespace WB.Tests.Integration
                 PublicKey = id,
                 StataExportCaption = variable,
                 IsInteger = true,
-                ConditionExpression = conditition
+                ConditionExpression = conditition,
+                ValidationExpression = validationExpression
             };
         }
 

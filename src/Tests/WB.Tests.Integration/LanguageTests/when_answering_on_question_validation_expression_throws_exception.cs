@@ -9,8 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tests.Integration.LanguageTests
 {
-    [Ignore("KP-4381 Support expressions which can throw exceptions like int.Parse and 1/0")]
-    internal class when_answering_on_question_condition_expression_throws_exception : CodeGenerationTestsContext
+    internal class when_answering_on_question_validation_expression_throws_exception : CodeGenerationTestsContext
     {
         Establish context = () =>
         {
@@ -29,7 +28,7 @@ namespace WB.Tests.Integration.LanguageTests
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.NumericIntegerQuestion(question1Id, "q1"),
-                    Create.NumericIntegerQuestion(question2Id, "q2", "1/q1 == 1")
+                    Create.NumericIntegerQuestion(question2Id, "q2", validationExpression: "1/q1 == 1")
                );
 
                 var interview = SetupInterview(actorId, questionnaireDocument, questionnaireId, new List<object>()
@@ -44,14 +43,14 @@ namespace WB.Tests.Integration.LanguageTests
                 {
                     interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 0);
 
-                    result.Questions2Enabled = GetFirstEventByType<QuestionsDisabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) == null;
+                    result.Questions2Disabled = GetFirstEventByType<QuestionsEnabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) != null;
                 }
 
                 return result;
             });
 
-        It should_enable_second_question = () =>
-            results.Questions2Enabled.ShouldBeTrue();
+        It should_disable_second_question = () =>
+            results.Questions2Disabled.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -65,7 +64,7 @@ namespace WB.Tests.Integration.LanguageTests
         [Serializable]
         internal class InvokeResults
         {
-            public bool Questions2Enabled { get; set; }
+            public bool Questions2Disabled { get; set; }
         } 
     }
 }
