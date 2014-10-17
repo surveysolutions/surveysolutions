@@ -102,10 +102,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
         public void DeletePreloadedDataOfSample(string id)
         {
             var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
-            if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
-                return;
-
-            fileSystemAccessor.DeleteDirectory(currentFolderPath);
+            
+            if (fileSystemAccessor.IsDirectoryExists(currentFolderPath))
+                fileSystemAccessor.DeleteDirectory(currentFolderPath);
         }
 
         public PreloadedDataByFile[] GetPreloadedDataOfPanel(string id)
@@ -121,10 +120,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
         public void DeletePreloadedDataOfPanel(string id)
         {
             var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
-            if (!fileSystemAccessor.IsDirectoryExists(currentFolderPath))
-                return;
 
-            fileSystemAccessor.DeleteDirectory(currentFolderPath);
+            if (fileSystemAccessor.IsDirectoryExists(currentFolderPath))
+                fileSystemAccessor.DeleteDirectory(currentFolderPath);
         }
 
         private IEnumerable<string> GetFiles(string id)
