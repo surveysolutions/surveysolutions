@@ -35,5 +35,8 @@
     <NamedTestSelector>
       <TestName>WB.Tests.Integration.LanguageTests.when_answering_on_question_validation_expression_throws_exception.should_disable_second_question</TestName>
     </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>WB.Tests.Integration.LanguageTests.when_answering_on_question_condition_expression_throws_exception_1.should_enable_second_question</TestName>
+    </NamedTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>
