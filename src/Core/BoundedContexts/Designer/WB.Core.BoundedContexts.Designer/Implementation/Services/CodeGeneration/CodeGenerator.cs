@@ -222,6 +222,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 case QuestionType.GpsCoordinates:
                     return "GeoLocation";
+
+                case QuestionType.Multimedia:
+                    return "string";
+
                 default:
                     throw new ArgumentException("Unknown question type.");
             }

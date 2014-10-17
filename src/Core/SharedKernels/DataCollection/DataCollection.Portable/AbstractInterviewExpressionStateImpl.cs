@@ -29,6 +29,11 @@ namespace WB.Core.SharedKernels.DataCollection
             throw new NotImplementedException();
         }
 
+        public override void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
             throw new NotImplementedException();

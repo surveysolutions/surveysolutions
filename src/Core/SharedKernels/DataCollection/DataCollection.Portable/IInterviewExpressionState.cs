@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection
         void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer);
         void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer);
         void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer);
+        void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer);
         void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer);
         void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer);
         void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer);

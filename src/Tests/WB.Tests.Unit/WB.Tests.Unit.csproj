@@ -181,6 +181,8 @@
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="BoundedContexts\Designer\AssemblyContext.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\CodeGeneratorTestsContext.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_executor_template_model_for_questionnaire_with_multimedia_question.cs" />
     <Compile Include="BoundedContexts\Designer\EnumerableExtensions.cs" />
     <Compile Include="BoundedContexts\Designer\NCalcToCSharpConverterTests\when_converting__a_plus_b_gt_c_plus_d__to_roslyn_and_a_is_mapped_to_x_and_b_is_mapped_to_y.cs" />
     <Compile Include="BoundedContexts\Designer\NCalcToCSharpConverterTests\when_converting_different_ncalc_expressions_to_roslyn.cs" />
@@ -394,6 +396,7 @@
     <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_called_by_localhost.cs" />
     <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_in_development.cs" />
     <Compile Include="Shared\Web\LocalOrDevelopmentAccessOnlyAttributeTests\when_action_executing_and_web_site_not_in_development_and_called_not_by_localhost.cs" />
+    <Compile Include="ShouldExtentions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Stub.cs" />
   </ItemGroup>

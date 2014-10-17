@@ -150,6 +150,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             }
         }
 
+        public override void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
+            if (targetLevel == null) return;
+        }
+
         public override void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);

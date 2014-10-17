@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public abstract void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer);
         public abstract void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer);
         public abstract void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer);
+        public abstract void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer);
         public abstract void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer);
         public abstract void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer);
         public abstract void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer);
