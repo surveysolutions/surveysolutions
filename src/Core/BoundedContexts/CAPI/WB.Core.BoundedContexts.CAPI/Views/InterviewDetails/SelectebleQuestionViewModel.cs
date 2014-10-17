@@ -69,11 +69,17 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
                 return;
             }
 
-            var selectedAnswer = Convert.ToDecimal(answer);
+            var typedAnswers = QuestionUtils.ExtractSelectedOptions(answer);
+
+            if (typedAnswers == null)
+            {
+                return;
+            }
 
             foreach (var item in this.Answers)
             {
-                item.Selected =  selectedAnswer == item.Value;
+                item.Selected = typedAnswers.Contains(item.Value);
+                item.AnswerOrder = Array.IndexOf(typedAnswers, item.Value) + 1;
             }
 
             base.SetAnswer(answer);

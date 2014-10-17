@@ -17,6 +17,17 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
             return answer.ToString("##,###.############################", CultureInfo.CurrentCulture);
         }
 
+        public static decimal[] ExtractSelectedOptions(object answer)
+        {
+            return CastAnswerToSingleDimensionalArray<decimal>(answer, decimal.TryParse) ?? CastAnswerToDecimal(answer);
+        }
+
+        public static decimal? CastToDecimal(object answer)
+        {
+            decimal d;
+            return decimal.TryParse((answer ?? "").ToString(), out d) ? d : (decimal?)null;
+        }
+
         public static decimal[][] ExtractSelectedOptionsOfLinkedQuestion(object answer)
         {
             if (answer == null)
@@ -33,7 +44,7 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
             return new decimal[0][];
         }
 
-        private static T[] CastAnswerToSingleDimensionalArray<T>(object answer, TryParseDelegate<T> tryParseFunction) where T : struct 
+        private static T[] CastAnswerToSingleDimensionalArray<T>(object answer, TryParseDelegate<T> tryParseFunction) where T : struct
         {
             var decimalCast = answer as IEnumerable<T>;
             if (decimalCast != null)
@@ -63,7 +74,7 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
             return result;
         }
 
-        private static T? ConvertObjectToAnswer<T>(object answer, TryParseDelegate<T> tryParseFunction) where T : struct 
+        private static T? ConvertObjectToAnswer<T>(object answer, TryParseDelegate<T> tryParseFunction) where T : struct
         {
             if (answer == null)
                 return null;
@@ -93,7 +104,7 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
             {
                 var result =
                     objectCast.Select((obj) => CastAnswerFormObjectToIntArray<decimal>(obj, decimal.TryParse)).Where(i => i != null).ToArray();
-             
+
                 if (result.Length > 0)
                     return result;
             }
