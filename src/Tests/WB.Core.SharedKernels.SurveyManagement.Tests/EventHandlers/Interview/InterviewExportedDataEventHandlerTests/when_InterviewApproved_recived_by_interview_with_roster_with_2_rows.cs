@@ -4,10 +4,13 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
@@ -15,6 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
+            dataExportServiceMock = CreateDataExportService(r => result = r);
             firstQuestionId = Guid.Parse("12222222222222222222222222222222");
             secondQuestionId = Guid.Parse("11111111111111111111111111111111");
             propagatedGroup = Guid.Parse("13333333333333333333333333333333");
@@ -30,8 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             propagationScopeKey = Guid.Parse("10000000000000000000000000000000");
             questionnarie = CreateQuestionnaireDocumentWith1PropagationLevel();
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                () => questionnarie,
-                CreateInterviewDataWith2PropagatedLevels, r => result = r);
+                templateCreationAction:() => questionnarie,
+                dataCreationAction:CreateInterviewDataWith2PropagatedLevels, dataExportService:dataExportServiceMock.Object);
         };
 
         Because of = () =>
@@ -95,5 +99,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static Guid firstQuestionId;
         private static int levelCount;
         private static QuestionnaireDocument questionnarie;
+        private static Mock<IDataExportService> dataExportServiceMock;
     }
 }

@@ -5,10 +5,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
@@ -16,6 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
+            dataExportServiceMock = CreateDataExportService(r => result = r);
             linkedQuestionSourceId = Guid.Parse("12222222222222222222222222222222");
             rosterId = Guid.Parse("13333333333333333333333333333333");
             var nestedRosterId = Guid.Parse("23333333333333333333333333333333");
@@ -63,8 +67,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             textListQuestion.Answer = new decimal[] { 0, 0 };
 
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                () => questionnarie,
-                () => interview, r => result = r);
+                templateCreationAction:() => questionnarie,
+                dataCreationAction:() => interview,dataExportService:dataExportServiceMock.Object);
         };
 
         Because of = () =>
@@ -82,5 +86,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static Guid linkedQuestionId;
         private static Guid linkedQuestionSourceId;
         private static QuestionnaireDocument questionnarie;
+        private static Mock<IDataExportService> dataExportServiceMock;
     }
 }
