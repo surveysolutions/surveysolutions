@@ -202,7 +202,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 state.PreviousState = state.State;
                 state.State = State.Unknown;
             }
-            
+
             foreach (Action verifier in this.ConditionExpressions)
             {
                 verifier();
@@ -297,62 +297,73 @@ namespace WB.Core.SharedKernels.DataCollection
         public void CalculateConditionChanges(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,
             out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled)
         {
-            this.EvaluateConditions(out questionsToBeEnabled,out questionsToBeDisabled, out groupsToBeEnabled, out groupsToBeDisabled);
+            this.EvaluateConditions(out questionsToBeEnabled, out questionsToBeDisabled, out groupsToBeEnabled, out groupsToBeDisabled);
         }
 
         public void UpdateTextAnswer(Guid questionId, string answer)
         {
-            this.QuestionStringUpdateMap[questionId].Invoke(answer);
+            if (this.QuestionStringUpdateMap.ContainsKey(questionId))
+                this.QuestionStringUpdateMap[questionId].Invoke(answer);
         }
 
         public void UpdateNumericIntegerAnswer(Guid questionId, long answer)
         {
-            this.QuestionLongUpdateMap[questionId].Invoke(answer);
+            if (this.QuestionLongUpdateMap.ContainsKey(questionId))
+                this.QuestionLongUpdateMap[questionId].Invoke(answer);
         }
 
         public void UpdateNumericRealAnswer(Guid questionId, double answer)
         {
-            this.QuestionDoubleUpdateMap[questionId].Invoke(answer);
+            if (this.QuestionDoubleUpdateMap.ContainsKey(questionId))
+                this.QuestionDoubleUpdateMap[questionId].Invoke(answer);
         }
-        
+
         public void UpdateDateTimeAnswer(Guid questionId, DateTime answer)
         {
-            this.QuestionDateTimeUpdateMap[questionId].Invoke(answer);
+            if (this.QuestionDateTimeUpdateMap.ContainsKey(questionId))
+                this.QuestionDateTimeUpdateMap[questionId].Invoke(answer);
         }
 
         public void UpdateQrBarcodeAnswer(Guid questionId, string answer)
         {
-            this.QuestionStringUpdateMap[questionId].Invoke(answer);
+            if (this.QuestionStringUpdateMap.ContainsKey(questionId))
+                this.QuestionStringUpdateMap[questionId].Invoke(answer);
         }
 
         public void UpdateSingleOptionAnswer(Guid questionId, decimal answer)
         {
-            this.QuestionDecimalUpdateMap[questionId].Invoke(answer);
+            if (this.QuestionDecimalUpdateMap.ContainsKey(questionId))
+                this.QuestionDecimalUpdateMap[questionId].Invoke(answer);
         }
 
         public void UpdateMultiOptionAnswer(Guid questionId, decimal[] answer)
         {
-            this.QuestionDecimal1DArrayUpdateMap[questionId].Invoke(answer);
+            if (this.QuestionDecimal1DArrayUpdateMap.ContainsKey(questionId))
+                this.QuestionDecimal1DArrayUpdateMap[questionId].Invoke(answer);
         }
 
         public void UpdateGeoLocationAnswer(Guid questionId, double latitude, double longitude, double precision, double altitude)
         {
-            this.QuestionGpsUpdateMap[questionId].Invoke(new GeoLocation(latitude, longitude, precision, altitude));
+            if (this.QuestionGpsUpdateMap.ContainsKey(questionId))
+                this.QuestionGpsUpdateMap[questionId].Invoke(new GeoLocation(latitude, longitude, precision, altitude));
         }
 
         public void UpdateTextListAnswer(Guid questionId, Tuple<decimal, string>[] answers)
         {
-            this.QuestionTupleArrayUpdateMap[questionId].Invoke(answers);
+            if (this.QuestionTupleArrayUpdateMap.ContainsKey(questionId))
+                this.QuestionTupleArrayUpdateMap[questionId].Invoke(answers);
         }
 
         public void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] selectedPropagationVector)
         {
-            this.QuestionDecimal1DArrayUpdateMap[questionId].Invoke(selectedPropagationVector);
+            if (this.QuestionDecimal1DArrayUpdateMap.ContainsKey(questionId))
+                this.QuestionDecimal1DArrayUpdateMap[questionId].Invoke(selectedPropagationVector);
         }
 
         public void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[][] selectedPropagationVectors)
         {
-            this.QuestionDecimal2DArrayUpdateMap[questionId].Invoke(selectedPropagationVectors);
+            if (this.QuestionDecimal2DArrayUpdateMap.ContainsKey(questionId))
+                this.QuestionDecimal2DArrayUpdateMap[questionId].Invoke(selectedPropagationVectors);
         }
 
         protected void Validate(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
@@ -370,7 +381,7 @@ namespace WB.Core.SharedKernels.DataCollection
                         this.EnablementStates[questionId].State == State.Disabled) continue;
 
                     bool isValid = validationExpression.Value.All(func => func());
-                    
+
                     if (isValid && !this.ValidAnsweredQuestions.Contains(questionId))
                         questionsToBeValid.Add(validationExpression.Key);
                     else if (!isValid && !this.InvalidAnsweredQuestions.Contains(questionId))
