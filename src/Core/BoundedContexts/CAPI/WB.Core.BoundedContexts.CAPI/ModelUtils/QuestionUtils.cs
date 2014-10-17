@@ -16,10 +16,6 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
                 return "0";
             return answer.ToString("##,###.############################", CultureInfo.CurrentCulture);
         }
-        public static decimal[] ExtractSelectedOptions(object answer)
-        {
-            return CastAnswerToSingleDimensionalArray<decimal>(answer, decimal.TryParse) ?? CastAnswerToDecimal(answer);
-        }
 
         public static decimal[][] ExtractSelectedOptionsOfLinkedQuestion(object answer)
         {
