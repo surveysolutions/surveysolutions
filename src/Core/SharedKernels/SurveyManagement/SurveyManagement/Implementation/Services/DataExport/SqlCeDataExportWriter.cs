@@ -50,44 +50,50 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     createTableCommand.CommandText = commandText;
                     createTableCommand.ExecuteNonQuery();
                 }
-            });
 
-            foreach (var item in items.Records)
-            {
-                commandText = string.Format("insert into \"{0}\" values (", items.LevelName);
-                commandText = commandText + (items.LevelVector.Length == 0 ? string.Format("'{0}'", item.RecordId) : item.RecordId);
-
-                foreach (var referenceValue in item.ReferenceValues)
+                foreach (var item in items.Records)
                 {
-                    commandText = commandText + "," + referenceValue;
-                }
+                    commandText = string.Format("insert into \"{0}\" values (", items.LevelName);
+                    commandText = commandText + (items.LevelVector.Length == 0 ? string.Format("'{0}'", item.RecordId) : item.RecordId);
 
-                foreach (var exportedQuestion in item.Questions)
-                {
-                    foreach (string itemValue in exportedQuestion.Answers)
+                    foreach (var referenceValue in item.ReferenceValues)
                     {
-                        commandText = commandText + "," + (string.IsNullOrEmpty(itemValue)
-                            ? "null"
-                            : (numericQuestionTypes.Contains(exportedQuestion.QuestionType) ? itemValue : string.Format("'{0}'", itemValue)));
+                        commandText = commandText + ",'" + QuoteString(referenceValue) + "'";
                     }
-                }
 
-                for (int i = 0; i < item.ParentRecordIds.Length; i++)
-                {
-                    commandText = commandText + "," +
-                        (item.ParentRecordIds.Length - 1 == i ? string.Format("'{0}'", item.ParentRecordIds[i]) : item.ParentRecordIds[i]);
-                }
-                commandText = commandText + ");";
+                    foreach (var exportedQuestion in item.Questions)
+                    {
+                        foreach (string itemValue in exportedQuestion.Answers)
+                        {
+                            commandText = commandText + "," + (string.IsNullOrEmpty(itemValue)
+                                ? "null"
+                                : (numericQuestionTypes.Contains(exportedQuestion.QuestionType)
+                                    ? itemValue
+                                    : string.Format("'{0}'", QuoteString(itemValue))));
+                        }
+                    }
 
-                ExecuteSqlLite(basePath, (db) =>
-                {
+                    for (int i = 0; i < item.ParentRecordIds.Length; i++)
+                    {
+                        commandText = commandText + "," +
+                            (item.ParentRecordIds.Length - 1 == i
+                                ? string.Format("'{0}'", item.ParentRecordIds[i])
+                                : item.ParentRecordIds[i]);
+                    }
+                    commandText = commandText + ");";
+
                     using (var createTableCommand = db.CreateCommand())
                     {
                         createTableCommand.CommandText = commandText;
                         createTableCommand.ExecuteNonQuery();
                     }
-                });
-            }
+                }
+            });
+        }
+
+        private string QuoteString(string val)
+        {
+            return val.Replace("'", "''");
         }
 
         public string[] GetAllDataFiles(string basePath)
@@ -247,7 +253,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 foreach (var name in header.ReferencedNames)
                 {
-                    commandText = commandText + ", " + string.Format("[{0}] {1}", name, numeric);
+                    commandText = commandText + ", " + string.Format("[{0}] {1}", name, text);
                 }
             }
 
@@ -304,7 +310,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         scope.Complete();
                     }
                 }
-                catch (SqlException)
+                catch(SqlCeException)
                 {
                     if (db.State != System.Data.ConnectionState.Closed)
                     {
