@@ -207,6 +207,7 @@
     <Compile Include="AddSingleOptionQuestionHandlerTests\when_adding_single_option_question_with_linkedQuestion_and_supervisor_scope.cs" />
     <Compile Include="AddStaticTextHandlerTests\when_adding_static_text_and_parent_does_not_exists.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_is_null.cs" />
+    <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_with_self_referencing_valiation_expression.cs" />
     <Compile Include="AddTextQuestionHandlerTests\when_adding_text_question_with_substitution_referencing_valid_variable_but_another_question_has_null_variable_name.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_MultimediaQuestionUpdated_event_received.cs" />
     <Compile Include="ChapterInfoViewDenormalizerTests\when_StaticTextDeleted_event_received.cs" />
