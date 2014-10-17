@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             var result = new Dictionary<string, IGroup>();
             var documentVariableName = this.fileSystemAccessor.MakeValidFileName(originalDocument.Title);
-            var rosters = originalDocument.Find<Group>(g => g.IsRoster);
+            var rosters = originalDocument.Find<Group>(g => g.IsRoster || g.Propagated != Propagate.None);
             var rostersVariableNames = new HashSet<string> { documentVariableName };
 
             foreach (var roster in rosters)
