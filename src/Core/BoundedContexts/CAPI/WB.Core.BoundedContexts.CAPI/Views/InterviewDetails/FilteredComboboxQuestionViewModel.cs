@@ -53,12 +53,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void SetAnswer(object answer)
         {
-            if (answer == null)
-            {
-                return;
-            }
+            var selectedAnswer = QuestionUtils.CastToDecimal(answer);
 
-            var selectedAnswer = Convert.ToDecimal(answer);
+            if (selectedAnswer == null)
+                return;
 
             foreach (var item in this.Answers)
             {

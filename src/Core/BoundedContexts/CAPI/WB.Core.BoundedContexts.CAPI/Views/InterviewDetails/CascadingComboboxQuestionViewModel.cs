@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
@@ -82,12 +83,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void SetAnswer(object answer)
         {
-            if (answer == null)
-            {
-                return;
-            }
+            var selectedAnswer = QuestionUtils.CastToDecimal(answer);
 
-            var selectedAnswer = Convert.ToDecimal(answer);
+            if (selectedAnswer == null)
+                return;
 
             foreach (var item in this.filteredAnswers ?? AnswerOptions)
             {
