@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -23,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     {
         Establish context = () =>
         {
-            interviewExportServiceMock = new Mock<IDataFileExportService>();
+            interviewExportServiceMock = new Mock<IDataExportWriter>();
             interviewExportServiceMock.Setup(x => x.GetInterviewExportedDataFileName(Moq.It.IsAny<string>())).Returns("name.tex");
 
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
@@ -36,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
                 {
                     new InterviewDataExportRecord(interviewId, "name.tex", new string[0], new string[0],
                         new[] { new ExportedQuestion(Guid.NewGuid(), QuestionType.Multimedia, new[] { fileName }), })
-                });
+                }, Guid.NewGuid().FormatGuid());
 
             interviewToExport = new InterviewDataExportView(interviewId, Guid.NewGuid(), 1,
                 new[] { interviewLevelToExport });
@@ -54,14 +55,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             interviewExportServiceMock.Verify(x => x.GetInterviewExportedDataFileName("1st"), Times.Once());
 
         It should_data_by_level_be_stored_once = () =>
-            interviewExportServiceMock.Verify(x => x.AddRecord(interviewLevelToExport,Moq.It.IsAny<string>()), Times.Once());
+            interviewExportServiceMock.Verify(x => x.AddRecords(interviewLevelToExport,Moq.It.IsAny<string>()), Times.Once());
 
         It should_files_by_interview_be_stored = () =>
             fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(fileName)),data), Times.Once());
 
         private static FileBasedDataExportService fileBasedDataExportService;
         
-        private static Mock<IDataFileExportService> interviewExportServiceMock;
+        private static Mock<IDataExportWriter> interviewExportServiceMock;
         private static Mock<IPlainInterviewFileStorage> plainFileRepositoryMock;
         private static InterviewDataExportView interviewToExport;
         private static InterviewDataExportLevelView interviewLevelToExport;

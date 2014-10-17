@@ -24,12 +24,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     internal class FileBasedDataExportServiceTestContext
     {
         protected static FileBasedDataExportService CreateFileBasedDataExportService(
-            IFileSystemAccessor fileSystemAccessor = null, IDataFileExportService dataFileExportService = null,
+            IFileSystemAccessor fileSystemAccessor = null, IDataExportWriter dataExportWriter = null,
             IEnvironmentContentService environmentContentService = null, IPlainInterviewFileStorage plainFileRepository = null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new FileBasedDataExportService(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "",
-                dataFileExportService ?? Mock.Of<IDataFileExportService>(),
+                dataExportWriter ?? Mock.Of<IDataExportWriter>(),
                 environmentContentService ?? Mock.Of<IEnvironmentContentService>(), currentFileSystemAccessor,
                 Mock.Of<ILogger>(), plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(_ => _.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>()) == new List<InterviewBinaryDataDescriptor>()));
         }
