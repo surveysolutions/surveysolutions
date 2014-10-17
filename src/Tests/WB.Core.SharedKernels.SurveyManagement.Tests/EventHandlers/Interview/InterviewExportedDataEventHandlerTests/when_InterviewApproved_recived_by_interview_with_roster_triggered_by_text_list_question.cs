@@ -6,11 +6,14 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
@@ -18,6 +21,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
+            dataExportServiceMock = CreateDataExportService(r => result = r);
+
             questionInsideRosterGroupId = Guid.Parse("12222222222222222222222222222222");
             rosterId = Guid.Parse("13333333333333333333333333333333");
 
@@ -49,8 +54,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                 });
 
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                () => questionnarie,
-                CreateInterviewDataWith2PropagatedLevels, r => result = r);
+                templateCreationAction:() => questionnarie,
+                dataCreationAction:CreateInterviewDataWith2PropagatedLevels, dataExportService:dataExportServiceMock.Object);
         };
 
         Because of = () =>
@@ -133,5 +138,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static QuestionnaireDocument questionnarie;
         private static string someAnswer = "some answer";
         private static int maxAnswerCount = 5;
+        private static Mock<IDataExportService> dataExportServiceMock;
     }
 }

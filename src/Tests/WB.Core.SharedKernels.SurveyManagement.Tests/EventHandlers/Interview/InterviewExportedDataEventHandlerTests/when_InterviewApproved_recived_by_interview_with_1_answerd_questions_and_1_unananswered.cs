@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Moq;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
@@ -16,7 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         {
             answeredQuestionId = Guid.Parse("10000000000000000000000000000000");
             unansweredQuestionId = Guid.Parse("11111111111111111111111111111111");
-
+            dataExportServiceMock = CreateDataExportService(r => result = r);
             variableNameAndQuestionId = new Dictionary<string, Guid>
             {
                 { "q1", answeredQuestionId },
@@ -24,8 +27,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             };
             questionnaireDocument = CreateQuestionnaireDocument(variableNameAndQuestionId);
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                () => questionnaireDocument,
-                () => CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)), r => result = r);
+                templateCreationAction:() => questionnaireDocument,
+                dataCreationAction: () => CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)), dataExportService: dataExportServiceMock.Object);
         };
 
         Because of = () =>
@@ -55,5 +58,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static Guid answeredQuestionId;
         private static Guid unansweredQuestionId;
         private static QuestionnaireDocument questionnaireDocument;
+        private static Mock<IDataExportService> dataExportServiceMock;
     }
 }
