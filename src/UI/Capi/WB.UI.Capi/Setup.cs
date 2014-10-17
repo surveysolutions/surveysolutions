@@ -19,7 +19,7 @@ namespace WB.UI.Capi
         {
             base.InitializeViewLookup();
             var container = Mvx.Resolve<IMvxViewsContainer>();
-           // container.Add(typeof(LoginViewModel), typeof(LoginActivity));
+            container.Add(typeof(LoginViewModel), typeof(LoginActivity));
             container.Add(typeof(FinishIntallationViewModel), typeof(FinishInstallationActivity));
         }
 

@@ -275,7 +275,9 @@
     <AndroidResource Include="Resources\Drawable\splash.png" />
     <AndroidResource Include="Resources\Drawable\capi_splash.png" />
     <AndroidResource Include="Resources\Drawable\capi_icon.png" />
-    <AndroidResource Include="Resources\Values\Themes.xml" />
+    <AndroidResource Include="Resources\Values\Themes.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
