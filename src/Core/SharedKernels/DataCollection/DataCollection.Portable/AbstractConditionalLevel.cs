@@ -284,6 +284,11 @@ namespace WB.Core.SharedKernels.DataCollection
             return !answer.HasValue;
         }
 
+        protected bool IsAnswerEmpty<TY>(TY answer) where TY : class
+        {
+            return answer == null;
+        }
+
         protected bool IsAnswerEmpty<TY>(TY[] answer) where TY : struct
         {
             return answer == null || answer.Length > 0;
