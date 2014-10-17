@@ -31,8 +31,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetEnvironmentContentFileName(string levelName)
         {
-            return string.Format("{0}.do", levelName);
+            return string.Format("{0}.{1}", levelName, ContentFileNameExtension);
         }
+
+        public string ContentFileNameExtension { get { return "do"; } }
 
         private static void BuildInsheet(string fileName, StringBuilder doContent)
         {

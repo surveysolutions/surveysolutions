@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     {
         Establish context = () =>
         {
-            dataFileExportServiceMock = new Mock<IDataFileExportService>();
+            dataFileExportServiceMock = new Mock<IDataExportWriter>();
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
 
             fileSystemAccessorMock.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
 
         private static FileBasedDataExportService fileBasedDataExportService;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
-        private static Mock<IDataFileExportService> dataFileExportServiceMock;
+        private static Mock<IDataExportWriter> dataFileExportServiceMock;
 
     }
 }

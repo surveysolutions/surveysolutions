@@ -8,6 +8,7 @@
     @Scripts.Render("~/Scripts/viewmodels/pages/questionnaires.js")
     <script type="text/javascript">
         var $getExportedDataUrl = '@Url.Action("GetExportedData", "ImportExport")';
+        var $getExportedApprovedDataUrl = '@Url.Action("GetExportedApprovedData", "ImportExport")';
         var $getExportedFilesUrl = '@Url.Action("GetExportedFiles", "ImportExport")';
         var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
         var $batchUploadUrl = '@Url.Action("BatchUpload", "HQ")';
@@ -80,7 +81,11 @@
                 <td>
                     <a class="btn btn-success" data-bind="attr: { href: $getExportedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
                         <i class=" glyphicon glyphicon-download">
-                        </i> CSV
+                        </i> TAB
+                    </a>
+                    <a class="btn btn-success" data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                        <i class=" glyphicon glyphicon-download">
+                        </i> Approved data
                     </a>
                     <a class="btn btn-success" data-bind="attr: { href: $getExportedFilesUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
                         <i class=" glyphicon glyphicon-download">
