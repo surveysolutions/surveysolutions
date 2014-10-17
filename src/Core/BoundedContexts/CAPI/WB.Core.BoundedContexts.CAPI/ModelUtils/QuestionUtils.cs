@@ -22,12 +22,6 @@ namespace WB.Core.BoundedContexts.Capi.ModelUtils
             return CastAnswerToSingleDimensionalArray<decimal>(answer, decimal.TryParse) ?? CastAnswerToDecimal(answer);
         }
 
-        public static decimal? CastToDecimal(object answer)
-        {
-            decimal d;
-            return decimal.TryParse((answer ?? "").ToString(), out d) ? d : (decimal?)null;
-        }
-
         public static decimal[][] ExtractSelectedOptionsOfLinkedQuestion(object answer)
         {
             if (answer == null)
