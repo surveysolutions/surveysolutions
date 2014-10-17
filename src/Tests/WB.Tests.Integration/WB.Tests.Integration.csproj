@@ -76,6 +76,7 @@
     <Compile Include="Create.cs" />
     <Compile Include="InterviewStatistics\Create.cs" />
     <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
+    <Compile Include="LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
     <Compile Include="LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
