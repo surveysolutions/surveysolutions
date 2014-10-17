@@ -83,14 +83,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void SetAnswer(object answer)
         {
-            var selectedAnswer = QuestionUtils.CastToDecimal(answer);
+            var selectedAnswer = QuestionUtils.ExtractSelectedOptions(answer);
 
             if (selectedAnswer == null)
                 return;
 
             foreach (var item in this.filteredAnswers ?? AnswerOptions)
             {
-                item.Selected = selectedAnswer == item.Value;
+                item.Selected = selectedAnswer[0] == item.Value;
             }
 
             base.SetAnswer(answer);
