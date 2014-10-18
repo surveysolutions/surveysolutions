@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -269,5 +271,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             return generatedScopesTypeNames[scopeStringKey];
         }
+
+
+        private static bool getQ()
+        {
+            return true;
+        }
+
+        private Func<bool> result = () =>
+        {
+            if(getQ())  
+                return true;
+            else
+            {
+                return getQ();
+            }
+        };
+
     }
 }
