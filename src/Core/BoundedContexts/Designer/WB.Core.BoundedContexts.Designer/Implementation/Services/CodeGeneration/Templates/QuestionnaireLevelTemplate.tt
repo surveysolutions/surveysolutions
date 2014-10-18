@@ -19,20 +19,18 @@
         {#>
             EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);
         <#
-            var validationMethods = new List<string>();
+            bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations) || question.IsMandatory;                       
 
-            if(!string.IsNullOrWhiteSpace(question.Validations))
-                validationMethods.Add(question.GeneratedValidationsMethodName);
-            
-            if(question.IsMandatory)
-                validationMethods.Add(question.GeneratedMandatoryMethodName);
-
-            if(validationMethods.Count > 0)
+            if(hasAnyValidation)
             {#>    
-            ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] {             
-            <#foreach (var methodName in validationMethods)
-            {#>  <#= methodName #> , <# }#>
-            });             
+            ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] {                             
+                <#if(question.IsMandatory) {#>  
+                <#= question.GeneratedMandatoryMethodName #> ,                                               
+                <# }#>
+                <#if(!string.IsNullOrWhiteSpace(question.Validations)) {#>  
+                    () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
+                <# }#>
+            }); 
         <# }#>
             AddUpdaterToMap(IdOf.<#= question.GeneratedIdName#>, (<#=question.GeneratedTypeName#> val) => {<#=question.GeneratedMemberName#>  = val; });
         <# }#>
