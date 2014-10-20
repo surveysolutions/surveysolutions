@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument questionnaire = this.documentStorage.GetById(evnt.EventSourceId);
 
-            questionnaire.AreExpressionsInCSharpLanguage = true;
+            questionnaire.UsesCSharp = true;
 
             this.UpdateQuestionnaire(evnt, questionnaire);
         }
