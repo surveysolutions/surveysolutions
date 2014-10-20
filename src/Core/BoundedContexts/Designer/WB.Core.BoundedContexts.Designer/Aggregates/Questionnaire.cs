@@ -925,8 +925,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 clonedDocument.SharedPersons.Clear();
             }
 
-            bool areExpressionsInCSharpLanguage = source.AreExpressionsInCSharpLanguage;
-
             ApplyEvent(new QuestionnaireCloned
             {
                 QuestionnaireDocument = clonedDocument,
@@ -934,7 +932,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ClonedFromQuestionnaireVersion = clonedDocument.LastEventSequence
             });
 
-            if (areExpressionsInCSharpLanguage)
+            if (source.UsesCSharp)
             {
                 this.ApplyEvent(new ExpressionsMigratedToCSharp());
             }

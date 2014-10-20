@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.UI.WebControls;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Shared.Web.Filters;
@@ -26,11 +29,14 @@ namespace WB.UI.Designer.Api
 
         private readonly ILogger logger;
         private readonly ICommandService commandService;
+        private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
 
-        public NCalcToSharpController(ILogger logger, ICommandService commandService)
+        public NCalcToSharpController(ILogger logger, ICommandService commandService,
+            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory)
         {
             this.logger = logger;
             this.commandService = commandService;
+            this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
         }
 
         public HttpResponseMessage Get()
@@ -81,7 +87,45 @@ namespace WB.UI.Designer.Api
 
         private void MigrateAllQuestionnaires()
         {
-            throw new NotImplementedException();
+            int total = -1, migrated = 0, failed = 0;
+
+            UpdateStatus("started to migrate all questionnaires");
+            try
+            {
+                UpdateStatus("detecting questionnaires which should be migrated");
+                total = this.questionnaireInfoViewFactory.CountQuestionnairesNotMigratedToCSharp();
+
+                IEnumerable<Guid> questionnaireIds = this.questionnaireInfoViewFactory.GetQuestionnairesNotMigratedToCSharp();
+
+                foreach (var questionnaireId in questionnaireIds)
+                {
+                    try
+                    {
+                        UpdateStatus(string.Format("migrating questionnaire {0} (total: {1}, migrated: {2}, failed: {3})",
+                            questionnaireId.FormatGuid(), total, migrated, failed));
+
+                        this.commandService.Execute(new MigrateExpressionsToCSharp(questionnaireId));
+
+                        migrated++;
+                    }
+                    catch (Exception exception)
+                    {
+                        failed++;
+
+                        this.logger.Error(string.Format("Error migrating questionnaire '{0}'.", questionnaireId), exception);
+                    }
+                }
+
+                UpdateStatus(string.Format("finished migration of all questionnaires (total: {0}, migrated: {1}, failed: {2})",
+                    total, migrated, failed));
+            }
+            catch (Exception exception)
+            {
+                this.logger.Error("Unexpected unhandled error while migrating all questionnaires.", exception);
+
+                UpdateStatus(string.Format("unexpectedly failed to migrate all questionnaires (total: {1}, migrated: {2}, failed: {3}){0}{0}{4}",
+                    Environment.NewLine, total, migrated, failed, exception));
+            }
         }
 
         private static void PerformMigration(Action migrate)

@@ -28,8 +28,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         Because of = () =>
             denormalizer.Handle(@event);
 
-        It should_set_document_language_marker_to_csharp = () =>
-            questionnaireDocument.AreExpressionsInCSharpLanguage.ShouldBeTrue();
+        It should_set_document_csharp_marker_to_true = () =>
+            questionnaireDocument.UsesCSharp.ShouldEqual(true);
 
         private static QuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<ExpressionsMigratedToCSharp> @event;

@@ -21,7 +21,7 @@ namespace Main.Core.Documents
         /// </summary>
         bool IsPublic { get; set; }
 
-        bool AreExpressionsInCSharpLanguage { get; set; }
+        bool UsesCSharp { get; set; }
 
         void Add(IComposite c, Guid? parentKey, Guid? parentPropagationKey);
 
