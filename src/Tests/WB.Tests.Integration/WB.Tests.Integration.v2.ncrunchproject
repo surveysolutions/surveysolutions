@@ -38,5 +38,8 @@
     <NamedTestSelector>
       <TestName>WB.Tests.Integration.LanguageTests.when_answering_on_question_condition_expression_throws_exception_1.should_enable_second_question</TestName>
     </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>WB.Tests.Integration.LanguageTests.ConditionsChaining.when_question_A_disables_question_B_and_B_disables_group_C.should_enable_second_group</TestName>
+    </NamedTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>
