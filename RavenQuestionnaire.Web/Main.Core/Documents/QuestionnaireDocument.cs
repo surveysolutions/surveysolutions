@@ -42,6 +42,8 @@ namespace Main.Core.Documents
 
         public bool IsPublic { get; set; }
 
+        public bool AreExpressionsInCSharpLanguage { get; set; }
+
         private IComposite parent;
 
         private ILogger logger;
