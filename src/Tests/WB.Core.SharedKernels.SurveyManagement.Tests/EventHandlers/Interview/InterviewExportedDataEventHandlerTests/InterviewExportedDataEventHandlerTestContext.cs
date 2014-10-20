@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
             return new InterviewExportedDataDenormalizer(
                 interviewDataStorageMock.Object,
-                questionnaireExportStructureMock.Object, dataExportService ?? Mock.Of<IDataExportService>(), userDocumentWriter.Object);
+                questionnaireExportStructureMock.Object, dataExportService ?? Mock.Of<IDataExportService>(), userDocumentWriter.Object, Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>());
         }
 
         protected static Mock<IDataExportService> CreateDataExportService(Action<InterviewDataExportView> returnStoredView = null)
