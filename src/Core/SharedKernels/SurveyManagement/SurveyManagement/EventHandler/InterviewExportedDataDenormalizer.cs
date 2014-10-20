@@ -7,6 +7,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Quartz.Util;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
@@ -23,7 +24,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class InterviewExportedDataDenormalizer : IEventHandler<InterviewApprovedByHQ>, 
+    internal class InterviewExportedDataDenormalizer : 
+        IEventHandler<InterviewApprovedByHQ>, 
         IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewCompleted>,
@@ -34,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewRejectedByHQ>,
         IEventHandler<TextQuestionAnswered>,
-        IEventHandler< MultipleOptionsQuestionAnswered>,
+        IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<NumericRealQuestionAnswered>,
         IEventHandler<NumericQuestionAnswered>,
@@ -45,42 +47,44 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<TextListQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
+        IEventHandler<PictureQuestionAnswered>,
 
         IEventHandler
     {
         private const string UnknownUserRole = "<UNKNOWN ROLE>";
+        private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
         private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
+        private readonly IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IDataExportService dataExportService;
 
-        private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[]
-        { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
-
         public InterviewExportedDataDenormalizer(IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
-            IDataExportService dataExportService, IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter)
+            IDataExportService dataExportService, IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
+            IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter)
         {
             this.interviewDataWriter = interviewDataWriter;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
             this.dataExportService = dataExportService;
             this.users = users;
             this.interviewSummaryWriter = interviewSummaryWriter;
+            this.recordFirstAnswerMarkerViewWriter = recordFirstAnswerMarkerViewWriter;
         }
 
         public string Name { get { return this.GetType().Name; } }
 
         public Type[] UsesViews
         {
-            get { return new Type[] { typeof(InterviewData), typeof(UserDocument), typeof(InterviewActionLog), typeof(QuestionnaireExportStructure) }; }
+            get { return new Type[] { typeof(InterviewData), typeof(UserDocument), typeof(RecordFirstAnswerMarkerView), typeof(QuestionnaireExportStructure) }; }
         }
 
-        public Type[] BuildsViews { get { return new Type[] { typeof(InterviewDataExportView), typeof(InterviewActionLog) }; } }
+        public Type[] BuildsViews { get { return new Type[] { typeof(InterviewDataExportView), typeof(RecordFirstAnswerMarkerView) }; } }
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.EventTimeStamp, InterviewExportedAction.ApproveByHeadquarter);
+            RecordAction(InterviewExportedAction.ApproveByHeadquarter, evnt.Payload.UserId, evnt.EventSourceId, evnt.EventTimeStamp);
         }
 
         private void UpdateInterviewData(Guid interviewId, Guid userId, DateTime timeStamp, InterviewExportedAction action)
@@ -99,13 +103,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             this.dataExportService.AddExportedDataByInterview(interviewDataExportView);
 
-            UserDocument responsible = this.users.GetById(userId);
-            var userName = this.GetUserName(responsible);
-
-            this.dataExportService.AddInterviewAction(interview.Document.QuestionnaireId,
-                interview.Document.QuestionnaireVersion, CreateInterviewActionExportView(interviewId, action,
-                    userName, this.GetUserRole(responsible), timeStamp));
+            RecordAction(action, userId, interviewId, timeStamp, interview.Document.QuestionnaireId, interview.Document.QuestionnaireVersion);
         }
+
+        private void RecordAction(InterviewExportedAction action, Guid userId, Guid interviewId, DateTime timeStamp, Guid? questionnaireId=null, long? questionnaireVersion=null)
+        {
+            if (!questionnaireId.HasValue || !questionnaireVersion.HasValue)
+            {
+                var interviewSummary = interviewSummaryWriter.GetById(interviewId);
+                if(interviewSummary==null)
+                    return;
+                questionnaireId = interviewSummary.QuestionnaireId;
+                questionnaireVersion = interviewSummary.QuestionnaireVersion;
+            }
+            UserDocument responsible = this.users.GetById(userId);
+            if (responsible == null)
+                return;
+            var userName = this.GetUserName(responsible);
+            this.dataExportService.AddInterviewAction(questionnaireId.Value,
+                questionnaireVersion.Value, CreateInterviewActionExportView(interviewId, action,
+                    userName, this.GetUserRole(responsible), timeStamp));
+
+            if (listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(action))
+                recordFirstAnswerMarkerViewWriter.Store(
+                    new RecordFirstAnswerMarkerView(interviewId, questionnaireId.Value, questionnaireVersion.Value),
+                    interviewId);
+            else
+                recordFirstAnswerMarkerViewWriter.Remove(interviewId);
+        }
+
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
         {
             var dataRecords = new List<InterviewDataExportRecord>();
@@ -220,23 +246,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void RecordFirstAnswerIfNeeded(Guid interviewId, Guid userId, DateTime answerTime)
         {
-            //TODO record first answer
-
-            /*      var interviewActionLog = this.interviewActionLogs.GetById(interviewId);
-            if (interviewActionLog == null)
+            var recordFirstAnswerMarkerView = this.recordFirstAnswerMarkerViewWriter.GetById(interviewId);
+            if (recordFirstAnswerMarkerView == null)
                 return;
-
-            if (!interviewActionLog.Actions.Any() || !listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(interviewActionLog.Actions.Last().Action))
-                return;
-
             UserDocument responsible = this.users.GetById(userId);
+
             if (responsible == null || !responsible.Roles.Contains(UserRoles.Operator))
                 return;
 
-            interviewActionLog.Actions.Add(CreateInterviewActionExportView(interviewId, InterviewExportedAction.FirstAnswerSet,
-                responsible.UserName, this.GetUserRole(responsible), answerTime));
-
-            interviewActionLogs.Store(interviewActionLog, interviewId);*/
+            var userName = this.GetUserName(responsible);
+            this.dataExportService.AddInterviewAction(recordFirstAnswerMarkerView.QuestionnaireId,
+                recordFirstAnswerMarkerView.QuestionnaireVersion, this.CreateInterviewActionExportView(interviewId, InterviewExportedAction.FirstAnswerSet,
+                    userName, this.GetUserRole(responsible), answerTime));
+                this.recordFirstAnswerMarkerViewWriter.Remove(interviewId);
         }
 
         private string GetUserRole(UserDocument user)
@@ -274,7 +296,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.EventTimeStamp, InterviewExportedAction.InterviewerAssigned);
+            RecordAction(InterviewExportedAction.InterviewerAssigned, evnt.Payload.UserId, evnt.EventSourceId, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
@@ -284,7 +306,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewRestarted> evnt)
         {
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.RestartTime ?? evnt.EventTimeStamp, InterviewExportedAction.Restarted);
+            RecordAction(InterviewExportedAction.Restarted, evnt.Payload.UserId, evnt.EventSourceId, evnt.Payload.RestartTime ?? evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<InterviewApproved> evnt)
@@ -299,7 +321,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
         {
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.EventTimeStamp, InterviewExportedAction.RejectedByHeadquarter);
+            RecordAction(InterviewExportedAction.RejectedByHeadquarter, evnt.Payload.UserId, evnt.EventSourceId, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
@@ -358,6 +380,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
+        {
+            this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<PictureQuestionAnswered> evnt)
         {
             this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
         }

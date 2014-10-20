@@ -24,20 +24,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         {
             dataExportService = new Mock<IDataExportService>();
             questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>());
+            recordFirstAnswerMarkerViewStorage=new Mock<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>();
             foreach (var questionAnswered in ListOfQuestionAnsweredEventsHandledByDenormalizer)
             {
                 var interviewId = Guid.NewGuid();
-                var interviewActionLog = new InterviewActionLog(interviewId, new List<InterviewActionExportView>());
-                interviewActionLog.Actions.Add(CreateInterviewActionExportView(interviewId,
-                    InterviewExportedAction.InterviewerAssigned));
 
-                eventsAndInterviewActionLog.Add(interviewId,
-                  new Tuple<QuestionAnswered, InterviewActionLog>(questionAnswered, interviewActionLog));
+                eventsAndInterviewActionLog.Add(interviewId, questionAnswered);
+                recordFirstAnswerMarkerViewStorage.Setup(x => x.GetById(Moq.It.IsAny<string>()))
+                    .Returns(new RecordFirstAnswerMarkerView(interviewId, Guid.NewGuid(), 1));
             }
-
+            
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
-                CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name", Roles = new List<UserRoles>{UserRoles.Operator}});
+                CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name", Roles = new List<UserRoles> { UserRoles.Operator } }, recordFirstAnswerMarkerViewStorage.Object);
         };
 
         Because of = () => HandleQuestionAnsweredEventsByDenormalizer(interviewExportedDataDenormalizer, eventsAndInterviewActionLog);
@@ -51,6 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static QuestionnaireDocument questionnarie;
         private static Mock<IDataExportService> dataExportService;
-        private static Dictionary<Guid, Tuple<QuestionAnswered, InterviewActionLog>> eventsAndInterviewActionLog = new Dictionary<Guid, Tuple<QuestionAnswered, InterviewActionLog>>();
+        private static Mock<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>> recordFirstAnswerMarkerViewStorage;
+        private static Dictionary<Guid, QuestionAnswered> eventsAndInterviewActionLog = new Dictionary<Guid, QuestionAnswered>();
     }
 }
