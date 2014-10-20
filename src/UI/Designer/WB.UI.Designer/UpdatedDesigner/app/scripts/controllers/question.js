@@ -276,6 +276,16 @@
                 }
             };
 
+            var questionTypesDoesNotSupportValidations = [
+                "TextList",
+                "QRBarcode",
+                "Multimedia",
+                "GpsCoordinates"];
+            
+            $scope.doesQuestionTypeSupportValidations = function (type) {
+                return !_.contains(questionTypesDoesNotSupportValidations, type);
+            };
+
             $scope.loadQuestion();
         }
     );
