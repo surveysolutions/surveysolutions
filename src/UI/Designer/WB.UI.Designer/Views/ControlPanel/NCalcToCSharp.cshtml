@@ -31,7 +31,7 @@
         <div class="form-group">
             <label class="col-xs-3 control-label">Migrate all questionnaires</label>
             <div class="col-xs-9">
-                <button id="migrateAll" type="button" class="btn btn-default">Migrate all</button>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmationDialog">Migrate all</button>
             </div>
         </div>
         <pre id="migrateAllOutput" class="help-block"></pre>
@@ -39,6 +39,34 @@
 </div>
 
 <pre id="statusArea" style="height: 200px; overflow-y: scroll;">requesting status...</pre>
+
+<div id="confirmationDialog" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="confirmationText" class="control-label">
+                            Operation will take a huge amount of time (up to a few days) and server may become unresponsive.
+                            Please enter 'MIGRATE ALL' if you are sure you want to start this operation.
+                        </label>
+                        <div class="">
+                            <input id="confirmationText" type="text" class="form-control" value="" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="migrateAll" type="button" class="btn btn-primary">Migrate</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts
 {
@@ -55,6 +83,14 @@
             });
 
             $('#migrateAll').click(function() {
+
+                $('#confirmationDialog').modal('hide');
+
+                if ($('#confirmationText').val() != 'MIGRATE ALL')
+                    return;
+
+                $('#confirmationText').val('');
+
                 performPrettyAjaxRequest($('#migrateAllOutput'), {
                     type: 'POST',
                     url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "NCalcToSharp", action = "MigrateAll" })',
