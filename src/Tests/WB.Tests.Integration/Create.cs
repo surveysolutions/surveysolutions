@@ -59,6 +59,17 @@ namespace WB.Tests.Integration
             };
         }
 
+        public static Group Group(Guid id, string variable = null, string conditition = null, params IComposite[] questions)
+        {
+            return new Group
+            {
+                PublicKey = id,
+                VariableName = variable,
+                ConditionExpression = conditition,
+                Children = questions.ToList()
+            };
+        }
+
         public static Questionnaire Questionnaire(Guid actorId, QuestionnaireDocument questionnaireDocument)
         {
             return new Questionnaire(actorId, questionnaireDocument, false, string.Empty);
