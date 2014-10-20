@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Spec;
@@ -45,18 +46,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = null;
         };
 
-        It should_raise_2_GroupUpdated_events = () =>
-            eventContext.ShouldContainEvents<GroupUpdated>(count: 2);
+        It should_raise_TemplateImported_event = () =>
+            eventContext.ShouldContainEvent<TemplateImported>();
 
-        It should_raise_GroupUpdated_event_for_group_B_with_enablement_condition_converted_to_csharp = () =>
-            eventContext.ShouldContainEvent<GroupUpdated>(@event
-                => @event.GroupPublicKey == groupBId
-                && @event.ConditionExpression == "C# EC B");
+        It should_set_group_B_enablement_condition_to_converted_to_csharp = () =>
+            eventContext.GetSingleEvent<TemplateImported>().Source.Find<IGroup>(groupBId)
+                .ConditionExpression.ShouldEqual("C# EC B");
 
-        It should_raise_GroupUpdated_event_for_roster_D_with_enablement_condition_converted_to_csharp = () =>
-            eventContext.ShouldContainEvent<GroupUpdated>(@event
-                => @event.GroupPublicKey == rosterDId
-                && @event.ConditionExpression == "C# EC D");
+        It should_set_roster_D_enablement_condition_to_converted_to_csharp = () =>
+            eventContext.GetSingleEvent<TemplateImported>().Source.Find<IGroup>(rosterDId)
+                .ConditionExpression.ShouldEqual("C# EC D");
 
         It should_raise_ExpressionsMigratedToCSharp_event = () =>
             eventContext.ShouldContainEvent<ExpressionsMigratedToCSharp>();
