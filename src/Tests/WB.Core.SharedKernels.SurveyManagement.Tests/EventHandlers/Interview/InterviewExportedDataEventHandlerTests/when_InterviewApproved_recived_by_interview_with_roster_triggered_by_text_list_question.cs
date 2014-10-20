@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -59,7 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         };
 
         Because of = () =>
-             interviewExportedDataDenormalizer.Handle(CreateInterviewApprovedByHQPublishableEvent());
+             interviewExportedDataDenormalizer.Handle(CreatePublishableEvent(() => new InterviewApproved(Guid.NewGuid(), "")));
 
         It should_records_count_equals_4 = () =>
            GetLevel(result, new[] { rosterSizeQuestionId }).Records.Length.ShouldEqual(2);

@@ -150,7 +150,6 @@
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextListQuestionAnswered_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_TextQuestionAnswered_recived_and_answered_question_is_roster_title.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataEventHandlerTestContext.cs" />
-    <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataDenormalizerShouldExtensions.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_ApprovedBySupervisor_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_Completed_recived.cs" />
     <Compile Include="EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_InterviewApproved_recived.cs" />

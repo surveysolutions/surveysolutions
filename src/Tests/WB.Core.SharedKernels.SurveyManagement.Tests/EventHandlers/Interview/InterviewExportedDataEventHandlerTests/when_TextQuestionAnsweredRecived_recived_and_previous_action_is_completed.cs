@@ -30,11 +30,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             foreach (var questionAnswered in ListOfQuestionAnsweredEventsHandledByDenormalizer)
             {
                 var interviewId = Guid.NewGuid();
-                var interviewActionLog = new InterviewActionLog(interviewId, new List<InterviewActionExportView>());
-                interviewActionLog.Actions.Add(CreateInterviewActionExportView(interviewId, InterviewExportedAction.Completed));
 
-                eventsAndInterviewActionLog.Add(interviewId,
-                    new Tuple<QuestionAnswered, InterviewActionLog>(questionAnswered, interviewActionLog));
+                eventsAndInterviewActionLog.Add(interviewId, questionAnswered);
             }
 
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
@@ -44,11 +41,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
         Because of = () => HandleQuestionAnsweredEventsByDenormalizer(interviewExportedDataDenormalizer, eventsAndInterviewActionLog);
 
-        It should_FirstAnswerSet_action_be_absent_in_list_of_actions_for_each_event = () => eventsAndInterviewActionLog.ShouldContainInterviewActionLog(i=>!i.Actions.Select(a => a.Action).Contains(InterviewExportedAction.FirstAnswerSet));
+        It should_interview_action_never_be_added = () => dataExportService.Verify(x=>x.AddInterviewAction(
+            Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>(), Moq.It.IsAny<InterviewActionExportView>()),Times.Never);
         
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static QuestionnaireDocument questionnarie;
         private static Mock<IDataExportService> dataExportService;
-        private static Dictionary<Guid, Tuple<QuestionAnswered, InterviewActionLog>> eventsAndInterviewActionLog = new Dictionary<Guid, Tuple<QuestionAnswered, InterviewActionLog>>();
+        private static Dictionary<Guid, QuestionAnswered> eventsAndInterviewActionLog = new Dictionary<Guid, QuestionAnswered>();
+ 
     }
 }
