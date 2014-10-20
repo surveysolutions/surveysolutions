@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Spec;
@@ -50,20 +51,24 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             eventContext = null;
         };
 
-        It should_raise_2_QuestionChanged_events = () =>
-            eventContext.ShouldContainEvents<QuestionChanged>(count: 2);
+        It should_raise_TemplateImported_event = () =>
+            eventContext.ShouldContainEvent<TemplateImported>();
 
-        It should_raise_QuestionChanged_event_for_question_B_with_enablement_condition_and_validation_expression_converted_to_csharp = () =>
-            eventContext.ShouldContainEvent<QuestionChanged>(@event
-                => @event.PublicKey == questionBId
-                && @event.ConditionExpression == "C# EC B"
-                && @event.ValidationExpression == "C# VE B");
+        It should_set_question_B_enablement_condition_to_converted_to_csharp = () =>
+            eventContext.GetSingleEvent<TemplateImported>().Source.Find<IQuestion>(questionBId)
+                .ConditionExpression.ShouldEqual("C# EC B");
 
-        It should_raise_QuestionChanged_event_for_question_D_with_enablement_condition_and_validation_expression_converted_to_csharp = () =>
-            eventContext.ShouldContainEvent<QuestionChanged>(@event
-                => @event.PublicKey == questionDId
-                && @event.ConditionExpression == "C# EC D"
-                && @event.ValidationExpression == "C# VE D");
+        It should_set_question_B_validation_expression_to_converted_to_csharp = () =>
+            eventContext.GetSingleEvent<TemplateImported>().Source.Find<IQuestion>(questionBId)
+                .ValidationExpression.ShouldEqual("C# VE B");
+
+        It should_set_question_D_enablement_condition_to_converted_to_csharp = () =>
+            eventContext.GetSingleEvent<TemplateImported>().Source.Find<IQuestion>(questionDId)
+                .ConditionExpression.ShouldEqual("C# EC D");
+
+        It should_set_question_D_validation_expression_to_converted_to_csharp = () =>
+            eventContext.GetSingleEvent<TemplateImported>().Source.Find<IQuestion>(questionDId)
+                .ValidationExpression.ShouldEqual("C# VE D");
 
         It should_raise_ExpressionsMigratedToCSharp_event = () =>
             eventContext.ShouldContainEvent<ExpressionsMigratedToCSharp>();
