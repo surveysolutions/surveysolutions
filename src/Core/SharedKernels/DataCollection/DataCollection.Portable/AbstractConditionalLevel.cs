@@ -294,6 +294,11 @@ namespace WB.Core.SharedKernels.DataCollection
             return answer == null || answer.Length > 0;
         }
 
+        protected bool IsAnswerEmpty(Tuple<decimal, string>[] answer)
+        {
+            return answer == null || answer.Any();
+        }
+
         public void CalculateConditionChanges(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,
             out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled)
         {
