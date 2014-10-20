@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -74,7 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         };
 
         Because of = () =>
-             interviewExportedDataDenormalizer.Handle(CreateInterviewApprovedByHQPublishableEvent());
+             interviewExportedDataDenormalizer.Handle(CreatePublishableEvent(() => new InterviewApproved(Guid.NewGuid(), "")));
 
         It should_linked_question_have_one_answer = () =>
            GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].Questions[0].Answers.Length.ShouldEqual(1);

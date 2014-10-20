@@ -23,8 +23,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             dataExportService = new Mock<IDataExportService>();
             questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>());
 
-            interviewActionLog = new InterviewActionLog(interviewId, new List<InterviewActionExportView>());
-
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 () => questionnarie,
                 CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name" });
@@ -44,6 +42,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static QuestionnaireDocument questionnarie;
         private static Mock<IDataExportService> dataExportService;
         private static Guid interviewId = Guid.NewGuid();
-        private static InterviewActionLog interviewActionLog;
     }
 }

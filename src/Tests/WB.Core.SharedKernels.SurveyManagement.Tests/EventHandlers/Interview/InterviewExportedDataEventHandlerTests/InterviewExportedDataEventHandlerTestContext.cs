@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using It = Moq.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
@@ -35,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
           Func<QuestionnaireDocument> templateCreationAction,
           Func<InterviewData> dataCreationAction = null, IDataExportService dataExportService = null,
-          UserDocument userDocument = null)
+          UserDocument userDocument = null, IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage=null)
         {
             var interviewDataStorageMock = new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
             var questionnaire = templateCreationAction();
@@ -66,7 +67,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
             return new InterviewExportedDataDenormalizer(
                 interviewDataStorageMock.Object,
-                questionnaireExportStructureMock.Object, dataExportService ?? Mock.Of<IDataExportService>(), userDocumentWriter.Object, Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>());
+                questionnaireExportStructureMock.Object, dataExportService ?? Mock.Of<IDataExportService>(), userDocumentWriter.Object, Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_=>_.GetById(
+                    It.IsAny<string>())==new InterviewSummary()),
+                recordFirstAnswerMarkerViewStorage?? Mock.Of<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>());
         }
 
         protected static Mock<IDataExportService> CreateDataExportService(Action<InterviewDataExportView> returnStoredView = null)
@@ -179,16 +182,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                     new MultipleOptionsLinkedQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new decimal[0][]),
                     new SingleOptionLinkedQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new decimal[0]),
                     new TextListQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new Tuple<decimal, string>[0]),
-                    new QRBarcodeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, "answer")
+                    new QRBarcodeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, "answer"),
+                    new PictureQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, "answer.png")
                 };
             }
         }
 
-        protected static void HandleQuestionAnsweredEventsByDenormalizer(InterviewExportedDataDenormalizer denormalizer, Dictionary<Guid, Tuple<QuestionAnswered, InterviewActionLog>> eventsAndInterviewActionLog)
+        protected static void HandleQuestionAnsweredEventsByDenormalizer(InterviewExportedDataDenormalizer denormalizer, Dictionary<Guid, QuestionAnswered> eventsAndInterviewActionLog)
         {
             foreach (var eventAndInterviewActionLog in eventsAndInterviewActionLog)
             {
-                var eventType = eventAndInterviewActionLog.Value.Item1.GetType();
+                var eventType = eventAndInterviewActionLog.Value.GetType();
                 var publishedEventType = typeof(IPublishedEvent<>).MakeGenericType(eventType);
                 MethodInfo createPublishableEventByEventInstanceMethod =
                     typeof (InterviewExportedDataEventHandlerTestContext).GetMethod("CreatePublishableEventByEventInstance",
@@ -196,7 +200,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                 MethodInfo genericCreatePublishableEventByEventInstanceMethod =
                     createPublishableEventByEventInstanceMethod.MakeGenericMethod(eventType);
                 var publishedEvent = genericCreatePublishableEventByEventInstanceMethod.Invoke(null,
-                    new object[] { eventAndInterviewActionLog.Value.Item1, eventAndInterviewActionLog.Key });
+                    new object[] { eventAndInterviewActionLog.Value, eventAndInterviewActionLog.Key });
 
                 MethodInfo methodInfo = denormalizer.GetType().GetMethod("Handle", new[] { publishedEventType });
 

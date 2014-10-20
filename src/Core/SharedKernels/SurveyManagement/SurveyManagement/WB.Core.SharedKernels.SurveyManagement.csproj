@@ -198,11 +198,11 @@
     <Compile Include="Views\DataExport\ExportedQuestion.cs" />
     <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
     <Compile Include="Views\DataExport\InterviewActionExportView.cs" />
-    <Compile Include="Views\DataExport\InterviewActionLog.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
+    <Compile Include="Views\DataExport\RecordFirstAnswerMarkerView.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalRecord.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalRecordView.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoryFactory.cs" />

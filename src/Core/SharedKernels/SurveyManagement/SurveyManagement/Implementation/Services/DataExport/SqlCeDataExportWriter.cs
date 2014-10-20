@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data.SqlServerCe;
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private const string allDataFolder = "AllData";
         private const string approvedDataFolder = "ApprovedData";
         private const string parentId = "ParentId";
+        
         private readonly ICsvWriterFactory csvWriterFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -42,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public void AddRecords(InterviewDataExportLevelView items, string basePath)
         {
             var commandText = string.Format("DELETE FROM \"{0}\" WHERE {1} = '{2}';", items.LevelName,
-                items.LevelVector.Length == 0 ? "Id" : string.Format("{0}{1}", parentId, items.LevelVector.Length), items.InterviewId);
+               items.LevelVector.Length == 0 ? "Id" : string.Format("{0}{1}", parentId, items.LevelVector.Length), items.InterviewId);
 
             ExecuteSqlLite(basePath, (db) =>
             {
@@ -165,7 +167,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 var columnReader = columnCommand.ExecuteReader();
                 while (columnReader.Read())
                 {
-                    var columnName = columnReader.GetString(0);
                     columnNames.Add(columnReader.GetString(0));
                 }
             }
@@ -269,11 +270,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 }
             });
 
-            var folderPath = basePath.Substring(0, basePath.Length - fileSystemAccessor.GetFileName(basePath).Length);
+            var folderPath = GetFolderPath(basePath);
 
             fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(folderPath));
             if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
                 fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(folderPath));
+        }
+
+        private string GetFolderPath(string dbPath)
+        {
+            return dbPath.Substring(0, dbPath.Length - fileSystemAccessor.GetFileName(dbPath).Length);
         }
 
         public void CreateHeader(HeaderStructureForLevel header, string basePath)
