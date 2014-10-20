@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -25,13 +26,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             dataExportServiceMock = CreateDataExportService(r => result = r);
             interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
                 templateCreationAction: () => questionnarie, dataExportService: dataExportServiceMock.Object,
-                dataCreationAction: CreateInterviewData);
+                dataCreationAction: CreateInterviewData, userDocument: new UserDocument());
         };
 
         Because of = () =>
             interviewExportedDataDenormalizer.Handle(CreatePublishableEvent(() => new InterviewApproved(Guid.NewGuid(),"comment")));
 
-        It should_ApproveByHeadquarter_action_be_added_to_dataExport = () =>
+        It should_ApproveBySupervisor_action_be_added_to_dataExport = () =>
             dataExportServiceMock.Verify(
                 x =>
                     x.AddInterviewAction(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>(),
