@@ -33,11 +33,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             interviewExportedDataDenormalizer.Handle(CreatePublishableEvent(() => new InterviewApproved(Guid.NewGuid(), "comment"),
                 interviewId));
 
-        It should_ApproveByHeadquarter_action_be_added_to_dataExport = () =>
+        It should_ApproveBySupervisor_action_be_added_to_dataExport = () =>
             dataExportService.Verify(
                 x =>
                     x.AddInterviewAction(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>(),
-                        Moq.It.Is<InterviewActionExportView>(view => view.Action == InterviewExportedAction.ApproveByHeadquarter)));
+                        Moq.It.Is<InterviewActionExportView>(view => view.Action == InterviewExportedAction.ApproveBySupervisor)));
 
 
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
