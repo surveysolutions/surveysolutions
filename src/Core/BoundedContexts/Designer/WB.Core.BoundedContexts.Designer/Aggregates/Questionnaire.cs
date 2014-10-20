@@ -888,6 +888,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     PublicKey = Guid.NewGuid()
                 }
             );
+
+            this.ApplyEvent(new ExpressionsMigratedToCSharp());
         }
 
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
@@ -923,12 +925,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 clonedDocument.SharedPersons.Clear();
             }
 
+            bool areExpressionsInCSharpLanguage = source.AreExpressionsInCSharpLanguage;
+
             ApplyEvent(new QuestionnaireCloned
             {
                 QuestionnaireDocument = clonedDocument,
                 ClonedFromQuestionnaireId = clonedDocument.PublicKey,
                 ClonedFromQuestionnaireVersion = clonedDocument.LastEventSequence
             });
+
+            if (areExpressionsInCSharpLanguage)
+            {
+                this.ApplyEvent(new ExpressionsMigratedToCSharp());
+            }
         }
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)

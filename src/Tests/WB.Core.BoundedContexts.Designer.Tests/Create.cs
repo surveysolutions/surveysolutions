@@ -23,20 +23,23 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             {
                 return new TemplateImported { Source = questionnaireDocument };
             }
+
+            public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
+            {
+                return new ExpressionsMigratedToCSharp();
+            }
         }
 
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
             where T : class
         {
-            return ToPublishedEvent<T>(@event, Guid.NewGuid());
+            return @event.ToPublishedEvent();
         }
 
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId)
             where T : class
         {
-            return Mock.Of<IPublishedEvent<T>>(publishedEvent
-                => publishedEvent.Payload == @event &&
-                   publishedEvent.EventSourceId == eventSourceId);
+            return @event.ToPublishedEvent(eventSourceId);
         }
 
         public static IPublishedEvent<QuestionDeleted> QuestionDeletedEvent(string questionId = null)
