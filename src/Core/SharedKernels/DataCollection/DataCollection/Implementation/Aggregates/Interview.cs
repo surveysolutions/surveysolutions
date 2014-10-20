@@ -1331,10 +1331,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerPictureQuestion(userId,
-                questionId, rosterVector, answerTime, pictureFileName, questionnaire);
-
-            this.ApplyInterviewChanges(interviewChanges);
+            this.CalculateInterviewChangesOnAnswerPictureQuestion(userId, questionId, rosterVector, answerTime, pictureFileName, questionnaire);
         }
 
         public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer)
@@ -1467,41 +1464,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerPictureQuestion(Guid userId, Guid questionId, decimal[] rosterVector,
+        private void CalculateInterviewChangesOnAnswerPictureQuestion(Guid userId, Guid questionId, decimal[] rosterVector,
             DateTime answerTime, string pictureFileName, IQuestionnaire questionnaire)
         {
-            var isQuestionMandatory = questionnaire.IsQuestionMandatory(questionId);
-            var questionIdentity = new Identity(questionId, rosterVector);
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateMediaAnswer(questionId, rosterVector, pictureFileName);
 
-            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
-                questionnaire);
-
-            var answerChanges = new List<AnswerChange>()
-            {
-                new AnswerChange(AnswerChangeType.Picture, userId, questionId, rosterVector, answerTime, pictureFileName)
-            };
-
-            var answersDeclaredValid = new List<Identity>();
-            var answersDeclaredInvalid = new List<Identity>();
-
-            if (isQuestionMandatory && string.IsNullOrWhiteSpace(pictureFileName))
-            {
-                answersDeclaredInvalid.Add(questionIdentity);
-            }
-            else
-            {
-                answersDeclaredValid.Add(questionIdentity);
-            }
-
-            var validityChanges = new ValidityChanges(
-                answersDeclaredValid: answersDeclaredValid,
-                answersDeclaredInvalid: answersDeclaredInvalid);
-            return new InterviewChanges(answerChanges, null,
-                validityChanges,
-                null,
-                null,
-                rosterInstancesWithAffectedTitles,
-                pictureFileName);
+            this.ApplyInterviewChanges(this.CalculateInterviewChangesOnAnswerQuestion(
+                this.interviewState,
+                userId,
+                questionId, rosterVector, pictureFileName, pictureFileName, AnswerChangeType.Picture,
+                answerTime,
+                questionnaire,
+                updateState));
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedPropagationVector)
@@ -1518,7 +1492,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             string answerFormattedAsRosterTitle = GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, answeredLinkedQuestion, questionnaire);
 
-            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, selectedPropagationVector); ;
+            Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, selectedPropagationVector);
 
             this.ApplyInterviewChanges(this.CalculateInterviewChangesOnAnswerQuestion(
                 this.interviewState,
