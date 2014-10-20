@@ -44,7 +44,7 @@ namespace WB.UI.Designer.Api
             if (isMigrationInProgress)
                 return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Migration is already in progress.");
 
-            new Task(() => this.MigrateOneQuestionnaire(model.Id)).Start();
+            new Task(() => PerformMigration(() => this.MigrateOneQuestionnaire(model.Id))).Start();
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
@@ -52,41 +52,15 @@ namespace WB.UI.Designer.Api
         [HttpPost]
         public HttpResponseMessage MigrateAll()
         {
-            try
-            {
-                throw new NotImplementedException();
-            }
-            catch (Exception exception)
-            {
-                this.logger.Error("Error migrating all questionnaires.", exception);
+            if (isMigrationInProgress)
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Migration is already in progress.");
 
-                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exception.ToString());
-            }
+            new Task(() => PerformMigration(() => this.MigrateAllQuestionnaires())).Start();
+
+            return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
         private void MigrateOneQuestionnaire(Guid questionnaireId)
-        {
-            if (!isMigrationInProgress)
-            {
-                lock (lockObject)
-                {
-                    if (!isMigrationInProgress)
-                    {
-                        isMigrationInProgress = true;
-                        try
-                        {
-                            this.MigrateOneQuestionnaireImpl(questionnaireId);
-                        }
-                        finally
-                        {
-                            isMigrationInProgress = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void MigrateOneQuestionnaireImpl(Guid questionnaireId)
         {
             UpdateStatus(string.Format("started to migrate questionnaire {0}", questionnaireId.FormatGuid()));
             try
@@ -102,6 +76,33 @@ namespace WB.UI.Designer.Api
                 UpdateStatus(string.Format("failed to migrate questionnaire {1}{0}{0}{2}", Environment.NewLine,
                     questionnaireId.FormatGuid(),
                     exception));
+            }
+        }
+
+        private void MigrateAllQuestionnaires()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void PerformMigration(Action migrate)
+        {
+            if (!isMigrationInProgress)
+            {
+                lock (lockObject)
+                {
+                    if (!isMigrationInProgress)
+                    {
+                        isMigrationInProgress = true;
+                        try
+                        {
+                            migrate();
+                        }
+                        finally
+                        {
+                            isMigrationInProgress = false;
+                        }
+                    }
+                }
             }
         }
 
