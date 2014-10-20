@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -12,5 +13,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         string GetInterviewActionFileName();
         string[] GetAllDataFiles(string basePath);
         string[] GetApprovedDataFiles(string basePath);
+        void DeleteInterviewRecords(string basePath, Guid interviewId);
     }
 }

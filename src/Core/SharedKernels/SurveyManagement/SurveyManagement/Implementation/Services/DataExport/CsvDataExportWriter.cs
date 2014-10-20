@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -132,6 +133,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public string[] GetApprovedDataFiles(string basePath)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void DeleteInterviewRecords(string basePath, Guid interviewId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,5 +14,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         void AddInterviewAction(Guid questionnaireId, long questionnaireVersion, InterviewActionExportView action);
         void CreateExportStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure);
         void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion);
+        void DeleteInterview(Guid questionnaireId, long questionnaireVersion, Guid interviewId);
     }
 }
