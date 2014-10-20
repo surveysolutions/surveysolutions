@@ -968,21 +968,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfExpressionsAreAlreadyMigrated();
 
 
+            bool wasAnyExpressionMigrated = false;
+
             Dictionary<string, string> customMappings = this.BuildCustomMappingsFromIdsToIdentifiers();
+            QuestionnaireDocument newDocument = this.innerDocument.Clone();
 
-            List<GroupUpdated> groupChangedEvents = this.innerDocument
-                .Find<IGroup>(HasEnablementCondition)
-                .Select(group => this.MigrateGroupToRoslyn(group, customMappings))
-                .ToList();
+            foreach (var group in newDocument.Find<IGroup>(HasEnablementCondition))
+            {
+                this.MigrateGroupToRoslyn(group, customMappings);
+                wasAnyExpressionMigrated = true;
+            }
 
-            List<QuestionnaireActiveEvent> questionChangedEvents = this.innerDocument
-                .Find<IQuestion>(HasEnablementConditionOrValidationExpression)
-                .Select(question => this.MigrateQuestionToRoslyn(question, customMappings))
-                .ToList();
+            foreach (var question in newDocument.Find<IQuestion>(HasEnablementConditionOrValidationExpression))
+            {
+                this.MigrateQuestionToRoslyn(question, customMappings);
+                wasAnyExpressionMigrated = true;
+            }
 
 
-            groupChangedEvents.ForEach(this.ApplyEvent);
-            questionChangedEvents.ForEach(this.ApplyEvent);
+            if (wasAnyExpressionMigrated)
+            {
+                this.ApplyEvent(new TemplateImported { Source = newDocument });
+            }
 
             this.ApplyEvent(new ExpressionsMigratedToCSharp());
         }
@@ -4474,123 +4481,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        private GroupUpdated MigrateGroupToRoslyn(IGroup group, Dictionary<string, string> customMappings)
+        private void MigrateGroupToRoslyn(IGroup group, Dictionary<string, string> customMappings)
         {
-            string enablementCondition = this.ConvertExpressionToCSharpIfNotEmpty(group.ConditionExpression, customMappings);
-
-            return new GroupUpdated
-            {
-                GroupPublicKey = group.PublicKey,
-
-                ConditionExpression = enablementCondition,
-
-                GroupText = group.Title,
-                VariableName = group.VariableName,
-                Description = group.Description,
-
-                // not appliable:
-                // ResponsibleId
-            };
+            group.ConditionExpression = this.ConvertExpressionToCSharpIfNotEmpty(@group.ConditionExpression, customMappings);
         }
 
-        private QuestionnaireActiveEvent MigrateQuestionToRoslyn(IQuestion question, Dictionary<string, string> customMappings)
+        private void MigrateQuestionToRoslyn(IQuestion question, Dictionary<string, string> customMappings)
         {
             UpdateCustomMappingsWithContextQuestion(customMappings, question);
 
-            string enablementCondition = this.ConvertExpressionToCSharpIfNotEmpty(question.ConditionExpression, customMappings);
-            string validationExpression = this.ConvertExpressionToCSharpIfNotEmpty(question.ValidationExpression, customMappings);
-
-            if (question is INumericQuestion)
-            {
-                var numericQuestion = (INumericQuestion) question;
-
-                return new NumericQuestionChanged
-                {
-                    PublicKey = question.PublicKey,
-
-                    ConditionExpression = enablementCondition,
-                    ValidationExpression = validationExpression,
-
-                    Featured = question.Featured,
-                    Instructions = question.Instructions,
-                    Mandatory = question.Mandatory,
-                    Capital = question.Capital,
-                    QuestionText = question.QuestionText,
-                    QuestionScope = question.QuestionScope,
-                    StataExportCaption = question.StataExportCaption,
-                    VariableLabel = question.VariableLabel,
-                    ValidationMessage = question.ValidationMessage,
-
-                    MaxAllowedValue = numericQuestion.MaxValue,
-                    IsInteger = numericQuestion.IsInteger,
-                    CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces,
-
-                    // obsolete:
-                    // Triggers
-                    // IsAutopropagating
-                    // MaxValue
-                };
-            }
-
-            if (question is ITextListQuestion)
-            {
-                var textListQuestion = (ITextListQuestion) question;
-
-                return new TextListQuestionChanged
-                {
-                    PublicKey = question.PublicKey,
-
-                    ConditionExpression = enablementCondition,
-
-                    Instructions = question.Instructions,
-                    Mandatory = question.Mandatory,
-                    QuestionText = question.QuestionText,
-                    StataExportCaption = question.StataExportCaption,
-                    VariableLabel = question.VariableLabel,
-
-                    MaxAnswerCount = textListQuestion.MaxAnswerCount,
-                };
-            }
-
-            var questionAsTextQuestion = question as TextQuestion;
-            var questionAsMultipleOptionsQuestion = question as IMultyOptionsQuestion;
-
-            return new QuestionChanged
-            {
-                PublicKey = question.PublicKey,
-
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-
-                QuestionType = question.QuestionType,
-                Featured = question.Featured,
-                Instructions = question.Instructions,
-                Mandatory = question.Mandatory,
-                Capital = question.Capital,
-                QuestionText = question.QuestionText,
-                QuestionScope = question.QuestionScope,
-                StataExportCaption = question.StataExportCaption,
-                VariableLabel = question.VariableLabel,
-                ValidationMessage = question.ValidationMessage,
-                AnswerOrder = question.AnswerOrder,
-                Answers = question.Answers.ToArray(),
-                LinkedToQuestionId = question.LinkedToQuestionId,
-                IsFilteredCombobox = question.IsFilteredCombobox,
-                CascadeFromQuestionId = question.CascadeFromQuestionId,
-
-                // questiontype-specific properties:
-                AreAnswersOrdered = Monads.Maybe(() => questionAsMultipleOptionsQuestion.AreAnswersOrdered),
-                MaxAllowedAnswers = Monads.Maybe(() => questionAsMultipleOptionsQuestion.MaxAllowedAnswers),
-                Mask = Monads.Maybe(() => questionAsTextQuestion.Mask),
-
-                // obsolete or not appliable:
-                // ResponsibleId
-                // GroupPublicKey
-                // TargetGroupKey
-                // IsInteger
-                // MaxValue
-                // Triggers
-            };
+            question.ConditionExpression = this.ConvertExpressionToCSharpIfNotEmpty(question.ConditionExpression, customMappings);
+            question.ValidationExpression = this.ConvertExpressionToCSharpIfNotEmpty(question.ValidationExpression, customMappings);
         }
 
         private string ConvertExpressionToCSharpIfNotEmpty(string expression, Dictionary<string, string> customMappings)
