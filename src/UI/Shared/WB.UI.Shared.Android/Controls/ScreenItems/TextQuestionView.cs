@@ -68,18 +68,12 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 return;
             }
 
-            if (!isInputMasked)
-            {
-                PutAnswerStoredInModelToUI();
-                return;
-            }
-
-            if (!this.maskedWatcher.IsTextMaskMatched())
+            if (!isInputMasked || !this.maskedWatcher.IsTextMaskMatched())
             {
                 this.PutAnswerStoredInModelToUI();
                 return;
             }
-
+            
             var newAnswer = etAnswer.Text.Trim();
 
             if (newAnswer != this.Model.AnswerString)
