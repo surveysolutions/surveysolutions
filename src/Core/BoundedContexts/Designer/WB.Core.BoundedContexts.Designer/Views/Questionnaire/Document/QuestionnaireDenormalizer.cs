@@ -17,6 +17,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
     internal class QuestionnaireDenormalizer :
         IEventHandler<NewQuestionnaireCreated>,
+        IEventHandler<ExpressionsMigratedToCSharp>,
+
         IEventHandler<NewGroupAdded>,
         IEventHandler<GroupCloned>,
         IEventHandler<QuestionnaireItemMoved>,
@@ -81,6 +83,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.documentStorage.Store(item, item.PublicKey);
         }
 
+        public void Handle(IPublishedEvent<ExpressionsMigratedToCSharp> evnt)
+        {
+            QuestionnaireDocument questionnaire = this.documentStorage.GetById(evnt.EventSourceId);
+
+            questionnaire.AreExpressionsInCSharpLanguage = true;
+
+            this.UpdateQuestionnaire(evnt, questionnaire);
+        }
 
         public void Handle(IPublishedEvent<NewGroupAdded> evnt)
         {
