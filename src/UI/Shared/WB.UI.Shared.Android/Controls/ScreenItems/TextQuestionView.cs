@@ -68,7 +68,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                 return;
             }
 
-            if (!isInputMasked || !this.maskedWatcher.IsTextMaskMatched())
+            if (isInputMasked && !this.maskedWatcher.IsTextMaskMatched())
             {
                 this.PutAnswerStoredInModelToUI();
                 return;
@@ -86,7 +86,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                         this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
                         this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, newAnswer));
             }
-            else if (this.etComments.Visibility!=ViewStates.Visible)
+            else if (this.etComments.Visibility != ViewStates.Visible)
             {
                 base.FireAnswerSavedEvent();
             }
