@@ -227,6 +227,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.interviewState.AnswersSupportedInExpressions[questionKey] = @event.PictureFileName;
             this.interviewState.AnsweredQuestions.Add(questionKey);
+
+            this.ExpressionProcessorStatePrototype.UpdateMediaAnswer(@event.QuestionId, @event.PropagationVector, @event.PictureFileName);
         }
 
         private void Apply(NumericQuestionAnswered @event)
