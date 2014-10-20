@@ -227,6 +227,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
+        public void DeleteInterview(Guid questionnaireId, long questionnaireVersion, Guid interviewId)
+        {
+            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
+
+            this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, questionnaireVersion, dataFolderForTemplatePath);
+
+            this.dataExportWriter.DeleteInterviewRecords(dataFolderForTemplatePath, interviewId);
+
+            var filesFolderForInterview = GetFolderPathOfFilesByQuestionnaireForInterview(questionnaireId,
+               questionnaireVersion, interviewId);
+
+            if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
+                fileSystemAccessor.DeleteDirectory(filesFolderForInterview);
+        }
+
         public void AddExportedDataByInterview(InterviewDataExportView interviewDataExportView)
         {
             var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);

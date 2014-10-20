@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -28,6 +29,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewRestarted>,
         IEventHandler<InterviewApproved>,
+        IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewRejectedByHQ>,
         IEventHandler<TextQuestionAnswered>,
@@ -47,6 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private const string UnknownUserRole = "<UNKNOWN ROLE>";
         private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IDataExportService dataExportService;
@@ -56,12 +60,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewExportedDataDenormalizer(IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
-            IDataExportService dataExportService, IReadSideRepositoryWriter<UserDocument> users)
+            IDataExportService dataExportService, IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter)
         {
             this.interviewDataWriter = interviewDataWriter;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
             this.dataExportService = dataExportService;
             this.users = users;
+            this.interviewSummaryWriter = interviewSummaryWriter;
         }
 
         public string Name { get { return this.GetType().Name; } }
@@ -217,7 +222,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             //TODO record first answer
 
-      /*      var interviewActionLog = this.interviewActionLogs.GetById(interviewId);
+            /*      var interviewActionLog = this.interviewActionLogs.GetById(interviewId);
             if (interviewActionLog == null)
                 return;
 
@@ -252,6 +257,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             DateTime timestamp)
         {
             return new InterviewActionExportView(interviewId.FormatGuid(), action, userName, timestamp, userRole);
+        }
+
+        private void DeleteInterview(Guid interviewId)
+        {
+            var interviewSummary = this.interviewSummaryWriter.GetById(interviewId);
+            if (interviewSummary == null)
+                return;
+            this.dataExportService.DeleteInterview(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion, interviewId);
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
@@ -347,6 +360,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
             this.RecordFirstAnswerIfNeeded(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTime);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            this.DeleteInterview(evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
+        {
+            this.DeleteInterview(evnt.EventSourceId);
         }
     }
 }

@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private const string interviewActions = "interview_actions";
         private const string allDataFolder = "AllData";
         private const string approvedDataFolder = "ApprovedData";
+        private const string parentId = "ParentId";
         private readonly ICsvWriterFactory csvWriterFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -41,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public void AddRecords(InterviewDataExportLevelView items, string basePath)
         {
             var commandText = string.Format("DELETE FROM \"{0}\" WHERE {1} = '{2}';", items.LevelName,
-                items.LevelVector.Length == 0 ? "Id" : string.Format("ParentId{0}", items.LevelVector.Length), items.InterviewId) + Environment.NewLine;
+                items.LevelVector.Length == 0 ? "Id" : string.Format("{0}{1}", parentId, items.LevelVector.Length), items.InterviewId);
 
             ExecuteSqlLite(basePath, (db) =>
             {
@@ -121,6 +122,56 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 CreateQueryStringForApprovedInterviewsByTableName);
         }
 
+        public void DeleteInterviewRecords(string basePath, Guid interviewId)
+        {
+            this.ExecuteSqlLite(fileSystemAccessor.CombinePath(basePath, dataFile), (db) =>
+            {
+                var tableNames = this.GetListofTables(db);
+                foreach (var tableName in tableNames)
+                {
+                    var columnNames = this.GetListOfColumns(db, tableName);
+                    using (var commamd = db.CreateCommand())
+                    {
+                        commamd.CommandText = string.Format("DELETE FROM \"{0}\" WHERE {1} = '{2}';", tableName,
+                            columnNames.Any(c => c.StartsWith(parentId)) ? columnNames.Last() : "Id", interviewId.FormatGuid());
+                        commamd.ExecuteNonQuery();
+                    }
+                }
+            });
+        }
+
+        private IEnumerable<string> GetListofTables(DbConnection db)
+        {
+            var tableNames = new List<string>();
+
+            using (var getListOfTables = db.CreateCommand())
+            {
+                getListOfTables.CommandText = "select table_name from information_schema.tables where TABLE_TYPE = 'TABLE'";
+                var tableNamesReader = getListOfTables.ExecuteReader();
+                while (tableNamesReader.Read())
+                {
+                    tableNames.Add(Convert.ToString(tableNamesReader.GetString(0)));
+                }
+            }
+            return tableNames;
+        }
+
+        private IEnumerable<string> GetListOfColumns(DbConnection db, string tableName)
+        {
+             var columnNames = new List<string>();
+            using (var columnCommand = db.CreateCommand())
+            {
+                columnCommand.CommandText = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "'";
+                var columnReader = columnCommand.ExecuteReader();
+                while (columnReader.Read())
+                {
+                    var columnName = columnReader.GetString(0);
+                    columnNames.Add(columnReader.GetString(0));
+                }
+            }
+            return columnNames;
+        } 
+
         private string GetAllDataFolder(string basePath)
         {
             return fileSystemAccessor.CombinePath(basePath, allDataFolder);
@@ -138,7 +189,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 return string.Format("select i2.* from {0} as i1 join {0} as i2 "
                     + "on i1.Id=i2.Id where i1.Action='{1}'", tableName, filterByAction);
 
-            if (!columnNames.Any(name => name.StartsWith("ParentId")))
+            if (!columnNames.Any(name => name.StartsWith(parentId)))
                 return string.Format("select \"{0}\".* from \"{1}\" join \"{0}\" "
                     + "ON \"{1}\".Id=\"{0}\".Id "
                     + "where \"{1}\".Action='{2}'", tableName, interviewActions, filterByAction);
@@ -154,36 +205,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var result = new List<string>();
             ExecuteSqlLite(dbPath, (db) =>
             {
-                var tableNames = new List<string>();
+                var tableNames = this.GetListofTables(db);
 
-                using (var getListOfTables = db.CreateCommand())
-                {
-                    getListOfTables.CommandText = "select table_name from information_schema.tables where TABLE_TYPE = 'TABLE'";
-                    var tableNamesReader = getListOfTables.ExecuteReader();
-
-                    while (tableNamesReader.Read())
-                    {
-                        tableNames.Add(Convert.ToString(tableNamesReader.GetString(0)));
-                    }
-                }
                 foreach (var tableName in tableNames)
                 {
                     var csvFilePath =
                         fileSystemAccessor.CombinePath(basePath, tableName + ".tab");
-                    var columnNames = new List<string>();
+                    
+                    var columnNames = GetListOfColumns(db, tableName);
                     using (var fileStream = fileSystemAccessor.OpenOrCreateFile(csvFilePath, true))
                     using (var csv = csvWriterFactory.OpenCsvWriter(fileStream, "\t "))
                     {
-                        using (var columnCommand = db.CreateCommand())
+                        foreach (var columnName in columnNames)
                         {
-                            columnCommand.CommandText = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "'";
-                            var columnReader = columnCommand.ExecuteReader();
-                            while (columnReader.Read())
-                            {
-                                var columnName = columnReader.GetString(0);
-                                columnNames.Add(columnName);
-                                csv.WriteField(columnName);
-                            }
+                            csv.WriteField(columnName);
                         }
 
                         csv.NextRecord();
@@ -269,7 +304,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             for (int i = 0; i < header.LevelScopeVector.Length; i++)
             {
                 commandText = commandText + ", " +
-                    string.Format("{0} {1}", string.Format("ParentId{0}", i + 1), i == header.LevelScopeVector.Length - 1 ? nvarchar : numeric);
+                    string.Format("{0} {1}", string.Format("{0}{1}",parentId, i + 1), i == header.LevelScopeVector.Length - 1 ? nvarchar : numeric);
             }
 
             commandText = commandText + ")";
@@ -286,7 +321,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 header.LevelScopeVector.Length == 0 ? "Main" : header.LevelName, header.LevelName,
                 header.LevelScopeVector.Length == 0
                     ? header.LevelIdColumnName
-                    : string.Format("ParentId{0}", header.LevelScopeVector.Length));
+                    : string.Format("{0}{1}",parentId, header.LevelScopeVector.Length));
 
                 using (var createTableCommand = db.CreateCommand())
                 {
