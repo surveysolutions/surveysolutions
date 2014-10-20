@@ -31,6 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection
         void UpdateNumericRealAnswer(Guid questionId, double answer);
         void UpdateDateTimeAnswer(Guid questionId, DateTime answer);
         void UpdateTextAnswer(Guid questionId, string answer);
+        void UpdateMediaAnswer(Guid questionId, string answer);
         void UpdateQrBarcodeAnswer(Guid questionId, string answer);
         void UpdateSingleOptionAnswer(Guid questionId, decimal answer);
         void UpdateMultiOptionAnswer(Guid questionId, decimal[] answer);
