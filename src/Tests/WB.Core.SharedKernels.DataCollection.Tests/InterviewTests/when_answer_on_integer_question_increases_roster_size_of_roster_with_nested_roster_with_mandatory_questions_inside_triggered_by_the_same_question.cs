@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#")]
+    [Ignore("C#, KP-4386 Rosters")]
     internal class when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_mandatory_questions_inside_triggered_by_the_same_question : InterviewTestsContext
     {
         Establish context = () =>
