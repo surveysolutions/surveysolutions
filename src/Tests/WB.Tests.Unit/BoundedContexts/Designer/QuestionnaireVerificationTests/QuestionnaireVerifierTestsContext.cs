@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             string generationResult;
             questionnireExpressionProcessorGeneratorMock.Setup(
                 _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), out generationResult))
-                .Returns(new GenerationResult() {Success = true});
+                .Returns(new GenerationResult() {Success = true, Diagnostics = new List<GenerationDiagnostic>()});
 
             var substitutionServiceInstance = new SubstitutionService();
 

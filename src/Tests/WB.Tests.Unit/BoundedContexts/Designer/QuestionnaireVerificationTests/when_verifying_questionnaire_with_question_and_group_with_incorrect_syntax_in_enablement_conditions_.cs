@@ -5,9 +5,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
@@ -30,14 +29,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     PublicKey = groupId,
                     ConditionExpression = incorrectConditionExpression,
                 });
-
-            var expressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
-            string resultAssembly;
-            expressionProcessorGeneratorMock.Setup(
-                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), out resultAssembly))
-                .Returns(new GenerationResult(){ Success = false});
-
-            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: expressionProcessorGeneratorMock.Object);
+            
+            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: new QuestionnireExpressionProcessorGenerator());
         };
 
         Because of = () =>

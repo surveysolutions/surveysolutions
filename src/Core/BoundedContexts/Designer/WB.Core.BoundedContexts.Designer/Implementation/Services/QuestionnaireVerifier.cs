@@ -1,7 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Antlr.Runtime;
+using CsQuery.ExtensionMethods;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -179,47 +183,122 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
-                    ErrorsByConditionExpressions,
-                    ErrorsByValidationExpressions
+                    ErrorsByConditionAndValidationExpressions
                 };
             }
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionExpressions(QuestionnaireDocument questionnaire)
+        private const int maxExpressionErrorsCount = 10;
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionAndValidationExpressions(QuestionnaireDocument questionnaire)
         {
-            var clonedQuestionnaire = GetQuestionnaireDocumentWithEmptyConditionsAndValidations(questionnaire);
+            var errors = new List<QuestionnaireVerificationError>();
 
-            foreach (var questionnaireItem in questionnaire.Find<IComposite>(item => !string.IsNullOrEmpty(GetCustomEnablementCondition(item))))
+            FindErrorsByConditionsAndValidations(questionnaire, new[]
             {
-                var clonedGroupOrQuestion = clonedQuestionnaire.Find<IComposite>(questionnaireItem.PublicKey);
+                questionnaire.Find<IComposite>(_ => true)
+            }, errors);
 
-                SetCustomEnablementCondition(clonedGroupOrQuestion, GetCustomEnablementCondition(questionnaireItem));
+            return errors;
+        }
 
-                if (IsQuestionnaireDocumentValid(clonedQuestionnaire)) continue;
+        private void FindErrorsByConditionsAndValidations(QuestionnaireDocument questionnaire,
+            IEnumerable<IEnumerable<IComposite>> questionsAndGroupsWithErrors,
+            ICollection<QuestionnaireVerificationError> errors)
+        {
+            foreach (var questionnaireItems in questionsAndGroupsWithErrors)
+            {
+                if (errors.Count == maxExpressionErrorsCount) break;
 
-                SetCustomEnablementCondition(clonedGroupOrQuestion, string.Empty);
-                yield return ConditionExpressionSyntaxError(questionnaireItem);
+                if (!questionnaireItems.Any() ||
+                    !HaveQuestionnaireItemsExpressionErrors(questionnaire, questionnaireItems)) continue;
+
+                if (questionnaireItems.Count() == 1)
+                {
+                    var questionnaireItem = questionnaireItems.First();
+                    var group = questionnaireItem as IGroup;
+                    var question = questionnaireItem as IQuestion;
+
+                    if (group != null)
+                    {
+                        errors.Add(ConditionExpressionSyntaxError(questionnaireItem));
+                    }
+
+                    if (question != null)
+                    {
+                        if (string.IsNullOrEmpty(question.ValidationExpression))
+                        {
+                            errors.Add(ConditionExpressionSyntaxError(questionnaireItem));
+                        }
+                        else if (string.IsNullOrEmpty(question.ConditionExpression))
+                        {
+                            errors.Add(ValidationExpressionSyntaxError(question));
+                        }
+                        else
+                        {
+                            if (HasQuestionErrorInConditionExpression(questionnaire, question))
+                            {
+                                errors.Add(ConditionExpressionSyntaxError(questionnaireItem));
+                            }
+
+                            if (HasQuestionErrorInValidationExpression(questionnaire, question))
+                            {
+                                errors.Add(ValidationExpressionSyntaxError(question));
+                            }
+                        }
+                    }
+
+                    continue;
+                }
+
+                var newQestionnaireItemsCount = questionnaireItems.Count()/2;
+
+                FindErrorsByConditionsAndValidations(questionnaire,
+                    new[]
+                    {
+                        questionnaireItems.Take(newQestionnaireItemsCount),
+                        questionnaireItems.Skip(newQestionnaireItemsCount)
+                    }, errors);
             }
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByValidationExpressions(QuestionnaireDocument questionnaire)
+        private bool HasQuestionErrorInValidationExpression(QuestionnaireDocument questionnaire, IQuestion question)
         {
-            var clonedQuestionnaire = GetQuestionnaireDocumentWithEmptyConditionsAndValidations(questionnaire);
+            var clonedQuestionnaire = GetQuestionnaireWithEmptyConditionsAndValidations(questionnaire);
 
-            foreach (var questionnaireItem in questionnaire.Find<IQuestion>(item => !string.IsNullOrEmpty(item.ValidationExpression)))
-            {
-                var clonedQuestion = clonedQuestionnaire.Find<IQuestion>(questionnaireItem.PublicKey);
+            clonedQuestionnaire.Find<IQuestion>(question.PublicKey).ValidationExpression = question.ValidationExpression;
 
-                clonedQuestion.ValidationExpression = questionnaireItem.ValidationExpression;
-
-                if (IsQuestionnaireDocumentValid(clonedQuestionnaire)) continue;
-
-                clonedQuestion.ValidationExpression =  string.Empty;
-                yield return ValidationExpressionSyntaxError(questionnaireItem);
-            }
+            return !IsQuestionnaireValidByValidationsAndConditions(clonedQuestionnaire);
         }
 
-        private bool IsQuestionnaireDocumentValid(QuestionnaireDocument questionnaire)
+        private bool HasQuestionErrorInConditionExpression(QuestionnaireDocument questionnaire, IQuestion question)
+        {
+            var clonedQuestionnaire = GetQuestionnaireWithEmptyConditionsAndValidations(questionnaire);
+
+            clonedQuestionnaire.Find<IQuestion>(question.PublicKey).ConditionExpression = question.ConditionExpression;
+
+            return !IsQuestionnaireValidByValidationsAndConditions(clonedQuestionnaire);
+        }
+
+        private static QuestionnaireDocument GetQuestionnaireWithEmptyConditionsAndValidations(
+            QuestionnaireDocument questionnaire)
+        {
+            var clonedQuestionnaire = questionnaire.Clone();
+            clonedQuestionnaire.Find<IComposite>(_ => true).ForEach(RemoveConditionAndValidationExpressions);
+            return clonedQuestionnaire;
+        }
+
+        private bool HaveQuestionnaireItemsExpressionErrors(QuestionnaireDocument questionnaire, IEnumerable<IComposite> questionnaireItems)
+        {
+            var clonedQuestionnaire = questionnaire.Clone();
+
+            clonedQuestionnaire.Find<IComposite>(_=>true).Where(
+                questionnaireItem => questionnaireItems.All(sourceQuestionnaireItem => sourceQuestionnaireItem.PublicKey != questionnaireItem.PublicKey))
+                .ForEach(RemoveConditionAndValidationExpressions);
+
+            return !IsQuestionnaireValidByValidationsAndConditions(clonedQuestionnaire);
+        }
+
+        private bool IsQuestionnaireValidByValidationsAndConditions(QuestionnaireDocument questionnaire)
         {
             string resultAssembly;
             var generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, out resultAssembly);
@@ -227,38 +306,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return generationResult.Success;
         }
 
-        private static void SetCustomEnablementCondition(IComposite questionnaireItem, string enablementCondition)
+        private static void RemoveConditionAndValidationExpressions(IComposite questionnaireItem)
         {
             var group = questionnaireItem as IGroup;
             if (group != null)
             {
-                group.ConditionExpression = enablementCondition;
+                group.ConditionExpression = string.Empty;
             }
             var question = questionnaireItem as IQuestion;
             if (question != null)
             {
-                question.ConditionExpression = enablementCondition;
+                question.ConditionExpression = question.ValidationExpression = string.Empty;
             }
-        }
-
-        private static QuestionnaireDocument GetQuestionnaireDocumentWithEmptyConditionsAndValidations(QuestionnaireDocument questionnaireDocument)
-        {
-            var clonedQuestionnaire = questionnaireDocument.Clone();
-            foreach (var questionnaireItem in clonedQuestionnaire.Find<IComposite>(item => true))
-            {
-                var group = questionnaireItem as IGroup;
-                if (group != null)
-                {
-                    group.ConditionExpression = string.Empty;
-                }
-                var question = questionnaireItem as IQuestion;
-                if (question != null)
-                {
-                    question.ConditionExpression = string.Empty;
-                    question.ValidationExpression = string.Empty;
-                }
-            }
-            return clonedQuestionnaire;
         }
 
         private bool CascadingQuestionOptionsWithParentValuesShouldBeUnique(SingleQuestion question)
