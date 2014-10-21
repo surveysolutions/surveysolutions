@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.LanguageTests
                     Create.NumericIntegerQuestion(question2Id, "q2", "q1 > 3")
                );
 
-                var interview = SetupInterview(actorId, questionnaireDocument, questionnaireId, new List<object>
+                var interview = SetupInterview(questionnaireDocument, new List<object>
                     {
                         new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 1),
                         new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 2),

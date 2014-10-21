@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.LanguageTests.ConditionsChaining
                     )
                );
 
-                var interview = SetupInterview(actorId, questionnaireDocument, questionnaireId, new List<object>() {});
+                var interview = SetupInterview(questionnaireDocument, new List<object>() {});
 
                 var result = new InvokeResults();
 
