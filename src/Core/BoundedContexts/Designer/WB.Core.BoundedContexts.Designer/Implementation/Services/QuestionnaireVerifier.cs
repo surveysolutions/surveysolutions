@@ -174,6 +174,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<SingleQuestion>(CascadingQuestionHasMoreThanAllowedOptions, "WB0088", VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers),
                     Verifier<SingleQuestion>(CascadingQuestionOptionsWithParentValuesShouldBeUnique, "WB0089", VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
                     Verifier<IQuestion>(LinkedQuestionIsInterviewersOnly, "WB0090", VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
+                    Verifier<SingleQuestion>(CascadingQuestionHasEnablementCondition, "WB0091", VerificationMessages.WB0091_CascadingChildQuestionShouldNotContainCondition),
+                    Verifier<SingleQuestion>(CascadingQuestionHasValidationExpresssion, "WB0092", VerificationMessages.WB0092_CascadingChildQuesionShouldNotContainValidation),
 
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
@@ -186,6 +188,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByConditionAndValidationExpressions
                 };
             }
+        }
+
+        private bool CascadingQuestionHasValidationExpresssion(SingleQuestion question)
+        {
+            return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ValidationExpression);
+        }
+
+        private bool CascadingQuestionHasEnablementCondition(SingleQuestion question)
+        {
+            return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ConditionExpression);
         }
 
         private const int maxExpressionErrorsCount = 10;

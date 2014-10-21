@@ -809,5 +809,23 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0090_LinkedQuestionIsInterviewersOnly", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Child cascading question should not contain enablement condition. .
+        /// </summary>
+        internal static string WB0091_CascadingChildQuestionShouldNotContainCondition {
+            get {
+                return ResourceManager.GetString("WB0091_CascadingChildQuestionShouldNotContainCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Child cascading question should not contain validation expression..
+        /// </summary>
+        internal static string WB0092_CascadingChildQuesionShouldNotContainValidation {
+            get {
+                return ResourceManager.GetString("WB0092_CascadingChildQuesionShouldNotContainValidation", resourceCulture);
+            }
+        }
     }
 }
