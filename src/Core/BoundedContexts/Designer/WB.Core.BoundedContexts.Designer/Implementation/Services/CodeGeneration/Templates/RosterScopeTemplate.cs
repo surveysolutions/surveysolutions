@@ -427,7 +427,7 @@ foreach (var q in Model.Questions)
             this.Write("        \r\n                ");
             
             #line 80 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(q.VariableName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
             
             #line default
             #line hidden
@@ -525,14 +525,7 @@ foreach (var question in Model.Questions)
             
             #line default
             #line hidden
-            this.Write(" : null; }\r\n            private set { this.");
-            
-            #line 105 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
-            
-            #line default
-            #line hidden
-            this.Write(" = value; }\r\n        }\r\n        ");
+            this.Write(" : null; }\r\n            \r\n        }\r\n        ");
             
             #line 107 "C:\Work\WB\Dev\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 if(!string.IsNullOrWhiteSpace(question.Conditions))
