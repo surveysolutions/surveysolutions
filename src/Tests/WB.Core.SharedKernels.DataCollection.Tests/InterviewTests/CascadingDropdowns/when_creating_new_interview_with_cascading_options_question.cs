@@ -14,14 +14,13 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDropdowns
 {
-    [Ignore("Temporary. Should be fixed with code fix")]
     internal class when_creating_new_interview_with_cascading_options_question : InterviewTestsContext
     {
         Establish context = () =>
         {
-            parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
-            childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
-            grandChildCascadedComboboxId = Guid.Parse("4C603B8A-3237-4915-96FA-8D1568C679E2");
+            parentSingleOptionQuestionId = Guid.Parse("11111111111111111111111111111111");
+            childCascadedComboboxId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            grandChildCascadedComboboxId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             actorId = Guid.Parse("366404A9-374E-4DCC-9B56-1F15103DE880");
             questionnaireId = Guid.Parse("3B7145CD-A235-44D0-917C-7B34A1017AEC");
 
@@ -68,21 +67,21 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
             eventContext = new EventContext();
         };
 
-        private Because of = () => new Interview(Guid.NewGuid(), actorId, questionnaireId, new Dictionary<Guid, object>(), DateTime.Now);
+        Because of = () => new Interview(Guid.NewGuid(), actorId, questionnaireId, new Dictionary<Guid, object>(), DateTime.Now);
 
-        private It should_disable_cascading_questions = () => 
+        It should_disable_cascading_questions = () => 
             eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
 
-        private It should_disable_secod_level_of_questions_in_cascade = () =>
+        It should_disable_secod_level_of_questions_in_cascade = () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
 
-        private static Guid parentSingleOptionQuestionId;
-        private static Guid childCascadedComboboxId;
-        private static Guid grandChildCascadedComboboxId;
-        private static Guid actorId;
-        private static Questionnaire questionnaire;
-        private static EventContext eventContext;
-        private static Guid questionnaireId;
+        static Guid parentSingleOptionQuestionId;
+        static Guid childCascadedComboboxId;
+        static Guid grandChildCascadedComboboxId;
+        static Guid actorId;
+        static Questionnaire questionnaire;
+        static EventContext eventContext;
+        static Guid questionnaireId;
     }
 }
 
