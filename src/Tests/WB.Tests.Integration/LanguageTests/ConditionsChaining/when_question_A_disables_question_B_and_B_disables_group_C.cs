@@ -64,6 +64,12 @@ namespace WB.Tests.Integration.LanguageTests.ConditionsChaining
         private static InvokeResults results;
         private static AppDomainContext appDomainContext;
 
+        Cleanup stuff = () =>
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        };
+
         [Serializable]
         internal class InvokeResults
         {
