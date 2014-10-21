@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewExpressionStatePro
         };
 
         Because of = () =>
-            isResultNotNull = RemoteFunc.Invoke(appDomainContext.Domain, () =>
+            isResultNotNull = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Guid id = Guid.Parse("33332222111100000000111122223333");
                 long version = 3;

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         };
 
         Because of = () =>
-            results = RemoteFunc.Invoke(appDomainContext.Domain, () =>
+            results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Guid questionnaireId = Guid.Parse("21111111111111111111111111111111");
                 Guid question1Id = Guid.Parse("11111111111111111111111111111112");
