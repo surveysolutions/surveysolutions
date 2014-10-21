@@ -4,24 +4,25 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
-using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_with_question_with_incorrect_syntax_in_enablement_condition : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_question_with_incorrect_syntax_in_validation_and_condition : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
         {
+            const string invalidExpression = "[hehe] &=+< 5";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new TextQuestion
                 {
                     PublicKey = questionId,
-                    ConditionExpression = "[hehe] &=+< 5",
+                    ValidationExpression = invalidExpression,
+                    ConditionExpression = invalidExpression, 
+                    ValidationMessage = "validation message",
                     StataExportCaption = "var1"
                 });
 
@@ -31,20 +32,23 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_2_errors = () =>
+            resultErrors.Count().ShouldEqual(2);
 
-        It should_return_error_with_code__WB0003__ = () =>
-            resultErrors.First().Code.ShouldEqual("WB0003");
+        It should_return_first_error_with_code__WB0003__ = () =>
+            resultErrors.ElementAt(0).Code.ShouldEqual("WB0003");
+
+        It should_return_second_error_with_code__WB0002__ = () =>
+            resultErrors.ElementAt(1).Code.ShouldEqual("WB0002");
 
         It should_return_error_with_single_reference = () =>
-            resultErrors.First().References.Count().ShouldEqual(1);
+            resultErrors.ShouldEachConformTo(error=>error.References.Count() == 1);
 
         It should_return_error_referencing_with_type_of_question = () =>
-            resultErrors.First().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            resultErrors.ShouldEachConformTo(error=>error.References.Single().Type == QuestionnaireVerificationReferenceType.Question);
 
         It should_return_error_referencing_with_specified_question_id = () =>
-            resultErrors.First().References.Single().Id.ShouldEqual(questionId);
+            resultErrors.ShouldEachConformTo(error=>error.References.Single().Id == questionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
