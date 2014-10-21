@@ -85,6 +85,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Color">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Color.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.Droid.dll</HintPath>
+    </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
     </Reference>
@@ -151,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
@@ -173,6 +180,7 @@
     <Compile Include="Implementations\Fragments\DataCollectionScreenContentFragment.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
     <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
+    <Compile Include="Implementations\Navigation\NavigationService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="FinishInstallationActivity.cs" />
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
@@ -197,7 +205,9 @@
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
+    <Compile Include="Utils\BackgroundColorValueConverter.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
+    <Compile Include="Views\FinishIntallationViewModel.cs" />
     <Compile Include="Views\Login\LoginViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
