@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation expression has syntax error..
+        ///   Looks up a localized string similar to Validation expression has syntax error (only few first questions are shown)..
         /// </summary>
         internal static string WB0002_CustomValidationExpressionHasIncorrectSyntax {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Condition expression has syntax error..
+        ///   Looks up a localized string similar to Condition expression has syntax error (only few first questions/groups are shown)..
         /// </summary>
         internal static string WB0003_CustomEnablementConditionHasIncorrectSyntax {
             get {
