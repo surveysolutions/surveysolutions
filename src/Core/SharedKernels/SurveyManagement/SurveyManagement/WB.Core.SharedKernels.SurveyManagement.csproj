@@ -123,7 +123,9 @@
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
-    <Compile Include="Implementation\Services\DataExport\SqlCeDataExportWriter.cs" />
+    <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
+    <Compile Include="Implementation\Services\Sql\CompactSqlService.cs" />
+    <Compile Include="Implementation\Services\Sql\CompactSqlServiceFactory.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomePackagesRepository\IncomePackagesRepository.cs" />
     <Compile Include="Implementation\Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsDataLoader.cs" />
@@ -171,6 +173,8 @@
     <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
+    <Compile Include="Services\Sql\ISqlService.cs" />
+    <Compile Include="Services\Sql\ISqlServiceFactory.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />
     <Compile Include="Synchronization\Interview\EntryType.cs" />
     <Compile Include="Synchronization\Questionnaire\QuestionnaireEntryType.cs" />
