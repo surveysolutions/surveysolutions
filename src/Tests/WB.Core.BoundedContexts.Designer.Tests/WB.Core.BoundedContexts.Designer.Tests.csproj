@@ -284,11 +284,6 @@
     <Compile Include="QuestionnaireTests\when_moving_group_to_negative_position.cs" />
     <Compile Include="QuestionnaireTests\when_moving_group_to_position_which_is_bigger_then_group_children_count.cs" />
     <Compile Include="QuestionnaireTests\when_updating_roster_group_by_numeric_question_and_question_is_null.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_filtered_combobox.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_multimedia_questioin.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_static_text.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_group_with_variable_name.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_masked_text_question.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
@@ -926,8 +921,6 @@
     <Compile Include="QuestionnaireTests\when_updating_text_list_question_and_max_answer_count_is_specified.cs" />
     <Compile Include="QuestionnaireVersionerTests\QuestionnaireVersionerTestContext.cs" />
     <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_without_specific_elements.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_nested_rosters.cs" />
-    <Compile Include="QuestionnaireVersionerTests\when_getting_version_for_questionnaire_with_qr_questions.cs" />
     <Compile Include="RoleProviderTests\when_adding_roles_to_users_with_non_Guid_userId.cs" />
     <Compile Include="RoleProviderTests\RoleProviderTestsContext.cs" />
     <Compile Include="RoleRepositoryTests\when_adding_role_to_user_with_role_repository.cs" />
