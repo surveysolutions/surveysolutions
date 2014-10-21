@@ -49,6 +49,17 @@ namespace WB.Tests.Integration
             };
         }
 
+        public static DateTimeQuestion DateTimeQuestion(Guid id, string variable, string conditition = null, string validationExpression = null)
+        {
+            return new DateTimeQuestion
+            {
+                PublicKey = id,
+                StataExportCaption = variable,
+                ConditionExpression = conditition,
+                ValidationExpression = validationExpression
+            };
+        }
+
         public static Group Group(Guid id, string variable = null, string conditition = null)
         {
             return new Group
