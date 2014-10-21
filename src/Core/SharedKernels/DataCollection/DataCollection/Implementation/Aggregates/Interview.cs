@@ -3729,7 +3729,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private InterviewChanges UpdateExpressionStateWithAnswersAndGetChanges(InterviewChangeStructures interviewChanges1, 
+        private InterviewChanges UpdateExpressionStateWithAnswersAndGetChanges(InterviewChangeStructures interviewChanges, 
             IEnumerable<RosterCalculationData> rosterDatas, 
             IQuestionnaire questionnaire)
         {
@@ -3737,30 +3737,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
-            foreach (var interviewChanges in interviewChanges1.Changes)
+            foreach (var changes in interviewChanges.Changes)
             {
-                if (interviewChanges.ValidityChanges != null)
+                if (changes.ValidityChanges != null)
                 {
-                    interviewChanges.ValidityChanges.Clear();
+                    changes.ValidityChanges.Clear();
                 }
 
-                if (interviewChanges.EnablementChanges != null)
+                if (changes.EnablementChanges != null)
                 {
-                    interviewChanges.EnablementChanges.Clear();
+                    changes.EnablementChanges.Clear();
                 }
 
-                if (interviewChanges.InterviewByAnswerChanges != null)
+                if (changes.InterviewByAnswerChanges != null)
                 {
-                    foreach (var answerChange in interviewChanges.InterviewByAnswerChanges)
+                    foreach (var answerChange in changes.InterviewByAnswerChanges)
                     {
                         UpdateExpressionProcessorStateWithAnswerChange(answerChange, expressionProcessorState);
                     }
                 }
 
-                if (interviewChanges.RosterCalculationData != null)
+                if (changes.RosterCalculationData != null)
                 {
-                    interviewChanges.RosterCalculationData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
-                    interviewChanges.RosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+                    changes.RosterCalculationData.RosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
+                    changes.RosterCalculationData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
                 }
             }
 
@@ -3771,30 +3771,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            var childCascadingQuestions = questionnaire.GetAllChildCascadingQuestions();
-            foreach (var cascadingQuestionId in childCascadingQuestions)
-            {
-                var rosterInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(interviewChanges1.State, 
-                    cascadingQuestionId, 
-                    EmptyRosterVector, 
-                    questionnaire, 
-                    GetRosterInstanceIds);
-                foreach (var childQuestionInstance in rosterInstances)
-                {
-                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(childQuestionInstance.Id);
-                    if (cascadingQuestionParentId.HasValue)
-                    {
-                        var parentInstance = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingQuestionParentId.Value,
-                            childQuestionInstance.RosterVector, questionnaire);
-
-                        var parentStringIdentity = ConversionHelper.ConvertIdentityToString(parentInstance);
-                        if (!interviewChanges1.State.AnsweredQuestions.Contains(parentStringIdentity))
-                        {
-                            enablementChanges.QuestionsToBeDisabled.Add(childQuestionInstance);
-                        }
-                    }
-                }
-            }
+            AppendCascadingQuestionChanges(interviewChanges, questionnaire, enablementChanges);
 
             expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
 
@@ -3807,6 +3784,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null,
                 null);
             return enablementAndValidityChanges;
+        }
+
+        private static void AppendCascadingQuestionChanges(InterviewChangeStructures interviewChanges, IQuestionnaire questionnaire,
+            EnablementChanges enablementChanges)
+        {
+            var childCascadingQuestions = questionnaire.GetAllChildCascadingQuestions();
+            foreach (var cascadingQuestionId in childCascadingQuestions)
+            {
+                var rosterInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(interviewChanges.State,
+                    cascadingQuestionId,
+                    EmptyRosterVector,
+                    questionnaire,
+                    GetRosterInstanceIds);
+                foreach (var childQuestionInstance in rosterInstances)
+                {
+                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(childQuestionInstance.Id);
+                    if (cascadingQuestionParentId.HasValue)
+                    {
+                        var parentInstance = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingQuestionParentId.Value,
+                            childQuestionInstance.RosterVector, questionnaire);
+
+                        var parentStringIdentity = ConversionHelper.ConvertIdentityToString(parentInstance);
+                        if (!interviewChanges.State.AnsweredQuestions.Contains(parentStringIdentity))
+                        {
+                            enablementChanges.QuestionsToBeDisabled.Add(childQuestionInstance);
+                            enablementChanges.QuestionsToBeEnabled.Remove(childQuestionInstance);
+                        }
+                    }
+                }
+            }
         }
 
         private static void UpdateExpressionProcessorStateWithAnswerChange(AnswerChange answerChange,
