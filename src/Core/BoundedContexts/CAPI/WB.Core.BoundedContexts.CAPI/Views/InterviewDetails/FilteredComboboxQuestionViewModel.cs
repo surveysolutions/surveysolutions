@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             var selectedAnswer = QuestionUtils.ExtractSelectedOptions(answer);
 
-            if (selectedAnswer == null)
+            if (selectedAnswer == null || selectedAnswer.Length == 0)
                 return;
 
             foreach (var item in this.Answers)
