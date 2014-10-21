@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.IncomePackagesRepository;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -21,6 +22,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
@@ -97,7 +99,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
-            this.Bind<IDataExportWriter>().To<SqlCeDataExportWriter>();
+            this.Bind<IDataExportWriter>().To<SqlDataExportWriter>();
+
+            this.Bind<ISqlServiceFactory>().To<CompactSqlServiceFactory>();
+
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
