@@ -19,7 +19,7 @@ using it = Moq.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#")]
+    [Ignore("C#, KP-4385 Misc Corner Cases")]
     internal class when_condition_expression_execution_throws_exception_for_question_in_disabled_state : InterviewTestsContext
     {
         Establish context = () =>

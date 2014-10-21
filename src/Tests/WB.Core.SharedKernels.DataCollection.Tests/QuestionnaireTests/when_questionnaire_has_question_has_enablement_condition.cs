@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
-    [Ignore("C#")]
+    [Ignore("C#, KP-4385 Misc Corner Cases")]
     internal class when_questionnaire_has_question_has_enablement_condition : QuestionnaireTestsContext
     {
         Establish context = () =>

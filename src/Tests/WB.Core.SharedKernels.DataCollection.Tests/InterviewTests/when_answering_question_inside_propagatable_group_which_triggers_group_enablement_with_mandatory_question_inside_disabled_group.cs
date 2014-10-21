@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#")]
+    [Ignore("C#, KP-4386 Rosters")]
     internal class when_answering_question_inside_propagatable_group_which_triggers_group_enablement_with_mandatory_question_inside_disabled_group : InterviewTestsContext
     {
         Establish context = () =>

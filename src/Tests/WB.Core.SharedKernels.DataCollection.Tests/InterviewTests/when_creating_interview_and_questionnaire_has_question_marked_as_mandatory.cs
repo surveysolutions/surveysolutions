@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#")]
+    [Ignore("C#, KP-4385 Misc Corner Cases")]
     internal class when_creating_interview_and_questionnaire_has_question_marked_as_mandatory : InterviewTestsContext
     {
         private Establish context = () =>
