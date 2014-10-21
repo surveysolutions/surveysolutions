@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (supervisorRevisionNumber.HasValue && version > supervisorRevisionNumber.Value)
             {
                 package.IsErrorOccured = true;
-                package.ErrorMessage = "Your application is incometible with the Supervisor. Please, remove your copy and download the correct version";
+                package.ErrorMessage = "Your application is incompatible with the Supervisor. Please, remove your copy and download the correct version";
             }
             else if (supervisorRevisionNumber.HasValue && version < supervisorRevisionNumber.Value)
             {
