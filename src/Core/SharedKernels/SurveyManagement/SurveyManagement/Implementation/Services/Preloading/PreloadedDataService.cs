@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 parentDataFile.Header, row);
 
             if (!answerOnRosterSizeQuestion.HasValue)
-                return null;
+                return new decimal[0];
 
             var answerObject = answerOnRosterSizeQuestion.Value.Value;
 
