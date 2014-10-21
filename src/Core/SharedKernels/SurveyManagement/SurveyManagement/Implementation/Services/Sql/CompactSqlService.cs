@@ -62,6 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
                         {
                             row[i] = dr[i];
                         }
+                        result.Add(row);
                     }
                 }
             }
