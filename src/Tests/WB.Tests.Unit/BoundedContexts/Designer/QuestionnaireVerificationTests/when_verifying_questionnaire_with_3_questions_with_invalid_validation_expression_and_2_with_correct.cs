@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    [Ignore("C#")]
+    [Ignore("C#, KP-4384 Chain disabling groups and anwers")]
     internal class when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_with_2_with_correct :
         QuestionnaireVerifierTestsContext
     {

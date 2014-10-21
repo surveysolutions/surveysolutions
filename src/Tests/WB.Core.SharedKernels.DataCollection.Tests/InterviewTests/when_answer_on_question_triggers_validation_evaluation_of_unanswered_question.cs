@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#")]
+    [Ignore("C#, KP-4385 Misc Corner Cases")]
     internal class when_answer_on_question_triggers_validation_evaluation_of_unanswered_question : InterviewTestsContext
     {
         Establish context = () =>

@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#")]
+    [Ignore("C#, KP-4386 Rosters")]
     internal class when_roster_size_question_of_neted_roster_increase_row_count_but_row_is_disabled : InterviewTestsContext
     {
         Establish context = () =>

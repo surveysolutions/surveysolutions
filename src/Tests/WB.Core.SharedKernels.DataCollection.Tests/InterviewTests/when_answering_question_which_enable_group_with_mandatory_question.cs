@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#")]
+    [Ignore("C#, KP-4385 Misc Corner Cases")]
     internal class when_answering_question_which_enable_group_with_mandatory_question : InterviewTestsContext
     {
         private Establish context = () =>
