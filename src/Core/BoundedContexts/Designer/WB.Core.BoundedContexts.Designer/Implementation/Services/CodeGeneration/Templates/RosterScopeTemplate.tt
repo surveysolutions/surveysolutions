@@ -77,7 +77,7 @@
 
              <#foreach (var q in Model.Questions) 
              {#>        
-                <#=q.VariableName#> = this.<#=q.GeneratedMemberName#>,        
+                <#=q.GeneratedMemberName#> = this.<#=q.GeneratedMemberName#>,        
              <#}#>
             };
 
@@ -102,7 +102,7 @@
         public <#=question.GeneratedTypeName#> <#=question.VariableName#>
         {
             get { return <#=question.GeneratedStateName#>.State != State.Disabled ? this.<#=question.GeneratedMemberName#> : null; }
-            private set { this.<#=question.GeneratedMemberName#> = value; }
+            
         }
         <#if(!string.IsNullOrWhiteSpace(question.Conditions))
         {#>      
