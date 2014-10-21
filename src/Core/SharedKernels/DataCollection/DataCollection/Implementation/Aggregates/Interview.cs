@@ -7,6 +7,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -704,8 +705,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
-                interviewChangeStructures.Changes,
-                fixedRosterCalculationDatas);
+                interviewChangeStructures,
+                fixedRosterCalculationDatas,
+                questionnaire);
 
             //apply events
             this.ApplyEvent(new InterviewFromPreloadedDataCreated(userId, questionnaireId, questionnaire.Version));
@@ -744,8 +746,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
             var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
-                interviewChangeStructures.Changes,
-                fixedRosterCalculationDatas);
+                interviewChangeStructures,
+                fixedRosterCalculationDatas,
+                questionnaire);
 
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
@@ -787,8 +790,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
             var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
-                interviewChangeStructures.Changes,
-                fixedRosterCalculationDatas);
+                interviewChangeStructures,
+                fixedRosterCalculationDatas,
+                questionnaire);
 
             //apply events
             this.ApplyEvent(new InterviewForTestingCreated(userId, questionnaireId, questionnaire.Version));
@@ -814,8 +818,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
             var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
-                interviewChangeStructures.Changes,
-                fixedRosterCalculationDatas);
+                interviewChangeStructures,
+                fixedRosterCalculationDatas,
+                questionnaire);
 
             //apply events
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaire.Version));
@@ -1154,6 +1159,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static Identity ToIdentity(InterviewItemId synchronizationIdentity)
         {
             return new Identity(synchronizationIdentity.Id, synchronizationIdentity.InterviewItemPropagationVector);
+        }
+
+        private static Identity GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId,
+            decimal[] rosterVector, IQuestionnaire questionnare)
+        {
+            int vectorRosterLevel = rosterVector.Length;
+            int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId);
+
+            if (questionRosterLevel > vectorRosterLevel)
+                throw new InterviewException(string.Format(
+                    "Question {0} expected to have roster level not deeper than {1} but it is {2}.",
+                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel));
+
+            decimal[] questionRosterVector = ShrinkRosterVector(rosterVector, questionRosterLevel);
+
+            return new Identity(questionId, questionRosterVector);
         }
 
         private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
@@ -3708,14 +3729,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private InterviewChanges UpdateExpressionStateWithAnswersAndGetChanges(IEnumerable<InterviewChanges> interviewChangesItems,
-            IEnumerable<RosterCalculationData> rosterDatas)
+        private InterviewChanges UpdateExpressionStateWithAnswersAndGetChanges(InterviewChangeStructures interviewChanges1, 
+            IEnumerable<RosterCalculationData> rosterDatas, 
+            IQuestionnaire questionnaire)
         {
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
-            foreach (var interviewChanges in interviewChangesItems)
+            foreach (var interviewChanges in interviewChanges1.Changes)
             {
                 if (interviewChanges.ValidityChanges != null)
                 {
@@ -3749,6 +3771,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
+            var childCascadingQuestions = questionnaire.GetAllChildCascadingQuestions();
+            foreach (var cascadingQuestionId in childCascadingQuestions)
+            {
+                var rosterInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(interviewChanges1.State, 
+                    cascadingQuestionId, 
+                    EmptyRosterVector, 
+                    questionnaire, 
+                    GetRosterInstanceIds);
+                foreach (var childQuestionInstance in rosterInstances)
+                {
+                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(childQuestionInstance.Id);
+                    if (cascadingQuestionParentId.HasValue)
+                    {
+                        var parentInstance = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingQuestionParentId.Value,
+                            childQuestionInstance.RosterVector, questionnaire);
+
+                        var parentStringIdentity = ConversionHelper.ConvertIdentityToString(parentInstance);
+                        if (!interviewChanges1.State.AnsweredQuestions.Contains(parentStringIdentity))
+                        {
+                            enablementChanges.QuestionsToBeDisabled.Add(childQuestionInstance);
+                        }
+                    }
+                }
+            }
+
             expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
 
             var enablementAndValidityChanges = new InterviewChanges(
