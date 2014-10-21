@@ -291,12 +291,12 @@ namespace WB.Core.SharedKernels.DataCollection
 
         protected bool IsAnswerEmpty<TY>(TY[] answer) where TY : struct
         {
-            return answer == null || answer.Length > 0;
+            return answer == null || answer.Length == 0;
         }
 
         protected bool IsAnswerEmpty(Tuple<decimal, string>[] answer)
         {
-            return answer == null || answer.Any();
+            return answer == null || !answer.Any();
         }
 
         public void CalculateConditionChanges(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,
