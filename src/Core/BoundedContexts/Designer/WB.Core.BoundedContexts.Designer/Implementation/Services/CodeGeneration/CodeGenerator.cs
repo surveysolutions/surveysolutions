@@ -271,22 +271,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             return generatedScopesTypeNames[scopeStringKey];
         }
-
-
-        private static bool getQ()
-        {
-            return true;
-        }
-
-        private Func<bool> result = () =>
-        {
-            if(getQ())  
-                return true;
-            else
-            {
-                return getQ();
-            }
-        };
-
     }
 }
