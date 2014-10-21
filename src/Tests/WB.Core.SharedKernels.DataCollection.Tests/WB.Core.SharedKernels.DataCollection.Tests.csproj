@@ -76,6 +76,7 @@
     <Compile Include="Create.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="EventContextExtenstions.cs" />
+    <Compile Include="Execute.cs" />
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\QuestionnaireRosterStructureFactoryTestContext.cs">
       <SubType>Code</SubType>
     </Compile>

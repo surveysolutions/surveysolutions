@@ -22,33 +22,4 @@
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
   <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
-  <IgnoredTests>
-    <NamedTestSelector>
-      <TestName>WB.Tests.Integration.LanguageTests.when_answering_on_question_condition_expression_throws_exception.should_enable_second_question</TestName>
-    </NamedTestSelector>
-    <NamedTestSelector>
-      <TestName>WB.Tests.Integration.LanguageTests.when_answering_on_question_validation_expression_throws_exception.should_enable_second_question</TestName>
-    </NamedTestSelector>
-    <NamedTestSelector>
-      <TestName>WB.Tests.Integration.LanguageTests.when_answering_on_question_condition_expression_throws_exception_1.should_enable_second_question</TestName>
-    </NamedTestSelector>
-    <FixtureTestSelector>
-      <FixtureName>WB.Tests.Integration.LanguageTests.when_creating_interview_and_all_questions_have_empty_enablement_condition</FixtureName>
-    </FixtureTestSelector>
-    <FixtureTestSelector>
-      <FixtureName>WB.Tests.Integration.LanguageTests.when_creating_interview_and_all_questions_have_empty_enablement_conditions</FixtureName>
-    </FixtureTestSelector>
-    <FixtureTestSelector>
-      <FixtureName>WB.Tests.Integration.LanguageTests.when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions</FixtureName>
-    </FixtureTestSelector>
-    <FixtureTestSelector>
-      <FixtureName>WB.Tests.Integration.LanguageTests.when_answering_on_question_validation_expression_throws_exception</FixtureName>
-    </FixtureTestSelector>
-    <FixtureTestSelector>
-      <FixtureName>WB.Tests.Integration.LanguageTests.when_answering_on_question_which_is_part_of_condition_expression_in_another_question</FixtureName>
-    </FixtureTestSelector>
-    <FixtureTestSelector>
-      <FixtureName>WB.Tests.Integration.LanguageTests.ConditionsChaining.when_question_A_disables_question_B_and_B_disables_group_C</FixtureName>
-    </FixtureTestSelector>
-  </IgnoredTests>
 </ProjectConfiguration>

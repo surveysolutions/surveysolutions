@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.LanguageTests
         };
 
         Because of = () =>
-            results = RemoteFunc.Invoke(appDomainContext.Domain, () =>
+            results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 var questionnaireId = Guid.Parse("00000000000000000000000000000000");
                 var actorId = Guid.Parse("99999999999999999999999999999999");
