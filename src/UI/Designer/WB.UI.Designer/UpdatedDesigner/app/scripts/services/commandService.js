@@ -88,6 +88,7 @@
                         command.linkedToQuestionId = question.linkedToQuestionId;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
+                        command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
                         if (shouldGetOptionsOnServer) {
                             command.options = null;
                         } else {
