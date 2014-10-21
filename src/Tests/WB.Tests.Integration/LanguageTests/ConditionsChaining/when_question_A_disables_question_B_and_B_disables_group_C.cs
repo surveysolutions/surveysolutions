@@ -32,12 +32,14 @@ namespace WB.Tests.Integration.LanguageTests.ConditionsChaining
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.NumericIntegerQuestion(q1, "q1"),
-                    Create.Group(g1, "g1", null,
+                    Create.Group(g1, "g1", null, children: new[]
+                    {
                         Create.NumericIntegerQuestion(q2, "q2", "q1 > 0")
-                    ),
-                    Create.Group(g2, "g2", "q1 > 0 && q2 == 1",
+                    }),
+                    Create.Group(g2, "g2", "q1 > 0 && q2 == 1", children: new[]
+                    {
                         Create.NumericIntegerQuestion(q3, "q3", "q2 > 20 && q1 > 0")
-                    )
+                    })
                );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>() {});

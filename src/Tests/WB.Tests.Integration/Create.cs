@@ -27,16 +27,34 @@ namespace WB.Tests.Integration
                    publishedEvent.EventSourceId == eventSourceId);
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid id, params IComposite[] questions)
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
         {
-            var questionnaireDocument = new QuestionnaireDocument { PublicKey = id };
-
-            questions.ToList().ForEach(q => questionnaireDocument.Add(q, id, null));
-
-            return questionnaireDocument;
+            return new QuestionnaireDocument
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                Children = children != null ? children.ToList() : new List<IComposite>(),
+            };
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid id, string variable, string conditition = null, string validationExpression = null)
+        public static Group Chapter(string title = "Chapter X", IEnumerable<IComposite> children = null)
+        {
+            return Create.Group(
+                title: title,
+                children: children);
+        }
+
+        public static IQuestion Question(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        {
+            return new TextQuestion("Question X")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+            };
+        }
+
+        public static NumericQuestion NumericIntegerQuestion(Guid id, string variable, string enablementCondition = null, string validationExpression = null)
         {
             return new NumericQuestion
             {
@@ -44,40 +62,48 @@ namespace WB.Tests.Integration
                 PublicKey = id,
                 StataExportCaption = variable,
                 IsInteger = true,
-                ConditionExpression = conditition,
+                ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression
             };
         }
 
-        public static DateTimeQuestion DateTimeQuestion(Guid id, string variable, string conditition = null, string validationExpression = null)
+        public static DateTimeQuestion DateTimeQuestion(Guid id, string variable, string enablementCondition = null, string validationExpression = null)
         {
             return new DateTimeQuestion
             {
                 PublicKey = id,
                 StataExportCaption = variable,
-                ConditionExpression = conditition,
+                ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression
             };
         }
 
-        public static Group Group(Guid id, string variable = null, string conditition = null)
+        public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
         {
-            return new Group
-            {
-                PublicKey = id,
-                VariableName = variable,
-                ConditionExpression = conditition                
-            };
+            Group group = Create.Group(
+                id: id,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.FixedTitles;
+            group.RosterFixedTitles = new[] { "Roster X-1", "Roster X-2" };
+
+            return group;
         }
 
-        public static Group Group(Guid id, string variable = null, string conditition = null, params IComposite[] questions)
+        public static Group Group(Guid? id = null, string title = "Group X", string variable = null,
+            string enablementCondition = null, IEnumerable<IComposite> children = null)
         {
-            return new Group
+            return new Group(title)
             {
-                PublicKey = id,
+                PublicKey = id ?? Guid.NewGuid(),
                 VariableName = variable,
-                ConditionExpression = conditition,
-                Children = questions.ToList()
+                ConditionExpression = enablementCondition,              
+                Children = children != null ? children.ToList() : new List<IComposite>(),
             };
         }
 
