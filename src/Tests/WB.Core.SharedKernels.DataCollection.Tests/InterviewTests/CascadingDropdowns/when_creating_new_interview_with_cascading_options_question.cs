@@ -75,9 +75,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
         It should_disable_secod_level_of_questions_in_cascade = () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
 
-        It should_not_enable_child_cascading_questions = () =>
-            eventContext.ShouldNotContainEvent<QuestionsEnabled>();
-
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;
         static Guid grandChildCascadedComboboxId;
