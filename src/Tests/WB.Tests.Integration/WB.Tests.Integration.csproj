@@ -79,6 +79,7 @@
     <Compile Include="LanguageTests\when_answering_on_question_and_related_group_condition_expression_throws_exception.cs" />
     <Compile Include="LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
     <Compile Include="LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
+    <Compile Include="LanguageTests\when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
     <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_6_interviews_created_and_then_deleted_all_together.cs" />
