@@ -81,9 +81,9 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static Questionnaire Questionnaire(Guid actorId, QuestionnaireDocument questionnaireDocument)
+        public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {
-            return new Questionnaire(actorId, questionnaireDocument, false, string.Empty);
+            return new Questionnaire(Guid.NewGuid(), questionnaireDocument, false, string.Empty);
         }
 
         public static Interview Interview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,

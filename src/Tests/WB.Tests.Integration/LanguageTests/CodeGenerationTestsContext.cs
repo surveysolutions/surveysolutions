@@ -17,9 +17,11 @@ namespace WB.Tests.Integration.LanguageTests
 {
     internal class CodeGenerationTestsContext
     {
-        protected static Interview SetupInterview(Guid actorId, QuestionnaireDocument questionnaireDocument, Guid questionnaireId, List<object> evnts)
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null)
         {
-            var questionnaire = Create.Questionnaire(actorId, questionnaireDocument);
+            Guid questionnaireId = questionnaireDocument.PublicKey;
+
+            var questionnaire = Create.Questionnaire(questionnaireDocument);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionnaire.GetQuestionnaire()
@@ -34,14 +36,17 @@ namespace WB.Tests.Integration.LanguageTests
 
             var interview = Create.Interview(questionnaireId: questionnaireId);
 
-            ApplyAllEvents(interview, evnts);
+            ApplyAllEvents(interview, events);
 
             return interview;
         }
 
-        public static void ApplyAllEvents(Interview interview, List<object> evnts)
+        public static void ApplyAllEvents(Interview interview, IEnumerable<object> events)
         {
-            foreach (var evnt in evnts)
+            if (events == null)
+                return;
+
+            foreach (var evnt in events)
             {
                 interview.Apply((dynamic)evnt);
             }

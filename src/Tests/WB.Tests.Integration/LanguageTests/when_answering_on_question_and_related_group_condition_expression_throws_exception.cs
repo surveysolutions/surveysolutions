@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.LanguageTests
                     Create.Group(groupId, "g1", "1/q1 == 1")
                );
 
-                var interview = SetupInterview(actorId, questionnaireDocument, questionnaireId, new List<object>()
+                var interview = SetupInterview(questionnaireDocument, new List<object>()
                 {
                     new NumericIntegerQuestionAnswered(actorId, questionId, new decimal[0], DateTime.Now, 1),
                     new GroupsEnabled(new[]{ new Identity(groupId, new decimal[0])})
