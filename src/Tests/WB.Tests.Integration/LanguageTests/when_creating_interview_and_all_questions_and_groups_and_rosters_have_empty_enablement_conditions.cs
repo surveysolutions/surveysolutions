@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.LanguageTests
         };
 
         Because of = () =>
-            result = RemoteFunc.Invoke(appDomainContext.Domain, () =>
+            result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.SetupMockedServiceLocator();
 

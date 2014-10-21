@@ -16,7 +16,7 @@ namespace WB.Tests.Integration.LanguageTests.ConditionsChaining
         };
 
         Because of = () =>
-            results = RemoteFunc.Invoke(appDomainContext.Domain, () =>
+            results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 var questionnaireId = Guid.Parse("00000000000000000000000000000000");
                 var q1 = Guid.Parse("11111111111111111111111111111111");
