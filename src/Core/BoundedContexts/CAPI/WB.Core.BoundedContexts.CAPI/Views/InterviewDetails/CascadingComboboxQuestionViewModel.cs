@@ -85,10 +85,10 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
         {
             var selectedAnswer = QuestionUtils.ExtractSelectedOptions(answer);
 
-            if (selectedAnswer == null)
+            if (selectedAnswer == null || selectedAnswer.Length == 0)
                 return;
 
-            foreach (var item in this.filteredAnswers ?? AnswerOptions)
+            foreach (var item in AnswerOptions)
             {
                 item.Selected = selectedAnswer[0] == item.Value;
             }
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void RemoveAnswer()
         {
-            foreach (var item in this.filteredAnswers ?? AnswerOptions)
+            foreach (var item in AnswerOptions)
             {
                 item.Selected = false;
             }
