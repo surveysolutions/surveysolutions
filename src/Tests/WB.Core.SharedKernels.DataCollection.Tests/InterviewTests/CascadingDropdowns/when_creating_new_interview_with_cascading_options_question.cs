@@ -69,11 +69,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
 
         Because of = () => new Interview(Guid.NewGuid(), actorId, questionnaireId, new Dictionary<Guid, object>(), DateTime.Now);
 
-        It should_disable_cascading_questions = () => 
+        It should_disable_first_cascading_question = () => 
             eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == childCascadedComboboxId));
 
         It should_disable_secod_level_of_questions_in_cascade = () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
+
+        It should_not_enable_child_cascading_questions = () =>
+            eventContext.ShouldNotContainEvent<QuestionsEnabled>();
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;
