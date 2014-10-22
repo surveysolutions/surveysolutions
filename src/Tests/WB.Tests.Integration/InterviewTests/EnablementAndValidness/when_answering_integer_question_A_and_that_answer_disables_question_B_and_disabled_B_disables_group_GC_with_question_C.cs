@@ -7,9 +7,9 @@ using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using It = Machine.Specifications.It;
+using WB.Tests.Integration.InterviewTests.LanguageTests;
 
-namespace WB.Tests.Integration.LanguageTests.EnablementAndValidness
+namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
     internal class when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_group_GC_with_question_C_and_B_was_answered : CodeGenerationTestsContext
     {

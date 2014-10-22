@@ -5,10 +5,12 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Tests.Integration.InterviewTests.LanguageTests;
 
-namespace WB.Tests.Integration.LanguageTests.EnablementAndValidness
+namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered : CodeGenerationTestsContext
+    internal class when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered : CodeGenerationTestsContext
     {
         Establish context = () =>
         {
@@ -30,20 +32,20 @@ namespace WB.Tests.Integration.LanguageTests.EnablementAndValidness
                 Setup.SetupMockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.NumericRealQuestion(questionAId, "a"),
-                    Create.NumericRealQuestion(questionBId, "b", "a < 0"),
-                    Create.NumericRealQuestion(questionCId, "c", "b < 0")
+                    Create.DateTimeQuestion(questionAId, "a"),
+                    Create.DateTimeQuestion(questionBId, "b", "a > new DateTime(2015, 2, 2)"),
+                    Create.DateTimeQuestion(questionCId, "c", "b > new DateTime(2015, 9, 9 )")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    new QuestionsEnabled(new[]{ new Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity(questionAId, emptyRosterVector), new Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity(questionBId, emptyRosterVector), new Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity(questionCId, emptyRosterVector) }),
-                    new NumericRealQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, (decimal) 4.2)
+                    new QuestionsEnabled(new[]{ new Identity(questionAId, emptyRosterVector), new Identity(questionBId, emptyRosterVector), new Identity(questionCId, emptyRosterVector) }),
+                    new DateTimeQuestionAnswered(userId, questionBId, emptyRosterVector, answerTime, new DateTime(2012, 1, 1))
                 });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericRealQuestion(userId, questionAId, emptyRosterVector, answerTime, (decimal)+100.500);
+                    interview.AnswerDateTimeQuestion(userId, questionAId, emptyRosterVector, answerTime, new DateTime(2014, 10, 10));
 
                     return new InvokeResults
                     {

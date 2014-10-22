@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
-namespace WB.Tests.Integration.LanguageTests
+namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     [Ignore("KP-4135")]
     internal class when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions : CodeGenerationTestsContext
