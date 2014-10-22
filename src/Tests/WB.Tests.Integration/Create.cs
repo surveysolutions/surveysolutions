@@ -43,23 +43,23 @@ namespace WB.Tests.Integration
                 children: children);
         }
 
-        public static IQuestion Question(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
         {
             return new TextQuestion("Question X")
             {
-                PublicKey = questionId ?? Guid.NewGuid(),
+                PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
             };
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid id, string variable, string enablementCondition = null, string validationExpression = null)
+        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
         {
             return new NumericQuestion
             {
                 QuestionType = QuestionType.Numeric,
-                PublicKey = id,
+                PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 IsInteger = true,
                 ConditionExpression = enablementCondition,
