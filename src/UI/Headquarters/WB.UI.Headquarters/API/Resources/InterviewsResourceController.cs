@@ -54,7 +54,8 @@ namespace WB.UI.Headquarters.API.Resources
             var result = this.Request.CreateResponse(HttpStatusCode.OK, interviewSynchronizationDto,
                 new JsonNetFormatter(new JsonSerializerSettings
                 {
-                    TypeNameHandling = TypeNameHandling.All
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    NullValueHandling = NullValueHandling.Ignore
                 }));
 
             return result;
