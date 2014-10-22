@@ -31,6 +31,7 @@ namespace WB.UI.Designer.Api
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private const int MaxCountOfOptionForFileredCombobox = 200;
+        public const int MaxVerificationErrors = 20;
 
         public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
@@ -147,7 +148,7 @@ namespace WB.UI.Designer.Api
         public VerificationErrors Verify(Guid id)
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
-            QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).Take(MaxVerificationErrors).ToArray();
             var errorsCount = verificationErrors.Length;
             VerificationError[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
 
