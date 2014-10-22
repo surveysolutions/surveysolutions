@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
-    [Ignore("KP-4381 Support expressions which can throw exceptions like int.Parse and 1/0")]
     internal class when_answering_on_question_condition_expression_throws_exception : InterviewTestsContext
     {
         Establish context = () =>
@@ -44,14 +43,23 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 0);
 
-                    result.Questions2Enabled = GetFirstEventByType<QuestionsDisabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) == null;
+                    result.Questions2DisabledEventWasFound  = 
+                        eventContext.Events.Any(b => b.Payload is QuestionsDisabled) &&
+                        GetFirstEventByType<QuestionsDisabled>(eventContext.Events).Questions.Any(q => q.Id == question2Id);
+
+                    result.Questions2EnabledEventWasFound =
+                        eventContext.Events.Any(b => b.Payload is QuestionsEnabled) &&
+                        GetFirstEventByType<QuestionsEnabled>(eventContext.Events).Questions.Any(q => q.Id == question2Id);
                 }
 
                 return result;
             });
 
-        It should_enable_second_question = () =>
-            results.Questions2Enabled.ShouldBeTrue();
+        It should_not_enable_question2Id = () =>
+            results.Questions2EnabledEventWasFound.ShouldBeFalse();
+
+        It should_disable_question2Id_because_of_calculation_error = () =>
+            results.Questions2DisabledEventWasFound.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -65,7 +73,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [Serializable]
         internal class InvokeResults
         {
-            public bool Questions2Enabled { get; set; }
+            public bool Questions2EnabledEventWasFound { get; set; }
+            public bool Questions2DisabledEventWasFound { get; set; }
         } 
     }
 }
