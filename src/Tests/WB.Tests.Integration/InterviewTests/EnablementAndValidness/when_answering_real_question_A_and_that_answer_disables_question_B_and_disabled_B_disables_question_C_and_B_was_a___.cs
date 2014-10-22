@@ -5,11 +5,10 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Tests.Integration.InterviewTests.LanguageTests;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered : CodeGenerationTestsContext
+    internal class when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_answered : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -48,8 +47,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                     return new InvokeResults
                     {
-                        QuestionBDisabled = GetFirstEventByType<QuestionsDisabled>(eventContext.Events).Questions.First(q => q.Id == questionBId) != null,
-                        QuestionCDisabled = GetFirstEventByType<QuestionsDisabled>(eventContext.Events).Questions.First(q => q.Id == questionCId) != null,
+                        QuestionBDisabled = GetFirstEventByType<QuestionsDisabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == questionBId) != null,
+                        QuestionCDisabled = GetFirstEventByType<QuestionsDisabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == questionCId) != null,
                     };
                 }
             });
