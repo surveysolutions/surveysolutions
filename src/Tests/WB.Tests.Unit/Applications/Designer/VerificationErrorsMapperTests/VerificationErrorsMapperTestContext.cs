@@ -18,10 +18,16 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
 
         internal static QuestionnaireVerificationError[] CreateQuestionnaireVerificationErrors(Guid questionId, Guid groupId)
         {
-            return new QuestionnaireVerificationError[2]
+            return new QuestionnaireVerificationError[4]
             {
-                new QuestionnaireVerificationError("aaa","aaaa", new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Question, questionId)}), 
-                new QuestionnaireVerificationError("bbb","bbbb", new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Group, groupId)})
+                new QuestionnaireVerificationError("aaa", "aaaa", new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId) }),
+                new QuestionnaireVerificationError("bbb", "bbbb", new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
+                new QuestionnaireVerificationError("ccc", "cccc", new QuestionnaireVerificationReference[2]
+                {
+                    new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId),
+                    new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId)
+                }),
+               new QuestionnaireVerificationError("aaa", "aaaa", new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
             };
         }
 
