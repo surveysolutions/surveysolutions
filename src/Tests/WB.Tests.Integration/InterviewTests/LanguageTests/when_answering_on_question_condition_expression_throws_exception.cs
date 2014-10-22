@@ -5,11 +5,12 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using It = Machine.Specifications.It;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
-namespace WB.Tests.Integration.LanguageTests
+namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
-    internal class when_answering_on_question_which_is_part_of_condition_expression_in_another_question : CodeGenerationTestsContext
+    [Ignore("KP-4381 Support expressions which can throw exceptions like int.Parse and 1/0")]
+    internal class when_answering_on_question_condition_expression_throws_exception : CodeGenerationTestsContext
     {
         Establish context = () =>
         {
@@ -18,7 +19,7 @@ namespace WB.Tests.Integration.LanguageTests
 
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
-            {                
+            {
                 var questionnaireId = Guid.Parse("00000000000000000000000000000000");
                 var actorId = Guid.Parse("99999999999999999999999999999999");
                 var question1Id = Guid.Parse("11111111111111111111111111111111");
@@ -28,23 +29,22 @@ namespace WB.Tests.Integration.LanguageTests
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.NumericIntegerQuestion(question1Id, "q1"),
-                    Create.NumericIntegerQuestion(question2Id, "q2", "q1 > 3")
+                    Create.NumericIntegerQuestion(question2Id, "q2", "1/q1 == 1")
                );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>
-                    {
-                        new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 1),
-                        new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 2),
-                        new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 3)
-                    });
+                var interview = SetupInterview(questionnaireDocument, new List<object>()
+                {
+                    new NumericIntegerQuestionAnswered(actorId, question1Id, new decimal[0], DateTime.Now, 1),
+                    new QuestionsEnabled(new[]{ new Identity(question1Id, new decimal[0]), new Identity(question2Id, new decimal[0])})
+                });
 
                 var result = new InvokeResults();
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 4);
+                    interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 0);
 
-                    result.Questions2Enabled = GetFirstEventByType<QuestionsEnabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) != null;
+                    result.Questions2Enabled = GetFirstEventByType<QuestionsDisabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) == null;
                 }
 
                 return result;
@@ -58,7 +58,7 @@ namespace WB.Tests.Integration.LanguageTests
             appDomainContext.Dispose();
             appDomainContext = null;
         };
-        
+
         private static InvokeResults results;
         private static AppDomainContext appDomainContext;
 
@@ -66,6 +66,6 @@ namespace WB.Tests.Integration.LanguageTests
         internal class InvokeResults
         {
             public bool Questions2Enabled { get; set; }
-        }
+        } 
     }
 }

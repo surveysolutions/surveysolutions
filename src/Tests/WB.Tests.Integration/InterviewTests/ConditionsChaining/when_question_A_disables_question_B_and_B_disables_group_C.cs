@@ -5,8 +5,9 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Tests.Integration.InterviewTests.LanguageTests;
 
-namespace WB.Tests.Integration.LanguageTests.ConditionsChaining
+namespace WB.Tests.Integration.InterviewTests.ConditionsChaining
 {
     internal class when_question_A_disables_question_B_and_B_disables_group_C : CodeGenerationTestsContext
     {

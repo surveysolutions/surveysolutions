@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.Tests.Integration.LanguageTests
+namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class CodeGenerationTestsContext
     {
