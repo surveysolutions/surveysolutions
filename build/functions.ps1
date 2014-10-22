@@ -298,7 +298,7 @@ function GetVersionString([string]$Project)
 
 function UpdateProjectVersion([string]$BuildNumber, [string]$ver)
 {
-	$foundFiles = get-childitem -Filter AssemblyInfo.cs -recurse -ErrorAction SilentlyContinue | `
+	$foundFiles = get-childitem -include *AssemblyInfo.cs -recurse -ErrorAction SilentlyContinue | `
 		?{ $_.fullname -notmatch "\\*.Tests\\?" }
 	foreach ($file in $foundFiles) {
 		UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
