@@ -48,6 +48,7 @@ namespace WB.Tests.Integration
             return new TextQuestion("Question X")
             {
                 PublicKey = id ?? Guid.NewGuid(),
+                QuestionType = QuestionType.Text,
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
@@ -67,11 +68,25 @@ namespace WB.Tests.Integration
             };
         }
 
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        {
+            return new NumericQuestion
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                IsInteger = false,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression
+            };
+        }
+
         public static DateTimeQuestion DateTimeQuestion(Guid id, string variable, string enablementCondition = null, string validationExpression = null)
         {
             return new DateTimeQuestion
             {
                 PublicKey = id,
+                QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression
