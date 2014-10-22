@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     [Ignore("KP-4381 Support expressions which can throw exceptions like int.Parse and 1/0")]
-    internal class when_answering_on_question_condition_expression_throws_exception : CodeGenerationTestsContext
+    internal class when_answering_on_question_condition_expression_throws_exception : InterviewTestsContext
     {
         Establish context = () =>
         {

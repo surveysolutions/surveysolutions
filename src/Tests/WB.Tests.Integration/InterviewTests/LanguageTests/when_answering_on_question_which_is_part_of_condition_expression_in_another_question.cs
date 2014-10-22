@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
-    internal class when_answering_on_question_which_is_part_of_condition_expression_in_another_question : CodeGenerationTestsContext
+    internal class when_answering_on_question_which_is_part_of_condition_expression_in_another_question : InterviewTestsContext
     {
         Establish context = () =>
         {
