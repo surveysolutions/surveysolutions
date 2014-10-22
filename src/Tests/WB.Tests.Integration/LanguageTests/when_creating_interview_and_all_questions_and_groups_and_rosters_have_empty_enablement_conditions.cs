@@ -40,8 +40,8 @@ namespace WB.Tests.Integration.LanguageTests
 
                     return new InvokeResult
                     {
-                        GroupsEnabledEventCount = eventContext.Events.Count(e => e.Payload is GroupsEnabled),
-                        QuestionsEnabledEventCount = eventContext.Events.Count(e => e.Payload is QuestionsEnabled),
+                        GroupsEnabledEventCount = eventContext.Count<GroupsEnabled>(),
+                        QuestionsEnabledEventCount = eventContext.Count<QuestionsEnabled>(),
                     };
                 }
             });
