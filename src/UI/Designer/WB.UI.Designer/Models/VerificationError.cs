@@ -8,6 +8,7 @@ namespace WB.UI.Designer.Models
     {
         public string Code { get; set; }
         public string Message { get; set; }
+        public bool IsGroupOfErrors { get; set; }
         public List<VerificationReference> References { get; set; }
     }
 
