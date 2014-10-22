@@ -21,37 +21,67 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
             result = mapper.EnrichVerificationErrors(verificationErrors, document);
 
         It should_return_2_errors = () => 
-            result.Length.ShouldEqual(2);
+            result.Length.ShouldEqual(3);
 
         It should_return_first_error_with_same_Code_as_input_error_has = () =>
-            result.First().Code.ShouldEqual(verificationErrors.First().Code);
-
-        It should_return_last_error_with_same_Code_as_input_error_has = () =>
-            result.Last().Code.ShouldEqual(verificationErrors.Last().Code);
+            result.ElementAt(0).Code.ShouldEqual(verificationErrors.ElementAt(0).Code);
 
         It should_return_first_error_with_same_Message_as_input_error_has = () =>
-            result.First().Message.ShouldEqual(verificationErrors.First().Message);
-
-        It should_return_last_error_with_same_Message_as_input_error_has = () =>
-            result.Last().Message.ShouldEqual(verificationErrors.Last().Message);
+            result.ElementAt(0).Message.ShouldEqual(verificationErrors.ElementAt(0).Message);
 
         It should_return_first_error_with_same_References_count_as_input_error_has = () =>
-            result.First().References.Count.ShouldEqual(verificationErrors.First().References.Count());
-
-        It should_return_last_error_with_same_References_count_as_input_error_has = () =>
-            result.Last().References.Count.ShouldEqual(verificationErrors.Last().References.Count());
+            result.ElementAt(0).References.Count.ShouldEqual(2);
 
         It should_return_first_error_that_references_question_with_questionId = () =>
-            result.First().References.First().ItemId.ShouldEqual(questionId);
+            result.ElementAt(0).References.ElementAt(0).ItemId.ShouldEqual(questionId);
 
-        It should_return_last_error_that_references_question_with_questionId = () =>
-            result.Last().References.First().ItemId.ShouldEqual(groupId);
+        It should_return_first_error_that_references_group_with_groupId = () =>
+            result.ElementAt(0).References.ElementAt(1).ItemId.ShouldEqual(groupId);
 
         It should_return_first_error_that_references_question_with_questionTitle = () =>
-            result.First().References.First().Title.ShouldEqual(questionTitle);
+            result.ElementAt(0).References.ElementAt(0).Title.ShouldEqual(questionTitle);
+
+        It should_return_first_error_with_IsGroupOfErrors_field_set_in_true = () =>
+            result.ElementAt(0).IsGroupOfErrors.ShouldBeTrue();
+
+        It should_return_last_error_with_same_Code_as_input_error_has = () =>
+            result.ElementAt(1).Code.ShouldEqual(verificationErrors.ElementAt(1).Code);
+
+        It should_return_last_error_with_same_Message_as_input_error_has = () =>
+            result.ElementAt(1).Message.ShouldEqual(verificationErrors.ElementAt(1).Message);
+
+        It should_return_last_error_with_same_References_count_as_input_error_has = () =>
+            result.ElementAt(1).References.Count.ShouldEqual(verificationErrors.ElementAt(1).References.Count());
+
+        It should_return_last_error_that_references_question_with_questionId = () =>
+            result.ElementAt(1).References.ElementAt(0).ItemId.ShouldEqual(groupId);
 
         It should_return_last_error_that_references_question_with_groupTitle = () =>
-            result.Last().References.First().Title.ShouldEqual(groupTitle);
+            result.ElementAt(1).References.ElementAt(0).Title.ShouldEqual(groupTitle);
+
+        It should_return_last_error_with_IsGroupOfErrors_field_set_in_true = () =>
+            result.ElementAt(1).IsGroupOfErrors.ShouldBeTrue();
+
+        It should_return_third_error_with_same_Code_as_input_error_has = () =>
+            result.ElementAt(2).Code.ShouldEqual(verificationErrors.ElementAt(2).Code);
+
+        It should_return_third_error_with_same_Message_as_input_error_has = () =>
+            result.ElementAt(2).Message.ShouldEqual(verificationErrors.ElementAt(2).Message);
+
+        It should_return_third_error_with_same_References_count_as_input_error_has = () =>
+            result.ElementAt(2).References.Count.ShouldEqual(2);
+
+        It should_return_third_error_that_references_question_with_questionId = () =>
+            result.ElementAt(2).References.ElementAt(0).ItemId.ShouldEqual(questionId);
+
+        It should_return_third_error_that_references_group_with_groupId = () =>
+            result.ElementAt(2).References.ElementAt(1).ItemId.ShouldEqual(groupId);
+
+        It should_return_third_error_that_references_question_with_questionTitle = () =>
+            result.ElementAt(2).References.ElementAt(0).Title.ShouldEqual(questionTitle);
+
+        It should_return_third_error_with_IsGroupOfErrors_field_set_in_true = () =>
+            result.ElementAt(2).IsGroupOfErrors.ShouldBeFalse();
 
 
         private static IVerificationErrorsMapper mapper;

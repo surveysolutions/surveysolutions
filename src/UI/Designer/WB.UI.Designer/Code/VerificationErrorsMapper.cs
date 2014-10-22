@@ -25,7 +25,8 @@ namespace WB.UI.Designer.Code
                 {
                     Code = x.Key.Code,
                     Message = x.Key.Message,
-                    References = x.SelectMany(g => GetEnrichedReferences(g.References, questionnaireDocument)).ToList()
+                    References = x.SelectMany(g => GetEnrichedReferences(g.References, questionnaireDocument)).ToList(),
+                    IsGroupOfErrors = true
                 }).ToList();
 
             errors.AddRange(verificationErrors
@@ -33,7 +34,8 @@ namespace WB.UI.Designer.Code
                 {
                     Code = x.Code,
                     Message = x.Message,
-                    References = GetEnrichedReferences(x.References, questionnaireDocument).ToList()
+                    References = GetEnrichedReferences(x.References, questionnaireDocument).ToList(),
+                    IsGroupOfErrors = false
                 }));
 
             return errors.OrderBy(x => x.Code).ToArray();

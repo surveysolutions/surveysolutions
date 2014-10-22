@@ -7727,9 +7727,12 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   padding: 0;
   margin-bottom: 20px;
 }
+#verification-modal .modal-dialog .modal-content .modal-body .verification-items .verification-item-container {
+  border-left: 4px solid #dd2c2c;
+}
 #verification-modal .modal-dialog .modal-content .modal-body .verification-items .verification-item {
-  margin-top: 2px;
-  border-radius: 4px;
+  margin-top: 3px;
+  border-radius: 0 4px 4px 0;
   padding-left: 18px;
   white-space: nowrap;
   height: 36px;
@@ -7774,6 +7777,12 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-image: linear-gradient(to right, rgba(242, 243, 245, 0) 0%, #f2f3f5 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00f2f3f5', endColorstr='#fff2f3f5', GradientType=1);
+}
+#verification-modal .modal-dialog .modal-content .modal-body .verification-items.singleError {
+  border-left: 4px solid #dd2c2c;
+}
+#verification-modal .modal-dialog .modal-content .modal-body .verification-items.singleError .verification-item-container {
+  border-left: none;
 }
 #verification-modal .modal-dialog .modal-content .modal-footer {
   border-top: 2px solid #edeff1;
