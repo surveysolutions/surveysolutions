@@ -162,6 +162,7 @@
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_filtered_combobox_question_info_with_more_than_200_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_getting_singleoption_question_info_with_25_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_absent_questionnaire.cs" />
+    <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_questionnaire_with_21_verification_errors.cs" />
     <Compile Include="Applications\Designer\QuestionnaireApiControllerTests\when_verifying_questionnaire_and_where_is_verification_errors.cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_cascading_options.cs" />
     <Compile Include="Applications\Designer\QuestionnaireControllerTests\when_editing_cascading_options_and_uploaded_file_has_wrong_csv_format.cs" />

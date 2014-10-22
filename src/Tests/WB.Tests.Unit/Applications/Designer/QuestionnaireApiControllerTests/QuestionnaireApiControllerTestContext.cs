@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Moq;
@@ -59,6 +60,11 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             return new QuestionnaireDocument();
         }
 
+        public static QuestionnaireDocument CreateQuestionnaireDocument(IEnumerable<IComposite> questionnaireItems)
+        {
+            return new QuestionnaireDocument() {Children = new List<IComposite>(questionnaireItems)};
+        }
+
         public static NewEditStaticTextView CreateStaticTextView()
         {
             return new NewEditStaticTextView();
@@ -71,6 +77,19 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                 new QuestionnaireVerificationError("aaa","aaaa", new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Question, Guid.NewGuid())}), 
                 new QuestionnaireVerificationError("bbb","bbbb", new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Group, Guid.NewGuid())}), 
             };
+        }
+
+        internal static QuestionnaireVerificationError[] CreateQuestionnaireVerificationErrors(IEnumerable<IComposite> questionnaireItems)
+        {
+            return
+                questionnaireItems.Select(
+                    questionnaireItem =>
+                        new QuestionnaireVerificationError("aaa", "aaaa",
+                            new QuestionnaireVerificationReference[1]
+                            {
+                                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
+                                    questionnaireItem.PublicKey)
+                            })).ToArray();
         }
 
         internal static NewEditQuestionView CreateSingleoptionFilteredCombobox(Guid questionId, int optionsCount = 3, bool isFilteredCombobox = false)
