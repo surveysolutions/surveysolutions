@@ -18,14 +18,22 @@ namespace WB.UI.Capi.Views
             }
         }
 
-        public bool CanSetSyncEndpoint { get; set; }
+        private bool canSetSyncEndpoint = true;
+        public bool CanSetSyncEndpoint
+        {
+            get { return canSetSyncEndpoint; }
+            set
+            {
+                canSetSyncEndpoint = value;
+                RaisePropertyChanged(() => CanSetSyncEndpoint);
+            }
+        }
         public string SyncEndpoint { get; private set; }
         public string Login { get; private set; }
         public string Password { get; private set; }
 
         public FinishIntallationViewModel()
         {
-            this.CanSetSyncEndpoint = true;
 #if DEBUG
             this.SyncEndpoint = "http://192.168.173.1/headquarters";
 #endif
@@ -49,7 +57,6 @@ namespace WB.UI.Capi.Views
             if (!SettingsManager.SetSyncAddressPoint(this.SyncEndpoint))
             {
                 this.CanSetSyncEndpoint = false;
-                RaisePropertyChanged(() => CanSetSyncEndpoint);
                 return;
             }
             
