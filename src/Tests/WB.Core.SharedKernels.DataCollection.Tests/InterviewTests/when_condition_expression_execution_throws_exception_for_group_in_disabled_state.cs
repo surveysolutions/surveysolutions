@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#, KP-4384 Chain disabling groups and anwers")]
+    [Ignore("C#, KP-4385 Misc Corner Cases")]
     internal class when_condition_expression_execution_throws_exception_for_group_in_disabled_state : InterviewTestsContext
     {
         Establish context = () =>
