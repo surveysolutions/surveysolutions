@@ -233,7 +233,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(folderPath));
             if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
-                fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(folderPath));
+                fileSystemAccessor.DeleteDirectory(this.GetApprovedDataFolder(folderPath));
         }
 
         private string GetFolderPath(string dbPath)
@@ -258,11 +258,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             foreach (ExportedHeaderItem question in header.HeaderItems.Values)
             {
+                var columnType = numericQuestionTypes.Contains(question.QuestionType) ? numeric : text;
                 foreach (var columnName in question.ColumnNames)
 
                 {
                     createLevelTable = createLevelTable + ", " +
-                        string.Format("[{0}] {1}", columnName, numericQuestionTypes.Contains(question.QuestionType) ? numeric : text);
+                        string.Format("[{0}] {1}", columnName, columnType);
                 }
             }
 
@@ -273,7 +274,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         i == header.LevelScopeVector.Length - 1 ? nvarchar : numeric);
             }
 
-            createLevelTable = createLevelTable + ")";
+            createLevelTable = createLevelTable + ");";
 
 
 
@@ -298,7 +299,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             createHeaderTabaleCommand += ", Role " + nvarchar;
             createHeaderTabaleCommand += ", Date " + nvarchar;
             createHeaderTabaleCommand += ", Time " + nvarchar;
-            createHeaderTabaleCommand = createHeaderTabaleCommand + ")";
+            createHeaderTabaleCommand = createHeaderTabaleCommand + ");";
 
             using (var sqlService = sqlServiceFactory.CreateSqlService(basePath))
             {
