@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    [Ignore("C#, KP-4384 Chain disabling groups and anwers")]
+    [Ignore("C#, KP-4385 Misc Corner Cases")]
     internal class when_verifying_questionnaire_with_2_questions_and_1_group_having_enablement_conditions_with_incorrect_syntax_and_1_question_and_1_group_having_correct_syntax :
             QuestionnaireVerifierTestsContext
     {

@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#, KP-4384 Chain disabling groups and anwers")]
+    [Ignore("C#, KP-4385 Misc Corner Cases")]
     internal class when_reevaluating_interview_with_mandatory_question_inside_recently_enabled_group : InterviewTestsContext
     {
         Establish context = () =>
