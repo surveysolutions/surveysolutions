@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
-    [Ignore("KP-4381 Support expressions which can throw exceptions like int.Parse and 1/0")]
     internal class when_answering_on_question_and_related_group_condition_expression_throws_exception : InterviewTestsContext
     {
         Establish context = () =>
@@ -44,14 +43,23 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     interview.AnswerNumericIntegerQuestion(actorId, questionId, new decimal[0], DateTime.Now, 0);
 
-                    result.GroupEnabled = GetFirstEventByType<GroupsDisabled>(eventContext.Events).Groups.FirstOrDefault(g => g.Id == groupId) == null;
+                    result.GroupDisabledEventWasFound  =
+                        eventContext.Events.Any(b => b.Payload is GroupsDisabled) &&
+                        GetFirstEventByType<GroupsDisabled>(eventContext.Events).Groups.Any(g => g.Id == groupId);
+
+                    result.GroupEnabledEventWasFound =
+                        eventContext.Events.Any(b => b.Payload is GroupsEnabled) &&
+                        GetFirstEventByType<GroupsEnabled>(eventContext.Events).Groups.Any(g => g.Id == groupId);
                 }
 
                 return result;
             });
 
-        It should_enable_second_question = () =>
-            results.GroupEnabled.ShouldBeTrue();
+        It should_not_enable_groupId = () =>
+            results.GroupEnabledEventWasFound.ShouldBeTrue();
+
+        It should_disable_groupId_because_of_calculation_error = () =>
+            results.GroupDisabledEventWasFound.ShouldBeFalse();
 
         Cleanup stuff = () =>
         {
@@ -65,7 +73,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [Serializable]
         internal class InvokeResults
         {
-            public bool GroupEnabled { get; set; }
+            public bool GroupEnabledEventWasFound { get; set; }
+            public bool GroupDisabledEventWasFound { get; set; }
         } 
     }
 }
