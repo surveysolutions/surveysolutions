@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     [Ignore("KP-4135")]
-    internal class when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions : CodeGenerationTestsContext
+    internal class when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions : InterviewTestsContext
     {
         Establish context = () =>
         {
