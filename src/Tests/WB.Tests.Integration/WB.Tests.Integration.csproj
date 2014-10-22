@@ -78,6 +78,13 @@
     <Compile Include="Execute.cs" />
     <Compile Include="InterviewStatistics\Create.cs" />
     <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
+    <Compile Include="LanguageTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
+    <Compile Include="LanguageTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
+    <Compile Include="LanguageTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_that_disables_group_GC.cs" />
+    <Compile Include="LanguageTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_group_GC_with_question_C.cs" />
+    <Compile Include="LanguageTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_wa___.cs" />
+    <Compile Include="LanguageTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
+    <Compile Include="LanguageTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="LanguageTests\when_answering_on_question_and_related_group_condition_expression_throws_exception.cs" />
     <Compile Include="LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
     <Compile Include="LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
