@@ -68,6 +68,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
+        public void AddOrUpdateInterviewRecords(InterviewDataExportView items, string basePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateStructure(QuestionnaireExportStructure header, string basePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] GetAllDataFiles(string basePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] GetApprovedDataFiles(string basePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteInterviewRecords(string basePath, Guid interviewId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BatchInsert(string basePath, IEnumerable<InterviewDataExportView> interviewDatas, IEnumerable<InterviewActionExportView> interviewActions)
+        {
+            throw new NotImplementedException();
+        }
+
         public void CreateHeader(HeaderStructureForLevel header, string filePath)
         {
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, false))
@@ -123,21 +153,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public string GetInterviewActionFileName()
         {
             return "interview_actions.csv";
-        }
-
-        public string[] GetAllDataFiles(string basePath)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public string[] GetApprovedDataFiles(string basePath)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void DeleteInterviewRecords(string basePath, Guid interviewId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

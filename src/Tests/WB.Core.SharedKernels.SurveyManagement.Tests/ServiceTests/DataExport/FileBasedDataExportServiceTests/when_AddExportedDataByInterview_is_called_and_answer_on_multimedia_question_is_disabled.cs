@@ -44,22 +44,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             plainFileRepositoryMock = new Mock<IPlainInterviewFileStorage>();
             plainFileRepositoryMock.Setup(x => x.GetInterviewBinaryData(interviewId, Moq.It.IsAny<string>()))
                 .Returns(data);
-            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object, plainFileRepository: plainFileRepositoryMock.Object);
+            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object, plainFileRepository: plainFileRepositoryMock.Object);
         };
 
         Because of = () =>
-            fileBasedDataExportService.AddExportedDataByInterview(interviewToExport);
+            fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(interviewToExport);
 
         It should_data_file_name_be_requested_once = () =>
             interviewExportServiceMock.Verify(x => x.GetInterviewExportedDataFileName("1st"), Times.Once());
 
         It should_data_by_level_be_stored_once = () =>
-            interviewExportServiceMock.Verify(x => x.AddRecords(interviewLevelToExport, Moq.It.IsAny<string>()), Times.Once());
+            interviewExportServiceMock.Verify(x => x.AddOrUpdateInterviewRecords(interviewLevelToExport, Moq.It.IsAny<string>()), Times.Once());
 
         It should_not_be_stored_multimedia_file_which_is_answer_on_disabled_question = () =>
             fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(fileName)), data), Times.Never);
 
-        private static FileBasedDataExportService fileBasedDataExportService;
+        private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
 
         private static Mock<IDataExportWriter> interviewExportServiceMock;
         private static Mock<IPlainInterviewFileStorage> plainFileRepositoryMock;

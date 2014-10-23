@@ -19,6 +19,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -71,11 +72,11 @@ namespace CapiDataGenerator
             }
         }
 
-        private IRavenReadSideRepositoryWriterRegistry writerRegistry
+        private IReadSideRepositoryWriterRegistry writerRegistry
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<IRavenReadSideRepositoryWriterRegistry>();
+                return ServiceLocator.Current.GetInstance<IReadSideRepositoryWriterRegistry>();
             }
         }
 
@@ -102,7 +103,7 @@ namespace CapiDataGenerator
 
         private void EnableCacheInAllRepositoryWriters()
         {
-            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            foreach (IReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
             {
                 writer.EnableCache();
             }
@@ -110,7 +111,7 @@ namespace CapiDataGenerator
 
         private void DisableCacheInAllRepositoryWriters()
         {
-            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            foreach (IReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
             {
                 writer.DisableCache();
             }

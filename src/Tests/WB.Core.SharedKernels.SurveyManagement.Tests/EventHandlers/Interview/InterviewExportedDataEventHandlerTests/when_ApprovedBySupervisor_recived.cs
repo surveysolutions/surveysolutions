@@ -20,13 +20,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
-            dataExportService = new Mock<IDataExportService>();
-            questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>());
-
-
-            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                () => questionnarie,
-                CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name" });
+            dataExportService = new Mock<IDataExportRepositoryWriter>();
+            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(dataExportRepositoryWriter: dataExportService.Object);
         };
 
         Because of = () =>
@@ -36,13 +31,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         It should_ApproveBySupervisor_action_be_added_to_dataExport = () =>
             dataExportService.Verify(
                 x =>
-                    x.AddInterviewAction(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>(),
-                        Moq.It.Is<InterviewActionExportView>(view => view.Action == InterviewExportedAction.ApproveBySupervisor)));
+                    x.AddInterviewAction(
+                        InterviewExportedAction.ApproveBySupervisor,
+                        Moq.It.IsAny<Guid>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<DateTime>()));
 
 
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
-        private static QuestionnaireDocument questionnarie;
-        private static Mock<IDataExportService> dataExportService;
+        private static Mock<IDataExportRepositoryWriter> dataExportService;
         private static Guid interviewId = Guid.NewGuid();
     }
 }

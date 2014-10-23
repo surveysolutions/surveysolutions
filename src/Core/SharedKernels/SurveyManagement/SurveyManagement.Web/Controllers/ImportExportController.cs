@@ -16,11 +16,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class ImportExportController : AsyncController
     {
         private readonly IBackupManager backupManager;
-        private readonly IDataExportService exporter;
+        private readonly IDataExportRepositoryWriter exporter;
         private readonly ILogger logger;
 
         public ImportExportController(
-            ILogger logger, IDataExportService exporter, IBackupManager backupManager)
+            ILogger logger, IDataExportRepositoryWriter exporter, IBackupManager backupManager)
         {
             this.exporter = exporter;
             this.logger = logger;

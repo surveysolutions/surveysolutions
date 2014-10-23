@@ -18,11 +18,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(false);
-            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object);
+            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessorMock.Object);
         };
 
         Because of =()=>
-            raisedException = Catch.Exception(() => fileBasedDataExportService.AddExportedDataByInterview(new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, null))) as InterviewDataExportException;
+            raisedException = Catch.Exception(() => fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, null))) as InterviewDataExportException;
 
         It should_InterviewDataExportException_be_rised = () =>
             raisedException.ShouldNotBeNull();
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         It should_rised_exception_has_message_about_missing_folder = () =>
             raisedException.Message.ShouldContain("data files are absent for questionnaire");
 
-        private static FileBasedDataExportService fileBasedDataExportService;
+        private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
         private static InterviewDataExportException raisedException;
     }
 }

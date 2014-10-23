@@ -28,7 +28,7 @@ namespace WB.Core.Infrastructure.Storage.Raven
                 .WithConstructorArgument("assembliesWithIndexes", this.assembliesWithIndexes);
             this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
 
-            this.Bind<IRavenReadSideRepositoryWriterRegistry>().To<RavenReadSideRepositoryWriterRegistry>().InSingletonScope();
+            this.Bind<IReadSideRepositoryWriterRegistry>().To<ReadSideRepositoryWriterRegistry>().InSingletonScope();
 
             this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
 

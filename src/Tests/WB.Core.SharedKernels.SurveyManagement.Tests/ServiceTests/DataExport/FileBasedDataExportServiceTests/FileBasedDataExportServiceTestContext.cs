@@ -20,15 +20,15 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.FileBasedDataExportServiceTests
 {
-    [Subject(typeof(FileBasedDataExportService))]
+    [Subject(typeof(FileBasedDataExportRepositoryWriter))]
     internal class FileBasedDataExportServiceTestContext
     {
-        protected static FileBasedDataExportService CreateFileBasedDataExportService(
+        protected static FileBasedDataExportRepositoryWriter CreateFileBasedDataExportService(
             IFileSystemAccessor fileSystemAccessor = null, IDataExportWriter dataExportWriter = null,
             IEnvironmentContentService environmentContentService = null, IPlainInterviewFileStorage plainFileRepository = null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
-            return new FileBasedDataExportService(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "",
+            return new FileBasedDataExportRepositoryWriter(Mock.Of<IReadSideRepositoryCleanerRegistry>(), "",
                 dataExportWriter ?? Mock.Of<IDataExportWriter>(),
                 environmentContentService ?? Mock.Of<IEnvironmentContentService>(), currentFileSystemAccessor,
                 Mock.Of<ILogger>(), plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(_ => _.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>()) == new List<InterviewBinaryDataDescriptor>()));
