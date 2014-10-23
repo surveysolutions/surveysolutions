@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
             result.ShouldEndWith(string.Format("template_{0}_v{1}.zip", questionnaireId.FormatGuid(), 1));
 
         It should_header_be_created_for_both_leveles = () =>
-            dataFileExportService.Verify(x=>x.CreateHeader(Moq.It.IsAny<HeaderStructureForLevel>(),Moq.It.IsAny<string>()), Times.Exactly(2));
+            dataFileExportService.Verify(x=>x.CreateStructure(Moq.It.IsAny<QuestionnaireExportStructure>(),Moq.It.IsAny<string>()), Times.Exactly(2));
 
         private static PreloadingTemplateService preloadingTemplateService;
         private static string result;

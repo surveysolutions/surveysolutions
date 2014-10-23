@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         };
 
         Because of = () =>
-            sqlDataExportWriter.CreateHeaderForActionFile("");
+            sqlDataExportWriter.CreateStructure(CreateQuestionnaireExportStructure(),"");
 
         It should_1_command_be_executed = () =>
              sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(1);

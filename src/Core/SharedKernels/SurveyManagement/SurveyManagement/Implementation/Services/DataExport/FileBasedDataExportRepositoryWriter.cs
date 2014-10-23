@@ -214,6 +214,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.fileSystemAccessor.CreateDirectory(dataFolderForTemplatePath);
 
             this.dataExportWriter.CreateStructure(questionnaireExportStructure, dataFolderForTemplatePath);
+
             foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
                 string levelFileName = headerStructureForLevel.LevelName;

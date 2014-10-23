@@ -53,13 +53,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
         private readonly IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
+        private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
-            IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter)
+            IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter, 
+            IReadSideRepositoryWriter<UserDocument> userDocumentWriter)
         {
             this.dataExportWriter = dataExportWriter;
             this.recordFirstAnswerMarkerViewWriter = recordFirstAnswerMarkerViewWriter;
+            this.users = userDocumentWriter;
         }
 
         public string Name { get { return this.GetType().Name; } }
@@ -98,6 +101,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var recordFirstAnswerMarkerView = this.recordFirstAnswerMarkerViewWriter.GetById(interviewId);
             if (recordFirstAnswerMarkerView == null)
+                return;
+
+            UserDocument responsible = this.users.GetById(userId);
+
+            if (responsible == null || !responsible.Roles.Contains(UserRoles.Operator))
                 return;
 
             this.dataExportWriter.AddInterviewAction(InterviewExportedAction.FirstAnswerSet, interviewId, userId, answerTime);

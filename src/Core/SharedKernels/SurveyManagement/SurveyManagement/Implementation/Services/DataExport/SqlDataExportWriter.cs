@@ -291,7 +291,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return dbPath.Substring(0, dbPath.Length - fileSystemAccessor.GetFileName(dbPath).Length);
         }
 
-        public void CreateHeader(HeaderStructureForLevel header, ISqlService sqlService)
+        private void CreateHeader(HeaderStructureForLevel header, ISqlService sqlService)
         {
             var createLevelTable = string.Format("create table \"{0}\" (", header.LevelName);
 
@@ -338,7 +338,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         }
 
-        public void CreateHeaderForActionFile(ISqlService sqlService)
+        private void CreateHeaderForActionFile(ISqlService sqlService)
         {
             var createHeaderTabaleCommand = string.Format("create table {0} (", interviewActions);
             createHeaderTabaleCommand += "Id " + nvarchar;
