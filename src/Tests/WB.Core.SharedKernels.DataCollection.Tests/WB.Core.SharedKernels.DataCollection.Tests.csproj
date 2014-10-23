@@ -199,7 +199,6 @@
     <Compile Include="InterviewTests\when_answering_real_question_with_1000_and_max_value_is_567.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_decreases_roster_size.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size.cs" />
-    <Compile Include="InterviewTests\when_answer_on_question_triggers_validation_evaluation_of_unanswered_question.cs" />
     <Compile Include="InterviewTests\when_checking_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_roster_is_zero.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_with_3_fixed_titles.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_and_interview_restored_after_synch_and_contains_answer_on_not_linked_multioption_question_and_qu___.cs" />
