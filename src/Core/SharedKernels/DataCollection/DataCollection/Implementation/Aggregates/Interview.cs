@@ -1531,16 +1531,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ReevaluateSynchronizedInterview()
         {
             ThrowIfInterviewHardDeleted();
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
             this.ApplyEnablementChangesEvents(enablementChanges);
 
-            this.ApplyValidityChangesEvents(new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid));
+            this.ApplyValidityChangesEvents(validationChanges);
 
             if (!this.HasInvalidAnswers())
             {
@@ -2281,8 +2280,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             RosterCalculationData rosterCalculationData = CalculateRosterData(state, questionnaire, rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer, getRosterInstanceIds);
 
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             //Update State
@@ -2297,7 +2294,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -2313,7 +2310,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.NumericInteger, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, validationChanges,
                 rosterCalculationData, answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, AnswerUtils.AnswerToString(answer));
         }
 
@@ -2322,8 +2319,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             decimal[] selectedValues, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
             IQuestionnaire questionnaire)
         {
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-
             List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId).ToList();
 
             var rosterInstanceIds = new DistinctDecimalList(selectedValues.ToList());
@@ -2358,7 +2353,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
@@ -2378,7 +2373,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.MultipleOptions, userId, questionId, rosterVector, answerTime, selectedValues)
             };
 
-            return new InterviewChanges(interviewByAnswerChange, enablementChanges, new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+            return new InterviewChanges(interviewByAnswerChange, enablementChanges, validationChanges,
                 rosterCalculationData,
                 answersForLinkedQuestionsToRemoveByDisabling, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
@@ -2387,8 +2382,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid questionId, decimal[] rosterVector, DateTime answerTime, Tuple<decimal, string>[] answers,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
         {
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-
             var selectedValues = answers.Select(x => x.Item1).ToArray();
             var rosterInstanceIds = new DistinctDecimalList(selectedValues.ToList());
             var rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
@@ -2432,7 +2425,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
             List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector,
                 questionnaire);
@@ -2445,7 +2438,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
 
             return new InterviewChanges(answerChanges, enablementChanges,
-                new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+                validationChanges,
                 rosterCalculationData,
                 null, rosterInstancesWithAffectedTitles, answerFormattedAsRosterTitle);
         }
@@ -2559,13 +2552,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire,
             Action<IInterviewExpressionState> updateState)
         {
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             updateState(expressionProcessorState);
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling = this
                 .GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -2596,7 +2587,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new InterviewChanges(
                 interviewByAnswerChange,
                 enablementChanges,
-                new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+                validationChanges,
                 null,
                 answersForLinkedQuestionsToRemoveByDisabling,
                 rosterInstancesWithAffectedTitles,
@@ -3733,8 +3724,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<RosterCalculationData> rosterDatas, 
             IQuestionnaire questionnaire)
         {
-            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             foreach (var changes in interviewChanges.Changes)
@@ -3773,12 +3762,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             AppendCascadingQuestionChanges(interviewChanges, questionnaire, enablementChanges);
 
-            expressionProcessorState.ProcessValidationExpressions(out answersDeclaredValid, out answersDeclaredInvalid);
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
             var enablementAndValidityChanges = new InterviewChanges(
                 null,
                 enablementChanges,
-                new ValidityChanges(answersDeclaredValid, answersDeclaredInvalid),
+                validationChanges,
                 null,
                 null,
                 null,

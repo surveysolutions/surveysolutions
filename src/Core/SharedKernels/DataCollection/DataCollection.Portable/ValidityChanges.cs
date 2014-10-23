@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
+namespace WB.Core.SharedKernels.DataCollection
 {
-    internal class ValidityChanges
+    public class ValidityChanges
     {
+        internal ValidityChanges() : this(null, null) { }
         public ValidityChanges(List<Identity> answersDeclaredValid, List<Identity> answersDeclaredInvalid)
         {
             this.AnswersDeclaredValid = answersDeclaredValid ?? new List<Identity>();
