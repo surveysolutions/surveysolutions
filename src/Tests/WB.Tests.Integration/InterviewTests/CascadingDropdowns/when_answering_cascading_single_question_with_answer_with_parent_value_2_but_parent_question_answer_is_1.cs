@@ -98,17 +98,18 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                     return new InvokeResults
                     {
-                        Exception = exception
+                        ExceptionType = exception.GetType(),
+                        ErrorMessage = exception.Message.ToLower()
                     };
                 }
             });
 
         It should_throw_InterviewException = () =>
-            results.Exception.ShouldBeOfExactType<InterviewException>();
+            results.ExceptionType.ShouldEqual(typeof(InterviewException));
 
         It should_throw_exception_with_message_containting__answer____parent_value____incorrect__ = () =>
             new[] { "answer", "parent value", "do not correspond" }.ShouldEachConformTo(
-                keyword => results.Exception.Message.ToLower().Contains(keyword));
+                keyword => results.ErrorMessage.Contains(keyword));
 
         Cleanup stuff = () =>
         {
@@ -122,7 +123,8 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         [Serializable]
         internal class InvokeResults
         {
-            public Exception Exception { get; set; }
+            public Type ExceptionType { get; set; }
+            public string ErrorMessage { get; set; }
         }
     }
 }
