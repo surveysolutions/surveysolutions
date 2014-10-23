@@ -51,25 +51,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         IEventHandler
     {
-        private const string UnknownUserRole = "<UNKNOWN ROLE>";
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
-        private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
         private readonly IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IDataExportService dataExportService;
+        private readonly IDataExportRepositoryWriter dataExportWriter;
 
-        public InterviewExportedDataDenormalizer(IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
-            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
-            IDataExportService dataExportService, IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
+        public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
             IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter)
         {
-            this.interviewDataWriter = interviewDataWriter;
-            this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
-            this.dataExportService = dataExportService;
-            this.users = users;
-            this.interviewSummaryWriter = interviewSummaryWriter;
+            this.dataExportWriter = dataExportWriter;
             this.recordFirstAnswerMarkerViewWriter = recordFirstAnswerMarkerViewWriter;
         }
 
@@ -89,159 +78,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void UpdateInterviewData(Guid interviewId, Guid userId, DateTime timeStamp, InterviewExportedAction action)
         {
-            var interview = this.interviewDataWriter.GetById(interviewId);
+            this.dataExportWriter.AddExportedDataByInterview(interviewId);
 
-            var exportStructure = this.questionnaireExportStructureWriter.GetById(interview.Document.QuestionnaireId,
-                interview.Document.QuestionnaireVersion);
-
-            var interviewDataExportView = new InterviewDataExportView(interviewId, interview.Document.QuestionnaireId,
-                interview.Document.QuestionnaireVersion,
-                exportStructure.HeaderToLevelMap.Values.Select(
-                    exportStructureForLevel =>
-                        new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector, exportStructureForLevel.LevelName,
-                            this.BuildRecordsForHeader(interview.Document, exportStructureForLevel), interviewId.FormatGuid())).ToArray());
-
-            this.dataExportService.AddExportedDataByInterview(interviewDataExportView);
-
-            RecordAction(action, userId, interviewId, timeStamp, interview.Document.QuestionnaireId, interview.Document.QuestionnaireVersion);
+            RecordAction(action, userId, interviewId, timeStamp);
         }
 
-        private void RecordAction(InterviewExportedAction action, Guid userId, Guid interviewId, DateTime timeStamp, Guid? questionnaireId=null, long? questionnaireVersion=null)
+        private void RecordAction(InterviewExportedAction action, Guid userId, Guid interviewId, DateTime timeStamp)
         {
-            if (!questionnaireId.HasValue || !questionnaireVersion.HasValue)
-            {
-                var interviewSummary = interviewSummaryWriter.GetById(interviewId);
-                if(interviewSummary==null)
-                    return;
-                questionnaireId = interviewSummary.QuestionnaireId;
-                questionnaireVersion = interviewSummary.QuestionnaireVersion;
-            }
-            UserDocument responsible = this.users.GetById(userId);
-            if (responsible == null)
-                return;
-            var userName = this.GetUserName(responsible);
-            this.dataExportService.AddInterviewAction(questionnaireId.Value,
-                questionnaireVersion.Value, CreateInterviewActionExportView(interviewId, action,
-                    userName, this.GetUserRole(responsible), timeStamp));
-
+            this.dataExportWriter.AddInterviewAction(action, interviewId, userId, timeStamp);
             if (listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(action))
                 recordFirstAnswerMarkerViewWriter.Store(
-                    new RecordFirstAnswerMarkerView(interviewId, questionnaireId.Value, questionnaireVersion.Value),
+                    new RecordFirstAnswerMarkerView(interviewId),
                     interviewId);
             else
                 recordFirstAnswerMarkerViewWriter.Remove(interviewId);
-        }
-
-        private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
-        {
-            var dataRecords = new List<InterviewDataExportRecord>();
-
-            var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelScopeVector);
-          
-            foreach (var dataByLevel in interviewDataByLevels)
-            {
-                var vectorLength = dataByLevel.RosterVector.Length;
-                
-                string recordId = vectorLength == 0 ?
-                    interview.InterviewId.FormatGuid() :
-                    dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
-
-                var parentRecordIds = new string[dataByLevel.RosterVector.Length];
-                if (parentRecordIds.Length > 0)
-                {
-                    parentRecordIds[0] = interview.InterviewId.FormatGuid();
-                    for (int i = 0; i < dataByLevel.RosterVector.Length-1; i++)
-                    {
-                        parentRecordIds[i+1] = dataByLevel.RosterVector[i].ToString(CultureInfo.InvariantCulture);
-                    }
-
-                    parentRecordIds = parentRecordIds.Reverse().ToArray();
-                }
-
-                string[] referenceValues = new string[0];
-
-                if (headerStructureForLevel.IsTextListScope)
-                {
-                    referenceValues = new string[]{ GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelScopeVector.Last())};
-                }
-
-                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordIds,
-                    this.GetQuestionsForExport(dataByLevel.GetAllQuestions(), headerStructureForLevel)));
-            }
-
-            return dataRecords.ToArray();
-        }
-
-        private string CreateLevelIdFromPropagationVector(decimal[] vector)
-        {
-            return vector.Length == 0 ? "#" : EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
-        }
-
-        private string GetTextValueForTextListQuestion(InterviewData interview, decimal[] rosterVector, Guid id)
-        {
-            decimal itemToSearch = rosterVector.Last();
-
-            for(var i = 1; i <= rosterVector.Length; i++)
-            {
-                var levelForVector =
-                    interview.Levels.SingleOrDefault(
-                        l => l.Key == CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
-
-                var questionToCheck = levelForVector.Value.GetQuestion(id);
-
-                if (questionToCheck == null) 
-                    continue;
-                if (questionToCheck.Answer == null) 
-                    return string.Empty;
-                var interviewTextListAnswer = questionToCheck.Answer as InterviewTextListAnswers;
-
-                if (interviewTextListAnswer == null) 
-                    return string.Empty;
-                var item = interviewTextListAnswer.Answers.SingleOrDefault(a => a.Value == itemToSearch);
-                
-                return item != null ? item.Answer : string.Empty;
-            }
-
-            return string.Empty;
-        }
-
-        private ExportedQuestion[] GetQuestionsForExport(IEnumerable<InterviewQuestion> availableQuestions, HeaderStructureForLevel headerStructureForLevel)
-        {
-            var result = new List<ExportedQuestion>();
-            foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
-            {
-                var question = availableQuestions.FirstOrDefault(q => q.Id == headerItem.PublicKey);
-                ExportedQuestion exportedQuestion = null;
-                if (question == null)
-                {
-                    var ansnwers = new List<string>();
-                    for (int i = 0; i < headerItem.ColumnNames.Count(); i++)
-                    {
-                        ansnwers.Add(string.Empty);
-                    }
-                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, headerItem.QuestionType, ansnwers.ToArray());
-                }
-                else
-                {
-                    exportedQuestion = new ExportedQuestion(question, headerItem);
-                }
-
-                result.Add(exportedQuestion);
-            }
-            return result.ToArray();
-        }
-
-        private IEnumerable<InterviewLevel> GetLevelsFromInterview(InterviewData interview, ValueVector<Guid> levelVector)
-        {
-            if (!levelVector.Any())
-                return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(new ValueVector<Guid>()));
-            return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector));
-        }
-
-        private string GetUserName(UserDocument responsible)
-        {
-            var userName = responsible != null ? responsible.UserName : "<UNKNOWN USER>";
-            return userName;
         }
 
         private void RecordFirstAnswerIfNeeded(Guid interviewId, Guid userId, DateTime answerTime)
@@ -249,44 +99,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var recordFirstAnswerMarkerView = this.recordFirstAnswerMarkerViewWriter.GetById(interviewId);
             if (recordFirstAnswerMarkerView == null)
                 return;
-            UserDocument responsible = this.users.GetById(userId);
 
-            if (responsible == null || !responsible.Roles.Contains(UserRoles.Operator))
-                return;
-
-            var userName = this.GetUserName(responsible);
-            this.dataExportService.AddInterviewAction(recordFirstAnswerMarkerView.QuestionnaireId,
-                recordFirstAnswerMarkerView.QuestionnaireVersion, this.CreateInterviewActionExportView(interviewId, InterviewExportedAction.FirstAnswerSet,
-                    userName, this.GetUserRole(responsible), answerTime));
-                this.recordFirstAnswerMarkerViewWriter.Remove(interviewId);
-        }
-
-        private string GetUserRole(UserDocument user)
-        {
-            if (user==null || !user.Roles.Any())
-                return UnknownUserRole;
-            var firstRole = user.Roles.First();
-            switch (firstRole)
-            {
-                case UserRoles.Operator: return "Interviewer";
-                case UserRoles.Supervisor: return "Supervisor";
-                case UserRoles.Headquarter: return "Headquarter";
-            }
-            return UnknownUserRole;
-        }
-
-        private InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action, string userName, string userRole,
-            DateTime timestamp)
-        {
-            return new InterviewActionExportView(interviewId.FormatGuid(), action, userName, timestamp, userRole);
-        }
-
-        private void DeleteInterview(Guid interviewId)
-        {
-            var interviewSummary = this.interviewSummaryWriter.GetById(interviewId);
-            if (interviewSummary == null)
-                return;
-            this.dataExportService.DeleteInterview(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion, interviewId);
+            this.dataExportWriter.AddInterviewAction(InterviewExportedAction.FirstAnswerSet, interviewId, userId, answerTime);
+            this.recordFirstAnswerMarkerViewWriter.Remove(interviewId);
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
@@ -391,12 +206,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-            this.DeleteInterview(evnt.EventSourceId);
+            this.dataExportWriter.DeleteInterview(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            this.DeleteInterview(evnt.EventSourceId);
+            this.dataExportWriter.DeleteInterview(evnt.EventSourceId);
         }
     }
 }

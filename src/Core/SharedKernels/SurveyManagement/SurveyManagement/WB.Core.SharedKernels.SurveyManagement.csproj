@@ -140,7 +140,7 @@
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\ApplicationVersionSettings.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvDataExportWriter.cs" />
-    <Compile Include="Implementation\Services\DataExport\FileBasedDataExportService.cs" />
+    <Compile Include="Implementation\Services\DataExport\FileBasedDataExportRepositoryWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\FileType.cs" />
     <Compile Include="Implementation\Services\DataExport\InterviewDataExportException.cs" />
     <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
@@ -162,7 +162,7 @@
     </Compile>
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
-    <Compile Include="Services\IDataExportService.cs" />
+    <Compile Include="Services\IDataExportRepositoryWriter.cs" />
     <Compile Include="Services\IDataExportWriter.cs" />
     <Compile Include="Services\IEnvironmentContentService.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />

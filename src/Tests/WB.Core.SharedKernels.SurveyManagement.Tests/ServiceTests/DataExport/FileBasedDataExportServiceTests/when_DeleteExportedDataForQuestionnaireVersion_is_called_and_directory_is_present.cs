@@ -25,10 +25,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
 
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
-            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, dataFileExportServiceMock.Object);
+            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, dataFileExportServiceMock.Object);
         };
 
-        Because of = () => fileBasedDataExportService.DeleteExportedDataForQuestionnaireVersion(Guid.NewGuid(),1);
+        Because of = () => fileBasedDataExportRepositoryWriter.DeleteExportedDataForQuestionnaireVersion(Guid.NewGuid(),1);
 
 
         It should_delete_ExportedData_directory = () =>
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         It should_delete_ExportedFiles_directory = () =>
             fileSystemAccessorMock.Verify(accessor => accessor.DeleteDirectory(Moq.It.Is<string>(name => name.Contains("ExportedFiles"))), Times.Once);
 
-        private static FileBasedDataExportService fileBasedDataExportService;
+        private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Mock<IDataExportWriter> dataFileExportServiceMock;
 

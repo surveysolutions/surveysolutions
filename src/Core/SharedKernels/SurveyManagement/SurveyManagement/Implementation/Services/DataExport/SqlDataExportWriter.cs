@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.sqlServiceFactory = sqlServiceFactory;
         }
 
-        public void AddRecords(InterviewDataExportLevelView items, string basePath)
+        private void AddRecordsImpl(InterviewDataExportLevelView items, ISqlService sqlService)
         {
             var deletePreviousRecordsCommand = string.Format("DELETE FROM \"{0}\" WHERE {1} = '{2}';", items.LevelName,
                 items.LevelVector.Length == 0 ? "Id" : string.Format("{0}{1}", parentId, items.LevelVector.Length), items.InterviewId);
@@ -81,10 +81,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 commandsToExecute.Add(insertCommand);
             }
 
-            using (var sqlService=sqlServiceFactory.CreateSqlService(basePath))
-            {
-                sqlService.ExecuteCommands(commandsToExecute);
-            }
+            sqlService.ExecuteCommands(commandsToExecute);
+
         }
 
         private string QuoteString(string val)
@@ -211,7 +209,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return result.ToArray();
         }
 
-        public void AddActionRecord(InterviewActionExportView action, string basePath)
+        private string CreaActionRecordInsertCommand(InterviewActionExportView action)
         {
             var insertActionRecord = string.Format("insert into \"{0}\" values (", interviewActions);
             insertActionRecord = insertActionRecord + string.Format("'{0}'", action.InterviewId);
@@ -223,17 +221,69 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             insertActionRecord = insertActionRecord +
                 string.Format(", '{0}'", action.Timestamp.ToString("T", CultureInfo.InvariantCulture));
             insertActionRecord = insertActionRecord + ");";
+            return insertActionRecord;
+        }
+        public void AddActionRecord(InterviewActionExportView action, string basePath)
+        {
+            var insertActionRecord = CreaActionRecordInsertCommand(action);
 
-            using (var sqlService = sqlServiceFactory.CreateSqlService(basePath))
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
             {
                 sqlService.ExecuteCommand(insertActionRecord);
             }
 
             var folderPath = GetFolderPath(basePath);
-
             fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(folderPath));
+
             if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
                 fileSystemAccessor.DeleteDirectory(this.GetApprovedDataFolder(folderPath));
+        }
+
+
+        public void BatchInsert(string basePath, IEnumerable<InterviewDataExportView> interviewDatas, IEnumerable<InterviewActionExportView> interviewActionRecords)
+        {
+            var commands = new List<string>();
+
+            foreach (var interviewActionRecord in interviewActionRecords)
+            {
+                commands.Add(this.CreaActionRecordInsertCommand(interviewActionRecord));
+            }
+
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
+            {
+                foreach (var interviewDataExportView in interviewDatas)
+                {
+                    foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
+                    {
+                        AddRecordsImpl(interviewDataExportLevelView, sqlService);
+                    }
+                }
+                sqlService.ExecuteCommands(commands);
+            }
+        }
+
+        public void AddOrUpdateInterviewRecords(InterviewDataExportView items, string basePath)
+        {
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath,dataFile)))
+            {
+                foreach (var interviewDataExportLevelView in items.Levels)
+                {
+                    AddRecordsImpl(interviewDataExportLevelView, sqlService);
+                }
+            }
+        }
+
+
+        public void CreateStructure(QuestionnaireExportStructure header, string basePath)
+        {
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
+            {
+                foreach (var headerStructureForLevel in header.HeaderToLevelMap.Values)
+                {
+                    this.CreateHeader(headerStructureForLevel, sqlService);
+                }
+                this.CreateHeaderForActionFile(sqlService);
+            }
         }
 
         private string GetFolderPath(string dbPath)
@@ -241,7 +291,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return dbPath.Substring(0, dbPath.Length - fileSystemAccessor.GetFileName(dbPath).Length);
         }
 
-        public void CreateHeader(HeaderStructureForLevel header, string basePath)
+        public void CreateHeader(HeaderStructureForLevel header, ISqlService sqlService)
         {
             var createLevelTable = string.Format("create table \"{0}\" (", header.LevelName);
 
@@ -284,13 +334,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     ? header.LevelIdColumnName
                     : string.Format("{0}{1}", parentId, header.LevelScopeVector.Length));
 
-            using (var sqlService = sqlServiceFactory.CreateSqlService(basePath))
-            {
-                sqlService.ExecuteCommands(new[] { createLevelTable, createLevelTableIndex });
-            }
+            sqlService.ExecuteCommands(new[] { createLevelTable, createLevelTableIndex });
+
         }
 
-        public void CreateHeaderForActionFile(string basePath)
+        public void CreateHeaderForActionFile(ISqlService sqlService)
         {
             var createHeaderTabaleCommand = string.Format("create table {0} (", interviewActions);
             createHeaderTabaleCommand += "Id " + nvarchar;
@@ -301,20 +349,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             createHeaderTabaleCommand += ", Time " + nvarchar;
             createHeaderTabaleCommand = createHeaderTabaleCommand + ");";
 
-            using (var sqlService = sqlServiceFactory.CreateSqlService(basePath))
-            {
-                sqlService.ExecuteCommand(createHeaderTabaleCommand);
-            }
-        }
-
-        public string GetInterviewExportedDataFileName(string levelName)
-        {
-            return dataFile;
-        }
-
-        public string GetInterviewActionFileName()
-        {
-            return dataFile;
+            sqlService.ExecuteCommand(createHeaderTabaleCommand);
         }
     }
 }

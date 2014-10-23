@@ -9,15 +9,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
     public class RecordFirstAnswerMarkerView : IView
     {
-        public RecordFirstAnswerMarkerView(Guid interviewId, Guid questionnaireId, long questionnaireVersion)
+        public RecordFirstAnswerMarkerView(Guid interviewId)
         {
             this.InterviewId = interviewId;
-            this.QuestionnaireId = questionnaireId;
-            this.QuestionnaireVersion = questionnaireVersion;
         }
 
         public Guid InterviewId { get; private set; }
-        public Guid QuestionnaireId { get; private set; }
-        public long QuestionnaireVersion { get; private set; }
     }
 }

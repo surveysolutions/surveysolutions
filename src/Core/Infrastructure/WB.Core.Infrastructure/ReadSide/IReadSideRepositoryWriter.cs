@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide
+namespace WB.Core.Infrastructure.ReadSide
 {
     /// <summary>
     /// Interface which is implemented by each Raven-specific read side repository writer.
     /// </summary>
-    public interface IRavenReadSideRepositoryWriter 
+    public interface IReadSideRepositoryWriter 
     {
         /// <summary>
         /// Enables caching of repository entities.

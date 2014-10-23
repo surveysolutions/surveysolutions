@@ -58,13 +58,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (fileSystemAccessor.IsFileExists(archiveFilePath))
                 return archiveFilePath;
 
-              foreach (var header in questionnaire.HeaderToLevelMap.Values)
+      /*        foreach (var header in questionnaire.HeaderToLevelMap.Values)
             {
                 var interviewTemplateFilePath = this.fileSystemAccessor.CombinePath(dataDirectoryPath,
                     this.dataExportWriter.GetInterviewExportedDataFileName(header.LevelName));
 
                 this.dataExportWriter.CreateHeader(header, interviewTemplateFilePath);
-            }
+            }*/
             archiveUtils.ZipDirectory(dataDirectoryPath, archiveFilePath);
 
             return archiveFilePath;
