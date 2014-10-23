@@ -14,17 +14,17 @@ namespace WB.Core.SharedKernels.DataCollection
             throw new NotImplementedException();
         }
 
-        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer)
+        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer)
+        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)
+        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime? answer)
         {
             throw new NotImplementedException();
         }
@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection
             throw new NotImplementedException();
         }
 
-        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal? answer)
         {
             throw new NotImplementedException();
         }

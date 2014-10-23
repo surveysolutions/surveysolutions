@@ -194,15 +194,18 @@ namespace WB.Core.SharedKernels.DataCollection
             };
         }
 
-        public void EvaluateConditions(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,
-            out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled)
+        public void BackupStates()
         {
             foreach (var state in this.EnablementStates.Values)
             {
                 state.PreviousState = state.State;
                 state.State = State.Unknown;
             }
+        }
 
+        public void EvaluateConditions(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,
+            out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled)
+        {
             foreach (Action verifier in this.ConditionExpressions)
             {
                 verifier();
@@ -338,19 +341,19 @@ namespace WB.Core.SharedKernels.DataCollection
                 this.QuestionStringUpdateMap[questionId].Invoke(answer);
         }
 
-        public void UpdateNumericIntegerAnswer(Guid questionId, long answer)
+        public void UpdateNumericIntegerAnswer(Guid questionId, long? answer)
         {
             if (this.QuestionLongUpdateMap.ContainsKey(questionId))
                 this.QuestionLongUpdateMap[questionId].Invoke(answer);
         }
 
-        public void UpdateNumericRealAnswer(Guid questionId, double answer)
+        public void UpdateNumericRealAnswer(Guid questionId, double? answer)
         {
             if (this.QuestionDoubleUpdateMap.ContainsKey(questionId))
                 this.QuestionDoubleUpdateMap[questionId].Invoke(answer);
         }
 
-        public void UpdateDateTimeAnswer(Guid questionId, DateTime answer)
+        public void UpdateDateTimeAnswer(Guid questionId, DateTime? answer)
         {
             if (this.QuestionDateTimeUpdateMap.ContainsKey(questionId))
                 this.QuestionDateTimeUpdateMap[questionId].Invoke(answer);
@@ -362,7 +365,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 this.QuestionStringUpdateMap[questionId].Invoke(answer);
         }
 
-        public void UpdateSingleOptionAnswer(Guid questionId, decimal answer)
+        public void UpdateSingleOptionAnswer(Guid questionId, decimal? answer)
         {
             if (this.QuestionDecimalUpdateMap.ContainsKey(questionId))
                 this.QuestionDecimalUpdateMap[questionId].Invoke(answer);

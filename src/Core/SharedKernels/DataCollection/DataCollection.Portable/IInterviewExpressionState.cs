@@ -5,13 +5,13 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public interface IInterviewExpressionState
     {
-        void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer);
-        void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer);
-        void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer);
+        void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer);
+        void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer);
+        void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime? answer);
         void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer);
         void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer);
         void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer);
-        void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer);
+        void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal? answer);
         void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer);
         void UpdateGeoLocationAnswer(Guid questionId, decimal[] propagationVector, double latitude, double longitude, double accuracy, double altitude);
         void UpdateTextListAnswer(Guid questionId, decimal[] propagationVector, Tuple<decimal, string>[] answers);
@@ -31,6 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         ValidityChanges ProcessValidationExpressions();
         EnablementChanges ProcessEnablementConditions();
+        void BackupStates();
 
         IInterviewExpressionState Clone();
     }

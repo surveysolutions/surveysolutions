@@ -12,13 +12,13 @@ namespace WB.Core.SharedKernels.DataCollection
         public abstract void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
         public abstract void RemoveRoster(Guid rosterId, decimal[] rosterVector, decimal rosterInstanceId);
 
-        public abstract void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer);
-        public abstract void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer);
-        public abstract void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer);
+        public abstract void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer);
+        public abstract void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer);
+        public abstract void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime? answer);
         public abstract void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer);
         public abstract void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer);
         public abstract void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer);
-        public abstract void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer);
+        public abstract void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal? answer);
         public abstract void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer);
 
         public abstract void UpdateGeoLocationAnswer(Guid questionId, decimal[] propagationVector, double latitude, double longitude,
@@ -159,6 +159,14 @@ namespace WB.Core.SharedKernels.DataCollection
             }
 
             return new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
+        }
+
+        public void BackupStates()
+        {
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
+            {
+                interviewScopeKvpValue.BackupStates();
+            }
         }
 
         public IEnumerable<IExpressionExecutable> GetRosterInstances(Identity[] rosterKey, Guid scopeId)
