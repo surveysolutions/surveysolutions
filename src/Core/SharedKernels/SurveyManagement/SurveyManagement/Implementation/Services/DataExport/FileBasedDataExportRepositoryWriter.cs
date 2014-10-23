@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -24,10 +25,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 {
     internal class FileBasedDataExportRepositoryWriter : IDataExportRepositoryWriter
     {
-        private const string ExportedDataFolderName = "ExportedData";
-        private const string ExportedFilesFolderName = "ExportedFiles";
-        private readonly string pathToExportedData;
-        private readonly string pathToExportedFiles;
         private readonly IDataExportWriter dataExportWriter;
         private readonly IEnvironmentContentService environmentContentService;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -41,13 +38,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private const string UnknownUserRole = "<UNKNOWN ROLE>";
         private bool isCacheEnabled = false;
         private readonly Dictionary<string, QuestionnaireExportEntity> cache = new Dictionary<string, QuestionnaireExportEntity>();
+        private readonly IFilebaseExportRouteService filebaseExportRouteService;
 
         public FileBasedDataExportRepositoryWriter(
-            IReadSideRepositoryCleanerRegistry cleanerRegistry, 
-            string folderPath,
-            IDataExportWriter dataExportWriter, 
+            IReadSideRepositoryCleanerRegistry cleanerRegistry,
+            IDataExportWriter dataExportWriter,
             IEnvironmentContentService environmentContentService,
-            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository, IReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter, IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter, IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter, IExportViewFactory exportViewFactory)
+            IFileSystemAccessor fileSystemAccessor, ILogger logger, IPlainInterviewFileStorage plainFileRepository,
+            IReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
+            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
+            IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
+            IExportViewFactory exportViewFactory, IFilebaseExportRouteService filebaseExportRouteService)
         {
             this.dataExportWriter = dataExportWriter;
             this.environmentContentService = environmentContentService;
@@ -59,15 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.users = users;
             this.interviewSummaryWriter = interviewSummaryWriter;
             this.exportViewFactory = exportViewFactory;
-            this.pathToExportedData = fileSystemAccessor.CombinePath(folderPath, ExportedDataFolderName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
-                fileSystemAccessor.CreateDirectory(this.pathToExportedData);
-
-            this.pathToExportedFiles = fileSystemAccessor.CombinePath(folderPath, ExportedFilesFolderName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedFiles))
-                fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
+            this.filebaseExportRouteService = filebaseExportRouteService;
 
             cleanerRegistry.Register(this);
             writerRegistry.Register(this);
@@ -75,20 +68,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void Clear()
         {
-            Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.pathToExportedData), (s) => this.fileSystemAccessor.DeleteDirectory(s));
-            Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.pathToExportedData), (s) => this.fileSystemAccessor.DeleteFile(s));
+            Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.filebaseExportRouteService.PathToExportedData), (s) => this.fileSystemAccessor.DeleteDirectory(s));
+            Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.filebaseExportRouteService.PathToExportedData), (s) => this.fileSystemAccessor.DeleteFile(s));
 
-            Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.pathToExportedFiles), (s) => this.fileSystemAccessor.DeleteDirectory(s));
-            Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.pathToExportedFiles), (s) => this.fileSystemAccessor.DeleteFile(s));
+            Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.filebaseExportRouteService.PathToExportedFiles), (s) => this.fileSystemAccessor.DeleteDirectory(s));
+            Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.filebaseExportRouteService.PathToExportedFiles), (s) => this.fileSystemAccessor.DeleteFile(s));
         }
 
         public string GetFilePathToExportedCompressedData(Guid questionnaireId, long version)
         {
-            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
+            var dataDirectoryPath = this.filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
 
             this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, version, dataDirectoryPath);
 
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.pathToExportedData, string.Format("{0}.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.filebaseExportRouteService.PathToExportedData, string.Format("{0}.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
@@ -112,11 +105,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version)
         {
-            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
+            var dataDirectoryPath = this.filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
 
             this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, version, dataDirectoryPath);
 
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.pathToExportedData, string.Format("{0}Approved.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.filebaseExportRouteService.PathToExportedData, string.Format("{0}Approved.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
@@ -140,11 +133,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetFilePathToExportedBinaryData(Guid questionnaireId, long version)
         {
-            var fileDirectoryPath = this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version);
+            var fileDirectoryPath = this.filebaseExportRouteService.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version);
 
             this.ThrowArgumentExceptionIfFilesFolderMissing(questionnaireId, version, fileDirectoryPath);
 
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.pathToExportedData, string.Format("{0}.zip", this.fileSystemAccessor.GetFileName(fileDirectoryPath)));
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.filebaseExportRouteService.PathToExportedData, string.Format("{0}.zip", this.fileSystemAccessor.GetFileName(fileDirectoryPath)));
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
@@ -207,7 +200,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion)
         {
-            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
+            var dataFolderForTemplatePath = this.filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
 
             if (isCacheEnabled)
             {
@@ -219,7 +212,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 this.fileSystemAccessor.DeleteDirectory(dataFolderForTemplatePath);
             }
 
-            var filesFolderForTemplatePath = this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, questionnaireVersion);
+            var filesFolderForTemplatePath = this.filebaseExportRouteService.GetFolderPathOfFilesByQuestionnaire(questionnaireId, questionnaireVersion);
             if (this.fileSystemAccessor.IsDirectoryExists(filesFolderForTemplatePath))
             {
                 this.fileSystemAccessor.DeleteDirectory(filesFolderForTemplatePath);
@@ -263,12 +256,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void CreateExportedDataStructure(QuestionnaireExportStructure questionnaireExportStructure)
         {
-            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireExportStructure.QuestionnaireId,
+            var dataFolderForTemplatePath = this.filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(questionnaireExportStructure.QuestionnaireId,
                 questionnaireExportStructure.Version);
 
             if (this.fileSystemAccessor.IsDirectoryExists(dataFolderForTemplatePath))
             {
-                string copyPath = this.GetPreviousCopiesFolderPath();
+                string copyPath = this.filebaseExportRouteService.PreviousCopiesFolderPath;
 
                 this.logger.Error(string.Format("Directory for export structure already exists: {0}. Will be moved to {1}.",
                     dataFolderForTemplatePath, copyPath));
@@ -304,12 +297,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void CreateExportedFileStructure(QuestionnaireExportStructure questionnaireExportStructure)
         {
-            var filesFolderForTemplatePath = this.GetFolderPathOfFilesByQuestionnaire(questionnaireExportStructure.QuestionnaireId,
+            var filesFolderForTemplatePath = this.filebaseExportRouteService.GetFolderPathOfFilesByQuestionnaire(questionnaireExportStructure.QuestionnaireId,
                 questionnaireExportStructure.Version);
 
             if (this.fileSystemAccessor.IsDirectoryExists(filesFolderForTemplatePath))
             {
-                string copyPath = this.GetPreviousCopiesOfFilesFolderPath();
+                string copyPath = this.filebaseExportRouteService.PreviousCopiesOfFilesFolderPath;
 
                 this.logger.Error(string.Format("Directory for export files already exists: {0}. Will be moved to {1}.",
                     filesFolderForTemplatePath, copyPath));
@@ -328,13 +321,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void DeleteInterviewImpl(Guid questionnaireId, long questionnaireVersion, Guid interviewId)
         {
-            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
+            var dataFolderForTemplatePath = this.filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
 
             this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, questionnaireVersion, dataFolderForTemplatePath);
 
             this.dataExportWriter.DeleteInterviewRecords(dataFolderForTemplatePath, interviewId);
 
-            var filesFolderForInterview = GetFolderPathOfFilesByQuestionnaireForInterview(questionnaireId,
+            var filesFolderForInterview = this.filebaseExportRouteService.GetFolderPathOfFilesByQuestionnaireForInterview(questionnaireId,
                questionnaireVersion, interviewId);
 
             if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
@@ -343,17 +336,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void AddExportedDataByInterviewImpl(InterviewDataExportView interviewDataExportView)
         {
-            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
+            var dataFolderForTemplatePath = this.filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
 
             this.ThrowArgumentExceptionIfDataFolderMissing(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion, dataFolderForTemplatePath);
 
             this.dataExportWriter.AddOrUpdateInterviewRecords(interviewDataExportView, dataFolderForTemplatePath);
 
-            var filesFolderForTemplatePath = this.GetFolderPathOfFilesByQuestionnaire(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
+            var filesFolderForTemplatePath = this.filebaseExportRouteService.GetFolderPathOfFilesByQuestionnaire(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion);
 
             this.ThrowArgumentExceptionIfFilesFolderMissing(interviewDataExportView.TemplateId, interviewDataExportView.TemplateVersion, filesFolderForTemplatePath);
 
-            var filesFolderForInterview = GetFolderPathOfFilesByQuestionnaireForInterview(interviewDataExportView.TemplateId,
+            var filesFolderForInterview = this.filebaseExportRouteService.GetFolderPathOfFilesByQuestionnaireForInterview(interviewDataExportView.TemplateId,
                 interviewDataExportView.TemplateVersion, interviewDataExportView.InterviewId);
 
             if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
@@ -380,7 +373,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void AddInterviewActionImpl(Guid questionnaireId, long questionnaireVersion, InterviewActionExportView action)
         {
-            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
+            var dataFolderForTemplatePath = this.filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion);
 
             this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, questionnaireVersion, dataFolderForTemplatePath);
 
@@ -417,32 +410,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         templateId, templateVersion));
         }
 
-        private string GetPreviousCopiesFolderPath()
-        {
-            return this.fileSystemAccessor.CombinePath(this.pathToExportedData, string.Format("_prv_{0}", DateTime.Now.Ticks));
-        }
-
-        private string GetPreviousCopiesOfFilesFolderPath()
-        {
-            return this.fileSystemAccessor.CombinePath(this.pathToExportedFiles, string.Format("_prv_{0}", DateTime.Now.Ticks));
-        }
-
-        private string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
-        {
-            return this.fileSystemAccessor.CombinePath(this.pathToExportedData, string.Format("exported_data_{0}_{1}", questionnaireId, version));
-        }
-
-        private string GetFolderPathOfFilesByQuestionnaire(Guid questionnaireId, long version)
-        {
-            return this.fileSystemAccessor.CombinePath(this.pathToExportedFiles, string.Format("exported_files_{0}_{1}", questionnaireId, version));
-        }
-
-        private string GetFolderPathOfFilesByQuestionnaireForInterview(Guid questionnaireId, long version, Guid interviewId)
-        {
-            return this.fileSystemAccessor.CombinePath(GetFolderPathOfFilesByQuestionnaire(questionnaireId, version),
-                string.Format("interview_{0}", interviewId.FormatGuid()));
-        }
-
         private QuestionnaireExportEntity GetOrCreateQuestionnaireExportEntityByInterviewId(Guid interviewId)
         {
             var interviewSummary = interviewSummaryWriter.GetById(interviewId);
@@ -450,7 +417,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 throw new InterviewDataExportException(
                   string.Format("data files are absent for interview with id '{0}'",
                       interviewId));
-            var dataFolderForTemplatePath = this.GetFolderPathOfDataByQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+            var dataFolderForTemplatePath = this.filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
             this.ThrowArgumentExceptionIfDataFolderMissing(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion, dataFolderForTemplatePath);
 

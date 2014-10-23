@@ -123,7 +123,10 @@
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
+    <Compile Include="Implementation\Services\DataExport\FilebaseExportRouteService.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
+    <Compile Include="Implementation\Services\DataExport\SqlToTabExportedDataFormatter.cs" />
+    <Compile Include="Implementation\Services\Sql\BaseSqlService.cs" />
     <Compile Include="Implementation\Services\Sql\CompactSqlService.cs" />
     <Compile Include="Implementation\Services\Sql\CompactSqlServiceFactory.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
@@ -161,6 +164,8 @@
       <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
+    <Compile Include="Services\Export\IExportedDataFormatter.cs" />
+    <Compile Include="Services\Export\IFilebaseExportRouteService.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IDataExportRepositoryWriter.cs" />
     <Compile Include="Services\IDataExportWriter.cs" />
