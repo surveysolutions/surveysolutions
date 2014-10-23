@@ -292,7 +292,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private string CreateLevelFileName(string levelName)
         {
-            return string.Format("{0}.tab", levelName);
+            return string.Format("{0}.{0}", levelName, filebaseExportRouteService.ExtensionOfExportedDataFile);
         }
 
         private void CreateExportedFileStructure(QuestionnaireExportStructure questionnaireExportStructure)

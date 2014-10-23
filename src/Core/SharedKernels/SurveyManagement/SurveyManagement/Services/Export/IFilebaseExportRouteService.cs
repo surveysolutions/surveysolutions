@@ -15,5 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
         string PathToExportedFiles { get; }
         string PreviousCopiesOfFilesFolderPath { get; }
         string PreviousCopiesFolderPath { get; }
+        string ExtensionOfExportedDataFile { get; }
+        string SeparatorOfExportedDataFile { get; }
     }
 }
