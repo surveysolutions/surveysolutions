@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Machine.Specifications;
 using Ncqrs.Spec;
 
 namespace WB.Tests.Integration
@@ -19,6 +21,13 @@ namespace WB.Tests.Integration
         public static IEnumerable<T> GetEvents<T>(this EventContext eventContext)
         {
             return eventContext.Events.Where(e => e.Payload is T).Select(e => (T)e.Payload);
+        }
+
+        public static bool AnyEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
+        {
+            return condition == null 
+                ? eventContext.Events.Any(@event => @event.Payload is TEvent) 
+                : eventContext.Events.Any(@event => @event.Payload is TEvent && condition.Invoke((TEvent)@event.Payload));
         }
     }
 }

@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             }
         }
 
-        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer)
+        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             targetLevel.UpdateNumericIntegerAnswer(questionId, answer);
         }
 
-        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer)
+        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             targetLevel.UpdateNumericRealAnswer(questionId, answer);
         }
 
-        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)
+        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime? answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             targetLevel.UpdateQrBarcodeAnswer(questionId, answer);
         }
 
-        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal? answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;

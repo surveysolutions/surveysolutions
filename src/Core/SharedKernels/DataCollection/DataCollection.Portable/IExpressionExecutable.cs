@@ -27,17 +27,18 @@ namespace WB.Core.SharedKernels.DataCollection
         void DeclareAnswerValid(Guid questionId);
         void DeclareAnswerInvalid(Guid questionId);
 
-        void UpdateNumericIntegerAnswer(Guid questionId, long answer);
-        void UpdateNumericRealAnswer(Guid questionId, double answer);
-        void UpdateDateTimeAnswer(Guid questionId, DateTime answer);
+        void UpdateNumericIntegerAnswer(Guid questionId, long? answer);
+        void UpdateNumericRealAnswer(Guid questionId, double? answer);
+        void UpdateDateTimeAnswer(Guid questionId, DateTime? answer);
         void UpdateTextAnswer(Guid questionId, string answer);
         void UpdateMediaAnswer(Guid questionId, string answer);
         void UpdateQrBarcodeAnswer(Guid questionId, string answer);
-        void UpdateSingleOptionAnswer(Guid questionId, decimal answer);
+        void UpdateSingleOptionAnswer(Guid questionId, decimal? answer);
         void UpdateMultiOptionAnswer(Guid questionId, decimal[] answer);
         void UpdateGeoLocationAnswer(Guid questionId, double latitude, double longitude, double precision, double altitude);
         void UpdateTextListAnswer(Guid questionId, Tuple<decimal, string>[] answers);
         void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] selectedPropagationVector);
         void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[][] selectedPropagationVectors);
+        void BackupStates();
     }
 }

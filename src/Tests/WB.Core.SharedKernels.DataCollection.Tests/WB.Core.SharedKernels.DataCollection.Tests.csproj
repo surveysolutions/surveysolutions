@@ -106,13 +106,6 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewItemIdTests\when_parsing_interview_item_id_with_guid_and_propagation_vector.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_from_roster_with_child_parent.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_integer_number.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_decimal_number.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_mandatory_child_under_condition_expression.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_cascading_question_depends_on_other_question.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_creating_new_interview_with_cascading_options_question.cs" />
     <Compile Include="InterviewTests\when_creating_interview_with_preloaded_data_with_real_question.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_full_path_to_assembly.cs" />
@@ -124,7 +117,6 @@
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ_when_interview_is_Restored_from_snapshot.cs" />
     <Compile Include="InterviewTests\when_answering_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_has_2_selected_options_and__.cs" />
     <Compile Include="InterviewTests\when_answering_picture_question_and_answer_is_specified.cs" />
