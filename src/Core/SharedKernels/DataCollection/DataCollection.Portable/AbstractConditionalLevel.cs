@@ -212,28 +212,24 @@ namespace WB.Core.SharedKernels.DataCollection
                 .Where(x => x.Type == ItemType.Question)
                 .Where(StateChangedToEnabled)
                 .Select(x => new Identity(x.ItemId, this.RosterVector))
-                .Distinct(IdentityComparer.Instance)
                 .ToList();
 
             questionsToBeDisabled = this.EnablementStates.Values
                 .Where(x => x.Type == ItemType.Question)
                 .Where(StateChangedToDisabled)
                 .Select(x => new Identity(x.ItemId, this.RosterVector))
-                .Distinct(IdentityComparer.Instance)
                 .ToList();
 
             groupsToBeEnabled = this.EnablementStates.Values
                 .Where(x => x.Type == ItemType.Group)
                 .Where(StateChangedToEnabled)
                 .Select(x => new Identity(x.ItemId, this.RosterVector))
-                .Distinct(IdentityComparer.Instance)
                 .ToList();
 
             groupsToBeDisabled = this.EnablementStates.Values
                 .Where(x => x.Type == ItemType.Group)
                 .Where(StateChangedToDisabled)
                 .Select(x => new Identity(x.ItemId, this.RosterVector))
-                .Distinct(IdentityComparer.Instance)
                 .ToList();
         }
 
