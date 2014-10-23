@@ -48,15 +48,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                     GroupsToBeDisabledCount = enablementChanges.GroupsToBeDisabled.Count,
                     DisabledGroupId = enablementChanges.GroupsToBeDisabled.Single().Id,
                     GroupsToBeEnabledCount = enablementChanges.GroupsToBeEnabled.Count,
-                    EnabledGroupId = enablementChanges.GroupsToBeEnabled.Single().Id,
                 };
             });
 
         It should_disabled_question_count_equal_0 = () =>
             results.QuestionsToBeDisabledCount.ShouldEqual(0);
 
-        It should_enabled_question_count_equal_2 = () =>
-            results.QuestionsToBeEnabledCount.ShouldEqual(2);
+        It should_enabled_question_count_equal_0 = () =>
+            results.QuestionsToBeEnabledCount.ShouldEqual(0);
 
         It should_disabled_group_count_equal_1 = () =>
             results.GroupsToBeDisabledCount.ShouldEqual(1);
@@ -64,11 +63,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         It should_disabled_group_id_equal_group2id = () =>
             results.DisabledGroupId.ShouldEqual(Guid.Parse("63232323232323232323232323232111"));
 
-        It should_enable_group_count_equal_1 = () =>
-            results.GroupsToBeEnabledCount.ShouldEqual(1);
-
-        It should_enabled_group_id_equal_group1id = () =>
-            results.EnabledGroupId.ShouldEqual(Guid.Parse("23232323232323232323232323232111"));
+        It should_enable_group_count_equal_0 = () =>
+            results.GroupsToBeEnabledCount.ShouldEqual(0);
 
 
         Cleanup stuff = () =>
@@ -88,7 +84,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             public int GroupsToBeDisabledCount { get; set; }
             public Guid DisabledGroupId { get; set; }
             public int GroupsToBeEnabledCount { get; set; }
-            public Guid EnabledGroupId { get; set; }
         }
     }
 }

@@ -5,6 +5,13 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class IdentityComparer : IEqualityComparer<Identity>
     {
+        private static readonly IEqualityComparer<Identity> instance = new IdentityComparer();
+
+        public static IEqualityComparer<Identity> Instance
+        {
+            get { return instance; }
+        }
+
         #region IEqualityComparer<Contact> Members
 
         public bool Equals(Identity x, Identity y)
