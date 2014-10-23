@@ -58,6 +58,16 @@ namespace WB.Tests.Integration
             {
                 return new GroupsDisabled(groups);
             }
+
+            public static QuestionsDisabled QuestionsDisabled(Identity[] questions)
+            {
+                return new QuestionsDisabled(questions);
+            }
+
+            public static QuestionsEnabled QuestionsEnabled(Identity[] questions)
+            {
+                return new QuestionsEnabled(questions);
+            }
         }
 
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
