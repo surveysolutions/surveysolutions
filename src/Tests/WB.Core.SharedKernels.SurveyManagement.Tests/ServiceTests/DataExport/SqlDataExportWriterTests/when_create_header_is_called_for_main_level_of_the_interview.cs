@@ -14,15 +14,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         Establish context = () =>
         {
             sqlServiceTestable=new SqlServiceTestable();
-            headerStructureForLevel = CreateHeaderStructureForLevel(levelName: "my table");
+            questionnaireExportStructure = CreateQuestionnaireExportStructure(CreateHeaderStructureForLevel(levelName: "my table"));
             sqlDataExportWriter = CreateSqlDataExportWriter(sqlServiceTestable);
         };
 
         Because of = () =>
-            sqlDataExportWriter.CreateHeader(headerStructureForLevel, "");
+            sqlDataExportWriter.CreateStructure(questionnaireExportStructure, "");
 
-        It should_2_commands_be_executed = () =>
-            sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(2);
+        It should_3_commands_be_executed = () =>
+            sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(3);
 
         It should_command_with_level_table_creation_be_executed = () =>
             sqlServiceTestable.CommandsToExecute[0].ShouldEqual("create table \"my table\" (Id nvarchar(512), [1] ntext, [a] money);");
@@ -32,6 +32,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
 
         private static SqlDataExportWriter sqlDataExportWriter;
         private static SqlServiceTestable sqlServiceTestable;
-        private static HeaderStructureForLevel headerStructureForLevel;
+        private static QuestionnaireExportStructure questionnaireExportStructure;
     }
 }

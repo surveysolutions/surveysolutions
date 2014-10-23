@@ -46,8 +46,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
         protected static Mock<IDataExportWriter> CreateIDataFileExportServiceMock()
         {
             var dataFileExportServiceMock = new Mock<IDataExportWriter>();
-            dataFileExportServiceMock.Setup(x => x.GetInterviewExportedDataFileName(Moq.It.IsAny<string>()))
-                .Returns<string>(levelName => levelName);
             return dataFileExportServiceMock;
         }
 

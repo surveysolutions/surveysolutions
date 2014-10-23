@@ -15,13 +15,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         Establish context = () =>
         {
             sqlServiceTestable = new SqlServiceTestable();
-            headerStructureForLevel = CreateHeaderStructureForLevel(levelName: "my_table",
-                levelScopeVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() }),referenceNames:new []{"ref1","ref2"});
+            questionnaireExportStructure =CreateQuestionnaireExportStructure( CreateHeaderStructureForLevel(levelName: "my_table",
+                levelScopeVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() }),referenceNames:new []{"ref1","ref2"}));
             sqlDataExportWriter = CreateSqlDataExportWriter(sqlServiceTestable);
         };
 
         Because of = () =>
-            sqlDataExportWriter.CreateHeader(headerStructureForLevel, "");
+            sqlDataExportWriter.CreateStructure(questionnaireExportStructure, "");
 
         It should_command_with_level_table_creation_be_executed = () =>
             sqlServiceTestable.CommandsToExecute[0].ShouldEqual("create table \"my_table\" (Id money, [ref1] ntext, [ref2] ntext, [1] ntext, [a] money, ParentId1 money, ParentId2 nvarchar(512));");
@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
 
         private static SqlDataExportWriter sqlDataExportWriter;
         private static SqlServiceTestable sqlServiceTestable;
-        private static HeaderStructureForLevel headerStructureForLevel;
+        private static QuestionnaireExportStructure questionnaireExportStructure;
 
     }
 }

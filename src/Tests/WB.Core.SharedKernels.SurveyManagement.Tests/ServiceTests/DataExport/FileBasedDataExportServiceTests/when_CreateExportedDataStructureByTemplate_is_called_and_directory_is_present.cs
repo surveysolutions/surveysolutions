@@ -20,7 +20,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Establish context = () =>
         {
             dataFileExportServiceMock=new Mock<IDataExportWriter>();
-            dataFileExportServiceMock.Setup(x => x.GetInterviewActionFileName()).Returns("file.csv");
 
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.IsDirectoryExists(it.IsAny<string>())).Returns(true);
@@ -45,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             fileSystemAccessorMock.Verify(accessor => accessor.CopyFileOrDirectory(it.Is<string>(name => name.Contains("ExportedData")), it.IsAny<string>()), Times.Once);
 
         It should_action_file_be_created = () =>
-          dataFileExportServiceMock.Verify(dataFileExportService => dataFileExportService.CreateHeaderForActionFile(Moq.It.IsAny<string>()), Times.Once);
+          dataFileExportServiceMock.Verify(dataFileExportService => dataFileExportService.CreateStructure(it.IsAny<QuestionnaireExportStructure>(), Moq.It.IsAny<string>()), Times.Once);
 
         It should_delete_exported_files_directory = () =>
             fileSystemAccessorMock.Verify(accessor => accessor.DeleteDirectory(it.Is<string>(name => name.Contains("ExportedFiles"))), Times.Once);

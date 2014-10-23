@@ -25,14 +25,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Establish context = () =>
         {
             interviewExportServiceMock = new Mock<IDataExportWriter>();
-            interviewExportServiceMock.Setup(x => x.GetInterviewExportedDataFileName(Moq.It.IsAny<string>())).Returns("name.tex");
 
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns("1st");
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns<string, string>(Path.Combine);
 
-            interviewLevelToExport = new InterviewDataExportLevelView(new ValueVector<Guid> { Guid.NewGuid() }, "1st",
+            var interviewLevelToExport = new InterviewDataExportLevelView(new ValueVector<Guid> { Guid.NewGuid() }, "1st",
                 new[]
                 {
                     new InterviewDataExportRecord(interviewId, "name.tex", new string[0], new string[0],
@@ -45,17 +44,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             plainFileRepositoryMock = new Mock<IPlainInterviewFileStorage>();
             plainFileRepositoryMock.Setup(x => x.GetInterviewBinaryData(interviewId, fileName))
                 .Returns(data);
-            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object, plainFileRepository: plainFileRepositoryMock.Object);
+            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, interviewExportServiceMock.Object, plainFileRepository: plainFileRepositoryMock.Object, interviewDataExportView: interviewToExport);
         };
 
         Because of = () =>
-            fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(interviewToExport);
-
-        It should_data_file_name_be_requested_once = () =>
-            interviewExportServiceMock.Verify(x => x.GetInterviewExportedDataFileName("1st"), Times.Once());
+            fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
 
         It should_data_by_level_be_stored_once = () =>
-            interviewExportServiceMock.Verify(x => x.AddOrUpdateInterviewRecords(interviewLevelToExport,Moq.It.IsAny<string>()), Times.Once());
+            interviewExportServiceMock.Verify(x => x.AddOrUpdateInterviewRecords(interviewToExport, Moq.It.IsAny<string>()), Times.Once());
 
         It should_files_by_interview_be_stored = () =>
             fileSystemAccessorMock.Verify(x => x.WriteAllBytes(Moq.It.Is<string>(name => name.Contains(fileName)),data), Times.Once());
@@ -65,7 +61,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         private static Mock<IDataExportWriter> interviewExportServiceMock;
         private static Mock<IPlainInterviewFileStorage> plainFileRepositoryMock;
         private static InterviewDataExportView interviewToExport;
-        private static InterviewDataExportLevelView interviewLevelToExport;
         private static Guid interviewId = Guid.NewGuid();
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static string fileName = "file.jpg";

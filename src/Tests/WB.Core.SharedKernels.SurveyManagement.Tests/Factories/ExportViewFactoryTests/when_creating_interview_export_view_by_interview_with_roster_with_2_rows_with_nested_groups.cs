@@ -9,18 +9,18 @@ using Moq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFactoryTests
 {
-    internal class when_InterviewApproved_recived_by_interview_with_roster_with_2_rows_with_nested_groups : InterviewExportedDataEventHandlerTestContext
+    internal class when_creating_interview_export_view_by_interview_with_roster_with_2_rows_with_nested_groups : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
-            dataExportServiceMock = CreateDataExportService(r => result = r);
             questionInsideNestedGroupId = Guid.Parse("12222222222222222222222222222222");
             rosterId = Guid.Parse("13333333333333333333333333333333");
 
@@ -57,15 +57,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                             }
                         }
                     }
-                }); 
-
-            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                templateCreationAction:() => questionnarie,
-                dataCreationAction:CreateInterviewDataWith2PropagatedLevels, dataExportService:dataExportServiceMock.Object);
+                });
+            exportViewFactory = CreateExportViewFactory();
         };
 
         Because of = () =>
-            interviewExportedDataDenormalizer.Handle(CreatePublishableEvent(() => new InterviewApproved(Guid.NewGuid(), "")));
+               result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1),
+                CreateInterviewDataWith2PropagatedLevels());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result, new[] { rosterSizeQuestionId }).Records.Length.ShouldEqual(2);
@@ -116,7 +114,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             return interview;
         }
 
-        private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
         private static Guid rosterId;
         private static Guid rosterSizeQuestionId;
@@ -124,6 +121,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static int levelCount;
         private static QuestionnaireDocument questionnarie;
         private static string someAnswer = "some answer";
-        private static Mock<IDataExportService> dataExportServiceMock;
+        private static ExportViewFactory exportViewFactory;
     }
 }
