@@ -2577,6 +2577,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             
                 var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
                 answersForLinkedQuestionsToRemoveByDisabling = answersForLinkedQuestionsToRemoveByDisabling.Concat(answersToRemoveByCascading).ToList();
+
+                var cascadingChildQuestions = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(questionId);
+                foreach (var cascadingChildQuestion in cascadingChildQuestions)
+                {
+                    IEnumerable<Identity> childInstances =
+                        GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, cascadingChildQuestion, rosterVector, questionnaire, GetRosterInstanceIds);
+                    enablementChanges.QuestionsToBeEnabled.AddRange(childInstances);
+                    enablementChanges.QuestionsToBeDisabled.RemoveAll(x => childInstances.Contains(x));
+                }
             }
    
             var interviewByAnswerChange = new List<AnswerChange>
@@ -2696,46 +2705,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 changeStructures.Changes.Add(interviewChanges);
             }
         }
-
-        //TODO: should be resolved!!!
-/*       
-
-                    bool parentAnsweredOrNoParent = true;
-                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(dependentQuestion.Id);
-                    if (cascadingQuestionParentId.HasValue)
-                    {
-                        KeyValuePair<string, Identity> parentInstance = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingQuestionParentId.Value, dependentQuestion.RosterVector, questionnaire);
-                        parentAnsweredOrNoParent = state.AnsweredQuestions.Contains(ConversionHelper.ConvertIdentityToString(parentInstance.Value));
-                    }
-
-                var cascadingQuestionsToEnable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id);
-                IEnumerable<Identity> cascadingQuestionsToEnableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                    cascadingQuestionsToEnable, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
-
-                foreach (var dependentCascadingQuestion in cascadingQuestionsToEnableIdentities)
-                {
-                    if (!collectedQuestionsToBeDisabled.Any(q => AreEqual(q, dependentCascadingQuestion)) &&
-                        !collectedQuestionsToBeEnabled.Any(q => AreEqual(q, dependentCascadingQuestion)))
-                    {
-                        collectedQuestionsToBeEnabled.Add(dependentCascadingQuestion);
-                    }
-                }
-
-                var cascadingQuestionsToDisable = questionnaire.GetCascadingQuestionsThatDependUponQuestion(affectingQuestion.Id)
-                                                              .Except(questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(affectingQuestion.Id));
-
-                IEnumerable<Identity> cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                    cascadingQuestionsToDisable, affectingQuestion.RosterVector, questionnaire, getRosterInstanceIds);
-
-                foreach (var dependentCascadingQuestion in cascadingQuestionsToDisableIdentities)
-                {
-                    if (!collectedQuestionsToBeDisabled.Any(q => AreEqual(q, (dependentCascadingQuestion))) &&
-                        !collectedQuestionsToBeEnabled.Any(q => AreEqual(q, (dependentCascadingQuestion))))
-                    {
-                        collectedQuestionsToBeEnabled.Remove(dependentCascadingQuestion);
-                        collectedQuestionsToBeDisabled.Add(dependentCascadingQuestion);
-                    }
-                }*/
 
         private List<RosterCalculationData> CalculateFixedRostersData(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire,
             decimal[] outerRosterVector = null)
