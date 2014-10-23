@@ -28,12 +28,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
 
-            fileBasedDataExportService = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, dataFileExportServiceMock.Object);
+            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessorMock.Object, dataFileExportServiceMock.Object);
         };
 
         Because of = () =>
             raisedException =
-                Catch.Exception(() => fileBasedDataExportService.CreateExportStructureByTemplate(questionnaireExportStructure)) as InterviewDataExportException;
+                Catch.Exception(() => fileBasedDataExportRepositoryWriter.CreateExportStructureByTemplate(questionnaireExportStructure)) as InterviewDataExportException;
 
         It should_not_raise_exception = () =>
             raisedException.ShouldBeNull();
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         It should_file_folder_for_template_be_created = () =>
           fileSystemAccessorMock.Verify(accessor => accessor.CreateDirectory(it.Is<string>(name => name.Contains("ExportedFiles\\exported_files_" + questionnaireExportStructure.QuestionnaireId.ToString()))), Times.Once);
 
-        private static FileBasedDataExportService fileBasedDataExportService;
+        private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
         private static InterviewDataExportException raisedException;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Mock<IDataExportWriter> dataFileExportServiceMock;

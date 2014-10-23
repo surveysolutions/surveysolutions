@@ -34,8 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         protected const string firstLevelkey = "#";
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-          Func<QuestionnaireDocument> templateCreationAction,
-          Func<InterviewData> dataCreationAction = null, IDataExportService dataExportService = null,
+          Func<QuestionnaireDocument> templateCreationAction=null,
+          Func<InterviewData> dataCreationAction = null, IDataExportRepositoryWriter dataExportRepositoryWriter = null,
           UserDocument userDocument = null, IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage=null)
         {
             var interviewDataStorageMock = new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
@@ -65,22 +65,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                 userDocumentWriter.Setup(x => x.GetById(Moq.It.IsAny<string>())).Returns(userDocument);
             }
 
-            return new InterviewExportedDataDenormalizer(
-                interviewDataStorageMock.Object,
-                questionnaireExportStructureMock.Object, dataExportService ?? Mock.Of<IDataExportService>(), userDocumentWriter.Object, Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_=>_.GetById(
-                    It.IsAny<string>())==new InterviewSummary()),
+            return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(), 
                 recordFirstAnswerMarkerViewStorage?? Mock.Of<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>());
-        }
-
-        protected static Mock<IDataExportService> CreateDataExportService(Action<InterviewDataExportView> returnStoredView = null)
-        {
-            var result = new Mock<IDataExportService>();
-
-            if (returnStoredView != null)
-                result.Setup(x => x.AddExportedDataByInterview(Moq.It.IsAny<InterviewDataExportView>()))
-                  .Callback(returnStoredView);
-
-            return result;
         }
 
         protected static InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action,string userName="test", string role="headquarter")

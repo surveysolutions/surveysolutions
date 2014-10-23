@@ -16,9 +16,9 @@ namespace WB.UI.Supervisor.Tests.ImportExportControllerTests
 {
     internal class ImportExportControllerTestContext
     {
-        protected static ImportExportController CreateImportExportController(IDataExportService dataExportService = null)
+        protected static ImportExportController CreateImportExportController(IDataExportRepositoryWriter dataExportRepositoryWriter = null)
         {
-            return new ImportExportController(Mock.Of<ILogger>(), dataExportService ?? Mock.Of<IDataExportService>(), Mock.Of<IBackupManager>());
+            return new ImportExportController(Mock.Of<ILogger>(), dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(), Mock.Of<IBackupManager>());
         }
 
         public static void ExecuteAsync(AsyncController asyncController,
