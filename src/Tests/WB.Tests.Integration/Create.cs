@@ -7,12 +7,33 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration
 {
     internal static class Create
     {
+        public class Event
+        {
+            public static NumericIntegerQuestionAnswered NumericIntegerQuestionAnswered(
+                Guid questionId, int answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
+            {
+                return new NumericIntegerQuestionAnswered(
+                    userId ?? Guid.NewGuid(),
+                    questionId,
+                    propagationVector ?? Empty.RosterVector,
+                    answerTime ?? DateTime.Now,
+                    answer);
+            }
+
+            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Identity[] questions)
+            {
+                return new AnswersDeclaredInvalid(questions);
+            }
+        }
+
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
             where T : class
         {
@@ -137,6 +158,11 @@ namespace WB.Tests.Integration
                 answersToFeaturedQuestions ?? new Dictionary<Guid, object>(),
                 answersTime ?? new DateTime(2012, 12, 20),
                 supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"));
+        }
+
+        public static Identity Identity(Guid id, decimal[] rosterVector = null)
+        {
+            return new Identity(id, rosterVector ?? Empty.RosterVector);
         }
     }
 }
