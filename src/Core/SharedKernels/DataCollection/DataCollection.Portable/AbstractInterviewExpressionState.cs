@@ -114,10 +114,10 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.InterviewScopes.ContainsKey(rosterStringKey) ? this.InterviewScopes[rosterStringKey] : null;
         }
 
-        public void ProcessValidationExpressions(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
+        public ValidityChanges ProcessValidationExpressions()
         {
-            questionsToBeValid = new List<Identity>();
-            questionsToBeInvalid = new List<Identity>();
+            var questionsToBeValid = new List<Identity>();
+            var questionsToBeInvalid = new List<Identity>();
 
             foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
             {
@@ -129,6 +129,8 @@ namespace WB.Core.SharedKernels.DataCollection
                 questionsToBeValid.AddRange(questionsToBeValidByScope);
                 questionsToBeInvalid.AddRange(questionsToBeInvalidByScope);
             }
+
+            return new ValidityChanges(answersDeclaredValid: questionsToBeValid, answersDeclaredInvalid: questionsToBeInvalid);
         }
 
         public EnablementChanges ProcessEnablementConditions()

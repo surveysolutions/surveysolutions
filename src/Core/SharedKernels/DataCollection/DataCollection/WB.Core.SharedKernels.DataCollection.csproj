@@ -220,7 +220,6 @@
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ValidityChanges.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
     <Compile Include="Implementation\EnumerableExtensions.cs">
       <SubType>Code</SubType>
