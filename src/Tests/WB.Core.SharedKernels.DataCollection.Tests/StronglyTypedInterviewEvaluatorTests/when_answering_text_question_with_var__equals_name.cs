@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.StronglyTypedInterviewEvaluatorTests
 {
-    [Ignore("C#, KP-4385 Misc Corner Cases")]
+    [Ignore("C#, KP-4386 Rosters")]
     internal class when_answering_text_question_with_var__equals_name : InterviewTestsContext
     {
         Establish context = () =>
