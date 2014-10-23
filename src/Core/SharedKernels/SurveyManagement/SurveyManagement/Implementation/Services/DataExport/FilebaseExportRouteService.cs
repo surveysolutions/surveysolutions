@@ -61,5 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             get { return this.fileSystemAccessor.CombinePath(this.pathToExportedData, string.Format("_prv_{0}", DateTime.Now.Ticks)); }
         }
+
+        public string ExtensionOfExportedDataFile { get { return "tab"; } }
+        public string SeparatorOfExportedDataFile { get { return "\t "; } }
     }
 }

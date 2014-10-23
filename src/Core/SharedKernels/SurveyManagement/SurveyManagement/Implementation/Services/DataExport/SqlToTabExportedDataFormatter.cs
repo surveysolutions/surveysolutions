@@ -47,11 +47,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         continue;
 
                     var csvFilePath =
-                        fileSystemAccessor.CombinePath(targetFolder, string.Format("{0}.tab", tableName));
+                        fileSystemAccessor.CombinePath(targetFolder, string.Format("{0}.{1}", tableName, filebaseExportRouteService.ExtensionOfExportedDataFile));
 
                     var columnNames = GetListOfColumns(sqlService, tableName).ToArray();
                     using (var fileStream = fileSystemAccessor.OpenOrCreateFile(csvFilePath, true))
-                    using (var csv = csvWriterFactory.OpenCsvWriter(fileStream, "\t "))
+                    using (var csv = csvWriterFactory.OpenCsvWriter(fileStream, filebaseExportRouteService.SeparatorOfExportedDataFile))
                     {
                         foreach (var columnName in columnNames)
                         {
