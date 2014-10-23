@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return val.Replace("'", "''");
         }
 
-        public string[] GetAllDataFiles(string basePath)
+        public string[] GetAllDataFiles(string basePath, Func<string, string> fileNameCreationFunc)
         {
             var allDataFolderPath = GetAllDataFolder(basePath);
 
@@ -99,10 +99,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             fileSystemAccessor.CreateDirectory(allDataFolderPath);
 
-            return this.ExportToCSVFile(allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, dataFile), (tableName, column) => string.Format("select * from \"{0}\"", tableName));
+            return this.ExportToCSVFile(allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, dataFile), (tableName, column) => string.Format("select * from \"{0}\"", tableName), fileNameCreationFunc);
         }
 
-        public string[] GetApprovedDataFiles(string basePath)
+        public string[] GetApprovedDataFiles(string basePath, Func<string, string> fileNameCreationFunc)
         {
             var approvedDataFolderPath = GetApprovedDataFolder(basePath);
 
@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
 
             return ExportToCSVFile(approvedDataFolderPath, fileSystemAccessor.CombinePath(basePath, dataFile),
-                CreateQueryStringForApprovedInterviewsByTableName);
+                CreateQueryStringForApprovedInterviewsByTableName, fileNameCreationFunc);
         }
 
         public void DeleteInterviewRecords(string basePath, Guid interviewId)
@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 columnNames.Last());
         }
 
-        private string[] ExportToCSVFile(string basePath, string dbPath, Func<string, IEnumerable<string>, string> createSqlQueryFormat)
+        private string[] ExportToCSVFile(string basePath, string dbPath, Func<string, IEnumerable<string>, string> createSqlQueryFormat, Func<string, string> fileNameCreationFunc)
         {
             var result = new List<string>();
             using (var sqlService = sqlServiceFactory.CreateSqlService(dbPath))
@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 foreach (var tableName in tableNames)
                 {
                     var csvFilePath =
-                        fileSystemAccessor.CombinePath(basePath, tableName + ".tab");
+                        fileSystemAccessor.CombinePath(basePath, fileNameCreationFunc(tableName));
 
                     var columnNames = GetListOfColumns(sqlService, tableName).ToArray();
                     using (var fileStream = fileSystemAccessor.OpenOrCreateFile(csvFilePath, true))

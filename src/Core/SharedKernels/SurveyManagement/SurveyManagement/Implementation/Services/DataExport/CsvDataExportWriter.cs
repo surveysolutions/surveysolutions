@@ -78,12 +78,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             throw new NotImplementedException();
         }
 
-        public string[] GetAllDataFiles(string basePath)
+        public string[] GetAllDataFiles(string basePath, Func<string, string> fileNameCreationFunc)
         {
             throw new NotImplementedException();
         }
 
-        public string[] GetApprovedDataFiles(string basePath)
+        public string[] GetApprovedDataFiles(string basePath, Func<string, string> fileNameCreationFunc)
         {
             throw new NotImplementedException();
         }
