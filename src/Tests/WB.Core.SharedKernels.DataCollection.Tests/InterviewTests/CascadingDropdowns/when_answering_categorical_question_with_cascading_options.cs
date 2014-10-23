@@ -14,32 +14,33 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDropdowns
 {
-    [Ignore("Temporary. Should be fixed with code fix")]
     [Subject(typeof(Interview))]
+    [Ignore("Cascading")]
     internal class when_answering_categorical_question_with_cascading_options : InterviewTestsContext
     {
         private Establish context = () =>
         {
-            parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
-            childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
-            grandChildCascadedComboboxId = Guid.Parse("4C603B8A-3237-4915-96FA-8D1568C679E2");
+            parentSingleOptionQuestionId = Guid.Parse("11111111111111111111111111111111");
+            childCascadedComboboxId = Guid.Parse("22222222222222222222222222222222");
+            grandChildCascadedComboboxId = Guid.Parse("33333333333333333333333333333333");
 
             var questionnaireId = Guid.NewGuid();
-
-            var nonAnsweredCombo = Guid.NewGuid();
-            comboShouldNotBeRemoved = Guid.NewGuid();
             actorId = Guid.NewGuid();
+
+            var nonAnsweredCombo = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            comboShouldNotBeRemoved = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             Questionnaire questionnaire = Create.Questionnaire(actorId,
-                CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion
-                {
-                    PublicKey = parentSingleOptionQuestionId,
-                    QuestionType = QuestionType.SingleOption,
-                    Answers = new List<Answer>
+                CreateQuestionnaireDocumentWithOneChapter(
+                    new SingleQuestion
                     {
-                        new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                        new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
-                    }
-                },
+                        PublicKey = parentSingleOptionQuestionId,
+                        QuestionType = QuestionType.SingleOption,
+                        Answers = new List<Answer>
+                        {
+                            new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
+                            new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
+                        }
+                    },
                     new SingleQuestion
                     {
                         PublicKey = childCascadedComboboxId,
@@ -109,6 +110,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
         It should_disable_grandchild_question = () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
 
+        It should_not_enable_grandchild_question = () =>
+            eventContext.ShouldNotContainEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId));
+
         It should_not_remove_answer_from_self = () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(x => x.Questions.Any(q => q.Id == parentSingleOptionQuestionId));
 
@@ -128,6 +132,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests.CascadingDro
         static Guid grandChildCascadedComboboxId;
         static Guid comboShouldNotBeRemoved;
         static Guid actorId;
+
+        Cleanup stuff = () => eventContext.Dispose();
     }
 }
 
