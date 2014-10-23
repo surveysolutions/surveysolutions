@@ -10,22 +10,20 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class SqlDataExportWriter : IDataExportWriter
+    internal class SqlDataExportWriter : BaseSqlService, IDataExportWriter
     {
         private const string text = "ntext";
         private const string numeric = "money";
         private const string nvarchar = "nvarchar(512)";
-        private const string dataFile = "data.sdf";
-        private const string interviewActions = "interview_actions";
         private const string allDataFolder = "AllData";
         private const string approvedDataFolder = "ApprovedData";
-        private const string parentId = "ParentId";
         
         private readonly ICsvWriterFactory csvWriterFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -130,16 +128,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 sqlService.ExecuteCommands(deleteInterviewRecords);
             }
         }
-
-        private IEnumerable<string> GetListofTables(ISqlService sqlService)
-        {
-            return sqlService.ExecuteReader("select table_name from information_schema.tables where TABLE_TYPE = 'TABLE'").Select(table=>table[0].ToString());
-        }
-
-        private IEnumerable<string> GetListOfColumns(ISqlService sqlService, string tableName)
-        {
-            return sqlService.ExecuteReader("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "'").Select(table => table[0].ToString());
-        } 
 
         private string GetAllDataFolder(string basePath)
         {

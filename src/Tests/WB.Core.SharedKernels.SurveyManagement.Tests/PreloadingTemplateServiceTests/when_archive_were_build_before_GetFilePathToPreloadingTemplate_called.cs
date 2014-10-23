@@ -21,8 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
             dataFileExportService = CreateIDataFileExportServiceMock();
-            questionnaireExportStructure = CreateQuestionnaireExportStructure(2);
-            preloadingTemplateService = CreatePreloadingTemplateService(dataFileExportService.Object, questionnaireExportStructure, fileSystemAccessor.Object);
+            preloadingTemplateService = CreatePreloadingTemplateService(fileSystemAccessor.Object);
         };
 
         Because of = () => result = preloadingTemplateService.GetFilePathToPreloadingTemplate(questionnaireId, 1);
@@ -38,7 +37,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
 
         private static PreloadingTemplateService preloadingTemplateService;
         private static string result;
-        private static QuestionnaireExportStructure questionnaireExportStructure;
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static Mock<IDataExportWriter> dataFileExportService;
         private static Guid questionnaireId = Guid.NewGuid();

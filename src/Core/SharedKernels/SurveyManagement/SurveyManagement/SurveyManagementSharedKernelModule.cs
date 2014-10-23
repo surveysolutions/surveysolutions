@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization.Sche
 using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -60,7 +61,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
         public override void Load()
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
-            this.Bind<IDataExportRepositoryWriter>().To<FileBasedDataExportRepositoryWriter>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IFilebaseExportRouteService>().To<FilebaseExportRouteService>().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IExportedDataFormatter>().To<SqlToTabExportedDataFormatter>();
+            this.Bind<IDataExportRepositoryWriter>().To<FileBasedDataExportRepositoryWriter>().InSingletonScope();
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();

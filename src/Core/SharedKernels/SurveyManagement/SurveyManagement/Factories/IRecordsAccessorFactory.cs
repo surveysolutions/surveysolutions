@@ -10,6 +10,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Factories
 {
     public interface IRecordsAccessorFactory
     {
-        IRecordsAccessor CreateRecordsAccessor(Stream sampleStream);
+        IRecordsAccessor CreateRecordsAccessor(Stream sampleStream, string delimiter = ",");
     }
 }
