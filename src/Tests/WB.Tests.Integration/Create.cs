@@ -17,20 +17,46 @@ namespace WB.Tests.Integration
     {
         public class Event
         {
+            public class Default
+            {
+                public static Guid UserId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAABBB");
+                public static DateTime AnswerTime = new DateTime(2014, 1, 1);
+            }
+
             public static NumericIntegerQuestionAnswered NumericIntegerQuestionAnswered(
                 Guid questionId, int answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
             {
                 return new NumericIntegerQuestionAnswered(
-                    userId ?? Guid.NewGuid(),
+                    userId ?? Default.UserId,
                     questionId,
                     propagationVector ?? Empty.RosterVector,
-                    answerTime ?? DateTime.Now,
+                    answerTime ?? Default.AnswerTime,
                     answer);
             }
 
-            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Identity[] questions)
+            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(params Identity[] questions)
             {
                 return new AnswersDeclaredInvalid(questions);
+            }
+
+            public static QuestionsEnabled QuestionsEnabled(params Identity[] questions)
+            {
+                return new QuestionsEnabled(questions);
+            }
+
+            public static QuestionsDisabled QuestionsDisabled(params Identity[] questions)
+            {
+                return new QuestionsDisabled(questions);
+            }
+
+            public static GroupsEnabled GroupsEnabled(params Identity[] groups)
+            {
+                return new GroupsEnabled(groups);
+            }
+
+            public static GroupsDisabled GroupsDisabled(params Identity[] groups)
+            {
+                return new GroupsDisabled(groups);
             }
         }
 
