@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#, KP-4385 Misc Corner Cases")]
+    [Ignore("C#, KP-4390 Interview creation")]
     internal class when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_no_propagatable_ancestor_groups : InterviewTestsContext
     {
         Establish context = () =>
