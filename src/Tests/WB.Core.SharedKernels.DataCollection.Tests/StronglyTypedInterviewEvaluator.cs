@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             }
         }
 
-        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long answer)
+        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             }
         }
 
-        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double answer)
+        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             }
         }
 
-        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime answer)
+        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime? answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -188,7 +188,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
             if (targetLevel == null) return;
         }
 
-        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal answer)
+        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal? answer)
         {
             var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
             if (targetLevel == null) return;
@@ -748,7 +748,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                 get { return this.@__parent.married_with; }
             }
 
-            public long times_per_week { get; set; }
+            public long? times_per_week { get; set; }
 
             private bool times_per_week_validation()
             {

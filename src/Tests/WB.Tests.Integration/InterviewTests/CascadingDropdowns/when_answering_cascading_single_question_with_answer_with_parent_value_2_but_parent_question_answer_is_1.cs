@@ -1,0 +1,128 @@
+using System;
+using System.Collections.Generic;
+using AppDomainToolkit;
+using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
+using Moq;
+using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using It = Machine.Specifications.It;
+
+namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
+{
+    internal class when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1 :
+        InterviewTestsContext
+    {
+        Establish context = () =>
+        {
+            appDomainContext = AppDomainContext.Create();
+        };
+
+        Because of = () =>
+            results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                var parentSingleOptionQuestionId = Guid.Parse("00000000000000000000000000000000");
+                var childCascadedComboboxId = Guid.Parse("11111111111111111111111111111111");
+                var questionnaireId = Guid.Parse("22222222222222222222222222222222");
+                var actorId = Guid.Parse("33333333333333333333333333333333");
+
+                Setup.SetupMockedServiceLocator();
+
+                var questionnaire = Create.QuestionnaireDocument(questionnaireId,
+                        new SingleQuestion
+                        {
+                            PublicKey = parentSingleOptionQuestionId,
+                            QuestionType = QuestionType.SingleOption,
+                            Answers = new List<Answer>
+                            {
+                                new Answer { AnswerText = "parent option 1", AnswerValue = "1", PublicKey = Guid.NewGuid() },
+                                new Answer { AnswerText = "parent option 2", AnswerValue = "2", PublicKey = Guid.NewGuid() }
+                            }
+                        },
+                        new SingleQuestion
+                        {
+                            PublicKey = childCascadedComboboxId,
+                            QuestionType = QuestionType.SingleOption,
+                            CascadeFromQuestionId = parentSingleOptionQuestionId,
+                            Answers = new List<Answer>
+                            {
+                                new Answer
+                                {
+                                    AnswerText = "child 1 for parent option 1",
+                                    AnswerValue = "1.1",
+                                    PublicKey = Guid.NewGuid(),
+                                    ParentValue = "1"
+                                },
+                                new Answer
+                                {
+                                    AnswerText = "child 2 for parent option 1",
+                                    AnswerValue = "1.2",
+                                    PublicKey = Guid.NewGuid(),
+                                    ParentValue = "1"
+                                },
+
+                                new Answer
+                                {
+                                    AnswerText = "child 1 for parent option 2",
+                                    AnswerValue = "2.1",
+                                    PublicKey = Guid.NewGuid(),
+                                    ParentValue = "2"
+                                },
+                                new Answer
+                                {
+                                    AnswerText = "child 2 for parent option 2",
+                                    AnswerValue = "2.2",
+                                    PublicKey = Guid.NewGuid(),
+                                    ParentValue = "2"
+                                },
+                                new Answer
+                                {
+                                    AnswerText = "child 3 for parent option 2",
+                                    AnswerValue = "2.3",
+                                    PublicKey = Guid.NewGuid(),
+                                    ParentValue = "2"
+                                },
+                            }
+                        });
+
+                var interview = SetupInterview(questionnaire, new List<object>{});
+
+                interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
+
+                using (var eventContext = new EventContext())
+                {
+                    var exception = Catch.Exception(() =>
+                        interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 2.2m)
+                    );
+
+                    return new InvokeResults
+                    {
+                        Exception = exception
+                    };
+                }
+            });
+
+        It should_throw_InterviewException = () =>
+            results.Exception.ShouldBeOfExactType<InterviewException>();
+
+        It should_throw_exception_with_message_containting__answer____parent_value____incorrect__ = () =>
+            new[] { "answer", "parent value", "do not correspond" }.ShouldEachConformTo(
+                keyword => results.Exception.Message.ToLower().Contains(keyword));
+
+        Cleanup stuff = () =>
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        };
+
+        private static InvokeResults results;
+        private static AppDomainContext appDomainContext;
+
+        [Serializable]
+        internal class InvokeResults
+        {
+            public Exception Exception { get; set; }
+        }
+    }
+}
