@@ -17,6 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#, KP-4391 Interview reevalution")]
     internal class when_reevaluating_whole_interview_and_questionnaire_has_mandatory_inside_disabled_group : InterviewTestsContext
     {
         Establish context = () =>
