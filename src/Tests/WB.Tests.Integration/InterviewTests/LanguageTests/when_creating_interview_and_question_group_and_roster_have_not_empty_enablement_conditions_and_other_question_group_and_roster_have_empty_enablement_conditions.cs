@@ -70,6 +70,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         It should_put_only_id_of_question_with_enablement_condition_to_QuestionsDisabled_event = () =>
             result.QuestionsDisabledEventQuestionIds.ShouldContainOnly(Guid.Parse("11111111111111111111111111111111"));
 
+        [Ignore("KP-4135")]
         It should_put_only_ids_of_group_and_roster_with_enablement_conditions_to_QuestionsDisabled_event = () =>
             result.GroupsDisabledEventGroupIds.ShouldContainOnly(Guid.Parse("22222222222222222222222222222222"), Guid.Parse("33333333333333333333333333333333"));
 
