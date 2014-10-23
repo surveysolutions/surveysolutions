@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    [Ignore("C#, KP-4385 Misc Corner Cases")]
+    [Ignore("C#, KP-4387 Not yet anwered questions (mandatory and not mandatory)")]
     internal class when_answering_mandatory_multy_option_question_with_empty_list_of_options : InterviewTestsContext
     {
         Establish context = () =>
