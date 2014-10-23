@@ -48,8 +48,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
         It should_disabled_question_count_equal_0 = () =>
             results.QuestionsToBeDisabledCount.ShouldEqual(0);
 
-        It should_enabled_question_count_equal_1 = () =>
-            results.QuestionsToBeEnabledCount.ShouldEqual(1);
+        It should_enabled_question_count_equal_0 = () =>
+            results.QuestionsToBeEnabledCount.ShouldEqual(0);
 
         It should_disabled_group_count_equal_1 = () =>
             results.GroupsToBeDisabledCount.ShouldEqual(1);
