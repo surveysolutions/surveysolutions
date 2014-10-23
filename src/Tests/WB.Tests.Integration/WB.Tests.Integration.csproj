@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Create.cs" />
+    <Compile Include="Empty.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="InterviewStatistics\Create.cs" />
@@ -85,6 +86,10 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_wa___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_invalid_before_answer.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_valid_before_answer.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_invalid_before_answer.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_and_related_group_condition_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
