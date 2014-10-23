@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var interview = SetupInterview(questionnaireDocument, new List<object>()
                 {
                     new NumericIntegerQuestionAnswered(actorId, questionId, new decimal[0], DateTime.Now, 1),
-                    new GroupsEnabled(new[]{ new Identity(groupId, new decimal[0])})
+                    new GroupsDisabled(new[]{ new Identity(groupId, new decimal[0])})
                 });
 
                 var result = new InvokeResults();

@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
+    [Ignore("KP-4381")]
     internal class when_answering_on_question_validation_expression_throws_exception : InterviewTestsContext
     {
         Establish context = () =>

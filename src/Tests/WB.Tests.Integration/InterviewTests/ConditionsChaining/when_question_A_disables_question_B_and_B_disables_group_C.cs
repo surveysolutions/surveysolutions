@@ -42,11 +42,12 @@ namespace WB.Tests.Integration.InterviewTests.ConditionsChaining
                     })
                );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>() {});
+                var interview = SetupInterview(questionnaireDocument, new List<object>() { });
 
                 var result = new InvokeResults();
 
                 interview.AnswerNumericIntegerQuestion(actorId, q1, new decimal[] { }, DateTime.Now, 1);
+                interview.Apply(new GroupDisabled(g2, new decimal[]{}));
 
                 using (var eventContext = new EventContext())
                 {                    

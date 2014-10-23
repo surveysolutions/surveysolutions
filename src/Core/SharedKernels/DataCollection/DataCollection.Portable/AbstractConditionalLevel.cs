@@ -209,23 +209,48 @@ namespace WB.Core.SharedKernels.DataCollection
             }
 
             questionsToBeEnabled = this.EnablementStates.Values
-                .Where(x => (x.State == State.Enabled || x.State == State.Unknown) && x.State != x.PreviousState && x.Type == ItemType.Question)
+                .Where(x => x.Type == ItemType.Question)
+                .Where(StateChangedToEnabled)
                 .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .Distinct(IdentityComparer.Instance)
                 .ToList();
 
             questionsToBeDisabled = this.EnablementStates.Values
-                .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Question)
+                .Where(x => x.Type == ItemType.Question)
+                .Where(StateChangedToDisabled)
                 .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .Distinct(IdentityComparer.Instance)
                 .ToList();
 
             groupsToBeEnabled = this.EnablementStates.Values
-                .Where(x => (x.State == State.Enabled || x.State == State.Unknown) && x.State != x.PreviousState && x.Type == ItemType.Group)
+                .Where(x => x.Type == ItemType.Group)
+                .Where(StateChangedToEnabled)
                 .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .Distinct(IdentityComparer.Instance)
                 .ToList();
 
             groupsToBeDisabled = this.EnablementStates.Values
-                .Where(x => x.State == State.Disabled && x.State != x.PreviousState && x.Type == ItemType.Group)
-                .Select(x => new Identity(x.ItemId, this.RosterVector)).ToList();
+                .Where(x => x.Type == ItemType.Group)
+                .Where(StateChangedToDisabled)
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .Distinct(IdentityComparer.Instance)
+                .ToList();
+        }
+
+        private static bool StateChangedToEnabled(ConditionalState state)
+        {
+            bool isCurrentStateEnabled = state.State == State.Enabled || state.State == State.Unknown;
+            bool isPreviousStateEnabled = state.PreviousState == State.Enabled || state.PreviousState == State.Unknown;
+
+            return isCurrentStateEnabled && !isPreviousStateEnabled;
+        }
+
+        private static bool StateChangedToDisabled(ConditionalState state)
+        {
+            bool isCurrentStateDisabled = state.State == State.Disabled;
+            bool isPreviousStateDisabled = state.PreviousState == State.Disabled;
+
+            return isCurrentStateDisabled && !isPreviousStateDisabled;
         }
 
         public void DeclareAnswerValid(Guid questionId)
