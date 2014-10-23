@@ -26,21 +26,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 Guid question3Id = Guid.Parse("31111111111111111111111111111112");
                 Guid question4Id = Guid.Parse("41111111111111111111111111111112");
 
-                List<Identity> questionsToBeValid;
-                List<Identity> questionsToBeInvalid;
-
                 var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
                 ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumenteHavingMandatoryQuestions(questionnaireId, question1Id, question2Id, question3Id, question4Id);
                 IInterviewExpressionState state = GetInterviewExpressionState(questionnaireDocument);
 
-                state.ProcessValidationExpressions(out questionsToBeValid, out questionsToBeInvalid);
+                ValidityChanges validationChanges = state.ProcessValidationExpressions();
 
                 return new InvokeResults
                 {
-                    ValidQuestionsCount = questionsToBeValid.Count,
-                    InvalidQuestionsCount = questionsToBeInvalid.Count,
+                    ValidQuestionsCount = validationChanges.AnswersDeclaredValid.Count,
+                    InvalidQuestionsCount = validationChanges.AnswersDeclaredInvalid.Count,
                 };
             });
 

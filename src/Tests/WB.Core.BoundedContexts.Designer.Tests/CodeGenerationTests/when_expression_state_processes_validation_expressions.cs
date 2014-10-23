@@ -24,9 +24,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 Guid questionId = Guid.Parse("11111111111111111111111111111112");
                 Guid rosterId = Guid.Parse("21111111111111111111111111111112");
 
-                List<Identity> questionsToBeValid;
-                List<Identity> questionsToBeInvalid;
-
                 var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
                 ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
 
@@ -36,12 +33,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
                 state.UpdateNumericIntegerAnswer(questionId, new decimal[0], 4);
                 state.AddRoster(rosterId, new decimal[0], 1, null);
 
-                state.ProcessValidationExpressions(out questionsToBeValid, out questionsToBeInvalid);
+                ValidityChanges validationChanges = state.ProcessValidationExpressions();
 
                 return new InvokeResults
                 {
-                    ValidQuestionsCount = questionsToBeValid.Count,
-                    InvalidQuestionsCount = questionsToBeInvalid.Count,
+                    ValidQuestionsCount = validationChanges.AnswersDeclaredValid.Count,
+                    InvalidQuestionsCount = validationChanges.AnswersDeclaredInvalid.Count,
                 };
             });
 
