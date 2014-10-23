@@ -45,7 +45,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
                 Mock.Of<IReadSideRepositoryWriterRegistry>(),
                 Mock.Of<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>(
                     _ => _.GetById(It.IsAny<string>()) == new ViewWithSequence<InterviewData>(new InterviewData(), 1)),
-                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>(),
+                Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>(
+                    _ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == new QuestionnaireExportStructure()),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(), Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 Mock.Of<IExportViewFactory>(
                     _ =>
