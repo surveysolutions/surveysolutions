@@ -28,8 +28,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         Create.Question(id: Guid.Parse("11111111111111111111111111111111"), variable: "b", enablementCondition: "a > 0"),
                         Create.Group(variable: "i", enablementCondition: null),
                         Create.Group(id: Guid.Parse("22222222222222222222222222222222"), variable: "j", enablementCondition: "a < 0"),
-                        Create.Roster(variable: "x", enablementCondition: null),
-                        Create.Roster(id: Guid.Parse("33333333333333333333333333333333"), variable: "y", enablementCondition: "a == 0"),
+                        Create.Roster(variable: "x", fixedTitles: new[] { "1", "2" }, enablementCondition: null),
+                        Create.Roster(id: Guid.Parse("33333333333333333333333333333333"), variable: "y", fixedTitles: new[] { "1", "2" }, enablementCondition: "a == 0"),
                     }),
                 });
 
@@ -70,9 +70,11 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         It should_put_only_id_of_question_with_enablement_condition_to_QuestionsDisabled_event = () =>
             result.QuestionsDisabledEventQuestionIds.ShouldContainOnly(Guid.Parse("11111111111111111111111111111111"));
 
-        [Ignore("KP-4135")]
-        It should_put_only_ids_of_group_and_roster_with_enablement_conditions_to_QuestionsDisabled_event = () =>
-            result.GroupsDisabledEventGroupIds.ShouldContainOnly(Guid.Parse("22222222222222222222222222222222"), Guid.Parse("33333333333333333333333333333333"));
+        It should_put_only_ids_of_group_and_2_roster_instances_with_enablement_conditions_to_QuestionsDisabled_event = () =>
+            result.GroupsDisabledEventGroupIds.ShouldContainOnly(
+                Guid.Parse("22222222222222222222222222222222"),
+                Guid.Parse("33333333333333333333333333333333"),
+                Guid.Parse("33333333333333333333333333333333"));
 
         private static AppDomainContext appDomainContext;
         private static InvokeResult result;

@@ -94,7 +94,7 @@ namespace WB.Tests.Integration
         }
 
         public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
-            IEnumerable<IComposite> children = null)
+            string[] fixedTitles = null, IEnumerable<IComposite> children = null)
         {
             Group group = Create.Group(
                 id: id,
@@ -105,7 +105,7 @@ namespace WB.Tests.Integration
 
             group.IsRoster = true;
             group.RosterSizeSource = RosterSizeSourceType.FixedTitles;
-            group.RosterFixedTitles = new[] { "Roster X-1", "Roster X-2" };
+            group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
 
             return group;
         }
