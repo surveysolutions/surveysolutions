@@ -34,90 +34,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         protected const string firstLevelkey = "#";
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-          Func<QuestionnaireDocument> templateCreationAction=null,
-          Func<InterviewData> dataCreationAction = null, IDataExportRepositoryWriter dataExportRepositoryWriter = null,
-          UserDocument userDocument = null, IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage=null)
+          IDataExportRepositoryWriter dataExportRepositoryWriter = null,
+          IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage=null, UserDocument user=null)
         {
-            var interviewDataStorageMock = new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
-            var questionnaire = templateCreationAction();
-
-            interviewDataStorageMock.Setup(
-                x => x.GetById(Moq.It.IsAny<string>()))
-                .Returns(
-                    () =>
-                    {
-                        var createInterview = dataCreationAction ?? CreateInterviewData;
-                        var interview = createInterview();
-                        interview.QuestionnaireId = questionnaire.PublicKey;
-                        return new ViewWithSequence<InterviewData>(interview, 1);
-                    });
-
-            var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
-            var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
-                new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
-            questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
-                .Returns(exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1));
-
-
-            var userDocumentWriter = new Mock<IReadSideRepositoryWriter<UserDocument>>();
-            if (userDocument != null)
-            {
-                userDocumentWriter.Setup(x => x.GetById(Moq.It.IsAny<string>())).Returns(userDocument);
-            }
-
-            return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(), 
-                recordFirstAnswerMarkerViewStorage?? Mock.Of<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>());
+            return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
+                recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>(),
+                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(
+                    It.IsAny<string>()) == user));
         }
 
         protected static InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action,string userName="test", string role="headquarter")
         {
             return new InterviewActionExportView(interviewId.FormatGuid(), action, userName, DateTime.Now, role);
-        }
-
-        protected static QuestionnaireDocument CreateQuestionnaireDocument(Dictionary<string,Guid> variableNameAndQuestionId)
-        {
-            var questionnaire = new QuestionnaireDocument();
-
-            foreach (var question in variableNameAndQuestionId)
-            {
-                questionnaire.Children.Add(new NumericQuestion() { StataExportCaption = question.Key, PublicKey = question.Value, QuestionType = QuestionType.Numeric});
-            }
-
-            return questionnaire;
-        }
-
-        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
-        {
-            return new QuestionnaireDocument
-            {
-                Children = new List<IComposite>
-                {
-                    new Group("Chapter")
-                    {
-                        PublicKey = Guid.Parse("FFF000AAA111EE2DD2EE111AAA000FFF"),
-                        Children = chapterChildren.ToList(),
-                    }
-                }
-            };
-        }
-
-        protected static InterviewData CreateInterviewData()
-        {
-            var interviewData = new InterviewData() {InterviewId = Guid.NewGuid()};
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
-            return interviewData;
-        }
-
-        protected static InterviewData CreateInterviewWithAnswers(IEnumerable<Guid> questionsWithAnswers)
-        {
-            var interviewData = CreateInterviewData();
-            foreach (var questionsWithAnswer in questionsWithAnswers)
-            {
-                var question =
-                    interviewData.Levels["#"].GetOrCreateQuestion(questionsWithAnswer);
-                question.Answer = "some answer";
-            }
-            return interviewData;
         }
 
         protected static IPublishedEvent<InterviewApprovedByHQ> CreateInterviewApprovedByHQPublishableEvent(Guid? interviewId=null)
@@ -144,11 +72,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             publishableEventMock.Setup(x => x.EventSourceId).Returns(eventSourceId ?? Guid.NewGuid());
 
             return publishableEventMock.Object;
-        }
-
-        protected static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)
-        {
-            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelVector.SequenceEqual(levelVector));
         }
 
         protected static List<QuestionAnswered> ListOfQuestionAnsweredEventsHandledByDenormalizer

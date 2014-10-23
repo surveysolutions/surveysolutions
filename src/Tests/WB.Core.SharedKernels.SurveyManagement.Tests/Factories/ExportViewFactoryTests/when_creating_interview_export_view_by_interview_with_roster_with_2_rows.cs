@@ -4,22 +4,20 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Moq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
+namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFactoryTests
 {
-    class when_InterviewApproved_recived_by_interview_with_roster_with_2_rows : InterviewExportedDataEventHandlerTestContext
+    class when_creating_interview_export_view_by_interview_with_roster_with_2_rows : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
-            dataExportServiceMock = CreateDataExportService(r => result = r);
             firstQuestionId = Guid.Parse("12222222222222222222222222222222");
             secondQuestionId = Guid.Parse("11111111111111111111111111111111");
             propagatedGroup = Guid.Parse("13333333333333333333333333333333");
@@ -34,13 +32,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
             propagationScopeKey = Guid.Parse("10000000000000000000000000000000");
             questionnarie = CreateQuestionnaireDocumentWith1PropagationLevel();
-            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                templateCreationAction:() => questionnarie,
-                dataCreationAction:CreateInterviewDataWith2PropagatedLevels, dataExportService:dataExportServiceMock.Object);
+            exportViewFactory = CreateExportViewFactory();
         };
 
         Because of = () =>
-            interviewExportedDataDenormalizer.Handle(CreatePublishableEvent(() => new InterviewApproved(Guid.NewGuid(), "")));
+            result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1),
+                CreateInterviewDataWith2PropagatedLevels());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result, new[] { propagationScopeKey }).Records.Length.ShouldEqual(2);
@@ -91,7 +88,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             return interview;
         }
 
-        private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
         private static InterviewDataExportView result;
         private static Dictionary<string, Guid> variableNameAndQuestionId;
         private static Guid propagatedGroup;
@@ -100,6 +96,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         private static Guid firstQuestionId;
         private static int levelCount;
         private static QuestionnaireDocument questionnarie;
-        private static Mock<IDataExportService> dataExportServiceMock;
+        private static ExportViewFactory exportViewFactory;
     }
 }

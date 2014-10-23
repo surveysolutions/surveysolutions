@@ -47,6 +47,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
             };
         }
 
+        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)
+        {
+            var header = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
+            if (levels != null && levels.Length > 0)
+            {
+                header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
+            }
+            return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
+        }
+        protected static InterviewDataExportView CreateInterviewDataExportView(Guid? interviewId = null, params InterviewDataExportLevelView[] levels)
+        {
+            return new InterviewDataExportView(interviewId??Guid.NewGuid(),Guid.NewGuid(),1, levels??new InterviewDataExportLevelView[0]);
+        }
         protected static InterviewDataExportLevelView CreateInterviewDataExportLevelView(Guid? interviewId = null, string levelName = "main level", ValueVector<Guid> levelVector =null, InterviewDataExportRecord[] records=null)
         {
             var interviewIdNotNull = interviewId ?? Guid.NewGuid();

@@ -15,18 +15,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         Establish context = () =>
         {
             sqlServiceTestable = new SqlServiceTestable();
-            interviewDataExportLevelView = CreateInterviewDataExportLevelView(interviewId: interviewId, levelName: "main level table",
-                levelVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() }),
-                records: new[]
-                {
-                    CreateInterviewDataExportRecord(interviewId, "0", new[] { "r1", "r2" }, new[] { "1", "parentIdTest1" }),
-                    CreateInterviewDataExportRecord(interviewId, "1", new[] { "r3", "r4" }, new[] { "2", "parentIdTest2" }) 
-                });
+            interviewDataExportView = CreateInterviewDataExportView(interviewId: interviewId,
+                levels: CreateInterviewDataExportLevelView(interviewId: interviewId, levelName: "main level table",
+                    levelVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() }),
+                    records: new[]
+                    {
+                        CreateInterviewDataExportRecord(interviewId, "0", new[] { "r1", "r2" }, new[] { "1", "parentIdTest1" }),
+                        CreateInterviewDataExportRecord(interviewId, "1", new[] { "r3", "r4" }, new[] { "2", "parentIdTest2" })
+                    }));
             sqlDataExportWriter = CreateSqlDataExportWriter(sqlService: sqlServiceTestable);
         };
 
         Because of = () =>
-            sqlDataExportWriter.AddOrUpdateInterviewRecords(interviewDataExportLevelView, "");
+            sqlDataExportWriter.AddOrUpdateInterviewRecords(interviewDataExportView, "");
 
         It should_3_commands_be_executed = () =>
              sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(3);
@@ -43,7 +44,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         private static SqlDataExportWriter sqlDataExportWriter;
         private static SqlServiceTestable sqlServiceTestable;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
-        private static DateTime dataTime = new DateTime(1984, 4, 18, 6, 38, 2);
-        private static InterviewDataExportLevelView interviewDataExportLevelView;
+        private static InterviewDataExportView interviewDataExportView;
     }
 }
