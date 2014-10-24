@@ -38,8 +38,13 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    new QuestionsEnabled(new[]{ new Identity(questionAId, emptyRosterVector), new Identity(questionBId, emptyRosterVector), new Identity(questionCId, emptyRosterVector) }),
-                    new TextQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, "2")
+                    Create.Event.QuestionsEnabled(new []
+                    {
+                        Create.Identity(questionAId),
+                        Create.Identity(questionBId),
+                        Create.Identity(questionCId)
+                    }),
+                    Create.Event.TextQuestionAnswered(questionBId, "2")
                 });
 
                 using (var eventContext = new EventContext())

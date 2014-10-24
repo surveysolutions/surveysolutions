@@ -37,8 +37,13 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    new QuestionsEnabled(new[]{ new Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity(questionAId, emptyRosterVector), new Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity(questionBId, emptyRosterVector), new Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity(questionCId, emptyRosterVector) }),
-                    new NumericRealQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, (decimal) 4.2)
+                    Create.Event.QuestionsEnabled(new []
+                    {
+                        Create.Identity(questionAId),
+                        Create.Identity(questionBId),
+                        Create.Identity(questionCId) 
+                    }),
+                    Create.Event.NumericRealQuestionAnswered(questionBId, 4.2m)
                 });
 
                 using (var eventContext = new EventContext())

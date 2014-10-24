@@ -20,7 +20,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                var emptyRosterVector = new decimal[] { };
+                Setup.SetupMockedServiceLocator();
+
                 var userId = Guid.Parse("11111111111111111111111111111111");
 
                 var questionnaireId = Guid.Parse("77778888000000000000000000000000");
@@ -28,8 +29,6 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var groupGBId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var groupGCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-
-                Setup.SetupMockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.NumericIntegerQuestion(questionAId, "a"),
@@ -41,14 +40,22 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    new QuestionsEnabled(new[]{ new Identity(questionAId, emptyRosterVector), new Identity(questionBId, emptyRosterVector)}),
-                    new GroupsEnabled(new [] { new Identity(groupGBId, emptyRosterVector), new Identity(groupGCId, emptyRosterVector) }),
-                    new NumericIntegerQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, 1)
+                    Create.Event.QuestionsEnabled(new []
+                    {
+                        Create.Identity(questionAId),
+                        Create.Identity(questionBId)
+                    }),
+                    Create.Event.GroupsEnabled(new []
+                    {
+                        Create.Identity(groupGBId),
+                        Create.Identity(groupGCId)
+                    }),
+                    Create.Event.NumericIntegerQuestionAnswered(questionBId, 1)
                 });
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, questionAId, emptyRosterVector, DateTime.Now, 0);
+                    interview.AnswerNumericIntegerQuestion(userId, questionAId, Empty.RosterVector, DateTime.Now, 0);
 
                     return new InvokeResults()
                     {

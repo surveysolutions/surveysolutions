@@ -5,6 +5,7 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
@@ -41,9 +42,14 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    new QuestionsEnabled(new[]{ new Identity(questionAId, emptyRosterVector), new Identity(questionBId, emptyRosterVector), new Identity(questionCId, emptyRosterVector) }),
-                    new GroupsEnabled(new [] { new Identity(groupGBId, emptyRosterVector) }),
-                    new NumericIntegerQuestionAnswered(userId, questionBId, emptyRosterVector, DateTime.Now, 1)
+                    Create.Event.QuestionsEnabled(new []
+                    {
+                        Create.Identity(questionAId),
+                        Create.Identity(questionBId),
+                        Create.Identity(questionCId)
+                    }),
+                    Create.Event.GroupsEnabled(Create.Identity(groupGBId)),
+                    Create.Event.NumericIntegerQuestionAnswered(questionBId, 1)
                 });
 
                 using (var eventContext = new EventContext())
