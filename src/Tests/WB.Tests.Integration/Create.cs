@@ -67,6 +67,11 @@ namespace WB.Tests.Integration
                     answer);
             }
 
+            public static AnswersDeclaredValid AnswersDeclaredValid(params Identity[] questions)
+            {
+                return new AnswersDeclaredValid(questions);
+            }
+
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(params Identity[] questions)
             {
                 return new AnswersDeclaredInvalid(questions);
