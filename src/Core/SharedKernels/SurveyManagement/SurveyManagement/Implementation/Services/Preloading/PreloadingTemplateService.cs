@@ -21,16 +21,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     internal class PreloadingTemplateService : IPreloadingTemplateService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IExportedDataFormatter exportedDataFormatter;
+        private readonly IDataExporter dataExporter;
         private readonly IArchiveUtils archiveUtils;
         private const string FolderName = "PreLoadingTemplates";
         private readonly string path;
 
         public PreloadingTemplateService(IFileSystemAccessor fileSystemAccessor,string folderPath,
-            IExportedDataFormatter exportedDataFormatter, IArchiveUtils archiveUtils)
+            IDataExporter dataExporter, IArchiveUtils archiveUtils)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.exportedDataFormatter = exportedDataFormatter;
+            this.dataExporter = dataExporter;
             this.archiveUtils = archiveUtils;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (fileSystemAccessor.IsFileExists(archiveFilePath))
                 return archiveFilePath;
 
-            this.exportedDataFormatter.CreateHeaderStructureForPreloadingForQuestionnaire(questionnaireId, version, dataDirectoryPath);
+            this.dataExporter.CreateHeaderStructureForPreloadingForQuestionnaire(questionnaireId, version, dataDirectoryPath);
 
             if (fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Length == 0)
             {

@@ -104,36 +104,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         }
 
         private readonly List<string> commandsToExecute = new List<string>();
+
         public void Dispose() {}
 
-        public void ExecuteCommand(string commandText)
-        {
-            commandsToExecute.Add(commandText);
-        }
-
-        public void ExecuteCommands(IEnumerable<string> commands)
-        {
-            commandsToExecute.AddRange(commands);
-        }
-
-        public object[][] ExecuteReader(string query)
-        {
-            commandsToExecute.Add(query);
-            if (query.Contains("information_schema.tables"))
-                return tableWithColumns.Keys.Select(k => new object[] { k }).ToArray();
-
-            if (query.Contains("INFORMATION_SCHEMA.COLUMNS"))
-            {
-                var tableNameWhere = "TABLE_NAME = '";
-                var beniningOfTableName = query.IndexOf(tableNameWhere) + tableNameWhere.Length;
-                var tableName = query.Substring(beniningOfTableName, query.LastIndexOf("'") - beniningOfTableName);
-                if(!tableWithColumns.ContainsKey(tableName))
-                    return new object[0][];
-                return tableWithColumns[tableName].Select(c => new object[] { c }).ToArray();
-            }
-            return new object[0][];
-        }
-
         public List<string> CommandsToExecute { get { return commandsToExecute; } }
+
+        public IEnumerable<dynamic> Query(string sql, object param = null)
+        {
+            commandsToExecute.Add(sql);
+            return new dynamic[0];
+        }
+
+        public IEnumerable<T> Query<T>(string sql, object param = null) where T : class
+        {
+            commandsToExecute.Add(sql);
+
+            if (sql.Contains("information_schema.tables"))
+                return tableWithColumns.Keys.Select(k =>  k  as T).ToArray();
+
+            if (sql.Contains("INFORMATION_SCHEMA.COLUMNS"))
+            {
+                string tableName = (param as dynamic).tableName;
+                if (!tableWithColumns.ContainsKey(tableName))
+                    return new T[0];
+                return tableWithColumns[tableName].Select(c => c as T).ToArray();
+            }
+
+            return new T[0];
+        }
+
+        public void ExecuteCommand(string sql, object param = null)
+        {
+            commandsToExecute.Add(sql);
+        }
     }
 }

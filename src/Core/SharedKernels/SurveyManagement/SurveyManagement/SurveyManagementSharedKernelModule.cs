@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<IFilebaseExportRouteService>().To<FilebaseExportRouteService>().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<IExportedDataFormatter>().To<SqlToTabExportedDataFormatter>();
+            this.Bind<IDataExporter>().To<SqlDataExporter>();
             this.Bind<IDataExportRepositoryWriter>().To<FileBasedDataExportRepositoryWriter>().InSingletonScope();
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);

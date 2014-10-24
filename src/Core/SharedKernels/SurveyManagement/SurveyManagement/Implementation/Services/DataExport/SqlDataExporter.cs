@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class SqlToTabExportedDataFormatter : BaseSqlService, IExportedDataFormatter
+    internal class SqlDataExporter : BaseSqlService, IDataExporter
     {
         private readonly IFilebaseExportRouteService filebaseExportRouteService;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private const string AllDataFolder = "AllData";
         private const string ApprovedDataFolder = "ApprovedData";
 
-        public SqlToTabExportedDataFormatter(IFilebaseExportRouteService filebaseExportRouteService, ISqlServiceFactory sqlServiceFactory, IFileSystemAccessor fileSystemAccessor, ICsvWriterFactory csvWriterFactory)
+        public SqlDataExporter(IFilebaseExportRouteService filebaseExportRouteService, ISqlServiceFactory sqlServiceFactory, IFileSystemAccessor fileSystemAccessor, ICsvWriterFactory csvWriterFactory)
         {
             this.filebaseExportRouteService = filebaseExportRouteService;
             this.sqlServiceFactory = sqlServiceFactory;
@@ -132,12 +132,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         }
 
                         csv.NextRecord();
-                        var dataSet = sqlService.ExecuteReader(createSqlQueryFormat(tableName, columnNames));
+                        var dataSet = sqlService.Query(createSqlQueryFormat(tableName, columnNames));
                         foreach (var dataRow in dataSet)
                         {
-                            for (int i = 0; i < dataRow.Length; i++)
+                            foreach (var cell in dataRow)
                             {
-                                csv.WriteField(dataRow[i]);
+                                if(cell.Value==null)
+                                    csv.WriteField(string.Empty);
+                                else
+                                    csv.WriteField(cell.Value);
                             }
 
                             csv.NextRecord();
