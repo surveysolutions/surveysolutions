@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.NumericIntegerQuestion(questionAId, "a"),
-                    Create.NumericIntegerQuestion(questionBId, "b", "a > 0"),
+                    Create.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
                     Create.Group(groupGCId, enablementCondition: "b > 0", children: new IComposite[] {
                         Create.NumericIntegerQuestion(questionCId)
                     })
