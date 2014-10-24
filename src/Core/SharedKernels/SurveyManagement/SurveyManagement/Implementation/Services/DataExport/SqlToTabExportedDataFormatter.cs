@@ -69,7 +69,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var allDataFolderPath = GetAllDataFolder(basePath);
 
             if (fileSystemAccessor.IsDirectoryExists(allDataFolderPath))
-                return fileSystemAccessor.GetFilesInDirectory(allDataFolderPath);
+                fileSystemAccessor.DeleteDirectory(allDataFolderPath);
+               // return fileSystemAccessor.GetFilesInDirectory(allDataFolderPath);
 
             fileSystemAccessor.CreateDirectory(allDataFolderPath);
 
@@ -82,7 +83,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var approvedDataFolderPath = GetApprovedDataFolder(basePath);
 
             if (fileSystemAccessor.IsDirectoryExists(approvedDataFolderPath))
-                return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath);
+                fileSystemAccessor.DeleteDirectory(approvedDataFolderPath);
+                //return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath);
 
             fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
 

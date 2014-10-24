@@ -8,8 +8,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         void AddActionRecord(InterviewActionExportView actions, string basePath);
         void AddOrUpdateInterviewRecords(InterviewDataExportView items, string basePath);
         void CreateStructure(QuestionnaireExportStructure header, string basePath);
-        string[] GetAllDataFiles(string basePath, Func<string, string> fileNameCreationFunc);
-        string[] GetApprovedDataFiles(string basePath, Func<string, string> fileNameCreationFunc);
         void DeleteInterviewRecords(string basePath, Guid interviewId);
         void BatchInsert(string basePath, IEnumerable<InterviewDataExportView> interviewDatas, IEnumerable<InterviewActionExportView> interviewActions);
     }

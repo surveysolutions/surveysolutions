@@ -39,6 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private bool isCacheEnabled = false;
         private readonly Dictionary<string, QuestionnaireExportEntity> cache = new Dictionary<string, QuestionnaireExportEntity>();
         private readonly IFilebaseExportRouteService filebaseExportRouteService;
+        private readonly IExportedDataFormatter exportedDataFormatter;
 
         public FileBasedDataExportRepositoryWriter(
             IReadSideRepositoryCleanerRegistry cleanerRegistry,
@@ -48,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
-            IExportViewFactory exportViewFactory, IFilebaseExportRouteService filebaseExportRouteService)
+            IExportViewFactory exportViewFactory, IFilebaseExportRouteService filebaseExportRouteService, IExportedDataFormatter exportedDataFormatter)
         {
             this.dataExportWriter = dataExportWriter;
             this.environmentContentService = environmentContentService;
@@ -61,6 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewSummaryWriter = interviewSummaryWriter;
             this.exportViewFactory = exportViewFactory;
             this.filebaseExportRouteService = filebaseExportRouteService;
+            this.exportedDataFormatter = exportedDataFormatter;
 
             cleanerRegistry.Register(this);
             writerRegistry.Register(this);
@@ -90,7 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
 
-                zip.AddFiles(dataExportWriter.GetAllDataFiles(dataDirectoryPath, this.CreateLevelFileName),"");
+                zip.AddFiles(exportedDataFormatter.ExportAllDataForQuestionnaire(questionnaireId, version, this.CreateLevelFileName), "");
 
                 foreach (var contentFile in fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Where(fileName => fileName.EndsWith("." + environmentContentService.ContentFileNameExtension)))
                 {
@@ -118,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
 
-                zip.AddFiles(dataExportWriter.GetApprovedDataFiles(dataDirectoryPath, this.CreateLevelFileName), "");
+                zip.AddFiles(exportedDataFormatter.ExportApprovedDataForQuestionnaire(questionnaireId, version, this.CreateLevelFileName), "");
 
                 foreach (var contentFile in fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Where(fileName => fileName.EndsWith("." + environmentContentService.ContentFileNameExtension)))
                 {
@@ -292,7 +294,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private string CreateLevelFileName(string levelName)
         {
-            return string.Format("{0}.{0}", levelName, filebaseExportRouteService.ExtensionOfExportedDataFile);
+            return string.Format("{0}.{1}", levelName, filebaseExportRouteService.ExtensionOfExportedDataFile);
         }
 
         private void CreateExportedFileStructure(QuestionnaireExportStructure questionnaireExportStructure)

@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class InterviewExportedDataDenormalizer : 
         IEventHandler<InterviewApprovedByHQ>, 
-        IEventHandler<SupervisorAssigned>,
+   //     IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewRestarted>,
@@ -112,10 +112,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.recordFirstAnswerMarkerViewWriter.Remove(interviewId);
         }
 
-        public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
+      /*  public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
             UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.EventTimeStamp, InterviewExportedAction.SupervisorAssigned);
-        }
+        }*/
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {

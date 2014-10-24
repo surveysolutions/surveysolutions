@@ -22,8 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private const string text = "ntext";
         private const string numeric = "money";
         private const string nvarchar = "nvarchar(512)";
-        private const string allDataFolder = "AllData";
-        private const string approvedDataFolder = "ApprovedData";
         
         private readonly ICsvWriterFactory csvWriterFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -88,31 +86,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return val.Replace("'", "''");
         }
 
-        public string[] GetAllDataFiles(string basePath, Func<string, string> fileNameCreationFunc)
-        {
-            var allDataFolderPath = GetAllDataFolder(basePath);
-
-            if (fileSystemAccessor.IsDirectoryExists(allDataFolderPath))
-                return fileSystemAccessor.GetFilesInDirectory(allDataFolderPath);
-
-            fileSystemAccessor.CreateDirectory(allDataFolderPath);
-
-            return this.ExportToCSVFile(allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, dataFile), (tableName, column) => string.Format("select * from \"{0}\"", tableName), fileNameCreationFunc);
-        }
-
-        public string[] GetApprovedDataFiles(string basePath, Func<string, string> fileNameCreationFunc)
-        {
-            var approvedDataFolderPath = GetApprovedDataFolder(basePath);
-
-            if (fileSystemAccessor.IsDirectoryExists(approvedDataFolderPath))
-                return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath);
-
-            fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
-
-            return ExportToCSVFile(approvedDataFolderPath, fileSystemAccessor.CombinePath(basePath, dataFile),
-                CreateQueryStringForApprovedInterviewsByTableName, fileNameCreationFunc);
-        }
-
         public void DeleteInterviewRecords(string basePath, Guid interviewId)
         {
             using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
@@ -127,74 +100,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 }
                 sqlService.ExecuteCommands(deleteInterviewRecords);
             }
-        }
-
-        private string GetAllDataFolder(string basePath)
-        {
-            return fileSystemAccessor.CombinePath(basePath, allDataFolder);
-        }
-
-        private string GetApprovedDataFolder(string basePath)
-        {
-            return fileSystemAccessor.CombinePath(basePath, approvedDataFolder);
-        }
-
-        private string CreateQueryStringForApprovedInterviewsByTableName(string tableName, IEnumerable<string> columnNames)
-        {
-            var filterByAction = InterviewExportedAction.ApproveByHeadquarter;
-            if (tableName == interviewActions)
-                return string.Format("select i2.* from {0} as i1 join {0} as i2 "
-                    + "on i1.Id=i2.Id where i1.Action='{1}'", tableName, filterByAction);
-
-            if (!columnNames.Any(name => name.StartsWith(parentId)))
-                return string.Format("select \"{0}\".* from \"{1}\" join \"{0}\" "
-                    + "ON \"{1}\".Id=\"{0}\".Id "
-                    + "where \"{1}\".Action='{2}'", tableName, interviewActions, filterByAction);
-
-            return string.Format("select \"{0}\".* from \"{1}\" join \"{0}\" "
-                + "ON \"{1}\".Id=\"{0}\".{3} "
-                + "where \"{1}\".Action='{2}'", tableName, interviewActions, filterByAction,
-                columnNames.Last());
-        }
-
-        private string[] ExportToCSVFile(string basePath, string dbPath, Func<string, IEnumerable<string>, string> createSqlQueryFormat, Func<string, string> fileNameCreationFunc)
-        {
-            var result = new List<string>();
-            using (var sqlService = sqlServiceFactory.CreateSqlService(dbPath))
-            {
-                var tableNames = this.GetListofTables(sqlService);
-
-                foreach (var tableName in tableNames)
-                {
-                    var csvFilePath =
-                        fileSystemAccessor.CombinePath(basePath, fileNameCreationFunc(tableName));
-
-                    var columnNames = GetListOfColumns(sqlService, tableName).ToArray();
-                    using (var fileStream = fileSystemAccessor.OpenOrCreateFile(csvFilePath, true))
-                    using (var csv = csvWriterFactory.OpenCsvWriter(fileStream, "\t "))
-                    {
-                        foreach (var columnName in columnNames)
-                        {
-                            csv.WriteField(columnName);
-                        }
-
-                        csv.NextRecord();
-                        var dataSet = sqlService.ExecuteReader(createSqlQueryFormat(tableName, columnNames));
-                        foreach (var dataRow in dataSet)
-                        {
-                            for (int i = 0; i < dataRow.Length; i++)
-                            {
-                                csv.WriteField(dataRow[i]);
-                            }
-
-                            csv.NextRecord();
-                        }
-
-                        result.Add(csvFilePath);
-                    }
-                }
-            }
-            return result.ToArray();
         }
 
         private string CreaActionRecordInsertCommand(InterviewActionExportView action)
@@ -220,11 +125,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 sqlService.ExecuteCommand(insertActionRecord);
             }
 
-            var folderPath = GetFolderPath(basePath);
+          /*  var folderPath = GetFolderPath(basePath);
             fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(folderPath));
 
             if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
-                fileSystemAccessor.DeleteDirectory(this.GetApprovedDataFolder(folderPath));
+                fileSystemAccessor.DeleteDirectory(this.GetApprovedDataFolder(folderPath));*/
         }
 
 
