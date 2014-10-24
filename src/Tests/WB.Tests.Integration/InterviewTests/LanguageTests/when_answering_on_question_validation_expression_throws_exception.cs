@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
@@ -8,7 +7,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
-    [Ignore("KP-4381")]
     internal class when_answering_on_question_validation_expression_throws_exception : InterviewTestsContext
     {
         Establish context = () =>
@@ -30,37 +28,23 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Create.QuestionnaireDocument(questionnaireId,
                         Create.NumericIntegerQuestion(question1Id, "q1"),
                         Create.NumericIntegerQuestion(question2Id, "q2", validationExpression: "1/q1 == 1")
-                    ),
-                    events: new List<object>
-                    {
-                        Create.Event.QuestionsEnabled(new []
-                        {
-                            Create.Identity(question1Id),
-                            Create.Identity(question2Id)
-                        }),
-                        Create.Event.AnswersDeclaredValid(new []
-                        {
-                            Create.Identity(question1Id),
-                            Create.Identity(question2Id)                            
-                        }),
-                        Create.Event.NumericIntegerQuestionAnswered(question1Id, 1)
-                    });
+                        ));
 
+                interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 0);
                 var result = new InvokeResults();
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 0);
+                    interview.AnswerNumericIntegerQuestion(actorId, question2Id, new decimal[0], DateTime.Now, 5);
 
                     result.Questions2ShouldBeDeclaredInvalid = 
-                        HasEvent<AnswersDeclaredInvalid>(eventContext.Events) &&
-                        GetFirstEventByType<AnswersDeclaredInvalid>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) != null;
+                        eventContext.AnyEvent<AnswersDeclaredInvalid>(x => x.Questions.Any(q => q.Id == question2Id));
                 }
 
                 return result;
             });
 
-        It should_disable_second_question = () =>
+        It should_declare_second_question_as_invalid = () =>
             results.Questions2ShouldBeDeclaredInvalid.ShouldBeTrue();
 
         Cleanup stuff = () =>

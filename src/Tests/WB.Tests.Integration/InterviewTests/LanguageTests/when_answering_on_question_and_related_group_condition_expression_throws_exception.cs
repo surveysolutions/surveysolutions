@@ -43,13 +43,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     interview.AnswerNumericIntegerQuestion(actorId, questionId, new decimal[0], DateTime.Now, 0);
 
-                    result.GroupDisabledEventWasFound  =
-                        eventContext.Events.Any(b => b.Payload is GroupsDisabled) &&
-                        GetFirstEventByType<GroupsDisabled>(eventContext.Events).Groups.Any(g => g.Id == groupId);
-
-                    result.GroupEnabledEventWasFound =
-                        eventContext.Events.Any(b => b.Payload is GroupsEnabled) &&
-                        GetFirstEventByType<GroupsEnabled>(eventContext.Events).Groups.Any(g => g.Id == groupId);
+                    result.GroupDisabledEventWasFound = eventContext.AnyEvent<GroupsDisabled>(x => x.Groups.Any(g => g.Id == groupId));
+                    result.GroupEnabledEventWasFound = eventContext.AnyEvent<GroupsEnabled>(x => x.Groups.Any(g => g.Id == groupId));
                 }
 
                 return result;
