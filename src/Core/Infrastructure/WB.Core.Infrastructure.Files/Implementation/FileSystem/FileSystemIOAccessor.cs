@@ -116,7 +116,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                 return string.Empty;
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidReStr = String.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-            var result = RemoveNonAscii(Regex.Replace(name, invalidReStr, "_"));
+            var result = RemoveNonAscii(Regex.Replace(name, invalidReStr, "_")).Trim();
             if (result.Length < 128)
                 return result;
             return result.Substring(0, 128);
