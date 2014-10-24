@@ -5,7 +5,6 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
@@ -34,12 +33,17 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     ),
                     events: new List<object>
                     {
-                        Create.Event.NumericIntegerQuestionAnswered(question1Id, 1),
                         Create.Event.QuestionsEnabled(new []
                         {
                             Create.Identity(question1Id),
                             Create.Identity(question2Id)
-                        })
+                        }),
+                        Create.Event.AnswersDeclaredValid(new []
+                        {
+                            Create.Identity(question1Id),
+                            Create.Identity(question2Id)                            
+                        }),
+                        Create.Event.NumericIntegerQuestionAnswered(question1Id, 1)
                     });
 
                 var result = new InvokeResults();
@@ -48,14 +52,16 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 0);
 
-                    result.Questions2Disabled = GetFirstEventByType<QuestionsEnabled>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) != null;
+                    result.Questions2ShouldBeDeclaredInvalid = 
+                        HasEvent<AnswersDeclaredInvalid>(eventContext.Events) &&
+                        GetFirstEventByType<AnswersDeclaredInvalid>(eventContext.Events).Questions.FirstOrDefault(q => q.Id == question2Id) != null;
                 }
 
                 return result;
             });
 
         It should_disable_second_question = () =>
-            results.Questions2Disabled.ShouldBeTrue();
+            results.Questions2ShouldBeDeclaredInvalid.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -69,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         [Serializable]
         internal class InvokeResults
         {
-            public bool Questions2Disabled { get; set; }
+            public bool Questions2ShouldBeDeclaredInvalid { get; set; }
         } 
     }
 }
