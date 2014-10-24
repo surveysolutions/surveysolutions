@@ -50,7 +50,7 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WB.Core.BoundedContexts.Designer.ValueObjects" />
+      <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.DataCollection" />
       <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/Message" />
       <xsd:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" />
     </xsd:schema>

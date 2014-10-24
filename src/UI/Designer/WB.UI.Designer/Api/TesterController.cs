@@ -5,12 +5,12 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Exceptions;
@@ -38,6 +38,7 @@ namespace WB.UI.Designer.Api
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireExportService exportService,
+            IExpressionProcessorGenerator expressionProcessorGenerator,
             ILogger logger)
         {
             this.userHelper = userHelper;
@@ -47,9 +48,7 @@ namespace WB.UI.Designer.Api
             this.logger = logger;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireVerifier = questionnaireVerifier;
-
-            //inject it
-            this.expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
         
         [HttpGet]
@@ -107,6 +106,19 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public QuestionnaireCommunicationPackage GetTemplate(Guid id)
         {
+            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage
+            {
+                IsErrorOccured = true,
+                ErrorMessage = "You have an old version of application. Please update application to continue."
+            };
+
+            return questionnaireSyncPackage;
+
+        }
+
+        [HttpGet]
+        public QuestionnaireCommunicationPackage GetTemplate(Guid id, string maxSupportedVersion)
+        {
             var user = this.userHelper.WebUser;
             if (user == null)
             {
@@ -114,17 +126,48 @@ namespace WB.UI.Designer.Api
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
             }
 
+            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage();
+
+            QuestionnaireVersion supportedQuestionnaireVersion;
+            if (!QuestionnaireVersion.TryParse(maxSupportedVersion, out supportedQuestionnaireVersion))
+            {
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "Incorrect request parameters (version).";
+
+                return questionnaireSyncPackage;
+            }
+
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
-                return null;
+            {
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "Questionnaire was not found.";
+
+                return questionnaireSyncPackage;
+            }
 
             if (!ValidateAccessPermissions(questionnaireView, user.UserId))
             {
                 logger.Error(String.Format("Non permitted resource was requested by user [{0}]", user.UserId));
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
             }
+            
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
+            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
+            {
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "Questionnaire was not found.";
 
-            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage();
+                return questionnaireSyncPackage;
+            }
+
+            if (templateInfo.Version > supportedQuestionnaireVersion)
+            {
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "You have an obsolete version of application. Please update application to continue.";
+
+                return questionnaireSyncPackage;
+            }
 
             string resultAssembly;
 
@@ -162,16 +205,6 @@ namespace WB.UI.Designer.Api
                 }
             }
             
-
-            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
-            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
-            {
-                questionnaireSyncPackage.IsErrorOccured = true;
-                questionnaireSyncPackage.ErrorMessage = "Questionnaire was not found.";
-
-                return questionnaireSyncPackage;
-            }
-
             var template = PackageHelper.CompressString(templateInfo.Source);
             questionnaireSyncPackage.Questionnaire = template;
             questionnaireSyncPackage.QuestionnaireAssembly = resultAssembly;

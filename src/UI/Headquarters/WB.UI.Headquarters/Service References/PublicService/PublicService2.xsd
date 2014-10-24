@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WB.Core.BoundedContexts.Designer.ValueObjects" />
+  <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.DataCollection" />
   <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/Message" />
   <xs:import schemaLocation="https://localhost/Designer/PublicService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" />
   <xs:element name="DownloadQuestionnaireRequest">
@@ -10,7 +10,7 @@
     </xs:complexType>
   </xs:element>
   <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/" name="QuestionnaireId" type="q1:guid" />
-  <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WB.Core.BoundedContexts.Designer.ValueObjects" name="SupportedQuestionnaireVersion" nillable="true" type="q2:QuestionnaireVersion" />
+  <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.DataCollection" name="SupportedQuestionnaireVersion" nillable="true" type="q2:QuestionnaireVersion" />
   <xs:element name="RemoteFileInfo">
     <xs:complexType>
       <xs:sequence>
