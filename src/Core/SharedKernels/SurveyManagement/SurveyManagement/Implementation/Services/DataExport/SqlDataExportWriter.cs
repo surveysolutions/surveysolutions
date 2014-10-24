@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -22,65 +23,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private const string text = "ntext";
         private const string numeric = "money";
         private const string nvarchar = "nvarchar(512)";
-        
-        private readonly ICsvWriterFactory csvWriterFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private ISqlServiceFactory sqlServiceFactory;
+        private readonly ISqlServiceFactory sqlServiceFactory;
 
         private readonly QuestionType[] numericQuestionTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.Numeric };
 
-        public SqlDataExportWriter(ICsvWriterFactory csvWriterFactory, IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory)
+        public SqlDataExportWriter(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory)
         {
-            this.csvWriterFactory = csvWriterFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.sqlServiceFactory = sqlServiceFactory;
-        }
-
-        private void AddRecordsToLevel(InterviewDataExportLevelView items, ISqlService sqlService)
-        {
-            var isMainLevel = items.LevelVector.Length == 0;
-            sqlService.ExecuteCommand(
-                string.Format("DELETE FROM \"{0}\" WHERE {1} = @interviewId;", items.LevelName,
-                    isMainLevel ? "Id" : string.Format("{0}{1}", parentId, items.LevelVector.Length)),
-                new { interviewId = items.InterviewId });
-
-            foreach (var item in items.Records)
-            {
-                var insertCommand = string.Format("insert into \"{0}\" values (", items.LevelName);
-                insertCommand = insertCommand + (isMainLevel ? string.Format("'{0}'", item.RecordId) : item.RecordId);
-
-                foreach (var referenceValue in item.ReferenceValues)
-                {
-                    insertCommand = insertCommand + ",'" + QuoteString(referenceValue) + "'";
-                }
-
-                foreach (var exportedQuestion in item.Questions)
-                {
-                    foreach (string itemValue in exportedQuestion.Answers)
-                    {
-                        insertCommand = insertCommand + "," + (string.IsNullOrEmpty(itemValue)
-                            ? "null"
-                            : (numericQuestionTypes.Contains(exportedQuestion.QuestionType)
-                                ? itemValue
-                                : string.Format("'{0}'", QuoteString(itemValue))));
-                    }
-                }
-
-                for (int i = 0; i < item.ParentRecordIds.Length; i++)
-                {
-                    insertCommand = insertCommand + "," +
-                        (item.ParentRecordIds.Length - 1 == i
-                            ? string.Format("'{0}'", item.ParentRecordIds[i])
-                            : item.ParentRecordIds[i]);
-                }
-                insertCommand = insertCommand + ");";
-                sqlService.ExecuteCommand(insertCommand);
-            }
-        }
-
-        private string QuoteString(string val)
-        {
-            return val.Replace("'", "''");
         }
 
         public void DeleteInterviewRecords(string basePath, Guid interviewId)
@@ -91,44 +42,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 foreach (var tableName in tableNames)
                 {
                     var columnNames = this.GetListOfColumns(sqlService, tableName);
-
-                    sqlService.ExecuteCommand(string.Format("DELETE FROM \"{0}\" WHERE {1} = @interviewId;", tableName,
-                        columnNames.Any(c => c.StartsWith(parentId)) ? columnNames.Last() : "Id"),
-                        new { interviewId = interviewId.FormatGuid() });
+                    DeleteFromTableByInterviewId(sqlService, tableName,
+                        columnNames.Any(c => c.StartsWith(parentId)) ? columnNames.Last() : "Id", interviewId.FormatGuid());
                 }
             }
         }
-
-        private string CreaActionRecordInsertCommand(InterviewActionExportView action)
-        {
-            var insertActionRecord = string.Format("insert into \"{0}\" values (", interviewActions);
-            insertActionRecord = insertActionRecord + string.Format("'{0}'", action.InterviewId);
-            insertActionRecord = insertActionRecord + string.Format(", '{0}'", action.Action);
-            insertActionRecord = insertActionRecord + string.Format(", '{0}'", action.Originator);
-            insertActionRecord = insertActionRecord + string.Format(", '{0}'", action.Role);
-            insertActionRecord = insertActionRecord +
-                string.Format(", '{0}'", action.Timestamp.ToString("d", CultureInfo.InvariantCulture));
-            insertActionRecord = insertActionRecord +
-                string.Format(", '{0}'", action.Timestamp.ToString("T", CultureInfo.InvariantCulture));
-            insertActionRecord = insertActionRecord + ");";
-            return insertActionRecord;
-        }
-        public void AddActionRecord(InterviewActionExportView action, string basePath)
-        {
-            var insertActionRecord = CreaActionRecordInsertCommand(action);
-
-            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
-            {
-                sqlService.ExecuteCommand(insertActionRecord);
-            }
-
-          /*  var folderPath = GetFolderPath(basePath);
-            fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(folderPath));
-
-            if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
-                fileSystemAccessor.DeleteDirectory(this.GetApprovedDataFolder(folderPath));*/
-        }
-
 
         public void BatchInsert(string basePath, IEnumerable<InterviewDataExportView> interviewDatas,
             IEnumerable<InterviewActionExportView> interviewActionRecords)
@@ -137,7 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 foreach (var interviewActionRecord in interviewActionRecords)
                 {
-                    sqlService.ExecuteCommand(this.CreaActionRecordInsertCommand(interviewActionRecord));
+                    this.InsertIntoTable(sqlService, interviewActions, this.BuildInserInterviewActionParameters(interviewActionRecord));
                 }
 
                 foreach (var interviewDataExportView in interviewDatas)
@@ -161,7 +79,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-
         public void CreateStructure(QuestionnaireExportStructure header, string basePath)
         {
             using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
@@ -174,9 +91,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
+        public void AddActionRecord(InterviewActionExportView action, string basePath)
+        {
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
+            {
+                this.InsertIntoTable(sqlService, interviewActions, this.BuildInserInterviewActionParameters(action));
+            }
+
+            /*  var folderPath = GetFolderPath(basePath);
+              fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(folderPath));
+
+              if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
+                  fileSystemAccessor.DeleteDirectory(this.GetApprovedDataFolder(folderPath));*/
+        }
+
+        private void CreateHeaderForActionFile(ISqlService sqlService)
+        {
+            var createHeaderTabaleCommand = string.Format("create table [{0}] (", interviewActions);
+            createHeaderTabaleCommand += "Id " + nvarchar;
+            createHeaderTabaleCommand += ", Action " + nvarchar;
+            createHeaderTabaleCommand += ", Originator " + nvarchar;
+            createHeaderTabaleCommand += ", Role " + nvarchar;
+            createHeaderTabaleCommand += ", Date " + nvarchar;
+            createHeaderTabaleCommand += ", Time " + nvarchar;
+            createHeaderTabaleCommand = createHeaderTabaleCommand + ");";
+
+            sqlService.ExecuteCommand(createHeaderTabaleCommand);
+        }
+
         private void CreateHeader(HeaderStructureForLevel header, ISqlService sqlService)
         {
-            var createLevelTable = string.Format("create table \"{0}\" (", header.LevelName);
+            var createLevelTable = string.Format("create table [{0}] (", header.LevelName);
 
             createLevelTable = createLevelTable +
                 string.Format("{0} {1}", header.LevelIdColumnName, header.LevelScopeVector.Length == 0 ? nvarchar : numeric);
@@ -193,7 +138,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 var columnType = numericQuestionTypes.Contains(question.QuestionType) ? numeric : text;
                 foreach (var columnName in question.ColumnNames)
-
                 {
                     createLevelTable = createLevelTable + ", " +
                         string.Format("[{0}] {1}", columnName, columnType);
@@ -211,7 +155,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             sqlService.ExecuteCommand(createLevelTable);
 
-            var createLevelTableIndex = string.Format("CREATE INDEX idx{0} ON \"{1}\"({2});",
+            var createLevelTableIndex = string.Format("CREATE INDEX [idx{0}] ON [{1}]({2});",
                 header.LevelScopeVector.Length == 0 ? "Main" : header.LevelName, header.LevelName,
                 header.LevelScopeVector.Length == 0
                     ? header.LevelIdColumnName
@@ -220,18 +164,85 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         }
 
-        private void CreateHeaderForActionFile(ISqlService sqlService)
+        private void DeleteFromTableByInterviewId(ISqlService sqlService, string tableName, string idColumnName, string interviewId)
         {
-            var createHeaderTabaleCommand = string.Format("create table {0} (", interviewActions);
-            createHeaderTabaleCommand += "Id " + nvarchar;
-            createHeaderTabaleCommand += ", Action " + nvarchar;
-            createHeaderTabaleCommand += ", Originator " + nvarchar;
-            createHeaderTabaleCommand += ", Role " + nvarchar;
-            createHeaderTabaleCommand += ", Date " + nvarchar;
-            createHeaderTabaleCommand += ", Time " + nvarchar;
-            createHeaderTabaleCommand = createHeaderTabaleCommand + ");";
+            sqlService.ExecuteCommand(
+                string.Format("DELETE FROM [{0}] WHERE [{1}] = @interviewId;", tableName,
+                    idColumnName),
+                new { interviewId = interviewId });
+        }
 
-            sqlService.ExecuteCommand(createHeaderTabaleCommand);
+        private void InsertIntoTable(ISqlService sqlService, string tableName, List<object> data)
+        {
+            var parameters = new Dictionary<string, object>();
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                parameters.Add("var" + (i + 1), data[i]);
+            }
+
+            var insertCommand = string.Format("insert into [{0}] values ({1});", tableName,
+                   string.Join(",", parameters.Keys.Select(k => string.Format("@{0}", k))));
+
+            sqlService.ExecuteCommand(insertCommand, parameters);
+        }
+
+        private void AddRecordsToLevel(InterviewDataExportLevelView items, ISqlService sqlService)
+        {
+            var isMainLevel = items.LevelVector.Length == 0;
+
+            DeleteFromTableByInterviewId(sqlService, items.LevelName,
+                isMainLevel ? "Id" : string.Format("{0}{1}", parentId, items.LevelVector.Length), items.InterviewId);
+
+            foreach (var item in items.Records)
+            {
+                var parameters = this.BuildInserInterviewRecordParameters(item);
+
+                InsertIntoTable(sqlService, items.LevelName, parameters);
+            }
+        }
+
+        private List<object> BuildInserInterviewRecordParameters(InterviewDataExportRecord item)
+        {
+            var parameters = new List<object> { item.RecordId };
+
+            foreach (var referenceValue in item.ReferenceValues)
+            {
+                parameters.Add(this.QuoteString(referenceValue));
+            }
+
+            foreach (var exportedQuestion in item.Questions)
+            {
+                foreach (string itemValue in exportedQuestion.Answers)
+                {
+                    parameters.Add(string.IsNullOrEmpty(itemValue)
+                        ? null
+                        : this.numericQuestionTypes.Contains(exportedQuestion.QuestionType) ? itemValue : this.QuoteString(itemValue));
+                }
+            }
+
+            for (int i = 0; i < item.ParentRecordIds.Length; i++)
+            {
+                parameters.Add(item.ParentRecordIds[i]);
+            }
+            return parameters;
+        }
+
+        private List<object> BuildInserInterviewActionParameters(InterviewActionExportView action)
+        {
+            var parameters = new List<object>();
+            parameters.Add(action.InterviewId);
+            parameters.Add(action.Action);
+            parameters.Add(action.Originator);
+            parameters.Add(action.Role);
+            parameters.Add(action.Timestamp.ToString("d", CultureInfo.InvariantCulture));
+            parameters.Add(action.Timestamp.ToString("T", CultureInfo.InvariantCulture));
+            return parameters;
+        }
+
+        private string QuoteString(string val)
+        {
+            return val.Replace("'", "''");
         }
     }
 }

@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
              sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(1);
 
         It should_command_with_level_table_creation_be_executed = () =>
-            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("create table interview_actions (Id nvarchar(512), Action nvarchar(512), Originator nvarchar(512), Role nvarchar(512), Date nvarchar(512), Time nvarchar(512));");
+            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("create table [interview_actions] (Id nvarchar(512), Action nvarchar(512), Originator nvarchar(512), Role nvarchar(512), Date nvarchar(512), Time nvarchar(512));");
 
         private static SqlDataExportWriter sqlDataExportWriter;
         private static SqlServiceTestable sqlServiceTestable;
