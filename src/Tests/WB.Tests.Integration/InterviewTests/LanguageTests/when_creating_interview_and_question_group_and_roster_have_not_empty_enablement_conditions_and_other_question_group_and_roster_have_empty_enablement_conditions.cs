@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         Because of = () =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.SetupMockedServiceLocator();
+                Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocument(children: new[]
                 {

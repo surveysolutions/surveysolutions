@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var questionnaireId = Guid.Parse("22222222222222222222222222222222");
                 var actorId = Guid.Parse("33333333333333333333333333333333");
 
-                Setup.SetupMockedServiceLocator();
+                Setup.MockedServiceLocator();
 
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId,
                         new SingleQuestion

@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
 
-                Setup.SetupMockedServiceLocator();
+                Setup.MockedServiceLocator();
                 var parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
                 var childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
                 var actorId = Guid.Parse("366404A9-374E-4DCC-9B56-1F15103DE880");

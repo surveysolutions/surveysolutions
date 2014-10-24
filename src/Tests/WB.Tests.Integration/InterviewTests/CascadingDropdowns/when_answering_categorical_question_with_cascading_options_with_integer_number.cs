@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
 
-                Setup.SetupMockedServiceLocator();
+                Setup.MockedServiceLocator();
                 var questionnaireId = Guid.Parse("88888888888888888888888888888888");
                 var actorId = Guid.Parse("99999999999999999999999999999999");
 
