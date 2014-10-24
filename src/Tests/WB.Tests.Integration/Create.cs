@@ -34,6 +34,39 @@ namespace WB.Tests.Integration
                     answer);
             }
 
+            public static NumericRealQuestionAnswered NumericRealQuestionAnswered(
+                Guid questionId, decimal answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
+            {
+                return new NumericRealQuestionAnswered(
+                    userId ?? Default.UserId,
+                    questionId,
+                    propagationVector ?? Empty.RosterVector,
+                    answerTime ?? Default.AnswerTime,
+                    answer);
+            }
+
+            public static TextQuestionAnswered TextQuestionAnswered(
+                Guid questionId, string answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
+            {
+                return new TextQuestionAnswered(
+                    userId ?? Default.UserId,
+                    questionId,
+                    propagationVector ?? Empty.RosterVector,
+                    answerTime ?? Default.AnswerTime,
+                    answer);
+            }
+
+            public static DateTimeQuestionAnswered DateTimeQuestionAnswered(
+                Guid questionId, DateTime answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
+            {
+                return new DateTimeQuestionAnswered(
+                    userId ?? Default.UserId,
+                    questionId,
+                    propagationVector ?? Empty.RosterVector,
+                    answerTime ?? Default.AnswerTime,
+                    answer);
+            }
+
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(params Identity[] questions)
             {
                 return new AnswersDeclaredInvalid(questions);
