@@ -18,42 +18,49 @@ namespace WB.Tests.Integration.InterviewTests.ConditionsChaining
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                var questionnaireId = Guid.Parse("00000000000000000000000000000000");
-                var q1 = Guid.Parse("11111111111111111111111111111111");
-                var q2 = Guid.Parse("22222222222222222222222222222222");
-                var q3 = Guid.Parse("33333333333333333333333333333333");
+                Setup.MockedServiceLocator();
 
-                var g1 = Guid.Parse("C1111111111111111111111111111111");
-                var g2 = Guid.Parse("C2222222222222222222222222222222");
+                var questionnaireId = Guid.Parse("00000000000000000000000000000000");
+                var questionA = Guid.Parse("11111111111111111111111111111111");
+                var questionB = Guid.Parse("22222222222222222222222222222222");
+                var questionC = Guid.Parse("33333333333333333333333333333333");
+
+                var groupA = Guid.Parse("C1111111111111111111111111111111");
+                var groupC = Guid.Parse("C2222222222222222222222222222222");
 
                 var actorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-                Setup.MockedServiceLocator();
-
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.NumericIntegerQuestion(q1, "q1"),
-                    Create.Group(g1, "g1", null, children: new[]
+                    Create.NumericIntegerQuestion(questionA, "questionA"),
+                    Create.Group(groupA, "groupA", children: new[]
                     {
-                        Create.NumericIntegerQuestion(q2, "q2", "q1 > 0")
+                        Create.NumericIntegerQuestion(questionB, "questionB", "questionA > 0")
                     }),
-                    Create.Group(g2, "g2", "q1 > 0 && q2 == 1", children: new[]
+                    Create.Group(groupC, "groupC", "questionA > 0 && questionB == 1", children: new[]
                     {
-                        Create.NumericIntegerQuestion(q3, "q3", "q2 > 20 && q1 > 0")
+                        Create.NumericIntegerQuestion(questionC, "questionC", "questionB > 20 && questionA > 0")
                     })
                );
 
-                var interview = SetupInterview(questionnaireDocument, new List<object>() { });
+                var interview = SetupInterview(questionnaireDocument, new List<object>()
+                {
+                    Create.Event.NumericIntegerQuestionAnswered(questionA, 1),
+                    Create.Event.QuestionsEnabled(new []
+                    {
+                        Create.Identity(questionA),
+                        Create.Identity(questionB),
+                        Create.Identity(questionC)
+                    }),
+                    Create.Event.GroupsDisabled(Create.Identity(groupC))
+                });
 
                 var result = new InvokeResults();
 
-                interview.AnswerNumericIntegerQuestion(actorId, q1, new decimal[] { }, DateTime.Now, 1);
-                interview.Apply(new GroupDisabled(g2, new decimal[]{}));
-
                 using (var eventContext = new EventContext())
-                {                    
-                    interview.AnswerNumericIntegerQuestion(actorId, q2, new decimal[] { }, DateTime.Now, 1);
+                {
+                    interview.AnswerNumericIntegerQuestion(actorId, questionB, Empty.RosterVector, DateTime.Now, 1);
 
-                    var group2Enabled = GetFirstEventByType<GroupsEnabled>(eventContext.Events).Groups.FirstOrDefault(q => q.Id == g2) != null;
+                    var group2Enabled = GetFirstEventByType<GroupsEnabled>(eventContext.Events).Groups.FirstOrDefault(q => q.Id == groupC) != null;
 
                     result.Group2Enabled = group2Enabled;
                 }
