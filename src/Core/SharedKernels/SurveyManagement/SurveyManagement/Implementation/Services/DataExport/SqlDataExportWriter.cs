@@ -107,30 +107,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void CreateHeaderForActionFile(ISqlService sqlService)
         {
-            var createHeaderTabaleCommand = string.Format("create table [{0}] (", interviewActions);
-            createHeaderTabaleCommand += "Id " + nvarchar;
-            createHeaderTabaleCommand += ", Action " + nvarchar;
-            createHeaderTabaleCommand += ", Originator " + nvarchar;
-            createHeaderTabaleCommand += ", Role " + nvarchar;
-            createHeaderTabaleCommand += ", Date " + nvarchar;
-            createHeaderTabaleCommand += ", Time " + nvarchar;
-            createHeaderTabaleCommand = createHeaderTabaleCommand + ");";
+            var columns = new Dictionary<string, string>();
 
-            sqlService.ExecuteCommand(createHeaderTabaleCommand);
+            columns.Add("Id", nvarchar);
+            columns.Add("Action", nvarchar);
+            columns.Add("Originator", nvarchar);
+            columns.Add("Role", nvarchar);
+            columns.Add("Date", nvarchar);
+            columns.Add("Time", nvarchar);
+
+            CreateTable(sqlService, interviewActions, columns);
         }
 
         private void CreateHeader(HeaderStructureForLevel header, ISqlService sqlService)
         {
-            var createLevelTable = string.Format("create table [{0}] (", header.LevelName);
+            var columns = new Dictionary<string, string>();
 
-            createLevelTable = createLevelTable +
-                string.Format("{0} {1}", header.LevelIdColumnName, header.LevelScopeVector.Length == 0 ? nvarchar : numeric);
+            columns.Add(header.LevelIdColumnName, header.LevelScopeVector.Length == 0 ? nvarchar : numeric);
 
             if (header.IsTextListScope)
             {
                 foreach (var name in header.ReferencedNames)
                 {
-                    createLevelTable = createLevelTable + ", " + string.Format("[{0}] {1}", name, text);
+                    columns.Add(name, text);
                 }
             }
 
@@ -139,29 +138,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 var columnType = numericQuestionTypes.Contains(question.QuestionType) ? numeric : text;
                 foreach (var columnName in question.ColumnNames)
                 {
-                    createLevelTable = createLevelTable + ", " +
-                        string.Format("[{0}] {1}", columnName, columnType);
+                    columns.Add( columnName, columnType);
                 }
             }
 
             for (int i = 0; i < header.LevelScopeVector.Length; i++)
             {
-                createLevelTable = createLevelTable + ", " +
-                    string.Format("{0} {1}", string.Format("{0}{1}", parentId, i + 1),
-                        i == header.LevelScopeVector.Length - 1 ? nvarchar : numeric);
+                columns.Add(string.Format("{0}{1}", parentId, i + 1), i == header.LevelScopeVector.Length - 1 ? nvarchar : numeric);
             }
 
-            createLevelTable = createLevelTable + ");";
+            CreateTable(sqlService, header.LevelName, columns);
 
-            sqlService.ExecuteCommand(createLevelTable);
-
-            var createLevelTableIndex = string.Format("CREATE INDEX [idx{0}] ON [{1}]({2});",
-                header.LevelScopeVector.Length == 0 ? "Main" : header.LevelName, header.LevelName,
+            CreateIndexOnFieldForTable(sqlService, header.LevelName,
                 header.LevelScopeVector.Length == 0
                     ? header.LevelIdColumnName
                     : string.Format("{0}{1}", parentId, header.LevelScopeVector.Length));
-            sqlService.ExecuteCommand(createLevelTableIndex);
-
         }
 
         private void DeleteFromTableByInterviewId(ISqlService sqlService, string tableName, string idColumnName, string interviewId)
@@ -169,7 +160,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             sqlService.ExecuteCommand(
                 string.Format("DELETE FROM [{0}] WHERE [{1}] = @interviewId;", tableName,
                     idColumnName),
-                new { interviewId = interviewId });
+                new { interviewId });
         }
 
         private void InsertIntoTable(ISqlService sqlService, string tableName, List<object> data)
@@ -185,6 +176,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                    string.Join(",", parameters.Keys.Select(k => string.Format("@{0}", k))));
 
             sqlService.ExecuteCommand(insertCommand, parameters);
+        }
+
+        private void CreateIndexOnFieldForTable(ISqlService sqlService, string tableName, string columnName)
+        {
+            var createLevelTableIndex = string.Format("CREATE INDEX [idx{0}] ON [{0}]([{1}]);",
+              tableName,
+              columnName);
+            sqlService.ExecuteCommand(createLevelTableIndex);
+        }
+
+        private void CreateTable(ISqlService sqlService, string tableName, Dictionary<string, string> columns)
+        {
+            var createLevelTable = string.Format("create table [{0}] ({1});", tableName,
+                string.Join(",", columns.Select(c => string.Format("[{0}] {1}", c.Key, c.Value))));
+
+            sqlService.ExecuteCommand(createLevelTable);
         }
 
         private void AddRecordsToLevel(InterviewDataExportLevelView items, ISqlService sqlService)
