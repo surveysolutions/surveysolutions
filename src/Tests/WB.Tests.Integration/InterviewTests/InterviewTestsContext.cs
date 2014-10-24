@@ -136,6 +136,12 @@ namespace WB.Tests.Integration.InterviewTests
             }
         }
 
+        public static bool HasEvent<T>(IEnumerable<UncommittedEvent> events)
+            where T : class
+        {
+            return events.Any(b => b.Payload is T);
+        }
+
         public static T GetFirstEventByType<T>(IEnumerable<UncommittedEvent> events)
             where T : class
         {
