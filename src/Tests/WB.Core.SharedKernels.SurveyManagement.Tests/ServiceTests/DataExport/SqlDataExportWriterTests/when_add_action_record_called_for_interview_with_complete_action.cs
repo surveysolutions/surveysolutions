@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
              sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(1);
 
         It should_command_with_action_insert_be_executed = () =>
-            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("insert into \"interview_actions\" values ('interviewId1', 'Completed', 'nastya', 'inter', '04/18/1984', '06:38:02');");
+            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("insert into [interview_actions] values (@var1,@var2,@var3,@var4,@var5,@var6);");
 
         It should_one_folder_be_deleted = () =>
             fileSystemAccessorMock.Verify(x=>x.DeleteDirectory(Moq.It.IsAny<string>()), Times.Once);

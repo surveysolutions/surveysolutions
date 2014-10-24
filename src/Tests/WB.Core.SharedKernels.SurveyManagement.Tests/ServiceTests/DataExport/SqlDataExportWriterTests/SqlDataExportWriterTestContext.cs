@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
     {
         protected static SqlDataExportWriter CreateSqlDataExportWriter(ISqlService sqlService = null, IFileSystemAccessor fileSystemAccessor=null)
         {
-            return new SqlDataExportWriter(Mock.Of<ICsvWriterFactory>(), fileSystemAccessor?? CreateIFileSystemAccessorMock().Object,
+            return new SqlDataExportWriter(fileSystemAccessor?? CreateIFileSystemAccessorMock().Object,
                 Mock.Of<ISqlServiceFactory>(_ => _.CreateSqlService(
                     It.IsAny<string>()) == sqlService));
         }

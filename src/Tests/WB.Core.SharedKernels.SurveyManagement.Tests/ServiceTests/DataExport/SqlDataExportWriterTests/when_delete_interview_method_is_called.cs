@@ -34,19 +34,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
            sqlServiceTestable.CommandsToExecute[1].ShouldEqual("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @tableName");
 
         It should_third_command_be_delete_from_interview_actions_table_by_id = () =>
-           sqlServiceTestable.CommandsToExecute[2].ShouldEqual("DELETE FROM \"interview_actions\" WHERE Id = @interviewId;");
+           sqlServiceTestable.CommandsToExecute[2].ShouldEqual("DELETE FROM [interview_actions] WHERE [Id] = @interviewId;");
 
         It should_fourth_command_be_select_of_all_columns_for_roster_table = () =>
             sqlServiceTestable.CommandsToExecute[3].ShouldEqual("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @tableName");
 
         It should_fifth_command_be_delete_from_main_table_by_ParentId2 = () =>
-            sqlServiceTestable.CommandsToExecute[4].ShouldEqual("DELETE FROM \"main\" WHERE Id = @interviewId;");
+            sqlServiceTestable.CommandsToExecute[4].ShouldEqual("DELETE FROM [main] WHERE [Id] = @interviewId;");
 
         It should_six_command_be_select_of_all_columns_for_main_table = () =>
             sqlServiceTestable.CommandsToExecute[5].ShouldEqual("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @tableName");
 
         It should_seventh_command_be_delete_from_roster_table_by_id = () =>
-            sqlServiceTestable.CommandsToExecute[6].ShouldEqual("DELETE FROM \"roster\" WHERE ParentId2 = @interviewId;");
+            sqlServiceTestable.CommandsToExecute[6].ShouldEqual("DELETE FROM [roster] WHERE [ParentId2] = @interviewId;");
 
         private static SqlDataExportWriter sqlDataExportWriter;
         private static SqlServiceTestable sqlServiceTestable;
