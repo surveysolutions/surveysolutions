@@ -17,10 +17,10 @@ namespace WB.Tests.Integration
     {
         public class Event
         {
-            public class Default
+            private static class Default
             {
-                public static Guid UserId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAABBB");
-                public static DateTime AnswerTime = new DateTime(2014, 1, 1);
+                public static readonly Guid UserId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAABBB");
+                public static readonly DateTime AnswerTime = new DateTime(2014, 1, 1);
             }
 
             public static NumericIntegerQuestionAnswered NumericIntegerQuestionAnswered(
