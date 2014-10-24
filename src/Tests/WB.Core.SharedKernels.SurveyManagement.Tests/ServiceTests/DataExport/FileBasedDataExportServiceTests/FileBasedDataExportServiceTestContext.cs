@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
                         _.CreateInterviewDataExportView(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<InterviewData>()) ==
                             (interviewDataExportView ??
                                 new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, new InterviewDataExportLevelView[0]))),
-                filebaseExportRouteService ?? CreateFilebaseExportRouteService().Object,Mock.Of<IExportedDataFormatter>());
+                filebaseExportRouteService ?? CreateFilebaseExportRouteService().Object,Mock.Of<IDataExporter>());
         }
 
         protected static Mock<IFilebaseExportRouteService> CreateFilebaseExportRouteService()
