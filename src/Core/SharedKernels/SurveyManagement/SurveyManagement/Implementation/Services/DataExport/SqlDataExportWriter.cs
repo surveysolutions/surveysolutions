@@ -23,14 +23,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private const string text = "ntext";
         private const string numeric = "money";
         private const string nvarchar = "nvarchar(512)";
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ISqlServiceFactory sqlServiceFactory;
 
         private readonly QuestionType[] numericQuestionTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.Numeric };
 
         public SqlDataExportWriter(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory)
+            : base(fileSystemAccessor)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
             this.sqlServiceFactory = sqlServiceFactory;
         }
 
@@ -98,11 +97,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 this.InsertIntoTable(sqlService, interviewActions, this.BuildInserInterviewActionParameters(action));
             }
 
-            /*  var folderPath = GetFolderPath(basePath);
-              fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(folderPath));
+            fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(basePath));
 
-              if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
-                  fileSystemAccessor.DeleteDirectory(this.GetApprovedDataFolder(folderPath));*/
+            if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
+                fileSystemAccessor.DeleteDirectory(this.GetApprovedDataFolder(basePath));
         }
 
         private void CreateHeaderForActionFile(ISqlService sqlService)
