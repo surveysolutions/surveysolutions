@@ -5,7 +5,6 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
@@ -34,8 +33,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>()
                 {
-                    new AnswersDeclaredInvalid(new[]{ new Identity(dependentOnAnsweredQuestionId, new decimal[0])}),
-                    new NumericIntegerQuestionAnswered(userId, dependentOnAnsweredQuestionId, new decimal[]{}, DateTime.Now, 1)
+                    Create.Event.AnswersDeclaredInvalid(Create.Identity(dependentOnAnsweredQuestionId)),
+                    Create.Event.NumericIntegerQuestionAnswered(dependentOnAnsweredQuestionId, 1)
                 });
 
                 var result = new InvokeResults();

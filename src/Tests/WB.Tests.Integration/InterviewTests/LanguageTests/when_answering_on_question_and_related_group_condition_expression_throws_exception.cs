@@ -5,7 +5,6 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
@@ -19,23 +18,23 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
+                Setup.SetupMockedServiceLocator();
+
                 var questionnaireId = Guid.Parse("00000000000000000000000000000000");
                 var actorId = Guid.Parse("99999999999999999999999999999999");
                 var questionId = Guid.Parse("11111111111111111111111111111111");
                 var groupId = Guid.Parse("22222222222222222222222222222222");
-
-                Setup.SetupMockedServiceLocator();
-
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.NumericIntegerQuestion(questionId, "q1"),
-                    Create.Group(groupId, "g1", "1/q1 == 1")
-               );
-
-                var interview = SetupInterview(questionnaireDocument, new List<object>()
-                {
-                    new NumericIntegerQuestionAnswered(actorId, questionId, new decimal[0], DateTime.Now, 1),
-                    new GroupsDisabled(new[]{ new Identity(groupId, new decimal[0])})
-                });
+                
+                var interview = SetupInterview(
+                    Create.QuestionnaireDocument(questionnaireId,
+                        Create.NumericIntegerQuestion(questionId, "q1"),
+                        Create.Group(groupId, "g1", "1/q1 == 1")
+                    ),
+                    events: new List<object>
+                    {
+                        Create.Event.NumericIntegerQuestionAnswered(questionId, 1),
+                        Create.Event.GroupsDisabled(Create.Identity(groupId))
+                    });
 
                 var result = new InvokeResults();
 

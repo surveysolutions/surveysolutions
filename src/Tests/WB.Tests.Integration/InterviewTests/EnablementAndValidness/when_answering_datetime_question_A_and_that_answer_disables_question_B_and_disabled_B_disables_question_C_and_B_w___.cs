@@ -5,7 +5,6 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -19,6 +18,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
+                Setup.SetupMockedServiceLocator();
+
                 var emptyRosterVector = new decimal[] { };
                 var userId = Guid.Parse("11111111111111111111111111111111");
                 var questionnaireId = Guid.Parse("22222222222222222222222222222222");
@@ -28,8 +29,6 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var questionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-                Setup.SetupMockedServiceLocator();
-
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.DateTimeQuestion(questionAId, "a"),
                     Create.DateTimeQuestion(questionBId, "b", "a > new DateTime(2015, 2, 2)"),
@@ -38,8 +37,13 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
                 {
-                    new QuestionsEnabled(new[]{ new Identity(questionAId, emptyRosterVector), new Identity(questionBId, emptyRosterVector), new Identity(questionCId, emptyRosterVector) }),
-                    new DateTimeQuestionAnswered(userId, questionBId, emptyRosterVector, answerTime, new DateTime(2012, 1, 1))
+                    Create.Event.QuestionsEnabled(new []
+                    {
+                        Create.Identity(questionAId),
+                        Create.Identity(questionBId),
+                        Create.Identity(questionCId)
+                    }),
+                    Create.Event.DateTimeQuestionAnswered(questionBId,new DateTime(2012, 1, 1))
                 });
 
                 using (var eventContext = new EventContext())
