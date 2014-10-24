@@ -34,11 +34,11 @@ namespace WB.Tests.Integration.InterviewTests.ConditionsChaining
                     Create.NumericIntegerQuestion(questionA, "questionA"),
                     Create.Group(groupA, "groupA", children: new[]
                     {
-                        Create.NumericIntegerQuestion(questionB, "questionB", "questionA > 0")
+                        Create.NumericIntegerQuestion(questionB, "questionB", enablementCondition: "questionA > 0")
                     }),
-                    Create.Group(groupC, "groupC", "questionA > 0 && questionB == 1", children: new[]
+                    Create.Group(groupC, "groupC", enablementCondition: "questionA > 0 && questionB == 1", children: new[]
                     {
-                        Create.NumericIntegerQuestion(questionC, "questionC", "questionB > 20 && questionA > 0")
+                        Create.NumericIntegerQuestion(questionC, "questionC",  enablementCondition: "questionB > 20 && questionA > 0")
                     })
                );
 

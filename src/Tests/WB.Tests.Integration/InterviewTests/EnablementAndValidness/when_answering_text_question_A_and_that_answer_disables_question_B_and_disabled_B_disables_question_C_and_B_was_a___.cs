@@ -32,8 +32,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.Question(questionAId, "a"),
-                    Create.Question(questionBId, "b", "a == 1.ToString()"),
-                    Create.Question(questionCId, "c", "b == 1.ToString()")
+                    Create.Question(questionBId, "b", enablementCondition: "a == 1.ToString()"),
+                    Create.Question(questionCId, "c", enablementCondition: "b == 1.ToString()")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>

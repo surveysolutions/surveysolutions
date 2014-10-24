@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var interview = SetupInterview(
                     Create.QuestionnaireDocument(questionnaireId,
                         Create.NumericIntegerQuestion(question1Id, "q1"),
-                        Create.NumericIntegerQuestion(question2Id, "q2", "1/q1 == 1")
+                        Create.NumericIntegerQuestion(question2Id, "q2", enablementCondition: "1/q1 == 1")
                     ),
                     events: new List<object>
                     {

@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var interview = SetupInterview(
                     Create.QuestionnaireDocument(questionnaireId,
                         Create.NumericIntegerQuestion(questionId, "q1"),
-                        Create.Group(groupId, "g1", "1/q1 == 1")
+                        Create.Group(groupId, "g1", enablementCondition: "1/q1 == 1")
                     ),
                     events: new List<object>
                     {
