@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Dapper;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 
@@ -13,7 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
 {
     internal class CompactSqlService : ISqlService
     {
-        private DbConnection dbConnection;
+        private IDbConnection dbConnection;
         private TransactionScope scope;
         public CompactSqlService(string pathToDb, IFileSystemAccessor fileSystemAccessor)
         {
@@ -30,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
             dbConnection.Open();
         }
 
-        public void ExecuteCommand(string commandText)
+       /* public void ExecuteCommand(string commandText)
         {
             ExecuteCommands(new[] { commandText });
         }
@@ -68,6 +70,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
             }
 
             return result.ToArray();
+        }*/
+
+        public IEnumerable<dynamic> Query(string sql, object param = null)
+        {
+            return dbConnection.Query(sql, param);
+        }
+
+        public IEnumerable<T> Query<T>(string sql, object param = null) where T : class
+        {
+            return dbConnection.Query<T>(sql, param);
+        }
+
+        public void ExecuteCommand(string sql, object param = null)
+        {
+            dbConnection.Execute(sql, param);
         }
 
         public void Dispose()
@@ -88,11 +105,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
                 }
                 if (dbConnection != null)
                 {
-                  /*  if (dbConnection.State != System.Data.ConnectionState.Closed)
-                    {
-                        dbConnection.Close();
-                    }*/
-
                     dbConnection.Dispose();
                     dbConnection = null;
                 }

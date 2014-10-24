@@ -8,8 +8,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Sql
 {
     internal interface ISqlService : IDisposable
     {
-        void ExecuteCommand(string commandText);
-        void ExecuteCommands(IEnumerable<string> commands);
-        object[][] ExecuteReader(string query);
+        IEnumerable<dynamic> Query(string sql, object param = null);
+        IEnumerable<T> Query<T>(string sql, object param = null) where T : class;
+        void ExecuteCommand(string sql, object param = null);
     }
 }

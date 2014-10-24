@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private bool isCacheEnabled = false;
         private readonly Dictionary<string, QuestionnaireExportEntity> cache = new Dictionary<string, QuestionnaireExportEntity>();
         private readonly IFilebaseExportRouteService filebaseExportRouteService;
-        private readonly IExportedDataFormatter exportedDataFormatter;
+        private readonly IDataExporter dataExporter;
 
         public FileBasedDataExportRepositoryWriter(
             IReadSideRepositoryCleanerRegistry cleanerRegistry,
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewDataWriter,
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
-            IExportViewFactory exportViewFactory, IFilebaseExportRouteService filebaseExportRouteService, IExportedDataFormatter exportedDataFormatter)
+            IExportViewFactory exportViewFactory, IFilebaseExportRouteService filebaseExportRouteService, IDataExporter dataExporter)
         {
             this.dataExportWriter = dataExportWriter;
             this.environmentContentService = environmentContentService;
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewSummaryWriter = interviewSummaryWriter;
             this.exportViewFactory = exportViewFactory;
             this.filebaseExportRouteService = filebaseExportRouteService;
-            this.exportedDataFormatter = exportedDataFormatter;
+            this.dataExporter = dataExporter;
 
             cleanerRegistry.Register(this);
             writerRegistry.Register(this);
@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
 
-                zip.AddFiles(exportedDataFormatter.ExportAllDataForQuestionnaire(questionnaireId, version, this.CreateLevelFileName), "");
+                zip.AddFiles(this.dataExporter.ExportAllDataForQuestionnaire(questionnaireId, version, this.CreateLevelFileName), "");
 
                 foreach (var contentFile in fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Where(fileName => fileName.EndsWith("." + environmentContentService.ContentFileNameExtension)))
                 {
@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
 
-                zip.AddFiles(exportedDataFormatter.ExportApprovedDataForQuestionnaire(questionnaireId, version, this.CreateLevelFileName), "");
+                zip.AddFiles(this.dataExporter.ExportApprovedDataForQuestionnaire(questionnaireId, version, this.CreateLevelFileName), "");
 
                 foreach (var contentFile in fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Where(fileName => fileName.EndsWith("." + environmentContentService.ContentFileNameExtension)))
                 {
@@ -169,7 +169,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId).InterviewIds.Add(interviewId);
                 return;
             }
-            this.AddExportedDataByInterviewImpl(this.CreateInterviewDataExportView(interviewId));
+            var interviewDataExportView = this.CreateInterviewDataExportView(interviewId);
+            if (interviewDataExportView==null)
+                return;
+            this.AddExportedDataByInterviewImpl(interviewDataExportView);
         }
 
         public void AddInterviewAction(InterviewExportedAction action, Guid interviewId, Guid userId, DateTime timestamp)
