@@ -31,8 +31,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.DateTimeQuestion(questionAId, "a"),
-                    Create.DateTimeQuestion(questionBId, "b", "a > new DateTime(2015, 2, 2)"),
-                    Create.DateTimeQuestion(questionCId, "c", "b > new DateTime(2015, 9, 9 )")
+                    Create.DateTimeQuestion(questionBId, "b", enablementCondition: "a > new DateTime(2015, 2, 2)"),
+                    Create.DateTimeQuestion(questionCId, "c", enablementCondition: "b > new DateTime(2015, 9, 9 )")
                 );
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>
