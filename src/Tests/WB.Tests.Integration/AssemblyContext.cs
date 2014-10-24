@@ -6,7 +6,7 @@ namespace WB.Tests.Integration
     {
         public void OnAssemblyStart()
         {
-            Setup.SetupMockedServiceLocator();
+            Setup.MockedServiceLocator();
         }
 
         public void OnAssemblyComplete() {}

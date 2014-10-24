@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.SetupMockedServiceLocator();
+                Setup.MockedServiceLocator();
 
                 var questionnaireId = Guid.Parse("00000000000000000000000000000000");
                 var actorId = Guid.Parse("99999999999999999999999999999999");

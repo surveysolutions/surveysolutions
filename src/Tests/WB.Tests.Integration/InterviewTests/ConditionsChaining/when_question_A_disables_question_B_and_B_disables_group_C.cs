@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.ConditionsChaining
 
                 var actorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-                Setup.SetupMockedServiceLocator();
+                Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.NumericIntegerQuestion(q1, "q1"),
