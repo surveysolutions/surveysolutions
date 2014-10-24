@@ -1,5 +1,5 @@
 ﻿using Main.Core.Documents;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {

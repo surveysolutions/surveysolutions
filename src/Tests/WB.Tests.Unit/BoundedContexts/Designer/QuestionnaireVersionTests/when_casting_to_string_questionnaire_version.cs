@@ -1,5 +1,6 @@
 ﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
 {

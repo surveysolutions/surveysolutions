@@ -15,8 +15,7 @@ namespace WB.UI.Headquarters.PublicService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireVersion", Namespace="http://schemas.datacontract.org/2004/07/WB.Core.BoundedContexts.Designer.ValueObj" +
-        "ects")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="QuestionnaireVersion", Namespace="http://schemas.datacontract.org/2004/07/WB.Core.SharedKernels.DataCollection")]
     [System.SerializableAttribute()]
     public partial class QuestionnaireVersion : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         

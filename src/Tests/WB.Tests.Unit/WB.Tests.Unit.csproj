@@ -177,6 +177,8 @@
     <Compile Include="Applications\Designer\QuestionnaireHelper\QuestionnaireHelperTestContext.cs" />
     <Compile Include="Applications\Designer\QuestionnaireHelper\when_getting_public_questionnaire_data_deleted_questionnaires_should_not_be_editable_.cs" />
     <Compile Include="Applications\Designer\SynchronizationControllerTests.cs" />
+    <Compile Include="Applications\Designer\TesterApiControllerTests\TesterApiControllerTestContext.cs" />
+    <Compile Include="Applications\Designer\TesterApiControllerTests\when_getting_template_with_id_only.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
@@ -344,6 +346,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_TextList_question_with_maxAnswer_value_set_in_100.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\QuestionnaireVersionTestsContext.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_trying_to_parse_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_casting_to_string_questionnaire_version.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_questionnaire_versions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_with_greater_than_operator.cs" />
@@ -440,6 +443,10 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
