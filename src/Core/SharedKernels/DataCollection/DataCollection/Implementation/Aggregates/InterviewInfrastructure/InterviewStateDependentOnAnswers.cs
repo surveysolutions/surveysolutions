@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changes.ValidityChanges != null)
             {
-                this.DeclareAnswersInvalid(Identity.ToEventIdentities(changes.ValidityChanges.AnswersDeclaredInvalid));
+                this.DeclareAnswersInvalid(Events.Interview.Dtos.Identity.ToEventIdentities(changes.ValidityChanges.AnswersDeclaredInvalid));
             }
 
             if (changes.RosterCalculationData != null)
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changes.AnswersForLinkedQuestionsToRemove != null)
             {
-                this.RemoveAnswers(Identity.ToEventIdentities(changes.AnswersForLinkedQuestionsToRemove));
+                this.RemoveAnswers(Events.Interview.Dtos.Identity.ToEventIdentities(changes.AnswersForLinkedQuestionsToRemove));
             }
         }
 
@@ -80,19 +80,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (rosterCalculationData.AnswersToRemoveByDecreasedRosterSize.Any())
             {
-                this.RemoveAnswers(Identity.ToEventIdentities(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize));
-            }
-
-            this.ApplyEnablementChanges(new EnablementChanges(
-                rosterCalculationData.InitializedGroupsToBeDisabled,
-                rosterCalculationData.InitializedGroupsToBeEnabled,
-                rosterCalculationData.InitializedQuestionsToBeDisabled,
-                rosterCalculationData.InitializedQuestionsToBeEnabled));
-
-
-            if (rosterCalculationData.InitializedQuestionsToBeInvalid != null)
-            {
-                this.DeclareAnswersInvalid(Identity.ToEventIdentities(rosterCalculationData.InitializedQuestionsToBeInvalid));
+                this.RemoveAnswers(Events.Interview.Dtos.Identity.ToEventIdentities(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize));
             }
 
             rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(rosterData => ApplyRosterData(rosterData));
@@ -100,10 +88,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void ApplyEnablementChanges(EnablementChanges enablementChanges)
         {
-            this.EnableGroups(Identity.ToEventIdentities(enablementChanges.GroupsToBeEnabled));
-            this.DisableGroups(Identity.ToEventIdentities(enablementChanges.GroupsToBeDisabled));
-            this.EnableQuestions(Identity.ToEventIdentities(enablementChanges.QuestionsToBeEnabled));
-            this.DisableQuestions(Identity.ToEventIdentities(enablementChanges.QuestionsToBeDisabled));
+            this.EnableGroups(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.GroupsToBeEnabled));
+            this.DisableGroups(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.GroupsToBeDisabled));
+            this.EnableQuestions(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.QuestionsToBeEnabled));
+            this.DisableQuestions(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.QuestionsToBeDisabled));
         }
 
         public void AddRosterInstances(AddedRosterInstance[] instances)

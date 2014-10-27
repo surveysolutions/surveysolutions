@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
-using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Utility;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
@@ -17,7 +16,6 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
-using WB.Core.BoundedContexts.Capi.Synchronization.Implementation;
 using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Views.Login;
@@ -25,15 +23,16 @@ using WB.Core.GenericSubdomains.Rest;
 using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernel.Utils.Serialization;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Extensions;
 using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 using WB.UI.Capi.Utils;
+using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.Capi
 {
@@ -103,7 +102,51 @@ namespace WB.UI.Capi
             this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
             this.tvSyncResult.Click += this.tvSyncResult_Click;
             this.llContainer.Click += this.llContainer_Click;
+
+            string login = Intent.GetStringExtra("Login");
+            string passwordHash = Intent.GetStringExtra("PasswordHash");
+
+            if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(passwordHash))
+            {
+                var syncCredentials = new SyncCredentials(login, passwordHash);
+                bool isThisFirstTimeAuthorizationRequested = true;
+                var authentificator = new RestAuthenticator();
+                authentificator.RequestCredentialsCallback += sender =>
+                {
+                    if (isThisFirstTimeAuthorizationRequested)
+                    {
+                        isThisFirstTimeAuthorizationRequested = false;
+                        return syncCredentials;
+                    }
+                    return this.RequestCredentialsCallBack(sender);
+                };
+
+                this.StartSynctionization(authentificator, (sender, args) =>
+                {
+                    this.RunOnUiThread(() =>
+                    {
+                        this.DestroyDialog();
+                        this.tvSyncResult.Text = "Sync is finished.";
+                        bool result = CapiApplication.Membership.LogOn(login, passwordHash, true);
+                        if (result)
+                        {
+                            this.ClearAllBackStack<DashboardActivity>();
+                        }
+                        else
+                        {
+                            this.ClearAllBackStack<LoginActivity>();
+                        }
+                    });
+                    this.DestroySynchronizer();
+                });
+            }
         }
+
+        private void ButtonSyncClick(object sender, EventArgs e)
+        {
+            this.StartSynctionization(this.CreateAuthenticator(), synchronizer_ProcessFinished);
+        }
+
 
         void llContainer_Click(object sender, EventArgs e)
         {
@@ -207,7 +250,7 @@ namespace WB.UI.Capi
         void tabletInformationSender_InformationPackageCreated(object sender, InformationPackageEventArgs e)
         {
             var remoteCommandDoneEvent = new AutoResetEvent(false);
-            
+
             this.RunOnUiThread(() =>
             {
                 var builder = new AlertDialog.Builder(this);
@@ -234,7 +277,8 @@ namespace WB.UI.Capi
             this.CreateActionBar();
         }
 
-        private void ButtonSyncClick(object sender, EventArgs e)
+
+        private void StartSynctionization(ISyncAuthenticator authenticator, EventHandler synchronizerProcessFinished)
         {
             if (!NetworkHelper.IsNetworkEnabled(this))
             {
@@ -250,24 +294,33 @@ namespace WB.UI.Capi
                 var changeLogManipulator = CapiApplication.Kernel.Get<IChangeLogManipulator>();
                 var plainFileRepository = CapiApplication.Kernel.Get<IPlainInterviewFileStorage>();
                 var cleaner = new CapiCleanUpService(changeLogManipulator, plainFileRepository);
-                this.synchronizer = new SynchronozationProcessor(this, this.CreateAuthenticator(),
-                    new CapiDataSynchronizationService(changeLogManipulator, NcqrsEnvironment.Get<ICommandService>(),
+                this.synchronizer = new SynchronozationProcessor(
+                    this,
+                    authenticator,
+                    new CapiDataSynchronizationService(
+                        changeLogManipulator,
+                        NcqrsEnvironment.Get<ICommandService>(),
                         CapiApplication.Kernel.Get<IViewFactory<LoginViewInput, LoginView>>(),
-                        CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(), cleaner, ServiceLocator.Current.GetInstance<ILogger>(),
-                        CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(), CapiApplication.Kernel.Get<IStringCompressor>(),
-                        CapiApplication.Kernel.Get<IJsonUtils>()),
-                    cleaner, CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(), CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>());
+                        CapiApplication.Kernel.Get<IPlainQuestionnaireRepository>(),
+                        cleaner,
+                        ServiceLocator.Current.GetInstance<ILogger>(),
+                        CapiApplication.Kernel.Get<ICapiSynchronizationCacheService>(),
+                        CapiApplication.Kernel.Get<IStringCompressor>(),
+                        CapiApplication.Kernel.Get<IJsonUtils>(),
+                        CapiApplication.Kernel.Get<IQuestionnaireAssemblyFileAccessor>()),
+                    cleaner,
+                    CapiApplication.Kernel.Get<IRestServiceWrapperFactory>(),
+                    CapiApplication.Kernel.Get<IInterviewSynchronizationFileStorage>());
             }
             catch (Exception ex)
             {
-
-                Logger.Error("Error on Sync: " + ex.Message, ex);
+                this.Logger.Error("Error on Sync: " + ex.Message, ex);
                 this.tvSyncResult.Text = ex.Message;
                 return;
             }
 
             this.synchronizer.StatusChanged += this.synchronizer_StatusChanged;
-            this.synchronizer.ProcessFinished += this.synchronizer_ProcessFinished;
+            this.synchronizer.ProcessFinished += synchronizerProcessFinished;
             this.synchronizer.ProcessCanceling += this.synchronizer_ProcessCanceling;
             this.synchronizer.ProcessCanceled += this.synchronizer_ProcessCanceled;
 
@@ -430,7 +483,6 @@ namespace WB.UI.Capi
                         this.progressDialog.Progress = messageWithPersents.Percent;
                     }
                 });
-
         }
 
         #region diialog manipulation
@@ -446,7 +498,7 @@ namespace WB.UI.Capi
             this.progressDialog.SetCancelable(false);
 
             if (cancelable)
-                this.progressDialog.SetButton("Cancel",cancelHandler);
+                this.progressDialog.SetButton("Cancel", cancelHandler);
 
             this.progressDialog.Show();
         }

@@ -35,6 +35,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppDomainToolkit">
+      <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
+    </Reference>
     <Reference Include="Machine.Specifications">
       <HintPath>..\..\..\packages\Machine.Specifications.0.8.1\lib\net45\Machine.Specifications.dll</HintPath>
     </Reference>
@@ -71,7 +74,9 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Create.cs" />
+    <Compile Include="Empty.cs" />
     <Compile Include="EventContextExtenstions.cs" />
+    <Compile Include="Execute.cs" />
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\QuestionnaireRosterStructureFactoryTestContext.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -92,6 +97,8 @@
     <Compile Include="Factories\QuestionnaireRosterStructureFactoryTests\when_creating_roster_structure_factory_for_questionnarie_which_has_textlist_roster_group.cs" />
     <Compile Include="InterviewSynchronizationFileStorageTests\InterviewSynchronizationFileStorageTestContext.cs" />
     <Compile Include="InterviewSynchronizationFileStorageTests\when_getting_all_interview_files_from_sync_storage.cs" />
+    <Compile Include="InterviewExpressionStatePrototypeProviderTests\InterviewExpressionStatePrototypeProviderTestContext.cs" />
+    <Compile Include="InterviewExpressionStatePrototypeProviderTests\when_getting_expression_state.cs" />
     <Compile Include="InterviewItemIdTests.cs" />
     <Compile Include="InterviewItemIdTests\InterviewItemIdTestsContext.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_hashcodes_two_instances_with_same_id_and_propagation_vectors_0point0_and_0.cs" />
@@ -99,22 +106,17 @@
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_1_2.cs" />
     <Compile Include="InterviewItemIdTests\when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1.cs" />
     <Compile Include="InterviewItemIdTests\when_parsing_interview_item_id_with_guid_and_propagation_vector.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_from_roster_with_child_parent.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_integer_number.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_decimal_number.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_mandatory_child_under_condition_expression.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_cascading_question_depends_on_other_question.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_creating_new_interview_with_cascading_options_question.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_that_disables_group_GC.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_group_GC_with_question_C.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_which_enables_B_which_makes_C_valid_and_B_was_disabled_and_answered_and_C_was_i___.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
+    <Compile Include="InterviewTests\when_creating_interview_with_preloaded_data_with_real_question.cs" />
+    <Compile Include="QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
+    <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_full_path_to_assembly.cs" />
+    <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_assembly_as_byte_array.cs" />
+    <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_getting_assembly_as_base_64_string.cs" />
+    <Compile Include="QuestionnaireAssemblyFileAccessorTests\when_storing_assembly.cs" />
+    <Compile Include="Setup.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluator.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options.cs" />
     <Compile Include="InterviewTests\Synchronization\when_rejecting_interview_with_comments_from_HQ_when_interview_is_Restored_from_snapshot.cs" />
     <Compile Include="InterviewTests\when_answering_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_has_2_selected_options_and__.cs" />
     <Compile Include="InterviewTests\when_answering_picture_question_and_answer_is_specified.cs" />
@@ -184,15 +186,11 @@
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_with_nested_fixed_roster.cs" />
     <Compile Include="InterviewTests\when_answer_on_multy_option_question_increases_roster_size.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_on_the_third_level.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_wa___.cs" />
     <Compile Include="InterviewTests\when_answering_integer_question_with_14400_and_max_value_is_3600.cs" />
     <Compile Include="InterviewTests\when_answering_mandatory_multy_option_question_with_empty_list_of_options.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_with_1000_and_max_value_is_567.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_decreases_roster_size.cs" />
     <Compile Include="InterviewTests\when_answer_on_integer_question_increases_roster_size.cs" />
-    <Compile Include="InterviewTests\when_answer_on_question_triggers_validation_evaluation_of_unanswered_question.cs" />
     <Compile Include="InterviewTests\when_checking_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_roster_is_zero.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_fixed_roster_with_3_fixed_titles.cs" />
     <Compile Include="InterviewTests\when_answering_real_question_and_interview_restored_after_synch_and_contains_answer_on_not_linked_multioption_question_and_qu___.cs" />
@@ -259,7 +257,6 @@
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_nested_roster_group_with_not_empty_RosterSizeQuestionId_and_GetRosterGroupsByRosterSizeQuestion_called.cs" />
-    <Compile Include="QuestionnaireTests\when_questionnaire_has_question_has_enablement_condition.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_have_numeric_question_which_is_triggering_roster_and_nested_roster_and_GetRosterGroupsByRosterSizeQuestion.cs" />
     <Compile Include="RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader.cs" />
     <Compile Include="RepositoryKeyHelperTests\when_creating_key_for_readside_versioned_repository_reader_from_guid_and_version.cs" />
@@ -275,6 +272,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_int_question_with_var_equals_age_for_the_third_time.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_int_question_with_var_equals_age.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_int_question_with_var_equals_age_for_the_second_time.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_single_option_question_with_var_equals_has_job.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_single_option_question_with_var_equals_marital_status.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_text_question_with_var_equals_persons_count.cs" />
+    <Compile Include="StronglyTypedInterviewEvaluatorTests\when_answering_text_question_with_var__equals_name.cs" />
     <Compile Include="UserARTests.cs" />
     <Compile Include="ValueVectorTests\when_call_ToString_for_ValueVector_with_empty_vector_inside.cs" />
     <Compile Include="ValueVectorTests\when_call_ToString_for_ValueVector_with_not_empty_vector_inside.cs" />
@@ -318,6 +322,10 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>

@@ -27,22 +27,28 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
         {
             get { return this.Model as ValueQuestionViewModel; }
         }
+
         protected MaskedWatcher maskedWatcher;
+
+        protected bool isInputMasked = false;
 
         protected override void Initialize()
         {
             base.Initialize();
 
             this.etAnswer = new EditText(this.Context);
-            maskedWatcher = new MaskedWatcher(TypedMode.Mask, etAnswer);
-            etAnswer.AddTextChangedListener(
-              maskedWatcher
-              );
 
-            this.etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                                   ViewGroup.LayoutParams.WrapContent);
-       
-            this.etAnswer.InputType = InputTypes.TextVariationVisiblePassword;
+            isInputMasked = !string.IsNullOrWhiteSpace(TypedMode.Mask);
+            
+            if (isInputMasked)
+            {
+                maskedWatcher = new MaskedWatcher(TypedMode.Mask, etAnswer);
+                etAnswer.AddTextChangedListener(maskedWatcher);
+                this.etAnswer.InputType = InputTypes.TextFlagNoSuggestions;
+            }
+            
+            this.etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
+            
             this.etAnswer.SetSelectAllOnFocus(true);
             this.etAnswer.ImeOptions = ImeAction.Done;
             this.etAnswer.SetSingleLine(true);
@@ -61,11 +67,13 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
             {
                 return;
             }
-            if (!maskedWatcher.IsTextMaskMatched())
+
+            if (isInputMasked && !this.maskedWatcher.IsTextMaskMatched())
             {
-                PutAnswerStoredInModelToUI();
+                this.PutAnswerStoredInModelToUI();
                 return;
             }
+            
             var newAnswer = etAnswer.Text.Trim();
 
             if (newAnswer != this.Model.AnswerString)
@@ -78,7 +86,7 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
                         this.QuestionnairePublicKey, this.Membership.CurrentUser.Id, this.Model.PublicKey.Id,
                         this.Model.PublicKey.InterviewItemPropagationVector, DateTime.UtcNow, newAnswer));
             }
-            else if (this.etComments.Visibility!=ViewStates.Visible)
+            else if (this.etComments.Visibility != ViewStates.Visible)
             {
                 base.FireAnswerSavedEvent();
             }

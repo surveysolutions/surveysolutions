@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Exceptions;
@@ -24,9 +24,10 @@ namespace WB.UI.Designer.Api
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IJsonExportService exportService;
+        private readonly IQuestionnaireExportService exportService;
         private readonly ILogger logger;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
@@ -36,7 +37,8 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IJsonExportService exportService,
+            IQuestionnaireExportService exportService,
+            IExpressionProcessorGenerator expressionProcessorGenerator,
             ILogger logger)
         {
             this.userHelper = userHelper;
@@ -46,6 +48,7 @@ namespace WB.UI.Designer.Api
             this.logger = logger;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireVerifier = questionnaireVerifier;
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
         
         [HttpGet]
@@ -103,6 +106,19 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public QuestionnaireCommunicationPackage GetTemplate(Guid id)
         {
+            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage
+            {
+                IsErrorOccured = true,
+                ErrorMessage = "You have an old version of application. Please update application to continue."
+            };
+
+            return questionnaireSyncPackage;
+
+        }
+
+        [HttpGet]
+        public QuestionnaireCommunicationPackage GetTemplate(Guid id, string maxSupportedVersion)
+        {
             var user = this.userHelper.WebUser;
             if (user == null)
             {
@@ -110,17 +126,50 @@ namespace WB.UI.Designer.Api
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
             }
 
+            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage();
+
+            QuestionnaireVersion supportedQuestionnaireVersion;
+            if (!QuestionnaireVersion.TryParse(maxSupportedVersion, out supportedQuestionnaireVersion))
+            {
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "Incorrect request parameters (version).";
+
+                return questionnaireSyncPackage;
+            }
+
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
-                return null;
+            {
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "Questionnaire was not found.";
+
+                return questionnaireSyncPackage;
+            }
 
             if (!ValidateAccessPermissions(questionnaireView, user.UserId))
             {
                 logger.Error(String.Format("Non permitted resource was requested by user [{0}]", user.UserId));
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
             }
+            
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
+            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
+            {
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "Questionnaire was not found.";
 
-            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage();
+                return questionnaireSyncPackage;
+            }
+
+            if (templateInfo.Version > supportedQuestionnaireVersion)
+            {
+                questionnaireSyncPackage.IsErrorOccured = true;
+                questionnaireSyncPackage.ErrorMessage = "You have an obsolete version of application. Please update application to continue.";
+
+                return questionnaireSyncPackage;
+            }
+
+            string resultAssembly;
 
             var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
             if (questoinnaireErrors.Any())
@@ -130,18 +179,35 @@ namespace WB.UI.Designer.Api
 
                 return questionnaireSyncPackage;
             }
-
-            var templateInfo = this.exportService.GetQuestionnaireTemplate(questionnaireView.Source);
-            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
+            else
             {
-                questionnaireSyncPackage.IsErrorOccured = true;
-                questionnaireSyncPackage.ErrorMessage = "Questionnaire was not found.";
+                GenerationResult generationResult;
+                try
+                {
+                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+                }
+                catch (Exception)
+                {
+                    generationResult = new GenerationResult()
+                    {
+                        Success = false,
+                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                    };
+                    resultAssembly = string.Empty;
+                }
 
-                return questionnaireSyncPackage;
+                if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
+                {
+                    questionnaireSyncPackage.IsErrorOccured = true;
+                    questionnaireSyncPackage.ErrorMessage = "Questionnaire is invalid. Please Verify it on Designer.";
+
+                    return questionnaireSyncPackage;
+                }
             }
-
+            
             var template = PackageHelper.CompressString(templateInfo.Source);
             questionnaireSyncPackage.Questionnaire = template;
+            questionnaireSyncPackage.QuestionnaireAssembly = resultAssembly;
 
             return questionnaireSyncPackage;
         }

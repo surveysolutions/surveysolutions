@@ -1,4 +1,6 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using System.Collections.Generic;
 using Ncqrs.Commanding;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
@@ -26,12 +28,21 @@ namespace WB.Tests.Unit
             return new PdfGroupView();
         }
 
+        public static RoslynExpressionProcessor RoslynExpressionProcessor()
+        {
+            return new RoslynExpressionProcessor();
+        }
         public static CreateInterviewControllerCommand CreateInterviewControllerCommand()
         {
             return new CreateInterviewControllerCommand()
             {
                 AnswersToFeaturedQuestions = new List<UntypedQuestionAnswer>()
             };
+        }
+
+        public static NCalcToCSharpConverter NCalcToCSharpConverter()
+        {
+            return new NCalcToCSharpConverter();
         }
     }
 }

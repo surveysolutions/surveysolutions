@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Android.App;
 using Android.Content;
-using Android.Provider;
 using Android.Runtime;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.EventHandlers;
@@ -29,6 +28,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi;
 using WB.Core.BoundedContexts.Capi.EventHandler;
+using WB.Core.BoundedContexts.Capi.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services;
 using WB.Core.BoundedContexts.Capi.Synchronization.Services;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
@@ -46,6 +46,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.UI.Capi.Implementations.Navigation;
 using WB.UI.Capi.Injections;
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Extensions;
@@ -227,7 +228,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(dashboardeventHandler, typeof(NumericIntegerQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(DateTimeQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
-            
         }
 
         
@@ -248,17 +248,19 @@ namespace WB.UI.Capi
             
             const string SynchronizationFolder = "SYNC";
             const string InterviewFilesFolder = "InterviewData";
-            
+            const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
+
             this.kernel = new StandardKernel(
                 new CapiBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new RestAndroidModule(),
                 new FileInfrastructureModule(),
-                new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder }),
+                new AndroidModelModule(basePath, new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }),
                 new ErrorReportingModule(basePath),
                 new AndroidLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, syncDirectoryName: SynchronizationFolder,
-                    dataDirectoryName: InterviewFilesFolder),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath, 
+                    syncDirectoryName: SynchronizationFolder, dataDirectoryName: InterviewFilesFolder, 
+                    questionnaireAssembliesFolder : QuestionnaireAssembliesFolder),
                 new ExpressionProcessorModule());
 
             CrashManager.Initialize(this);
@@ -267,7 +269,7 @@ namespace WB.UI.Capi
             this.kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
-
+            
             NcqrsInit.Init(this.kernel);
        
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
@@ -280,6 +282,7 @@ namespace WB.UI.Capi
             this.kernel.Bind<IAnswerOnQuestionCommandService>().To<AnswerOnQuestionCommandService>().InSingletonScope();
             this.kernel.Bind<IAnswerProgressIndicator>().To<AnswerProgressIndicator>().InSingletonScope();
             this.kernel.Bind<IQuestionViewFactory>().To<DefaultQuestionViewFactory>();
+            this.kernel.Bind<INavigationService>().To<NavigationService>().InSingletonScope();
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();

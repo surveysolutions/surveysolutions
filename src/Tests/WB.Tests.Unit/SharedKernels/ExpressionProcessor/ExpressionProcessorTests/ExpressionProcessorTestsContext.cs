@@ -6,7 +6,7 @@ namespace WB.Tests.Unit.SharedKernels.ExpressionProcessor.ExpressionProcessorTes
     {
         protected static IExpressionProcessor CreateExpressionProcessor()
         {
-            return new WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services.ExpressionProcessor();
+            return new Core.SharedKernels.ExpressionProcessor.Implementation.Services.ExpressionProcessor();
         }
     }
 }

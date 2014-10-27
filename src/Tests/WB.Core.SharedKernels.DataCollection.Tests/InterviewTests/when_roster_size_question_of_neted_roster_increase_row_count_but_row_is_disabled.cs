@@ -18,6 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#, KP-4386 Rosters")]
     internal class when_roster_size_question_of_neted_roster_increase_row_count_but_row_is_disabled : InterviewTestsContext
     {
         Establish context = () =>
@@ -35,20 +36,20 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     && _.GetRosterGroupsByRosterSizeQuestion(nestedRosterSizeQuestionId) == new[] { nestedRosterId }
                     && _.GetRostersFromTopToSpecifiedQuestion(nestedRosterSizeQuestionId) == new[] { parentRosterId }
 
-                    && _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(nestedRosterId) == new[] { nestedRosterId }
+                    //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(nestedRosterId) == new[] { nestedRosterId }
                     && _.GetRosterLevelForGroup(nestedRosterId) == 2
                     && _.GetRostersFromTopToSpecifiedGroup(nestedRosterId) == new[] { parentRosterId, nestedRosterId }
                 );
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                               questionnaire);
-            var expressionProcessor = new Mock<IExpressionProcessor>();
+            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
             Mock.Get(ServiceLocator.Current)
-              .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+              .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
               .Returns(expressionProcessor.Object);
 
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))

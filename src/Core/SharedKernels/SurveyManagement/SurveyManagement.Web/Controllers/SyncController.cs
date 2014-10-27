@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (supervisorRevisionNumber.HasValue && version > supervisorRevisionNumber.Value)
             {
                 package.IsErrorOccured = true;
-                package.ErrorMessage = "Your application is incometible with the Supervisor. Please, remove your copy and download the correct version";
+                package.ErrorMessage = "Your application is incompatible with the Supervisor. Please, remove your copy and download the correct version";
             }
             else if (supervisorRevisionNumber.HasValue && version < supervisorRevisionNumber.Value)
             {
@@ -190,7 +190,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 package.ErrorMessage = "Error occurred. Try later.";
             }
 
-            return this.Json(package, JsonRequestBehavior.AllowGet);
+            var result = this.Json(package, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = int.MaxValue;
+            return result;
         }
 
         //In case of error of type missing or casting error we send correct response.

@@ -18,6 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#, KP-4386 Rosters")]
     internal class when_answering_top_level_question_which_enables_nested_roster : InterviewTestsContext
     {
         Establish context = () =>
@@ -28,9 +29,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             answeringQuestionId = Guid.Parse("11111111111111111111111111111111");
             var parentRosterId =  Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var questionnaire = Mock.Of<IQuestionnaire>(_
-                => _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { nestedRosterId }
-                    && _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new[] { nestedRosterId }
-                    && _.HasQuestion(answeringQuestionId) == true
+                => _.HasQuestion(answeringQuestionId) == true
+                    //&& _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { nestedRosterId }
+                    //&& _.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(answeringQuestionId) == new[] { nestedRosterId }
                     && _.GetQuestionType(answeringQuestionId) == QuestionType.Numeric
                     && _.GetRosterLevelForGroup(nestedRosterId) == 2
                     && _.GetRostersFromTopToSpecifiedGroup(nestedRosterId) == new[] { parentRosterId, nestedRosterId }
@@ -38,13 +39,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                               questionnaire);
-            var expressionProcessor = new Mock<IExpressionProcessor>();
+            var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
             Mock.Get(ServiceLocator.Current)
-              .Setup(locator => locator.GetInstance<IExpressionProcessor>())
+              .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
               .Returns(expressionProcessor.Object);
 
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))

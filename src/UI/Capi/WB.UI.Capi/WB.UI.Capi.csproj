@@ -85,6 +85,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Color">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Color.Droid">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Color.Droid.dll</HintPath>
+    </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.PictureChooser">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.3.1.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.PictureChooser.dll</HintPath>
     </Reference>
@@ -151,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
@@ -173,7 +180,9 @@
     <Compile Include="Implementations\Fragments\DataCollectionScreenContentFragment.cs" />
     <Compile Include="Implementations\Fragments\DataCollectionStatisticsContentFragment.cs" />
     <Compile Include="Implementations\Fragments\PrefilledScreenContentFragment.cs" />
+    <Compile Include="Implementations\Navigation\NavigationService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
+    <Compile Include="FinishInstallationActivity.cs" />
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
@@ -196,7 +205,9 @@
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
+    <Compile Include="Utils\BackgroundColorValueConverter.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
+    <Compile Include="Views\FinishIntallationViewModel.cs" />
     <Compile Include="Views\Login\LoginViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +253,9 @@
     <AndroidResource Include="Resources\Layout\InterviewActionBar.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\FinishInstallation.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">
@@ -271,8 +285,9 @@
     <AndroidResource Include="Resources\Drawable\splash.png" />
     <AndroidResource Include="Resources\Drawable\capi_splash.png" />
     <AndroidResource Include="Resources\Drawable\capi_icon.png" />
-    <AndroidResource Include="Resources\Values\Themes.xml" />
-    
+    <AndroidResource Include="Resources\Values\Themes.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
@@ -354,6 +369,10 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>

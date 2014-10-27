@@ -30,7 +30,7 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
             (result.Data as HandshakePackage). IsErrorOccured.ShouldBeTrue();
 
         It should_return_error_message_that_contains_specific_words = () =>
-            new[] { "application", "is incometible with", "supervisor", "remove your copy", "download the correct version" }.ShouldEachConformTo(
+            new[] { "application", "is incompatible with", "supervisor", "remove your copy", "download the correct version" }.ShouldEachConformTo(
                 keyword => (result.Data as HandshakePackage).ErrorMessage.ToLower().Contains(keyword));
 
         private static SyncController controller;

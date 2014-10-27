@@ -5,9 +5,9 @@ using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using WB.UI.Designer.Code;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -27,6 +27,7 @@ namespace WB.UI.Designer.Api
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private const int MaxCountOfOptionForFileredCombobox = 200;
+        public const int MaxVerificationErrors = 20;
 
         public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
@@ -41,6 +42,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.verificationErrorsMapper = verificationErrorsMapper;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
+
         }
 
         [HttpGet]
@@ -142,16 +144,15 @@ namespace WB.UI.Designer.Api
         public VerificationErrors Verify(Guid id)
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
-
-            QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).Take(MaxVerificationErrors).ToArray();
             var errorsCount = verificationErrors.Length;
             VerificationError[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
-            var verificationResult = new VerificationErrors
+
+            return new VerificationErrors
             {
                 Errors = errors,
                 ErrorsCount = errorsCount
             };
-            return verificationResult;
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)

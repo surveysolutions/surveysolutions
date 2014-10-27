@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
@@ -49,7 +50,7 @@ namespace WB.Core.BoundedContexts.Supervisor
 
             this.Bind<IEventHandler>().To<ReadyToSendToHeadquartersInterviewDenormalizer>().InSingletonScope();
 
-            this.Bind<Func<HttpMessageHandler>>().ToMethod(x => () => new HttpClientHandler());
+            this.Bind<Func<HttpMessageHandler>>().ToMethod(x => () => new HttpClientHandler(){ AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate});
             //this.Bind<HttpMessageHandler>().To<HttpClientHandler>();
         }
     }
