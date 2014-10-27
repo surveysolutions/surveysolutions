@@ -140,7 +140,7 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
         {
             return new NumericQuestion
             {
@@ -149,7 +149,8 @@ namespace WB.Tests.Integration
                 StataExportCaption = variable,
                 IsInteger = true,
                 ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
+                Mandatory = isMandatory
             };
         }
 
