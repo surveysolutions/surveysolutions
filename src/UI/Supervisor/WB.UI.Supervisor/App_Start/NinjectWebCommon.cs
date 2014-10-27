@@ -30,8 +30,10 @@ using WB.Core.Infrastructure.FunctionalDenormalization;
 using WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Storage.Raven;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.ExpressionProcessor;
-using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.ReadSide.Indexes;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -139,22 +141,23 @@ namespace WB.UI.Supervisor.App_Start
                     LegacyOptions.SynchronizationIncomingCapiPackagesWithErrorsDirectory,
                 incomingCapiPackageFileNameExtension: LegacyOptions.SynchronizationIncomingCapiPackageFileNameExtension);
 
-            
+            var basePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+            const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
+
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(AppDomain.CurrentDomain.BaseDirectory),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
+                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new ExpressionProcessorModule(),
-                new QuestionnaireVerificationModule(),
+                new QuestionnaireUpgraderModule(),
                 new RavenReadSideInfrastructureModule(ravenSettings, typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly),
                 new RavenPlainStorageInfrastructureModule(ravenSettings),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new QuestionnaireUpgraderModule(),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
@@ -172,7 +175,7 @@ namespace WB.UI.Supervisor.App_Start
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
+            
             PrepareNcqrsInfrastucture(kernel);
 
             var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(),

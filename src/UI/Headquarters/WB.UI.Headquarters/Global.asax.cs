@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
 
-            AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
+            //AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
         }
 
         private static void RegisterVirtualPathProvider()

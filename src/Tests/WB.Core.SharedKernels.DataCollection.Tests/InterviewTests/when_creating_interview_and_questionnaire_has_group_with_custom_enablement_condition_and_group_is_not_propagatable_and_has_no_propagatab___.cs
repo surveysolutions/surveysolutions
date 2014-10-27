@@ -14,6 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#, KP-4386 Rosters")]
     internal class when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_not_propagatable_and_has_no_propagatable_ancestor_groups : InterviewTestsContext
     {
         Establish context = () =>
@@ -28,8 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             groupId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
 
             var questionaire = Mock.Of<IQuestionnaire>(_
-                => _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
-                && _.IsRosterGroup(groupId) == false
+                => /*_.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
+                &&*/ _.IsRosterGroup(groupId) == false
                 && _.GetRostersFromTopToSpecifiedGroup(groupId) == new Guid[] { });
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository

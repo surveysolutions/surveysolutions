@@ -6,9 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
@@ -25,19 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
             return (T)eventContext.Events.Last(e => e.Payload is T).Payload;
         }
 
-        public static Questionnaire CreateQuestionnaire(Guid creatorId)
+        public static Questionnaire CreateQuestionnaire(Guid? creatorId = null, QuestionnaireDocument document = null)
         {
-            return new Questionnaire(creatorId, new QuestionnaireDocument(), false);
-        }
-
-        public static Questionnaire CreateQuestionnaire()
-        {
-            return CreateQuestionnaire(new Guid());
-        }
-
-        public static Questionnaire CreateQuestionnaire(Guid creatorId, QuestionnaireDocument document)
-        {
-            return new Questionnaire(new Guid(), document, false);
+            return new Questionnaire(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, string.Empty);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

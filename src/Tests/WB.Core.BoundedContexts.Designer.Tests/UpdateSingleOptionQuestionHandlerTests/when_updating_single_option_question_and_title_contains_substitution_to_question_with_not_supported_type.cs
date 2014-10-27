@@ -9,9 +9,10 @@ using WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandlerTests
 {
-    internal class when_updating_single_option_question_and_title_contains_substitution_to_question_with_not_supported_type : QuestionnaireTestsContext
+    internal class when_updating_single_option_question_and_title_contains_substitution_to_question_with_not_supported_type :
+        QuestionnaireTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
             });
         };
 
-        Because of = () =>
+        private Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateSingleOptionQuestion(
                     questionId: questionId,
@@ -50,16 +51,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
                     validationMessage: validationMessage,
                     instructions: instructions,
                     responsibleId: responsibleId,
-                    options:options,
+                    options: options,
                     linkedToQuestionId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: ñascadeFromQuestionId
                     ));
 
-        It should_throw_QuestionnaireException = () =>
+        private It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__title___constains__substitution__with__illegal__type__ = () =>
+        private It should_throw_exception_with_message_containting__title___constains__substitution__with__illegal__type__ = () =>
             new[] { "title", "contains", "substitution", "illegal", "type" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
@@ -79,8 +80,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.UpdateSingleOptionQuestionHandl
         private static string enablementCondition = null;
         private static string validationExpression = null;
         private static string validationMessage = "";
-        private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
-        private static Guid? linkedToQuestionId = (Guid?)null;
+
+        private static Option[] options = new Option[]
+        { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
+
+        private static Guid? linkedToQuestionId = (Guid?) null;
         private static bool isFilteredCombobox = false;
         private static Guid? ñascadeFromQuestionId = (Guid?)null;
     }

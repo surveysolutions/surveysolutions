@@ -2,9 +2,13 @@
 using System.ServiceModel;
 using Machine.Specifications;
 using Machine.Specifications.Utility;
+using Main.Core.Documents;
+using Main.Core.View;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using It = Machine.Specifications.It;
@@ -23,9 +27,10 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 
             var templateInfo = CreateTemplateInfo(version);
 
-            exportService = Mock.Of<IJsonExportService>(x => x.GetQuestionnaireTemplate(questionnaireId) == templateInfo);
+            exportService = Mock.Of<IQuestionnaireExportService>(x => x.GetQuestionnaireTemplateInfo(Moq.It.IsAny<QuestionnaireDocument>()) == templateInfo);
 
-            service = CreatePublicService(exportService: exportService);
+            var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
+            service = CreatePublicService(exportService: exportService, questionnaireViewFactory: questionnaireViewFactory);
         };
 
         Because of = () => 
@@ -39,7 +44,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
 
         private static QuestionnaireVersion version = new QuestionnaireVersion(1,0,0);
         private static DownloadQuestionnaireRequest request;
-        private static IJsonExportService exportService;
+        private static IQuestionnaireExportService exportService;
         private static IPublicService service;
         private static Exception exception;
     }

@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Capi
         Guid SupervisorId { get; }
         
         bool IsLoggedIn { get; }
-        bool LogOn(string userName, string password);
+        bool LogOn(string userName, string password, bool wasPasswordHashed = false);
         void LogOff();
     }
 }
