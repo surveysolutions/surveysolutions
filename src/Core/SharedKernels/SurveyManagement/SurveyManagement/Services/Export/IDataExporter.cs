@@ -8,8 +8,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
 {
     internal interface IDataExporter
     {
-        void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long version, string targetFolder);
-        string[] ExportAllDataForQuestionnaire(Guid questionnaireId, long version, Func<string, string> fileNameCreationFunc);
-        string[] ExportApprovedDataForQuestionnaire(Guid questionnaireId, long version, Func<string, string> fileNameCreationFunc);
+        void CreateHeaderStructureForPreloadingForQuestionnaire(string basePath, string targetFolder);
+        string[] GetDataFilesForQuestionnaire(string basePath);
+        string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(string basePath);
     }
 }

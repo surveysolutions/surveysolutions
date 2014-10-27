@@ -8,29 +8,32 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
     internal class SqlDataExporter : BaseSqlService, IDataExporter
     {
-        private readonly IFilebaseExportRouteService filebaseExportRouteService;
         private readonly ISqlServiceFactory sqlServiceFactory;
         private readonly ICsvWriterFactory csvWriterFactory;
+        private readonly string separator;
+        private readonly Func<string, string> createDataFileName;
+
         private const InterviewExportedAction ApproveByHeadquarterAction = InterviewExportedAction.ApproveByHeadquarter;
 
-        public SqlDataExporter(IFileSystemAccessor fileSystemAccessor, IFilebaseExportRouteService filebaseExportRouteService, ISqlServiceFactory sqlServiceFactory, ICsvWriterFactory csvWriterFactory)
+        public SqlDataExporter(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory, ICsvWriterFactory csvWriterFactory)
             : base(fileSystemAccessor)
         {
-            this.filebaseExportRouteService = filebaseExportRouteService;
             this.sqlServiceFactory = sqlServiceFactory;
             this.csvWriterFactory = csvWriterFactory;
+            this.createDataFileName = ExportFileSettings.GetContentFileName;
+            this.separator = ExportFileSettings.SeparatorOfExportedDataFile;
         }
 
-        public void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long version, string targetFolder)
+        public void CreateHeaderStructureForPreloadingForQuestionnaire(string basePath, string targetFolder)
         {
-            var dbPath = fileSystemAccessor.CombinePath(
-                filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(questionnaireId, version), dataFile);
+            var dbPath = fileSystemAccessor.CombinePath(basePath, dataFile);
             
             if (!fileSystemAccessor.IsFileExists(dbPath))
                 return;
@@ -45,11 +48,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         continue;
 
                     var csvFilePath =
-                        fileSystemAccessor.CombinePath(targetFolder, string.Format("{0}.{1}", tableName, filebaseExportRouteService.ExtensionOfExportedDataFile));
+                        fileSystemAccessor.CombinePath(targetFolder, createDataFileName(tableName));
 
                     var columnNames = GetListOfColumns(sqlService, tableName).ToArray();
                     using (var fileStream = fileSystemAccessor.OpenOrCreateFile(csvFilePath, true))
-                    using (var tabWriter = csvWriterFactory.OpenCsvWriter(fileStream, filebaseExportRouteService.SeparatorOfExportedDataFile))
+                    using (var tabWriter = csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
                     {
                         foreach (var columnName in columnNames)
                         {
@@ -61,9 +64,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        public string[] ExportAllDataForQuestionnaire(Guid questionnaireId, long version, Func<string, string> fileNameCreationFunc)
+        public string[] GetDataFilesForQuestionnaire(string basePath)
         {
-            var basePath = filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
             var allDataFolderPath = GetAllDataFolder(basePath);
 
             if (fileSystemAccessor.IsDirectoryExists(allDataFolderPath))
@@ -71,12 +73,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             fileSystemAccessor.CreateDirectory(allDataFolderPath);
 
-            return this.ExportToTabFile(allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, dataFile), QueryAllRecodsFromTable, fileNameCreationFunc);
+            return this.ExportToTabFile(allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, dataFile), QueryAllRecodsFromTable);
         }
 
-        public string[] ExportApprovedDataForQuestionnaire(Guid questionnaireId, long version, Func<string, string> fileNameCreationFunc)
+        public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(string basePath)
         {
-            var basePath = filebaseExportRouteService.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
             var approvedDataFolderPath = GetApprovedDataFolder(basePath);
 
             if (fileSystemAccessor.IsDirectoryExists(approvedDataFolderPath))
@@ -85,7 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
 
             return this.ExportToTabFile(approvedDataFolderPath, fileSystemAccessor.CombinePath(basePath, dataFile),
-                QueryRecordsFromTableByInterviewsInApprovedStatus, fileNameCreationFunc);
+                QueryRecordsFromTableByInterviewsInApprovedStatus);
         }
 
         private IEnumerable<dynamic> QueryAllRecodsFromTable(ISqlService sqlService, string tableName)
@@ -107,7 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 columnNames.Any(name => name.StartsWith(parentId)) ? columnNames.Last() : "Id"), new { interviewAction = ApproveByHeadquarterAction.ToString() });
         }
 
-        private string[] ExportToTabFile(string basePath, string dbPath, Func<ISqlService,string, IEnumerable<dynamic>> query, Func<string, string> fileNameCreationFunc)
+        private string[] ExportToTabFile(string basePath, string dbPath, Func<ISqlService,string, IEnumerable<dynamic>> query)
         {
             var result = new List<string>();
             using (var sqlService = sqlServiceFactory.CreateSqlService(dbPath))
@@ -117,12 +118,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 foreach (var tableName in tableNames)
                 {
                     var csvFilePath =
-                        fileSystemAccessor.CombinePath(basePath, fileNameCreationFunc(tableName));
+                        fileSystemAccessor.CombinePath(basePath, createDataFileName(tableName));
 
                     var columnNames = GetListOfColumns(sqlService, tableName);
 
                     using (var fileStream = fileSystemAccessor.OpenOrCreateFile(csvFilePath, true))
-                    using (var tabWriter = csvWriterFactory.OpenCsvWriter(fileStream, "\t "))
+                    using (var tabWriter = csvWriterFactory.OpenCsvWriter(fileStream, separator))
                     {
                         foreach (var columnName in columnNames)
                         {

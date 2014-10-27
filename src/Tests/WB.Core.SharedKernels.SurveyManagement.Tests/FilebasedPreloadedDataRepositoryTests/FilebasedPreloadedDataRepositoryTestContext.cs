@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
         {
             return new FilebasedPreloadedDataRepository(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "",
                 archiveUtils ?? Mock.Of<IArchiveUtils>(), recordsAccessorFactory ?? Mock.Of<IRecordsAccessorFactory>(),
-                Mock.Of<IFilebaseExportRouteService>(_ => _.ExtensionOfExportedDataFile == "tab"));
+                Mock.Of<IFilebaseExportDataAccessor>());
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

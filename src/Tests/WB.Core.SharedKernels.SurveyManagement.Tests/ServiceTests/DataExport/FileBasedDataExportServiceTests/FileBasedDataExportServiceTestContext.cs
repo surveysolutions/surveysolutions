@@ -35,7 +35,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         protected static FileBasedDataExportRepositoryWriter CreateFileBasedDataExportService(
             IFileSystemAccessor fileSystemAccessor = null, IDataExportWriter dataExportWriter = null,
             IEnvironmentContentService environmentContentService = null, IPlainInterviewFileStorage plainFileRepository = null,
-            InterviewDataExportView interviewDataExportView = null, IFilebaseExportRouteService filebaseExportRouteService = null)
+            InterviewDataExportView interviewDataExportView = null, IFilebaseExportDataAccessor filebaseExportDataAccessor = null,
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter =null, UserDocument user=null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new FileBasedDataExportRepositoryWriter(Mock.Of<IReadSideRepositoryCleanerRegistry>(),
@@ -50,27 +51,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
                     _ => _.GetById(It.IsAny<string>()) == new ViewWithSequence<InterviewData>(new InterviewData(), 1)),
                 Mock.Of<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>(
                     _ => _.GetById(It.IsAny<string>(), It.IsAny<long>()) == new QuestionnaireExportStructure()),
-                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(), Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
+                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user), interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 Mock.Of<IExportViewFactory>(
                     _ =>
                         _.CreateInterviewDataExportView(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<InterviewData>()) ==
                             (interviewDataExportView ??
                                 new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, new InterviewDataExportLevelView[0]))),
-                filebaseExportRouteService ?? CreateFilebaseExportRouteService().Object,Mock.Of<IDataExporter>());
-        }
-
-        protected static Mock<IFilebaseExportRouteService> CreateFilebaseExportRouteService()
-        {
-            var result = new Mock<IFilebaseExportRouteService>();
-            result.Setup(x => x.GetFolderPathOfDataByQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>()))
-                .Returns<Guid, long>((id, v) => string.Format("ExportedData\\{0}-{1}", id, v));
-            result.Setup(x => x.GetFolderPathOfFilesByQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>()))
-                .Returns<Guid, long>((id, v) => string.Format("ExportedFiles\\exported_files_{0}-{1}", id, v));
-            result.Setup(x => x.GetFolderPathOfFilesByQuestionnaireForInterview(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<Guid>()))
-                .Returns<Guid, long, Guid>((id, v, interviewId) => string.Format("ExportedFiles\\{0}-{1}-{2}", id, v, interviewId));
-            result.Setup(x => x.PathToExportedData).Returns("ExportedData");
-            result.Setup(x => x.PathToExportedFiles).Returns("ExportedFiles");
-            return result;
+                filebaseExportDataAccessor ?? Mock.Of<IFilebaseExportDataAccessor>());
         }
 
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,
