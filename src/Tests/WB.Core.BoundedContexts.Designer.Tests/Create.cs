@@ -520,12 +520,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             return new EventContext();
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(IEnumerable<IComposite> children = null)
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
         {
             return new QuestionnaireDocument
             {
-                PublicKey = Guid.NewGuid(),
+                PublicKey = id ?? Guid.NewGuid(),
                 Children = children != null ? children.ToList() : new List<IComposite>(),
+                UsesCSharp = usesCSharp,
             };
         }
 
