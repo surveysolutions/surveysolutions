@@ -20,8 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
     {
         protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator(IFileSystemAccessor fileSystemAccessor)
         {
-            var filebaseExportRouteService = new Mock<IFilebaseExportDataAccessor>();
-            return new StataEnvironmentContentService(fileSystemAccessor, filebaseExportRouteService.Object);
+            return new StataEnvironmentContentService(fileSystemAccessor);
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)

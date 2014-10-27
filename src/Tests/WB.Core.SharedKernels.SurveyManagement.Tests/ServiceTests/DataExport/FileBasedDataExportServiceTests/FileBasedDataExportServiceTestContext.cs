@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             IFileSystemAccessor fileSystemAccessor = null, IDataExportWriter dataExportWriter = null,
             IEnvironmentContentService environmentContentService = null, IPlainInterviewFileStorage plainFileRepository = null,
             InterviewDataExportView interviewDataExportView = null, IFilebaseExportDataAccessor filebaseExportDataAccessor = null,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter =null, UserDocument user=null)
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, UserDocument user = null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new FileBasedDataExportRepositoryWriter(Mock.Of<IReadSideRepositoryCleanerRegistry>(),
