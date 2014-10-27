@@ -23,20 +23,22 @@ namespace WB.UI.Designer.Api
             public Guid Id { get; set; }
         }
 
-        private static object lockObject = new object();
+        private static readonly object LockObject = new object();
         private static bool isMigrationInProgress = false;
         private static string lastStatusMessage = "no operations were performed so far";
 
         private readonly ILogger logger;
         private readonly ICommandService commandService;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
+        private readonly IAsyncExecutor asyncExecutor;
 
         public NCalcToSharpController(ILogger logger, ICommandService commandService,
-            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory)
+            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory, IAsyncExecutor asyncExecutor)
         {
             this.logger = logger;
             this.commandService = commandService;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
+            this.asyncExecutor = asyncExecutor;
         }
 
         public HttpResponseMessage Get()
@@ -50,7 +52,7 @@ namespace WB.UI.Designer.Api
             if (isMigrationInProgress)
                 return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Migration is already in progress.");
 
-            new Task(() => PerformMigration(() => this.MigrateOneQuestionnaire(model.Id))).Start();
+            this.asyncExecutor.ExecuteAsync(() => PerformMigration(() => this.MigrateOneQuestionnaire(model.Id)));
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
@@ -61,7 +63,7 @@ namespace WB.UI.Designer.Api
             if (isMigrationInProgress)
                 return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Migration is already in progress.");
 
-            new Task(() => PerformMigration(() => this.MigrateAllQuestionnaires())).Start();
+            this.asyncExecutor.ExecuteAsync(() => PerformMigration(() => this.MigrateAllQuestionnaires()));
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
@@ -132,7 +134,7 @@ namespace WB.UI.Designer.Api
         {
             if (!isMigrationInProgress)
             {
-                lock (lockObject)
+                lock (LockObject)
                 {
                     if (!isMigrationInProgress)
                     {
