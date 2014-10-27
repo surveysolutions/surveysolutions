@@ -264,6 +264,8 @@
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_edit_view_and_static_text_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="QuestionnaireInfoFactoryTests\when_getting_static_text_edit_view.cs" />
+    <Compile Include="QuestionnaireInfoViewFactoryTests\when_counting_questionnaires_which_are_not_migrated_to_csharp_and_4_questionnaires_have_csharp_flag_and_5_do_not_have.cs" />
+    <Compile Include="QuestionnaireInfoViewFactoryTests\when_getting_questionnaires_which_are_not_migrated_to_csharp_and_4_questionnaires_have_csharp_flag_and_5_do_not_have.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_removing_single_option_question.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_setting_to_cascade_from_non_existing_question.cs" />
     <Compile Include="QuestionnaireTests\CascadigOptions\when_updating_question_with_empty_cascading_options.cs" />
