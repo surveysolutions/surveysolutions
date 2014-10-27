@@ -40,6 +40,8 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAsyncExecutor.cs" />
+    <Compile Include="Implementation\AsyncExecutor.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
     <Compile Include="Implementation\TopologicalSorter.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
