@@ -40,7 +40,7 @@
   <ItemGroup>
     <Compile Include="AbstractConditionalLevel.cs" />
     <Compile Include="AbstractInterviewExpressionState.cs" />
-    <Compile Include="AbstractInterviewExpressionStateImpl.cs" />
+    <Compile Include="DummyInterviewExpressionState.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="EnablementChanges.cs" />
