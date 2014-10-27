@@ -161,11 +161,11 @@ namespace WB.Core.SharedKernels.DataCollection
             return new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
         }
 
-        public void BackupStates()
+        public void SaveAllCurrentStatesAsPrevious()
         {
             foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
             {
-                interviewScopeKvpValue.BackupStates();
+                interviewScopeKvpValue.SaveAllCurrentStatesAsPrevious();
             }
         }
 
