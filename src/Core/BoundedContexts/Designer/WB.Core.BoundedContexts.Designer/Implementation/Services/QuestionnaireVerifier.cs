@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Antlr.Runtime;
 using CsQuery.ExtensionMethods;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -22,6 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
         #region Constants
+
+        private const int maxExpressionErrorsCount = 10;
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
         {
@@ -200,7 +199,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ConditionExpression);
         }
 
-        private const int maxExpressionErrorsCount = 10;
+       
         private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionAndValidationExpressions(QuestionnaireDocument questionnaire)
         {
             var errors = new List<QuestionnaireVerificationError>();

@@ -39,6 +39,6 @@ namespace WB.Core.SharedKernels.DataCollection
         void UpdateTextListAnswer(Guid questionId, Tuple<decimal, string>[] answers);
         void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] selectedPropagationVector);
         void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[][] selectedPropagationVectors);
-        void BackupStates();
+        void SaveAllCurrentStatesAsPrevious();
     }
 }

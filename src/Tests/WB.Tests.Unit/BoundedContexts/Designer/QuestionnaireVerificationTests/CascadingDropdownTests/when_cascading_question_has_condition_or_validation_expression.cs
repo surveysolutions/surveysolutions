@@ -12,47 +12,50 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
 {
     internal class when_cascading_question_has_condition_or_validation_expression : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             parentSingleOptionQuestionId = Guid.Parse("11111111111111111111111111111111");
             childCascadedComboboxId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             secondChildId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new SingleQuestion
-            {
-                PublicKey = parentSingleOptionQuestionId,
-                StataExportCaption = "var",
-                QuestionType = QuestionType.SingleOption,
-                Answers = new List<Answer> {
-                            new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                            new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
-                        }
-            },
-                    new SingleQuestion
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+                new SingleQuestion
+                {
+                    PublicKey = parentSingleOptionQuestionId,
+                    StataExportCaption = "var",
+                    QuestionType = QuestionType.SingleOption,
+                    Answers = new List<Answer>
                     {
-                        PublicKey = childCascadedComboboxId,
-                        QuestionType = QuestionType.SingleOption,
-                        StataExportCaption = "var1",
-                        ConditionExpression = "var == 2",
-                        CascadeFromQuestionId = parentSingleOptionQuestionId,
-                        Answers = new List<Answer> {
-                            new Answer { AnswerText = "child 1", ParentValue = "1", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                            new Answer { AnswerText = "child 2", ParentValue = "2", AnswerValue = "2", PublicKey = Guid.NewGuid() },
-                        }
-                    },
-                    new SingleQuestion
-                    {
-                        PublicKey = secondChildId,
-                        QuestionType = QuestionType.SingleOption,
-                        StataExportCaption = "var2",
-                        ValidationExpression = "var2 == 2",
-                        CascadeFromQuestionId = parentSingleOptionQuestionId,
-                        Answers = new List<Answer> {
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                            new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
-                        }
+                        new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
+                        new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
                     }
-                );
+                },
+                new SingleQuestion
+                {
+                    PublicKey = childCascadedComboboxId,
+                    QuestionType = QuestionType.SingleOption,
+                    StataExportCaption = "var1",
+                    ConditionExpression = "var == 2",
+                    CascadeFromQuestionId = parentSingleOptionQuestionId,
+                    Answers = new List<Answer>
+                    {
+                        new Answer { AnswerText = "child 1", ParentValue = "1", AnswerValue = "1", PublicKey = Guid.NewGuid() },
+                        new Answer { AnswerText = "child 2", ParentValue = "2", AnswerValue = "2", PublicKey = Guid.NewGuid() },
+                    }
+                },
+                new SingleQuestion
+                {
+                    PublicKey = secondChildId,
+                    QuestionType = QuestionType.SingleOption,
+                    StataExportCaption = "var2",
+                    ValidationExpression = "var2 == 2",
+                    CascadeFromQuestionId = parentSingleOptionQuestionId,
+                    Answers = new List<Answer>
+                    {
+                        new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
+                        new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                    }
+                });
             verifier = CreateQuestionnaireVerifier();
         };
 

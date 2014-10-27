@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         ValidityChanges ProcessValidationExpressions();
         EnablementChanges ProcessEnablementConditions();
-        void BackupStates();
+        void SaveAllCurrentStatesAsPrevious();
 
         IInterviewExpressionState Clone();
     }

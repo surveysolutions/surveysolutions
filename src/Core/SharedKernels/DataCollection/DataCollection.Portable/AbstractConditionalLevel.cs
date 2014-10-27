@@ -194,7 +194,7 @@ namespace WB.Core.SharedKernels.DataCollection
             };
         }
 
-        public void BackupStates()
+        public void SaveAllCurrentStatesAsPrevious()
         {
             foreach (var state in this.EnablementStates.Values)
             {

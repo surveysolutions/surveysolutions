@@ -1492,13 +1492,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             Action<IInterviewExpressionState> updateState = expressionProcessorState => expressionProcessorState.UpdateMediaAnswer(questionId, rosterVector, pictureFileName);
 
-            this.ApplyInterviewChanges(this.CalculateInterviewChangesOnAnswerQuestion(
-                this.interviewState,
-                userId,
-                questionId, rosterVector, pictureFileName, pictureFileName, AnswerChangeType.Picture,
-                answerTime,
-                questionnaire,
-                updateState));
+            var calculatedInterviewChangesOnAnswerQuestion = this.CalculateInterviewChangesOnAnswerQuestion(
+                 this.interviewState,
+                 userId,
+                 questionId, rosterVector, pictureFileName, pictureFileName, AnswerChangeType.Picture,
+                 answerTime,
+                 questionnaire,
+                 updateState);
+
+            this.ApplyInterviewChanges(calculatedInterviewChangesOnAnswerQuestion);
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedPropagationVector)
@@ -1533,8 +1535,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfInterviewHardDeleted();
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
-            
-            expressionProcessorState.BackupStates();
+
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
@@ -2294,7 +2296,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            expressionProcessorState.BackupStates();
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
@@ -2344,7 +2346,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionId, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer, getRosterInstanceIds);
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
-            
+
 
             expressionProcessorState.UpdateMultiOptionAnswer(questionId, rosterVector, selectedValues);
 
@@ -2356,7 +2358,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            expressionProcessorState.BackupStates();
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
@@ -2429,7 +2431,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            expressionProcessorState.BackupStates();
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
@@ -2586,7 +2588,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Action<IInterviewExpressionState> updateState)
         {
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
-            expressionProcessorState.BackupStates();
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
 
             updateState(expressionProcessorState);
 
@@ -3189,7 +3191,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var questionId = answeredQuestion.Id;
             Guid? cascadingId = questionnaire.GetCascadingQuestionParentId(questionId);
-            
+
             if (!cascadingId.HasValue) return;
 
             decimal childParentValue = questionnaire.GetCascadingParentValue(questionId, value);
@@ -3199,7 +3201,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (!interviewState.AnswersSupportedInExpressions.ContainsKey(questionKey))
                 return;
-            
+
             object answer = interviewState.AnswersSupportedInExpressions[questionKey];
             string parentAnswer = AnswerUtils.AnswerToString(answer);
 
@@ -3742,7 +3744,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterData.RosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
             }
 
-            expressionProcessorState.BackupStates();
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             AppendCascadingQuestionChanges(interviewChanges, questionnaire, enablementChanges);
 
