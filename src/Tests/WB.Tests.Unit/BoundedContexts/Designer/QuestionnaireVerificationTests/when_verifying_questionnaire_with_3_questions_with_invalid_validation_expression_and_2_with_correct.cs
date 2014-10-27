@@ -4,22 +4,19 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
-using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    [Ignore("C#, KP-4385 Misc Corner Cases")]
-    internal class when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_with_2_with_correct :
-        QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_with_2_with_correct : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
         {
             const string InvalidExpression = "[hehe] &=+< 5";
-            const string ValidExpression = "[33333333333333333333333333333333] == 2";
+            const string ValidExpression = "var1 > 0";
 
             firstIncorrectQuestionId = Guid.Parse("1111CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             secondIncorrectQuestionId = Guid.Parse("2222CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -65,48 +62,44 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 }
                 );
 
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.IsSyntaxValid(InvalidExpression) == false
-                    && processor.IsSyntaxValid(ValidExpression) == true);
-
-            verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
+            verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: new QuestionnireExpressionProcessorGenerator());
         };
 
-        private Because of = () =>
+        Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        private It should_return_3_errors = () =>
+        It should_return_3_errors = () =>
             resultErrors.Count().ShouldEqual(3);
 
-        private It should_return_errors_each_with_code__WB0002__ = () =>
+        It should_return_errors_each_with_code__WB0002__ = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.Code == "WB0002");
 
-        private It should_return_errors_each_having_single_reference = () =>
+        It should_return_errors_each_having_single_reference = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        private It should_return_errors_each_referencing_question = () =>
+        It should_return_errors_each_referencing_question = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_error_referencing_first_incorrect_question = () =>
+        It should_return_error_referencing_first_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Id == firstIncorrectQuestionId);
 
-        private It should_return_error_referencing_secong_incorrect_question = () =>
+        It should_return_error_referencing_secong_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Id == secondIncorrectQuestionId);
 
-        private It should_return_error_referencing_third_incorrect_question = () =>
+        It should_return_error_referencing_third_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Id == thirdIncorrectQuestionId);
 
-        private It should_not_return_error_referencing_first_correct_question = () =>
+        It should_not_return_error_referencing_first_correct_question = () =>
             resultErrors.ShouldNotContain(error
                 => error.References.Single().Id == firstCorrectQuestionId);
 
-        private It should_not_return_error_referencing_second_correct_question = () =>
+        It should_not_return_error_referencing_second_correct_question = () =>
             resultErrors.ShouldNotContain(error
                 => error.References.Single().Id == secondCorrectQuestionId);
 
