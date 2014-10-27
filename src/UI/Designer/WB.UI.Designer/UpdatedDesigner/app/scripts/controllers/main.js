@@ -58,8 +58,6 @@ angular.module('designerApp')
                 Multimedia: 'icon-photo'
             };
 
-            $scope.chapters = [];
-
             $scope.items = [];
 
             $scope.item = null;
@@ -76,7 +74,7 @@ angular.module('designerApp')
                 dropped: function (event) {
                     $scope.chaptersTree.isDragging = false;
                     var rollback = function (item, targetIndex) {
-                        $scope.questionnaire.chapters.splice(_.indexOf($scope.chapters, item), 1);
+                        $scope.questionnaire.chapters.splice(_.indexOf($scope.questionnaire.chapters, item), 1);
                         $scope.questionnaire.chapters.splice(targetIndex, 0, item);
                     };
 

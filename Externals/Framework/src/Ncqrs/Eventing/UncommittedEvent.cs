@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace Ncqrs.Eventing
@@ -6,6 +7,7 @@ namespace Ncqrs.Eventing
     /// <summary>
     /// Represents an event which has not been yet persisted.
     /// </summary>
+    [DebuggerDisplay("{Payload.GetType().Name} {EventIdentifier}")]
     public class UncommittedEvent : IPublishableEvent
     {
         private readonly object _payload;

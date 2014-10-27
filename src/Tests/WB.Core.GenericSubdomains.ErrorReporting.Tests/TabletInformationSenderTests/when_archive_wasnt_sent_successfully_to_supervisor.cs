@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
 
 namespace WB.Core.GenericSubdomains.ErrorReporting.Tests.TabletInformationSenderTests

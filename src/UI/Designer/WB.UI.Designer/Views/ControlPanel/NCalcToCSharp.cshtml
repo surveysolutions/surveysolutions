@@ -1,0 +1,146 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Control Panel: Migration from NCalc to C#";
+    Layout = "~/Views/Shared/Layout.admin.cshtml";
+}
+
+<div class="page-header">
+    <h2>Migration: NCalc to C#</h2>
+</div>
+
+<div class="well">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="questionnaireId" class="col-xs-3 control-label">Migrate one questionnaire</label>
+            <div class="col-xs-9">
+                <input id="questionnaireId" type="text" class="form-control" value="00000000-0000-0000-0000-000000000000" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-9">
+                <button id="migrateSingle" type="button" class="btn btn-primary">Migrate one</button>
+            </div>
+        </div>
+        <pre id="migrateSingleOutput" class="help-block"></pre>
+    </form>
+</div>
+
+<div class="well">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-xs-3 control-label">Migrate all questionnaires</label>
+            <div class="col-xs-9">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmationDialog">Migrate all</button>
+            </div>
+        </div>
+        <pre id="migrateAllOutput" class="help-block"></pre>
+    </form>
+</div>
+
+<pre id="statusArea" style="height: 200px; overflow-y: scroll;">requesting status...</pre>
+
+<div id="confirmationDialog" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="confirmationText" class="control-label">
+                            Operation will take a huge amount of time (up to a few days) and server may become unresponsive.
+                            Please enter 'MIGRATE ALL' if you are sure you want to start this operation.
+                        </label>
+                        <div class="">
+                            <input id="confirmationText" type="text" class="form-control" value="" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="migrateAll" type="button" class="btn btn-primary">Migrate</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function() {
+
+            $('#migrateSingle').click(function() {
+                performPrettyAjaxRequest($('#migrateSingleOutput'), {
+                    type: 'POST',
+                    url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "NCalcToSharp", action = "MigrateOne" })',
+                    data: { id: $('#questionnaireId').val() },
+                })
+            });
+
+            $('#migrateAll').click(function() {
+
+                $('#confirmationDialog').modal('hide');
+
+                if ($('#confirmationText').val() != 'MIGRATE ALL')
+                    return;
+
+                $('#confirmationText').val('');
+
+                performPrettyAjaxRequest($('#migrateAllOutput'), {
+                    type: 'POST',
+                    url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "NCalcToSharp", action = "MigrateAll" })',
+                })
+            });
+
+            function performPrettyAjaxRequest($output, ajaxSettings) {
+                $('button').attr('disabled', 'disabled');
+
+                $output.text("sending request...");
+
+                $.ajax(ajaxSettings
+                ).done(function(result) {
+                    $output.text("started execution on server, see status below for details");
+                }).fail(function(xhr, status, error) {
+                    $output.text("failed: " + error + "\r\n" + getExceptionDetails(xhr));
+                }).always(function() {
+                    $('button').removeAttr('disabled');
+                });
+            }
+
+            function getExceptionDetails(xhr) {
+                try {
+                    return xhr.responseJSON.Message;
+                } catch (e1) {
+                    return xhr.responseText;
+                }
+            }
+
+            function updateStatus() {
+                return $.ajax({
+                    type: 'GET',
+                    url: '@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "NCalcToSharp" })',
+                    data: { timestamp: new Date().getMilliseconds() },
+                }).done(function(result) {
+                    $('#statusArea').text('Updated from server: ' + new Date().toTimeString() + '\r\n\r\n' + result);
+                }).fail(function(xhr, status, error) {
+                    $('#statusArea').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
+                });
+            }
+
+            function updateStatusNeverending() {
+                $.when(updateStatus()).always(function() {
+                    setTimeout(updateStatusNeverending, 1000);
+                });
+            }
+
+            updateStatusNeverending();
+
+        });
+
+    </script>
+}

@@ -1,4 +1,4 @@
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public string Title { get; set; }
 
         public string Source { get; set; }
-
+        
         public QuestionnaireVersion Version { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -9,9 +10,11 @@ using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using It = Moq.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
@@ -57,19 +60,25 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
         {
-            questionaire = questionaire ?? Mock.Of<IQuestionnaire>();
+            return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+        }
 
-            return Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
+        protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub()
+        {
+            return new InterviewExpressionStateProviderForTests();
+        }
+
+        public class InterviewExpressionStateProviderForTests : IInterviewExpressionStatePrototypeProvider
+        {
+            public IInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
+            {
+                return new StronglyTypedInterviewEvaluator();
+            }
         }
 
         protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
         {
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<TInstance>())
-                .Returns(instance);
+            Setup.InstanceToMockedServiceLocator(instance);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)

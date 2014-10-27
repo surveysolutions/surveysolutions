@@ -82,6 +82,7 @@ namespace WB.UI.Shared.Android.Controls
                 };
             }
             headerItemView.SetSingleLine(true);
+            headerItemView.Ellipsize = TextUtils.TruncateAt.End;
             headerItemView.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
             return headerItemView;
         }

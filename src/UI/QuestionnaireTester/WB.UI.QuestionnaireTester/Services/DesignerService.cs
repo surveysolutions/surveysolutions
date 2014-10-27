@@ -4,6 +4,7 @@ using System.Threading;
 using Ninject;
 using WB.Core.GenericSubdomains.Rest;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.QuestionnaireTester.Services
 {
@@ -58,7 +59,8 @@ namespace WB.UI.QuestionnaireTester.Services
                 var package = webExecutor.ExecuteRestRequestAsync<QuestionnaireCommunicationPackage>(
                     "GetTemplate", cancellationToken, null, CapiTesterApplication.DesignerMembership.RemoteUser.UserName,
                     CapiTesterApplication.DesignerMembership.RemoteUser.Password, "GET",
-                    new KeyValuePair<string, string>("id", id.ToString()));
+                    new KeyValuePair<string, string>("id", id.ToString()),
+                    new KeyValuePair<string, string>("maxSupportedVersion", QuestionnaireVersionProvider.GetCurrentEngineVersion().ToString()));
 
                 return package;
             }

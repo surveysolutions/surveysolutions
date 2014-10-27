@@ -40,6 +40,11 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
+    <Compile Include="Implementation\TopologicalSorter.cs" />
+    <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
+    <Compile Include="Implementation\TopologicalSorter\Vertex.cs" />
+    <Compile Include="ITopologicalSorter.cs" />
     <Compile Include="Monads.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Implementation\Crypto\ArrayExtensions.cs" />

@@ -3,7 +3,7 @@
         function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
-            var bindQuestion = function(question) {
+            hotkeys.bindTo($scope)
               .add({
                   combo: 'ctrl+s',
                   description: 'Save current question',
@@ -13,6 +13,7 @@
                       event.preventDefault();
                   }
               });
+            var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
                 $scope.activeQuestion.breadcrumbs = question.breadcrumbs;
 
@@ -273,6 +274,16 @@
                     $scope.activeQuestion.cascadeFromQuestionId = itemId;
                     $scope.activeQuestion.cascadeFromQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.cascadeFromQuestionId });
                 }
+            };
+
+            var questionTypesDoesNotSupportValidations = [
+                "TextList",
+                "QRBarcode",
+                "Multimedia",
+                "GpsCoordinates"];
+            
+            $scope.doesQuestionTypeSupportValidations = function (type) {
+                return !_.contains(questionTypesDoesNotSupportValidations, type);
             };
 
             $scope.loadQuestion();
