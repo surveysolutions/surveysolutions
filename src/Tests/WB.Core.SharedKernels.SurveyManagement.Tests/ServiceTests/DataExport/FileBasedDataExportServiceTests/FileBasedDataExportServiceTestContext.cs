@@ -66,5 +66,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid> { levelId },
                new HeaderStructureForLevel() { LevelScopeVector = new ValueVector<Guid> { levelId }, LevelName = levelName });
         }
+
+        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure()
+        {
+            return new QuestionnaireExportStructure();
+        }
     }
 }
