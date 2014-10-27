@@ -134,24 +134,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion)
         {
-            var dataFolderForTemplatePath = this.filebaseExportDataAccessor.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
+            var dataFolderForTemplatePath = this.filebaseExportDataAccessor.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireId,
+                questionnaireVersion);
 
             if (isCacheEnabled)
             {
                 cache.Remove(dataFolderForTemplatePath);
             }
 
-            if (this.fileSystemAccessor.IsDirectoryExists(dataFolderForTemplatePath))
-            {
-                this.fileSystemAccessor.DeleteDirectory(dataFolderForTemplatePath);
-            }
+            this.fileSystemAccessor.DeleteDirectory(dataFolderForTemplatePath);
 
-            var filesFolderForTemplatePath = this.filebaseExportDataAccessor.GetFolderPathOfFilesByQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
+            var filesFolderForTemplatePath = this.filebaseExportDataAccessor.GetFolderPathOfFilesByQuestionnaireOrThrow(questionnaireId,
+                questionnaireVersion);
 
-            if (this.fileSystemAccessor.IsDirectoryExists(filesFolderForTemplatePath))
-            {
-                this.fileSystemAccessor.DeleteDirectory(filesFolderForTemplatePath);
-            }
+            this.fileSystemAccessor.DeleteDirectory(filesFolderForTemplatePath);
         }
 
         public void EnableCache()
