@@ -15,11 +15,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         {
             oneQuestionHeaderStructureForLevel =
                 CreateHeaderStructureForLevel(CreateExportedHeaderItem(questionsVariableName, questionsTitle, CreateLabelItem("c1", "t1`\""), CreateLabelItem("c2", "t2\"'")));
-
-            stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor(contentFilePath, (c) => stataGeneratedContent = c));
+            stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
         };
 
-        Because of = () =>  stataEnvironmentContentService.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel, dataFileName, contentFilePath);
+        Because of = () =>  stataEnvironmentContentService.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel,dataFileName, contentFilePath);
 
         It should_contain_stata_script_for_insheet_file = () =>
             stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}\", comma\r\n", dataFileName));

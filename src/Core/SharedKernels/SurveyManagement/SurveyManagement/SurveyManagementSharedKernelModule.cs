@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         public override void Load()
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
-            this.Bind<IFilebaseExportRouteService>().To<FilebaseExportRouteService>().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IFilebaseExportDataAccessor>().To<FilebaseExportDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IDataExporter>().To<SqlDataExporter>();
             this.Bind<IDataExportRepositoryWriter>().To<FileBasedDataExportRepositoryWriter>().InSingletonScope();
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);

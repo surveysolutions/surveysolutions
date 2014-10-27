@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (fileSystemAccessor.IsFileExists(archiveFilePath))
                 return archiveFilePath;
 
-            this.dataExporter.CreateHeaderStructureForPreloadingForQuestionnaire(questionnaireId, version, dataDirectoryPath);
+            this.dataExporter.CreateHeaderStructureForPreloadingForQuestionnaire(dataDirectoryPath, dataDirectoryPath);
 
             if (fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Length == 0)
             {

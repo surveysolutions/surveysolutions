@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
@@ -18,7 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly IRecordsAccessorFactory recordsAccessorFactory;
-        private readonly IFilebaseExportRouteService filebaseExportRouteService ;
+        private readonly IFilebaseExportDataAccessor filebaseExportDataAccessor ;
         private const string FolderName = "PreLoadedData";
         private const string UnzippedFoldername = "Unzipped";
         private readonly string tabExtension;
@@ -28,18 +29,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
-        public FilebasedPreloadedDataRepository(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils, IRecordsAccessorFactory recordsAccessorFactory, IFilebaseExportRouteService filebaseExportRouteService)
+        public FilebasedPreloadedDataRepository(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils, IRecordsAccessorFactory recordsAccessorFactory, IFilebaseExportDataAccessor filebaseExportDataAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.recordsAccessorFactory = recordsAccessorFactory;
-            this.filebaseExportRouteService = filebaseExportRouteService;
+            this.filebaseExportDataAccessor = filebaseExportDataAccessor;
 
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
 
-            this.tabExtension = "." + filebaseExportRouteService.ExtensionOfExportedDataFile;
+            this.tabExtension = "." + ExportFileSettings.ExtensionOfExportedDataFile;
         }
 
         public string Store(Stream preloadedDataFile, string fileName)
@@ -187,7 +188,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             {
                 using (var fileStream = fileSystemAccessor.ReadFile(fileInDirectory))
                 {
-                    var recordAccessor = recordsAccessorFactory.CreateRecordsAccessor(fileStream, filebaseExportRouteService.SeparatorOfExportedDataFile);
+                    var recordAccessor = recordsAccessorFactory.CreateRecordsAccessor(fileStream, ExportFileSettings.SeparatorOfExportedDataFile);
 
                     foreach (var record in recordAccessor.Records.ToList())
                     {

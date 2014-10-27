@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Threading;
 using WB.Core.Synchronization;
@@ -16,13 +17,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class ImportExportController : AsyncController
     {
         private readonly IBackupManager backupManager;
-        private readonly IDataExportRepositoryWriter exporter;
+        private readonly IFilebaseExportDataAccessor exportDataAccessor;
         private readonly ILogger logger;
 
         public ImportExportController(
-            ILogger logger, IDataExportRepositoryWriter exporter, IBackupManager backupManager)
+            ILogger logger, IFilebaseExportDataAccessor exportDataAccessor, IBackupManager backupManager)
         {
-            this.exporter = exporter;
+            this.exportDataAccessor = exportDataAccessor;
             this.logger = logger;
             this.backupManager = backupManager;
         }
@@ -80,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     try
                     {
-                        this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedCompressedData(id, version);
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version);
                     }
                     catch (Exception exc)
                     {
@@ -109,7 +110,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     try
                     {
-                        this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedApprovedCompressedData(id, version);
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version);
                     }
                     catch (Exception exc)
                     {
@@ -133,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     try
                     {
-                        this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedBinaryData(id, version);
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedBinaryData(id, version);
                     }
                     catch (Exception exc)
                     {

@@ -135,7 +135,7 @@
     <Compile Include="Implementation\ReadSide\Indexes\InterviewsSearchIndex.cs" />
     <Compile Include="Implementation\ReadSide\Indexes\SeachIndexContent.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
-    <Compile Include="Implementation\Services\DataExport\FilebaseExportRouteService.cs" />
+    <Compile Include="Implementation\Services\DataExport\FilebaseExportDataAccessor.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExporter.cs" />
@@ -179,7 +179,7 @@
     <Compile Include="QuestionnaireUpgraderModule.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
     <Compile Include="Services\Export\IDataExporter.cs" />
-    <Compile Include="Services\Export\IFilebaseExportRouteService.cs" />
+    <Compile Include="Services\Export\IFilebaseExportDataAccessor.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IDataExportRepositoryWriter.cs" />
     <Compile Include="Services\IDataExportWriter.cs" />
@@ -207,6 +207,7 @@
     <Compile Include="Synchronization\Schedulers\SynchorizationContext.cs" />
     <Compile Include="Synchronization\Schedulers\SynchronizationStatus.cs" />
     <Compile Include="Synchronization\Users\SupervisorValidationResult.cs" />
+    <Compile Include="ValueObjects\Export\ExportFileSettings.cs" />
     <Compile Include="ValueObjects\PreloadedData\PreloadedDataVerificationError.cs" />
     <Compile Include="Synchronization\Users\SupervisorFeedEntry.cs" />
     <Compile Include="Synchronization\Users\UserChangedFeedEntry.cs" />
