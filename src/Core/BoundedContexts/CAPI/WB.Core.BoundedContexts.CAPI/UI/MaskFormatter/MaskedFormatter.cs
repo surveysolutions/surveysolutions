@@ -45,10 +45,16 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
         public string FormatValue(string value, ref int oldCursorPosition)
         {
             bool isIncreasing = IsIncreasedValue(value);
-            
+
+            if (isIncreasing)
+            {
+                oldCursorPosition = FixCursorPosition(value, oldCursorPosition);
+            }
+
             value = AddMaskedCharacters(value, isIncreasing, oldCursorPosition);
 
             var result = new StringBuilder();
+
             int index = 0;
 
             for (int i = 0; i < this.maskChars.Length; i++)
@@ -60,7 +66,16 @@ namespace WB.Core.BoundedContexts.Capi.UI.MaskFormatter
             }
 
             oldCursorPosition = GetNewCursorPosition(value, isIncreasing, oldCursorPosition);
+
             return result.ToString();
+        }
+
+        private int FixCursorPosition(string value, int oldCursorPosition)
+        {
+            if (value.Length > 0 && oldCursorPosition == 0)
+                return value.Length;
+
+            return oldCursorPosition;
         }
 
         private bool IsIncreasedValue(string value)
