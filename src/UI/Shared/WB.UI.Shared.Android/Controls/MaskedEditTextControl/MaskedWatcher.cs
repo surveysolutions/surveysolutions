@@ -2,7 +2,9 @@ using System;
 using Android.Text;
 using Android.Widget;
 using Java.Lang;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Capi.UI.MaskFormatter;
+using WB.Core.GenericSubdomains.Logging;
 using String = System.String;
 
 namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
@@ -12,6 +14,12 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
         private readonly IMaskedFormatter maskFormatter;
         private readonly EditText editor;
         private string previousValue = null;
+
+        private ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
         public MaskedWatcher(String mask, EditText editor)
         {
             this.editor = editor;
@@ -35,14 +43,20 @@ namespace WB.UI.Shared.Android.Controls.MaskedEditTextControl
         {
             if (previousValue == editor.Text)
                 return;
-            
-            int cursorPosition = editor.SelectionEnd;
-            var filtered = this.maskFormatter.FormatValue(editor.Text??"", ref cursorPosition);
-            if (!string.Equals(editor.Text, filtered))
+            try
             {
-                previousValue = filtered;
-                s.Replace(0, s.Length(), filtered);
-                editor.SetSelection(cursorPosition);
+                int cursorPosition = editor.SelectionEnd;
+                var filtered = this.maskFormatter.FormatValue(editor.Text ?? "", ref cursorPosition);
+                if (!string.Equals(editor.Text, filtered))
+                {
+                    previousValue = filtered;
+                    s.Replace(0, s.Length(), filtered);
+                    editor.SetSelection(cursorPosition);
+                }
+            }
+            catch (System.Exception e)
+            {
+                Logger.Error(e.Message, e);
             }
         }
 
