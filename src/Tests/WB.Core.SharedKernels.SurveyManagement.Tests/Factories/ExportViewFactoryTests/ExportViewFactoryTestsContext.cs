@@ -5,11 +5,15 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFactoryTests
 {
@@ -37,6 +41,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.Factories.ExportViewFacto
             };
             questionnaireDocument.ConnectChildrenWithParent();
             return questionnaireDocument;
+        }
+
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(Dictionary<string, Guid> variableNameAndQuestionId)
+        {
+            var questionnaire = new QuestionnaireDocument();
+
+            foreach (var question in variableNameAndQuestionId)
+            {
+                questionnaire.Children.Add(new NumericQuestion() { StataExportCaption = question.Key, PublicKey = question.Value, QuestionType = QuestionType.Numeric });
+            }
+
+            return questionnaire;
+        }
+
+        protected static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)
+        {
+            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelVector.SequenceEqual(levelVector));
+        }
+
+        protected static InterviewData CreateInterviewData()
+        {
+            var interviewData = new InterviewData() { InterviewId = Guid.NewGuid() };
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
+            return interviewData;
+        }
+
+        protected static InterviewData CreateInterviewWithAnswers(IEnumerable<Guid> questionsWithAnswers)
+        {
+            var interviewData = CreateInterviewData();
+            foreach (var questionsWithAnswer in questionsWithAnswers)
+            {
+                var question =
+                    interviewData.Levels["#"].GetOrCreateQuestion(questionsWithAnswer);
+                question.Answer = "some answer";
+            }
+            return interviewData;
         }
     }
 }

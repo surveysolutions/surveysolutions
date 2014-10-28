@@ -12,16 +12,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
     {
         Establish context = () =>
         {
-            csvDataFileExportService = CreateCsvDataFileExportService();
+            csvDataExportWriter = CreateCsvDataFileExportService();
         };
 
         Because of = () =>
-            result = csvDataFileExportService.GetInterviewActionFileName();
+            result = csvDataExportWriter.GetInterviewActionFileName();
 
         It should_result_be_equal_to_interview_actions_csv = () =>
             result.ShouldEqual("interview_actions.csv");
 
-        private static CsvDataFileExportService csvDataFileExportService;
+        private static CsvDataExportWriter csvDataExportWriter;
         private static string result;
     }
 }

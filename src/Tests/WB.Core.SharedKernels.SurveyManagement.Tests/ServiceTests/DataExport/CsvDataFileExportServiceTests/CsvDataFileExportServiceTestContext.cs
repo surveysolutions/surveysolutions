@@ -18,15 +18,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
 {
     internal class CsvDataFileExportServiceTestContext
     {
-        protected static CsvDataFileExportService CreateCsvDataFileExportService(IFileSystemAccessor fileSystemAccessor=null, ICsvWriterService csvWriterService = null)
+        protected static CsvDataExportWriter CreateCsvDataFileExportService(IFileSystemAccessor fileSystemAccessor=null, ICsvWriterService csvWriterService = null)
         {
-            return new CsvDataFileExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(It.IsAny<Stream>()) == csvWriterService));
+            return new CsvDataExportWriter(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService));
         }
 
         protected static InterviewDataExportLevelView CreateInterviewDataExportLevelView(InterviewDataExportRecord[] records=null)
         {
-            return new InterviewDataExportLevelView(new ValueVector<Guid>(), "level name", records?? new InterviewDataExportRecord[0]);
+            return new InterviewDataExportLevelView(new ValueVector<Guid>(), "level name", records?? new InterviewDataExportRecord[0], Guid.NewGuid().FormatGuid());
         }
 
         protected static InterviewDataExportRecord CreateInterviewDataExportRecord(string recordId=null,ExportedQuestion[] questions = null, string[] referenceValues = null, string[] parentLevelIds=null)

@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
             questionnaireId = Guid.NewGuid();
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
             questionnaireExportStructureMock=new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
-            dataExportServiceMock=new Mock<IDataExportService>();
+            dataExportServiceMock = new Mock<IDataExportRepositoryWriter>();
             exportViewFactory=new Mock<IExportViewFactory>();
 
             var questionnaireUpgradeServiceMock = new Mock<IQuestionnaireUpgradeService>();
@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
 
         private static QuestionnaireExportStructureDenormalizer questionnaireExportStructureDenormalizer;
         private static Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>> questionnaireExportStructureMock;
-        private static Mock<IDataExportService> dataExportServiceMock;
+        private static Mock<IDataExportRepositoryWriter> dataExportServiceMock;
         private static Mock<IExportViewFactory> exportViewFactory;
         private static Guid questionnaireId;
         private const long QuestionnaireVersion = 2;
