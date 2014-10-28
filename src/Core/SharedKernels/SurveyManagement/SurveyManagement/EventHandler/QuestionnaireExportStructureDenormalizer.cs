@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>, IEventHandler
+    internal class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>, IEventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
         private readonly IQuestionnaireUpgradeService questionnaireUpgradeService;
