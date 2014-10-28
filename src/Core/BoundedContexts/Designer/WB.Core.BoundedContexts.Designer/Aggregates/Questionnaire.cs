@@ -4239,7 +4239,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             IQuestion question = GetQuestionByStringIdOrVariableName(identifier);
 
-            if (question == null)
+            IGroup roster = this.GetRosterByrVariableName(identifier);
+
+            if (question == null && roster == null)
                 throw new QuestionnaireException(DomainExceptionType.ExpressionContainsNotExistingQuestionReference, string.Format(
                     "Identifier '{0}' from expression '{1}' is not valid question identifier. Question with such an identifier is missing.",
                     identifier, expression));
@@ -4333,6 +4335,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             return false;
+        }
+
+        private IGroup GetRosterByrVariableName(string rosterName)
+        {
+            return this.innerDocument.Find<IGroup>(group => group.VariableName == rosterName && group.IsRoster).FirstOrDefault();
         }
 
         private IEnumerable<IGroup> GetGroupsByRosterSizeQuestion(Guid rosterSizeQuestionId)

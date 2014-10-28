@@ -1309,16 +1309,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
+            IGroup rosterReferencedInExpression = GetRosterByIdentifier(identifier, questionnaire);
 
-            if (questionsReferencedInExpression == null)
+            if (questionsReferencedInExpression == null && rosterReferencedInExpression == null)
             {
                 return notRecognizedParameterError(itemWithExpression);
             }
 
+            if (rosterReferencedInExpression != null)
+            {
+                return null;
+            }
+
             if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(questionsReferencedInExpression, vectorOfRosterQuestionsForQuestionWithExpression, questionnaire))
             {
-                return referencesQuestionWithDeeperPropagationLevelError(
-                    itemWithExpression, questionsReferencedInExpression);
+                return referencesQuestionWithDeeperPropagationLevelError(itemWithExpression, questionsReferencedInExpression);
             }
 
             return null;
@@ -1357,6 +1362,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return null;
+        }
+
+        private static IGroup GetRosterByIdentifier(string identifier, QuestionnaireDocument questionnaire)
+        {
+            Guid parsedId;
+
+            return Guid.TryParse(identifier, out parsedId)
+                ? questionnaire.FirstOrDefault<IGroup>(q => q.PublicKey == parsedId)
+                : questionnaire.FirstOrDefault<IGroup>(q => q.VariableName == identifier);
         }
 
         private static IQuestion GetQuestionByIdentifier(string identifier, QuestionnaireDocument questionnaire)
