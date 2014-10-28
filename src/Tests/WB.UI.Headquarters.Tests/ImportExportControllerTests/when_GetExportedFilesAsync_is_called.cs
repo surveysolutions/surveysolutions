@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using It = Machine.Specifications.It;
 
@@ -16,7 +17,7 @@ namespace WB.UI.Headquarters.Tests.ImportExportControllerTests
     {
         Establish context = () =>
         {
-            dataExportServiceMock = new Mock<IDataExportService>();
+            dataExportServiceMock = new Mock<IFilebaseExportDataAccessor>();
             questionnaireId = Guid.NewGuid();
             dataExportServiceMock.Setup(x => x.GetFilePathToExportedBinaryData(questionnaireId, 1)).Returns("hello.txt");
             controller = CreateImportExportController(dataExportServiceMock.Object);
@@ -35,7 +36,7 @@ namespace WB.UI.Headquarters.Tests.ImportExportControllerTests
 
         private static ImportExportController controller;
         private static Guid questionnaireId;
-        private static Mock<IDataExportService> dataExportServiceMock;
+        private static Mock<IFilebaseExportDataAccessor> dataExportServiceMock;
         private static FilePathResult result;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -10,18 +11,18 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class CsvDataFileExportService : IDataFileExportService
+    internal class CsvDataExportWriter : IDataExportWriter
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriterFactory csvWriterFactory;
 
-        public CsvDataFileExportService(IFileSystemAccessor fileSystemAccessor, ICsvWriterFactory csvWriterFactory)
+        public CsvDataExportWriter(IFileSystemAccessor fileSystemAccessor, ICsvWriterFactory csvWriterFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriterFactory = csvWriterFactory;
         }
          
-        public void AddRecord(InterviewDataExportLevelView items, string filePath)
+        public void AddRecords(InterviewDataExportLevelView items, string filePath)
         {
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, true))
             using (var writer = csvWriterFactory.OpenCsvWriter(fileStream))
@@ -51,23 +52,50 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        public void AddActionRecords(IEnumerable<InterviewActionExportView> actions, string filePath)
+        public void AddActionRecord(InterviewActionExportView action, string filePath)
         {
             using (var fileStream = fileSystemAccessor.OpenOrCreateFile(filePath, true))
             using (var writer = csvWriterFactory.OpenCsvWriter(fileStream))
             {
-                foreach (var interviewActionExportView in actions)
-                {
-                    writer.WriteField(interviewActionExportView.InterviewId);
-                    writer.WriteField(interviewActionExportView.Action);
-                    writer.WriteField(interviewActionExportView.Originator);
-                    writer.WriteField(interviewActionExportView.Role);
-                    writer.WriteField(interviewActionExportView.Timestamp.ToString("d", CultureInfo.InvariantCulture));
-                    writer.WriteField(interviewActionExportView.Timestamp.ToString("T", CultureInfo.InvariantCulture));
+                writer.WriteField(action.InterviewId);
+                writer.WriteField(action.Action);
+                writer.WriteField(action.Originator);
+                writer.WriteField(action.Role);
+                writer.WriteField(action.Timestamp.ToString("d", CultureInfo.InvariantCulture));
+                writer.WriteField(action.Timestamp.ToString("T", CultureInfo.InvariantCulture));
 
-                    writer.NextRecord();
-                }
+                writer.NextRecord();
             }
+        }
+
+        public void AddOrUpdateInterviewRecords(InterviewDataExportView items, string basePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateStructure(QuestionnaireExportStructure header, string basePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] GetAllDataFiles(string basePath, Func<string, string> fileNameCreationFunc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] GetApprovedDataFiles(string basePath, Func<string, string> fileNameCreationFunc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteInterviewRecords(string basePath, Guid interviewId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BatchInsert(string basePath, IEnumerable<InterviewDataExportView> interviewDatas, IEnumerable<InterviewActionExportView> interviewActions)
+        {
+            throw new NotImplementedException();
         }
 
         public void CreateHeader(HeaderStructureForLevel header, string filePath)

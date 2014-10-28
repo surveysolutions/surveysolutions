@@ -18,11 +18,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
         Establish context = () =>
         {
             csvWriterServiceMock = new Mock<ICsvWriterService>();
-            csvDataFileExportService = CreateCsvDataFileExportService(null, csvWriterServiceMock.Object);
+            csvDataExportWriter = CreateCsvDataFileExportService(null, csvWriterServiceMock.Object);
         };
 
         Because of = () =>
-            csvDataFileExportService.CreateHeader(
+            csvDataExportWriter.CreateHeader(
                 CreateHeaderStructureForLevel(levelIdColumnName, new[] { referenceName },
                     new Dictionary<Guid, ExportedHeaderItem>() { { Guid.NewGuid(), CreateExportedHeaderItem(new[] { colName }) } },
                     new ValueVector<Guid>(new[] { Guid.NewGuid() })), filePath);
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
         It should_write_ParentId1_once = () =>
             csvWriterServiceMock.Verify(x => x.WriteField("ParentId1"), Times.Once);
 
-        private static CsvDataFileExportService csvDataFileExportService;
+        private static CsvDataExportWriter csvDataExportWriter;
         private static Mock<ICsvWriterService> csvWriterServiceMock;
         private static readonly string levelIdColumnName = "level id col name";
         private static readonly string referenceName = "reference name";

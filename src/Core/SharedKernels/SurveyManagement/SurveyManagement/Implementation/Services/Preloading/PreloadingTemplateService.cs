@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -20,20 +21,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     internal class PreloadingTemplateService : IPreloadingTemplateService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IDataFileExportService dataFileExportService;
+        private readonly IDataExporter dataExporter;
         private readonly IArchiveUtils archiveUtils;
         private const string FolderName = "PreLoadingTemplates";
         private readonly string path;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage;
 
-
-        public PreloadingTemplateService(IFileSystemAccessor fileSystemAccessor,
-            IVersionedReadSideRepositoryReader<QuestionnaireExportStructure> questionnaireDocumentVersionedStorage, string folderPath,
-            IDataFileExportService dataFileExportService, IArchiveUtils archiveUtils)
+        public PreloadingTemplateService(IFileSystemAccessor fileSystemAccessor,string folderPath,
+            IDataExporter dataExporter, IArchiveUtils archiveUtils)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
-            this.dataFileExportService = dataFileExportService;
+            this.dataExporter = dataExporter;
             this.archiveUtils = archiveUtils;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -42,10 +39,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public string GetFilePathToPreloadingTemplate(Guid questionnaireId, long version)
         {
-            var questionnaire = this.questionnaireDocumentVersionedStorage.GetById(questionnaireId, version);
-            if (questionnaire == null)
-                return null;
-
             var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
             
             if (!fileSystemAccessor.IsDirectoryExists(dataDirectoryPath))
@@ -58,13 +51,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (fileSystemAccessor.IsFileExists(archiveFilePath))
                 return archiveFilePath;
 
-              foreach (var header in questionnaire.HeaderToLevelMap.Values)
-            {
-                var interviewTemplateFilePath = this.fileSystemAccessor.CombinePath(dataDirectoryPath,
-                    dataFileExportService.GetInterviewExportedDataFileName(header.LevelName));
+            this.dataExporter.CreateHeaderStructureForPreloadingForQuestionnaire(dataDirectoryPath, dataDirectoryPath);
 
-                dataFileExportService.CreateHeader(header, interviewTemplateFilePath);
+            if (fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Length == 0)
+            {
+                fileSystemAccessor.DeleteDirectory(dataDirectoryPath);
+                return null;
             }
+
             archiveUtils.ZipDirectory(dataDirectoryPath, archiveFilePath);
 
             return archiveFilePath;
