@@ -37,24 +37,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
             {
-                var tableNames = this.GetListofTables(sqlService);
-                foreach (var tableName in tableNames)
-                {
-                    var columnNames = this.GetListOfColumns(sqlService, tableName);
-                    DeleteFromTableByInterviewId(sqlService, tableName,
-                        columnNames.Any(c => c.StartsWith(parentId)) ? columnNames.Last() : "Id", interviewId.FormatGuid());
-                }
+                this.DeleteInterviewImpl(interviewId, sqlService);
+            }
+        }
+
+        private void DeleteInterviewImpl(Guid interviewId, ISqlService sqlService)
+        {
+            var tableNames = this.GetListofTables(sqlService);
+            foreach (var tableName in tableNames)
+            {
+                var columnNames = this.GetListOfColumns(sqlService, tableName);
+                this.DeleteFromTableByInterviewId(sqlService, tableName,
+                    columnNames.Any(c => c.StartsWith(parentId)) ? columnNames.Last() : "Id", interviewId.FormatGuid());
             }
         }
 
         public void BatchInsert(string basePath, IEnumerable<InterviewDataExportView> interviewDatas,
-            IEnumerable<InterviewActionExportView> interviewActionRecords)
+            IEnumerable<InterviewActionExportView> interviewActionRecords, IEnumerable<Guid> interviewsForDelete)
         {
             using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
             {
                 foreach (var interviewActionRecord in interviewActionRecords)
                 {
                     this.InsertIntoTable(sqlService, interviewActions, this.BuildInserInterviewActionParameters(interviewActionRecord));
+                }
+
+                foreach (var interviewIdForDelete in interviewsForDelete)
+                {
+                    this.DeleteInterviewImpl(interviewIdForDelete, sqlService);
                 }
 
                 foreach (var interviewDataExportView in interviewDatas)

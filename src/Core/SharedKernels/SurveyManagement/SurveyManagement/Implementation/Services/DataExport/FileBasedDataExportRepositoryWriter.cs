@@ -88,7 +88,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             if (isCacheEnabled)
             {
-                this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId).InterviewIds.Add(interviewId);
+                var cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
+                cacheByInterview.InterviewIds.Add(interviewId);
+                cacheByInterview.InterviewForDeleteIds.Remove(interviewId);
                 return;
             }
 
@@ -110,7 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             var interviewSummary = interviewSummaryWriter.GetById(interviewId);
 
-            if (interviewSummary == null)
+            if (interviewSummary == null || interviewSummary.IsDeleted)
                 return;
 
             this.AddInterviewActionImpl(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion,
@@ -121,7 +123,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             if (isCacheEnabled)
             {
-                this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId).InterviewIds.Remove(interviewId);
+                var cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
+                cacheByInterview.InterviewIds.Remove(interviewId);
+                cacheByInterview.InterviewForDeleteIds.Add(interviewId);
                 return;
             }
 
@@ -166,7 +170,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 {
                     this.dataExportWriter.BatchInsert(cachedEntity,
                         cache[cachedEntity].InterviewIds.Select(i => CreateInterviewDataExportView(i, exportStructure)).Where(i => i != null),
-                        entity.Actions.Select(a => this.CreateInterviewAction(a.Action, a.InterviewId, a.UserId, a.Timestamp)).Where(a => a != null));
+                        entity.Actions.Select(a => this.CreateInterviewAction(a.Action, a.InterviewId, a.UserId, a.Timestamp)).Where(a => a != null), entity.InterviewForDeleteIds);
                 }
                 this.cache.Remove(cachedEntity);
             }
@@ -358,12 +362,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 this.QuestionnaireId = questionnaireId;
                 this.QuestionnaireVersion = questionnaireVersion;
                 this.InterviewIds = new HashSet<Guid>();
+                this.InterviewForDeleteIds = new HashSet<Guid>();
                 this.Actions = new List<ActionCacheEntity>();
             }
 
             public Guid QuestionnaireId { get; private set; }
             public long QuestionnaireVersion { get; private set; }
             public HashSet<Guid> InterviewIds { get; private set; }
+            public HashSet<Guid> InterviewForDeleteIds { get; private set; }
             public List<ActionCacheEntity> Actions { get; private set; }
         }
 
