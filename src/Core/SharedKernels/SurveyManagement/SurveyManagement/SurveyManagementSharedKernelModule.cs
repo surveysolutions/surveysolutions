@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
             this.Bind<IDataExportWriter>().To<SqlDataExportWriter>();
-
+            this.Bind<ISqlDataAccessor>().To<SqlDataAccessor>();
             this.Bind<ISqlServiceFactory>().To<CompactSqlServiceFactory>();
 
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
