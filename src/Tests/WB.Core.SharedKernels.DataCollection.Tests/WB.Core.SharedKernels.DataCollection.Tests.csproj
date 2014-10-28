@@ -151,7 +151,6 @@
     <Compile Include="InterviewTests\when_answering_qr_barcode_question_with_incorrect_roster_vector.cs" />
     <Compile Include="InterviewTests\when_answering_qr_barcode_question_which_is_absent.cs" />
     <Compile Include="InterviewTests\Synchronization\when_creating_new_AnsweredQuestionSynchronizationDto_for_InterviewTextListAnswers.cs" />
-    <Compile Include="InterviewTests\Synchronization\when_answering_question_which_validation_involves_textlist_question_which_has_answer_which_appeared_from_synchronization.cs" />
     <Compile Include="InterviewTests\when_answering_datetime_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is__08_Mar_2011__.cs" />
     <Compile Include="InterviewTests\when_answering_geolocation_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="InterviewTests\when_answering_integer_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_7.cs" />
