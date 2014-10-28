@@ -313,7 +313,7 @@ namespace WB.Core.SharedKernels.DataCollection
             return answer == null;
         }
 
-        protected bool IsAnswerEmpty<TY>(TY[] answer) where TY : struct
+        protected bool IsAnswerEmpty<TY>(TY[] answer)
         {
             return answer == null || answer.Length == 0;
         }
