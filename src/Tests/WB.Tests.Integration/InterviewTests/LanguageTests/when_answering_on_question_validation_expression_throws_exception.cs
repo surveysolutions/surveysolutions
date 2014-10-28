@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
@@ -24,13 +25,16 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var question1Id = Guid.Parse("11111111111111111111111111111111");
                 var question2Id = Guid.Parse("22222222222222222222222222222222");
 
-                var interview = SetupInterview(
-                    Create.QuestionnaireDocument(questionnaireId,
-                        Create.NumericIntegerQuestion(question1Id, "q1"),
-                        Create.NumericIntegerQuestion(question2Id, "q2", validationExpression: "1/q1 == 1")
-                        ));
+                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                    Create.NumericIntegerQuestion(question1Id, "q1"),
+                    Create.NumericIntegerQuestion(question2Id, "q2", validationExpression: "1/q1 == 1")
+                    );
 
-                interview.AnswerNumericIntegerQuestion(actorId, question1Id, new decimal[0], DateTime.Now, 0);
+                var interview = SetupInterview(questionnaireDocument, new List<object>
+                {
+                    Create.Event.NumericIntegerQuestionAnswered(question1Id, answer: 0)
+                });
+
                 var result = new InvokeResults();
 
                 using (var eventContext = new EventContext())

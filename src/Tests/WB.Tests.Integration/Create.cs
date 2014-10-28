@@ -23,6 +23,17 @@ namespace WB.Tests.Integration
                 public static readonly DateTime AnswerTime = new DateTime(2014, 1, 1);
             }
 
+            public static SingleOptionQuestionAnswered SingleOptionQuestionAnswered(
+                Guid questionId, decimal answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
+            {
+                return new SingleOptionQuestionAnswered(
+                    userId ?? Default.UserId,
+                    questionId,
+                    propagationVector ?? Empty.RosterVector,
+                    answerTime ?? Default.AnswerTime,
+                    answer);
+            }
+
             public static NumericIntegerQuestionAnswered NumericIntegerQuestionAnswered(
                 Guid questionId, int answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
             {
