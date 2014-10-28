@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Threading;
 using WB.Core.Synchronization;
@@ -16,13 +17,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class ImportExportController : AsyncController
     {
         private readonly IBackupManager backupManager;
-        private readonly IDataExportService exporter;
+        private readonly IFilebaseExportDataAccessor exportDataAccessor;
         private readonly ILogger logger;
 
         public ImportExportController(
-            ILogger logger, IDataExportService exporter, IBackupManager backupManager)
+            ILogger logger, IFilebaseExportDataAccessor exportDataAccessor, IBackupManager backupManager)
         {
-            this.exporter = exporter;
+            this.exportDataAccessor = exportDataAccessor;
             this.logger = logger;
             this.backupManager = backupManager;
         }
@@ -80,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     try
                     {
-                        this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedCompressedData(id, version);
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version);
                     }
                     catch (Exception exc)
                     {
@@ -90,7 +91,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 });
         }
 
-        public ActionResult GetExportedFilesCompleted(string result)
+        public ActionResult GetExportedDataCompleted(string result)
+        {
+            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
+        }
+
+        [Authorize(Roles = "Headquarter")]
+        public void GetExportedApprovedDataAsync(Guid id, long version)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new HttpException(404, "Invalid query string parameters");
+            }
+
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager,
+                () =>
+                {
+                    try
+                    {
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version);
+                    }
+                    catch (Exception exc)
+                    {
+                        this.logger.Error("Error occurred during export. " + exc.Message, exc);
+                        this.AsyncManager.Parameters["result"] = null;
+                    }
+                });
+        }
+
+        public ActionResult GetExportedApprovedDataCompleted(string result)
         {
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }
@@ -104,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 {
                     try
                     {
-                        this.AsyncManager.Parameters["result"] = this.exporter.GetFilePathToExportedBinaryData(id, version);
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedBinaryData(id, version);
                     }
                     catch (Exception exc)
                     {
@@ -114,7 +144,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 });
         }
 
-        public ActionResult GetExportedDataCompleted(string result)
+        public ActionResult GetExportedFilesCompleted(string result)
         {
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
         }

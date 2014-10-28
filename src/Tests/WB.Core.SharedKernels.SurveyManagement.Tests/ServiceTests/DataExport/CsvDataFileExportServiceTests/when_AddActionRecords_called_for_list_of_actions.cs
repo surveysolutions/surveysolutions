@@ -18,11 +18,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
         Establish context = () =>
         {
             csvWriterServiceMock = new Mock<ICsvWriterService>();
-            csvDataFileExportService = CreateCsvDataFileExportService(null, csvWriterServiceMock.Object);
+            csvDataExportWriter = CreateCsvDataFileExportService(null, csvWriterServiceMock.Object);
         };
 
         Because of = () =>
-            csvDataFileExportService.AddActionRecords(new []{CreateInterviewActionExportView(interviewId,InterviewExportedAction.Completed,originator,timeStamp,someRole)}, "file path");
+            csvDataExportWriter.AddActionRecord(CreateInterviewActionExportView(interviewId,InterviewExportedAction.Completed,originator,timeStamp,someRole), "file path");
 
         It should_write_interviewId_once = () =>
             csvWriterServiceMock.Verify(x => x.WriteField(interviewId), Times.Once);
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.C
         It should_write_role_once = () =>
           csvWriterServiceMock.Verify(x => x.WriteField(someRole), Times.Once);
 
-        private static CsvDataFileExportService csvDataFileExportService;
+        private static CsvDataExportWriter csvDataExportWriter;
         private static Mock<ICsvWriterService> csvWriterServiceMock;
         private static readonly string interviewId = "interview id";
         private static readonly string originator = "originator";

@@ -15,8 +15,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly CsvWriter csvWriter;
         private readonly string delimiter = ",";
 
-        public CsvWriterService(Stream stream)
+        public CsvWriterService(Stream stream, string delimiter = ",")
         {
+            this.delimiter = delimiter;
             this.streamWriter = new StreamWriter(stream, Encoding.UTF8);
             this.csvWriter = new CsvWriter(streamWriter);
             this.csvWriter.Configuration.Delimiter = this.delimiter;

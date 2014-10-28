@@ -9,7 +9,9 @@ using Moq;
 using Machine.Specifications;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using It = Moq.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
@@ -21,10 +23,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
             return new StataEnvironmentContentService(fileSystemAccessor);
         }
 
-        protected static IFileSystemAccessor CreateFileSystemAccessor(string contentFilePath, Action<string> returnContentAction)
+        protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.WriteAllText(contentFilePath, Moq.It.IsAny<string>()))
+            fileSystemAccessorMock.Setup(x => x.WriteAllText(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Callback<string, string>((path, content) => returnContentAction(content));
 
             return fileSystemAccessorMock.Object;

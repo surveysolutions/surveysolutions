@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using It = Moq.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.InterviewExportedDataEventHandlerTests
 {
@@ -33,106 +34,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         protected const string firstLevelkey = "#";
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-            Func<QuestionnaireDocument> templateCreationAction,
-            Func<InterviewData> dataCreationAction = null, Action<InterviewDataExportView> returnStoredView = null,
-            UserDocument userDocument = null, IReadSideRepositoryWriter<InterviewActionLog> interviewActionLogWriter = null)
+          IDataExportRepositoryWriter dataExportRepositoryWriter = null,
+          IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage=null, UserDocument user=null)
         {
-            var dataExportService = new Mock<IDataExportService>();
-
-            if (returnStoredView != null)
-                dataExportService.Setup(x => x.AddExportedDataByInterview(Moq.It.IsAny<InterviewDataExportView>()))
-                    .Callback(returnStoredView);
-            return CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(templateCreationAction, dataCreationAction,
-                dataExportService.Object, userDocument, interviewActionLogWriter);
-        }
-
-        protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-          Func<QuestionnaireDocument> templateCreationAction,
-          Func<InterviewData> dataCreationAction = null, IDataExportService dataExportService = null,
-          UserDocument userDocument = null, IReadSideRepositoryWriter<InterviewActionLog> interviewActionLogWriter = null)
-        {
-            var interviewDataStorageMock = new Mock<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>();
-            var questionnaire = templateCreationAction();
-
-            interviewDataStorageMock.Setup(
-                x => x.GetById(Moq.It.IsAny<string>()))
-                .Returns(
-                    () =>
-                    {
-                        var createInterview = dataCreationAction ?? CreateInterviewData;
-                        var interview = createInterview();
-                        interview.QuestionnaireId = questionnaire.PublicKey;
-                        return new ViewWithSequence<InterviewData>(interview, 1);
-                    });
-
-            var questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
-            var exportViewFactory = new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
-                new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
-            questionnaireExportStructureMock.Setup(x => x.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()))
-                .Returns(exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1));
-
-
-            var userDocumentWriter = new Mock<IReadSideRepositoryWriter<UserDocument>>();
-            if (userDocument != null)
-            {
-                userDocumentWriter.Setup(x => x.GetById(Moq.It.IsAny<string>())).Returns(userDocument);
-            }
-
-            return new InterviewExportedDataDenormalizer(
-                interviewDataStorageMock.Object,
-                questionnaireExportStructureMock.Object, dataExportService ?? Mock.Of<IDataExportService>(), userDocumentWriter.Object,
-                interviewActionLogWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewActionLog>>());
+            return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
+                recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>(),
+                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(
+                    It.IsAny<string>()) == user));
         }
 
         protected static InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action,string userName="test", string role="headquarter")
         {
             return new InterviewActionExportView(interviewId.FormatGuid(), action, userName, DateTime.Now, role);
-        }
-
-        protected static QuestionnaireDocument CreateQuestionnaireDocument(Dictionary<string,Guid> variableNameAndQuestionId)
-        {
-            var questionnaire = new QuestionnaireDocument();
-
-            foreach (var question in variableNameAndQuestionId)
-            {
-                questionnaire.Children.Add(new NumericQuestion() { StataExportCaption = question.Key, PublicKey = question.Value, QuestionType = QuestionType.Numeric});
-            }
-
-            return questionnaire;
-        }
-
-        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
-        {
-            return new QuestionnaireDocument
-            {
-                Children = new List<IComposite>
-                {
-                    new Group("Chapter")
-                    {
-                        PublicKey = Guid.Parse("FFF000AAA111EE2DD2EE111AAA000FFF"),
-                        Children = chapterChildren.ToList(),
-                    }
-                }
-            };
-        }
-
-        protected static InterviewData CreateInterviewData()
-        {
-            var interviewData = new InterviewData() {InterviewId = Guid.NewGuid()};
-            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
-            return interviewData;
-        }
-
-        protected static InterviewData CreateInterviewWithAnswers(IEnumerable<Guid> questionsWithAnswers)
-        {
-            var interviewData = CreateInterviewData();
-            foreach (var questionsWithAnswer in questionsWithAnswers)
-            {
-                var question =
-                    interviewData.Levels["#"].GetOrCreateQuestion(questionsWithAnswer);
-                question.Answer = "some answer";
-            }
-            return interviewData;
         }
 
         protected static IPublishedEvent<InterviewApprovedByHQ> CreateInterviewApprovedByHQPublishableEvent(Guid? interviewId=null)
@@ -161,11 +74,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
             return publishableEventMock.Object;
         }
 
-        protected static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)
-        {
-            return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelVector.SequenceEqual(levelVector));
-        }
-
         protected static List<QuestionAnswered> ListOfQuestionAnsweredEventsHandledByDenormalizer
         {
             get
@@ -183,16 +91,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                     new MultipleOptionsLinkedQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new decimal[0][]),
                     new SingleOptionLinkedQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new decimal[0]),
                     new TextListQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, new Tuple<decimal, string>[0]),
-                    new QRBarcodeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, "answer")
+                    new QRBarcodeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, "answer"),
+                    new PictureQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, "answer.png")
                 };
             }
         }
 
-        protected static void HandleQuestionAnsweredEventsByDenormalizer(InterviewExportedDataDenormalizer denormalizer, Dictionary<Guid, Tuple<QuestionAnswered, InterviewActionLog>> eventsAndInterviewActionLog)
+        protected static void HandleQuestionAnsweredEventsByDenormalizer(InterviewExportedDataDenormalizer denormalizer, Dictionary<Guid, QuestionAnswered> eventsAndInterviewActionLog)
         {
             foreach (var eventAndInterviewActionLog in eventsAndInterviewActionLog)
             {
-                var eventType = eventAndInterviewActionLog.Value.Item1.GetType();
+                var eventType = eventAndInterviewActionLog.Value.GetType();
                 var publishedEventType = typeof(IPublishedEvent<>).MakeGenericType(eventType);
                 MethodInfo createPublishableEventByEventInstanceMethod =
                     typeof (InterviewExportedDataEventHandlerTestContext).GetMethod("CreatePublishableEventByEventInstance",
@@ -200,7 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
                 MethodInfo genericCreatePublishableEventByEventInstanceMethod =
                     createPublishableEventByEventInstanceMethod.MakeGenericMethod(eventType);
                 var publishedEvent = genericCreatePublishableEventByEventInstanceMethod.Invoke(null,
-                    new object[] { eventAndInterviewActionLog.Value.Item1, eventAndInterviewActionLog.Key });
+                    new object[] { eventAndInterviewActionLog.Value, eventAndInterviewActionLog.Key });
 
                 MethodInfo methodInfo = denormalizer.GetType().GetMethod("Handle", new[] { publishedEventType });
 

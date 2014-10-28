@@ -15,7 +15,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryWriterTests
     {
         Establish context = () =>
         {
-            registryMock = new Mock<IRavenReadSideRepositoryWriterRegistry>();
+            registryMock = new Mock<IReadSideRepositoryWriterRegistry>();
         };
 
         Because of = () =>
@@ -25,7 +25,7 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryWriterTests
         It should_register_itself_in_writer_registry = () =>
             registryMock.Verify(registry => registry.Register(writer), Times.Once());
 
-        private static Mock<IRavenReadSideRepositoryWriterRegistry> registryMock;
+        private static Mock<IReadSideRepositoryWriterRegistry> registryMock;
         private static RavenReadSideRepositoryWriter<IReadSideRepositoryEntity> writer;
     }
 }

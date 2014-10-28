@@ -21,8 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
             dataFileExportService = CreateIDataFileExportServiceMock();
-            questionnaireExportStructure = CreateQuestionnaireExportStructure(2);
-            preloadingTemplateService = CreatePreloadingTemplateService(dataFileExportService.Object, questionnaireExportStructure, fileSystemAccessor.Object);
+            preloadingTemplateService = CreatePreloadingTemplateService(fileSystemAccessor.Object);
         };
 
         Because of = () => result = preloadingTemplateService.GetFilePathToPreloadingTemplate(questionnaireId, 1);
@@ -34,13 +33,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
             result.ShouldEndWith(string.Format("template_{0}_v{1}.zip", questionnaireId.FormatGuid(), 1));
 
         It should_header_be_created_zero_times = () =>
-           dataFileExportService.Verify(x => x.CreateHeader(Moq.It.IsAny<HeaderStructureForLevel>(), Moq.It.IsAny<string>()), Times.Never);
+           dataFileExportService.Verify(x => x.CreateStructure(Moq.It.IsAny<QuestionnaireExportStructure>(), Moq.It.IsAny<string>()), Times.Never);
 
         private static PreloadingTemplateService preloadingTemplateService;
         private static string result;
-        private static QuestionnaireExportStructure questionnaireExportStructure;
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
-        private static Mock<IDataFileExportService> dataFileExportService;
+        private static Mock<IDataExportWriter> dataFileExportService;
         private static Guid questionnaireId = Guid.NewGuid();
     }
 }
