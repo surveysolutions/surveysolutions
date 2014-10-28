@@ -349,7 +349,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_with_not_unique_titles_and_values.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_TextList_question_with_maxAnswer_value_set_in_100.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\QuestionnaireVersionTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_trying_to_parse_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_trying_to_parse_string_to_questionnaire_version.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_casting_to_string_questionnaire_version.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_questionnaire_versions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_with_greater_than_operator.cs" />
