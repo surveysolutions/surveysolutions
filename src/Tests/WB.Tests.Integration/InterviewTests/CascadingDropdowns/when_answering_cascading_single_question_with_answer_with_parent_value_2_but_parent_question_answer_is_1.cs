@@ -4,7 +4,6 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using It = Machine.Specifications.It;
@@ -86,9 +85,10 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                             }
                         });
 
-                var interview = SetupInterview(questionnaire, new List<object>{});
-
-                interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
+                var interview = SetupInterview(questionnaire, new List<object>
+                {
+                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: new decimal[] { })
+                });
 
                 using (var eventContext = new EventContext())
                 {
