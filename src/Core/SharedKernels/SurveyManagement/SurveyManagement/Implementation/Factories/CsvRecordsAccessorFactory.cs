@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class CsvRecordsAccessorFactory : IRecordsAccessorFactory
     {
-        public IRecordsAccessor CreateRecordsAccessor(Stream sampleStream, string delimiter = ",")
+        public IRecordsAccessor CreateRecordsAccessor(Stream sampleStream, string delimiter)
         {
             return new CsvRecordsAccessor(sampleStream, delimiter);
         }
