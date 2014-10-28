@@ -1,12 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Json;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using Newtonsoft.Json;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
@@ -74,9 +81,10 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                             }
                         });
 
-                var interview = SetupInterview(questionnaire);
-
-                interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
+                Interview interview = SetupInterview(questionnaire, new List<object>
+                {
+                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: new decimal[] { })
+                });
 
                 using (var eventContext = new EventContext())
                 {
@@ -89,7 +97,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 }
             });
 
-        It should_answer_on_question_with_selectedValue_equals_1 = () =>
+        It should_answer_on_single_option_question_with_selectedValue_equals_1 = () =>
            results.WasChildAnswerSaved.ShouldBeTrue();
 
         Cleanup stuff = () =>
