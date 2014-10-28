@@ -26,6 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.RoslynExpressionProcessorTests
                 { "a.x", new[] { "a" } },
                 { "x_date > new DateTime(2014, 08, 19)", new[] { "x_date" } },
                 { "if then else", new[] { "then" } },
+                { "roster.Select(x => x.age).Max()", new[] { "roster", "age" } },
+                //{ "roster.Select((x, i) => x.age).Max()", new[] { "roster", "age" } },
             };
 
             analyzer = Create.RoslynExpressionProcessor();
