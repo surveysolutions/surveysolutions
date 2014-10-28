@@ -142,10 +142,24 @@ namespace WB.Tests.Integration.InterviewTests
             return events.Any(b => b.Payload is T);
         }
 
+        public static bool HasEvent<T>(IEnumerable<UncommittedEvent> events, Func<T, bool> @where)
+            where T : class
+        {
+            return events.Any(b => (b.Payload is T) && @where((T)b.Payload));
+        }
+
+        public static IEnumerable<T> EventsByType<T>(IEnumerable<UncommittedEvent> events)
+            where T : class
+        {
+            return events.Select(evnt => evnt.Payload).OfType<T>();
+        }
+
         public static T GetFirstEventByType<T>(IEnumerable<UncommittedEvent> events)
             where T : class
         {
-            return ((T)events.First(b => b.Payload is T).Payload);
+            var firstTypedEvent = events.FirstOrDefault(b => b.Payload is T);
+
+            return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
         }
 
         public static void SetupRoslyn(QuestionnaireDocument questionnaireDocument)
