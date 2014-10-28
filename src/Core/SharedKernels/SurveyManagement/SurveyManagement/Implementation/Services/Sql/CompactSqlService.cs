@@ -32,46 +32,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
             dbConnection.Open();
         }
 
-       /* public void ExecuteCommand(string commandText)
-        {
-            ExecuteCommands(new[] { commandText });
-        }
-
-        public void ExecuteCommands(IEnumerable<string> commands)
-        {
-            foreach (var commandText in commands)
-            {
-                using (var command = dbConnection.CreateCommand())
-                {
-                    command.CommandText = commandText;
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
-        public object[][] ExecuteReader(string query)
-        {
-            var result = new List<object[]>();
-            using (var command = dbConnection.CreateCommand())
-            {
-                command.CommandText = query;
-                using (var dr = command.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        var row = new object[dr.FieldCount];
-                        for (int i = 0; i < dr.FieldCount; i++)
-                        {
-                            row[i] = dr[i];
-                        }
-                        result.Add(row);
-                    }
-                }
-            }
-
-            return result.ToArray();
-        }*/
-
         public IEnumerable<dynamic> Query(string sql, object param = null)
         {
             return dbConnection.Query(sql, param);
