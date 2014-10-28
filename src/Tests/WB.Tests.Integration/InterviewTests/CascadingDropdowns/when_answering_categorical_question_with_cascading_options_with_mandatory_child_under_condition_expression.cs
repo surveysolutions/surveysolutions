@@ -93,9 +93,10 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         }
                     });
 
-                var interview = SetupInterview(questionnaire);
-
-                interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
+                var interview = SetupInterview(questionnaire, new List<object>
+                {
+                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: new decimal[] { })
+                });
 
                 using (var eventContext = new EventContext())
                 {

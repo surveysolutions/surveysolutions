@@ -91,11 +91,16 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                             }
                         });
 
-                var interview = SetupInterview(questionnaire);
-
-                interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, new decimal[] { }, DateTime.Now, 1);
-                interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 1);
-                interview.AnswerSingleOptionQuestion(actorId, grandChildCascadedComboboxId, new decimal[] { }, DateTime.Now, 1);
+                var interview = SetupInterview(questionnaire, new List<object>
+                {
+                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: new decimal[] { }),
+                    Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId)),
+                    Create.Event.AnswersDeclaredInvalid(Create.Identity(childCascadedComboboxId)),
+                    Create.Event.SingleOptionQuestionAnswered(questionId: childCascadedComboboxId, answer: 1, propagationVector: new decimal[] { }),
+                    Create.Event.QuestionsEnabled(Create.Identity(grandChildCascadedComboboxId)),
+                    Create.Event.AnswersDeclaredValid(Create.Identity(childCascadedComboboxId)),
+                    Create.Event.SingleOptionQuestionAnswered(questionId: grandChildCascadedComboboxId, answer: 1, propagationVector: new decimal[] { }),
+                });
 
                 using (var eventContext = new EventContext())
                 {
