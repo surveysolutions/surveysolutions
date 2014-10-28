@@ -207,6 +207,33 @@ namespace WB.Tests.Integration
             };
         }
 
+        public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false,
+            Guid? cascadeFromQuestionId = null, List<Answer> options = null)
+        {
+            return new SingleQuestion
+            {
+                QuestionType = QuestionType.SingleOption,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                Mandatory = isMandatory,
+                Answers = options ?? new List<Answer>(),
+                CascadeFromQuestionId = cascadeFromQuestionId
+            };
+        }
+
+        public static Answer Option(Guid? id = null, string text = null, string value = null, string parentValue = null)
+        {
+            return new Answer
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                AnswerText = text ?? "text",
+                AnswerValue = value ?? "1",
+                ParentValue = parentValue
+            };
+        }
+
         public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
         {
             return new NumericQuestion

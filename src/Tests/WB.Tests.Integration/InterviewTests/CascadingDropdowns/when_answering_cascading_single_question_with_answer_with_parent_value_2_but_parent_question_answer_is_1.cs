@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
@@ -18,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             appDomainContext = AppDomainContext.Create();
         };
 
-        Because of = () =>
+        private Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 var parentSingleOptionQuestionId = Guid.Parse("00000000000000000000000000000000");
@@ -29,72 +30,33 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 Setup.MockedServiceLocator();
 
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId,
-                        new SingleQuestion
+                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                    {
+                        Create.Option(text: "parent option 1", value: "1"),
+                        Create.Option(text: "parent option 2", value: "2")
+                    }),
+                    Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                        options: new List<Answer>
                         {
-                            PublicKey = parentSingleOptionQuestionId,
-                            QuestionType = QuestionType.SingleOption,
-                            Answers = new List<Answer>
-                            {
-                                new Answer { AnswerText = "parent option 1", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                                new Answer { AnswerText = "parent option 2", AnswerValue = "2", PublicKey = Guid.NewGuid() }
-                            }
-                        },
-                        new SingleQuestion
-                        {
-                            PublicKey = childCascadedComboboxId,
-                            QuestionType = QuestionType.SingleOption,
-                            CascadeFromQuestionId = parentSingleOptionQuestionId,
-                            Answers = new List<Answer>
-                            {
-                                new Answer
-                                {
-                                    AnswerText = "child 1 for parent option 1",
-                                    AnswerValue = "1.1",
-                                    PublicKey = Guid.NewGuid(),
-                                    ParentValue = "1"
-                                },
-                                new Answer
-                                {
-                                    AnswerText = "child 2 for parent option 1",
-                                    AnswerValue = "1.2",
-                                    PublicKey = Guid.NewGuid(),
-                                    ParentValue = "1"
-                                },
-
-                                new Answer
-                                {
-                                    AnswerText = "child 1 for parent option 2",
-                                    AnswerValue = "2.1",
-                                    PublicKey = Guid.NewGuid(),
-                                    ParentValue = "2"
-                                },
-                                new Answer
-                                {
-                                    AnswerText = "child 2 for parent option 2",
-                                    AnswerValue = "2.2",
-                                    PublicKey = Guid.NewGuid(),
-                                    ParentValue = "2"
-                                },
-                                new Answer
-                                {
-                                    AnswerText = "child 3 for parent option 2",
-                                    AnswerValue = "2.3",
-                                    PublicKey = Guid.NewGuid(),
-                                    ParentValue = "2"
-                                },
-                            }
-                        });
+                            Create.Option(text: "child 1 for parent option 1", value: "1.1", parentValue: "1"),
+                            Create.Option(text: "child 2 for parent option 1", value: "1.2", parentValue: "1"),
+                            Create.Option(text: "child 1 for parent option 2", value: "2.1", parentValue: "2"),
+                            Create.Option(text: "child 2 for parent option 2", value: "2.2", parentValue: "2"),
+                            Create.Option(text: "child 3 for parent option 2", value: "2.3", parentValue: "2"),
+                        })
+                    );
 
                 var interview = SetupInterview(questionnaire, new List<object>
                 {
-                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: new decimal[] { })
+                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1,
+                        propagationVector: new decimal[] { })
                 });
 
                 using (var eventContext = new EventContext())
                 {
                     var exception = Catch.Exception(() =>
                         interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 2.2m)
-                    );
+                        );
 
                     return new InvokeResults
                     {

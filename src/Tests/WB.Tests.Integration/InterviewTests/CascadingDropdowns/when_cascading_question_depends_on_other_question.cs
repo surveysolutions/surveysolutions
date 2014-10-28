@@ -28,57 +28,30 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var actorId = Guid.Parse("366404A9-374E-4DCC-9B56-1F15103DE880");
                 var questionnaireId = Guid.Parse("3B7145CD-A235-44D0-917C-7B34A1017AEC");
                 var numericQuestionId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-                var grandChildCascading = Guid.Parse("107E3563-8005-41D3-8073-06DCDA4C528D");
-
-                var conditionExpression = "numeric==2";
-
-                var numericQuestionVariable = "numeric";
+                var grandChildCascadedComboboxId = Guid.Parse("107E3563-8005-41D3-8073-06DCDA4C528D");
 
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId,
-                    new NumericQuestion
+                    Create.NumericIntegerQuestion(numericQuestionId, variable: "numeric"),
+                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                        PublicKey = numericQuestionId,
-                        QuestionType = QuestionType.Numeric,
-                        StataExportCaption = numericQuestionVariable,
-                        IsInteger = true
-                    },
-                    new SingleQuestion
-                    {
-                        PublicKey = parentSingleOptionQuestionId,
-                        QuestionType = QuestionType.SingleOption,
-                        StataExportCaption = "parent",
-                        Answers = new List<Answer>
+                        Create.Option(text: "parent option 1", value: "1"),
+                        Create.Option(text: "parent option 2", value: "2")
+                    }),
+                    Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                        isMandatory: true,
+                        options: new List<Answer>
                         {
-                            new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                            new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
-                        }
-                    },
-                    new SingleQuestion
-                    {
-                        PublicKey = childCascadedComboboxId,
-                        QuestionType = QuestionType.SingleOption,
-                        CascadeFromQuestionId = parentSingleOptionQuestionId,
-                        StataExportCaption = "child",
-                        Mandatory = true,
-                        Answers = new List<Answer>
+                            Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),
+                            Create.Option(text: "child 1 for parent option 2", value: "2", parentValue: "2"),
+                        }),
+                    Create.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
+                        enablementCondition: "numeric==2",
+                        options: new List<Answer>
                         {
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                            new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" }
-                        }
-                    },
-                    new SingleQuestion
-                    {
-                        PublicKey = grandChildCascading,
-                        QuestionType = QuestionType.SingleOption,
-                        CascadeFromQuestionId = childCascadedComboboxId,
-                        StataExportCaption = "grandChild",
-                        ConditionExpression = conditionExpression,
-                        Answers = new List<Answer>
-                        {
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                            new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" }
-                        }
-                    });
+                            Create.Option(text: "grand child 1 for parent option 1", value: "1", parentValue: "1"),
+                            Create.Option(text: "grand child 1 for parent option 2", value: "2", parentValue: "2"),
+                        })
+                    );
 
                 var interview = SetupInterview(questionnaire);
 
@@ -88,13 +61,12 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                     return new InvokeResults
                     {
-                        WasGrandChildEnabled = eventContext.AnyEvent<QuestionsEnabled>(e => e.Questions.Any(q => q.Id == grandChildCascading))
+                        WasGrandChildEnabled = eventContext.AnyEvent<QuestionsEnabled>(e => e.Questions.Any(q => q.Id == grandChildCascadedComboboxId))
                     };
                 }
-
             });
 
-        It should_not_enable_grand_child_question = () => 
+        It should_not_enable_grand_child_question = () =>
             results.WasGrandChildEnabled.ShouldBeTrue();
 
         Cleanup stuff = () =>
