@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
@@ -10,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    internal class when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value : InterviewTestsContext
+    internal class when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -56,17 +55,17 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 {                    
                     interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
 
-                    interview.AnswerNumericIntegerQuestion(userId, rosterAgeQuestionId, new decimal[1] { 0 }, DateTime.Now, 17);
-                    interview.AnswerNumericIntegerQuestion(userId, rosterAgeQuestionId, new decimal[1] { 1 }, DateTime.Now, 66);
+                    interview.AnswerNumericIntegerQuestion(userId, rosterAgeQuestionId, new decimal[1] { 0 }, DateTime.Now, 24);
+                    interview.AnswerNumericIntegerQuestion(userId, rosterAgeQuestionId, new decimal[1] { 1 }, DateTime.Now, 25);
 
-                    result.RosterValidationQuestionEnabled = GetFirstEventByType<QuestionsEnabled>(eventContext.Events).Questions.Any(q => q.Id == rosterValidation);
+                    result.RosterValidationQuestionEnabled = HasEvent<QuestionsEnabled>(eventContext.Events);
                 }
 
                 return result;
             });
 
-        It should_enable_question = () =>
-            results.RosterValidationQuestionEnabled.ShouldBeTrue();
+        It should_keep_question_disabled = () =>
+            results.RosterValidationQuestionEnabled.ShouldBeFalse();
 
         Cleanup stuff = () =>
         {
