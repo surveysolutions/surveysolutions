@@ -19,28 +19,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly IRecordsAccessorFactory recordsAccessorFactory;
-        private readonly IFilebaseExportDataAccessor filebaseExportDataAccessor ;
         private const string FolderName = "PreLoadedData";
         private const string UnzippedFoldername = "Unzipped";
-        private readonly string tabExtension;
         private readonly string path;
+        private readonly string extension;
         private static ILogger Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
-        public FilebasedPreloadedDataRepository(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils, IRecordsAccessorFactory recordsAccessorFactory, IFilebaseExportDataAccessor filebaseExportDataAccessor)
+        public FilebasedPreloadedDataRepository(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils, IRecordsAccessorFactory recordsAccessorFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.recordsAccessorFactory = recordsAccessorFactory;
-            this.filebaseExportDataAccessor = filebaseExportDataAccessor;
 
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
                 fileSystemAccessor.CreateDirectory(this.path);
 
-            this.tabExtension = "." + ExportFileSettings.ExtensionOfExportedDataFile;
+            this.extension = ExportFileSettings.ExtensionOfExportedDataFile;
         }
 
         public string Store(Stream preloadedDataFile, string fileName)
@@ -61,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
         public PreloadedContentMetaData GetPreloadedDataMetaInformationForSampleData(string id)
         {
             var filesInDirectory = GetFiles(id);
-            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(this.tabExtension)).ToArray();
+            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(this.extension)).ToArray();
             if (csvFilesInDirectory.Length == 0)
                 return null;
 
@@ -82,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                     return new PreloadedContentMetaData(id,
                         fileSystemAccessor.GetFileName(zipFilesInDirectory[0]),
                         archiveUtils.GetArchivedFileNamesAndSize(zipFilesInDirectory[0])
-                            .Select(file => new PreloadedFileMetaData(file.Key, file.Value, file.Key.EndsWith(this.tabExtension)))
+                            .Select(file => new PreloadedFileMetaData(file.Key, file.Value, file.Key.EndsWith(this.extension)))
                             .ToArray(), PreloadedContentType.Panel);
                 }
                 catch (Exception e)
@@ -97,7 +95,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
         public PreloadedDataByFile GetPreloadedDataOfSample(string id)
         {
             var filesInDirectory = GetFiles(id);
-            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(this.tabExtension)).ToArray();
+            var csvFilesInDirectory = filesInDirectory.Where(file => file.EndsWith(this.extension)).ToArray();
             if (csvFilesInDirectory.Length != 0)
             {
                 return this.GetPreloadedDataFromFile(id, csvFilesInDirectory[0]);
@@ -162,7 +160,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
                 }
             }
             var unzippedFiles =
-                fileSystemAccessor.GetFilesInDirectory(unzippedDirectoryPath).Where(filename => filename.EndsWith(this.tabExtension)).ToArray();
+                fileSystemAccessor.GetFilesInDirectory(unzippedDirectoryPath).Where(filename => filename.EndsWith(this.extension)).ToArray();
 
             if (unzippedFiles.Length == 0)
             {
@@ -174,7 +172,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             }
 
             return unzippedFiles
-                .Where(filename => filename.EndsWith(this.tabExtension))
+                .Where(filename => filename.EndsWith(this.extension))
                 .Select(file => GetPreloadedDataFromFile(id, file))
                 .Where(data => data != null)
                 .ToArray();
