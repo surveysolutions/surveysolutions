@@ -13,44 +13,46 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class SqlDataExporter : BaseSqlService, IDataExporter
+    internal class SqlDataExporter : IDataExporter
     {
         private readonly ISqlServiceFactory sqlServiceFactory;
         private readonly ICsvWriterFactory csvWriterFactory;
         private readonly string separator;
         private readonly Func<string, string> createDataFileName;
-
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ISqlDataAccessor sqlDataAccessor;
         private const InterviewExportedAction ApproveByHeadquarterAction = InterviewExportedAction.ApproveByHeadquarter;
 
-        public SqlDataExporter(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory, ICsvWriterFactory csvWriterFactory)
-            : base(fileSystemAccessor)
+        public SqlDataExporter(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory, ICsvWriterFactory csvWriterFactory, ISqlDataAccessor sqlDataAccessor)
         {
             this.sqlServiceFactory = sqlServiceFactory;
             this.csvWriterFactory = csvWriterFactory;
+            this.sqlDataAccessor = sqlDataAccessor;
             this.createDataFileName = ExportFileSettings.GetContentFileName;
             this.separator = ExportFileSettings.SeparatorOfExportedDataFile;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(string basePath, string targetFolder)
         {
-            var dbPath = fileSystemAccessor.CombinePath(basePath, dataFile);
+            var dbPath = fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFile);
             
             if (!fileSystemAccessor.IsFileExists(dbPath))
                 return;
             
             using (var sqlService = sqlServiceFactory.CreateSqlService(dbPath))
             {
-                var tableNames = this.GetListofTables(sqlService);
+                var tableNames = sqlDataAccessor.GetListofTables(sqlService);
 
                 foreach (var tableName in tableNames)
                 {
-                    if (tableName == interviewActions)
+                    if (tableName == sqlDataAccessor.InterviewActions)
                         continue;
 
                     var csvFilePath =
                         fileSystemAccessor.CombinePath(targetFolder, createDataFileName(tableName));
 
-                    var columnNames = GetListOfColumns(sqlService, tableName).ToArray();
+                    var columnNames = sqlDataAccessor.GetListOfColumns(sqlService, tableName).ToArray();
                     using (var fileStream = fileSystemAccessor.OpenOrCreateFile(csvFilePath, true))
                     using (var tabWriter = csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
                     {
@@ -66,26 +68,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string[] GetDataFilesForQuestionnaire(string basePath)
         {
-            var allDataFolderPath = GetAllDataFolder(basePath);
+            var allDataFolderPath = sqlDataAccessor.GetAllDataFolder(basePath);
 
             if (fileSystemAccessor.IsDirectoryExists(allDataFolderPath))
                 return fileSystemAccessor.GetFilesInDirectory(allDataFolderPath);
 
             fileSystemAccessor.CreateDirectory(allDataFolderPath);
 
-            return this.ExportToTabFile(allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, dataFile), QueryAllRecodsFromTable);
+            return this.ExportToTabFile(allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFile), QueryAllRecodsFromTable);
         }
 
         public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(string basePath)
         {
-            var approvedDataFolderPath = GetApprovedDataFolder(basePath);
+            var approvedDataFolderPath = sqlDataAccessor.GetApprovedDataFolder(basePath);
 
             if (fileSystemAccessor.IsDirectoryExists(approvedDataFolderPath))
                 return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath);
 
             fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
 
-            return this.ExportToTabFile(approvedDataFolderPath, fileSystemAccessor.CombinePath(basePath, dataFile),
+            return this.ExportToTabFile(approvedDataFolderPath, fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFile),
                 QueryRecordsFromTableByInterviewsInApprovedStatus);
         }
 
@@ -96,16 +98,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private IEnumerable<dynamic> QueryRecordsFromTableByInterviewsInApprovedStatus(ISqlService sqlService, string tableName)
         {
-            var columnNames = GetListOfColumns(sqlService, tableName).ToArray();
+            var columnNames = sqlDataAccessor.GetListOfColumns(sqlService, tableName).ToArray();
 
-            if (tableName == interviewActions)
+            if (tableName == sqlDataAccessor.InterviewActions)
                 return sqlService.Query(string.Format("select i2.* from [{0}] as i1 join [{0}] as i2 "
-                    + "on i1.[Id]=i2.[Id] where i1.[Action]=@interviewAction", interviewActions), new { interviewAction = ApproveByHeadquarterAction.ToString() });
+                    + "on i1.[Id]=i2.[Id] where i1.[Action]=@interviewAction", sqlDataAccessor.InterviewActions), new { interviewAction = ApproveByHeadquarterAction.ToString() });
 
             return sqlService.Query(string.Format("select [{0}].* from [{1}] join [{0}] "
                 + "ON [{1}].[Id]=[{0}].[{2}] "
-                + "where [{1}].[Action] = @interviewAction", tableName, interviewActions,
-                columnNames.Any(name => name.StartsWith(parentId)) ? columnNames.Last() : "Id"), new { interviewAction = ApproveByHeadquarterAction.ToString() });
+                + "where [{1}].[Action] = @interviewAction", tableName, sqlDataAccessor.InterviewActions,
+                columnNames.Any(name => name.StartsWith(sqlDataAccessor.ParentId)) ? columnNames.Last() : "Id"), new { interviewAction = ApproveByHeadquarterAction.ToString() });
         }
 
         private string[] ExportToTabFile(string basePath, string dbPath, Func<ISqlService,string, IEnumerable<dynamic>> query)
@@ -113,14 +115,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var result = new List<string>();
             using (var sqlService = sqlServiceFactory.CreateSqlService(dbPath))
             {
-                var tableNames = this.GetListofTables(sqlService);
+                var tableNames = sqlDataAccessor.GetListofTables(sqlService);
 
                 foreach (var tableName in tableNames)
                 {
                     var csvFilePath =
                         fileSystemAccessor.CombinePath(basePath, createDataFileName(tableName));
 
-                    var columnNames = GetListOfColumns(sqlService, tableName);
+                    var columnNames = sqlDataAccessor.GetListOfColumns(sqlService, tableName);
 
                     using (var fileStream = fileSystemAccessor.OpenOrCreateFile(csvFilePath, true))
                     using (var tabWriter = csvWriterFactory.OpenCsvWriter(fileStream, separator))

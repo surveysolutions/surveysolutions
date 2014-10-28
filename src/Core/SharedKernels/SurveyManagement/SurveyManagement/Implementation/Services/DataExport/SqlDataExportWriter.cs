@@ -18,24 +18,27 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class SqlDataExportWriter : BaseSqlService, IDataExportWriter
+    internal class SqlDataExportWriter : IDataExportWriter
     {
         private const string text = "ntext";
         private const string numeric = "money";
         private const string nvarchar = "nvarchar(512)";
         private readonly ISqlServiceFactory sqlServiceFactory;
+        private readonly ISqlDataAccessor sqlDataAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly QuestionType[] numericQuestionTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.Numeric };
 
-        public SqlDataExportWriter(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory)
-            : base(fileSystemAccessor)
+        public SqlDataExportWriter(ISqlDataAccessor sqlDataAccessor, ISqlServiceFactory sqlServiceFactory, IFileSystemAccessor fileSystemAccessor)
         {
             this.sqlServiceFactory = sqlServiceFactory;
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.sqlDataAccessor = sqlDataAccessor;
         }
 
         public void DeleteInterviewRecords(string basePath, Guid interviewId)
         {
-            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFile)))
             {
                 this.DeleteInterviewImpl(interviewId, sqlService);
             }
@@ -43,23 +46,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void DeleteInterviewImpl(Guid interviewId, ISqlService sqlService)
         {
-            var tableNames = this.GetListofTables(sqlService);
+            var tableNames = sqlDataAccessor.GetListofTables(sqlService);
             foreach (var tableName in tableNames)
             {
-                var columnNames = this.GetListOfColumns(sqlService, tableName);
+                var columnNames = sqlDataAccessor.GetListOfColumns(sqlService, tableName);
                 this.DeleteFromTableByInterviewId(sqlService, tableName,
-                    columnNames.Any(c => c.StartsWith(parentId)) ? columnNames.Last() : "Id", interviewId.FormatGuid());
+                    columnNames.Any(c => c.StartsWith(sqlDataAccessor.ParentId)) ? columnNames.Last() : "Id", interviewId.FormatGuid());
             }
         }
 
         public void BatchInsert(string basePath, IEnumerable<InterviewDataExportView> interviewDatas,
             IEnumerable<InterviewActionExportView> interviewActionRecords, IEnumerable<Guid> interviewsForDelete)
         {
-            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFile)))
             {
                 foreach (var interviewActionRecord in interviewActionRecords)
                 {
-                    this.InsertIntoTable(sqlService, interviewActions, this.BuildInserInterviewActionParameters(interviewActionRecord));
+                    this.InsertIntoTable(sqlService, sqlDataAccessor.InterviewActions, this.BuildInserInterviewActionParameters(interviewActionRecord));
                 }
 
                 foreach (var interviewIdForDelete in interviewsForDelete)
@@ -79,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void AddOrUpdateInterviewRecords(InterviewDataExportView items, string basePath)
         {
-            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath,dataFile)))
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFile)))
             {
                 foreach (var interviewDataExportLevelView in items.Levels)
                 {
@@ -90,7 +93,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void CreateStructure(QuestionnaireExportStructure header, string basePath)
         {
-            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFile)))
             {
                 foreach (var headerStructureForLevel in header.HeaderToLevelMap.Values)
                 {
@@ -102,15 +105,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void AddActionRecord(InterviewActionExportView action, string basePath)
         {
-            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, dataFile)))
+            using (var sqlService = sqlServiceFactory.CreateSqlService(fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFile)))
             {
-                this.InsertIntoTable(sqlService, interviewActions, this.BuildInserInterviewActionParameters(action));
+                this.InsertIntoTable(sqlService, sqlDataAccessor.InterviewActions, this.BuildInserInterviewActionParameters(action));
             }
 
-            fileSystemAccessor.DeleteDirectory(this.GetAllDataFolder(basePath));
+            fileSystemAccessor.DeleteDirectory(sqlDataAccessor.GetAllDataFolder(basePath));
 
             if (action.Action == InterviewExportedAction.ApproveByHeadquarter)
-                fileSystemAccessor.DeleteDirectory(this.GetApprovedDataFolder(basePath));
+                fileSystemAccessor.DeleteDirectory(sqlDataAccessor.GetApprovedDataFolder(basePath));
         }
 
         private void CreateHeaderForActionFile(ISqlService sqlService)
@@ -124,7 +127,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             columns.Add("Date", nvarchar);
             columns.Add("Time", nvarchar);
 
-            CreateTable(sqlService, interviewActions, columns);
+            CreateTable(sqlService, sqlDataAccessor.InterviewActions, columns);
         }
 
         private void CreateHeader(HeaderStructureForLevel header, ISqlService sqlService)
@@ -152,7 +155,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             for (int i = 0; i < header.LevelScopeVector.Length; i++)
             {
-                columns.Add(string.Format("{0}{1}", parentId, i + 1), i == header.LevelScopeVector.Length - 1 ? nvarchar : numeric);
+                columns.Add(string.Format("{0}{1}", sqlDataAccessor.ParentId, i + 1), i == header.LevelScopeVector.Length - 1 ? nvarchar : numeric);
             }
 
             CreateTable(sqlService, header.LevelName, columns);
@@ -160,7 +163,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             CreateIndexOnFieldForTable(sqlService, header.LevelName,
                 header.LevelScopeVector.Length == 0
                     ? header.LevelIdColumnName
-                    : string.Format("{0}{1}", parentId, header.LevelScopeVector.Length));
+                    : string.Format("{0}{1}", sqlDataAccessor.ParentId, header.LevelScopeVector.Length));
         }
 
         private void DeleteFromTableByInterviewId(ISqlService sqlService, string tableName, string idColumnName, string interviewId)
@@ -207,7 +210,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var isMainLevel = items.LevelVector.Length == 0;
 
             DeleteFromTableByInterviewId(sqlService, items.LevelName,
-                isMainLevel ? "Id" : string.Format("{0}{1}", parentId, items.LevelVector.Length), items.InterviewId);
+                isMainLevel ? "Id" : string.Format("{0}{1}", sqlDataAccessor.ParentId, items.LevelVector.Length), items.InterviewId);
 
             foreach (var item in items.Records)
             {

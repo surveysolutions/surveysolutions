@@ -139,7 +139,7 @@
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExporter.cs" />
-    <Compile Include="Implementation\Services\Sql\BaseSqlService.cs" />
+    <Compile Include="Implementation\Services\Sql\SqlDataAccessor.cs" />
     <Compile Include="Implementation\Services\Sql\CompactSqlService.cs" />
     <Compile Include="Implementation\Services\Sql\CompactSqlServiceFactory.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
@@ -192,6 +192,7 @@
     <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="Services\Preloading\IPreloadedDataService.cs" />
+    <Compile Include="Services\Sql\ISqlDataAccessor.cs" />
     <Compile Include="Services\Sql\ISqlService.cs" />
     <Compile Include="Services\Sql\ISqlServiceFactory.cs" />
     <Compile Include="SurveyManagementSharedKernelModule.cs" />

@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -24,9 +25,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
     {
         protected static SqlDataExportWriter CreateSqlDataExportWriter(ISqlService sqlService = null, IFileSystemAccessor fileSystemAccessor=null)
         {
-            return new SqlDataExportWriter(fileSystemAccessor?? CreateIFileSystemAccessorMock().Object,
+            fileSystemAccessor = fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object;
+            return new SqlDataExportWriter(new SqlDataAccessor(fileSystemAccessor), 
                 Mock.Of<ISqlServiceFactory>(_ => _.CreateSqlService(
-                    It.IsAny<string>()) == sqlService));
+                    It.IsAny<string>()) == sqlService), fileSystemAccessor);
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector=null)
