@@ -22,8 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             IRecordsAccessorFactory recordsAccessorFactory = null)
         {
             return new FilebasedPreloadedDataRepository(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "",
-                archiveUtils ?? Mock.Of<IArchiveUtils>(), recordsAccessorFactory ?? Mock.Of<IRecordsAccessorFactory>(),
-                Mock.Of<IFilebaseExportDataAccessor>());
+                archiveUtils ?? Mock.Of<IArchiveUtils>(), recordsAccessorFactory ?? Mock.Of<IRecordsAccessorFactory>());
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()
