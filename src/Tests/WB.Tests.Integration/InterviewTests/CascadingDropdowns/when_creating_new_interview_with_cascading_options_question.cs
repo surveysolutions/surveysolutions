@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             appDomainContext = AppDomainContext.Create();
         };
 
-        private Because of = () =>
+        Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -28,38 +28,25 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var questionnaireId = Guid.Parse("3B7145CD-A235-44D0-917C-7B34A1017AEC");
 
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId,
-                    new MultyOptionsQuestion
+                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                        PublicKey = parentSingleOptionQuestionId,
-                        QuestionType = QuestionType.SingleOption,
-                        Answers = new List<Answer>
+                        Create.Option(text: "parent option 1", value: "1"),
+                        Create.Option(text: "parent option 2", value: "2")
+                    }),
+                    Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                        isMandatory: true,
+                        options: new List<Answer>
                         {
-                            new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                            new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
-                        }
-                    },
-                    new SingleQuestion
-                    {
-                        PublicKey = childCascadedComboboxId,
-                        QuestionType = QuestionType.SingleOption,
-                        CascadeFromQuestionId = parentSingleOptionQuestionId,
-                        Answers = new List<Answer>
+                            Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),
+                            Create.Option(text: "child 1 for parent option 2", value: "2", parentValue: "2"),
+                        }),
+                    Create.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
+                        options: new List<Answer>
                         {
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                            new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" }
-                        }
-                    },
-                    new SingleQuestion
-                    {
-                        PublicKey = grandChildCascadedComboboxId,
-                        QuestionType = QuestionType.SingleOption,
-                        CascadeFromQuestionId = childCascadedComboboxId,
-                        Answers = new List<Answer>
-                        {
-                            new Answer { AnswerText = "grand child", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" }
-                        }
-                    });
-
+                            Create.Option(text: "grand child 1 for parent option 1", value: "1", parentValue: "1"),
+                            Create.Option(text: "grand child 1 for parent option 2", value: "2", parentValue: "2"),
+                        })
+                    );
 
                 using (var eventContext = new EventContext())
                 {
@@ -71,7 +58,6 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         WasGrandchildCascadedComboboxQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == grandChildCascadedComboboxId))
                     };
                 }
-
             });
 
         It should_disable_first_cascading_question = () =>

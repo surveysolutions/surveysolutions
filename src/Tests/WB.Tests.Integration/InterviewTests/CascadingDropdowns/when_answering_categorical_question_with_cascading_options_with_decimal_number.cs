@@ -32,30 +32,19 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var childCascadedComboboxId = Guid.Parse("11111111111111111111111111111111");
 
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId,
-                        new SingleQuestion
+                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                    {
+                        Create.Option(text: "parent option 1", value: "1"),
+                        Create.Option(text: "parent option 2", value: "2")
+                    }),
+                    Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                        isMandatory: true,
+                        options: new List<Answer>
                         {
-                            PublicKey = parentSingleOptionQuestionId,
-                            QuestionType = QuestionType.SingleOption,
-                            Answers = new List<Answer>
-                            {
-                                new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                                new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
-                            }
-                        },
-                        new SingleQuestion
-                        {
-                            PublicKey = childCascadedComboboxId,
-                            QuestionType = QuestionType.SingleOption,
-                            StataExportCaption = "q1",
-                            Mandatory = true,
-                            CascadeFromQuestionId = parentSingleOptionQuestionId,
-                            Answers = new List<Answer>
-                            {
-                                new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                                new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" }
-                            }
-                        }
-                        );
+                            Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),
+                            Create.Option(text: "child 1 for parent option 2", value: "2", parentValue: "2"),
+                        })
+                    );
 
                 var interview = SetupInterview(questionnaire, new List<object>
                 {
