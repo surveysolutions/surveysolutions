@@ -67,6 +67,28 @@ namespace WB.Tests.Integration
                     answer);
             }
 
+            public static MultipleOptionsQuestionAnswered MultipleOptionsQuestionAnswered(
+                Guid questionId, Guid? userId = null, decimal[] propagationVector = null, DateTime? answerTime = null, decimal[] selectedValues = null)
+            {
+                return new MultipleOptionsQuestionAnswered(
+                    userId ?? Default.UserId,
+                    questionId,
+                    propagationVector ?? Empty.RosterVector,
+                    answerTime ?? Default.AnswerTime,
+                    selectedValues);
+            }
+
+            public static MultipleOptionsLinkedQuestionAnswered MultipleOptionsLinkedQuestionAnswered(
+                Guid questionId, Guid? userId = null, decimal[] propagationVector = null, DateTime? answerTime = null, decimal[][] selectedValues = null)
+            {
+                return new MultipleOptionsLinkedQuestionAnswered(
+                    userId ?? Default.UserId,
+                    questionId,
+                    propagationVector ?? Empty.RosterVector,
+                    answerTime ?? Default.AnswerTime,
+                    selectedValues);
+            }
+
             public static AnswersDeclaredValid AnswersDeclaredValid(params Identity[] questions)
             {
                 return new AnswersDeclaredValid(questions);
@@ -95,6 +117,11 @@ namespace WB.Tests.Integration
             public static GroupsDisabled GroupsDisabled(params Identity[] groups)
             {
                 return new GroupsDisabled(groups);
+            }
+
+            public static RosterInstancesAdded RosterInstancesAdded(params AddedRosterInstance[] rosterInstances)
+            {
+                return new RosterInstancesAdded(rosterInstances);
             }
         }
 
@@ -128,7 +155,7 @@ namespace WB.Tests.Integration
                 children: children);
         }
 
-        public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
         {
             return new TextQuestion("Question X")
             {
@@ -137,6 +164,21 @@ namespace WB.Tests.Integration
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
+                Mandatory = isMandatory
+            };
+        }
+
+        public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, bool isMandatory = false,
+            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null)
+        {
+            return new MultyOptionsQuestion
+            {
+                QuestionType = QuestionType.MultyOption,
+                PublicKey = id ?? Guid.NewGuid(),
+                Mandatory = isMandatory,
+                Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] {}),
+                LinkedToQuestionId = linkedToQuestionId,
+                StataExportCaption = variable
             };
         }
 
@@ -180,7 +222,8 @@ namespace WB.Tests.Integration
         }
 
         public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
-            string[] fixedTitles = null, IEnumerable<IComposite> children = null)
+            string[] fixedTitles = null, IEnumerable<IComposite> children = null, RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+            Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
         {
             Group group = Create.Group(
                 id: id,
@@ -190,8 +233,11 @@ namespace WB.Tests.Integration
                 children: children);
 
             group.IsRoster = true;
-            group.RosterSizeSource = RosterSizeSourceType.FixedTitles;
-            group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+            group.RosterSizeSource = rosterSizeSourceType;
+            if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
+                group.RosterFixedTitles = fixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"};
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+            group.RosterTitleQuestionId = rosterTitleQuestionId;
 
             return group;
         }
@@ -228,6 +274,12 @@ namespace WB.Tests.Integration
         public static Identity Identity(Guid id, decimal[] rosterVector = null)
         {
             return new Identity(id, rosterVector ?? Empty.RosterVector);
+        }
+
+        public static AddedRosterInstance AddedRosterInstance(Guid groupId, decimal[] outerRosterVector = null,
+            decimal rosterInstanceId = 0, int? sortIndex = null)
+        {
+            return new AddedRosterInstance(groupId, outerRosterVector ?? Empty.RosterVector, rosterInstanceId, sortIndex);
         }
     }
 }
