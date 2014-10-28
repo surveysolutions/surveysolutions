@@ -36,50 +36,29 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var actorId = Guid.Parse("33333333333333333333333333333333");
                 var topRosterId = Guid.Parse("44444444444444444444444444444444");
 
+
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId,
-                        new SingleQuestion
+                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
+                    {
+                        Create.Option(text: "parent option 1", value: "1"),
+                        Create.Option(text: "parent option 2", value: "2")
+                    }),
+                    Create.Roster(topRosterId, 
+                        variable: "roster",
+                        rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
+                        fixedTitles: new[] { "a", "b" },
+                        children: new List<IComposite>
                         {
-                            PublicKey = parentSingleOptionQuestionId,
-                            QuestionType = QuestionType.SingleOption,
-                            Answers = new List<Answer>
-                            {
-                                new Answer { AnswerText = "parent option 1", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                                new Answer { AnswerText = "parent option 2", AnswerValue = "2", PublicKey = Guid.NewGuid() }
-                            }
-                        },
-                        new Group("roster")
-                        {
-                            PublicKey = topRosterId,
-                            IsRoster = true,
-                            RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                            RosterFixedTitles = new[] { "a", "b" },
-                            Children = new List<IComposite>
-                            {
-                                new SingleQuestion
-                                {
-                                    PublicKey = childCascadedComboboxId,
-                                    QuestionType = QuestionType.SingleOption,
-                                    CascadeFromQuestionId = parentSingleOptionQuestionId,
-                                    Answers = new List<Answer>
+                            Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                                options:
+                                    new List<Answer>
                                     {
-                                        new Answer
-                                        {
-                                            AnswerText = "child 1 for parent option 1",
-                                            AnswerValue = "1",
-                                            PublicKey = Guid.NewGuid(),
-                                            ParentValue = "1"
-                                        },
-                                        new Answer
-                                        {
-                                            AnswerText = "child 1 for parent option 2",
-                                            AnswerValue = "2",
-                                            PublicKey = Guid.NewGuid(),
-                                            ParentValue = "2"
-                                        }
+                                        Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),
+                                        Create.Option(text: "child 1 for parent option 2", value: "3", parentValue: "2")
                                     }
-                                }
-                            }
-                        });
+                                )
+                        })
+                    );
 
                 Interview interview = SetupInterview(questionnaire, new List<object>
                 {
@@ -92,7 +71,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                     return new InvokeResults
                     {
-                         WasChildAnswerSaved = eventContext.AnyEvent<SingleOptionQuestionAnswered>(x => x.SelectedValue == 1)
+                        WasChildAnswerSaved = eventContext.AnyEvent<SingleOptionQuestionAnswered>(x => x.SelectedValue == 1)
                     };
                 }
             });

@@ -32,66 +32,39 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 var nonAnsweredCombo = Guid.NewGuid();
                 var comboShouldNotBeRemoved = Guid.NewGuid();
-                var actorId = Guid.NewGuid();
 
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId,
-                    new SingleQuestion
+                    Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
-                        PublicKey = parentSingleOptionQuestionId,
-                        StataExportCaption = "q1",
-                        QuestionType = QuestionType.SingleOption,
-                        Answers = new List<Answer>
+                        Create.Option(text: "parent option 1", value: "1"),
+                        Create.Option(text: "parent option 2", value: "2")
+                    }),
+                    Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
+                        isMandatory: true,
+                        enablementCondition: "q1==2",
+                        options: new List<Answer>
                         {
-                            new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                            new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
-                        }
-                    },
-                    new SingleQuestion
+                            Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),
+                            Create.Option(text: "child 1 for parent option 2", value: "2", parentValue: "2"),
+                        }),
+                    Create.SingleQuestion(grandChildCascadedComboboxId, "q3", cascadeFromQuestionId: childCascadedComboboxId,
+                        options: new List<Answer>
+                        {
+                            Create.Option(text: "grand child 1 for parent option 1", value: "1", parentValue: "1"),
+                            Create.Option(text: "grand child 1 for parent option 2", value: "2", parentValue: "2"),
+                        }),
+                    Create.SingleQuestion(nonAnsweredCombo, "q4", options: new List<Answer>
                     {
-                        PublicKey = childCascadedComboboxId,
-                        QuestionType = QuestionType.SingleOption,
-                        StataExportCaption = "q5",
-                        Mandatory = true,
-                        ConditionExpression = "q1==2",
-                        CascadeFromQuestionId = parentSingleOptionQuestionId,
-                        Answers = new List<Answer>
+                        Create.Option(text: "parent option 1", value: "1"),
+                        Create.Option(text: "parent option 2", value: "2")
+                    }),
+                    Create.SingleQuestion(comboShouldNotBeRemoved, "q5", cascadeFromQuestionId: nonAnsweredCombo,
+                        options: new List<Answer>
                         {
-                            new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                            new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" }
-                        }
-                    },
-                    new SingleQuestion
-                    {
-                        PublicKey = grandChildCascadedComboboxId,
-                        QuestionType = QuestionType.SingleOption,
-                        CascadeFromQuestionId = childCascadedComboboxId,
-                        StataExportCaption = "q2",
-                        Answers = new List<Answer>
-                        {
-                            new Answer { AnswerText = "grand child", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" }
-                        }
-                    },
-                    new SingleQuestion
-                    {
-                        PublicKey = nonAnsweredCombo,
-                        QuestionType = QuestionType.SingleOption,
-                        StataExportCaption = "q3",
-                        Answers = new List<Answer>
-                        {
-                            new Answer { AnswerText = "other cascade", AnswerValue = "1", PublicKey = Guid.NewGuid() }
-                        }
-                    },
-                    new SingleQuestion
-                    {
-                        PublicKey = comboShouldNotBeRemoved,
-                        QuestionType = QuestionType.SingleOption,
-                        StataExportCaption = "q4",
-                        CascadeFromQuestionId = nonAnsweredCombo,
-                        Answers = new List<Answer>
-                        {
-                            new Answer { AnswerText = "blue", AnswerValue = "1", PublicKey = Guid.NewGuid() }
-                        }
-                    });
+                            Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),
+                            Create.Option(text: "child 1 for parent option 2", value: "2", parentValue: "2"),
+                        })
+                    );
 
                 var interview = SetupInterview(questionnaire, new List<object>
                 {
