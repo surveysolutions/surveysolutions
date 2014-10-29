@@ -12,6 +12,7 @@ using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Raven.Client.Linq;
 using WB.Core.BoundedContexts.Supervisor.Extensions;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
@@ -116,8 +117,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             foreach (var localSupervisor in supervisorIds)
             {
-                IEnumerable<LocalInterviewFeedEntry> events = 
-                    this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed));
+                List<LocalInterviewFeedEntry> events = 
+                    this.plainStorage.Query(_ => _.Where(x => x.SupervisorId == localSupervisor.FormatGuid() && !x.Processed))
+                                     .OrderByDescending(x => x.Timestamp).ToList();
 
                 this.headquartersPullContext.PushMessage(string.Format("Synchronizing interviews for supervisor '{0}'. Events count: {1}", localSupervisor, events.Count()));
                 
@@ -125,11 +127,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 {
                     try
                     {
-                        var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
+                        if (interviewFeedEntry.Processed) continue;
 
                         switch (interviewFeedEntry.EntryType)
                         {
                             case EntryType.SupervisorAssigned:
+                                var interviewDetails = this.GetInterviewDetails(interviewFeedEntry).Result;
                                 if (!this.IsResponsiblePresent(interviewDetails.UserId))
                                     continue;
 
@@ -137,16 +140,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                                 break;
                             case EntryType.InterviewUnassigned:
                                 this.CancelInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
                                 break;
                             case EntryType.InterviewDeleted:
                                 this.HardDeleteInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.UserId);
+                                this.MarkOtherInterviewEventsAsProcessed(events, interviewFeedEntry);
                                 break;
                             case EntryType.InterviewRejected:
-                                if (!this.IsResponsiblePresent(interviewDetails.UserId))
+                                var rejectedInterview = this.GetInterviewDetails(interviewFeedEntry).Result;
+                                if (!this.IsResponsiblePresent(rejectedInterview.UserId))
                                     continue;
 
-                                this.RejectInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.SupervisorId,
-                                    interviewDetails);
+                                this.RejectInterview(interviewFeedEntry.InterviewId, interviewFeedEntry.SupervisorId, rejectedInterview);
                                 break;
                             default:
                                 this.logger.Warn(string.Format(
@@ -178,6 +183,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             }
         }
 
+        private void MarkOtherInterviewEventsAsProcessed(IEnumerable<LocalInterviewFeedEntry> events, LocalInterviewFeedEntry interviewFeedEntry)
+        {
+            events.Where(x => x.InterviewId == interviewFeedEntry.InterviewId && !x.Processed && x.EntryId != interviewFeedEntry.EntryId)
+                
+                .ToList()
+                .ForEach(x => {
+                    x.Processed = true;
+                    this.plainStorage.Store(x, x.EntryId);
+                    this.headquartersPullContext.PushMessage(string.Format("Event {0}, '{1}' is marked as processed because it is overriden by {2}, '{3}'",
+                        x.EntryId, x.EntryType, interviewFeedEntry.EntryId, interviewFeedEntry.EntryType));
+                });
+        }
+
         private async Task<InterviewSynchronizationDto> GetInterviewDetails(LocalInterviewFeedEntry interviewFeedEntry)
         {
             this.headquartersPullContext.PushMessage(string.Format("Loading interview using {0} URL", interviewFeedEntry.InterviewUri));
@@ -196,7 +214,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             var supervisorIdGuid = Guid.Parse(supervisorId);
 
-            this.headquartersPullContext.PushMessage(string.Format("Applying interview rejected by HQ on {0} interview", interviewId));
+            this.headquartersPullContext.PushMessage(string.Format("Interview {0} was rejected by HQ", interviewId));
 
             var interviewSummary = this.interviewSummaryRepositoryWriter.GetById(interviewId);
             if (interviewSummary == null)
@@ -224,7 +242,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         private void PushInterviewData(Guid userId)
         {
-            this.headquartersPushContext.PushMessage("Getting interviews to be pushed.");
             List<Guid> interviewsToPush = this.GetInterviewsToPush();
             this.headquartersPushContext.PushMessage(string.Format("Found {0} interviews to push.", interviewsToPush.Count));
 
@@ -305,6 +322,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             
             var supervisorIdGuid = Guid.Parse(supervisorId);
 
+            this.headquartersPullContext.PushMessage(string.Format("Interview {0} was assigned by HQ for supervisor {1}", interviewDetails.Id, interviewDetails.UserId));
             this.executeCommand(new SynchronizeInterviewFromHeadquarters(interviewDetails.Id, interviewDetails.UserId, supervisorIdGuid, interviewDetails, DateTime.Now));
         }
 
@@ -317,9 +335,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             Guid userIdGuid = Guid.Parse(userId);
 
+            this.headquartersPullContext.PushMessage(string.Format("Interview {0} was canceled by HQ", interviewId));
             this.executeCommand(new CancelInterviewByHQSynchronizationCommand(interviewId: interviewIdGuid, userId: userIdGuid));
         }
-
 
         private void HardDeleteInterview(string interviewId, string userId)
         {
@@ -331,6 +349,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             Guid userIdGuid = Guid.Parse(userId);
 
+            this.headquartersPullContext.PushMessage(string.Format("Interview {0} was deleted by HQ", interviewId));
             this.executeCommand(new HardDeleteInterview(interviewId: interviewIdGuid, userId: userIdGuid));
         }
 
