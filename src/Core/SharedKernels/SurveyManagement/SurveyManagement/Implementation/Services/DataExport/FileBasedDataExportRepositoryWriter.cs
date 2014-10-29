@@ -168,9 +168,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 var exportStructure = questionnaireExportStructureWriter.GetById(entity.QuestionnaireId, entity.QuestionnaireVersion);
                 if (exportStructure != null)
                 {
-                    this.dataExportWriter.BatchInsert(cachedEntity,
-                        cache[cachedEntity].InterviewIds.Select(i => CreateInterviewDataExportView(i, exportStructure)).Where(i => i != null),
-                        entity.Actions.Select(a => this.CreateInterviewAction(a.Action, a.InterviewId, a.UserId, a.Timestamp)).Where(a => a != null), entity.InterviewForDeleteIds);
+                    try
+                    {
+                        this.dataExportWriter.BatchInsert(cachedEntity,
+                            cache[cachedEntity].InterviewIds.Select(i => CreateInterviewDataExportView(i, exportStructure))
+                                .Where(i => i != null),
+                            entity.Actions.Select(a => this.CreateInterviewAction(a.Action, a.InterviewId, a.UserId, a.Timestamp))
+                                .Where(a => a != null), entity.InterviewForDeleteIds);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message, e);
+                    }
                 }
                 this.cache.Remove(cachedEntity);
             }
