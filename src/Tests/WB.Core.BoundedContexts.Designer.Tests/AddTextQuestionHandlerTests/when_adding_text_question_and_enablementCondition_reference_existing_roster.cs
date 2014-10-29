@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.AddTextQuestionHandlerTests
             questionnaire.Apply(Create.Event.AddTextQuestion(rosterQuestionId, parentId: rosterId));
             questionnaire.Apply(Create.Event.UpdateNumericIntegerQuestion(rosterQuestionId, variableName: "age"));
             questionnaire.Apply(Create.Event.AddTextQuestion(existingQuestionId, parentId: chapterId));
-            questionnaire.Apply(Create.Event.UpdateNumericIntegerQuestion(rosterQuestionId, variableName: "maxAge"));
+            questionnaire.Apply(Create.Event.UpdateNumericIntegerQuestion(existingQuestionId, variableName: "maxAge"));
 
             RegisterExpressionProcessorMock("roster.Max(x => x.age) > maxAge", new[] { "roster", "age", "maxAge" });
 
