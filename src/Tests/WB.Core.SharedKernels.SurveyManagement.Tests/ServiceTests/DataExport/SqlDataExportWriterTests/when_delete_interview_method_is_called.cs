@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.SqlDataExportWriterTests
 {
+    [Ignore("un ignore later")]
     internal class when_delete_interview_method_is_called : SqlDataExportWriterTestContext
     {
         Establish context = () =>
