@@ -3765,26 +3765,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             EnablementChanges enablementChanges)
         {
             var childCascadingQuestions = questionnaire.GetAllChildCascadingQuestions();
-            foreach (var cascadingQuestionId in childCascadingQuestions)
+            foreach (var childCascadingQuestionId in childCascadingQuestions)
             {
-                var rosterInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(interviewChanges.State,
-                    cascadingQuestionId,
+                var childCascadingQuestionRosterInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(interviewChanges.State,
+                    childCascadingQuestionId,
                     EmptyRosterVector,
                     questionnaire,
                     GetRosterInstanceIds);
-                foreach (var childQuestionInstance in rosterInstances)
+                foreach (var childCascadingQuestionRosterInstance in childCascadingQuestionRosterInstances)
                 {
-                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(childQuestionInstance.Id);
+                    var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(childCascadingQuestionRosterInstance.Id);
                     if (cascadingQuestionParentId.HasValue)
                     {
                         var parentInstance = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingQuestionParentId.Value,
-                            childQuestionInstance.RosterVector, questionnaire);
+                            childCascadingQuestionRosterInstance.RosterVector, questionnaire);
 
                         var parentStringIdentity = ConversionHelper.ConvertIdentityToString(parentInstance);
                         if (!interviewChanges.State.AnsweredQuestions.Contains(parentStringIdentity))
                         {
-                            enablementChanges.QuestionsToBeDisabled.Add(childQuestionInstance);
-                            enablementChanges.QuestionsToBeEnabled.Remove(childQuestionInstance);
+                            enablementChanges.QuestionsToBeDisabled.Add(childCascadingQuestionRosterInstance);
+                            enablementChanges.QuestionsToBeEnabled.Remove(childCascadingQuestionRosterInstance);
                         }
                     }
                 }
