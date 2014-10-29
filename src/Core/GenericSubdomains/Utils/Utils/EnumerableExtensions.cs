@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.GenericSubdomains.Utils
 {
@@ -8,6 +9,11 @@ namespace WB.Core.GenericSubdomains.Utils
         public static IEnumerable<T> ToEnumerable<T>(this T element)
         {
             yield return element;
+        }
+
+        public static IEnumerable<T> Except<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+        {
+            return enumerable.Where(element => !predicate.Invoke(element));
         }
 
         public static IEnumerable<TResult> SelectUsingPrevCurrNext<TSource, TResult>(this IEnumerable<TSource> enumerable, Func<TSource, TSource, TSource, TResult> selector)
