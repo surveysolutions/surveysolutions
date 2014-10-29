@@ -106,6 +106,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Identifier &apos;{0}&apos; from expression &apos;{1}&apos; is not valid question or roster identifier. Question or roster with such an identifier is missing..
+        /// </summary>
+        internal static string QuestionOrRosterIdentifierIsMissing {
+            get {
+                return ResourceManager.GetString("QuestionOrRosterIdentifierIsMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question to cascade from should exist in questionnaire.
         /// </summary>
         internal static string ShouldCascadeFromExistingQuestion {

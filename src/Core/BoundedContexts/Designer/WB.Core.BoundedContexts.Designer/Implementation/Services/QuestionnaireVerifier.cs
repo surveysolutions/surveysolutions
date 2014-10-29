@@ -1323,7 +1323,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (QuestionHasDeeperRosterLevelThenVectorOfRosterQuestions(questionsReferencedInExpression, vectorOfRosterQuestionsForQuestionWithExpression, questionnaire))
             {
-                return referencesQuestionWithDeeperPropagationLevelError(itemWithExpression, questionsReferencedInExpression);
+                //return referencesQuestionWithDeeperPropagationLevelError(itemWithExpression, questionsReferencedInExpression);
             }
 
             return null;
