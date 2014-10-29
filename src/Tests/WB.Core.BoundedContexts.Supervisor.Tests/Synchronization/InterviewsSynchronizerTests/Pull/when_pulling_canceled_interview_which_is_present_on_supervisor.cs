@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -20,9 +19,9 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests.Pull
 {
-    internal class when_pulling_deleted_interview_which_is_present_on_supervisor : InterviewsSynchronizerTestsContext
+    internal class when_pulling_canceled_interview_which_is_present_on_supervisor : InterviewsSynchronizerTestsContext
     {
         private Establish context = () =>
         {
@@ -33,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                     {
                         new LocalInterviewFeedEntry()
                         {
-                            EntryType = EntryType.InterviewDeleted,
+                            EntryType = EntryType.InterviewUnassigned,
                             UserId = userId.FormatGuid(),
                             SupervisorId = supervisorId.FormatGuid(),
                             InterviewId = interviewId.FormatGuid(),
@@ -52,7 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
 
             interviewSummaryStorageMock.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary());
 
-            interviewsSynchronizer = Create.InterviewsSynchronizer(interviewSummaryRepositoryWriter: interviewSummaryStorageMock.Object,
+            interviewsSynchronizer = Create.InterviewsSynchronizer(interviewSummaryRepositoryWriter:interviewSummaryStorageMock.Object,
                 commandService: commandServiceMock.Object, userDocumentStorage: userDocumentStorageMock.Object, plainStorage: plainStorageMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object);
         };
 
@@ -60,11 +59,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             interviewsSynchronizer.PullInterviewsForSupervisors(new[] { Guid.NewGuid() });
 
 
-        It should_HardDeleteInterview_be_called_once = () =>
+        It should_CancelInterviewByHQSynchronizationCommand_be_called_once = () =>
             commandServiceMock.Verify(
                 x =>
                     x.Execute(
-                        Moq.It.IsAny<HardDeleteInterview>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
+                        Moq.It.IsAny<CancelInterviewByHQSynchronizationCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;
@@ -82,6 +81,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         private static Mock<IQueryableReadSideRepositoryReader<UserDocument>> userDocumentStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
         private static Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>> plainStorageMock = new Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>();
         private static Mock<IHeadquartersInterviewReader> headquartersInterviewReaderMock = new Mock<IHeadquartersInterviewReader>();
-        private static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryStorageMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
+        private static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryStorageMock=new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
     }
 }

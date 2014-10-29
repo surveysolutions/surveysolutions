@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading;
@@ -19,9 +18,8 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using It = Machine.Specifications.It;
-using it = Moq.It;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests.Push
 {
     internal class when_pushing_one_interview_with_all_events_having_hq_synchronization_origin : InterviewsSynchronizerTestsContext
     {
@@ -37,10 +35,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             });
 
             var eventStore = Mock.Of<IEventStore>(store
-                => store.ReadFrom(interviewId, 0, it.IsAny<long>()) == eventStream);
+                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == eventStream);
 
             var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(writer
-                => writer.QueryAll(it.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
+                => writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
 
             fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder()).Returns(new List<InterviewBinaryDataDescriptor>());
 
@@ -60,19 +58,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             httpMessageHandlerMock.Protected().Verify("SendAsync", Times.Never(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
 
         It should_not_log_errors = () =>
-            loggerMock.Verify(logger => logger.Error(it.IsAny<string>(), it.IsAny<Exception>()), Times.Never);
+            loggerMock.Verify(logger => logger.Error(Moq.It.IsAny<string>(), Moq.It.IsAny<Exception>()), Times.Never);
 
         It should_move_interview_files_into_sync_storage = () =>
           fileSyncRepository.Verify(x=>x.MoveInterviewsBinaryDataToSyncFolder(interviewId), Times.Once);
 
         It should_mark_interview_as_sent_to_hq_using_hq_synchronization_origin = () =>
             commandServiceMock.Verify(service =>
-                service.Execute(it.Is<MarkInterviewAsSentToHeadquarters>(command => command.InterviewId == interviewId), "hq-sync"),
+                service.Execute(Moq.It.Is<MarkInterviewAsSentToHeadquarters>(command => command.InterviewId == interviewId), "hq-sync"),
                 Times.Once);
 
         It should_execute_only_one_command = () =>
             commandServiceMock.Verify(service =>
-                service.Execute(it.IsAny<ICommand>(), it.IsAny<string>()),
+                service.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()),
                 Times.Once);
 
         private static Mock<HttpMessageHandler> httpMessageHandlerMock = new Mock<HttpMessageHandler>();
