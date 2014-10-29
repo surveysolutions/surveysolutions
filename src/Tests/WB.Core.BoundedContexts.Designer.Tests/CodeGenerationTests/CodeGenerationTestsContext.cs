@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Machine.Specifications.Annotations;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -148,6 +150,38 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             return questionnaireDocument;
         }
 
+        public static QuestionnaireDocument CreateQuestionnaireWithCategoricalMultiLinkedMandatoryQuestion()
+        {
+            var linkedToQuestionId = new Guid("11111111111111111111111111111111");
+            return new QuestionnaireDocument()
+            {
+                Children = new List<IComposite>()
+                {
+                    new Group("Chapter")
+                    {
+                        Children = new List<IComposite>()
+                        {
+                            new Group("Roster")
+                            {
+                                IsRoster = true,
+                                RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                                RosterFixedTitles = new[] {"Roster row 1", "Roster row 2"},
+                                Children = new List<IComposite>()
+                                {
+                                    new TextQuestion("Text") {PublicKey = linkedToQuestionId}
+                                }
+                            },
+                            new MultyOptionsQuestion("Categrical multi linked mandatory")
+                            {
+                                QuestionType = QuestionType.MultyOption,
+                                Mandatory = true,
+                                LinkedToQuestionId = linkedToQuestionId
+                            }
+                        }
+                    }
+                }
+            };
+        }
 
         public static QuestionnaireDocument CreateQuestionnaireDocumenteWithOneNumericIntegerQuestionAndRosters(Guid questionnaireId,
             Guid questionId, Guid rosterId)
