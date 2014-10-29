@@ -237,6 +237,7 @@
     <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions_on_roster.cs" />
     <Compile Include="CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
     <Compile Include="CodeGenerationTests\when_expression_state_processes_mandatory_question.cs" />
+    <Compile Include="CodeGenerationTests\when_generating_assembly_and_questionnaire_has_multi_linked_mandatory_question.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="InterviewCompilerTests\when_generating_assembly_as_string.cs" />
