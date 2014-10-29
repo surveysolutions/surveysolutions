@@ -481,7 +481,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
         }
 
-        private void Apply(NumericQuestionChanged e)
+        internal void Apply(NumericQuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
@@ -4242,9 +4242,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup roster = this.GetRosterByrVariableName(identifier);
 
             if (question == null && roster == null)
-                throw new QuestionnaireException(DomainExceptionType.ExpressionContainsNotExistingQuestionReference, string.Format(
-                    "Identifier '{0}' from expression '{1}' is not valid question identifier. Question with such an identifier is missing.",
-                    identifier, expression));
+                throw new QuestionnaireException(
+                    DomainExceptionType.ExpressionContainsNotExistingQuestionOrRosterReference, 
+                    string.Format(ExceptionMessages.QuestionOrRosterIdentifierIsMissing, identifier, expression));
         }
 
         private IQuestion GetQuestionByStringIdOrVariableName(string identifier)
