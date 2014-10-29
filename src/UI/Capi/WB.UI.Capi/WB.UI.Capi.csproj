@@ -205,7 +205,7 @@
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
-    <Compile Include="Utils\BackgroundColorValueConverter.cs" />
+    <Compile Include="Utils\BooleanToTextColorValueConverter.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
     <Compile Include="Views\FinishIntallationViewModel.cs" />
     <Compile Include="Views\Login\LoginViewFactory.cs" />
