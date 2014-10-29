@@ -637,7 +637,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\System.Data.SQLite.Core.targets'))" />
   </Target>
-  <Target Name="CustomCollectFiles">
+  <Target Name="CustomCollectFiles" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
     <ItemGroup>
       <_CustomFiles Include="Externals\**\*" />
       <FilesForPackagingFromProject Include="%(_CustomFiles.Identity)">
@@ -645,30 +645,24 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="SQLiteCollectFiles_x64">
+  <Target Name="CollectFilesFromBin_x64" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+    <Message Text="Copying sqlite x64" Importance="high"/>
     <ItemGroup>
-      <_SQLiteFiles_x64 Include="..\..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\x64\**\*" />
+      <_SQLiteFiles_x64 Include="$(MSBuildProjectDirectory)\bin\x64\**\*" />
       <FilesForPackagingFromProject Include="%(_SQLiteFiles_x64.Identity)">
         <DestinationRelativePath>bin\x64\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="SQLiteCollectFiles_x86">
+  <Target Name="CollectFilesFromBin_x86" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+    <Message Text="Copying sqlite x86" Importance="high"/>    
     <ItemGroup>
-      <_SQLiteFiles_x86 Include="..\..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\x86\**\*" />
+      <_SQLiteFiles_x86 Include="$(MSBuildProjectDirectory)\bin\x86\**\*" />
       <FilesForPackagingFromProject Include="%(_SQLiteFiles_x86.Identity)">
         <DestinationRelativePath>bin\x86\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
     </ItemGroup>
-  </Target>
-  <PropertyGroup>
-    <CopyAllFilesToSingleFolderForMsdeployDependsOn>      
-      CustomCollectFiles;
-      SQLiteCollectFiles_x64;
-      SQLiteCollectFiles_x86;
-      $(CopyAllFilesToSingleFolderForMsdeployDependsOn);
-    </CopyAllFilesToSingleFolderForMsdeployDependsOn>
-  </PropertyGroup>
+  </Target>  
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
