@@ -202,73 +202,76 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
        
         private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionAndValidationExpressions(QuestionnaireDocument questionnaire)
         {
-            var errors = new List<QuestionnaireVerificationError>();
+            if (IsQuestionnaireValidByValidationsAndConditions(questionnaire)) yield break;
 
-            FindErrorsByConditionsAndValidations(questionnaire, new[]
+            var expressionErrorsCount = 0;
+            var questionnaireItemsWithExpressionErrors =
+                new Queue<IEnumerable<IComposite>>(DivideArrayIntoTwoParts(questionnaire.Find<IComposite>(_ => true)));
+            
+            while (questionnaireItemsWithExpressionErrors.Count > 0)
             {
-                questionnaire.Find<IComposite>(_ => true)
-            }, errors);
-
-            return errors;
-        }
-
-        private void FindErrorsByConditionsAndValidations(QuestionnaireDocument questionnaire,
-            IEnumerable<IEnumerable<IComposite>> questionsAndGroupsWithErrors,
-            ICollection<QuestionnaireVerificationError> errors)
-        {
-            foreach (var questionnaireItems in questionsAndGroupsWithErrors)
-            {
-                if (errors.Count == maxExpressionErrorsCount) break;
+                var questionnaireItems = questionnaireItemsWithExpressionErrors.Dequeue();
 
                 if (!questionnaireItems.Any() ||
                     !HaveQuestionnaireItemsExpressionErrors(questionnaire, questionnaireItems)) continue;
 
                 if (questionnaireItems.Count() == 1)
                 {
-                    var questionnaireItem = questionnaireItems.First();
-                    var group = questionnaireItem as IGroup;
-                    var question = questionnaireItem as IQuestion;
-
-                    if (group != null)
+                    foreach (
+                        var expressionError in
+                            QuestionnaireItemExpressionErrors(questionnaire, questionnaireItems.First()))
                     {
-                        errors.Add(ConditionExpressionSyntaxError(questionnaireItem));
-                    }
+                        if (expressionErrorsCount++ == maxExpressionErrorsCount) yield break;
 
-                    if (question != null)
-                    {
-                        if (string.IsNullOrEmpty(question.ValidationExpression))
-                        {
-                            errors.Add(ConditionExpressionSyntaxError(questionnaireItem));
-                        }
-                        else if (string.IsNullOrEmpty(question.ConditionExpression))
-                        {
-                            errors.Add(ValidationExpressionSyntaxError(question));
-                        }
-                        else
-                        {
-                            if (HasQuestionErrorInConditionExpression(questionnaire, question))
-                            {
-                                errors.Add(ConditionExpressionSyntaxError(questionnaireItem));
-                            }
-
-                            if (HasQuestionErrorInValidationExpression(questionnaire, question))
-                            {
-                                errors.Add(ValidationExpressionSyntaxError(question));
-                            }
-                        }
+                        yield return expressionError;
                     }
 
                     continue;
                 }
 
-                var newQestionnaireItemsCount = questionnaireItems.Count()/2;
+                DivideArrayIntoTwoParts(questionnaireItems).ForEach(questionnaireItemsWithExpressionErrors.Enqueue);
+            }
+        }
 
-                FindErrorsByConditionsAndValidations(questionnaire,
-                    new[]
+        private IEnumerable<IEnumerable<IComposite>> DivideArrayIntoTwoParts(IEnumerable<IComposite> questionnaireItems)
+        {
+            var newQestionnaireItemsCount = questionnaireItems.Count() / 2;
+
+            return new[]{questionnaireItems.Take(newQestionnaireItemsCount), questionnaireItems.Skip(newQestionnaireItemsCount)};
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> QuestionnaireItemExpressionErrors(
+            QuestionnaireDocument questionnaire, IComposite questionnaireItem)
+        {
+            var group = questionnaireItem as IGroup;
+            if (group != null)
+            {
+                yield return ConditionExpressionSyntaxError(questionnaireItem);
+            }
+
+            var question = questionnaireItem as IQuestion;
+            if (question != null)
+            {
+                if (string.IsNullOrEmpty(question.ValidationExpression))
+                {
+                    yield return ConditionExpressionSyntaxError(questionnaireItem);
+                }
+                else if (string.IsNullOrEmpty(question.ConditionExpression))
+                {
+                    yield return ValidationExpressionSyntaxError(question);
+                }
+                else
+                {
+                    if (HasQuestionErrorInConditionExpression(questionnaire, question))
                     {
-                        questionnaireItems.Take(newQestionnaireItemsCount),
-                        questionnaireItems.Skip(newQestionnaireItemsCount)
-                    }, errors);
+                        yield return ConditionExpressionSyntaxError(questionnaireItem);
+                    }
+
+                    if (HasQuestionErrorInValidationExpression(questionnaire, question))
+                    {
+                        yield return ValidationExpressionSyntaxError(question);
+                    }
+                }
             }
         }
 
