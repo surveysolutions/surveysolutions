@@ -33,13 +33,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
                 IEnumerable<AtomFeedEntry<T>> entries = ParseFeed<T>(feedDocument);
                 Uri archiveUrl = GetArchiveUrl(feedDocument);
 
-                while (archiveUrl != null)
+                while (archiveUrl != null && !WasLastReceivedEntryReached(entries, lastReceivedEntryId))
                 {
-                    if (!string.IsNullOrEmpty(lastReceivedEntryId) && entries.Any(x => x.Id == lastReceivedEntryId))
-                    {
-                        break;
-                    }
-
                     XDocument archiveFeedDocument = await ReadFeedPage(archiveUrl, client).ConfigureAwait(false);
                     archiveUrl = GetArchiveUrl(archiveFeedDocument);
 
@@ -50,11 +45,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
 
                 if (!string.IsNullOrEmpty(lastReceivedEntryId))
                 {
+                    if (!WasLastReceivedEntryReached(entries, lastReceivedEntryId))
+                        throw new ArgumentException(string.Format(
+                            "Failed to find entry {0} in feed {1}. This usually means that local configuration was changed to another incorrect feed or target server was cleaned and has a new setup now.",
+                            lastReceivedEntryId, feedUri));
+
                     return entries.SkipWhile(x => x.Id != lastReceivedEntryId).Where(x => x.Id != lastReceivedEntryId).ToList();
                 }
 
                 return entries.ToList();
             }
+        }
+
+        private static bool WasLastReceivedEntryReached<T>(IEnumerable<AtomFeedEntry<T>> entries, string lastReceivedEntryId)
+        {
+            return !string.IsNullOrEmpty(lastReceivedEntryId) && entries.Any(x => x.Id == lastReceivedEntryId);
         }
 
         private static async Task<XDocument> ReadFeedPage(Uri feedUrl, HttpClient client)
