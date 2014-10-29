@@ -61,21 +61,39 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
 
         Because of = () => verificationErrors = verifier.Verify(questionnaire);
 
-        It should_return_WB0091_Error_for_question_with_enablement_condition = () =>
-        {
-            verificationErrors.ShouldContain(x => x.Code == "WB0091");
-            var refereces = verificationErrors.Single(x => x.Code == "WB0091").References.ToList();
-            refereces.Count.ShouldEqual(1);
-            refereces.ShouldContain(x => x.Id == childCascadedComboboxId);
-        };
 
-        It should_return_WB0092_Error_for_question_with_validation_expression = () =>
+        It should_result_contains_WB0091_error = () =>
+            getWB0091Error().ShouldNotBeNull();
+
+        It should_WB0091_error_contains_single_reference = () =>
+            getWB0091Error().References.Count().ShouldEqual(1);
+
+        It should_WB0091_error_contains_reference_to_specified_child_cascading_question_id = () =>
+            getWB0091Error().References.Single().Id.ShouldEqual(childCascadedComboboxId);
+
+        It should_result_contains_WB0092_error = () =>
+            getWB0092Error().ShouldNotBeNull();
+
+        It should_WB0092_error_contains_single_reference = () =>
+            getWB0092Error().References.Count().ShouldEqual(1);
+
+        It should_WB0092_error_contains_reference_to_specified_child_cascading_question_id = () =>
+            getWB0092Error().References.Single().Id.ShouldEqual(secondChildId);
+
+        private static QuestionnaireVerificationError getWB0091Error()
         {
-            verificationErrors.ShouldContain(x => x.Code == "WB0092");
-            var refereces = verificationErrors.Single(x => x.Code == "WB0092").References.ToList();
-            refereces.Count.ShouldEqual(1);
-            refereces.ShouldContain(x => x.Id == secondChildId);
-        };
+            return getQuestionnaireVerificationErrorByCode("WB0091");
+        }
+
+        private static QuestionnaireVerificationError getWB0092Error()
+        {
+            return getQuestionnaireVerificationErrorByCode("WB0092");
+        }
+
+        private static QuestionnaireVerificationError getQuestionnaireVerificationErrorByCode(string code)
+        {
+            return verificationErrors.FirstOrDefault(error => error.Code == code);
+        }
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;
