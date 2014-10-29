@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -19,14 +18,14 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests.Pull
 {
-    internal class when_pulling_rejected_by_hq_interview_absent_on_hq : InterviewsSynchronizerTestsContext
+    internal class when_pulling_rejected_by_hq_interview_created_on_client : InterviewsSynchronizerTestsContext
     {
         private Establish context = () =>
         {
             userDocumentStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
-            .Returns(new UserDocument());
+              .Returns(new UserDocument());
 
             plainStorageMock.Setup(
                 x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalInterviewFeedEntry>, IQueryable<LocalInterviewFeedEntry>>>())).
@@ -43,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                         }
                     }.AsQueryable());
 
-            iInterviewSynchronizationDto = new InterviewSynchronizationDto(Guid.Empty, InterviewStatus.RejectedByHeadquarters, "",
+            iInterviewSynchronizationDto=new InterviewSynchronizationDto(interviewId, InterviewStatus.RejectedByHeadquarters, "",
                         userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
                         new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                         new Dictionary<InterviewItemId, int>(), new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
@@ -60,23 +59,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             interviewsSynchronizer.PullInterviewsForSupervisors(new[] { Guid.NewGuid() });
 
 
-        It should_CreateInterviewCreatedOnClientCommand_be_never_called = () =>
+        It should_CreateInterviewCreatedOnClientCommand_be_called_once = () =>
             commandServiceMock.Verify(
                 x =>
                     x.Execute(
                         Moq.It.Is<CreateInterviewCreatedOnClientCommand>(
                             _ =>
                                 _.Id == interviewId && _.UserId == userId && _.QuestionnaireId == questionnaireId &&
-                                    _.QuestionnaireVersion == 2 && _.InterviewStatus == InterviewStatus.RejectedByHeadquarters && _.FeaturedQuestionsMeta.Length == 0), Constants.HeadquartersSynchronizationOrigin), Times.Never);
+                                    _.QuestionnaireVersion == 2 && _.InterviewStatus == InterviewStatus.RejectedByHeadquarters && _.FeaturedQuestionsMeta.Length==0), Constants.HeadquartersSynchronizationOrigin), Times.Once);
 
-        It should_RejectInterviewFromHeadquartersCommand_be_never_called = () =>
+        It should_RejectInterviewFromHeadquartersCommand_be_called_once = () =>
             commandServiceMock.Verify(
                 x =>
                     x.Execute(
                         Moq.It.Is<RejectInterviewFromHeadquartersCommand>(
                             _ =>
                                 _.InterviewDto == iInterviewSynchronizationDto && _.InterviewerId == userId &&
-                                    _.SupervisorId == supervisorId), Constants.HeadquartersSynchronizationOrigin), Times.Never);
+                                    _.SupervisorId == supervisorId), Constants.HeadquartersSynchronizationOrigin), Times.Once);
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;
@@ -84,7 +83,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
         private static Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         private static Guid supervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB");
-
+  
         private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc");

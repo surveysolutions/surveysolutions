@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -14,18 +13,21 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests.Pull
 {
-    internal class when_pulling_new_interview_created_but_interview_details_is_absen_on_hq : InterviewsSynchronizerTestsContext
+    internal class when_pulling_hard_deleted_by_hq_interview_in_light_delete_state_at_supervisor : InterviewsSynchronizerTestsContext
     {
         private Establish context = () =>
         {
+            userDocumentStorageMock.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<UserDocument>, IQueryable<UserDocument>>>()))
+                .Returns(new[] { new UserDocument() }.AsQueryable());
+
             userDocumentStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
             .Returns(new UserDocument());
 
@@ -36,7 +38,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                     {
                         new LocalInterviewFeedEntry()
                         {
-                            EntryType = EntryType.SupervisorAssigned,
+                            EntryType = EntryType.InterviewDeleted,
                             UserId = userId.FormatGuid(),
                             SupervisorId = supervisorId.FormatGuid(),
                             InterviewId = interviewId.FormatGuid(),
@@ -44,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                         }
                     }.AsQueryable());
 
-            iInterviewSynchronizationDto = new InterviewSynchronizationDto(Guid.Empty, InterviewStatus.SupervisorAssigned, "",
+            iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.RejectedByHeadquarters, "",
                         userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
                         new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                         new Dictionary<InterviewItemId, int>(), new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
@@ -53,25 +55,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                 .Returns(
                     Task.FromResult(iInterviewSynchronizationDto));
 
-            interviewsSynchronizer = Create.InterviewsSynchronizer(
-                commandService: commandServiceMock.Object, userDocumentStorage: userDocumentStorageMock.Object,
-                plainStorage: plainStorageMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object,
-                plainQuestionnaireRepository:
-                    Mock.Of<IPlainQuestionnaireRepository>());
+            var interviewSummaryStorageMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
+            interviewSummaryStorageMock.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary() { IsDeleted = true });
+
+            interviewsSynchronizer = Create.InterviewsSynchronizer(interviewSummaryRepositoryWriter: interviewSummaryStorageMock.Object,
+                commandService: commandServiceMock.Object, userDocumentStorage: userDocumentStorageMock.Object, plainStorage: plainStorageMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object);
         };
 
         Because of = () =>
-            interviewsSynchronizer.PullInterviewsForSupervisors(new[] { Guid.NewGuid() });
+            interviewsSynchronizer.PullInterviewsForSupervisors(new []{supervisorId});
 
-
-        It should_not_be_called_SynchronizeInterviewFromHeadquarters = () =>
+        It should_HardDeleteInterview_be_called_once = () =>
             commandServiceMock.Verify(
                 x =>
                     x.Execute(
-                        Moq.It.Is<SynchronizeInterviewFromHeadquarters>(
+                        Moq.It.Is<HardDeleteInterview>(
                             _ =>
-                                _.Id == interviewId && _.UserId == userId && _.InterviewDto == iInterviewSynchronizationDto), Constants.HeadquartersSynchronizationOrigin), Times.Never);
-
+                                _.InterviewId==interviewId && _.UserId==userId), Constants.HeadquartersSynchronizationOrigin), Times.Once);
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;
@@ -84,6 +84,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc");
         private static InterviewSynchronizationDto iInterviewSynchronizationDto;
+
 
         private static Mock<IQueryableReadSideRepositoryReader<UserDocument>> userDocumentStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
         private static Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>> plainStorageMock = new Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>();

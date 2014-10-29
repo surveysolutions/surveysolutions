@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
-using Main.Core;
 using Main.Core.Events;
 using Moq;
 using Moq.Protected;
@@ -21,9 +20,8 @@ using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
-using it = Moq.It;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests.Push
 {
     internal class when_pushing_interviews_and_one_interview_is_ready_and_has_different_events : InterviewsSynchronizerTestsContext
     {
@@ -87,21 +85,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                     new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(positiveResponse) }));
 
             var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(writer
-                => writer.QueryAll(it.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
+                => writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
 
             var eventStore = Mock.Of<IEventStore>(store
-                => store.ReadFrom(interviewId, 0, it.IsAny<long>()) == eventStream);
+                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == eventStream);
 
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
-                => utils.GetItemAsContent(it.IsAny<InterviewMetaInfo>()) == "metadata json"
-                && utils.GetItemAsContent(it.IsAny<SyncItem>()) == "sync item json"
+                => utils.GetItemAsContent(Moq.It.IsAny<InterviewMetaInfo>()) == "metadata json"
+                && utils.GetItemAsContent(Moq.It.IsAny<SyncItem>()) == "sync item json"
                 && utils.Deserrialize<bool>(positiveResponse) == true);
 
             Mock.Get(jsonUtils)
-                .Setup(utils => utils.GetItemAsContent(it.IsAny<AggregateRootEvent[]>()))
+                .Setup(utils => utils.GetItemAsContent(Moq.It.IsAny<AggregateRootEvent[]>()))
                 .Returns("events json")
                 .Callback<object>(entity => events = (AggregateRootEvent[]) entity);
 
