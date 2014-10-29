@@ -139,6 +139,7 @@
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExporter.cs" />
+    <Compile Include="Implementation\Services\Sql\DataRow.cs" />
     <Compile Include="Implementation\Services\Sql\SqlDataAccessor.cs" />
     <Compile Include="Implementation\Services\Sql\SqliteService.cs" />
     <Compile Include="Implementation\Services\Sql\SqliteServiceFactory.cs" />

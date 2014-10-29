@@ -30,23 +30,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         Because of = () =>
             sqlDataExportWriter.BatchInsert("", new[] { interviewDataExportView }, new[] { new InterviewActionExportView(interviewId.FormatGuid(), InterviewExportedAction.ApproveByHeadquarter, "nastya", DateTime.Now, "int") }, new[] { interviewIdForDelete });
 
-        It should_9_commands_be_executed = () =>
-             sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(9);
+        It should_7_commands_be_executed = () =>
+             sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(7);
 
         It should_one_action_be_inserted = () =>
             sqlServiceTestable.CommandsToExecute[0].ShouldEqual("insert into [interview_actions] values (@var1,@var2,@var3,@var4,@var5,@var6);");
 
-        It should_forth_command_be_delete_from_Action_table = () =>
-           sqlServiceTestable.CommandsToExecute[3].ShouldEqual("DELETE FROM [interview_actions] WHERE [Id] = @interviewId;");
+        It should_second_query_of_all_tables_in_database = () =>
+           sqlServiceTestable.CommandsToExecute[1].ShouldEqual("SELECT name FROM sqlite_master WHERE type='table';");
 
-        It should_seventh_command_be_delete_from_roster_table = () =>
-          sqlServiceTestable.CommandsToExecute[6].ShouldEqual("DELETE FROM [roster level table] WHERE [ParentId2] = @interviewId;");
+        It should_third_command_be_delete_from_interview_actions_table = () =>
+          sqlServiceTestable.CommandsToExecute[2].ShouldEqual("DELETE FROM [interview_actions] WHERE [InterviewId] = @interviewId;");
 
-        It should_eight_command_be_insert_first_new_interview_data_in_level_table = () =>
-           sqlServiceTestable.CommandsToExecute[7].ShouldEqual("insert into [roster level table] values ('0','r1','r2','a','1','1','11111111111111111111111111111111');");
+        It should_forth_command_be_delete_from_roster_table = () =>
+         sqlServiceTestable.CommandsToExecute[3].ShouldEqual("DELETE FROM [roster level table] WHERE [InterviewId] = @interviewId;");
 
-        It should_nine_command_be_insert_second_new_interview_data_in_level_table = () =>
-            sqlServiceTestable.CommandsToExecute[8].ShouldEqual("insert into [roster level table] values ('1','r3','r4','a','1','2','11111111111111111111111111111111');");
+        It should_fifth_command_be_delete_from_roster_table = () =>
+           sqlServiceTestable.CommandsToExecute[4].ShouldEqual("DELETE FROM [roster level table] WHERE [InterviewId] = @interviewId;");
+
+        It should_six_command_be_insert_first_new_interview_data_in_level_table = () =>
+         sqlServiceTestable.CommandsToExecute[5].ShouldEqual("insert into [roster level table] values (@var1,@var2);");
+
+        It should_seventh_command_be_insert_second_new_interview_data_in_level_table = () =>
+            sqlServiceTestable.CommandsToExecute[6].ShouldEqual("insert into [roster level table] values (@var1,@var2);");
 
         private static SqlDataExportWriter sqlDataExportWriter;
         private static SqlServiceTestable sqlServiceTestable;

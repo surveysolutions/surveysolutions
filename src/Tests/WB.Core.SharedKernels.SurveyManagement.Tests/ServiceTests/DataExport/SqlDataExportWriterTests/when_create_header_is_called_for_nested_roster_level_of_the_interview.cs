@@ -24,10 +24,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
             sqlDataExportWriter.CreateStructure(questionnaireExportStructure, "");
 
         It should_command_with_level_table_creation_be_executed = () =>
-            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("create table [my_table] ([Id] TEXT,[ref1] TEXT,[ref2] TEXT,[1] TEXT,[a] TEXT,[ParentId1] TEXT,[ParentId2] NVARCHAR(128));");
+            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("create table [my_table] ([InterviewId] NVARCHAR(128),[Data] BLOB);");
 
         It should_command_with_index_creation_for_level_table_be_executed = () =>
-            sqlServiceTestable.CommandsToExecute[1].ShouldEqual("CREATE INDEX [idxmy_table] ON [my_table]([ParentId2]);");
+            sqlServiceTestable.CommandsToExecute[1].ShouldEqual("CREATE INDEX [idxmy_table] ON [my_table]([InterviewId]);");
 
         private static SqlDataExportWriter sqlDataExportWriter;
         private static SqlServiceTestable sqlServiceTestable;

@@ -14,6 +14,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export
         }
 
         public static string ExtensionOfExportedDataFile { get { return ".tab"; } }
-        public static string SeparatorOfExportedDataFile { get { return "\t "; } }
+        public static char SeparatorOfExportedDataFile { get { return '\t'; } }
     }
 }
