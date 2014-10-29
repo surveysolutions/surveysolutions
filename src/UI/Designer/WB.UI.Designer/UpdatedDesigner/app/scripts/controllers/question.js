@@ -286,6 +286,11 @@
                 return !_.contains(questionTypesDoesNotSupportValidations, type);
             };
 
+            $scope.doesQuestionSupportEnablementConditions = function () {
+                return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Prefilled')
+                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
+            };
+
             $scope.loadQuestion();
         }
     );
