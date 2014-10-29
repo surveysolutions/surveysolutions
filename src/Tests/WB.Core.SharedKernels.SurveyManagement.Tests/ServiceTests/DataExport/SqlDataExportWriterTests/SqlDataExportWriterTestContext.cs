@@ -114,6 +114,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         public IEnumerable<dynamic> Query(string sql, object param = null)
         {
             commandsToExecute.Add(sql);
+            if (sql.Contains("PRAGMA table_info"))
+            {
+                var firstQuotePosition = sql.IndexOf("'");
+                var tableName = sql.Substring(firstQuotePosition+1, sql.LastIndexOf("'") - firstQuotePosition-1);
+                if (!tableWithColumns.ContainsKey(tableName))
+                    return new dynamic[0];
+                return
+                    tableWithColumns[tableName].Select((c, i) => new Dictionary<string, object> { { "Ind", i }, { "name", c } }).ToArray();
+            }
             return new dynamic[0];
         }
 
@@ -121,16 +130,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         {
             commandsToExecute.Add(sql);
 
-            if (sql.Contains("information_schema.tables"))
+            if (sql.Contains("sqlite_master"))
                 return tableWithColumns.Keys.Select(k =>  k  as T).ToArray();
 
-            if (sql.Contains("INFORMATION_SCHEMA.COLUMNS"))
-            {
-                string tableName = (param as dynamic).tableName;
-                if (!tableWithColumns.ContainsKey(tableName))
-                    return new T[0];
-                return tableWithColumns[tableName].Select(c => c as T).ToArray();
-            }
+          
 
             return new T[0];
         }
