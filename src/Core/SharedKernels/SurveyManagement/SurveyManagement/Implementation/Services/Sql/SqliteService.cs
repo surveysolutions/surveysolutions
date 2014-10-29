@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlServerCe;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,21 +13,19 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
 {
-    internal class CompactSqlService : ISqlService
+    internal class SqliteService : ISqlService
     {
         private IDbConnection dbConnection;
         private TransactionScope scope;
-        public CompactSqlService(string pathToDb, IFileSystemAccessor fileSystemAccessor)
+        public SqliteService(string pathToDb, IFileSystemAccessor fileSystemAccessor)
         {
-            string connectionString = "DataSource=\"" + pathToDb + "\"";
+            string connectionString = "Data Source=" + pathToDb;
+
             if (!fileSystemAccessor.IsFileExists(pathToDb))
             {
-                using (var en = new SqlCeEngine(connectionString))
-                {
-                    en.CreateDatabase();
-                }
+                SQLiteConnection.CreateFile(pathToDb);
             }
-            dbConnection = new SqlCeConnection(connectionString);
+            dbConnection = new SQLiteConnection(connectionString);
             scope = new TransactionScope(TransactionScopeOption.RequiresNew);
             dbConnection.Open();
         }
