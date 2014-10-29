@@ -13,6 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
+    [Ignore("KP-4518")]
     internal class when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_roster_level : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
