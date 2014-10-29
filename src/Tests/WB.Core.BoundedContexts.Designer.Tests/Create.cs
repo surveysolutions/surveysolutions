@@ -6,10 +6,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
-using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Spec;
-using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
@@ -27,6 +25,46 @@ namespace WB.Core.BoundedContexts.Designer.Tests
             public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
             {
                 return new ExpressionsMigratedToCSharp();
+            }
+
+            public static NewGroupAdded AddGroup(Guid groupId, Guid? parentId = null, string variableName = null)
+            {
+                return new NewGroupAdded
+                {
+                    PublicKey = groupId,
+                    ParentGroupPublicKey = parentId,
+                    VariableName = variableName
+                };
+            }
+
+            public static GroupBecameARoster GroupBecameRoster(Guid rosterId)
+            {
+                return new GroupBecameARoster(Guid.NewGuid(), rosterId);
+            }
+
+            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, string[] titles)
+            {
+                return new RosterChanged(Guid.NewGuid(), rosterId, null, rosterType, titles, null);
+            }
+
+            public static NewQuestionAdded AddTextQuestion(Guid questionId, Guid parentId)
+            {
+                return new NewQuestionAdded
+                {
+                    PublicKey = questionId,
+                    GroupPublicKey = parentId,
+                    QuestionType = QuestionType.Text
+                };
+            }
+
+            public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName)
+            {
+                return new NumericQuestionChanged
+                {
+                    PublicKey = questionId,
+                    StataExportCaption = variableName,
+                    IsInteger = true
+                };
             }
         }
 
