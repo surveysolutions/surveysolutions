@@ -20,9 +20,8 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
-using it = Moq.It;
 
-namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSynchronizerTests.Push
 {
     internal class when_pushing_one_interview_with_one_event_and_headquarters_returns_negative_response : InterviewsSynchronizerTestsContext
     {
@@ -40,19 +39,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                     new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(negativeResponse) }));
 
             var readyToSendInterviewsRepositoryWriter = Mock.Of<IQueryableReadSideRepositoryWriter<ReadyToSendToHeadquartersInterview>>(writer
-                => writer.QueryAll(it.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
+                => writer.QueryAll(Moq.It.IsAny<Expression<Func<ReadyToSendToHeadquartersInterview, bool>>>()) == new[] { new ReadyToSendToHeadquartersInterview(interviewId) });
 
             CommittedEvent interviewEvent = Create.CommittedEvent(eventSourceId: interviewId, origin: null);
             var eventStore = Mock.Of<IEventStore>(store
-                => store.ReadFrom(interviewId, 0, it.IsAny<long>()) == new CommittedEventStream(interviewId, interviewEvent));
+                => store.ReadFrom(interviewId, 0, Moq.It.IsAny<long>()) == new CommittedEventStream(interviewId, interviewEvent));
 
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
             var jsonUtils = Mock.Of<IJsonUtils>(utils
-                => utils.GetItemAsContent(it.IsAny<InterviewMetaInfo>()) == "metadata json"
-                && utils.GetItemAsContent(it.IsAny<AggregateRootEvent[]>()) == "events json"
-                && utils.GetItemAsContent(it.IsAny<SyncItem>()) == "sync item json"
+                => utils.GetItemAsContent(Moq.It.IsAny<InterviewMetaInfo>()) == "metadata json"
+                && utils.GetItemAsContent(Moq.It.IsAny<AggregateRootEvent[]>()) == "events json"
+                && utils.GetItemAsContent(Moq.It.IsAny<SyncItem>()) == "sync item json"
                 && utils.Deserrialize<bool>(negativeResponse) == false);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
@@ -69,10 +68,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             interviewsSynchronizer.Push(userId);
 
         It should_log_error = () =>
-            loggerMock.Verify(logger => logger.Error(it.IsAny<string>(), it.IsAny<Exception>()), Times.Once);
+            loggerMock.Verify(logger => logger.Error(Moq.It.IsAny<string>(), Moq.It.IsAny<Exception>()), Times.Once);
 
         It should_register_error_in_push_context = () =>
-            headquartersPushContextMock.Verify(context => context.PushError(it.IsAny<string>()), Times.Once);
+            headquartersPushContextMock.Verify(context => context.PushError(Moq.It.IsAny<string>()), Times.Once);
 
         private static Mock<ILogger> loggerMock = new Mock<ILogger>();
         private static InterviewsSynchronizer interviewsSynchronizer;
