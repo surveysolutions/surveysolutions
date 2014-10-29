@@ -24,29 +24,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         Because of = () =>
             sqlDataExportWriter.DeleteInterviewRecords("",interviewId);
 
-        It should_7_commands_be_executed = () =>
-             sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(7);
+        It should_4_commands_be_executed = () =>
+             sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(4);
 
         It should_first_command_be_select_of_all_tables_in_database = () =>
-            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("SELECT name FROM sqlite_master WHERE type='table'");
+            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("SELECT name FROM sqlite_master WHERE type='table';");
 
-        It should_second_command_be_select_of_all_columns_for_interview_action_table = () =>
-           sqlServiceTestable.CommandsToExecute[1].ShouldEqual("PRAGMA table_info('interview_actions')");
+        It should_second_command_be_delete_from_interview_actions_table_by_id = () =>
+           sqlServiceTestable.CommandsToExecute[1].ShouldEqual("DELETE FROM [interview_actions] WHERE [InterviewId] = @interviewId;");
 
-        It should_third_command_be_delete_from_interview_actions_table_by_id = () =>
-           sqlServiceTestable.CommandsToExecute[2].ShouldEqual("DELETE FROM [interview_actions] WHERE [Id] = @interviewId;");
+        It should_third_command_be_delete_from_main_table_by_ParentId2 = () =>
+            sqlServiceTestable.CommandsToExecute[2].ShouldEqual("DELETE FROM [main] WHERE [InterviewId] = @interviewId;");
 
-        It should_fourth_command_be_select_of_all_columns_for_roster_table = () =>
-            sqlServiceTestable.CommandsToExecute[3].ShouldEqual("PRAGMA table_info('main')");
-
-        It should_fifth_command_be_delete_from_main_table_by_ParentId2 = () =>
-            sqlServiceTestable.CommandsToExecute[4].ShouldEqual("DELETE FROM [main] WHERE [Id] = @interviewId;");
-
-        It should_six_command_be_select_of_all_columns_for_main_table = () =>
-            sqlServiceTestable.CommandsToExecute[5].ShouldEqual("PRAGMA table_info('roster')");
-
-        It should_seventh_command_be_delete_from_roster_table_by_id = () =>
-            sqlServiceTestable.CommandsToExecute[6].ShouldEqual("DELETE FROM [roster] WHERE [ParentId2] = @interviewId;");
+        It should_fourth_command_be_delete_from_roster_table_by_id = () =>
+            sqlServiceTestable.CommandsToExecute[3].ShouldEqual("DELETE FROM [roster] WHERE [InterviewId] = @interviewId;");
 
         private static SqlDataExportWriter sqlDataExportWriter;
         private static SqlServiceTestable sqlServiceTestable;
