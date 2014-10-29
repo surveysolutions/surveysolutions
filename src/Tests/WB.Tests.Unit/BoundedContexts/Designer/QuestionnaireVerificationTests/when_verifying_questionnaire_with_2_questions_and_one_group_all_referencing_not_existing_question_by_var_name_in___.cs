@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
@@ -53,31 +54,31 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
         };
 
-        private Because of = () =>
+        Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        private It should_return_3_errors = () =>
+        It should_return_3_errors = () =>
             resultErrors.Count().ShouldEqual(3);
 
-        private It should_return_errors_each_with_code__WB0005__ = () =>
+        It should_return_errors_each_with_code__WB0005__ = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.Code == "WB0005");
 
-        private It should_return_errors_each_having_single_reference = () =>
+        It should_return_errors_each_having_single_reference = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        private It should_return_error_referencing_first_incorrect_question = () =>
+        It should_return_error_referencing_first_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == firstIncorrectQuestionId);
 
-        private It should_return_error_referencing_second_incorrect_question = () =>
+        It should_return_error_referencing_second_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == secondIncorrectQuestionId);
 
-        private It should_return_error_referencing_incorrect_group = () =>
+        It should_return_error_referencing_incorrect_group = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
                     && error.References.Single().Id == incorrectGroupId);

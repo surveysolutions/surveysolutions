@@ -25,20 +25,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
     {
         private Establish context = () =>
         {
-            plainStorageMock.Setup(
-                x => x.Query(Moq.It.IsAny<Func<IQueryable<LocalInterviewFeedEntry>, IQueryable<LocalInterviewFeedEntry>>>())).
-                Returns(
-                    new[]
-                    {
+            var plainStorageMock = new TestPlainStorage<LocalInterviewFeedEntry>();
+            plainStorageMock.Store(
                         new LocalInterviewFeedEntry()
                         {
                             EntryType = EntryType.InterviewDeleted,
                             UserId = userId.FormatGuid(),
                             SupervisorId = supervisorId.FormatGuid(),
                             InterviewId = interviewId.FormatGuid(),
-                            InterviewerId = userId.FormatGuid()
-                        }
-                    }.AsQueryable());
+                            InterviewerId = userId.FormatGuid(),
+                            EntryId = "1"
+                        }, "1");
 
             iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.Deleted, "",
                         userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
@@ -52,12 +49,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
             interviewSummaryStorageMock.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary());
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(interviewSummaryRepositoryWriter: interviewSummaryStorageMock.Object,
-                commandService: commandServiceMock.Object, userDocumentStorage: userDocumentStorageMock.Object, plainStorage: plainStorageMock.Object, headquartersInterviewReader: headquartersInterviewReaderMock.Object);
+                commandService: commandServiceMock.Object, 
+                userDocumentStorage: userDocumentStorageMock.Object, 
+                plainStorage: plainStorageMock, 
+                headquartersInterviewReader: headquartersInterviewReaderMock.Object);
         };
 
         Because of = () =>
-            interviewsSynchronizer.PullInterviewsForSupervisors(new[] { Guid.NewGuid() });
-
+            interviewsSynchronizer.PullInterviewsForSupervisors(new[] { supervisorId });
 
         It should_HardDeleteInterview_be_called_once = () =>
             commandServiceMock.Verify(
@@ -66,21 +65,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Synchronization.InterviewsSyn
                         Moq.It.IsAny<HardDeleteInterview>(), Constants.HeadquartersSynchronizationOrigin), Times.Once);
 
 
-        private static InterviewsSynchronizer interviewsSynchronizer;
-        private static Guid userId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        static InterviewsSynchronizer interviewsSynchronizer;
+        static Guid userId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        static Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        static Guid supervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB");
+        static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc");
 
-        private static Guid supervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB");
+        static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
 
-        private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
+        static InterviewSynchronizationDto iInterviewSynchronizationDto;
 
-        private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc");
-        private static InterviewSynchronizationDto iInterviewSynchronizationDto;
-
-
-        private static Mock<IQueryableReadSideRepositoryReader<UserDocument>> userDocumentStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
-        private static Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>> plainStorageMock = new Mock<IQueryablePlainStorageAccessor<LocalInterviewFeedEntry>>();
-        private static Mock<IHeadquartersInterviewReader> headquartersInterviewReaderMock = new Mock<IHeadquartersInterviewReader>();
-        private static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryStorageMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
+        static Mock<IQueryableReadSideRepositoryReader<UserDocument>> userDocumentStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
+        static Mock<IHeadquartersInterviewReader> headquartersInterviewReaderMock = new Mock<IHeadquartersInterviewReader>();
+        static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryStorageMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
     }
 }
