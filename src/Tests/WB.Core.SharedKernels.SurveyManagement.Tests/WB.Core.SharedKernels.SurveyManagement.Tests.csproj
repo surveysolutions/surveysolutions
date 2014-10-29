@@ -248,6 +248,7 @@
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_add_action_record_called_for_interview_with_complete_action.cs" />
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_add_records_method_is_called_for_main_level_of_interview.cs" />
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_add_records_method_is_called_for_nested_roster_level_of_interview.cs" />
+    <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_batch_insert_interview_data.cs" />
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_create_header_is_called_for_main_level_of_the_interview.cs" />
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_create_header_is_called_for_nested_roster_level_of_the_interview.cs" />
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_create_interview_action_header_is_called_for_interview.cs" />
