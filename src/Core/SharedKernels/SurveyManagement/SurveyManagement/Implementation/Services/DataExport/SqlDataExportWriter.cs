@@ -20,14 +20,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 {
     internal class SqlDataExportWriter : IDataExportWriter
     {
-        private const string text = "ntext";
-        private const string numeric = "money";
-        private const string nvarchar = "nvarchar(512)";
+        private const string text = "TEXT";
+        private const string nvarchar = "NVARCHAR(128)";
         private readonly ISqlServiceFactory sqlServiceFactory;
         private readonly ISqlDataAccessor sqlDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
-
-        private readonly QuestionType[] numericQuestionTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.Numeric };
 
         public SqlDataExportWriter(ISqlDataAccessor sqlDataAccessor, ISqlServiceFactory sqlServiceFactory, IFileSystemAccessor fileSystemAccessor)
         {
@@ -121,11 +118,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var columns = new Dictionary<string, string>();
 
             columns.Add("Id", nvarchar);
-            columns.Add("Action", nvarchar);
-            columns.Add("Originator", nvarchar);
-            columns.Add("Role", nvarchar);
-            columns.Add("Date", nvarchar);
-            columns.Add("Time", nvarchar);
+            columns.Add("Action", text);
+            columns.Add("Originator", text);
+            columns.Add("Role", text);
+            columns.Add("Date", text);
+            columns.Add("Time", text);
 
             CreateTable(sqlService, sqlDataAccessor.InterviewActions, columns);
         }
@@ -134,7 +131,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             var columns = new Dictionary<string, string>();
 
-            columns.Add(header.LevelIdColumnName, header.LevelScopeVector.Length == 0 ? nvarchar : numeric);
+            columns.Add(header.LevelIdColumnName, header.LevelScopeVector.Length == 0 ? nvarchar : text);
 
             if (header.IsTextListScope)
             {
@@ -146,16 +143,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             foreach (ExportedHeaderItem question in header.HeaderItems.Values)
             {
-                var columnType = numericQuestionTypes.Contains(question.QuestionType) ? numeric : text;
                 foreach (var columnName in question.ColumnNames)
                 {
-                    columns.Add( columnName, columnType);
+                    columns.Add(columnName, text);
                 }
             }
 
             for (int i = 0; i < header.LevelScopeVector.Length; i++)
             {
-                columns.Add(string.Format("{0}{1}", sqlDataAccessor.ParentId, i + 1), i == header.LevelScopeVector.Length - 1 ? nvarchar : numeric);
+                columns.Add(string.Format("{0}{1}", sqlDataAccessor.ParentId, i + 1), i == header.LevelScopeVector.Length - 1 ? nvarchar : text);
             }
 
             CreateTable(sqlService, header.LevelName, columns);
@@ -172,6 +168,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 string.Format("DELETE FROM [{0}] WHERE [{1}] = @interviewId;", tableName,
                     idColumnName),
                 new { interviewId });
+        }
+
+        private void InsertIntoTableWithoutVariables(ISqlService sqlService, string tableName, List<string> data)
+        {
+
+            var insertCommand = string.Format("insert into [{0}] values ({1});", tableName,
+                   string.Join(",", data));
+
+            sqlService.ExecuteCommand(insertCommand);
         }
 
         private void InsertIntoTable(ISqlService sqlService, string tableName, List<object> data)
@@ -216,17 +221,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 var parameters = this.BuildInserInterviewRecordParameters(item);
 
-                InsertIntoTable(sqlService, items.LevelName, parameters);
+                InsertIntoTableWithoutVariables(sqlService, items.LevelName, parameters);
             }
         }
 
-        private List<object> BuildInserInterviewRecordParameters(InterviewDataExportRecord item)
+        private List<string> BuildInserInterviewRecordParameters(InterviewDataExportRecord item)
         {
-            var parameters = new List<object> { item.RecordId };
+            var parameters = new List<string> { this.QuoteString(item.RecordId) };
 
             foreach (var referenceValue in item.ReferenceValues)
             {
-                parameters.Add(this.QuoteString(referenceValue));
+                parameters.Add(this.QuoteString(referenceValue) );
             }
 
             foreach (var exportedQuestion in item.Questions)
@@ -234,14 +239,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 foreach (string itemValue in exportedQuestion.Answers)
                 {
                     parameters.Add(string.IsNullOrEmpty(itemValue)
-                        ? null
-                        : this.numericQuestionTypes.Contains(exportedQuestion.QuestionType) ? itemValue : this.QuoteString(itemValue));
+                        ? "null"
+                        : this.QuoteString(itemValue));
                 }
             }
 
             for (int i = 0; i < item.ParentRecordIds.Length; i++)
             {
-                parameters.Add(item.ParentRecordIds[i]);
+                parameters.Add(this.QuoteString(item.ParentRecordIds[i]));
             }
             return parameters;
         }
@@ -250,7 +255,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             var parameters = new List<object>();
             parameters.Add(action.InterviewId);
-            parameters.Add(action.Action);
+            parameters.Add(action.Action.ToString());
             parameters.Add(action.Originator);
             parameters.Add(action.Role);
             parameters.Add(action.Timestamp.ToString("d", CultureInfo.InvariantCulture));
@@ -260,7 +265,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private string QuoteString(string val)
         {
-            return val.Replace("'", "''");
+            return "'" + val.Replace("'", "''")+"'";
         }
     }
 }

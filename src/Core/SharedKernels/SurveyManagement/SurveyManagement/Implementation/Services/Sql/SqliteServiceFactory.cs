@@ -8,18 +8,18 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
 {
-    internal class CompactSqlServiceFactory : ISqlServiceFactory
+    internal class SqliteServiceFactory : ISqlServiceFactory
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public CompactSqlServiceFactory(IFileSystemAccessor fileSystemAccessor)
+        public SqliteServiceFactory(IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public ISqlService CreateSqlService(string dbPath)
         {
-            return new CompactSqlService(dbPath, fileSystemAccessor);
+            return new SqliteService(dbPath, fileSystemAccessor);
         }
     }
 }

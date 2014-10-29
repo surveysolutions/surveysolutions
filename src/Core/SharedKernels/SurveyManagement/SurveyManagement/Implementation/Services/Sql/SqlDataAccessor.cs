@@ -26,13 +26,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
 
         public IEnumerable<string> GetListofTables(ISqlService sqlService)
         {
-            return sqlService.Query<string>("select table_name from information_schema.tables where TABLE_TYPE = 'TABLE'");
+            return sqlService.Query<string>("SELECT name FROM sqlite_master WHERE type='table'");
         }
 
         public IEnumerable<string> GetListOfColumns(ISqlService sqlService, string tableName)
         {
-            return sqlService.Query<string>("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @tableName",
-                new { tableName });
+            var result = new List<string>();
+            var query = sqlService.Query(string.Format("PRAGMA table_info('{0}')", tableName));
+            foreach (var row in query)
+            {
+                foreach (var cell in row)
+                {
+                    if (cell.Key == "name")
+                    {
+                        result.Add(cell.Value);
+                        break;
+                    }
+                }
+            }
+            return result;
         }
 
         public string GetAllDataFolder(string basePath)

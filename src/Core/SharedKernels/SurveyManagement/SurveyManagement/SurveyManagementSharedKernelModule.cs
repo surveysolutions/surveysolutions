@@ -41,11 +41,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly Version applicationBuildVersion;
         private readonly bool overrideReceivedEventTimeStamp;
         private readonly string origin;
+        private readonly bool hqEnabled;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             int supportedQuestionnaireVersionMajor, int supportedQuestionnaireVersionMinor, int supportedQuestionnaireVersionPatch,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin)
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool overrideReceivedEventTimeStamp, string origin, bool hqEnabled)
         {
             this.currentFolderPath = currentFolderPath;
             this.supportedQuestionnaireVersionMajor = supportedQuestionnaireVersionMajor;
@@ -56,6 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.applicationBuildVersion = applicationBuildVersion;
             this.overrideReceivedEventTimeStamp = overrideReceivedEventTimeStamp;
             this.origin = origin;
+            this.hqEnabled = hqEnabled;
         }
 
         public override void Load()
@@ -104,14 +106,19 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
             this.Bind<IDataExportWriter>().To<SqlDataExportWriter>();
             this.Bind<ISqlDataAccessor>().To<SqlDataAccessor>();
-            this.Bind<ISqlServiceFactory>().To<CompactSqlServiceFactory>();
+            this.Bind<ISqlServiceFactory>().To<SqliteServiceFactory>();
 
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
-           // this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();
+
+            if (hqEnabled)
+            {
+                this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();
+                this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
+            }
 
             this.Bind<IIncomePackagesRepository>()
                 .To<IncomePackagesRepository>()
