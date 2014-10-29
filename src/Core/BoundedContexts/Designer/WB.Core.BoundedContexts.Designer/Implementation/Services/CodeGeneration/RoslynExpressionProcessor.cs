@@ -24,12 +24,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return SyntaxFactory
                 .ParseSyntaxTree(code).GetRoot().ChildNodesAndTokens().TreeToEnumerable(_ => _.ChildNodesAndTokens())
                 .Where(IsIdentifierToken)
-                .Where(identifierToken => !IsFunction(identifierToken))
-                .Where(identifierToken => !IsConstructorCall(identifierToken))
-                .Where(identifierToken => !(IsPropertyOrMethod(identifierToken) && !IsPropertyOfLambdaParameter(identifierToken)))
-                .Where(identifierToken => !IsLambdaParameter(identifierToken))
+                .Except(IsFunction)
+                .Except(IsConstructorCall)
+                .Except(IsLambdaParameter)
+                .Except(identifierToken => IsPropertyOrMethod(identifierToken) && !IsPropertyOfLambdaParameter(identifierToken))
                 .Select(token => token.ToString())
-                .Where(identifier => identifier != string.Empty)
+                .Except(string.IsNullOrEmpty)
                 .Distinct();
         }
 
@@ -55,7 +55,59 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return identifierToken.Parent.Parent is ObjectCreationExpressionSyntax;
         }
 
+        private static bool IsPropertyOrMethod(SyntaxNodeOrToken identifierToken)
+        {
+            return IsPartOfMemberAccessChain(identifierToken)
+                && !IsFirstMemberInMemberAccessChain(identifierToken);
+        }
+
+        private static bool IsPropertyOfLambdaParameter(SyntaxNodeOrToken identifierToken)
+        {
+            return IsPartOfMemberAccessChain(identifierToken)
+                && IsSecondMemberInMemberAccessChain(identifierToken)
+                && DoesMemberAccessChainStartWithLambdaParameter(identifierToken.Parent.Parent);
+        }
+
+        private static bool IsFirstMemberInMemberAccessChain(SyntaxNodeOrToken identifierToken)
+        {
+            return identifierToken == GetFirstMemberAsIdentifierTokenFromMemberAccessChain(identifierToken.Parent.Parent);
+        }
+
+        private static bool IsSecondMemberInMemberAccessChain(SyntaxNodeOrToken identifierToken)
+        {
+            return identifierToken.Parent.Parent.ChildNodesAndTokens().Skip(2).First() == identifierToken.Parent;
+        }
+
+        private static bool DoesMemberAccessChainStartWithLambdaParameter(SyntaxNode memberAccessChainNode)
+        {
+            var firstMemberAsIdentifierToken = GetFirstMemberAsIdentifierTokenFromMemberAccessChain(memberAccessChainNode);
+
+            return firstMemberAsIdentifierToken != null && IsLambdaParameter(firstMemberAsIdentifierToken);
+        }
+
+        private static SyntaxNodeOrToken GetFirstMemberAsIdentifierTokenFromMemberAccessChain(SyntaxNode memberAccessChainNode)
+        {
+            ChildSyntaxList childrenOfFirstMemberInChain = memberAccessChainNode.ChildNodesAndTokens().First().ChildNodesAndTokens();
+
+            if (childrenOfFirstMemberInChain.Count != 1)
+                return null;
+
+            SyntaxNodeOrToken potentialIdentifierToken = childrenOfFirstMemberInChain.Single();
+
+            return IsIdentifierToken(potentialIdentifierToken) ? potentialIdentifierToken : null;
+        }
+
+        private static bool IsPartOfMemberAccessChain(SyntaxNodeOrToken identifierToken)
+        {
+            return identifierToken.Parent.Parent is MemberAccessExpressionSyntax;
+        }
+
         private static bool IsLambdaParameter(SyntaxNodeOrToken identifierToken)
+        {
+            return IsSimpleLambdaParameter(identifierToken) || IsParenthesizedLambdaParameter(identifierToken);
+        }
+
+        private static bool IsSimpleLambdaParameter(SyntaxNodeOrToken identifierToken)
         {
             var lambdaNode = FindAncestor<SimpleLambdaExpressionSyntax>(identifierToken);
 
@@ -70,44 +122,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return lambdaParameters.Contains(identifierToken.ToString());
         }
 
-        private static bool IsPropertyOfLambdaParameter(SyntaxNodeOrToken identifierToken)
+        private static bool IsParenthesizedLambdaParameter(SyntaxNodeOrToken identifierToken)
         {
-            // TODO: TLK: requires refactoring of this method or combining with IsPropertyOrMethod method
+            var lambdaNode = FindAncestor<ParenthesizedLambdaExpressionSyntax>(identifierToken);
 
-            SyntaxNode identifierNameNode = identifierToken.Parent;
-
-            bool isPartOfMemberAccessChain = identifierNameNode.Parent is MemberAccessExpressionSyntax;
-
-            if (!isPartOfMemberAccessChain)
+            if (lambdaNode == null)
                 return false;
 
-            bool isSecondMemberInChain = identifierNameNode.Parent.ChildNodesAndTokens().Skip(2).First() == identifierNameNode;
+            IEnumerable<string> lambdaParameters = lambdaNode
+                .ChildNodesAndTokens()
+                .First()
+                .ChildNodesAndTokens()
+                .Where(nodeOrToken => nodeOrToken.IsNode && nodeOrToken.CSharpKind() == SyntaxKind.Parameter)
+                .Select(parameterNode => parameterNode.ToString());
 
-            if (!isSecondMemberInChain)
-                return false;
-
-            SyntaxNodeOrToken firstMemberInChain = identifierNameNode.Parent.ChildNodesAndTokens().First();
-
-            ChildSyntaxList firstMemberInChainChildren = firstMemberInChain.ChildNodesAndTokens();
-
-            if (firstMemberInChainChildren.Count != 1)
-                return false;
-
-            return IsLambdaParameter(firstMemberInChainChildren.Single());
-        }
-
-        private static bool IsPropertyOrMethod(SyntaxNodeOrToken identifierToken)
-        {
-            SyntaxNode identifierNameNode = identifierToken.Parent;
-
-            bool isPartOfMemberAccessChain = identifierNameNode.Parent is MemberAccessExpressionSyntax;
-
-            if (!isPartOfMemberAccessChain)
-                return false;
-
-            bool isFirstMemberInChain = identifierNameNode.Parent.ChildNodesAndTokens().First() == identifierNameNode;
-
-            return !isFirstMemberInChain;
+            return lambdaParameters.Contains(identifierToken.ToString());
         }
 
         private static TAncestor FindAncestor<TAncestor>(SyntaxNodeOrToken nodeOrToken)
