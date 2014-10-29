@@ -8,15 +8,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Sql
 {
     internal interface ISqlDataAccessor
     {
-        IEnumerable<string> GetListofTables(ISqlService sqlService);
-        IEnumerable<string> GetListOfColumns(ISqlService sqlService, string tableName);
         string GetAllDataFolder(string basePath);
         string GetApprovedDataFolder(string basePath);
 
-        string ParentId { get; }
-        string InterviewActions { get; }
-        string DataFile { get; }
+        string InterviewActionsTableName { get; }
+        string DataFileName { get; }
         string AllDataFolder { get; }
         string ApprovedDataFolder { get; }
+        List<string> ActionFileColumns { get; }
+        string InterviewIdColumnName { get; }
+        string DataColumnName { get; }
     }
 }

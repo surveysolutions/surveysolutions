@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
             {
                 using (var fileStream = fileSystemAccessor.ReadFile(fileInDirectory))
                 {
-                    var recordAccessor = recordsAccessorFactory.CreateRecordsAccessor(fileStream, ExportFileSettings.SeparatorOfExportedDataFile);
+                    var recordAccessor = recordsAccessorFactory.CreateRecordsAccessor(fileStream, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
 
                     foreach (var record in recordAccessor.Records.ToList())
                     {

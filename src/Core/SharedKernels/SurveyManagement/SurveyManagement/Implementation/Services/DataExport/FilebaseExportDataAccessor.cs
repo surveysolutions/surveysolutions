@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
 
-                zip.AddFiles(this.dataExporter.GetDataFilesForQuestionnaire(dataDirectoryPath), "");
+                zip.AddFiles(this.dataExporter.GetDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
 
                 zip.AddFiles(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
 
@@ -176,7 +176,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
 
-                zip.AddFiles(this.dataExporter.GetDataFilesForQuestionnaireByInterviewsInApprovedState(dataDirectoryPath), "");
+                zip.AddFiles(this.dataExporter.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, version, dataDirectoryPath), "");
 
                 zip.AddFiles(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
 

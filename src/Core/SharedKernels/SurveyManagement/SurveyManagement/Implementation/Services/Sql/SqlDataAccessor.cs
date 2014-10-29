@@ -11,40 +11,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
 {
     internal class SqlDataAccessor : ISqlDataAccessor
     {
-        protected const string parentId = "ParentId";
-        protected const string interviewActions = "interview_actions";
-        protected const string dataFile = "data.sdf";
+        private const string interviewActions = "interview_actions";
+        private const string dataFileName = "data.sqlite";
 
         private const string allDataFolder = "AllData";
         private const string approvedDataFolder = "ApprovedData";
-        protected readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly List<string> actionFileColumns;
 
         public SqlDataAccessor(IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-        }
-
-        public IEnumerable<string> GetListofTables(ISqlService sqlService)
-        {
-            return sqlService.Query<string>("SELECT name FROM sqlite_master WHERE type='table'");
-        }
-
-        public IEnumerable<string> GetListOfColumns(ISqlService sqlService, string tableName)
-        {
-            var result = new List<string>();
-            var query = sqlService.Query(string.Format("PRAGMA table_info('{0}')", tableName));
-            foreach (var row in query)
-            {
-                foreach (var cell in row)
-                {
-                    if (cell.Key == "name")
-                    {
-                        result.Add(cell.Value);
-                        break;
-                    }
-                }
-            }
-            return result;
+            actionFileColumns = new List<string> { this.InterviewIdColumnName, "Action", "Originator", "Role", "Date", "Time" };
         }
 
         public string GetAllDataFolder(string basePath)
@@ -56,11 +34,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
         {
             return this.fileSystemAccessor.CombinePath(basePath, ApprovedDataFolder);
         }
-
-        public string ParentId { get { return parentId; }}
-        public string InterviewActions { get { return interviewActions; } }
-        public string DataFile { get { return dataFile; }}
+        public string InterviewActionsTableName { get { return interviewActions; } }
+        public string DataFileName { get { return dataFileName; } }
         public string AllDataFolder { get { return allDataFolder; } }
         public string ApprovedDataFolder { get { return approvedDataFolder; } }
+        public List<string> ActionFileColumns { get { return actionFileColumns; } }
+
+        public string InterviewIdColumnName { get { return "InterviewId"; } }
+        public string DataColumnName { get { return "Data"; } }
     }
 }

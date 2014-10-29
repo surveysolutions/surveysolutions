@@ -33,13 +33,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
              sqlServiceTestable.CommandsToExecute.Count.ShouldEqual(3);
 
         It should_first_command_be_delete_all_interview_data_by_id = () =>
-            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("DELETE FROM [main level table] WHERE [ParentId2] = @interviewId;");
+            sqlServiceTestable.CommandsToExecute[0].ShouldEqual("DELETE FROM [main level table] WHERE [InterviewId] = @interviewId;");
 
         It should_second_command_be_intert_first_new_interview_data_in_level_table = () =>
-           sqlServiceTestable.CommandsToExecute[1].ShouldEqual("insert into [main level table] values ('0','r1','r2','a','1','1','parentIdTest1');");
+           sqlServiceTestable.CommandsToExecute[1].ShouldEqual("insert into [main level table] values (@var1,@var2);");
 
         It should_third_command_be_intert_second_new_interview_data_in_level_table = () =>
-          sqlServiceTestable.CommandsToExecute[2].ShouldEqual("insert into [main level table] values ('1','r3','r4','a','1','2','parentIdTest2');");
+          sqlServiceTestable.CommandsToExecute[2].ShouldEqual("insert into [main level table] values (@var1,@var2);");
 
         private static SqlDataExportWriter sqlDataExportWriter;
         private static SqlServiceTestable sqlServiceTestable;
