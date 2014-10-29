@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionReference));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionOrRosterReference));
         }
 
         [Test]
@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionReference));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionOrRosterReference));
             Assert.That(domainException.Message, Is.StringContaining(aliasForNotExistingQuestion));
         }
     }

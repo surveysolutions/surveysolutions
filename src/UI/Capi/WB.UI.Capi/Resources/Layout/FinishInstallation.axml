@@ -21,13 +21,13 @@
                 android:id="@+id/syncEndpoint"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-				android:layout_marginBottom="20dip"
+                android:layout_marginBottom="20dip"
                 android:singleLine="true"
-                local:MvxBind="Text SyncEndpoint; BackgroundColor CanSetSyncEndpoint, Converter=BackgroundColor" />
+                local:MvxBind="Text SyncEndpoint; TextColor CanSetSyncEndpoint, Converter=BooleanToTextColor" />
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-				android:layout_marginTop="5dip"
+                android:layout_marginTop="5dip"
                 android:text="Login" />
             <EditText
                 android:layout_width="fill_parent"
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
                 android:text="Start synchronization"
-				local:MvxBind="Click StartSynchronizationCommand" />
+                local:MvxBind="Click StartSynchronizationCommand" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>
