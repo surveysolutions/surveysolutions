@@ -19,12 +19,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Establish context = () =>
         {
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            filebaseExportDataAccessorMock = new Mock<IFilebaseExportDataAccessor>();
+            filebaseExportDataAccessorMock = new Mock<IFilebasedExportedDataAccessor>();
             filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfFilesByQuestionnaireOrThrow(questionnaireId, questionnaireVersion))
                 .Returns("binary files");
             filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireId, questionnaireVersion))
                 .Returns("data files");
-            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessor: fileSystemAccessorMock.Object, filebaseExportDataAccessor: filebaseExportDataAccessorMock.Object);
+            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessor: fileSystemAccessorMock.Object, filebasedExportedDataAccessor: filebaseExportDataAccessorMock.Object);
         };
 
         Because of = () => fileBasedDataExportRepositoryWriter.DeleteExportedDataForQuestionnaireVersion(questionnaireId, questionnaireVersion);
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
-        private static Mock<IFilebaseExportDataAccessor> filebaseExportDataAccessorMock;
+        private static Mock<IFilebasedExportedDataAccessor> filebaseExportDataAccessorMock;
 
         private static Guid questionnaireId = Guid.NewGuid();
         private static long questionnaireVersion = 3;

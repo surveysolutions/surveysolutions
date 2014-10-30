@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class FilebaseExportDataAccessor : IFilebaseExportDataAccessor
+    internal class FilebasedExportedDataAccessor : IFilebasedExportedDataAccessor
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string pathToExportedData;
         private readonly string pathToExportedFiles;
 
-        public FilebaseExportDataAccessor(IFileSystemAccessor fileSystemAccessor,
+        public FilebasedExportedDataAccessor(IFileSystemAccessor fileSystemAccessor,
             string folderPath, IDataExportService dataExportService, IEnvironmentContentService environmentContentService, ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
