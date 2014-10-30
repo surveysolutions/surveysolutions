@@ -20,11 +20,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
     {
         Establish context = () =>
         {
-            exportedDataFormatter=new Mock<IDataExporter>();
+            exportedDataFormatter=new Mock<IDataExportService>();
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { "1.tab" });
             preloadingTemplateService = CreatePreloadingTemplateService(fileSystemAccessor.Object,
-                dataExporter: exportedDataFormatter.Object);
+                dataExportService: exportedDataFormatter.Object);
         };
 
         Because of = () => result = preloadingTemplateService.GetFilePathToPreloadingTemplate(questionnaireId, 1);
@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
         private static PreloadingTemplateService preloadingTemplateService;
         private static string result;
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
-        private static Mock<IDataExporter> exportedDataFormatter;
+        private static Mock<IDataExportService> exportedDataFormatter;
         private static Guid questionnaireId = Guid.NewGuid();
     }
 }

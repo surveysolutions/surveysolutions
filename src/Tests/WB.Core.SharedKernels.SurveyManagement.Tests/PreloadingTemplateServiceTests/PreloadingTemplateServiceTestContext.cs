@@ -21,11 +21,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
     [Subject(typeof(PreloadingTemplateService))]
     internal class PreloadingTemplateServiceTestContext
     {
-        protected static PreloadingTemplateService CreatePreloadingTemplateService(IFileSystemAccessor fileSystemAccessor = null, IDataExporter dataExporter=null)
+        protected static PreloadingTemplateService CreatePreloadingTemplateService(IFileSystemAccessor fileSystemAccessor = null, IDataExportService dataExportService=null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object;
             return new PreloadingTemplateService(currentFileSystemAccessor, "",
-                dataExporter?? Mock.Of<IDataExporter>(),
+                dataExportService?? Mock.Of<IDataExportService>(),
                 Mock.Of<IArchiveUtils>());
         }
 
