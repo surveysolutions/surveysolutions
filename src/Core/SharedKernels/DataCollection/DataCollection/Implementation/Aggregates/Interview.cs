@@ -2521,10 +2521,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Except(cascadingQuestionsToEnable);
 
             var cascadingQuestionsToEnableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-               cascadingQuestionsToEnable, rosterVector, questionnaire, GetRosterInstanceIds);
+                cascadingQuestionsToEnable, rosterVector, questionnaire, GetRosterInstanceIds);
 
             var cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                  cascadingQuestionsToDisable, rosterVector, questionnaire, GetRosterInstanceIds);
+                cascadingQuestionsToDisable, rosterVector, questionnaire, GetRosterInstanceIds);
 
             Action<IInterviewExpressionState> updateState = expressionProcessorState =>
             {
