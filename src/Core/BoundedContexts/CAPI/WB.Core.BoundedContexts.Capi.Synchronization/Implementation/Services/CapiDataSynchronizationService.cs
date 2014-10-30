@@ -138,14 +138,23 @@ namespace WB.Core.BoundedContexts.Capi.Synchronization.Implementation.Services
             {
                 bool createdOnClient = metaInfo.CreatedOnClient.HasValue && metaInfo.CreatedOnClient.Value;
 
-                this.commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId, metaInfo.TemplateVersion,
+                var featuredQuestionsMeta = metaInfo
+                    .FeaturedQuestionsMeta
+                    .Select(q => new AnsweredQuestionSynchronizationDto(q.PublicKey, new decimal[0], q.Value, string.Empty))
+                    .ToArray();
+
+                var applySynchronizationMetadata = new ApplySynchronizationMetadata(
+                    metaInfo.PublicKey, 
+                    metaInfo.ResponsibleId, 
+                    metaInfo.TemplateId, 
+                    metaInfo.TemplateVersion,
                     (InterviewStatus)metaInfo.Status,
-                    metaInfo.FeaturedQuestionsMeta.Select(
-                        q =>
-                            new AnsweredQuestionSynchronizationDto(
-                                q.PublicKey, new decimal[0], q.Value,
-                                string.Empty))
-                        .ToArray(), metaInfo.Comments, true, createdOnClient));
+                    featuredQuestionsMeta, 
+                    metaInfo.Comments, 
+                    true, 
+                    createdOnClient);
+
+                this.commandService.Execute(applySynchronizationMetadata);
              
                 this.capiSynchronizationCacheService.SaveItem(metaInfo.PublicKey, item.Content);
             }
