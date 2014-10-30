@@ -202,26 +202,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
        
         private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionAndValidationExpressions(QuestionnaireDocument questionnaire)
         {
-            if (IsQuestionnaireValidByValidationsAndConditions(questionnaire)) yield break;
+            if (IsQuestionnaireValidByValidationsAndConditions(questionnaire))
+                yield break;
 
             var expressionErrorsCount = 0;
-            var questionnaireItemsWithExpressionErrors =
-                new Queue<IEnumerable<IComposite>>(DivideArrayIntoTwoParts(questionnaire.Find<IComposite>(_ => true)));
+            var questionnaireItemsWithExpressionErrors = new Queue<IEnumerable<IComposite>>(new[] { questionnaire.Find<IComposite>(_ => true) });
             
             while (questionnaireItemsWithExpressionErrors.Count > 0)
             {
                 var questionnaireItems = questionnaireItemsWithExpressionErrors.Dequeue();
 
-                if (!questionnaireItems.Any() ||
-                    !HaveQuestionnaireItemsExpressionErrors(questionnaire, questionnaireItems)) continue;
+                if (!questionnaireItems.Any() || !HaveQuestionnaireItemsExpressionErrors(questionnaire, questionnaireItems))
+                    continue;
 
                 if (questionnaireItems.Count() == 1)
                 {
-                    foreach (
-                        var expressionError in
-                            QuestionnaireItemExpressionErrors(questionnaire, questionnaireItems.First()))
+                    foreach (var expressionError in QuestionnaireItemExpressionErrors(questionnaire, questionnaireItems.First()))
                     {
-                        if (expressionErrorsCount++ == maxExpressionErrorsCount) yield break;
+                        if (expressionErrorsCount++ == maxExpressionErrorsCount)
+                            yield break;
 
                         yield return expressionError;
                     }
@@ -229,7 +228,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                DivideArrayIntoTwoParts(questionnaireItems).ForEach(questionnaireItemsWithExpressionErrors.Enqueue);
+                foreach (var part in DivideArrayIntoTwoParts(questionnaireItems))
+                {
+                    questionnaireItemsWithExpressionErrors.Enqueue(part);
+                }
             }
         }
 
