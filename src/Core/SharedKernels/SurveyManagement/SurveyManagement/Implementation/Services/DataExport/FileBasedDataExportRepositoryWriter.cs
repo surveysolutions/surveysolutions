@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
         private const string UnknownUserRole = "<UNKNOWN ROLE>";
+        private const int MaxCountOfCachedEntities = 256;
         private bool isCacheEnabled = false;
         private readonly Dictionary<string, QuestionnaireExportEntity> cache = new Dictionary<string, QuestionnaireExportEntity>();
 
@@ -91,6 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 var cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
                 cacheByInterview.InterviewIds.Add(interviewId);
                 cacheByInterview.InterviewForDeleteIds.Remove(interviewId);
+                
                 return;
             }
 
@@ -126,6 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 var cacheByInterview = this.GetOrCreateQuestionnaireExportEntityByInterviewId(interviewId);
                 cacheByInterview.InterviewIds.Remove(interviewId);
                 cacheByInterview.InterviewForDeleteIds.Add(interviewId);
+                ReduceCacheIfNeeded(cacheByInterview.PathToDataBase);
                 return;
             }
 
@@ -164,39 +167,61 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var cachedEntities = this.cache.Keys.ToArray();
             foreach (var cachedEntity in cachedEntities)
             {
-                var entity = cache[cachedEntity];
-                var exportStructure = questionnaireExportStructureWriter.GetById(entity.QuestionnaireId, entity.QuestionnaireVersion);
-                if (exportStructure != null)
-                {
-                    try
-                    {
-                        this.dataExportWriter.BatchInsert(cachedEntity,
-                            cache[cachedEntity].InterviewIds.Select(i => CreateInterviewDataExportView(i, exportStructure))
-                                .Where(i => i != null),
-                            entity.Actions.Select(a => this.CreateInterviewAction(a.Action, a.InterviewId, a.UserId, a.Timestamp))
-                                .Where(a => a != null), entity.InterviewForDeleteIds);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message, e);
-                    }
-                }
-                this.cache.Remove(cachedEntity);
+                if(cache.ContainsKey(cachedEntity))
+                    ReduceCache(cache[cachedEntity]);
             }
             this.isCacheEnabled = false;
         }
 
         public string GetReadableStatus()
         {
-            int cachedEntities = this.cache.Count;
-
-            return string.Format("cache {0,8};    cached: {1,3};    not stored: {2,3}",
+            return string.Format("cache {0};    files: {1}    insert: {2};    delete: {3}    actions: {4}",
                 this.isCacheEnabled ? "enabled" : "disabled",
-                cachedEntities,
-                cachedEntities);
+                cache.Count,
+                cache.Values.Sum(c=>c.InterviewIds.Count),
+                cache.Values.Sum(c => c.InterviewForDeleteIds.Count),
+                cache.Values.Sum(c => c.Actions.Count));
         }
 
         public Type ViewType { get { return typeof(InterviewDataExportView); } }
+
+        private void ReduceCacheIfNeeded(string entityDbPath)
+        {
+            var entity = cache[entityDbPath];
+            if (this.IsCacheLimitReached(entity))
+            {
+                this.ReduceCache(entity);
+            }
+        }
+
+        private bool IsCacheLimitReached(QuestionnaireExportEntity entity)
+        {
+            return entity.InterviewIds.Count >= MaxCountOfCachedEntities;
+        }
+
+        private void ReduceCache(QuestionnaireExportEntity entity)
+        {
+            var exportStructure = questionnaireExportStructureWriter.GetById(entity.QuestionnaireId, entity.QuestionnaireVersion);
+            if (exportStructure == null)
+            {
+                return;
+            }
+
+            try
+            {
+                this.dataExportWriter.BatchInsert(entity.PathToDataBase,
+                    entity.InterviewIds.Select(i => CreateInterviewDataExportView(i, exportStructure))
+                        .Where(i => i != null),
+                    entity.Actions.Select(a => this.CreateInterviewAction(a.Action, a.InterviewId, a.UserId, a.Timestamp))
+                        .Where(a => a != null), entity.InterviewForDeleteIds);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message, e);
+            }
+
+            this.cache.Remove(entity.PathToDataBase);
+        }
 
         private void CreateExportedDataStructure(QuestionnaireExportStructure questionnaireExportStructure)
         {
@@ -294,7 +319,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var dataFolderForTemplatePath = this.filebaseExportDataAccessor.GetFolderPathOfDataByQuestionnaireOrThrow(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
             if (!cache.ContainsKey(dataFolderForTemplatePath))
-                cache.Add(dataFolderForTemplatePath, new QuestionnaireExportEntity(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
+                cache.Add(dataFolderForTemplatePath, new QuestionnaireExportEntity(dataFolderForTemplatePath, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
             return cache[dataFolderForTemplatePath];
         }
 
@@ -366,8 +391,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private class QuestionnaireExportEntity
         {
-            public QuestionnaireExportEntity(Guid questionnaireId, long questionnaireVersion)
+            public QuestionnaireExportEntity(string pathToDataBase, Guid questionnaireId, long questionnaireVersion)
             {
+                this.PathToDataBase = pathToDataBase;
                 this.QuestionnaireId = questionnaireId;
                 this.QuestionnaireVersion = questionnaireVersion;
                 this.InterviewIds = new HashSet<Guid>();
@@ -377,6 +403,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             public Guid QuestionnaireId { get; private set; }
             public long QuestionnaireVersion { get; private set; }
+            public string PathToDataBase { get; private set; }
             public HashSet<Guid> InterviewIds { get; private set; }
             public HashSet<Guid> InterviewForDeleteIds { get; private set; }
             public List<ActionCacheEntity> Actions { get; private set; }
