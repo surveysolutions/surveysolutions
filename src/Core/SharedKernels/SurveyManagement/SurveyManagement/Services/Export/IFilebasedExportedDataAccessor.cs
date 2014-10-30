@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
 {
-    public interface IFilebaseExportDataAccessor
+    public interface IFilebasedExportedDataAccessor
     {
         string GetFolderPathOfFilesByQuestionnaireForInterview(Guid questionnaireId, long version, Guid interviewId);
         string GetFolderPathOfDataByQuestionnaireOrThrow(Guid questionnaireId, long version);

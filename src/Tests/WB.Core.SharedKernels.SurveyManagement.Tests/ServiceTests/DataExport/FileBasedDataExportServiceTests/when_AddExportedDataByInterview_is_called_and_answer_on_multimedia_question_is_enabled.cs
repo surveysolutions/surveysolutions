@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns("1st");
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns<string, string>(Path.Combine);
 
-            filebaseExportDataAccessorMock=new Mock<IFilebaseExportDataAccessor>();
+            filebaseExportDataAccessorMock=new Mock<IFilebasedExportedDataAccessor>();
             filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfFilesByQuestionnaireForInterview(Moq.It.IsAny<Guid>(),
                 Moq.It.IsAny<long>(), Moq.It.IsAny<Guid>())).Returns("path");
 
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
                 .Returns(data);
             fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessorMock.Object,
                 interviewExportServiceMock.Object, plainFileRepository: plainFileRepositoryMock.Object,
-                interviewDataExportView: interviewToExport, filebaseExportDataAccessor: filebaseExportDataAccessorMock.Object);
+                interviewDataExportView: interviewToExport, filebasedExportedDataAccessor: filebaseExportDataAccessorMock.Object);
         };
 
         Because of = () =>
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
 
         private static Mock<IDataExportWriter> interviewExportServiceMock;
-        private static Mock<IFilebaseExportDataAccessor> filebaseExportDataAccessorMock;
+        private static Mock<IFilebasedExportedDataAccessor> filebaseExportDataAccessorMock;
         private static Mock<IPlainInterviewFileStorage> plainFileRepositoryMock;
         private static InterviewDataExportView interviewToExport;
         private static InterviewDataExportLevelView interviewLevelToExport;

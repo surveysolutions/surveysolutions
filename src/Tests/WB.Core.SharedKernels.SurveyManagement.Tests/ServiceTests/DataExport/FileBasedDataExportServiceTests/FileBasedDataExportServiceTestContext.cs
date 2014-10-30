@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         protected static FileBasedDataExportRepositoryWriter CreateFileBasedDataExportService(
             IFileSystemAccessor fileSystemAccessor = null, IDataExportWriter dataExportWriter = null,
             IEnvironmentContentService environmentContentService = null, IPlainInterviewFileStorage plainFileRepository = null,
-            InterviewDataExportView interviewDataExportView = null, IFilebaseExportDataAccessor filebaseExportDataAccessor = null,
+            InterviewDataExportView interviewDataExportView = null, IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, UserDocument user = null, InterviewData interviewData=null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
                         _.CreateInterviewDataExportView(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<InterviewData>()) ==
                             (interviewDataExportView ??
                                 new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, new InterviewDataExportLevelView[0]))),
-                filebaseExportDataAccessor ?? Mock.Of<IFilebaseExportDataAccessor>());
+                filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>());
         }
 
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,

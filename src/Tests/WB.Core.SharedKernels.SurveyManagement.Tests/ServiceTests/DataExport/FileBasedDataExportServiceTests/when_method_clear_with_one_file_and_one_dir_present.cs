@@ -17,9 +17,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     {
         Establish context = () =>
         {
-            filebaseExportDataAccessorMock = new Mock<IFilebaseExportDataAccessor>();
+            filebaseExportDataAccessorMock = new Mock<IFilebasedExportedDataAccessor>();
 
-            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(filebaseExportDataAccessor: filebaseExportDataAccessorMock.Object);
+            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(filebasedExportedDataAccessor: filebaseExportDataAccessorMock.Object);
         };
         
         Because of = () => fileBasedDataExportRepositoryWriter.Clear();
@@ -31,6 +31,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             filebaseExportDataAccessorMock.Verify(x => x.CleanExportDataFolder(), Times.Once());
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
-        private static Mock<IFilebaseExportDataAccessor> filebaseExportDataAccessorMock;
+        private static Mock<IFilebasedExportedDataAccessor> filebaseExportDataAccessorMock;
     }
 }

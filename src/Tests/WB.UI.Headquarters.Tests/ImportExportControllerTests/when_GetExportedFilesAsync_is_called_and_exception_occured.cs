@@ -17,7 +17,7 @@ namespace WB.UI.Headquarters.Tests.ImportExportControllerTests
         Establish context = () =>
         {
             questionnaireId = Guid.NewGuid();
-            dataExportServiceMock = new Mock<IFilebaseExportDataAccessor>();
+            dataExportServiceMock = new Mock<IFilebasedExportedDataAccessor>();
             dataExportServiceMock.Setup(x => x.GetFilePathToExportedBinaryData(questionnaireId, 1)).Throws<NullReferenceException>();
 
             controller = CreateImportExportController(dataExportServiceMock.Object);
@@ -34,6 +34,6 @@ namespace WB.UI.Headquarters.Tests.ImportExportControllerTests
         private static ImportExportController controller;
         private static Guid questionnaireId;
         private static object Result;
-        private static Mock<IFilebaseExportDataAccessor> dataExportServiceMock;
+        private static Mock<IFilebasedExportedDataAccessor> dataExportServiceMock;
     }
 }
