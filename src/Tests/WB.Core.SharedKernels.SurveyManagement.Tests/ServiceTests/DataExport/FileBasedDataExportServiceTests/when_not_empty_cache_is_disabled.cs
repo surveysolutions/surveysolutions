@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         {
             dataExportWriterMock=new Mock<IDataExportWriter>();
 
-            var filebaseExportDataAccessorMock = new Mock<IFilebaseExportDataAccessor>();
+            var filebaseExportDataAccessorMock = new Mock<IFilebasedExportedDataAccessor>();
             filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireId, questionnaireVersion))
                 .Returns(existingQuestionnairePath);
             filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireForDeleteId, questionnaireForDeleteVersion))
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
 
             fileBasedDataExportRepositoryWriter =
                 CreateFileBasedDataExportService(interviewSummaryWriter: interviewSummaryStorageMock.Object,
-                    filebaseExportDataAccessor: filebaseExportDataAccessorMock.Object, dataExportWriter: dataExportWriterMock.Object, user:new UserDocument());
+                    filebasedExportedDataAccessor: filebaseExportDataAccessorMock.Object, dataExportWriter: dataExportWriterMock.Object, user: new UserDocument());
             fileBasedDataExportRepositoryWriter.EnableCache();
             fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
             fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(interviewByDeletedTemplateId);

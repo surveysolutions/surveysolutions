@@ -23,9 +23,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             AddLevelToExportStructure(questionnaireExportStructure,Guid.NewGuid(),levelName1);
             AddLevelToExportStructure(questionnaireExportStructure, Guid.NewGuid(), levelName2);
 
-            filebaseExportDataAccessorMock = new Mock<IFilebaseExportDataAccessor>();
+            filebaseExportDataAccessorMock = new Mock<IFilebasedExportedDataAccessor>();
 
-            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(filebaseExportDataAccessor: filebaseExportDataAccessorMock.Object, environmentContentService: environmentContentServiceMock.Object);
+            fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(filebasedExportedDataAccessor: filebaseExportDataAccessorMock.Object, environmentContentService: environmentContentServiceMock.Object);
         };
 
         Because of = () => fileBasedDataExportRepositoryWriter.CreateExportStructureByTemplate(questionnaireExportStructure);
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             Moq.It.IsAny<string>()), Times.Once());
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
-        private static Mock<IFilebaseExportDataAccessor> filebaseExportDataAccessorMock;
+        private static Mock<IFilebasedExportedDataAccessor> filebaseExportDataAccessorMock;
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static Mock<IEnvironmentContentService> environmentContentServiceMock;
 

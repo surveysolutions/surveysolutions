@@ -17,11 +17,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
     {
         Establish context = () =>
         {
-            var filebaseExportRouteServiceMock = new Mock<IFilebaseExportDataAccessor>();
+            var filebaseExportRouteServiceMock = new Mock<IFilebasedExportedDataAccessor>();
             filebaseExportRouteServiceMock.Setup(x => x.GetFolderPathOfDataByQuestionnaireOrThrow(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Throws<InterviewDataExportException>();
             fileBasedDataExportRepositoryWriter =
-                CreateFileBasedDataExportService(filebaseExportDataAccessor: filebaseExportRouteServiceMock.Object);
+                CreateFileBasedDataExportService(filebasedExportedDataAccessor: filebaseExportRouteServiceMock.Object);
         };
 
         Because of =()=>
