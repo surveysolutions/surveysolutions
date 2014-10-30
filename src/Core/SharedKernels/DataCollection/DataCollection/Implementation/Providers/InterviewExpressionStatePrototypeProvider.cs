@@ -31,16 +31,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 //path is cached
                 //if assembly was loaded from this path it won't be loaded again 
                 var compiledAssembly = Assembly.LoadFrom(assemblyFile);
-
                 Type interviewExpressionStateType = compiledAssembly.GetTypes().
                     SingleOrDefault(type => !(type.IsAbstract || type.IsGenericTypeDefinition || type.IsInterface) && type.GetInterfaces().Contains(typeof(IInterviewExpressionState)));
 
                 if (interviewExpressionStateType == null)
                     throw new Exception("Type implementing IInterviewExpressionState was not found");
 
-                var interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
+                try
+                {
+                    var interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
 
-                return interviewExpressionState;
+                    return interviewExpressionState;
+                }
+                catch (Exception e)
+                {
+                    Logger.Fatal("Error on activating interview expression state. Cannot cast to created object to IInterviewExpressionState", e);
+                    return null;
+                }
             }
             catch (Exception exception)
             {
@@ -48,8 +55,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 //hide original one
                 throw new InterviewException("Interview loading error. Code EC0001");
             }
-
-            
         }
     }
 }
