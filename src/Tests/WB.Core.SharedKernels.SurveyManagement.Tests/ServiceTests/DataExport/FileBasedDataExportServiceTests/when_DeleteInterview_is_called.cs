@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Because of = () =>
             fileBasedDataExportRepositoryWriter.DeleteInterview(interviewId);
 
-        It should_interview_be_deleted_from_IDataExportWriter = () =>
+        It should_delete_interview_from_IDataExportWriter = () =>
             interviewExportServiceMock.Verify(
                 x => x.DeleteInterviewRecords(Moq.It.IsAny<string>(), interviewId), Times.Once);
 

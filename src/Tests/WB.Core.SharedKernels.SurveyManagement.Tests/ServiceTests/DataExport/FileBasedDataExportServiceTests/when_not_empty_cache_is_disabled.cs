@@ -51,11 +51,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Because of = () =>
             fileBasedDataExportRepositoryWriter.DisableCache();
 
-        It should_batch_inser_be_called_once_for_existing_questionnaire = () =>
+        It should_call_once_batch_insert_for_existing_questionnaire = () =>
             dataExportWriterMock.Verify(x => x.BatchInsert(existingQuestionnairePath, Moq.It.Is<IEnumerable<InterviewDataExportView>>(_ => _.Count() == 1),
                 Moq.It.Is<IEnumerable<InterviewActionExportView>>(_ => _.Count() == 1 && _.First().Action == InterviewExportedAction.SupervisorAssigned), Moq.It.Is<IEnumerable<Guid>>(_ => _.Count() == 1 && _.First() == interviewForDeleteId)), Times.Once);
 
-        It should_batch_inser_be_never_called_for_deleted_questionnaire = () =>
+        It should_never_call_batch_insert_for_deleted_questionnaire = () =>
            dataExportWriterMock.Verify(x => x.BatchInsert(deletingQuestionnairePath, Moq.It.IsAny<IEnumerable<InterviewDataExportView>>(),
                Moq.It.IsAny<IEnumerable<InterviewActionExportView>>(), Moq.It.IsAny<IEnumerable<Guid>>()), Times.Never);
 

@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Because of = () =>
             fileBasedDataExportRepositoryWriter.AddInterviewAction(InterviewExportedAction.InterviewerAssigned, interviewId, Guid.NewGuid(),DateTime.Now);
 
-        It should_InterviewerAssigned_action_be_passed_to_data_export_writer = () =>
+        It should_pass_InterviewerAssigned_action_to_data_export_writer = () =>
             interviewExportServiceMock.Verify(
                 x => x.AddActionRecord(Moq.It.Is<InterviewActionExportView>(i => i.Action == InterviewExportedAction.InterviewerAssigned),
                     Moq.It.IsAny<string>()), Times.Once);
