@@ -29,10 +29,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
 
         Because of = () => fileBasedDataExportRepositoryWriter.DeleteExportedDataForQuestionnaireVersion(questionnaireId, questionnaireVersion);
 
-        It should_data_folder_be_deleted = () =>
+        It should_delete_data_folder = () =>
             fileSystemAccessorMock.Verify(x => x.DeleteDirectory("data files"), Times.Once());
 
-        It should_files_folder_be_deleted = () =>
+        It should_delete_files_folder = () =>
             fileSystemAccessorMock.Verify(x => x.DeleteDirectory("binary files"), Times.Once());
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;

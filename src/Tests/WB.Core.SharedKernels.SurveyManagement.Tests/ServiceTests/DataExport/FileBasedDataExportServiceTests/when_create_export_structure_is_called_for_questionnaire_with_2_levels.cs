@@ -30,17 +30,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
 
         Because of = () => fileBasedDataExportRepositoryWriter.CreateExportStructureByTemplate(questionnaireExportStructure);
 
-        It should_data_folder_be_created = () =>
+        It should_create_data_folder = () =>
             filebaseExportDataAccessorMock.Verify(x => x.CreateExportDataFolder(questionnaireExportStructure.QuestionnaireId,questionnaireExportStructure.Version), Times.Once());
 
-        It should_files_folder_be_created = () =>
+        It should_create_files_folder = () =>
             filebaseExportDataAccessorMock.Verify(x => x.CreateExportFileFolder(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version), Times.Once());
 
-        It should_environment_files_be_created_for_first_level = () =>
+        It should_create_environment_files_for_first_level = () =>
             environmentContentServiceMock.Verify(x => x.CreateContentOfAdditionalFile(Moq.It.IsAny<HeaderStructureForLevel>(), "level test1.tab",
              Moq.It.IsAny<string>()), Times.Once());
 
-        It should_environment_files_be_created_for_second_level = () =>
+        It should_create_environment_files_for_second_level = () =>
             environmentContentServiceMock.Verify(x => x.CreateContentOfAdditionalFile(Moq.It.IsAny<HeaderStructureForLevel>(), "level test2.tab",
             Moq.It.IsAny<string>()), Times.Once());
 
