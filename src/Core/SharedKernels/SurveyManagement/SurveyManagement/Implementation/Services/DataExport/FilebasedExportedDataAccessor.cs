@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ionic.Zip;
-using Ionic.Zlib;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
@@ -16,7 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
     internal class FilebasedExportedDataAccessor : IFilebasedExportedDataAccessor
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-
+        private readonly IArchiveUtils archiveUtils;
         private readonly IDataExportService dataExportService;
         private readonly IEnvironmentContentService environmentContentService;
 
@@ -28,12 +26,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string pathToExportedFiles;
 
         public FilebasedExportedDataAccessor(IFileSystemAccessor fileSystemAccessor,
-            string folderPath, IDataExportService dataExportService, IEnvironmentContentService environmentContentService, ILogger logger)
+            string folderPath, IDataExportService dataExportService, IEnvironmentContentService environmentContentService, ILogger logger, IArchiveUtils archiveUtils)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportService = dataExportService;
             this.environmentContentService = environmentContentService;
             this.logger = logger;
+            this.archiveUtils = archiveUtils;
             this.pathToExportedData = fileSystemAccessor.CombinePath(folderPath, ExportedDataFolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
@@ -149,16 +148,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
-            using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
-            {
-                zip.CompressionLevel = CompressionLevel.BestCompression;
+            var filesToArchive = new List<string>();
 
-                zip.AddFiles(this.dataExportService.GetDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
+            filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+            filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
 
-                zip.AddFiles(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
-
-                zip.Save(archiveFilePath);
-            }
+            archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
 
             return archiveFilePath;
         }
@@ -167,22 +162,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireId, version);
 
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, string.Format("{0}Approved.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, string.Format("{0}_Approved.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
-            using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
-            {
-                zip.CompressionLevel = CompressionLevel.BestCompression;
+            var filesToArchive = new List<string>();
 
-                zip.AddFiles(this.dataExportService.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, version, dataDirectoryPath), "");
+            filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, version, dataDirectoryPath));
+            filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
 
-                zip.AddFiles(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
-
-                zip.Save(archiveFilePath);
-            }
-
+            archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
+          
             return archiveFilePath;
         }
 
@@ -195,12 +186,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
-            using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
-            {
-                zip.CompressionLevel = CompressionLevel.BestCompression;
-                zip.AddDirectory(fileDirectoryPath);
-                zip.Save(archiveFilePath);
-            }
+            archiveUtils.ZipFiles(new string[0], new[] { fileDirectoryPath }, archiveFilePath);
 
             return archiveFilePath;
         }
