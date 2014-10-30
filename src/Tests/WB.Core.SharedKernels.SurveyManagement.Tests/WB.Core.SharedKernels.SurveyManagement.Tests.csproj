@@ -253,6 +253,8 @@
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_create_header_is_called_for_nested_roster_level_of_the_interview.cs" />
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_create_interview_action_header_is_called_for_interview.cs" />
     <Compile Include="ServiceTests\DataExport\SqlDataExportWriterTests\when_delete_interview_method_is_called.cs" />
+    <Compile Include="ServiceTests\DataExport\SqlToTabDataExportServiceTests\SqlToTabDataExportServiceTestContext.cs" />
+    <Compile Include="ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\Create.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\InterviewDetailsDataProcessorTestsContext.cs" />
     <Compile Include="SynchronizationTests\SchedulersTests\InterviewDetailsDataProcessorTests\when_process_2_capi_packages_and_max_per_process_is_1.cs" />

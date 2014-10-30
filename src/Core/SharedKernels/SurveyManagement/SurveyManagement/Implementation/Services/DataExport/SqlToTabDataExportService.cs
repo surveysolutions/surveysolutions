@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class SqlDataExporter : IDataExporter
+    internal class SqlToTabDataExportService : IDataExportService
     {
         private readonly ISqlServiceFactory sqlServiceFactory;
         private readonly ICsvWriterFactory csvWriterFactory;
@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter;
 
-        public SqlDataExporter(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory,
+        public SqlToTabDataExportService(IFileSystemAccessor fileSystemAccessor, ISqlServiceFactory sqlServiceFactory,
             ICsvWriterFactory csvWriterFactory, ISqlDataAccessor sqlDataAccessor,
             IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> questionnaireExportStructureWriter)
         {
@@ -60,6 +60,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
+        public string[] GetDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
+        {
+            var allDataFolderPath = sqlDataAccessor.GetAllDataFolder(basePath);
+
+            if (fileSystemAccessor.IsDirectoryExists(allDataFolderPath))
+                return fileSystemAccessor.GetFilesInDirectory(allDataFolderPath);
+
+            fileSystemAccessor.CreateDirectory(allDataFolderPath);
+
+            return this.ExportToTabFile(questionnaireId, questionnaireVersion,allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFileName));
+        }
+
+        public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath)
+        {
+            var approvedDataFolderPath = sqlDataAccessor.GetApprovedDataFolder(basePath);
+
+            if (fileSystemAccessor.IsDirectoryExists(approvedDataFolderPath))
+                return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath);
+
+            fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
+
+            return this.ExportToTabFile(questionnaireId, questionnaireVersion,approvedDataFolderPath, fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFileName),
+                InterviewExportedAction.ApproveByHeadquarter);
+        }
+
         private void CreateHeaderForActionFile(ICsvWriterService fileWriter)
         {
             foreach (var actionFileColumn in sqlDataAccessor.ActionFileColumns)
@@ -89,37 +114,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 }
             }
 
-
             for (int i = 0; i < headerStructureForLevel.LevelScopeVector.Length; i++)
             {
                 fileWriter.WriteField(string.Format("{0}{1}", parentId, i + 1));
             }
             fileWriter.NextRecord();
-        }
-
-        public string[] GetDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
-        {
-            var allDataFolderPath = sqlDataAccessor.GetAllDataFolder(basePath);
-
-            if (fileSystemAccessor.IsDirectoryExists(allDataFolderPath))
-                return fileSystemAccessor.GetFilesInDirectory(allDataFolderPath);
-
-            fileSystemAccessor.CreateDirectory(allDataFolderPath);
-
-            return this.ExportToTabFile(questionnaireId, questionnaireVersion,allDataFolderPath, this.fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFileName));
-        }
-
-        public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath)
-        {
-            var approvedDataFolderPath = sqlDataAccessor.GetApprovedDataFolder(basePath);
-
-            if (fileSystemAccessor.IsDirectoryExists(approvedDataFolderPath))
-                return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath);
-
-            fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
-
-            return this.ExportToTabFile(questionnaireId, questionnaireVersion,approvedDataFolderPath, fileSystemAccessor.CombinePath(basePath, sqlDataAccessor.DataFileName),
-                InterviewExportedAction.ApproveByHeadquarter);
         }
 
         private IEnumerable<DataRow> QueryRecordsFromTableByInterviewsInApprovedStatus(ISqlService sqlService, string tableName, InterviewExportedAction? action)
@@ -132,7 +131,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 + "where [{1}].[Action] = @interviewAction", tableName, sqlDataAccessor.InterviewActionsTableName,
                 sqlDataAccessor.InterviewIdColumnName), new { interviewAction = action.Value.ToString() });
         }
-
 
         private IEnumerable<string[]> QueryFromActionTable(ISqlService sqlService, InterviewExportedAction? action)
         {
@@ -186,7 +184,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                             var otherRecords = ParseByteArray(dataRow.Data);
                             foreach (var otherRecord in otherRecords)
                             {
-                                tabWriter.WriteField(otherRecord);
+                                tabWriter.WriteField(otherRecord ?? string.Empty);
                             }
 
                             tabWriter.NextRecord();
@@ -223,7 +221,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private string[] ParseByteArray(byte[] bytes)
         {
-            return Encoding.Default.GetString(bytes).Split(ExportFileSettings.SeparatorOfExportedDataFile);
+            return Encoding.Unicode.GetString(bytes).Split(ExportFileSettings.SeparatorOfExportedDataFile);
         }
     }
 }

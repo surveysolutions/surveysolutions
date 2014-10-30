@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
 {
-    internal interface IDataExporter
+    internal interface IDataExportService
     {
         void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string targetFolder);
         string[] GetDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath);

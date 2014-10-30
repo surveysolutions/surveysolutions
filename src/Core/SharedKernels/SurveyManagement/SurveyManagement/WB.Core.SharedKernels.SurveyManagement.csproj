@@ -138,7 +138,7 @@
     <Compile Include="Implementation\Services\DataExport\FilebaseExportDataAccessor.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\DataExport\SqlDataExportWriter.cs" />
-    <Compile Include="Implementation\Services\DataExport\SqlDataExporter.cs" />
+    <Compile Include="Implementation\Services\DataExport\SqlToTabDataExportService.cs" />
     <Compile Include="Implementation\Services\Sql\DataRow.cs" />
     <Compile Include="Implementation\Services\Sql\SqlDataAccessor.cs" />
     <Compile Include="Implementation\Services\Sql\SqliteService.cs" />
@@ -178,7 +178,7 @@
     </Compile>
     <Compile Include="QuestionnaireUpgraderModule.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
-    <Compile Include="Services\Export\IDataExporter.cs" />
+    <Compile Include="Services\Export\IDataExportService.cs" />
     <Compile Include="Services\Export\IFilebaseExportDataAccessor.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IDataExportRepositoryWriter.cs" />

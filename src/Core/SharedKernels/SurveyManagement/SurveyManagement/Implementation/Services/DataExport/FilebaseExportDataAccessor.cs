@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        private readonly IDataExporter dataExporter;
+        private readonly IDataExportService dataExportService;
         private readonly IEnvironmentContentService environmentContentService;
 
         private readonly ILogger logger;
@@ -28,10 +28,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string pathToExportedFiles;
 
         public FilebaseExportDataAccessor(IFileSystemAccessor fileSystemAccessor,
-            string folderPath, IDataExporter dataExporter, IEnvironmentContentService environmentContentService, ILogger logger)
+            string folderPath, IDataExportService dataExportService, IEnvironmentContentService environmentContentService, ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.dataExporter = dataExporter;
+            this.dataExportService = dataExportService;
             this.environmentContentService = environmentContentService;
             this.logger = logger;
             this.pathToExportedData = fileSystemAccessor.CombinePath(folderPath, ExportedDataFolderName);
@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
 
-                zip.AddFiles(this.dataExporter.GetDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
+                zip.AddFiles(this.dataExportService.GetDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
 
                 zip.AddFiles(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
 
@@ -176,7 +176,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 zip.CompressionLevel = CompressionLevel.BestCompression;
 
-                zip.AddFiles(this.dataExporter.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, version, dataDirectoryPath), "");
+                zip.AddFiles(this.dataExportService.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, version, dataDirectoryPath), "");
 
                 zip.AddFiles(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath), "");
 
