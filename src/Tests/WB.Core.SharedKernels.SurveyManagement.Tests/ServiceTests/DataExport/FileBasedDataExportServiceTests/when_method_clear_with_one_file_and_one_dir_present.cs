@@ -24,10 +24,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         
         Because of = () => fileBasedDataExportRepositoryWriter.Clear();
 
-        It should_data_folder_be_cleared = () =>
+        It should_clear_data_folder = () =>
             filebaseExportDataAccessorMock.Verify(x => x.CleanExportDataFolder(), Times.Once());
 
-        It should_file_folder_be_cleared = () =>
+        It should_clear_file_folder = () =>
             filebaseExportDataAccessorMock.Verify(x => x.CleanExportDataFolder(), Times.Once());
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;

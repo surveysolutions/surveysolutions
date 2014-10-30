@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Because of =()=>
             raisedException = Catch.Exception(() => fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(Guid.NewGuid())) as InterviewDataExportException;
 
-        It should_InterviewDataExportException_be_rised = () =>
+        It should_rise_InterviewDataExportException = () =>
             raisedException.ShouldNotBeNull();
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;

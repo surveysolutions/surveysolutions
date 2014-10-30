@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Because of = () =>
             fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(Guid.NewGuid());
 
-        It should_AddOrUpdateInterviewRecords_be_never_called = () =>
+        It should_never_calll_AddOrUpdateInterviewRecords = () =>
             dataExportWriterMock.Verify(x => x.AddOrUpdateInterviewRecords(Moq.It.IsAny<InterviewDataExportView>(), Moq.It.IsAny<string>()), Times.Never);
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
