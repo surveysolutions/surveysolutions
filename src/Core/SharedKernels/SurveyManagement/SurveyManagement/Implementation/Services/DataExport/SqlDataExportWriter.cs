@@ -41,6 +41,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 this.DeleteInterviewImpl(interviewId, sqlService);
             }
+
+
+            fileSystemAccessor.DeleteDirectory(sqlDataAccessor.GetAllDataFolder(basePath));
         }
 
         private void DeleteInterviewImpl(Guid interviewId, ISqlService sqlService)
@@ -76,6 +79,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     }
                 }
             }
+            fileSystemAccessor.DeleteDirectory(sqlDataAccessor.GetAllDataFolder(basePath));
+
+            if (interviewActionRecords.Any(action => action.Action == InterviewExportedAction.ApproveByHeadquarter))
+                fileSystemAccessor.DeleteDirectory(sqlDataAccessor.GetApprovedDataFolder(basePath));
         }
 
         public void AddOrUpdateInterviewRecords(InterviewDataExportView items, string basePath)

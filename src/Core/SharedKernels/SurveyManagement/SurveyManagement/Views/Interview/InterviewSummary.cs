@@ -68,6 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public DateTime Date { get; set; }
         public InterviewStatus Status { get; set; }
         public string Responsible { get; set; }
+        public Guid ResponsibleId { get; set; }
     }
 
     public class QuestionAnswer
