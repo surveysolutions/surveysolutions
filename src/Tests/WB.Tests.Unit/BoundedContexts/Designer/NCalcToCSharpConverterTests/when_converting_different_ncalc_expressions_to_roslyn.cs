@@ -17,6 +17,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.NCalcToCSharpConverterTests
                 { "[a] > 0 and [b] < 3", "(a > 0) && (b < 3)" },
                 { "[x] = [y]", "x == y" },
                 { "contains([prob_school],8)", "prob_school.Contains(8)" },
+                { "in([q],1,2,3)", "new decimal[] { 1, 2, 3 }.Contains(q)" },
+                { "in([q],1)", "q == 1" },
             };
 
             converter = Create.NCalcToCSharpConverter();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using NCalc;
 using NCalc.Domain;
@@ -174,6 +175,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             public override void Visit(Function function)
             {
                 bool isContainsFunction = function.Identifier.Name.Trim().ToLower() == "contains" && function.Expressions.Length == 2;
+                bool isShortInFunction = function.Identifier.Name.Trim().ToLower() == "in" && function.Expressions.Length == 2;
+                bool isInFunction = function.Identifier.Name.Trim().ToLower() == "in" && function.Expressions.Length > 2;
 
                 if (isContainsFunction)
                 {
@@ -184,6 +187,38 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     this.builder.Append(".Contains(");
 
                     function.Expressions[1].Accept(this);
+
+                    TrimEndingSpaces(this.builder);
+
+                    this.builder.Append(") ");
+                }
+                else if (isShortInFunction)
+                {
+                    function.Expressions[0].Accept(this);
+
+                    this.builder.Append("== ");
+
+                    function.Expressions[1].Accept(this);
+                }
+                else if (isInFunction)
+                {
+                    this.builder.Append("new decimal[] { ");
+
+                    foreach (LogicalExpression optionExpression in function.Expressions.Skip(1))
+                    {
+                        optionExpression.Accept(this);
+
+                        TrimEndingSpaces(this.builder);
+
+                        this.builder.Append(", ");
+                    }
+
+                    TrimEndingSpaces(this.builder);
+                    TrimEndingCommas(this.builder);
+
+                    this.builder.Append(" }.Contains(");
+
+                    function.Expressions[0].Accept(this);
 
                     TrimEndingSpaces(this.builder);
 
@@ -213,8 +248,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             private static void TrimEndingSpaces(StringBuilder stringBuilder)
             {
-                while (stringBuilder[stringBuilder.Length - 1] == ' ')
+                TrimEndingCharacters(stringBuilder, ' ');
+            }
+
+            private static void TrimEndingCommas(StringBuilder stringBuilder)
+            {
+                TrimEndingCharacters(stringBuilder, ',');
+            }
+
+            private static void TrimEndingCharacters(StringBuilder stringBuilder, char character)
+            {
+                while (stringBuilder[stringBuilder.Length - 1] == character)
+                {
                     stringBuilder.Remove(stringBuilder.Length - 1, 1);
+                }
             }
 
             public override void Visit(Identifier parameter)
