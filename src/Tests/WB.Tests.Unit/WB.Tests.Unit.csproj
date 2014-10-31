@@ -356,9 +356,12 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_comparing_with_less_than_operator.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVersionTests\when_equating_questionaire_versions.cs" />
     <Compile Include="BoundedContexts\Designer\RoslynExpressionProcessorTests\when_getting_identifiers_from_different_expressions.cs" />
+    <Compile Include="BoundedContexts\Supervisor\AtomFeedReaderTests\when_reading_feed_from_specified_entry_and_such_entry_is_absent_in_feed.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="GenericSubdomains\Utils\StringExtensionsTests.cs" />
+    <Compile Include="MockExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceHelper.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\PlainQuestionnaireTestsTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value_which_is_not_decimal.cs" />
@@ -414,7 +417,6 @@
     <Folder Include="Applications\Headquarters\" />
     <Folder Include="Applications\Supervisor\" />
     <Folder Include="BoundedContexts\Headquarters\" />
-    <Folder Include="BoundedContexts\Supervisor\" />
     <Folder Include="GenericSubdomains\Logging\" />
     <Folder Include="Infrastructure\" />
   </ItemGroup>
@@ -434,6 +436,10 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
+      <Project>{755CA607-6B50-487F-98A0-34A98973593D}</Project>
+      <Name>WB.Core.BoundedContexts.Supervisor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
@@ -487,6 +493,12 @@
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BoundedContexts\Supervisor\AtomFeedReaderTests\SimpleStringFeed.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BoundedContexts\Supervisor\AtomFeedReaderTests\SimpleStringArchiveFeed.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using Ncqrs.Commanding;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.BoundedContexts.Supervisor;
+using WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.GenericSubdomains.Utils.Implementation;
@@ -85,6 +87,13 @@ namespace WB.Tests.Unit
         public static NCalcToSharpController.OneQuestionnaireModel OneQuestionnaireModel(Guid id)
         {
             return new NCalcToSharpController.OneQuestionnaireModel { Id = id };
+        }
+
+        public static AtomFeedReader AtomFeedReader(Func<HttpMessageHandler> messageHandler = null, IHeadquartersSettings settings = null)
+        {
+            return new AtomFeedReader(
+                messageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
+                settings ?? Mock.Of<IHeadquartersSettings>());
         }
     }
 }
