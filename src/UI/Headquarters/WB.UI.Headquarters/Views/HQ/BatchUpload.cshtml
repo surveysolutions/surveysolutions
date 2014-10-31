@@ -14,7 +14,7 @@
 <div class="row-fluid">
     <h3>Upload sample </h3>
     <div>
-        To upload the sample to be interviewed, please prepare a file with coma-separated values (.csv file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as pre-filled.
+        To upload the sample to be interviewed, please prepare a file with coma-separated values (.tab file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as pre-filled.
     </div>
     <br />
     <div>
@@ -53,7 +53,7 @@
             <br />
             <div class="control-group">
                 <div class="controls">
-                    @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".csv" })
+                    @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab" })
                     @Html.ValidationMessageFor(x => x.File)
                 </div>
             </div>
@@ -63,7 +63,7 @@
 
     <h3>Advanced data upload mode</h3>
     <div>
-        In order to pre-load data to more sections and variables, you can prepare a set of .csv files that correspond to the structure of your questionnaire and put in a .zip archive . Please use the template archive below. You can put only those files and columns that you wish to upload. Any columns left missing or with titles not corresponding to an existing variable in the questionnaire will be ignored.
+        In order to pre-load data to more sections and variables, you can prepare a set of .tab files that correspond to the structure of your questionnaire and put in a .zip archive . Please use the template archive below. You can put only those files and columns that you wish to upload. Any columns left missing or with titles not corresponding to an existing variable in the questionnaire will be ignored.
     </div>
     <br />
     <a href="@Url.Action("TemplateDownload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion })" class="btn">download template archive</a>
