@@ -282,8 +282,9 @@
                 "Multimedia",
                 "GpsCoordinates"];
             
-            $scope.doesQuestionTypeSupportValidations = function (type) {
-                return !_.contains(questionTypesDoesNotSupportValidations, type);
+            $scope.doesQuestionSupportValidations = function () {
+                return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
+                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
 
             $scope.doesQuestionSupportEnablementConditions = function () {
