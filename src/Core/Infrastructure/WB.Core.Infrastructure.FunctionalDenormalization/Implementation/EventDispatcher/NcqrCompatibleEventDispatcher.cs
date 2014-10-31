@@ -53,8 +53,16 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
             if(!eventMessages.Any())
                 return;
 
+            var functionalHandlers =
+               this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler).Where(h => h != null).ToList();
+
             var oldStyleHandlers =
                this.registredHandlers.Values.Where(h => !(h.Handler is IFunctionalEventHandler)).ToList();
+
+            foreach (var functionalEventHandler in functionalHandlers)
+            {
+                functionalEventHandler.Handle(eventMessages, eventMessages.First().EventSourceId);
+            }
 
             foreach (var publishableEvent in eventMessages)
             {
@@ -62,14 +70,6 @@ namespace WB.Core.Infrastructure.FunctionalDenormalization.Implementation.EventD
                 {
                     handler.Bus.Publish(publishableEvent);
                 }
-            }
-
-            var functionalHandlers =
-               this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler).Where(h => h != null).ToList();
-
-            foreach (var functionalEventHandler in functionalHandlers)
-            {
-                functionalEventHandler.Handle(eventMessages, eventMessages.First().EventSourceId);
             }
         }
 
