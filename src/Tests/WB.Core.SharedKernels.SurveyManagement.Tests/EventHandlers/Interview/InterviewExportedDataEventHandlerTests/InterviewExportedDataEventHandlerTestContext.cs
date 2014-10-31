@@ -39,8 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
         {
             return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
                 recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>(),
-                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(
-                    It.IsAny<string>()) == user));
+                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user), Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>());
         }
 
         protected static InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action,string userName="test", string role="headquarter")

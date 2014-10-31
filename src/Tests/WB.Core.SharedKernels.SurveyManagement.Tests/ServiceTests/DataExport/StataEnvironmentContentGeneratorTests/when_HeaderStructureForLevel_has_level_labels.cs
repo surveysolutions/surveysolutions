@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         Because of = () => stataEnvironmentContentService.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel,dataFileName, contentFilePath);
 
         It should_contain_stata_script_for_insheet_file = () =>
-            stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}\", comma\r\n", dataFileName));
+            stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}\", tab\r\n", dataFileName));
 
         It should_contain_stata_id_variable_on_ids_label_mapping = () =>
            stataGeneratedContent.ShouldContain(string.Format("label values {0} l{0}", oneQuestionHeaderStructureForLevel.LevelIdColumnName));

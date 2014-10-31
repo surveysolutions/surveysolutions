@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private static void BuildInsheet(string fileName, StringBuilder doContent)
         {
             doContent.AppendLine(
-                string.Format("insheet using \"{0}\", comma", fileName));
+                string.Format("insheet using \"{0}\", tab", fileName));
         }
 
         protected void BuildLabelsForLevel(HeaderStructureForLevel headerStructureForLevel, StringBuilder doContent)
