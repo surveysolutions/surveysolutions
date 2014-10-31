@@ -48,21 +48,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<TextListQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
         IEventHandler<PictureQuestionAnswered>,
+        IEventHandler<InterviewRestored>,
 
         IEventHandler
     {
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
         private readonly IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage;
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
             IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewWriter, 
-            IReadSideRepositoryWriter<UserDocument> userDocumentWriter)
+            IReadSideRepositoryWriter<UserDocument> userDocumentWriter, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage)
         {
             this.dataExportWriter = dataExportWriter;
             this.recordFirstAnswerMarkerViewWriter = recordFirstAnswerMarkerViewWriter;
             this.users = userDocumentWriter;
+            this.interviewSummaryStorage = interviewSummaryStorage;
         }
 
         public string Name { get { return this.GetType().Name; } }
@@ -220,6 +223,46 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
             this.dataExportWriter.DeleteInterview(evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewRestored> evnt)
+        {
+            var interviewSummary = interviewSummaryStorage.GetById(evnt.EventSourceId);
+            if(interviewSummary==null)
+                return;
+
+            foreach (var interviewCommentedStatus in interviewSummary.CommentedStatusesHistory)
+            {
+                var action = this.GetInterviewExportedAction(interviewCommentedStatus.Status);
+                if (!action.HasValue)
+                    continue;
+
+                this.dataExportWriter.AddInterviewAction(action.Value, evnt.EventSourceId, interviewCommentedStatus.ResponsibleId, interviewCommentedStatus.Date);
+            }
+        }
+
+        private InterviewExportedAction? GetInterviewExportedAction(InterviewStatus status)
+        {
+            switch (status)
+            {
+                case  InterviewStatus.ApprovedByHeadquarters:
+                    return InterviewExportedAction.ApproveByHeadquarter;
+                case InterviewStatus.SupervisorAssigned:
+                    return InterviewExportedAction.SupervisorAssigned;
+                case InterviewStatus.InterviewerAssigned:
+                    return InterviewExportedAction.InterviewerAssigned;
+                case InterviewStatus.Completed:
+                    return InterviewExportedAction.Completed;
+                case InterviewStatus.Restarted:
+                    return InterviewExportedAction.Restarted;
+                case InterviewStatus.ApprovedBySupervisor:
+                    return InterviewExportedAction.ApproveBySupervisor;
+                case InterviewStatus.RejectedBySupervisor:
+                    return InterviewExportedAction.RejectedBySupervisor;
+                case InterviewStatus.RejectedByHeadquarters:
+                    return InterviewExportedAction.RejectedByHeadquarter;
+            }
+            return null;
         }
     }
 }

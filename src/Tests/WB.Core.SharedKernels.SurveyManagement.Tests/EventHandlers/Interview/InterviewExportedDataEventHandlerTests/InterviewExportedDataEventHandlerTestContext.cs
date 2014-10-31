@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -35,11 +36,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
           IDataExportRepositoryWriter dataExportRepositoryWriter = null,
-          IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage=null, UserDocument user=null)
+          IReadSideRepositoryWriter<RecordFirstAnswerMarkerView> recordFirstAnswerMarkerViewStorage = null, UserDocument user = null, InterviewSummary interviewSummary=null)
         {
             return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
                 recordFirstAnswerMarkerViewStorage ?? Mock.Of<IReadSideRepositoryWriter<RecordFirstAnswerMarkerView>>(),
-                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user), Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>());
+                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
+                Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary));
+        }
+
+        protected static InterviewSummary CreateInterviewSummary(InterviewStatus[] statuses)
+        {
+            var interviewSummary = new InterviewSummary();
+            interviewSummary.CommentedStatusesHistory=new List<InterviewCommentedStatus>();
+            foreach (var interviewStatus in statuses)
+            {
+                interviewSummary.CommentedStatusesHistory.Add(CreateInterviewCommentedStatus(interviewStatus));
+            }
+            return interviewSummary;
+        }
+
+        protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewStatus status)
+        {
+            return new InterviewCommentedStatus() { Status = status, ResponsibleId = Guid.NewGuid() };
         }
 
         protected static InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action,string userName="test", string role="headquarter")
