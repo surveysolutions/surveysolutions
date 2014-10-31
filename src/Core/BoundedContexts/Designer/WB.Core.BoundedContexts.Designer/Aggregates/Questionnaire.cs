@@ -4517,9 +4517,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             return this.innerDocument
                 .Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.StataExportCaption))
+                .SelectMany(question => new []
+                {
+                    new KeyValuePair<string, string>(question.PublicKey.ToString(), question.StataExportCaption),
+                    new KeyValuePair<string, string>(question.PublicKey.FormatGuid(), question.StataExportCaption),
+                })
                 .ToDictionary(
-                    question => question.PublicKey.ToString(),
-                    question => question.StataExportCaption);
+                    kvp => kvp.Key,
+                    kvp => kvp.Value);
         }
 
         private static bool HasEnablementCondition(IGroup group)
