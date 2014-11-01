@@ -8,7 +8,7 @@ namespace WB.UI.Capi.Syncronization.Update
     {
         private readonly IRestServiceWrapper webExecutor;
 
-        private const string checkPath = "sync/CheckNewVersion";
+        private const string checkPath = "api/InterviewerSync/CheckNewVersion";
 
         public RestVersionUpdate(IRestServiceWrapper webExecutor)
         {
@@ -18,10 +18,10 @@ namespace WB.UI.Capi.Syncronization.Update
         public bool Execute(string version, int versionCode, string androidId)
         {
             var newVersionExists = this.webExecutor.ExecuteRestRequest<bool>(checkPath,
-                null,null,null,
-                new KeyValuePair<string, string>("version", version),
-                new KeyValuePair<string, string>("versionCode", versionCode.ToString(CultureInfo.InvariantCulture)),
-                new KeyValuePair<string, string>("androidId", androidId));
+                null,null,"GET",
+                new KeyValuePair<string, object>("version", version),
+                new KeyValuePair<string, object>("versionCode", versionCode.ToString(CultureInfo.InvariantCulture)),
+                new KeyValuePair<string, object>("androidId", androidId));
 
             return newVersionExists;
         }

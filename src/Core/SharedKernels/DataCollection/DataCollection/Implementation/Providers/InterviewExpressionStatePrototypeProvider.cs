@@ -52,6 +52,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             catch (Exception exception)
             {
                 Logger.Fatal("Error on assembly loading", exception);
+                if (exception.InnerException != null)
+                    Logger.Fatal("Error on assembly loading", exception.InnerException);
+
                 //hide original one
                 throw new InterviewException("Interview loading error. Code EC0001");
             }

@@ -18,6 +18,7 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.UI.Shared.Android.Extensions;
 using WB.UI.Shared.Android.Helpers;
 
 namespace WB.UI.QuestionnaireTester
@@ -54,24 +55,39 @@ namespace WB.UI.QuestionnaireTester
         {
             Guid interviewId = Guid.NewGuid();
 
-            if (!LoadTemplateAndCreateInterview(publicKey, interviewId, ct)) return;
+            if (!LoadTemplateAndCreateInterview(publicKey, interviewId, ct))
+                this.RunOnUiThread(() => CapiTesterApplication.Context.ClearAllBackStack<QuestionnaireListActivity>());
+            else
+            {
+                var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
+                    new QuestionnaireScreenInput(interviewId));
 
-            var questionnaire = CapiTesterApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                new QuestionnaireScreenInput(interviewId));
+                if (questionnaire == null || ct.IsCancellationRequested)
+                    return;
 
-            if (questionnaire == null || ct.IsCancellationRequested) 
-                return;
+                var intent = new Intent(this, typeof (CreateInterviewActivity));
+                intent.PutExtra("publicKey", interviewId.ToString());
 
-            var intent = new Intent(this, typeof(CreateInterviewActivity));
-            intent.PutExtra("publicKey", interviewId.ToString());
-
-            if (!ct.IsCancellationRequested)
-                this.StartActivity(intent);
+                if (!ct.IsCancellationRequested)
+                    this.StartActivity(intent);
+            }
         }
 
         private bool LoadTemplateAndCreateInterview(Guid itemKey, Guid interviewId, CancellationToken ct)
         {
-            QuestionnaireCommunicationPackage template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(itemKey, ct);
+            if (!CapiTesterApplication.DesignerMembership.IsLoggedIn)
+                return false;
+
+            QuestionnaireCommunicationPackage template;
+            try
+            {
+                template = CapiTesterApplication.DesignerServices.GetTemplateForCurrentUser(CapiTesterApplication.DesignerMembership.RemoteUser, itemKey, ct);
+            }
+            catch (Exception exc) 
+            {
+                ShowLongToastInUIThread(exc.Message);
+                return false;
+            }
 
             if (ct.IsCancellationRequested) 
                 return false;
@@ -79,12 +95,6 @@ namespace WB.UI.QuestionnaireTester
             if (template == null)
             {
                 ShowLongToastInUIThread("Template is missing.");
-                return false;
-            }
-
-            if (template.IsErrorOccured)
-            {
-                ShowLongToastInUIThread(template.ErrorMessage);
                 return false;
             }
 

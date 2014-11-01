@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncManagerTests
             syncProvider.Verify(x => x.GetSyncItem(registrationId, itemId, sequence), Times.Once());
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ItemsContainer.Count, Is.EqualTo(1));
-            Assert.That(result.IsErrorOccured, Is.EqualTo(false));
+            
             Assert.That(result.ItemsContainer[0].Id, Is.EqualTo(itemId));
         }
 
@@ -94,7 +94,7 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SyncManagerTests
             //Assert
             syncProvider.Verify(x => x.GetSyncItem(registrationId, itemId, sequence), Times.Once());
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.IsErrorOccured, Is.EqualTo(true));
+            
         }
 
 

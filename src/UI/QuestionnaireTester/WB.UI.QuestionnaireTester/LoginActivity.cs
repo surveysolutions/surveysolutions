@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using Android.Views;
@@ -10,7 +9,6 @@ using Android.Widget;
 using Android.Content.PM;
 using Cirrious.MvvmCross.Droid.Simple;
 using WB.Core.BoundedContexts.Capi.Views.Login;
-using WB.UI.QuestionnaireTester.Services;
 using WB.UI.Shared.Android.Extensions;
 
 namespace WB.UI.QuestionnaireTester
@@ -113,6 +111,10 @@ namespace WB.UI.QuestionnaireTester
         {
             var tokenSource2 = new CancellationTokenSource();
             this.cancellationToken = tokenSource2.Token;
+
+            if (string.IsNullOrEmpty(this.teLogin.Text) || string.IsNullOrEmpty(this.tePassword.Text))
+                return;
+
             progressDialog.Show();
             Task.Factory.StartNew(LoginAsync, this.cancellationToken);
         
