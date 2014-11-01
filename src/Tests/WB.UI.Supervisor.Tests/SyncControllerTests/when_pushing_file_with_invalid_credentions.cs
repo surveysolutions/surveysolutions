@@ -1,40 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+using System.Net;
+using System.Net.Http;
 using Machine.Specifications;
 using Main.Core.View;
 using Main.Core.View.User;
 using Moq;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using It = Machine.Specifications.It;
 
 namespace WB.UI.Supervisor.Tests.SyncControllerTests
 {
+    [Ignore("no scence")]
     internal class when_pushing_file_with_invalid_credentions : SyncControllerTestContext
     {
         Establish context = () =>
         {
+            var user = new UserView();
+            var userFactory = Mock.Of<IViewFactory<UserViewInputModel, UserView>>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == user);
+            
             controller = CreateSyncController();
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                (JsonResult)controller.PostFile("login", "password", Guid.NewGuid())) as HttpException;
+            result = controller.PostFile(Guid.NewGuid()).Result;
 
-        It should_http_exception_be_rised = () =>
-            exception.ShouldNotBeNull();
+        It should_have_NotAcceptable_status_code = () =>
+            result.StatusCode.ShouldEqual(HttpStatusCode.NotAcceptable);
 
-        It should_exception_http_code_be_equal_to_403 = () =>
-            exception.GetHttpCode().ShouldEqual(403);
-
-        private static SyncController controller;
-        private static HttpException exception;
+        private static HttpResponseMessage result;
+        private static InterviewerSyncController controller;
     }
 }

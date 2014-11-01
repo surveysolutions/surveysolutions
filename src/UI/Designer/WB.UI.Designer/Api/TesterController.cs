@@ -15,7 +15,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
-using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
@@ -87,6 +86,7 @@ namespace WB.UI.Designer.Api
                 {
                     Items = questionnaireItemList
                 };
+
             return Request.CreateResponse(HttpStatusCode.OK, questionnaireSyncPackage);
 
         }
@@ -123,8 +123,6 @@ namespace WB.UI.Designer.Api
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
             }
 
-            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage();
-
             QuestionnaireVersion supportedQuestionnaireVersion;
             if (!QuestionnaireVersion.TryParse(maxSupportedVersion, out supportedQuestionnaireVersion))
             {
@@ -140,7 +138,7 @@ namespace WB.UI.Designer.Api
             if (!ValidateAccessPermissions(questionnaireView, user.UserId))
             {
                 logger.Error(String.Format("Non permitted resource was requested by user [{0}]", user.UserId));
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
             }
             
             var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
@@ -155,37 +153,32 @@ namespace WB.UI.Designer.Api
             }
 
             string resultAssembly;
-
-            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
-            if (questoinnaireErrors.Any())
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
-            }
-            GenerationResult generationResult;
             try
             {
-                generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+                if (questionnaireVerifier.Verify(questionnaireView.Source).ToArray().Any())
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
+                }
+
+                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+
+                if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
+                }
             }
             catch (Exception exc)
             {
-                logger.Error("Error on assembly generation.", exc);
-
-                generationResult = new GenerationResult()
-                {
-                    Success = false,
-                    Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
-                };
-                resultAssembly = string.Empty;
-            }
-
-            if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
-            {
+                logger.Error("Error template verification.", exc);
                 return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
             }
-
+            
             var template = PackageHelper.CompressString(templateInfo.Source);
-            questionnaireSyncPackage.Questionnaire = template;
-            questionnaireSyncPackage.QuestionnaireAssembly = resultAssembly;
+            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage
+            {
+                Questionnaire = template,
+                QuestionnaireAssembly = resultAssembly
+            };
 
             return Request.CreateResponse(HttpStatusCode.OK, questionnaireSyncPackage);
         }

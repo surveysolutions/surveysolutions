@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
-using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.Http;
 using Elmah;
@@ -42,13 +39,18 @@ namespace WB.UI.Headquarters
             filters.Add(new NoCacheAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add(new MaintenanceFilter());
-            filters.Add(new SupervisorFunctionsEnabledAttribute());
+            //filters.Add(new SupervisorFunctionsEnabledAttribute());
             filters.Add(new InstallationAttribute());
         }
 
         public static void RegisterHttpFilters(HttpFilterCollection filters)
         {
             filters.Add(new ElmahHandledErrorLoggerFilter());
+        }
+
+        public static void RegisterWebApiFilters(HttpFilterCollection filters)
+        {
+            filters.Add(new SupervisorFunctionsEnabledAttribute());
         }
 
         public static void RegisterRoutes(RouteCollection routes)
@@ -91,6 +93,7 @@ namespace WB.UI.Headquarters
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
+            RegisterWebApiFilters(GlobalConfiguration.Configuration.Filters);
             RegisterRoutes(RouteTable.Routes);
 
             DataAnnotationsConfig.RegisterAdapters();

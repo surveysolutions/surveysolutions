@@ -126,9 +126,11 @@
   <ItemGroup>
     <Compile Include="Api\BaseApiServiceController.cs" />
     <Compile Include="Api\ControlPanelApiController.cs" />
+    <Compile Include="Api\InterviewerSyncController.cs" />
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
@@ -164,7 +166,6 @@
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Api\ReportDataApiController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
-    <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
