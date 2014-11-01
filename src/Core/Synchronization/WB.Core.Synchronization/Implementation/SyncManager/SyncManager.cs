@@ -71,17 +71,13 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             SyncItem item = this.syncProvider.GetSyncItem(clientRegistrationId, id, timestamp);
 
-            if (item != null)
+            if (item == null)
             {
-                syncPackage.ItemsContainer.Add(item);
-                syncPackage.IsErrorOccured = false;
-            }
-            else
-            {
-                syncPackage.IsErrorOccured = true;
-                syncPackage.ErrorMessage = "Item was not found";
+                throw new Exception("Item was not found");
             }
 
+            syncPackage.ItemsContainer.Add(item);
+            
             return syncPackage;
         }
 
@@ -91,18 +87,12 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             var items = this.syncProvider.GetSyncItemBulk(userId, clientRegistrationId, timestamp);
 
-            if (items != null)
+            if (items == null)
             {
-                syncPackage.ItemsContainer.AddRange(items);
-                syncPackage.IsErrorOccured = false;
-                //syncPackage.ErrorMessage = "OK";
-            }
-            else
-            {
-                syncPackage.IsErrorOccured = true;
-                syncPackage.ErrorMessage = "Item was not found";
+                throw new Exception("Item was not found");
             }
 
+            syncPackage.ItemsContainer.AddRange(items);
             return syncPackage;
         }
 

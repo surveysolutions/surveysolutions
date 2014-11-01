@@ -90,12 +90,8 @@ namespace WB.Core.Synchronization.SyncProvider
                 {
                     //keys were provided but we can't find device
                     //probably device has been synchronized with other supervisor application
-                    var package = new HandshakePackage
-                    {
-                        IsErrorOccured = true,
-                        ErrorMessage = "Device was not found. It could be linked to other system."
-                    };
-                    return package;
+
+                    throw new Exception("Device was not found. It could be linked to other system.");
                 }
 
                 //old sync devices are already in use
@@ -107,12 +103,7 @@ namespace WB.Core.Synchronization.SyncProvider
                 }
                 else if (device.SupervisorKey != identifier.SupervisorPublicKey)
                 {
-                    var package = new HandshakePackage
-                        {
-                            IsErrorOccured = true,
-                            ErrorMessage = "Device was assigned to another Supervisor."
-                        };
-                    return package;
+                    throw new Exception("Device was assigned to another Supervisor.");
                 }
 
                 //TODO: check device validity
