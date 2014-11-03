@@ -401,10 +401,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             var parentRosters = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(parentQuestion, questionnaire);
+
             if (parentRosters == null)
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            var questionRosters = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire);
+            parentRosters = parentRosters.Reverse().ToArray();
+
+            var questionRosters = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(question, questionnaire).Reverse().ToArray();
 
             if (parentRosters.Length > questionRosters.Length || parentRosters.Where((parentGuid, i) => questionRosters[i] != parentGuid).Any())
             {
