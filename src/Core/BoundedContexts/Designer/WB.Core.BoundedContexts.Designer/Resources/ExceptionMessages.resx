@@ -123,6 +123,12 @@
   <data name="CantRemoveParentQuestionInCascading" xml:space="preserve">
     <value>Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed</value>
   </data>
+  <data name="CascadingCantHaveConditionExpression" xml:space="preserve">
+    <value>Cascading questions can't have condition expression</value>
+  </data>
+  <data name="CascadingCantHaveValidationExpression" xml:space="preserve">
+    <value>Cascading questions can't have validation expression</value>
+  </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
     <value>Options in cascading question can not have empty ParentValue column</value>
   </data>

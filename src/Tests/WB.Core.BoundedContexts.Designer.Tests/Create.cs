@@ -66,6 +66,27 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                     IsInteger = true
                 };
             }
+
+            public static QuestionChanged UpdateSingleOptionQuestion(Guid questionId, string variableName)
+            {
+                return new QuestionChanged
+                {
+                    PublicKey = questionId,
+                    StataExportCaption = variableName,
+                    QuestionType = QuestionType.SingleOption
+                };
+            }
+
+            public static Answer Option(Guid? id = null, string text = null, string value = null, string parentValue = null)
+            {
+                return new Answer
+                {
+                    PublicKey = id ?? Guid.NewGuid(),
+                    AnswerText = text ?? "text",
+                    AnswerValue = value ?? "1",
+                    ParentValue = parentValue
+                };
+            }
         }
 
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
