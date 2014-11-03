@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
                 new Group
                 {
                     IsRoster = true,
-                    RosterFixedTitles = new []{"1", "2"}, 
+                    RosterFixedTitles = new[] { "1", "2" },
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     VariableName = "roster",
                     Children = new List<IComposite>
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
 
         It should_return_WB0084_verification_error = () => verificationErrors.First().Code.ShouldEqual("WB0085");
 
-        It should_return_error_with_reference_to_wrong_question = () => 
+        It should_return_error_with_reference_to_wrong_question = () =>
             verificationErrors.First().References.First().Id.ShouldEqual(childCascadedComboboxId);
 
         static QuestionnaireDocument questionnaire;
