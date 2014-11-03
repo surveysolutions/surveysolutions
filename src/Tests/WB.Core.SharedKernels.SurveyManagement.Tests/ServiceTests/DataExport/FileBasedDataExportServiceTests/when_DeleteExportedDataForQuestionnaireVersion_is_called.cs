@@ -20,9 +20,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         {
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             filebaseExportDataAccessorMock = new Mock<IFilebasedExportedDataAccessor>();
-            filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfFilesByQuestionnaireOrThrow(questionnaireId, questionnaireVersion))
+            filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfFilesByQuestionnaire(questionnaireId, questionnaireVersion))
                 .Returns("binary files");
-            filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireId, questionnaireVersion))
+            filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion))
                 .Returns("data files");
             fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessor: fileSystemAccessorMock.Object, filebasedExportedDataAccessor: filebaseExportDataAccessorMock.Object);
         };

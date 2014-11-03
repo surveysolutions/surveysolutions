@@ -44,31 +44,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
         }
 
-        public string GetFolderPathOfDataByQuestionnaireOrThrow(Guid questionnaireId, long version)
+        public string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
         {
-            var result = GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
+            var result = this.GetFolderPathOfDataByQuestionnaireImpl(questionnaireId, version);
 
             this.ThrowArgumentExceptionIfDataFolderMissing(questionnaireId, version, result);
 
             return result;
         }
 
-        private string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
+        private string GetFolderPathOfDataByQuestionnaireImpl(Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(this.pathToExportedData,
                 string.Format("exported_data_{0}_{1}", questionnaireId, version));
         }
 
-        public string GetFolderPathOfFilesByQuestionnaireOrThrow(Guid questionnaireId, long version)
+        public string GetFolderPathOfFilesByQuestionnaire(Guid questionnaireId, long version)
         {
-            var result = GetFolderPathOfFilesByQuestionnaire( questionnaireId, version);
+            var result = this.GetFolderPathOfFilesByQuestionnaireImpl( questionnaireId, version);
 
             this.ThrowArgumentExceptionIfFilesFolderMissing(questionnaireId, version, result);
 
             return result;
         }
 
-        private string GetFolderPathOfFilesByQuestionnaire(Guid questionnaireId, long version)
+        private string GetFolderPathOfFilesByQuestionnaireImpl(Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(this.pathToExportedFiles,
                 string.Format("exported_files_{0}_{1}", questionnaireId, version));
@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string CreateExportDataFolder(Guid questionnaireId, long version)
         {
-            var folderPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
+            var folderPath = this.GetFolderPathOfDataByQuestionnaireImpl(questionnaireId, version);
             this.CreateExportFolder(folderPath);
             return folderPath;
         }
@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string CreateExportFileFolder(Guid questionnaireId, long version)
         {
-            var folderPath = this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version);
+            var folderPath = this.GetFolderPathOfFilesByQuestionnaireImpl(questionnaireId, version);
             this.CreateExportFolder(folderPath);
             return folderPath;
         }
@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetFilePathToExportedCompressedData(Guid questionnaireId, long version)
         {
-            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireId, version);
+            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
 
             var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, string.Format("{0}.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
 
@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version)
         {
-            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireId, version);
+            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
 
             var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, string.Format("{0}_Approved.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath)));
 
@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetFilePathToExportedBinaryData(Guid questionnaireId, long version)
         {
-            var fileDirectoryPath = this.GetFolderPathOfFilesByQuestionnaireOrThrow(questionnaireId, version);
+            var fileDirectoryPath = this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version);
 
             var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, string.Format("{0}.zip", this.fileSystemAccessor.GetFileName(fileDirectoryPath)));
 
@@ -193,7 +193,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetFolderPathOfFilesByQuestionnaireForInterview(Guid questionnaireId, long version, Guid interviewId)
         {
-            return this.fileSystemAccessor.CombinePath(this.GetFolderPathOfFilesByQuestionnaireOrThrow(questionnaireId, version),
+            return this.fileSystemAccessor.CombinePath(this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version),
                 string.Format("interview_{0}", interviewId.FormatGuid()));
         }
 

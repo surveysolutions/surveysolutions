@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         Establish context = () =>
         {
             var filebaseExportRouteServiceMock = new Mock<IFilebasedExportedDataAccessor>();
-            filebaseExportRouteServiceMock.Setup(x => x.GetFolderPathOfDataByQuestionnaireOrThrow(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
+            filebaseExportRouteServiceMock.Setup(x => x.GetFolderPathOfDataByQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Throws<InterviewDataExportException>();
             fileBasedDataExportRepositoryWriter =
                 CreateFileBasedDataExportService(filebasedExportedDataAccessor: filebaseExportRouteServiceMock.Object);

@@ -167,55 +167,80 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             using (var sqlService = sqlServiceFactory.CreateSqlService(dbPath))
             {
-                foreach (var level in structure.HeaderToLevelMap.Values)
-                {
-                    var dataFilePath =
-                        fileSystemAccessor.CombinePath(basePath, createDataFileName(level.LevelName));
+                var dataFiles = this.CreateDataFiles(basePath, action, structure, sqlService);
 
-                    using (var fileStream = fileSystemAccessor.OpenOrCreateFile(dataFilePath, true))
-                    using (var tabWriter = csvWriterFactory.OpenCsvWriter(fileStream, separator))
-                    {
-                        this.CreateHeaderForDataFile(tabWriter, level);
+                result.AddRange(dataFiles);
 
-                        var dataSet = QueryRecordsFromTableByInterviewsInApprovedStatus(sqlService, level.LevelName, action);
+                var actionFile = this.CreateFileForInterviewActions(action, basePath, sqlService);
 
-                        foreach (var dataRow in dataSet)
-                        {
-                            var otherRecords = ParseByteArray(dataRow.Data);
-                            foreach (var otherRecord in otherRecords)
-                            {
-                                tabWriter.WriteField(otherRecord ?? string.Empty);
-                            }
-
-                            tabWriter.NextRecord();
-                        }
-
-                        result.Add(dataFilePath);
-                    }
-                }
-
-                var actionFilePath =
-                    fileSystemAccessor.CombinePath(basePath, createDataFileName(sqlDataAccessor.InterviewActionsTableName));
-
-                using (var fileStream = fileSystemAccessor.OpenOrCreateFile(actionFilePath, true))
-                using (var tabWriter = csvWriterFactory.OpenCsvWriter(fileStream, separator))
-                {
-                    this.CreateHeaderForActionFile(tabWriter);
-
-                    var dataSet = QueryFromActionTable(sqlService, action);
-
-                    foreach (var dataRow in dataSet)
-                    {
-                        foreach (var cell in dataRow)
-                        {
-                            tabWriter.WriteField(cell);
-                        }
-
-                        tabWriter.NextRecord();
-                    }
-                }
-                result.Add(actionFilePath);
+                result.Add(actionFile);
+                
                 return result.ToArray();
+            }
+        }
+
+        private string[] CreateDataFiles(string basePath, InterviewExportedAction? action, QuestionnaireExportStructure structure, ISqlService sqlService)
+        {
+            var result = new List<string>();
+
+            foreach (var level in structure.HeaderToLevelMap.Values)
+            {
+                var dataFilePath =
+                    this.fileSystemAccessor.CombinePath(basePath, this.createDataFileName(level.LevelName));
+
+                this.WriteDataFileForInterivewLvel(action, dataFilePath, level, sqlService);
+
+                result.Add(dataFilePath);
+            }
+
+            return result.ToArray();
+        }
+
+        private string CreateFileForInterviewActions(InterviewExportedAction? action, string basePath, ISqlService sqlService)
+        {
+            var actionFilePath =
+                fileSystemAccessor.CombinePath(basePath, createDataFileName(sqlDataAccessor.InterviewActionsTableName));
+
+            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(actionFilePath, true))
+            using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
+            {
+                this.CreateHeaderForActionFile(tabWriter);
+
+                var dataSet = this.QueryFromActionTable(sqlService, action);
+
+                foreach (var dataRow in dataSet)
+                {
+                    foreach (var cell in dataRow)
+                    {
+                        tabWriter.WriteField(cell);
+                    }
+
+                    tabWriter.NextRecord();
+                }
+            }
+            return actionFilePath;
+        }
+
+        private void WriteDataFileForInterivewLvel(InterviewExportedAction? action, string dataFilePath, HeaderStructureForLevel level,
+            ISqlService sqlService)
+        {
+            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(dataFilePath, true))
+            using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
+            {
+                this.CreateHeaderForDataFile(tabWriter, level);
+
+                var dataSet = this.QueryRecordsFromTableByInterviewsInApprovedStatus(sqlService, level.LevelName, action);
+
+                foreach (var dataRow in dataSet)
+                {
+                    var otherRecords = this.ParseByteArray(dataRow.Data);
+                    foreach (var otherRecord in otherRecords)
+                    {
+                        tabWriter.WriteField(otherRecord ?? string.Empty);
+                    }
+
+                    tabWriter.NextRecord();
+                }
             }
         }
 
