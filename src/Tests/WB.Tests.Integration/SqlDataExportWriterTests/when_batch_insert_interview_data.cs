@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
+using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Integration.SqlDataExportWriterTests
@@ -13,7 +14,7 @@ namespace WB.Tests.Integration.SqlDataExportWriterTests
     {
         Establish context = () =>
         {
-            sqliteServiceFactory = CreateSqliteServiceFactory();
+            sqliteServiceFactory = Create.SqliteServiceFactory("sqllite_batch_upload_test");
             interviewDataExportView = CreateInterviewDataExportView(interviewId: interviewId,
                 levels: CreateInterviewDataExportLevelView(interviewId: interviewId, levelName: rosterLevelTable,
                     levelVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() }),
@@ -25,7 +26,7 @@ namespace WB.Tests.Integration.SqlDataExportWriterTests
 
             sqlDataExportWriter = CreateSqlDataExportWriter(sqliteServiceFactory);
             sqlDataExportWriter.CreateStructure(
-                CreateQuestionnaireExportStructure(CreateHeaderStructureForLevel(rosterLevelTable, referenceNames: new[] { "1", "2" },
+                Create.QuestionnaireExportStructure(Create.HeaderStructureForLevel(rosterLevelTable, referenceNames: new[] { "1", "2" },
                     levelScopeVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() }))), "");
 
             RunCommand(sqliteServiceFactory, string.Format("insert into [interview_actions] values('{0}','Funny status','user','super role','some data','some time')", interviewIdForDelete.FormatGuid()));
@@ -95,6 +96,6 @@ namespace WB.Tests.Integration.SqlDataExportWriterTests
         private static string[][] interviewActionsTableData;
         private static string[][] interviewRosterLevelTableData;
 
-        private static SqliteServiceFactory sqliteServiceFactory;
+        private static ISqlServiceFactory sqliteServiceFactory;
     }
 }

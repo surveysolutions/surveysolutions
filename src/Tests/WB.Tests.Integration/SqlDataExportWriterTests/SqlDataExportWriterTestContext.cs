@@ -26,43 +26,6 @@ namespace WB.Tests.Integration.SqlDataExportWriterTests
             var fileSystemAccessor = new FileSystemIOAccessor();
             return new SqlDataExportWriter(new SqlDataAccessor(fileSystemAccessor), sqlServiceFactory, fileSystemAccessor);
         }
-
-        protected static SqliteServiceFactory CreateSqliteServiceFactory()
-        {
-            var fileSystemAccessor = new FileSystemIOAccessor();
-            if (fileSystemAccessor.IsFileExists(dbFileName))
-                fileSystemAccessor.DeleteFile(dbFileName);
-            return new SqliteServiceFactory(fileSystemAccessor);
-        }
-
-        protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector=null)
-        {
-            return new HeaderStructureForLevel()
-            {
-                LevelScopeVector = levelScopeVector?? new ValueVector<Guid>(),
-                LevelName = levelName,
-                LevelIdColumnName = "Id",
-                IsTextListScope = referenceNames != null,
-                ReferencedNames = referenceNames,
-                HeaderItems =
-                    new Dictionary<Guid, ExportedHeaderItem>
-                    {
-                        { Guid.NewGuid(), CreateExportedHeaderItem() },
-                        { Guid.NewGuid(), CreateExportedHeaderItem(QuestionType.Numeric, new[] { "a" }) }
-                    }
-            };
-        }
-
-        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)
-        {
-            var header = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
-            if (levels != null && levels.Length > 0)
-            {
-                header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
-            }
-            return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
-        }
-
         protected static InterviewDataExportView CreateInterviewDataExportView(Guid? interviewId = null, params InterviewDataExportLevelView[] levels)
         {
             return new InterviewDataExportView(interviewId??Guid.NewGuid(),Guid.NewGuid(),1, levels??new InterviewDataExportLevelView[0]);
@@ -97,16 +60,11 @@ namespace WB.Tests.Integration.SqlDataExportWriterTests
             result.Setup(x => x.CombinePath(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>(Path.Combine);
             return result;
         } 
-        protected static ExportedHeaderItem CreateExportedHeaderItem(QuestionType type = QuestionType.Text, string[] columnNames=null)
-        {
-            return new ExportedHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, QuestionType = type };
-        }
 
-        private static string dbFileName = "data.sqlite";
         protected static string[][] QueryTo2DimensionStringArray(ISqlServiceFactory sqlServiceFactory, string sql)
         {
             var result = new List<string[]>();
-            using (var sqlService = sqlServiceFactory.CreateSqlService(dbFileName))
+            using (var sqlService = sqlServiceFactory.CreateSqlService(""))
             {
                 IEnumerable<dynamic> queryResult = sqlService.Query(sql);
 
@@ -134,7 +92,7 @@ namespace WB.Tests.Integration.SqlDataExportWriterTests
 
         protected static void RunCommand(ISqlServiceFactory sqlServiceFactory, string sql)
         {
-            using (var sqlService = sqlServiceFactory.CreateSqlService(dbFileName))
+            using (var sqlService = sqlServiceFactory.CreateSqlService(""))
             {
                 sqlService.ExecuteCommand(sql);
             }

@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
     {
         private IDbConnection dbConnection;
         private TransactionScope scope;
+
         public SqliteService(string pathToDb, IFileSystemAccessor fileSystemAccessor)
         {
             string connectionString = "Data Source=" + pathToDb;
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql
             {
                 SQLiteConnection.CreateFile(pathToDb);
             }
+
             dbConnection = new SQLiteConnection(connectionString);
             scope = new TransactionScope(TransactionScopeOption.RequiresNew);
             dbConnection.Open();
