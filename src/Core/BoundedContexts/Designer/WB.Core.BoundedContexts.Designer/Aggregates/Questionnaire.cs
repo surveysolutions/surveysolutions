@@ -1011,6 +1011,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName);
+
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
 
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
@@ -1331,6 +1333,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
+
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName);
 
             this.ThrowIfExpressionContainsNotExistingQuestionReference(condition, variableName);
 
