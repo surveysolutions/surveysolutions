@@ -197,6 +197,7 @@
     <Compile Include="SyncControllerTests\SyncControllerTestContext.cs" />
     <Compile Include="SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_greater.cs" />
     <Compile Include="SyncControllerTests\when_handshaking_capi_with_supervisor_and_capi_version_is_lesser.cs" />
+    <Compile Include="SyncControllerTests\when_checking_new_version_with_correct_paarams.cs" />
     <Compile Include="SyncControllerTests\when_pushing_file_which_rise_exception_during_saving.cs" />
     <Compile Include="SyncControllerTests\when_pushing_file_without_file.cs" />
     <Compile Include="SyncControllerTests\when_pushing_file_with_valid_file.cs" />

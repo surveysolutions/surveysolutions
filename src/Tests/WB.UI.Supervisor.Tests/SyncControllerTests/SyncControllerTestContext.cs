@@ -1,18 +1,16 @@
-﻿using System.Collections.Specialized;
-using System.IO;
+﻿using System.IO;
 using System.Net.Http;
 using System.Text;
-using System.Web;
 using System.Web.Http;
 using Main.Core.View;
 using Main.Core.View.User;
 using Moq;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 
@@ -40,9 +38,10 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
             ILogger logger = null,
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
             ISupportedVersionProvider versionProvider = null, IPlainInterviewFileStorage plainFileRepository = null, 
-            Stream stream = null, string fileName = null)
+            Stream stream = null, string fileName = null,
+            IFileSystemAccessor fileSystemAccessor = null)
         {
-            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, plainFileRepository);
+            var controller = CreateSyncControllerImpl(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider, plainFileRepository, fileSystemAccessor);
             SetControllerContextWithFiles(controller, stream: stream, fileName: fileName);
 
             return controller;
@@ -54,7 +53,9 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
             ISyncManager syncManager = null,
             ILogger logger = null,
             IViewFactory<UserViewInputModel, UserView> viewFactory = null,
-            ISupportedVersionProvider versionProvider = null, IPlainInterviewFileStorage plainFileRepository = null)
+            ISupportedVersionProvider versionProvider = null, 
+            IPlainInterviewFileStorage plainFileRepository = null,
+            IFileSystemAccessor fileSystemAccessor = null)
         {
             var controller = new InterviewerSyncController(
                 commandService ?? Mock.Of<ICommandService>(), 
@@ -64,7 +65,8 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
                 viewFactory ?? Mock.Of<IViewFactory<UserViewInputModel, UserView>>(),
                 versionProvider ?? Mock.Of<ISupportedVersionProvider>(), 
                 (login, role) => true, 
-                plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>());
+                plainFileRepository ?? Mock.Of<IPlainInterviewFileStorage>(),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
 
             return controller;
         }
