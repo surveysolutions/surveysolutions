@@ -79,6 +79,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cascading questions can&apos;t have condition expression.
+        /// </summary>
+        internal static string CascadingCantHaveConditionExpression {
+            get {
+                return ResourceManager.GetString("CascadingCantHaveConditionExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading questions can&apos;t have validation expression.
+        /// </summary>
+        internal static string CascadingCantHaveValidationExpression {
+            get {
+                return ResourceManager.GetString("CascadingCantHaveValidationExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options in cascading question can not have empty ParentValue column.
         /// </summary>
         internal static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {

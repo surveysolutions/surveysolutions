@@ -440,7 +440,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.CreatedBy = e.CreatedBy;
         }
 
-        private void Apply(QuestionChanged e)
+        internal void Apply(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
@@ -2270,8 +2270,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
+            this.ThrowIfCascadingQuestionHasConditionOrValidation(questionId, cascadeFromQuestionId, validationExpression, enablementCondition);
             this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, cascadeFromQuestionId, linkedToQuestionId.HasValue);
             this.ThrowIfConditionOrValidationExpressionContainsNotExistingQuestionReference(enablementCondition, validationExpression, variableName);
+
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -3274,6 +3276,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
+        private void ThrowIfCascadingQuestionHasConditionOrValidation(Guid questionId, Guid? cascadeFromQuestionId, string validationExpression, string enablementCondition)
+        {
+            if (!cascadeFromQuestionId.HasValue )
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(validationExpression))
+            {
+                throw new QuestionnaireException(ExceptionMessages.CascadingCantHaveValidationExpression);
+            }
+
+            if (!string.IsNullOrWhiteSpace(enablementCondition))
+            {
+                throw new QuestionnaireException(ExceptionMessages.CascadingCantHaveConditionExpression);
+            }
+        }
         private void ThrowIfCategoricalQuestionIsInvalid(Guid questionId, Option[] options, Guid? linkedToQuestionId, bool isFeatured, bool? isFilteredCombobox, QuestionScope scope, Guid? cascadeFromQuestionId)
         {
             bool questionIsLinked = linkedToQuestionId.HasValue;
