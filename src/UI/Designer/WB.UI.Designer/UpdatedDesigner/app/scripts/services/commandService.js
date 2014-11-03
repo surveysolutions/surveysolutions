@@ -89,6 +89,7 @@
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
+                        command.validationExpression = question.cascadeFromQuestionId ? '' : command.validationExpression;
                         if (shouldGetOptionsOnServer) {
                             command.options = null;
                         } else {
