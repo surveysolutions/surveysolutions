@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,6 +14,7 @@ using Main.Core.View.User;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -34,6 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly ISupportedVersionProvider versionProvider;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IGlobalInfoProvider globalInfo;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
 
         private string CapiFileName = "wbcapi.apk";
         private string pathToSearchVersions = ("~/App_Data/Capi");
@@ -41,18 +43,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
             ISyncManager syncManager,
             ILogger logger, IViewFactory<UserViewInputModel, UserView> viewFactory,
-            ISupportedVersionProvider versionProvider, IPlainInterviewFileStorage plainFileRepository)
+            ISupportedVersionProvider versionProvider, IPlainInterviewFileStorage plainFileRepository,
+            IFileSystemAccessor fileSystemAccessor)
             : this(commandService, globalInfo, syncManager, logger, viewFactory, versionProvider,
-                Roles.IsUserInRole, plainFileRepository)
+                Roles.IsUserInRole, plainFileRepository, fileSystemAccessor)
         {
         }
 
         public InterviewerSyncController(ICommandService commandService, IGlobalInfoProvider globalInfo,
-            ISyncManager syncManager,
-            ILogger logger,
+            ISyncManager syncManager,ILogger logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory, ISupportedVersionProvider versionProvider,
-            Func<string, string, bool> checkIfUserIsInRole,
-            IPlainInterviewFileStorage plainFileRepository) : base(commandService, globalInfo, logger)
+            Func<string, string, bool> checkIfUserIsInRole,IPlainInterviewFileStorage plainFileRepository,
+            IFileSystemAccessor fileSystemAccessor)
+            : base(commandService, globalInfo, logger)
         {
             this.checkIfUserIsInRole = checkIfUserIsInRole;
             this.plainFileRepository = plainFileRepository;
@@ -61,6 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.logger = logger;
             this.viewFactory = viewFactory;
             this.globalInfo = globalInfo;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         protected UserView GetUser(string login)
@@ -285,7 +289,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             }
         }
 
-
         [HttpGet]
         public HttpResponseMessage GetLatestVersion()
         {
@@ -296,25 +299,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
 
             string targetToSearchVersions = HostingEnvironment.MapPath(pathToSearchVersions);
-            string path = Path.Combine(targetToSearchVersions, maxVersion.ToString(CultureInfo.InvariantCulture));
-            string pathToFile = Path.Combine(path, CapiFileName);
 
-            if (File.Exists(pathToFile))
+            string path = fileSystemAccessor.CombinePath(targetToSearchVersions, maxVersion.ToString(CultureInfo.InvariantCulture));
+            string pathToFile = fileSystemAccessor.CombinePath(path, CapiFileName);
+
+            if (fileSystemAccessor.IsFileExists(pathToFile))
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new StreamContent(File.OpenRead(pathToFile)),
+                    Content = new StreamContent(fileSystemAccessor.ReadFile(pathToFile))
                 };
 
                 response.Content.Headers.ContentType =
                     new MediaTypeHeaderValue("application/vnd.android.package-archive");
-            }
-            else
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "File was not found");
-            }
 
-            return null;
+                return response;
+            }
+            
+            return Request.CreateErrorResponse(HttpStatusCode.NotFound, "File was not found");
         }
 
         private int GetLastVersionNumber()
@@ -322,13 +324,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             int maxVersion = 0;
 
             string targetToSearchVersions = HostingEnvironment.MapPath(pathToSearchVersions);
-            if (Directory.Exists(targetToSearchVersions))
+            
+            if (fileSystemAccessor.IsDirectoryExists(targetToSearchVersions))
             {
-                var dirInfo = new DirectoryInfo(targetToSearchVersions);
-                foreach (DirectoryInfo directoryInfo in dirInfo.GetDirectories())
+                var containingDirectories = fileSystemAccessor.GetDirectoriesInDirectory(targetToSearchVersions);
+                
+                foreach (var directoryInfo in containingDirectories)
                 {
                     int value;
-                    if (int.TryParse(directoryInfo.Name, out value))
+                    if (int.TryParse(fileSystemAccessor.GetFileName(directoryInfo), out value))
                         if (maxVersion < value)
                             maxVersion = value;
                 }
@@ -338,29 +342,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage CheckNewVersion(string version, string versionCode, string androidId)
+        public HttpResponseMessage CheckNewVersion(int versionCode)
         {
-            bool isNewVersionExsist = false;
-
-            try
-            {
-                int versionValue;
-                if (int.TryParse(versionCode, out versionValue))
-                {
-                    int maxVersion = GetLastVersionNumber();
-
-                    if (maxVersion != 0 && maxVersion > versionValue)
-                    {
-                        isNewVersionExsist = true;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                logger.Error("Error on version check.", e);
-            }
-            
-            return Request.CreateResponse(HttpStatusCode.OK, isNewVersionExsist);
+            int maxVersion = GetLastVersionNumber();
+            return Request.CreateResponse(HttpStatusCode.OK, (maxVersion != 0 && maxVersion > versionCode));
         }
     }
 }
