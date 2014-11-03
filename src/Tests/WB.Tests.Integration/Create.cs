@@ -7,9 +7,15 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.Files.Implementation.FileSystem;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
+using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Integration
 {
@@ -318,6 +324,65 @@ namespace WB.Tests.Integration
             decimal rosterInstanceId = 0, int? sortIndex = null)
         {
             return new AddedRosterInstance(groupId, outerRosterVector ?? Empty.RosterVector, rosterInstanceId, sortIndex);
+        }
+
+
+        public static ISqlServiceFactory SqliteServiceFactory(string dbFileName, IFileSystemAccessor fileSystemAccessor=null)
+        {
+            fileSystemAccessor = fileSystemAccessor ?? new FileSystemIOAccessor();
+            if(fileSystemAccessor.IsFileExists(dbFileName))
+                fileSystemAccessor.DeleteFile(dbFileName);
+
+            return new SqlServiceFactoryForTests(dbFileName, fileSystemAccessor);
+        }
+
+        class SqlServiceFactoryForTests : ISqlServiceFactory
+        {
+            private readonly string dbFileName;
+            private readonly IFileSystemAccessor fileSystemAccessor;
+            public SqlServiceFactoryForTests(string dbFileName, IFileSystemAccessor fileSystemAccessor)
+            {
+                this.dbFileName = dbFileName;
+                this.fileSystemAccessor = fileSystemAccessor;
+            }
+
+            public ISqlService CreateSqlService(string dbPath)
+            {
+                return new SqliteService(dbFileName, fileSystemAccessor);
+            }
+        }
+
+        public static HeaderStructureForLevel HeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
+        {
+            return new HeaderStructureForLevel()
+            {
+                LevelScopeVector = levelScopeVector ?? new ValueVector<Guid>(),
+                LevelName = levelName,
+                LevelIdColumnName = "Id",
+                IsTextListScope = referenceNames != null,
+                ReferencedNames = referenceNames,
+                HeaderItems =
+                    new Dictionary<Guid, ExportedHeaderItem>
+                    {
+                        { Guid.NewGuid(), ExportedHeaderItem() },
+                        { Guid.NewGuid(), ExportedHeaderItem(QuestionType.Numeric, new[] { "a" }) }
+                    }
+            };
+        }
+
+        public static ExportedHeaderItem ExportedHeaderItem(QuestionType type = QuestionType.Text, string[] columnNames = null)
+        {
+            return new ExportedHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, QuestionType = type };
+        }
+
+        public static QuestionnaireExportStructure QuestionnaireExportStructure(params HeaderStructureForLevel[] levels)
+        {
+            var header = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
+            if (levels != null && levels.Length > 0)
+            {
+                header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
+            }
+            return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
         }
     }
 }
