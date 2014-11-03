@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
         It should_return_valid_archive_name = () =>
             result.ShouldEndWith(string.Format("template_{0}_v{1}.zip", questionnaireId.FormatGuid(), 1));
 
-        It should_template_for_preloade_be_created_once = () =>
+        It should_only_create_template_for_preload_once = () =>
             exportedDataFormatter.Verify(x => x.CreateHeaderStructureForPreloadingForQuestionnaire(questionnaireId, 1, Moq.It.IsAny<string>()), Times.Once);
 
         private static PreloadingTemplateService preloadingTemplateService;

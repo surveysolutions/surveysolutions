@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.SqlToTabDataExportServiceTests
         Establish context = () =>
         {
             csvWriterService=new CsvWriterServiceTest();
-            sqlServiceFactory = Create.SqliteServiceFactory("sqllite_export_test");
+            sqlServiceFactory = Create.SqliteServiceFactory("sqllite_export_all_test");
 
             questionnaireExportStructure =
                 Create.QuestionnaireExportStructure(Create.HeaderStructureForLevel(rosterLevelTable,

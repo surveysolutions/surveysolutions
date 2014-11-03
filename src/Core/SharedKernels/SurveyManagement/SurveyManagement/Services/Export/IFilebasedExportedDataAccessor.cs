@@ -5,8 +5,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
     public interface IFilebasedExportedDataAccessor
     {
         string GetFolderPathOfFilesByQuestionnaireForInterview(Guid questionnaireId, long version, Guid interviewId);
-        string GetFolderPathOfDataByQuestionnaireOrThrow(Guid questionnaireId, long version);
-        string GetFolderPathOfFilesByQuestionnaireOrThrow(Guid questionnaireId, long version);
+        string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version);
+        string GetFolderPathOfFilesByQuestionnaire(Guid questionnaireId, long version);
 
         string GetFilePathToExportedCompressedData(Guid questionnaireId, long version);
         string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version);

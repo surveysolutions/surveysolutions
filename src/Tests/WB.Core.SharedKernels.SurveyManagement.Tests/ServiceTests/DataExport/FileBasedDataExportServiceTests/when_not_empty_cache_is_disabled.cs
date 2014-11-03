@@ -25,9 +25,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
             dataExportWriterMock=new Mock<IDataExportWriter>();
 
             var filebaseExportDataAccessorMock = new Mock<IFilebasedExportedDataAccessor>();
-            filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireId, questionnaireVersion))
+            filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfDataByQuestionnaire(questionnaireId, questionnaireVersion))
                 .Returns(existingQuestionnairePath);
-            filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfDataByQuestionnaireOrThrow(questionnaireForDeleteId, questionnaireForDeleteVersion))
+            filebaseExportDataAccessorMock.Setup(x => x.GetFolderPathOfDataByQuestionnaire(questionnaireForDeleteId, questionnaireForDeleteVersion))
                 .Returns(deletingQuestionnairePath);
             var interviewSummaryStorageMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             interviewSummaryStorageMock.Setup(x => x.GetById(Moq.It.Is<string>(i => i == interviewId.FormatGuid() || i == interviewForDeleteId.FormatGuid())))
