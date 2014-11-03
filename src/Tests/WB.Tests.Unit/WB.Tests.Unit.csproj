@@ -196,6 +196,7 @@
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_entity_and_root_id_is_used_as_parent_group_id.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\when_adding_group_specifying_root_id_as_parent.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\parent_cascading_question_should_exist.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_form_roster_references_parent_from_parent_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_has_10001_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_has_condition_or_validation_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_have_repeating_pair_of_Value_and_ParentValue.cs" />
