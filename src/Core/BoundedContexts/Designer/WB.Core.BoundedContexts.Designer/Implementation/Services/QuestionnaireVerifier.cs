@@ -1157,10 +1157,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 {
                     VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
                         identifier => GetVerificationErrorByCustomExpressionReferenceOrNull(
-                            questionWithValidationExpression, identifier, vectorOfRosterSizeQuestionsForQuestionWithCustomValidation,
+                            questionWithValidationExpression, identifier,
                             questionnaire,
-                            CustomValidationExpressionUsesNotRecognizedParameter,
-                            CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel));
+                            CustomValidationExpressionUsesNotRecognizedParameter));
                 }
             }
 
@@ -1183,13 +1182,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(itemWithConditionExpression, questionnaire);
 
                 if (vectorOfRosterSizeQuestionsForQuestionWithCustomCondition != null)
-                {
-                    VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllItemsWithCustomCondition,
+                { 
+                    VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, 
+                        errorByAllItemsWithCustomCondition,
                         identifier => GetVerificationErrorByCustomExpressionReferenceOrNull(
-                            itemWithConditionExpression, identifier, vectorOfRosterSizeQuestionsForQuestionWithCustomCondition,
+                            itemWithConditionExpression, 
+                            identifier,
                             questionnaire,
-                            CustomConditionExpressionUsesNotRecognizedParameter,
-                            CustomConditionExpressionReferencesQuestionWithDeeperPropagationLevel));
+                            CustomConditionExpressionUsesNotRecognizedParameter));
 
                     VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllItemsWithCustomCondition,
                      identifier => GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(
@@ -1303,10 +1303,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static QuestionnaireVerificationError GetVerificationErrorByCustomExpressionReferenceOrNull(
-            IComposite itemWithExpression, string identifier,
-            Guid[] vectorOfRosterQuestionsForQuestionWithExpression, QuestionnaireDocument questionnaire,
-            Func<IComposite, QuestionnaireVerificationError> notRecognizedParameterError,
-            Func<IComposite, IQuestion, QuestionnaireVerificationError> referencesQuestionWithDeeperPropagationLevelError)
+            IComposite itemWithExpression, 
+            string identifier, 
+            QuestionnaireDocument questionnaire,
+            Func<IComposite, QuestionnaireVerificationError> notRecognizedParameterError)
         {
             if (IsSpecialThisIdentifier(identifier))
             {
@@ -1569,12 +1569,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,
-            List<QuestionnaireVerificationError> errorList, Func<T, QuestionnaireVerificationError> getErrorOrNull)
+            List<QuestionnaireVerificationError> errorList, 
+            Func<T, QuestionnaireVerificationError> getErrorOrNull)
         {
-            errorList.AddRange(
-                enumerableToVerify
-                    .Select(getErrorOrNull)
-                    .Where(errorOrNull => errorOrNull != null));
+            var resultErrors = enumerableToVerify
+                .Select(getErrorOrNull)
+                .Where(errorOrNull => errorOrNull != null);
+
+            foreach (var error in resultErrors)
+            {
+                var verificationError = error;
+                if (!errorList.Any(e => e.Code == verificationError.Code && e.References.SequenceEqual(verificationError.References)))
+                {
+                    errorList.Add(error);
+                }
+            }
         }
 
         private static bool NoQuestionsExist(QuestionnaireDocument questionnaire)

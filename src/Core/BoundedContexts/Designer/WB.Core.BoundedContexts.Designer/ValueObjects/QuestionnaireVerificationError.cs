@@ -1,23 +1,35 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.ValueObjects
 {
     public class QuestionnaireVerificationError
     {
-        public QuestionnaireVerificationError(string code, string message, params QuestionnaireVerificationReference[] references)
+        private readonly QuestionnaireVerificationReference[] references;
+
+        public QuestionnaireVerificationError(string code, 
+            string message,
+            params QuestionnaireVerificationReference[] references)
         {
             this.Code = code;
             this.Message = message;
-            this.References = references.ToList();
+            this.references = references ?? new QuestionnaireVerificationReference[0];
         }
 
-        public QuestionnaireVerificationError(string code, string message, IEnumerable<QuestionnaireVerificationReference> references)
+        public QuestionnaireVerificationError(string code, 
+            string message,
+            IEnumerable<QuestionnaireVerificationReference> references)
             : this(code, message, references.ToArray()) { }
 
         public string Code { get; private set; }
+
         public string Message { get; private set; }
-        public IEnumerable<QuestionnaireVerificationReference> References { get; private set; }
+
+        public IReadOnlyCollection<QuestionnaireVerificationReference> References
+        {
+            get { return new ReadOnlyCollection<QuestionnaireVerificationReference>(this.references); }
+        }
 
         public override string ToString()
         {
