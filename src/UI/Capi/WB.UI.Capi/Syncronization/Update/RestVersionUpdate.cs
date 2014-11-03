@@ -15,13 +15,10 @@ namespace WB.UI.Capi.Syncronization.Update
             this.webExecutor = webExecutor;
         }
 
-        public bool Execute(string version, int versionCode, string androidId)
+        public bool Execute(int versionCode)
         {
-            var newVersionExists = this.webExecutor.ExecuteRestRequest<bool>(checkPath,
-                null,null,"GET",
-                new KeyValuePair<string, object>("version", version),
-                new KeyValuePair<string, object>("versionCode", versionCode.ToString(CultureInfo.InvariantCulture)),
-                new KeyValuePair<string, object>("androidId", androidId));
+            var newVersionExists = this.webExecutor.ExecuteRestRequest<bool>(checkPath,null,null,"GET",
+                new KeyValuePair<string, object>("versionCode", versionCode.ToString(CultureInfo.InvariantCulture)));
 
             return newVersionExists;
         }
