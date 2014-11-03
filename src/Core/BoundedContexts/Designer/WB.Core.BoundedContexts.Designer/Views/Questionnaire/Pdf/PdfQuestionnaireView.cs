@@ -165,6 +165,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                             VariableName = childQuestion.StataExportCaption
                         };
 
+                        newQuestion.ValidationExpression = childQuestion.ValidationExpression;
                         newQuestion.ConditionExpression = childQuestion.ConditionExpression;
                         this.AddEntity(newQuestion, item.PublicKey);
                     }
