@@ -578,7 +578,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (isLegacyEvent)
             {
-                logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
+                Logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
                 return;
             }
 
@@ -808,8 +808,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
 
-        private readonly ILogger logger;
-
+        private static ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
 
         private static IClock Clock
         {
@@ -855,7 +857,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             : base()
         {
             this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         public Questionnaire(Guid publicKey)
@@ -4503,9 +4504,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private string ConvertExpressionToCSharpIfNotEmpty(string expression, Dictionary<string, string> customMappings)
         {
-            return string.IsNullOrWhiteSpace(expression)
-                ? expression
-                : this.NCalcToCSharpConverter.Convert(expression, customMappings);
+            try
+            {
+                return string.IsNullOrWhiteSpace(expression)
+                    ? expression
+                    : this.NCalcToCSharpConverter.Convert(expression, customMappings);
+            }
+            catch (Exception exception)
+            {
+                Logger.Warn(string.Format("Failed to migrate NCalc expression to C#: {0}", expression ?? string.Empty), exception);
+
+                return expression;
+            }
         }
 
         private static void UpdateCustomMappingsWithContextQuestion(Dictionary<string, string> customMappings, IQuestion contextQuestion)

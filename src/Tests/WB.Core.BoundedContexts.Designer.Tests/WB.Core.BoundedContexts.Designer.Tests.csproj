@@ -280,6 +280,7 @@
     <Compile Include="QuestionnaireTests\when_cloning_text_question_by_id.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_2_questions_have_both_validation_expressions_and_enablement_conditions.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_all_questions_have_empty_expressions.cs" />
+    <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_converter_throws_exception_and_one_question_has_validation_expressions_and_enablement_conditions.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_group_B_and_rosted_D_both_have_enablement_conditions.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_question_has_enablement_condition_but_validation_expression_is_empty.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_question_has_validation_expression_but_enablement_condition_is_empty.cs" />
