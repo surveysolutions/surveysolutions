@@ -363,6 +363,9 @@
     <Compile Include="MockExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceHelper.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateTests\MetodInfo.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateTests\MetodInfoExtensions.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateTests\when_getting_methods_of_IInterviewExpressionState.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\PlainQuestionnaireTestsTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value_which_is_not_decimal.cs" />
