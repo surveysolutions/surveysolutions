@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.F
         {
             dataExportWriterMock=new Mock<IDataExportWriter>();
             var filebaseExportRouteServiceMock = new Mock<IFilebasedExportedDataAccessor>();
-            filebaseExportRouteServiceMock.Setup(x => x.GetFolderPathOfDataByQuestionnaireOrThrow(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
+            filebaseExportRouteServiceMock.Setup(x => x.GetFolderPathOfDataByQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Throws<InterviewDataExportException>();
             fileBasedDataExportRepositoryWriter =
                 CreateFileBasedDataExportService(filebasedExportedDataAccessor: filebaseExportRouteServiceMock.Object, interviewData: new InterviewData() { IsDeleted = true }, dataExportWriter: dataExportWriterMock.Object);

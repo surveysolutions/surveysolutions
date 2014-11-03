@@ -24,13 +24,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         Because of = () =>
             sqlToTabDataExportService.CreateHeaderStructureForPreloadingForQuestionnaire(questionnaireId, questionnaireVersion,"");
 
-        It should_2_headers_be_created = () =>
+        It should_craete_2_headers = () =>
             csvWriterServiceTestable.Rows.Count.ShouldEqual(2);
 
-        It should_first_header_correspond_to_main_level_of_the_interview = () =>
+        It should_add_first_header_that_corresponds_to_interview = () =>
             csvWriterServiceTestable.Rows[0].ShouldEqual(new object[] { "Id" ,"1","a"});
 
-        It should_second_header_correspond_to_nested_roster_level_of_the_interview = () =>
+        It should_add_second_header_that_corresponds_to_nested_roster_level_of_the_interview = () =>
             csvWriterServiceTestable.Rows[1].ShouldEqual(new object[] { "Id", "r1", "r2", "1", "a", "ParentId1", "ParentId2" });
 
         private static SqlToTabDataExportService sqlToTabDataExportService;
