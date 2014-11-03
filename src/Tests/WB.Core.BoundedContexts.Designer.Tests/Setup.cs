@@ -20,6 +20,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 .Returns(instance);
         }
 
+        public static void StubToMockedServiceLocator<T>()
+            where T : class
+        {
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<T>())
+                .Returns(Mock.Of<T>());
+        }
+
         public static void SimpleQuestionnaireDocumentUpgraderToMockedServiceLocator()
         {
             var questionnaireDocumentUpgrader = Mock.Of<IQuestionnaireDocumentUpgrader>();
