@@ -220,11 +220,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public async Task<HttpResponseMessage> PostFile([FromUri]Guid interviewId)
         {
-            //Guid interviewId = fileDescription.InterviewId;
-
-            /*if(!Guid.TryParse(form.Get("interviewId"), out interviewId))
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Incorrect interview Id");*/
-
             if (Request.Content == null || !Request.Content.IsMimeMultipartContent())
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Incorrect media type");
@@ -232,10 +227,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             try
             {
-                MultipartMemoryStreamProvider provider = await Request.Content.ReadAsMultipartAsync();
+                var provider = await Request.Content.ReadAsMultipartAsync();
 
                 if (provider.Contents.Count != 1)
-                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Incorrect files");
+                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Incorrect files count");
 
                 HttpContent file = provider.Contents[0];
                 string filename = file.Headers.ContentDisposition.FileName.Trim('\"');
