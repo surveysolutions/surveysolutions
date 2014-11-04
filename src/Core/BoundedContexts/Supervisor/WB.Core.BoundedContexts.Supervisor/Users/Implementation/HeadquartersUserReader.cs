@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Main.Core.View.User;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
@@ -8,8 +9,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
 {
     internal class HeadquartersUserReader : HeadquartersEntityReader, IHeadquartersUserReader
     {
-        public HeadquartersUserReader(IJsonUtils jsonUtils, IHeadquartersSettings headquartersSettings)
-            : base(jsonUtils, headquartersSettings) {}
+        public HeadquartersUserReader(IJsonUtils jsonUtils, IHeadquartersSettings headquartersSettings, Func<HttpMessageHandler> messageHandler)
+            : base(jsonUtils, headquartersSettings, messageHandler) {}
 
         public async Task<UserView> GetUserByUri(Uri headquartersUserUri)
         {

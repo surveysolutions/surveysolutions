@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -9,6 +10,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests
 {
     internal static class ShouldExtensions
     {
+        public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count)
+        {
+            eventContext.Events.Count(e => e.Payload is TEvent).ShouldEqual(count);
+        }
+
         public static void ShouldContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
         {
             if (condition == null)

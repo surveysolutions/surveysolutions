@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Capi.ModelUtils;
@@ -82,18 +83,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void SetAnswer(object answer)
         {
-            var typedAnswers = QuestionUtils.ExtractSelectedOptions(answer ?? "");
+            var selectedAnswer = QuestionUtils.ExtractSelectedOptions(answer);
 
-            if (typedAnswers == null)
-            {
+            if (selectedAnswer == null || selectedAnswer.Length == 0)
                 return;
-            }
 
-            var selectedAnswer = typedAnswers[0];
-
-            foreach (var item in this.filteredAnswers ?? AnswerOptions)
+            foreach (var item in AnswerOptions)
             {
-                item.Selected = selectedAnswer == item.Value;
+                item.Selected = selectedAnswer[0] == item.Value;
             }
 
             base.SetAnswer(answer);
@@ -101,7 +98,7 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void RemoveAnswer()
         {
-            foreach (var item in this.filteredAnswers ?? AnswerOptions)
+            foreach (var item in AnswerOptions)
             {
                 item.Selected = false;
             }

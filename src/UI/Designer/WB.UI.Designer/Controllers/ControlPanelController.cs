@@ -70,5 +70,10 @@ namespace WB.UI.Designer.Controllers
 
             return this.RedirectToAction("ReadSide");
         }
+
+        public ActionResult NCalcToCSharp()
+        {
+            return this.View();
+        }
     }
 }

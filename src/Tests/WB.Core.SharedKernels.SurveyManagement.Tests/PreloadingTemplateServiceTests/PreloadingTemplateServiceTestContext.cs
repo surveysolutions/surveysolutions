@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -20,14 +21,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
     [Subject(typeof(PreloadingTemplateService))]
     internal class PreloadingTemplateServiceTestContext
     {
-        protected static PreloadingTemplateService CreatePreloadingTemplateService(IDataFileExportService dataFileExportService = null,
-            QuestionnaireExportStructure questionnaireExportStructure = null, IFileSystemAccessor fileSystemAccessor=null)
+        protected static PreloadingTemplateService CreatePreloadingTemplateService(IFileSystemAccessor fileSystemAccessor = null, IDataExportService dataExportService=null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object;
-            return new PreloadingTemplateService(currentFileSystemAccessor,
-                Mock.Of<IVersionedReadSideRepositoryReader<QuestionnaireExportStructure>>(
-                    _ => _.GetById(Moq.It.IsAny<string>(), Moq.It.IsAny<long>()) == questionnaireExportStructure), "",
-                dataFileExportService ?? CreateIDataFileExportServiceMock().Object,
+            return new PreloadingTemplateService(currentFileSystemAccessor, "",
+                dataExportService?? Mock.Of<IDataExportService>(),
                 Mock.Of<IArchiveUtils>());
         }
 
@@ -43,11 +41,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.PreloadingTemplateService
             return fileSystemAccessorMock;
         }
 
-        protected static Mock<IDataFileExportService> CreateIDataFileExportServiceMock()
+        protected static Mock<IDataExportWriter> CreateIDataFileExportServiceMock()
         {
-            var dataFileExportServiceMock = new Mock<IDataFileExportService>();
-            dataFileExportServiceMock.Setup(x => x.GetInterviewExportedDataFileName(Moq.It.IsAny<string>()))
-                .Returns<string>(levelName => levelName);
+            var dataFileExportServiceMock = new Mock<IDataExportWriter>();
             return dataFileExportServiceMock;
         }
 

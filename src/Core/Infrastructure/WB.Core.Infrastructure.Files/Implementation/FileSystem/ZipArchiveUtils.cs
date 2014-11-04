@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zip;
+using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
@@ -31,6 +32,23 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             {
                 zipFile.AddDirectory(directory, fileSystemAccessor.GetFileName(directory));
                 zipFile.Save(archiveFile);
+            }
+        }
+
+        public void ZipFiles(IEnumerable<string> files, IEnumerable<string> directories, string archiveFilePath)
+        {
+            using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
+            {
+                zip.CompressionLevel = CompressionLevel.BestCompression;
+
+                zip.AddFiles(files, "");
+
+                foreach (var directory in directories)
+                {
+                    zip.AddDirectory(directory, "");
+                }
+
+                zip.Save(archiveFilePath);
             }
         }
 

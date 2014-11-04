@@ -162,10 +162,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                                 AnswerValue = x.AnswerValue,
                                 ParentValue = x.ParentValue
                             }).ToList(),
-                            VariableName = childQuestion.StataExportCaption
+                            VariableName = childQuestion.StataExportCaption,
+                            ValidationExpression = childQuestion.ValidationExpression,
+                            ConditionExpression = childQuestion.ConditionExpression
                         };
 
-                        newQuestion.ConditionExpression = childQuestion.ConditionExpression;
                         this.AddEntity(newQuestion, item.PublicKey);
                     }
                     if (childStaticText != null)

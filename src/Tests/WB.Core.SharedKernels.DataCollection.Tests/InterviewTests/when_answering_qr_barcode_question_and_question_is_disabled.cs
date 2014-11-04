@@ -11,6 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
+    [Ignore("C#, KP-4388 Different question types without validation expressions (barcode)")]
     internal class when_answering_qr_barcode_question_and_question_is_disabled : InterviewTestsContext
     {
         Establish context = () =>
@@ -19,8 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>
                 (_
                     => _.HasQuestion(questionId) == true &&
-                        _.GetQuestionType(questionId) == QuestionType.QRBarcode &&
-                        _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { questionId } 
+                        _.GetQuestionType(questionId) == QuestionType.QRBarcode
+                // && _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { questionId } 
                 );
 
             SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(

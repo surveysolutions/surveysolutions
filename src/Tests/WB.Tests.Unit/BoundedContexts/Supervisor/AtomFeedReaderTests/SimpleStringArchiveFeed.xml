@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Users changed feed</title>
+  <id>e0288c6203934e3ebf98f624bac16265</id>
+  <updated>2014-04-10T12:18:47Z</updated>
+  <entry>
+    <id>preLastArchiveEntry</id>
+    <title type="text">User changed</title>
+    <updated>2014-04-09T15:33:38Z</updated>
+    <link rel="enclosure" href="http://localhost/Headquarters/api/resources/users/v1/40ad9dff03d24137997db418d0f3ae1b" />
+    <content type="text">
+      "aaa"
+    </content>
+  </entry>
+  <entry>
+    <id>lastArchiveEntry</id>
+    <title type="text">User changed</title>
+    <updated>2014-04-09T15:35:14Z</updated>
+    <link rel="enclosure" href="http://localhost/Headquarters/api/resources/users/v1/40ad9dff03d24137997db418d0f3ae1b" />
+    <content type="text">
+      "bbb"
+    </content>
+  </entry>
+</feed>

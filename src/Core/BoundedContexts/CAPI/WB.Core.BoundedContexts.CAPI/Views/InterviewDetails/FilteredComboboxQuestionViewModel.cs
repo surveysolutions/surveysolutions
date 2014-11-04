@@ -53,22 +53,14 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         public override void SetAnswer(object answer)
         {
-            if (answer == null)
-            {
-                return;
-            }
+            var selectedAnswer = QuestionUtils.ExtractSelectedOptions(answer);
 
-            var typedAnswers = QuestionUtils.ExtractSelectedOptions(answer);
-
-            if (typedAnswers == null)
-            {
+            if (selectedAnswer == null || selectedAnswer.Length == 0)
                 return;
-            }
 
             foreach (var item in this.Answers)
             {
-                item.Selected = typedAnswers.Contains(item.Value);
-                item.AnswerOrder = Array.IndexOf(typedAnswers, item.Value) + 1;
+                item.Selected = selectedAnswer[0] == item.Value;
             }
 
             base.SetAnswer(answer);

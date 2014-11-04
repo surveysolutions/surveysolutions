@@ -25,4 +25,5 @@
   <IgnoredTests>
     <AllTestsSelector />
   </IgnoredTests>
+  <HiddenWarnings>AssemblyReferenceToBuildOutputDirectory</HiddenWarnings>
 </ProjectConfiguration>

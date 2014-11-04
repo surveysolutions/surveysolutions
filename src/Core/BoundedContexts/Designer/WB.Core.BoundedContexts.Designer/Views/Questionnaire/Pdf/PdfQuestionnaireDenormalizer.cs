@@ -214,6 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     VariableName = @event.StataExportCaption
                 };
 
+                newQuestion.ValidationExpression = @event.ValidationExpression;
                 newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddEntity(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
@@ -294,7 +295,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Answers = new List<PdfAnswerView>(),
                     VariableName = @event.StataExportCaption
                 };
-                
+
                 newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddEntity(newQuestion, @event.GroupId);
                 return questionnaire;

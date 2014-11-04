@@ -4,13 +4,14 @@ using System.Linq;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Linq;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.RepositoryAccessors
 {
     #warning TLK: make string identifiers here after switch to new storage
-    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IQueryableReadSideRepositoryWriter<TEntity>, IRavenReadSideRepositoryWriter
+    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IQueryableReadSideRepositoryWriter<TEntity>, IReadSideRepositoryWriter
         where TEntity : class, IReadSideRepositoryEntity
     {
         private const int MaxCountOfCachedEntities = 256;
@@ -32,7 +33,7 @@ namespace WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide.Repositor
         private bool isCacheEnabled = false;
         private readonly Dictionary<string, CachedEntity> cache = new Dictionary<string, CachedEntity>();
 
-        public RavenReadSideRepositoryWriter(DocumentStore ravenStore, IRavenReadSideRepositoryWriterRegistry writerRegistry)
+        public RavenReadSideRepositoryWriter(DocumentStore ravenStore, IReadSideRepositoryWriterRegistry writerRegistry)
             : base(ravenStore)
         {
             writerRegistry.Register(this);

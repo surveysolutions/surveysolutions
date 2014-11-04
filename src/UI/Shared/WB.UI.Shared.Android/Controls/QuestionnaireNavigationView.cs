@@ -1,11 +1,14 @@
 using System;
 using Android.Content;
+using Android.Content.Res;
 using Android.Graphics;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Events;
+using Orientation = Android.Widget.Orientation;
 
 namespace WB.UI.Shared.Android.Controls
 {
@@ -14,10 +17,19 @@ namespace WB.UI.Shared.Android.Controls
         #region public fields
 
         private readonly LinearLayout linearLayout;
+        private readonly Color selectedItemColor;
 
         public QuestionnaireNavigationView(Context context, InterviewViewModel model)
             : base(context)
         {
+            TypedValue typedValue = new TypedValue();
+            int[] colorAttr = new int[] { global::Android.Resource.Attribute.TextColorHighlightInverse };
+            using (var a = context.ObtainStyledAttributes(typedValue.Data, colorAttr))
+            {
+                selectedItemColor = a.GetColor(0, -1);
+                a.Recycle();
+            }
+
             this.model = model;
             this.linearLayout = new LinearLayout(context);
             this.linearLayout.Orientation = Orientation.Vertical;
@@ -57,7 +69,7 @@ namespace WB.UI.Shared.Android.Controls
             lastView.Touch += view_Touch;
             this.linearLayout.AddView(lastView);
 
-            this.linearLayout.GetChildAt(0).SetBackgroundColor(Color.LightBlue);
+            this.linearLayout.GetChildAt(0).SetBackgroundColor(selectedItemColor);
         }
 
         private void view_Touch(object sender, View.TouchEventArgs e)
@@ -75,7 +87,7 @@ namespace WB.UI.Shared.Android.Controls
 
             if (e.Event.Action == MotionEventActions.Down)
             {
-                view.SetBackgroundColor(Color.LightBlue);
+                view.SetBackgroundColor(selectedItemColor);
                 return;
             }
             if (e.Event.Action == MotionEventActions.Up)
@@ -119,7 +131,9 @@ namespace WB.UI.Shared.Android.Controls
                 var element = this.linearLayout.GetChildAt(i);
                 if (element == null)
                     continue;
-                element.SetBackgroundColor(element == this.selectedView ? Color.LightBlue : Color.Transparent);
+                element.SetBackgroundColor(element == this.selectedView
+                    ? selectedItemColor
+                    : Color.Transparent);
             }
         }
         public void SelectItem(int position)

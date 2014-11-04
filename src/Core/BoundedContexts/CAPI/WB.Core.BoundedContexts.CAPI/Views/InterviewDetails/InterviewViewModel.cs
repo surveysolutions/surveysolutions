@@ -946,7 +946,12 @@ namespace WB.Core.BoundedContexts.Capi.Views.InterviewDetails
 
         protected HeaderItem BuildHeader(IQuestion question)
         {
-            string text = question.GetVariablesUsedInTitle().Aggregate(question.QuestionText, (current, substitutionVariable) => SubstitutionService.ReplaceSubstitutionVariable(current, substitutionVariable, SubstitutionService.DefaultSubstitutionText));
+            string text = string.IsNullOrEmpty(question.VariableLabel) ?
+                question.GetVariablesUsedInTitle()
+                    .Aggregate(question.QuestionText,
+                        (current, substitutionVariable) =>
+                            SubstitutionService.ReplaceSubstitutionVariable(current, substitutionVariable,
+                                SubstitutionService.DefaultSubstitutionText)) : question.VariableLabel;
             return new HeaderItem(question.PublicKey, text, question.Instructions);
         }
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http;
 using Main.Core.Documents;
 using Moq;
@@ -100,6 +102,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             Uri usersChangedFeedUri = null,
             Uri interviewsFeedUri = null,
             string questionnaireDetailsEndpoint = "",
+            string questionnaireAssemblyEndpoint = "",
             string accessToken = "",
             Uri interviewsPushUrl = null)
         {
@@ -108,6 +111,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
             headquartersSettingsMock.SetupGet(x => x.UserChangedFeedUrl).Returns(usersChangedFeedUri ?? new Uri("http://localhost/"));
             headquartersSettingsMock.SetupGet(x => x.InterviewsFeedUrl).Returns(interviewsFeedUri ?? new Uri("http://localhost/"));
             headquartersSettingsMock.SetupGet(x => x.QuestionnaireDetailsEndpoint).Returns(questionnaireDetailsEndpoint);
+            headquartersSettingsMock.SetupGet(x => x.QuestionnaireAssemblyEndpoint).Returns(questionnaireAssemblyEndpoint);
             headquartersSettingsMock.SetupGet(x => x.AccessToken).Returns(accessToken);
             headquartersSettingsMock.SetupGet(x => x.InterviewsPushUrl).Returns(interviewsPushUrl ?? new Uri("http://localhost/"));
             headquartersSettingsMock.SetupGet(x => x.FilePushUrl).Returns( new Uri("http://localhost/"));

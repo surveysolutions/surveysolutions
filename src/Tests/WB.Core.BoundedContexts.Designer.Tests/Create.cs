@@ -1,31 +1,104 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
-using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using NUnit.Framework;
+using Ncqrs.Spec;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests
 {
     internal static class Create
     {
+        public class Event
+        {
+            public static TemplateImported TemplateImported(QuestionnaireDocument questionnaireDocument)
+            {
+                return new TemplateImported { Source = questionnaireDocument };
+            }
+
+            public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
+            {
+                return new ExpressionsMigratedToCSharp();
+            }
+
+            public static NewGroupAdded AddGroup(Guid groupId, Guid? parentId = null, string variableName = null)
+            {
+                return new NewGroupAdded
+                {
+                    PublicKey = groupId,
+                    ParentGroupPublicKey = parentId,
+                    VariableName = variableName
+                };
+            }
+
+            public static GroupBecameARoster GroupBecameRoster(Guid rosterId)
+            {
+                return new GroupBecameARoster(Guid.NewGuid(), rosterId);
+            }
+
+            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, string[] titles)
+            {
+                return new RosterChanged(Guid.NewGuid(), rosterId, null, rosterType, titles, null);
+            }
+
+            public static NewQuestionAdded AddTextQuestion(Guid questionId, Guid parentId)
+            {
+                return new NewQuestionAdded
+                {
+                    PublicKey = questionId,
+                    GroupPublicKey = parentId,
+                    QuestionType = QuestionType.Text
+                };
+            }
+
+            public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName)
+            {
+                return new NumericQuestionChanged
+                {
+                    PublicKey = questionId,
+                    StataExportCaption = variableName,
+                    IsInteger = true
+                };
+            }
+
+            public static QuestionChanged QuestionChanged(Guid questionId, string variableName, QuestionType questionType)
+            {
+                return new QuestionChanged
+                {
+                    PublicKey = questionId,
+                    StataExportCaption = variableName,
+                    QuestionType = questionType
+                };
+            }
+
+            public static Answer Option(Guid? id = null, string text = null, string value = null, string parentValue = null)
+            {
+                return new Answer
+                {
+                    PublicKey = id ?? Guid.NewGuid(),
+                    AnswerText = text ?? "text",
+                    AnswerValue = value ?? "1",
+                    ParentValue = parentValue
+                };
+            }
+        }
+
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
             where T : class
         {
-            return ToPublishedEvent<T>(@event, Guid.NewGuid());
+            return @event.ToPublishedEvent();
         }
 
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId)
             where T : class
         {
-            return Mock.Of<IPublishedEvent<T>>(publishedEvent
-                => publishedEvent.Payload == @event &&
-                   publishedEvent.EventSourceId == eventSourceId);
+            return @event.ToPublishedEvent(eventSourceId);
         }
 
         public static IPublishedEvent<QuestionDeleted> QuestionDeletedEvent(string questionId = null)
@@ -483,6 +556,128 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 Title = questionTitle,
                 EnablementCondition = questionConditionExpression
             });
+        }
+
+        public static Questionnaire Questionnaire(Guid? questionnaireId = null,
+            string title = "Questionnnaire Title", Guid? responsibleId = null)
+        {
+            return new Questionnaire(
+                publicKey: questionnaireId ?? Guid.Parse("ddddaaaaaaaaaaaaaaaaaaaaaaaabbbb"),
+                title: title,
+                createdBy: responsibleId ?? Guid.Parse("ddddccccccccccccccccccccccccbbbb"));
+        }
+
+        public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument, Guid? responsibleId = null)
+        {
+            return new Questionnaire(
+                createdBy: responsibleId ?? Guid.NewGuid(),
+                source: questionnaireDocument);
+        }
+
+        public static EventContext EventContext()
+        {
+            return new EventContext();
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
+        {
+            return new QuestionnaireDocument
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                Children = children != null ? children.ToList() : new List<IComposite>(),
+                UsesCSharp = usesCSharp,
+            };
+        }
+
+        public static Group Chapter(string title = "Chapter X", IEnumerable<IComposite> children = null)
+        {
+            return Create.Group(
+                title: title,
+                children: children);
+        }
+
+        public static Group Roster(Guid? rosterId = null, string title = "Roster X", string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            return Create.Group(
+                groupId: rosterId,
+                title: title,
+                isRoster: true,
+                enablementCondition: enablementCondition,
+                children: children);
+        }
+
+        public static Group Group(Guid? groupId = null, string title = "Group X", bool isRoster = false, string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            return new Group(title)
+            {
+                PublicKey = groupId ?? Guid.NewGuid(),
+                IsRoster = isRoster,
+                ConditionExpression = enablementCondition,
+                Children = children != null ? children.ToList() : new List<IComposite>(),
+            };
+        }
+
+        public static IQuestion Question(Guid? questionId = null, string enablementCondition = null, string validationExpression = null)
+        {
+            return new TextQuestion("Question X")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+            };
+        }
+
+        public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            bool isInteger = false, int? countOfDecimalPlaces = null, int? maxValue = null)
+        {
+            return new NumericQuestion("Question N")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                IsInteger = isInteger,
+                CountOfDecimalPlaces = countOfDecimalPlaces,
+                MaxValue = maxValue,
+            };
+        }
+
+        public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            int? maxAnswerCount = null)
+        {
+            return new TextListQuestion("Question TL")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                MaxAnswerCount = maxAnswerCount,
+            };
+        }
+
+        public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            string mask = null)
+        {
+            return new TextQuestion("Question T")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                Mask = mask,
+            };
+        }
+
+        public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null)
+        {
+            return new MultyOptionsQuestion("Question MO")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                AreAnswersOrdered = areAnswersOrdered,
+                MaxAllowedAnswers = maxAllowedAnswers,
+            };
         }
     }
 }
