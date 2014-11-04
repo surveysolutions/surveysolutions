@@ -281,6 +281,7 @@
     <Compile Include="QuestionnaireTests\when_adding_roster_group_by_question_and_roster_size_question_is_empty.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_multimedia_question.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
+    <Compile Include="QuestionnaireTests\when_cloning__the_same_question_by_id_twice_with_the_same_id.cs" />
     <Compile Include="QuestionnaireTests\when_cloning_text_question_by_id.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_2_questions_have_both_validation_expressions_and_enablement_conditions.cs" />
     <Compile Include="QuestionnaireTests\when_migrating_expressions_to_csharp_and_all_questions_have_empty_expressions.cs" />
