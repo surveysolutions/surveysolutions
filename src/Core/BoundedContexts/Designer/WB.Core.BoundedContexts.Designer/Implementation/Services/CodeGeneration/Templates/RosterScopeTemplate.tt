@@ -9,7 +9,7 @@
             Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
             : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
         {
-            this.@__parent = parent; 
+            this.@_parent = parent; 
         }
 
         private <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, 
@@ -52,20 +52,20 @@
 
         <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, Model.RostersInScope)) 
         {#> 
-            __conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
+            _conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
         <#}#>
         }
     
-        private <#= Model.ParentTypeName#> @__parent;
+        private <#= Model.ParentTypeName#> @_parent;
 
         <#foreach (var parentQuestion in Model.ParentScope.GetAllQuestionsToTop()) 
         {#>
-        public <#=parentQuestion.GeneratedTypeName#> <#=parentQuestion.VariableName#> { get { return this.@__parent.<#=parentQuestion.VariableName#>; } }                                        
+        public <#=parentQuestion.GeneratedTypeName#> <#=parentQuestion.VariableName#> { get { return this.@_parent.<#=parentQuestion.VariableName#>; } }                                        
         <#}#>
 
         <#foreach (var parentRoster in Model.ParentScope.GetAllRostersToTop()) 
         {#>
-        public IEnumerable<<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@__parent.<#=parentRoster.VariableName#>; } }                                        
+        public IEnumerable<<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }                                        
         <#}#>
                 
         public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
@@ -168,13 +168,13 @@
         <# }#>
         
 
-        private readonly List<Action> __conditionExpressions = new List<Action>();
+        private readonly List<Action> _conditionExpressions = new List<Action>();
         
         protected override IEnumerable<Action> ConditionExpressions
         {
             get
             {
-                return __conditionExpressions;
+                return _conditionExpressions;
             }
         }
 
@@ -187,12 +187,12 @@
         {
         <#if(Model.ParentScope != null)
         {#>
-            this.@__parent = parentLevel as <#= Model.ParentTypeName#>;
+            this.@_parent = parentLevel as <#= Model.ParentTypeName#>;
         <# }#>
         }
 
         public IExpressionExecutable GetParent()
         {
-            return this.@__parent;
+            return this.@_parent;
         }
 }
