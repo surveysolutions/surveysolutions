@@ -19,6 +19,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Capi.Synchronization.ChangeLog;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Raven.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -71,11 +72,11 @@ namespace CapiDataGenerator
             }
         }
 
-        private IRavenReadSideRepositoryWriterRegistry writerRegistry
+        private IReadSideRepositoryWriterRegistry writerRegistry
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<IRavenReadSideRepositoryWriterRegistry>();
+                return ServiceLocator.Current.GetInstance<IReadSideRepositoryWriterRegistry>();
             }
         }
 
@@ -102,7 +103,7 @@ namespace CapiDataGenerator
 
         private void EnableCacheInAllRepositoryWriters()
         {
-            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            foreach (IReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
             {
                 writer.EnableCache();
             }
@@ -110,7 +111,7 @@ namespace CapiDataGenerator
 
         private void DisableCacheInAllRepositoryWriters()
         {
-            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            foreach (IReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
             {
                 writer.DisableCache();
             }
@@ -480,7 +481,8 @@ namespace CapiDataGenerator
                         var questionnaire = new Questionnaire(questionnaireDocument).GetQuestionnaire();
                         var state = new State(questionnaire.GetFixedRosterGroups());
 
-                        this.ImportTemplate(questionnaireDocument);
+                        //fix loading with correspoding assembly
+                        this.ImportTemplate(questionnaireDocument, null);
 
                         var interviews = this.CreateInterviews(questionnaireDocument, interviewsCount, users, questionnaire, state);
 
@@ -524,10 +526,10 @@ namespace CapiDataGenerator
             });
         }
 
-        private void ImportTemplate(IQuestionnaireDocument template)
+        private void ImportTemplate(IQuestionnaireDocument template, string supportingAssembly)
         {
             this.Log("import template");
-            this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template, true));
+            this.commandService.Execute(new ImportFromDesigner(this._headquarterUser.Id, template, true, null));
 
             //incorrect. should be saved on denormalizer
             this.questionnaireRepository.StoreQuestionnaire(template.PublicKey, 1, template as QuestionnaireDocument);

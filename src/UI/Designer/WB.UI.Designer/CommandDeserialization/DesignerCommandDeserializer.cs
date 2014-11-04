@@ -63,6 +63,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "CloneStaticText", typeof (CloneStaticTextCommand) },
                     { "DeleteStaticText", typeof (DeleteStaticTextCommand) },
                     { "MoveStaticText", typeof (MoveStaticTextCommand) },
+                    { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)}
                 };
             }
 

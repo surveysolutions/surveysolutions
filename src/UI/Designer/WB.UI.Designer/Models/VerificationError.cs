@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.UI.Designer.Models
 {
@@ -8,6 +8,7 @@ namespace WB.UI.Designer.Models
     {
         public string Code { get; set; }
         public string Message { get; set; }
+        public bool IsGroupOfErrors { get; set; }
         public List<VerificationReference> References { get; set; }
     }
 

@@ -2,6 +2,8 @@
 <resources>
     <string name="ApplicationName">$projectname$</string>
 
+  <string name="drawer_open">Open</string>
+  <string name="drawer_close">Close</string>
   <item  type="id"  name="QuestionnaireId" />
   <item  type="id"  name="ScreenId" />
   <item  type="id"  name="PrpagationKey" />

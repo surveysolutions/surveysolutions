@@ -12,7 +12,6 @@ using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -28,10 +27,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
         {
             questionnaireId = Guid.NewGuid();
             questionnaireExportStructureMock = new Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>>();
-            dataExportServiceMock = new Mock<IDataExportService>();
+            dataExportService = new Mock<IDataExportRepositoryWriter>();
 
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
-                questionnaireExportStructureMock.Object, dataExportServiceMock.Object, Mock.Of<IExportViewFactory>(), Mock.Of<IPlainQuestionnaireRepository>(), Mock.Of<IQuestionnaireUpgradeService>());
+                questionnaireExportStructureMock.Object, dataExportService.Object, Mock.Of<IExportViewFactory>(), Mock.Of<IPlainQuestionnaireRepository>(), Mock.Of<IQuestionnaireUpgradeService>());
         };
 
         Because of = () =>
@@ -42,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
                 Times.Once());
 
         It should_exported_data_be_deleted_by_IDataExportService = () =>
-            dataExportServiceMock.Verify(x => x.DeleteExportedDataForQuestionnaireVersion(questionnaireId, QuestionnaireVersion),
+            dataExportService.Verify(x => x.DeleteExportedDataForQuestionnaireVersion(questionnaireId, QuestionnaireVersion),
                 Times.Once());
 
         protected static IPublishedEvent<QuestionnaireDeleted> CreatePublishableEvent()
@@ -56,7 +55,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Questionnai
 
         private static QuestionnaireExportStructureDenormalizer questionnaireExportStructureDenormalizer;
         private static Mock<IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure>> questionnaireExportStructureMock;
-        private static Mock<IDataExportService> dataExportServiceMock;
+
+        private static Mock<IDataExportRepositoryWriter> dataExportService;
         private static Guid questionnaireId;
         private const long QuestionnaireVersion = 2;
     }

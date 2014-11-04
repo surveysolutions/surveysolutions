@@ -63,7 +63,7 @@
 				this.push.apply(this, new_array);
 			},
 			clear: function(){
-				this.splice(0);
+				this.length = 0;
 			},
 			copy: function(){
 				var a = new DateArray();
@@ -192,8 +192,6 @@
 				o.multidate = Number(o.multidate) || false;
 				if (o.multidate !== false)
 					o.multidate = Math.max(0, o.multidate);
-				else
-					o.multidate = 1;
 			}
 			o.multidateSeparator = String(o.multidateSeparator);
 
@@ -302,7 +300,10 @@
 							if ($.inArray(e.keyCode, [27,37,39,38,40,32,13,9]) === -1)
 								this.update();
 						}, this),
-						keydown: $.proxy(this.keydown, this)
+						keydown: $.proxy(this.keydown, this),
+						change: $.proxy(function(){
+							this.update();
+						}, this)
 					}]
 				];
 			}
@@ -501,11 +502,11 @@
 			var formatted = this.getFormattedDate();
 			if (!this.isInput){
 				if (this.component){
-					this.element.find('input').val(formatted).change();
+					this._doChange(this.element.find('input').val(formatted));
 				}
 			}
 			else {
-				this.element.val(formatted).change();
+				this._doChange(this.element.val(formatted));
 			}
 		},
 
@@ -602,10 +603,18 @@
 			});
 		},
 
+		_doChange: function(element) {
+			var old_allow_update = this._allow_update;
+			this._allow_update = false;
+			element.change();
+			this._allow_update = old_allow_update;
+		},
+
 		_allow_update: true,
 		update: function(){
 			if (!this._allow_update)
 				return;
+			this._allow_update = false;
 
 			var oldDates = this.dates.copy(),
 				dates = [],
@@ -661,6 +670,8 @@
 				this._trigger('clearDate');
 
 			this.fill();
+
+			this._allow_update = true;
 		},
 
 		fillDow: function(){
@@ -943,7 +954,7 @@
 								else if (this.component)
 									element = this.element.find('input');
 								if (element)
-									element.val("").change();
+									this._doChange(element.val(""));
 								this.update();
 								this._trigger('changeDate');
 								if (this.o.autoclose)
@@ -1017,15 +1028,21 @@
 			if (!date){
 				this.dates.clear();
 			}
-			else if (ix !== -1){
-				this.dates.remove(ix);
-			}
-			else {
+			else if (this.o.multidate === false) {
+				this.dates.clear();
 				this.dates.push(date);
 			}
-			if (typeof this.o.multidate === 'number')
-				while (this.dates.length > this.o.multidate)
-					this.dates.remove(0);
+			else {
+				if (ix !== -1){
+					this.dates.remove(ix);
+				}
+				else {
+					this.dates.push(date);
+				}
+				if (typeof this.o.multidate === 'number')
+					while (this.dates.length > this.o.multidate)
+						this.dates.remove(0);
+			}
 		},
 
 		_setDate: function(date, which){
@@ -1045,7 +1062,7 @@
 				element = this.element.find('input');
 			}
 			if (element){
-				element.change();
+				this._doChange(element);
 			}
 			if (this.o.autoclose && (!which || which === 'date')){
 				this.hide();
@@ -1224,7 +1241,7 @@
 					element = this.element.find('input');
 				}
 				if (element){
-					element.change();
+					this._doChange(element);
 				}
 			}
 		},

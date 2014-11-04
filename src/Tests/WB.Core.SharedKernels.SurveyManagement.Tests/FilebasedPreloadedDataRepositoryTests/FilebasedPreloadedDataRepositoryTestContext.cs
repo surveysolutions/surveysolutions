@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRepositoryTests
 {
@@ -21,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.FilebasedPreloadedDataRep
             IRecordsAccessorFactory recordsAccessorFactory = null)
         {
             return new FilebasedPreloadedDataRepository(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "",
-                archiveUtils ?? Mock.Of<IArchiveUtils>(),recordsAccessorFactory??Mock.Of<IRecordsAccessorFactory>());
+                archiveUtils ?? Mock.Of<IArchiveUtils>(), recordsAccessorFactory ?? Mock.Of<IRecordsAccessorFactory>());
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

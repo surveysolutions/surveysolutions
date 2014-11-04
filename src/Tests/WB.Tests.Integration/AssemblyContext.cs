@@ -1,6 +1,4 @@
 ﻿using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 
 namespace WB.Tests.Integration
 {
@@ -8,9 +6,7 @@ namespace WB.Tests.Integration
     {
         public void OnAssemblyStart()
         {
-            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+            Setup.MockedServiceLocator();
         }
 
         public void OnAssemblyComplete() {}

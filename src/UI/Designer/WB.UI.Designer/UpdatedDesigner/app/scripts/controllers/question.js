@@ -1,8 +1,18 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService) {
+        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
+            hotkeys.bindTo($scope)
+              .add({
+                  combo: 'ctrl+s',
+                  description: 'Save current question',
+                  allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                  callback: function (event) {
+                      $scope.saveQuestion();
+                      event.preventDefault();
+                  }
+              });
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
                 $scope.activeQuestion.breadcrumbs = question.breadcrumbs;
@@ -264,6 +274,22 @@
                     $scope.activeQuestion.cascadeFromQuestionId = itemId;
                     $scope.activeQuestion.cascadeFromQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.cascadeFromQuestionId });
                 }
+            };
+
+            var questionTypesDoesNotSupportValidations = [
+                "TextList",
+                "QRBarcode",
+                "Multimedia",
+                "GpsCoordinates"];
+            
+            $scope.doesQuestionSupportValidations = function () {
+                return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
+                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
+            };
+
+            $scope.doesQuestionSupportEnablementConditions = function () {
+                return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Prefilled')
+                    && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
 
             $scope.loadQuestion();

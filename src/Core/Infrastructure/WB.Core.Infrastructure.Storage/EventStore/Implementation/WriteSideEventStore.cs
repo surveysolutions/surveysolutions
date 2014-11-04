@@ -109,7 +109,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 this.SaveStream(eventStream, connection);
 
-                transaction.Commit();
+                transaction.CommitAsync().Wait(defaultTimeout);
             }
         }
 

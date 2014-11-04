@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates.Snapshots
     {
         public QuestionnaireDocument QuestionnaireDocument { get; set; }
         public long Version { get; set; }
+        public bool WasExpressionsMigrationPerformed { get; set; }
     }
 }

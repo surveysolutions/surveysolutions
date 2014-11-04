@@ -5,6 +5,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Factories
 {
     public interface ICsvWriterFactory
     {
-        ICsvWriterService OpenCsvWriter(Stream stream);
+        ICsvWriterService OpenCsvWriter(Stream stream, string delimiter = ",");
     }
 }

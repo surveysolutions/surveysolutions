@@ -126,14 +126,17 @@
   <ItemGroup>
     <Compile Include="Api\BaseApiServiceController.cs" />
     <Compile Include="Api\ControlPanelApiController.cs" />
+    <Compile Include="Api\InterviewerSyncController.cs" />
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
+    <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />
@@ -163,7 +166,6 @@
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Api\ReportDataApiController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
-    <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
@@ -434,10 +436,6 @@
     <ProjectReference Include="..\..\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\QuestionnaireVerification\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
-      <Project>{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}</Project>
-      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>

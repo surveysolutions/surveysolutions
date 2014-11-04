@@ -79,6 +79,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cascading questions can&apos;t have condition expression.
+        /// </summary>
+        internal static string CascadingCantHaveConditionExpression {
+            get {
+                return ResourceManager.GetString("CascadingCantHaveConditionExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading questions can&apos;t have validation expression.
+        /// </summary>
+        internal static string CascadingCantHaveValidationExpression {
+            get {
+                return ResourceManager.GetString("CascadingCantHaveValidationExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options in cascading question can not have empty ParentValue column.
         /// </summary>
         internal static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
@@ -102,6 +120,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
             get {
                 return ResourceManager.GetString("CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifier &apos;{0}&apos; from expression &apos;{1}&apos; is not valid question or roster identifier. Question or roster with such an identifier is missing..
+        /// </summary>
+        internal static string QuestionOrRosterIdentifierIsMissing {
+            get {
+                return ResourceManager.GetString("QuestionOrRosterIdentifierIsMissing", resourceCulture);
             }
         }
         

@@ -1,8 +1,13 @@
 using System;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using Android.App;
+using Android.Content.Res;
+using Android.Graphics.Drawables;
 using Android.OS;
+using Android.Support.V4.App;
 using Android.Support.V4.View;
+using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Droid.Fragging;
@@ -11,13 +16,14 @@ using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Android.Adapters;
 using WB.UI.Shared.Android.Controls;
+
 using WB.UI.Shared.Android.Controls.ScreenItems;
 using WB.UI.Shared.Android.Events;
 using WB.UI.Shared.Android.Frames;
 
 namespace WB.UI.Shared.Android.Activities
 {
-    public abstract class DetailsActivity : DoubleBackMvxFragmentActivity, ViewTreeObserver.IOnGlobalLayoutListener, GestureDetector.IOnGestureListener
+    public abstract class DetailsActivity : DoubleBackMvxFragmentActivity
     {
         protected Guid QuestionnaireId
         {
@@ -29,47 +35,25 @@ namespace WB.UI.Shared.Android.Activities
             get { return this.ViewModel as InterviewViewModel; }
         }
 
-        protected LinearLayout llSpaceFiller
-        {
-            get { return this.FindViewById<LinearLayout>(Resource.Id.llSpaceFiller); }
-        }
-
         protected ViewPager VpContent
         {
             get { return this.FindViewById<ViewPager>(Resource.Id.vpContent); }
         }
+
         protected LinearLayout llNavigationHolder
         {
             get { return this.FindViewById<LinearLayout>(Resource.Id.llNavigationHolder); }
         }
 
-        protected RelativeLayout lNavigationContainer
+        protected DrawerLayout llContainer
         {
-            get { return this.FindViewById<RelativeLayout>(Resource.Id.lNavigationContainer); }
-        }
-        protected RelativeLayout llContainer
-        {
-            get { return this.FindViewById<RelativeLayout>(Resource.Id.llContainer); }
-        }
-        protected TextView btnNavigation
-        {
-            get { return this.FindViewById<TextView>(Resource.Id.btnNavigation); }
-        }
-
-        protected int ScreenWidth {
-            get { return this.llContainer.Width; }
-        }
-
-        protected int ScreenHeight
-        {
-            get { return this.llContainer.Height; }
+            get { return this.FindViewById<DrawerLayout>(Resource.Id.llContainer); }
         }
 
         private ContentFrameAdapter adapter;
         private QuestionnaireNavigationView navList;
-        private bool isChaptersVisible = false;
         private InterviewItemId? screenId;
-        private GestureDetector gestureDetector;
+        private ActionBarDrawerToggle drawerToggle;
         
         protected override void OnCreate(Bundle bundle)
         {
@@ -94,8 +78,6 @@ namespace WB.UI.Shared.Android.Activities
                 this.screenId = this.Model.Chapters.FirstOrDefault().ScreenId;
             }
 
-            this.Title = CreateScreenTitle();
-
             if (bundle == null)
             {
                 this.navList = new QuestionnaireNavigationView(this, this.Model);
@@ -105,91 +87,52 @@ namespace WB.UI.Shared.Android.Activities
             else
             {
                 this.navList = this.llNavigationHolder.GetChildAt(0) as QuestionnaireNavigationView;
-            } 
-            this.gestureDetector = new GestureDetector(this);
-            this.llNavigationHolder.Touch += this.btnNavigation_Touch;
-            this.btnNavigation.Touch += this.btnNavigation_Touch;
+            }
+            Title = CreateScreenTitle();
             this.adapter = this.CreateFrameAdapter(this.screenId);
             this.VpContent.Adapter = this.adapter;
             this.VpContent.PageSelected += this.VpContentPageSelected;
-            this.llContainer.ViewTreeObserver.AddOnGlobalLayoutListener(this);
+
+            this.drawerToggle = new ActionBarDrawerToggle(this, this.llContainer, Android.Resource.Drawable.ic_drawer_dark,
+                Resource.String.drawer_open,
+                Resource.String.drawer_close);
+
+            //Set the drawer lister to be the toggle.
+            this.llContainer.SetDrawerListener(this.drawerToggle);
+        }
+
+        protected override void OnPostCreate(Bundle savedInstanceState)
+        {
+            this.ActionBar.SetDisplayHomeAsUpEnabled(true);
+            base.OnPostCreate(savedInstanceState);
+            this.drawerToggle.SyncState();
+        }
+
+        public override void OnConfigurationChanged(Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+            this.drawerToggle.OnConfigurationChanged(newConfig);
+        }
+
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (this.drawerToggle.OnOptionsItemSelected(item))
+                return true;
+
+            return base.OnOptionsItemSelected(item);
         }
 
         protected abstract ContentFrameAdapter CreateFrameAdapter(InterviewItemId? screenId);
         protected abstract InterviewViewModel GetInterviewViewModel(Guid interviewId);
 
-        public void OnGlobalLayout()
-        {
-            this.llContainer.ViewTreeObserver.RemoveGlobalOnLayoutListener(this);
-
-            this.AlignBookmark();
-            this.ResizeNavigationPanel();
-            this.UpdateLayout(this.isChaptersVisible);
-        }
-
-        private void ResizeNavigationPanel()
-        {
-            this.lNavigationContainer.LayoutParameters = new RelativeLayout.LayoutParams(this.ScreenWidth/2,
-                this.lNavigationContainer.LayoutParameters.Height);
-        }
 
         protected virtual string CreateScreenTitle()
         {
             return string.Format("{0} {1}", this.Model.Title,
                 string.Join("|",
                     this.Model.FeaturedQuestions.Values.Where(q => !string.IsNullOrEmpty(q.AnswerString)).Select(q => q.AnswerString)));
-        }
-
-        public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)
-        {
-            base.OnConfigurationChanged(newConfig);
-            this.isChaptersVisible = false;
-            this.llContainer.ViewTreeObserver.AddOnGlobalLayoutListener(this);
-        }
-
-        private void UpdateLayout(bool isNavigationVisible, bool animated = false)
-        {
-            this.AlignNavigationContainer(isNavigationVisible, animated);
-            this.AlignScreenContainer(isNavigationVisible);
-        }
-
-        private void HidePanelAnimated()
-        {
-            this.isChaptersVisible = false;
-            this.AlignNavigationContainer(false, true);
-            this.AlignScreenContainer(false);
-        }
-
-        private void AlignScreenContainer(bool isNavigationVisible)
-        {
-            var screenContainerWith = isNavigationVisible
-                ? (this.ScreenWidth / 2 + this.btnNavigation.LayoutParameters.Width)
-                : this.ScreenWidth;
-            var screenContainerX = this.ScreenWidth - screenContainerWith;
-            this.VpContent.LayoutParameters.Width = screenContainerWith;
-            this.VpContent.SetX(screenContainerX);
-            this.VpContent.RequestLayout();
-        }
-
-        private void AlignNavigationContainer(bool isNavigationVisible, bool animated)
-        {
-            var navigationContainerX = isNavigationVisible
-                ? 0
-                : this.btnNavigation.LayoutParameters.Width - this.lNavigationContainer.LayoutParameters.Width;
-            if (animated)
-                this.lNavigationContainer.Animate().TranslationX(navigationContainerX);
-            else
-                this.lNavigationContainer.SetX(navigationContainerX);
-        }
-
-        private void AlignBookmark()
-        {
-            this.llSpaceFiller.LayoutParameters.Height = (this.ScreenHeight - this.btnNavigation.LayoutParameters.Height) / 2;
-        }
-
-        void btnNavigation_Touch(object sender, View.TouchEventArgs e)
-        {
-            this.gestureDetector.OnTouchEvent(e.Event);
         }
 
         protected override void OnSaveInstanceState(Bundle outState)
@@ -215,16 +158,12 @@ namespace WB.UI.Shared.Android.Activities
         {
             var index = this.adapter.GetScreenIndex(e.ScreenId);
 
-            if (sender == this.navList)
-            {
-                this.HidePanelAnimated();
-            }
-
             if (index >= 0)
             {
                 this.VpContent.CurrentItem = this.adapter.GetScreenIndex(e.ScreenId);
                 this.adapter.NotifyDataSetChanged();
 
+                this.llContainer.CloseDrawers();
                 return;
             }
             this.adapter.UpdateScreenData(e.ScreenId);
@@ -244,7 +183,7 @@ namespace WB.UI.Shared.Android.Activities
                     }
                 }
             }
-
+            this.llContainer.CloseDrawers();
             GC.Collect(0);
 
         }
@@ -259,10 +198,6 @@ namespace WB.UI.Shared.Android.Activities
         {
             base.OnDestroy();
 
-            if(this.btnNavigation != null)
-                this.btnNavigation.Touch -= this.btnNavigation_Touch;
-            if (this.llNavigationHolder != null)
-                this.llNavigationHolder.Touch -= this.btnNavigation_Touch;
             if(this.VpContent != null)
                 this.VpContent.PageSelected -= this.VpContentPageSelected;
             if(this.navList != null)
@@ -275,47 +210,6 @@ namespace WB.UI.Shared.Android.Activities
         {
             base.OnLowMemory();
             GC.Collect();
-        }
-
-        public bool OnDown(MotionEvent e)
-        {
-            return true;
-        }
-
-        public bool OnFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-        {
-            if (velocityX > 0 && !this.isChaptersVisible)
-            {
-                this.isChaptersVisible = true;
-                this.UpdateLayout(true, true);
-            }
-            else if (velocityX < 0 && this.isChaptersVisible)
-            {
-                this.isChaptersVisible = false;
-                this.UpdateLayout(false, true);
-            }
-            
-            return true;
-        }
-
-        public void OnLongPress(MotionEvent e)
-        {
-        }
-
-        public bool OnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
-        {
-            return true;
-        }
-
-        public void OnShowPress(MotionEvent e)
-        {
-        }
-
-        public bool OnSingleTapUp(MotionEvent e)
-        {
-            this.isChaptersVisible = !this.isChaptersVisible;
-            this.UpdateLayout(this.isChaptersVisible, true);
-            return true;
         }
     }
 }

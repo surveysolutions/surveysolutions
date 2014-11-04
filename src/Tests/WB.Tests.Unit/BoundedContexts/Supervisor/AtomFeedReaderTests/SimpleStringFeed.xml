@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Users changed feed</title>
+  <id>preLastEntry</id>
+  <updated>2014-04-10T12:18:47Z</updated>
+  <link rel="prev-archive" href="http://localhost/feed/archive" />
+  <entry>
+    <id>preLastEntry</id>
+    <title type="text">User changed</title>
+    <updated>2014-04-09T16:25:51Z</updated>
+    <link rel="enclosure" href="http://localhost/Headquarters/api/resources/users/v1/8a25e5113b214d26a48ad6b50379afce" />
+    <content type="text">
+      "123"
+    </content>
+  </entry>
+  <entry>
+    <id>lastEntry</id>
+    <title type="text">User changed</title>
+    <updated>2014-04-10T12:18:47Z</updated>
+    <link rel="enclosure" href="http://localhost/Headquarters/api/resources/users/v1/40ad9dff03d24137997db418d0f3ae1b" />
+    <content type="text">
+      "456"
+    </content>
+  </entry>
+</feed>

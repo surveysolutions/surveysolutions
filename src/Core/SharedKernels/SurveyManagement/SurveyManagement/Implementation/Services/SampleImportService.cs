@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
             if (interviewForCreate == null)
             {
-                result.SetErrorMessage("Data pasing error");
+                result.SetErrorMessage("Data parsing error");
                 this.tempSampleCreationStorage.Store(result, id);
                 return;
             }
@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
             if (errorCountOccuredOnInterviewsCreaition > 0)
             {
-                result.SetErrorMessage(string.Format("Error{0} occured during interview creation", errorCountOccuredOnInterviewsCreaition == 1 ? "" : "s"));
+                result.SetErrorMessage(string.Format("Error{0} occurred during interview creation", errorCountOccuredOnInterviewsCreaition == 1 ? "" : "s"));
             }
             else
                 result.CompleteProcess();

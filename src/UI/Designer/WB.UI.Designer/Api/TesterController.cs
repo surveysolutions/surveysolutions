@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using Main.Core;
 using Main.Core.View;
 using System;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
-using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
@@ -24,9 +25,10 @@ namespace WB.UI.Designer.Api
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IJsonExportService exportService;
+        private readonly IQuestionnaireExportService exportService;
         private readonly ILogger logger;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
 
@@ -36,7 +38,8 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IJsonExportService exportService,
+            IQuestionnaireExportService exportService,
+            IExpressionProcessorGenerator expressionProcessorGenerator,
             ILogger logger)
         {
             this.userHelper = userHelper;
@@ -46,22 +49,21 @@ namespace WB.UI.Designer.Api
             this.logger = logger;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireVerifier = questionnaireVerifier;
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
         
         [HttpGet]
-        public QuestionnaireListCommunicationPackage GetAllTemplates()
+        public HttpResponseMessage GetAllTemplates()
         {
             var user = this.userHelper.WebUser;
 
             if (user == null)
             {
                 logger.Error("Unauthorized request to the questionnaire list");
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
             }
             
-            
             var questionnaireItemList = new List<QuestionnaireListItem>();
-
             int pageIndex = 1;
             while (true)
             {
@@ -85,65 +87,100 @@ namespace WB.UI.Designer.Api
                     Items = questionnaireItemList
                 };
 
-            return questionnaireSyncPackage;
+            return Request.CreateResponse(HttpStatusCode.OK, questionnaireSyncPackage);
+
         }
         
         [HttpPost]
-        public bool ValidateCredentials()
+        public HttpResponseMessage ValidateCredentials()
         {
             if (this.userHelper.WebUser == null)
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
 
-            if (this.userHelper.WebUser.MembershipUser.IsLockedOut)
-                return false;
-
-            return true;
+            return Request.CreateResponse(HttpStatusCode.OK, !this.userHelper.WebUser.MembershipUser.IsLockedOut);
         }
 
         [HttpGet]
-        public QuestionnaireCommunicationPackage GetTemplate(Guid id)
+        public HttpResponseMessage GetTemplate(Guid id)
         {
             var user = this.userHelper.WebUser;
             if (user == null)
             {
                 logger.Error("Unauthorized request to the questionnaire " + id);
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+            }
+
+            return Request.CreateErrorResponse(HttpStatusCode.Gone, TesterApiController.TesterController_GetTemplate_You_have_an_old_version_of_application__Please_update_application_to_continue_);
+        }
+
+        [HttpGet]
+        public HttpResponseMessage GetTemplate(Guid id, string maxSupportedVersion)
+        {
+            var user = this.userHelper.WebUser;
+            if (user == null)
+            {
+                logger.Error("Unauthorized request to the questionnaire " + id);
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+            }
+
+            QuestionnaireVersion supportedQuestionnaireVersion;
+            if (!QuestionnaireVersion.TryParse(maxSupportedVersion, out supportedQuestionnaireVersion))
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TesterApiController.TesterController_GetTemplate_Max_supporter_version_of_questionnaire_was_not_correctly_provided_);
             }
 
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
-                return null;
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiController.TesterController_GetTemplate_, id));
+            }
 
             if (!ValidateAccessPermissions(questionnaireView, user.UserId))
             {
                 logger.Error(String.Format("Non permitted resource was requested by user [{0}]", user.UserId));
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
             }
-
-            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage();
-
-            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
-            if (questoinnaireErrors.Any())
-            {
-                questionnaireSyncPackage.IsErrorOccured = true;
-                questionnaireSyncPackage.ErrorMessage = "Questionnaire is invalid. Please Verify it on Designer.";
-
-                return questionnaireSyncPackage;
-            }
-
-            var templateInfo = this.exportService.GetQuestionnaireTemplate(questionnaireView.Source);
+            
+            var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
-                questionnaireSyncPackage.IsErrorOccured = true;
-                questionnaireSyncPackage.ErrorMessage = "Questionnaire was not found.";
-
-                return questionnaireSyncPackage;
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiController.TesterController_GetTemplate_, id));
             }
 
-            var template = PackageHelper.CompressString(templateInfo.Source);
-            questionnaireSyncPackage.Questionnaire = template;
+            if (templateInfo.Version > supportedQuestionnaireVersion)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TesterApiController.TesterController_GetTemplate_You_have_an_obsolete_version_of_application__Please_update_application_to_continue_);
+            }
 
-            return questionnaireSyncPackage;
+            string resultAssembly;
+            try
+            {
+                if (questionnaireVerifier.Verify(questionnaireView.Source).ToArray().Any())
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
+                }
+
+                GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
+
+                if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
+                }
+            }
+            catch (Exception exc)
+            {
+                logger.Error("Error template verification.", exc);
+                return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
+            }
+            
+            var template = PackageHelper.CompressString(templateInfo.Source);
+            var questionnaireSyncPackage = new QuestionnaireCommunicationPackage
+            {
+                Questionnaire = template,
+                QuestionnaireAssembly = resultAssembly
+            };
+
+            return Request.CreateResponse(HttpStatusCode.OK, questionnaireSyncPackage);
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView, Guid currentPersonId)

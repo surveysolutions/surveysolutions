@@ -14,13 +14,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
         Establish context = () =>
         {
             emptyHeaderStructureForLevel = CreateHeaderStructureForLevel();
-            stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor(contentFilePath, (c) => stataGeneratedContent = c));
+            stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
         };
 
-        Because of = () => stataEnvironmentContentService.CreateContentOfAdditionalFile(emptyHeaderStructureForLevel, dataFileName, contentFilePath);
+        Because of = () => stataEnvironmentContentService.CreateContentOfAdditionalFile(emptyHeaderStructureForLevel,dataFileName, contentFilePath);
 
         It should_contain_stata_script_for_insheet_file = () =>
-            stataGeneratedContent.ShouldEqual(string.Format("insheet using \"{0}\", comma\r\nlist\r\n", dataFileName));
+            stataGeneratedContent.ShouldEqual(string.Format("insheet using \"{0}\", tab\r\nlist\r\n", dataFileName));
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel emptyHeaderStructureForLevel;

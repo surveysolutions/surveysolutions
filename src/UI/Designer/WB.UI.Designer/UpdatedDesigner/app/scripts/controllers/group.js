@@ -1,7 +1,18 @@
 ﻿angular.module('designerApp')
     .controller('GroupCtrl',
-        function ($rootScope, $scope, $stateParams, questionnaireService, commandService) {
+        function ($rootScope, $scope, $stateParams, questionnaireService, commandService, hotkeys) {
             $scope.currentChapterId = $stateParams.chapterId;
+            hotkeys.bindTo($scope)
+             .add({
+                 combo: 'ctrl+s',
+                 description: 'Save current group',
+                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                 callback: function (event) {
+                     $scope.saveGroup();
+                     event.preventDefault();
+                 }
+             });
+
             var dataBind = function (group) {
                 $scope.activeGroup = group;
 

@@ -12,9 +12,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class CsvWriterFactory : ICsvWriterFactory
     {
-        public ICsvWriterService OpenCsvWriter(Stream stream)
+        public ICsvWriterService OpenCsvWriter(Stream stream, string delimiter = ",")
         {
-            return new CsvWriterService(stream);
+            return new CsvWriterService(stream, delimiter);
         }
     }
 }

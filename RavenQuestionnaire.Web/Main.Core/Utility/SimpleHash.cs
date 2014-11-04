@@ -31,6 +31,9 @@ namespace Main.Core.Utility
         /// </returns>
         public static string ComputeHash(string plainText)
         {
+            if (plainText == null)
+                return string.Empty;
+
             // Convert plain text into a byte array.
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
 

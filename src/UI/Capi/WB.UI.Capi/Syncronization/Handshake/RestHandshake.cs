@@ -10,7 +10,7 @@ namespace WB.UI.Capi.Syncronization.Handshake
     {
         private readonly IRestServiceWrapper webExecutor;
 
-        private const string handshakePath = "sync/Handshake";
+        private const string handshakePath = "api/InterviewerSync/GetHandshakePackage";
 
         public RestHandshake(IRestServiceWrapper webExecutor)
         {
@@ -20,16 +20,11 @@ namespace WB.UI.Capi.Syncronization.Handshake
         public string Execute(string login, string password, string androidId, string appID, string registrationKey)
         {
             var package = this.webExecutor.ExecuteRestRequest<HandshakePackage>(handshakePath,
-                login, password, null,
-                new KeyValuePair<string, string>("clientId", appID),
-                new KeyValuePair<string, string>("version", SettingsManager.AppVersionCode().ToString(CultureInfo.InvariantCulture)),
-                new KeyValuePair<string, string>("clientRegistrationId", registrationKey),
-                new KeyValuePair<string, string>("androidId", androidId));
-
-            if (package.IsErrorOccured)
-            {
-                throw new SynchronizationException("Error occurred during handshake. Message:" + package.ErrorMessage);
-            }
+                login, password, "GET",
+                new KeyValuePair<string, object>("clientId", appID),
+                new KeyValuePair<string, object>("version", SettingsManager.AppVersionCode().ToString(CultureInfo.InvariantCulture)),
+                new KeyValuePair<string, object>("clientRegistrationId", registrationKey),
+                new KeyValuePair<string, object>("androidId", androidId));
 
             return package.ClientRegistrationKey.ToString();
         }
