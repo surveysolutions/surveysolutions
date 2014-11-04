@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Net.Http.Formatting;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -14,7 +16,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.UI.Supervisor.Tests.SyncControllerTests
 {
-    [Ignore("Solve mock issue")]
     internal class when_pushing_file_with_valid_file : SyncControllerTestContext
     {
         Establish context = () =>
@@ -29,11 +30,15 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
             
         };
 
-        Because of = () => controller.PostFile(interviewId);
+        Because of = () => result = controller.PostFile(interviewId).Result;
+
+        It should_have_NotAcceptable_status_code = () =>
+            result.StatusCode.ShouldEqual(HttpStatusCode.OK);
 
         It should_file_be_Saved_in_plain_file_storage = () =>
             plainFileRepository.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, Moq.It.IsAny<byte[]>()), Times.Once);
 
+        private static HttpResponseMessage result;
         private static InterviewerSyncController controller;
         
         private static Mock<IPlainInterviewFileStorage> plainFileRepository;
