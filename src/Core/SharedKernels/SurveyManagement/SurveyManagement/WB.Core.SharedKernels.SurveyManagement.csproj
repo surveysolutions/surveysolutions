@@ -178,6 +178,11 @@
     </Compile>
     <Compile Include="QuestionnaireUpgraderModule.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
+    <Compile Include="Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\Export\IDataExportService.cs" />
     <Compile Include="Services\Export\IFilebasedExportedDataAccessor.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
@@ -420,6 +425,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

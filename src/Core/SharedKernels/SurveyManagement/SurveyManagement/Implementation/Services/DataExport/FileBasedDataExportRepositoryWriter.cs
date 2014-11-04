@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using Ionic.Zip;
 using Ionic.Zlib;
 using Main.Core.Documents;
@@ -15,6 +16,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -42,7 +44,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
-        private const string UnknownUserRole = "<UNKNOWN ROLE>";
         private const int MaxCountOfCachedEntities = 256;
         private bool isCacheEnabled = false;
         private readonly Dictionary<string, QuestionnaireExportEntity> cache = new Dictionary<string, QuestionnaireExportEntity>();
@@ -175,8 +176,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetReadableStatus()
         {
-            return string.Format("cache {0};    files: {1}    insert: {2};    delete: {3}    actions: {4}",
-                this.isCacheEnabled ? "enabled" : "disabled",
+            return string.Format(FileBasedDataExportRepositoryWriterMessages.CacheDescriptionFormat,
+                this.isCacheEnabled ? FileBasedDataExportRepositoryWriterMessages.Enabled : FileBasedDataExportRepositoryWriterMessages.Disabled,
                 cache.Count,
                 cache.Values.Sum(c=>c.InterviewIds.Count),
                 cache.Values.Sum(c => c.InterviewForDeleteIds.Count),
@@ -279,7 +280,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
                 if (fileContent == null || fileContent.Length == 0)
                 {
-                    logger.Error(string.Format("file content is missing for file name {0} interview {1}", questionWithAnswersOnMultimediaQuestions, interviewDataExportView.InterviewId));
+                    logger.Error(string.Format(FileBasedDataExportRepositoryWriterMessages.FileContentIsMissingForFileNameAndInterviewFormat, questionWithAnswersOnMultimediaQuestions, interviewDataExportView.InterviewId));
                     continue;
                 }
 
@@ -313,8 +314,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var interviewSummary = interviewSummaryWriter.GetById(interviewId);
             if (interviewSummary == null)
                 throw new InterviewDataExportException(
-                  string.Format("data files are absent for interview with id '{0}'",
-                      interviewId));
+                    string.Format(FileBasedDataExportRepositoryWriterMessages.InterviewWithIdIsAbsentFormat,
+                        interviewId));
 
             var dataFolderForTemplatePath = this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
@@ -354,20 +355,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private string GetUserRole(UserDocument user)
         {
             if (user == null || !user.Roles.Any())
-                return UnknownUserRole;
+                return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
             var firstRole = user.Roles.First();
             switch (firstRole)
             {
-                case UserRoles.Operator: return "Interviewer";
-                case UserRoles.Supervisor: return "Supervisor";
-                case UserRoles.Headquarter: return "Headquarter";
+                case UserRoles.Operator: return  FileBasedDataExportRepositoryWriterMessages.Interviewer;
+                case UserRoles.Supervisor: return  FileBasedDataExportRepositoryWriterMessages.Supervisor;
+                case UserRoles.Headquarter: return  FileBasedDataExportRepositoryWriterMessages.Headquarter;
             }
-            return UnknownUserRole;
+            return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
         }
 
         private string GetUserName(UserDocument responsible)
         {
-            var userName = responsible != null ? responsible.UserName : "<UNKNOWN USER>";
+            var userName = responsible != null ? responsible.UserName : FileBasedDataExportRepositoryWriterMessages.UnknownUser;
             return userName;
         }
 
