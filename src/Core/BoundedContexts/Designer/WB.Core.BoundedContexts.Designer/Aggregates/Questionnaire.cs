@@ -1459,8 +1459,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void CloneQuestionById(Guid questionId, Guid responsibleId, Guid targetId)
         {
-            IQuestion question = this.GetQuestion(questionId);
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(targetId);
 
+            IQuestion question = this.GetQuestion(questionId);
+            
             this.innerDocument.ConnectChildrenWithParent();
             IComposite parentGroup = question.GetParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(question.PublicKey);
