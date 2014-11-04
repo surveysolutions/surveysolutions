@@ -167,8 +167,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 logger.Fatal("Error on sync", ex);
                 logger.Fatal(ex.StackTrace);
 
-                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                    "General error occurred. Try later");
+                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, "General error occurred. Try later");
             }
         }
 

@@ -183,6 +183,40 @@ namespace WB.Core.BoundedContexts.Designer.Tests.CodeGenerationTests
             };
         }
 
+        public static QuestionnaireDocument CreateQuestionnaireWithRosterAndNamedTextQuestions(string[] varNames)
+        {
+
+            var roster = new Group("Roster")
+            {
+                IsRoster = true,
+                RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                RosterFixedTitles = new[] {"Roster row 1", "Roster row 2"}
+            };
+
+            foreach (var varName in varNames)
+            {
+                roster.Children.Add(new TextQuestion(varName)
+                                    {
+                                        PublicKey = Guid.NewGuid(),
+                                        StataExportCaption = varName
+                                    });
+            }
+
+            return new QuestionnaireDocument()
+            {
+                Children = new List<IComposite>()
+                {
+                    new Group("Chapter")
+                    {
+                        Children = new List<IComposite>()
+                        {
+                            roster
+                        }
+                    }
+                }
+            };
+        }
+
         public static QuestionnaireDocument CreateQuestionnaireDocumenteWithOneNumericIntegerQuestionAndRosters(Guid questionnaireId,
             Guid questionId, Guid rosterId)
         {
