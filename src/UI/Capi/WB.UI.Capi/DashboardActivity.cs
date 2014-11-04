@@ -8,7 +8,6 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
-using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -18,12 +17,11 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Capi.Controls;
 using WB.UI.Capi.Extensions;
-using WB.UI.Capi.Settings;
 using WB.UI.Capi.Syncronization;
 
 namespace WB.UI.Capi
 {
-    [Activity(Label = "CAPI",
+    [Activity(Label = "Interviewer",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class DashboardActivity : Activity
     {

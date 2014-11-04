@@ -264,7 +264,7 @@ namespace WB.UI.Capi
                 new ExpressionProcessorModule());
 
             CrashManager.Initialize(this);
-            CrashManager.AttachSender(() => new FileReportSender("CAPI", this.kernel.Get<IInfoFileSupplierRegistry>()));
+            CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));
          
             this.kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
