@@ -11,9 +11,8 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.CustomEnablementConditions
+namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.Conditions
 {
-    [Ignore("fix build")]
     internal class when_verifing_question_with_two_referenes_to_non_existing_other_questions : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
