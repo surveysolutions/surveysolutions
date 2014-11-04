@@ -1088,8 +1088,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var rosterVariableNameMappedOnRosters = questionnaire.Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
                 .GroupBy(s => s.VariableName, StringComparer.InvariantCultureIgnoreCase).ToDictionary(r => r.Key, r => r.ToArray());
 
+            var questionsVariableNamesMappedOnQuestions = questionnaire.Find<IQuestion>(q => true)
+             .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
+             .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
+             .ToDictionary(r => r.Key, r => r.ToArray());
+
             foreach (var rosterVariableNameMappedOnRoster in rosterVariableNameMappedOnRosters)
             {
+                if (questionsVariableNamesMappedOnQuestions.ContainsKey(rosterVariableNameMappedOnRoster.Key))
+                    yield return
+                        new QuestionnaireVerificationError("WB0093",
+                            VerificationMessages.WB0093_QuestionWithTheSameVariableNameAlreadyExists,
+                            CreateReference(rosterVariableNameMappedOnRoster.Value.First()),
+                            CreateReference(questionsVariableNamesMappedOnQuestions[rosterVariableNameMappedOnRoster.Key].First()));
+
                 if (rosterVariableNameMappedOnRoster.Value.Length < 2)
                     continue;
 

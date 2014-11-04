@@ -372,4 +372,7 @@
   <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
     <value>Child cascading question should not contain validation expression.</value>
   </data>
+  <data name="WB0093_QuestionWithTheSameVariableNameAlreadyExists" xml:space="preserve">
+    <value>Question with the same variable name already exists.</value>
+  </data>
 </root>
