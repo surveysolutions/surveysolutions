@@ -106,6 +106,12 @@ namespace WB.UI.Headquarters.Controllers
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
             var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForSampleData(preloadedDataId);
 
+            //clean up for security reasons
+            if (preloadedMetadata == null)
+            {
+                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
+            }
+
             return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
         }
 
@@ -123,6 +129,12 @@ namespace WB.UI.Headquarters.Controllers
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
             var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(preloadedDataId);
 
+            //clean up for security reasons
+            if (preloadedMetadata == null)
+            {
+                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
+            }
+
             return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
         }
 
@@ -134,17 +146,34 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult VerifySample(Guid questionnaireId, long version, string id)
         {
-            var errors = this.preloadedDataVerifier.VerifySample(questionnaireId, version, this.preloadedDataRepository.GetPreloadedDataOfSample(id));
-            this.ViewBag.SupervisorList =
-              this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+            var preloadedSample = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
+            //null is handled inside 
+            var errors = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample).ToList();
+
+            this.ViewBag.SupervisorList = this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+
+            //clean up for security reasons
+            if (errors.Any())
+            {
+                this.preloadedDataRepository.DeletePreloadedDataOfSample(id);
+            }
+
             return this.View(new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Sample));
         }
 
         public ActionResult VerifyPanel(Guid questionnaireId, long version, string id)
         {
-            var errors = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, this.preloadedDataRepository.GetPreloadedDataOfPanel(id));
+            var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
+            var errors = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData).ToList();
             this.ViewBag.SupervisorList =
               this.supervisorsFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
+
+            //clean up for security reasons
+            if (errors.Any())
+            {
+                this.preloadedDataRepository.DeletePreloadedDataOfPanel(id);
+            }
+            
             return this.View("VerifySample", new PreloadedDataVerificationErrorsView(questionnaireId, version, errors.ToArray(), id, PreloadedContentType.Panel));
         }
 
@@ -152,17 +181,19 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.sampleImportService.CreatePanel(questionnaireId, version, id, this.preloadedDataRepository.GetPreloadedDataOfPanel(id),
                 this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
+
             return this.RedirectToAction("SampleCreationResult", new { id });
         }
 
         public ActionResult ImportSampleData(Guid questionnaireId, long version, string id, Guid responsibleSupervisor)
         {
-            this.sampleImportService.CreateSample(questionnaireId, 
-                version, 
-                id, 
-                this.preloadedDataRepository.GetPreloadedDataOfSample(id),
-                this.GlobalInfo.GetCurrentUser().Id, 
-                responsibleSupervisor);
+            this.sampleImportService.CreateSample(questionnaireId,
+                    version,
+                    id,
+                    this.preloadedDataRepository.GetPreloadedDataOfSample(id),
+                    this.GlobalInfo.GetCurrentUser().Id,
+                    responsibleSupervisor);
+            
             return this.RedirectToAction("SampleCreationResult", new { id });
         }
 
@@ -176,7 +207,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             return this.Json(this.sampleImportService.GetSampleCreationStatus(id));
         }
-
 
         public ActionResult TakeNew(Guid id, long? version)
         {

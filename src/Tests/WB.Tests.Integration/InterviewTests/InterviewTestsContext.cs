@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs.Eventing;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
 {
@@ -33,6 +35,10 @@ namespace WB.Tests.Integration.InterviewTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(CreateInterviewExpressionStateProviderStub(questionnaireId));
 
             return CreateInterview(questionnaireId: questionnaireId);
         }
@@ -61,6 +67,19 @@ namespace WB.Tests.Integration.InterviewTests
                 && repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
         }
 
+        protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
+        {
+            var expressionState = new Mock<IInterviewExpressionState>();
+
+            var emptyList = new List<Identity>();
+
+            expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
+            expressionState.Setup(_ => _.ProcessEnablementConditions()).Returns(new EnablementChanges(emptyList, emptyList, emptyList, emptyList));
+            
+            return Mock.Of<IInterviewExpressionStatePrototypeProvider>(
+                provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);
+        }
+
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
             var result = new QuestionnaireDocument();
@@ -80,6 +99,111 @@ namespace WB.Tests.Integration.InterviewTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<TInstance>())
                 .Returns(instance);
+        }
+
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null)
+        {
+            Guid questionnaireId = questionnaireDocument.PublicKey;
+
+            var questionnaire = Create.Questionnaire(questionnaireDocument);
+
+            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
+                => repository.GetQuestionnaire(questionnaireId) == questionnaire.GetQuestionnaire()
+                    && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
+                    && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionnaire.GetQuestionnaire());
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
+                .Returns(questionnaireRepository);
+
+            SetupRoslyn(questionnaireDocument);
+
+            var interview = Create.Interview(questionnaireId: questionnaireId);
+
+            ApplyAllEvents(interview, events);
+
+            return interview;
+        }
+
+        public static void ApplyAllEvents(Interview interview, IEnumerable<object> events)
+        {
+            if (events == null)
+                return;
+
+            foreach (var evnt in events)
+            {
+                interview.Apply((dynamic)evnt);
+            }
+        }
+
+        public static bool HasEvent<T>(IEnumerable<UncommittedEvent> events)
+            where T : class
+        {
+            return events.Any(b => b.Payload is T);
+        }
+
+        public static bool HasEvent<T>(IEnumerable<UncommittedEvent> events, Func<T, bool> @where)
+            where T : class
+        {
+            return events.Any(b => (b.Payload is T) && @where((T)b.Payload));
+        }
+
+        public static IEnumerable<T> EventsByType<T>(IEnumerable<UncommittedEvent> events)
+            where T : class
+        {
+            return events.Select(evnt => evnt.Payload).OfType<T>();
+        }
+
+        public static T GetFirstEventByType<T>(IEnumerable<UncommittedEvent> events)
+            where T : class
+        {
+            var firstTypedEvent = events.FirstOrDefault(b => b.Payload is T);
+
+            return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
+        }
+
+        public static void SetupRoslyn(QuestionnaireDocument questionnaireDocument)
+        {
+            IInterviewExpressionState state = GetInterviewExpressionState(questionnaireDocument);
+
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(statePrototypeProvider);
+        }
+
+        public static IInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        {
+            var expressionProcessorGenerator = new QuestionnireExpressionProcessorGenerator();
+
+            string resultAssembly;
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+
+            var filePath = Path.GetTempFileName();
+
+            if (emitResult.Success && !string.IsNullOrEmpty(resultAssembly))
+            {
+                File.WriteAllBytes(filePath, Convert.FromBase64String(resultAssembly));
+
+                var compiledAssembly = Assembly.LoadFrom(filePath);
+
+                Type interviewExpressionStateType =
+                    compiledAssembly.GetTypes()
+                        .FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IInterviewExpressionState)));
+
+                if (interviewExpressionStateType == null)
+                    throw new Exception("Type InterviewExpressionState was not found");
+
+                var interviewExpressionState = Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
+
+                if (interviewExpressionState == null)
+                    throw new Exception("Error on IInterviewExpressionState generation");
+
+                return interviewExpressionState;
+            }
+
+            throw new Exception("Error on IInterviewExpressionState generation");
         }
     }
 }

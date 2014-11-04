@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
@@ -16,28 +19,40 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public void CreateContentOfAdditionalFile(HeaderStructureForLevel headerStructureForLevel, string dataFileName, string contentFilePath)
+        public void CreateContentOfAdditionalFile(HeaderStructureForLevel headerStructureForLevel, string dataFileName, string basePath)
         {
             var doContent = new StringBuilder();
-
+            
             BuildInsheet(dataFileName, doContent);
 
             this.BuildLabelsForLevel(headerStructureForLevel, doContent);
 
             doContent.AppendLine("list");
 
+            var contentFilePath = this.fileSystemAccessor.CombinePath(basePath,
+                GetEnvironmentContentFileName(headerStructureForLevel.LevelName));
+
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString().ToLower());
         }
 
-        public string GetEnvironmentContentFileName(string levelName)
+        public string[] GetContentFilesForQuestionnaire(Guid questionnaireId, long version, string basePath)
         {
-            return string.Format("{0}.do", levelName);
+            return
+                fileSystemAccessor.GetFilesInDirectory(basePath)
+                    .Where(fileName => fileName.EndsWith("." + ContentFileNameExtension)).ToArray();
         }
+
+        private string GetEnvironmentContentFileName(string levelName)
+        {
+            return string.Format("{0}.{1}", levelName, ContentFileNameExtension);
+        }
+
+        private string ContentFileNameExtension { get { return "do"; } }
 
         private static void BuildInsheet(string fileName, StringBuilder doContent)
         {
             doContent.AppendLine(
-                string.Format("insheet using \"{0}\", comma", fileName));
+                string.Format("insheet using \"{0}\", tab", fileName));
         }
 
         protected void BuildLabelsForLevel(HeaderStructureForLevel headerStructureForLevel, StringBuilder doContent)

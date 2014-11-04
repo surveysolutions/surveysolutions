@@ -6,28 +6,27 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>, IEventHandler
+    internal class QuestionnaireExportStructureDenormalizer : IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>, IEventHandler
     {
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter;
         private readonly IQuestionnaireUpgradeService questionnaireUpgradeService;
-        private readonly IDataExportService dataExportService;
+        private readonly IDataExportRepositoryWriter dataExportWriter;
         private readonly IExportViewFactory exportViewFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public QuestionnaireExportStructureDenormalizer(
-            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportService dataExportService,
+            IVersionedReadSideRepositoryWriter<QuestionnaireExportStructure> readsideRepositoryWriter, IDataExportRepositoryWriter dataExportWriter,
             IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IQuestionnaireUpgradeService questionnaireUpgradeService)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;
-            this.dataExportService = dataExportService;
+            this.dataExportWriter = dataExportWriter;
             this.exportViewFactory = exportViewFactory;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.questionnaireUpgradeService = questionnaireUpgradeService;
@@ -66,14 +65,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
             this.readsideRepositoryWriter.Remove(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
-            this.dataExportService.DeleteExportedDataForQuestionnaireVersion(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
+            this.dataExportWriter.DeleteExportedDataForQuestionnaireVersion(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
         }
 
         private void StoreExportStructure(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
             questionnaireDocument = questionnaireUpgradeService.CreateRostersVariableName(questionnaireDocument);
             var questionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, version);
-            this.dataExportService.CreateExportStructureByTemplate(questionnaireExportStructure);
+            this.dataExportWriter.CreateExportStructureByTemplate(questionnaireExportStructure);
             this.readsideRepositoryWriter.Store(questionnaireExportStructure, id);
         }
     }

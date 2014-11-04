@@ -16,13 +16,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.ServiceTests.DataExport.S
             oneQuestionHeaderStructureForLevel =
                 CreateHeaderStructureForLevel(CreateExportedHeaderItem(questionsVariableName, questionsTitle));
             stataEnvironmentContentService =
-                CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor(contentFilePath, (c) => stataGeneratedContent = c));
+                CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
         };
 
-        Because of = () => stataEnvironmentContentService.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel, dataFileName, contentFilePath);
+        Because of = () => stataEnvironmentContentService.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel,dataFileName, contentFilePath);
 
         It should_contain_stata_script_for_insheet_file = () =>
-            stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}\", comma\r\n", dataFileName));
+            stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}\", tab\r\n", dataFileName));
 
         It should_contain_stata_variable_on_title_mapping = () =>
            stataGeneratedContent.ShouldContain(string.Format("label variable {0} `\"{1}\"'",questionsVariableName,questionsTitle));

@@ -55,41 +55,63 @@ namespace WB.UI.Shared.Android
 			}
 		}
 		
+		public partial class Color
+		{
+			
+			// aapt resource value: 0x7f040000
+			public static int capi_orange = 2130968576;
+			
+			static Color()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Color()
+			{
+			}
+		}
+		
 		public partial class Drawable
 		{
 			
 			// aapt resource value: 0x7f020000
-			public static int bookmarkStyle = 2130837504;
+			public static int answer_progress_indicator = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public static int CounterRoundShape = 2130837505;
+			public static int bookmarkStyle = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public static int donecountershape = 2130837506;
+			public static int CounterRoundShape = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public static int errorwarningstyle = 2130837507;
+			public static int donecountershape = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public static int grid_headerItem = 2130837508;
+			public static int errorwarningstyle = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public static int no_image_found = 2130837509;
+			public static int grid_headerItem = 2130837509;
 			
 			// aapt resource value: 0x7f020006
-			public static int questionAnsweredShape = 2130837510;
+			public static int ic_drawer_dark = 2130837510;
 			
 			// aapt resource value: 0x7f020007
-			public static int questionDisabledShape = 2130837511;
+			public static int no_image_found = 2130837511;
 			
 			// aapt resource value: 0x7f020008
-			public static int questionInvalidShape = 2130837512;
+			public static int questionAnsweredShape = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public static int questionShape = 2130837513;
+			public static int questionDisabledShape = 2130837513;
 			
 			// aapt resource value: 0x7f02000a
-			public static int statistics_row_style = 2130837514;
+			public static int questionInvalidShape = 2130837514;
+			
+			// aapt resource value: 0x7f02000b
+			public static int questionShape = 2130837515;
+			
+			// aapt resource value: 0x7f02000c
+			public static int statistics_row_style = 2130837516;
 			
 			static Drawable()
 			{
@@ -104,113 +126,101 @@ namespace WB.UI.Shared.Android
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f040004
-			public static int AnswerId = 2130968580;
+			// aapt resource value: 0x7f050004
+			public static int AnswerId = 2131034116;
 			
-			// aapt resource value: 0x7f040006
-			public static int ElementId = 2130968582;
+			// aapt resource value: 0x7f050006
+			public static int ElementId = 2131034118;
 			
-			// aapt resource value: 0x7f040005
-			public static int Index = 2130968581;
+			// aapt resource value: 0x7f050005
+			public static int Index = 2131034117;
 			
-			// aapt resource value: 0x7f040000
-			public static int MvxBindingTagUnique = 2130968576;
+			// aapt resource value: 0x7f050000
+			public static int MvxBindingTagUnique = 2131034112;
 			
-			// aapt resource value: 0x7f040017
-			public static int MyLayout = 2130968599;
+			// aapt resource value: 0x7f050013
+			public static int MyLayout = 2131034131;
 			
-			// aapt resource value: 0x7f040003
-			public static int PrpagationKey = 2130968579;
+			// aapt resource value: 0x7f050003
+			public static int PrpagationKey = 2131034115;
 			
-			// aapt resource value: 0x7f040001
-			public static int QuestionnaireId = 2130968577;
+			// aapt resource value: 0x7f050001
+			public static int QuestionnaireId = 2131034113;
 			
-			// aapt resource value: 0x7f040002
-			public static int ScreenId = 2130968578;
+			// aapt resource value: 0x7f050002
+			public static int ScreenId = 2131034114;
 			
-			// aapt resource value: 0x7f04001e
-			public static int btnAnswered = 2130968606;
+			// aapt resource value: 0x7f05001a
+			public static int btnAnswered = 2131034138;
 			
-			// aapt resource value: 0x7f040022
-			public static int btnComplete = 2130968610;
+			// aapt resource value: 0x7f05001e
+			public static int btnComplete = 2131034142;
 			
-			// aapt resource value: 0x7f040008
-			public static int btnInstructions = 2130968584;
+			// aapt resource value: 0x7f050008
+			public static int btnInstructions = 2131034120;
 			
-			// aapt resource value: 0x7f040021
-			public static int btnInvalid = 2130968609;
+			// aapt resource value: 0x7f05001d
+			public static int btnInvalid = 2131034141;
 			
-			// aapt resource value: 0x7f040015
-			public static int btnNavigation = 2130968597;
+			// aapt resource value: 0x7f05001b
+			public static int btnUnanswered = 2131034139;
 			
-			// aapt resource value: 0x7f04001f
-			public static int btnUnanswered = 2130968607;
+			// aapt resource value: 0x7f05001f
+			public static int contentFrame = 2131034143;
 			
-			// aapt resource value: 0x7f040023
-			public static int contentFrame = 2130968611;
+			// aapt resource value: 0x7f05000f
+			public static int etComments = 2131034127;
 			
-			// aapt resource value: 0x7f04000f
-			public static int etComments = 2130968591;
+			// aapt resource value: 0x7f050018
+			public static int llButtom = 2131034136;
 			
-			// aapt resource value: 0x7f040012
-			public static int lNavigationContainer = 2130968594;
+			// aapt resource value: 0x7f050010
+			public static int llContainer = 2131034128;
 			
-			// aapt resource value: 0x7f04001c
-			public static int llButtom = 2130968604;
+			// aapt resource value: 0x7f050017
+			public static int llContent = 2131034135;
 			
-			// aapt resource value: 0x7f040010
-			public static int llContainer = 2130968592;
+			// aapt resource value: 0x7f050012
+			public static int llNavigationHolder = 2131034130;
 			
-			// aapt resource value: 0x7f04001b
-			public static int llContent = 2130968603;
+			// aapt resource value: 0x7f050007
+			public static int llRoot = 2131034119;
 			
-			// aapt resource value: 0x7f040013
-			public static int llNavigationButton = 2130968595;
+			// aapt resource value: 0x7f050016
+			public static int llTop = 2131034134;
 			
-			// aapt resource value: 0x7f040016
-			public static int llNavigationHolder = 2130968598;
+			// aapt resource value: 0x7f050009
+			public static int llWrapper = 2131034121;
 			
-			// aapt resource value: 0x7f040007
-			public static int llRoot = 2130968583;
+			// aapt resource value: 0x7f05000d
+			public static int tvComments = 2131034125;
 			
-			// aapt resource value: 0x7f040014
-			public static int llSpaceFiller = 2130968596;
+			// aapt resource value: 0x7f05000e
+			public static int tvCommentsTitle = 2131034126;
 			
-			// aapt resource value: 0x7f04001a
-			public static int llTop = 2130968602;
+			// aapt resource value: 0x7f050015
+			public static int tvCount = 2131034133;
 			
-			// aapt resource value: 0x7f040009
-			public static int llWrapper = 2130968585;
+			// aapt resource value: 0x7f05000b
+			public static int tvError = 2131034123;
 			
-			// aapt resource value: 0x7f04000d
-			public static int tvComments = 2130968589;
+			// aapt resource value: 0x7f05001c
+			public static int tvErrorWarning = 2131034140;
 			
-			// aapt resource value: 0x7f04000e
-			public static int tvCommentsTitle = 2130968590;
+			// aapt resource value: 0x7f050014
+			public static int tvITem = 2131034132;
 			
-			// aapt resource value: 0x7f040019
-			public static int tvCount = 2130968601;
+			// aapt resource value: 0x7f05000a
+			public static int tvMError = 2131034122;
 			
-			// aapt resource value: 0x7f04000b
-			public static int tvError = 2130968587;
+			// aapt resource value: 0x7f050019
+			public static int tvText = 2131034137;
 			
-			// aapt resource value: 0x7f040020
-			public static int tvErrorWarning = 2130968608;
+			// aapt resource value: 0x7f05000c
+			public static int tvTitle = 2131034124;
 			
-			// aapt resource value: 0x7f040018
-			public static int tvITem = 2130968600;
-			
-			// aapt resource value: 0x7f04000a
-			public static int tvMError = 2130968586;
-			
-			// aapt resource value: 0x7f04001d
-			public static int tvText = 2130968605;
-			
-			// aapt resource value: 0x7f04000c
-			public static int tvTitle = 2130968588;
-			
-			// aapt resource value: 0x7f040011
-			public static int vpContent = 2130968593;
+			// aapt resource value: 0x7f050011
+			public static int vpContent = 2131034129;
 			
 			static Id()
 			{
@@ -271,8 +281,14 @@ namespace WB.UI.Shared.Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050000
-			public static int ApplicationName = 2131034112;
+			// aapt resource value: 0x7f060000
+			public static int ApplicationName = 2131099648;
+			
+			// aapt resource value: 0x7f060002
+			public static int drawer_close = 2131099650;
+			
+			// aapt resource value: 0x7f060001
+			public static int drawer_open = 2131099649;
 			
 			static String()
 			{

@@ -25,7 +25,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
                 return null;
             }
 
-            // byte[] key = (byte[])currentUser.ProviderUserKey;
             return new UserLight((Guid)currentUser.ProviderUserKey, currentUser.UserName);
         }
 

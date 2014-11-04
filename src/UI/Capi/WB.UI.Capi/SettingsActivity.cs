@@ -34,6 +34,8 @@ namespace WB.UI.Capi
         protected EventHandler<EventArgs> versionCheckEventHandler;
         protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
 
+        const string syncGetlatestversion = "api/InterviewerSync/GetLatestVersion";
+
         const string defaultTemplate = "http://";
 
         protected override void OnStart()
@@ -210,7 +212,7 @@ namespace WB.UI.Capi
             {
                 try
                 {
-                    updater.GetLatestVersion(SettingsManager.GetSyncAddressPoint() + "/Sync/GetLatestVersion", fileName);
+                    updater.GetLatestVersion(SettingsManager.GetSyncAddressPoint() + syncGetlatestversion, fileName);
                     updater.StartUpdate(fileName);
                 }
                 catch (Exception ex)

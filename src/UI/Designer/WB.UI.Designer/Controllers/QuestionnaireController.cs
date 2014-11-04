@@ -18,11 +18,12 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question.SingleOption;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.QuestionnaireVerification.Services;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -37,6 +38,8 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory;
@@ -53,7 +56,8 @@ namespace WB.UI.Designer.Controllers
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             ILogger logger, IViewFactory<QuestionnaireViewInputModel, EditQuestionnaireView> editQuestionnaireViewFactory,
-            IQuestionnaireInfoFactory questionnaireInfoFactory)
+            IQuestionnaireInfoFactory questionnaireInfoFactory,
+            IExpressionProcessorGenerator expressionProcessorGenerator)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -64,6 +68,7 @@ namespace WB.UI.Designer.Controllers
             this.logger = logger;
             this.editQuestionnaireViewFactory = editQuestionnaireViewFactory;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
+            this.expressionProcessorGenerator = expressionProcessorGenerator;
         }
 
         public ActionResult Clone(Guid id)
@@ -79,6 +84,28 @@ namespace WB.UI.Designer.Controllers
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
             var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            
+            if (!questoinnaireErrors.Any())
+            {
+                GenerationResult generationResult;
+                try
+                {
+                    string resultAssembly;
+                    generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, out resultAssembly);
+                }
+                catch (Exception)
+                {
+                    generationResult = new GenerationResult()
+                    {
+                        Success = false,
+                        Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", GenerationDiagnosticSeverity.Error) }
+                    };
+                }
+                //errors shouldn't be displayed as is 
+                questoinnaireErrors = generationResult.Success
+                    ? new QuestionnaireVerificationError[0]
+                    : generationResult.Diagnostics.Select(d => new QuestionnaireVerificationError("WB1001", d.Message, new QuestionnaireVerificationReference[0])).ToArray();
+            }
 
             return this.Json(new VerificationResult
             {

@@ -49,15 +49,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
                     FillAllComments(answeredQuestion, interviewQuestion);
 
-                    answeredQuestions.Add(answeredQuestion);
+                    if (!answeredQuestion.IsEmpty())
+                    {
+                        answeredQuestions.Add(answeredQuestion);
+                    }
                     if (!interviewQuestion.Enabled)
+                    {
                         disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
+                    }
 
-#warning TLK: validness flag misses undefined state
                     if (!interviewQuestion.Valid)
+                    {
                         invalidQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
+                    }
                     if (interviewQuestion.Valid)
+                    {
                         validQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.RosterVector));
+                    }
                 }
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
                 {

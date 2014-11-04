@@ -64,7 +64,7 @@ namespace WB.UI.Capi.Syncronization.Update
         {
             var executor = restServiceWrapperFactory.CreateRestServiceWrapper(SettingsManager.GetSyncAddressPoint());
             var checker = new RestVersionUpdate(executor);
-            return checker.Execute(SettingsManager.AppVersionName(), SettingsManager.AppVersionCode(), SettingsManager.AndroidVersion());
+            return checker.Execute(SettingsManager.AppVersionCode());
         }
     }
 }

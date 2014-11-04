@@ -61,5 +61,11 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
                 return new decimal[0];
             return PropagationVector.Select(Convert.ToDecimal).ToArray();
         }
+        public bool IsEmpty()
+        {
+            return this.Answer == null
+                && string.IsNullOrWhiteSpace(this.Comments)
+                && (this.AllComments == null || this.AllComments.Length == 0);
+        }
     }
 }

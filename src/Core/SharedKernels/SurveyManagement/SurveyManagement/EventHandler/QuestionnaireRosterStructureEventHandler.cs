@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter;
+        
         public QuestionnaireRosterStructureEventHandler(
             IVersionedReadSideRepositoryWriter<QuestionnaireRosterStructure> readsideRepositoryWriter,
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)

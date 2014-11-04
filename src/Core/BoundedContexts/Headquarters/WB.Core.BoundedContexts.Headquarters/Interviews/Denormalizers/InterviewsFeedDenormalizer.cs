@@ -20,14 +20,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
     {
         private readonly IReadSideRepositoryWriter<InterviewFeedEntry> writer;
         private readonly IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewInterviewSummaryes;
 
         public InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> writer,
-            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews)
+            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviews, IReadSideRepositoryWriter<InterviewSummary> interviewInterviewSummaryes)
         {
             if (writer == null) throw new ArgumentNullException("writer");
             if (interviews == null) throw new ArgumentNullException("interviews");
             this.writer = writer;
             this.interviews = interviews;
+            this.interviewInterviewSummaryes = interviewInterviewSummaryes;
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
@@ -67,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-            string supervisorId = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document.SupervisorId.FormatGuid());
+            string supervisorId = Monads.Maybe(() => this.interviewInterviewSummaryes.GetById(evnt.EventSourceId).TeamLeadId.FormatGuid());
 
             this.writer.Store(new InterviewFeedEntry
             {
@@ -82,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            string supervisorId = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document.SupervisorId.FormatGuid());
+            string supervisorId = Monads.Maybe(() => this.interviewInterviewSummaryes.GetById(evnt.EventSourceId).TeamLeadId.FormatGuid());
 
             this.writer.Store(new InterviewFeedEntry
             {
@@ -97,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            string supervisorId = Monads.Maybe(() => this.interviews.GetById(evnt.EventSourceId).Document.SupervisorId.FormatGuid());
+            string supervisorId = Monads.Maybe(() => this.interviewInterviewSummaryes.GetById(evnt.EventSourceId).TeamLeadId.FormatGuid());
 
             this.writer.Store(new InterviewFeedEntry
             {

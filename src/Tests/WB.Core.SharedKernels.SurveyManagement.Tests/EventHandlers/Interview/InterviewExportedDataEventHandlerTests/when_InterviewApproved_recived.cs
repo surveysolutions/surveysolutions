@@ -19,36 +19,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
-            dataExportService=new Mock<IDataExportService>();
-            interviewActionLogWriter = new Mock<IReadSideRepositoryWriter<InterviewActionLog>>();
-            questionnarie = CreateQuestionnaireDocument(new Dictionary<string, Guid>());
-            interviewActionLog = new InterviewActionLog(interviewId, new List<InterviewActionExportView>());
+            dataExportService = new Mock<IDataExportRepositoryWriter>();
 
-            interviewActionLogWriter.Setup(x => x.GetById(Moq.It.IsAny<string>()))
-                .Returns(interviewActionLog);
-            
-            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(
-                () => questionnarie,
-                CreateInterviewData, dataExportService.Object, new UserDocument() { UserName = "user name" }, interviewActionLogWriter.Object);
+            interviewExportedDataDenormalizer = CreateInterviewExportedDataEventHandlerForQuestionnarieCreatedByMethod(dataExportRepositoryWriter:dataExportService.Object);
         };
 
         Because of = () =>
            interviewExportedDataDenormalizer.Handle(CreateInterviewApprovedByHQPublishableEvent(interviewId));
 
-        It should_interviewActionLog_be_removed = () =>
-              interviewActionLogWriter.Verify(x => x.Remove(interviewId.FormatGuid()), Times.Once);
-
         It should_interviewActionLog_be_added_to_data_export = () =>
-           dataExportService.Verify(x => x.AddInterviewActions(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>(), interviewActionLog.Actions), Times.Once);
-
-        It should_InterviewExportedAction_be_present_in_list_of_actions = () =>
-            interviewActionLog.Actions[0].Action.ShouldEqual(InterviewExportedAction.ApproveByHeadquarter);
-
+           dataExportService.Verify(x => x.AddInterviewAction(
+                        InterviewExportedAction.ApproveByHeadquarter,
+                        Moq.It.IsAny<Guid>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<DateTime>()), Times.Once);
+        
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;
-        private static QuestionnaireDocument questionnarie;
-        private static Mock<IReadSideRepositoryWriter<InterviewActionLog>> interviewActionLogWriter;
-        private static Mock<IDataExportService> dataExportService;
+        private static Mock<IDataExportRepositoryWriter> dataExportService;
         private static Guid interviewId = Guid.NewGuid();
-        private static InterviewActionLog interviewActionLog;
     }
 }

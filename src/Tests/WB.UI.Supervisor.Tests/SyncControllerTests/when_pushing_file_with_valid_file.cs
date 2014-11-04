@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Formatting;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Main.Core.View.User;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.UI.Supervisor.Tests.SyncControllerTests
@@ -19,22 +20,30 @@ namespace WB.UI.Supervisor.Tests.SyncControllerTests
     {
         Establish context = () =>
         {
+            var userLight = new UserLight() { Name = "test" };
+            var globalInfo = Mock.Of<IGlobalInfoProvider>(x => x.GetCurrentUser() == userLight);
+
             var user = new UserView();
             var userFactory = Mock.Of<IViewFactory<UserViewInputModel, UserView>>(x => x.Load(Moq.It.IsAny<UserViewInputModel>()) == user);
             plainFileRepository = new Mock<IPlainInterviewFileStorage>();
-            controller = CreateSyncControllerWithFile(viewFactory: userFactory, stream: new MemoryStream(), plainFileRepository: plainFileRepository.Object, fileName: fileName);
+            controller = CreateSyncControllerWithFile(viewFactory: userFactory, stream: new MemoryStream(), plainFileRepository: plainFileRepository.Object, fileName: fileName, globalInfo: globalInfo);
+            
         };
 
-        Because of = () =>
-            result = (JsonResult)controller.PostFile("login", "password", iterviewId);
+        Because of = () => result = controller.PostFile(interviewId).Result;
+
+        It should_have_NotAcceptable_status_code = () =>
+            result.StatusCode.ShouldEqual(HttpStatusCode.OK);
 
         It should_file_be_Saved_in_plain_file_storage = () =>
-            plainFileRepository.Verify(x => x.StoreInterviewBinaryData(iterviewId, fileName, Moq.It.IsAny<byte[]>()), Times.Once);
+            plainFileRepository.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, Moq.It.IsAny<byte[]>()), Times.Once);
 
-        private static SyncController controller;
-        private static JsonResult result;
+        private static HttpResponseMessage result;
+        private static InterviewerSyncController controller;
+        
         private static Mock<IPlainInterviewFileStorage> plainFileRepository;
-        private static Guid iterviewId = Guid.NewGuid();
-        private static string fileName = "file name";
+        private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
+        private static string fileName = "file.test";
+        private static FormDataCollection formdata;
     }
 }

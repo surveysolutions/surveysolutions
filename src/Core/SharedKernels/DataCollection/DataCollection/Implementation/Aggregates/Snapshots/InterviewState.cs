@@ -15,7 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers, Dictionary<string, Tuple<decimal, string>[]> textListAnswers,
             HashSet<string> answeredQuestions,List<AnswerComment> answerComments,
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, DistinctDecimalList> rosterGroupInstanceIds,
-            HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted)
+            HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted,
+            IInterviewExpressionState expressionProcessorState)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
@@ -32,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             this.ValidAnsweredQuestions = validAnsweredQuestions;
             this.InvalidAnsweredQuestions = invalidAnsweredQuestions;
             this.WasCompleted = wasCompleted;
+            this.ExpressionProcessorState = expressionProcessorState;
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -50,5 +52,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public bool WasCompleted { get; private set; }
         public bool WasHardDeleted { get; private set; }
         public Dictionary<string, Tuple<decimal, string>[]> TextListAnswers { get; set; }
+        public IInterviewExpressionState ExpressionProcessorState { get; set; }
     }
 }

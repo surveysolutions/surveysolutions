@@ -38,10 +38,8 @@ namespace WB.UI.Shared.Android.Controls.ScreenItems
 
         private void InitializeFilteredCombobox()
         {
-            this.filteredCombobox = new AutoCompleteTextView(this.Context);
-            
-            this.filteredCombobox.Threshold = 1;
-            this.filteredCombobox.ImeOptions = ImeAction.Done;
+            this.filteredCombobox = new AutoCompleteTextView(this.Context) { Threshold = 1, ImeOptions = ImeAction.Done };
+
             this.filteredCombobox.SetSelectAllOnFocus(true);
             this.filteredCombobox.SetSingleLine(true);
             this.filteredCombobox.ItemClick += filteredCombobox_ItemClick;

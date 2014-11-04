@@ -37,6 +37,11 @@ namespace WB.UI.Supervisor
         {
             get { return new Uri(this.BaseHqUrl, (string)this["questionnaireDetailsEndpoint"]).ToString(); }
         }
+        [ConfigurationProperty("questionnaireAssemblyEndpoint")]
+        public string QuestionnaireAssemblyEndpoint
+        {
+            get { return new Uri(this.BaseHqUrl, (string)this["questionnaireAssemblyEndpoint"]).ToString(); }
+        }
         [ConfigurationProperty("accessToken")]
         public string AccessToken
         {
