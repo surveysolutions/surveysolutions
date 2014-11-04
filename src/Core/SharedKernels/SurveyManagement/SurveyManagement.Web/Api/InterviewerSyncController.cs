@@ -132,29 +132,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [ApiBasicAuth]
-        public HttpResponseMessage GetSyncPackage(string aRKey, string aRTimestamp, string clientRegistrationId)
+        public HttpResponseMessage GetSyncPackage(Guid aRKey, long aRTimestamp, string clientRegistrationId)
         {
-            Guid key;
-            if (!Guid.TryParse(aRKey, out key))
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Invalid object identifier");
-            }
-
             Guid clientRegistrationKey;
             if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Invalid device identifier");
             }
-
-            long timestamp;
-            if (!long.TryParse(aRTimestamp, out timestamp))
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Invalid sequence identifier");
-            }
-
+            
             try
             {
-                SyncPackage package = syncManager.ReceiveSyncPackage(clientRegistrationKey, key, new DateTime(timestamp));
+                SyncPackage package = syncManager.ReceiveSyncPackage(clientRegistrationKey, aRKey, new DateTime(aRTimestamp));
 
                 if (package == null)
                     return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
@@ -227,7 +215,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             try
             {
-                var provider = await Request.Content.ReadAsMultipartAsync();
+                var provider = new MultipartMemoryStreamProvider();
+                await Request.Content.ReadAsMultipartAsync(provider);
 
                 if (provider.Contents.Count != 1)
                     return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Incorrect files count");
@@ -246,8 +235,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 logger.Fatal("Exception message: " + ex.Message);
                 logger.Fatal("Stack: " + ex.StackTrace);
 
-                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                    "General error occurred. Try later");
+                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, "General error occurred. Try later");
             }
         }
 
