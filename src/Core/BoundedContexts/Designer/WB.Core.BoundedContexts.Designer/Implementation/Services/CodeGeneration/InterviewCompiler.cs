@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             var compilation = CSharpCompilation.Create(
                 String.Format("rules-{0}-{1}.dll", templateId, uniqueAssemblySuffix),
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, checkOverflow: true),
                 syntaxTrees: new[] { tree },
                 references: metadataFileReference);
 
