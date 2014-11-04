@@ -836,5 +836,23 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0093_QuestionWithTheSameVariableNameAlreadyExists", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Condition expresssion has length more than 10000 characters.
+        /// </summary>
+        internal static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
+            get {
+                return ResourceManager.GetString("WB0094_ConditionExpresssionHasLengthMoreThan10000Characters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation expresssion has length more than 10000 characters.
+        /// </summary>
+        internal static string WB0095_ValidationExpresssionHasLengthMoreThan10000Characters {
+            get {
+                return ResourceManager.GetString("WB0095_ValidationExpresssionHasLengthMoreThan10000Characters", resourceCulture);
+            }
+        }
     }
 }
