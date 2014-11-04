@@ -67,13 +67,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 };
             }
 
-            public static QuestionChanged UpdateSingleOptionQuestion(Guid questionId, string variableName)
+            public static QuestionChanged QuestionChanged(Guid questionId, string variableName, QuestionType questionType)
             {
                 return new QuestionChanged
                 {
                     PublicKey = questionId,
                     StataExportCaption = variableName,
-                    QuestionType = QuestionType.SingleOption
+                    QuestionType = questionType
                 };
             }
 
