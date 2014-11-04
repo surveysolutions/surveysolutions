@@ -14,11 +14,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Tests
 {
     internal static class Create
     {
-        public static InterviewsFeedDenormalizer InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> feedEntryWriter = null, 
-            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewsRepository = null)
+        public static InterviewsFeedDenormalizer InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> feedEntryWriter = null,
+            IReadSideRepositoryWriter<ViewWithSequence<InterviewData>> interviewsRepository = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryRepository = null)
         {
             return new InterviewsFeedDenormalizer(feedEntryWriter ?? Substitute.For<IReadSideRepositoryWriter<InterviewFeedEntry>>(),
-                interviewsRepository ?? Substitute.For<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>());
+                interviewsRepository ?? Substitute.For<IReadSideRepositoryWriter<ViewWithSequence<InterviewData>>>(), interviewSummaryRepository ?? Substitute.For<IReadSideRepositoryWriter<InterviewSummary>>());
         }
 
         public static QuestionnaireFeedDenormalizer QuestionnaireFeedDenormalizer(IReadSideRepositoryWriter<QuestionnaireFeedEntry> questionnaireFeedWriter)
