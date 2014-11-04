@@ -65,33 +65,33 @@
                     <!-- /ko -->
                 </td>
                 <td data-bind="text: Title"></td>
-                <td data-bind="text: Version"></td>
+                <td data-bind="text: Version"></td> 
                 <td data-bind="date: CreationDate"></td>
                 <td data-bind="date: LastEntryDate"></td>
                 <td>
                     <!-- ko ifnot:AllowCensusMode -->
-                    <a class="btn btn-primary" data-bind="attr: { href: $batchUploadUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                    <a class="btn btn-primary margin-top-bottom-3" data-bind="attr: { href: $batchUploadUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
                         <i class="icon-white"></i>Batch upload
                     </a>
-                    <a class="btn btn-primary" data-bind="attr: { href: $newInterviewUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                    <a class="btn btn-primary margin-top-bottom-3" data-bind="attr: { href: $newInterviewUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
                         <i class="glyphicon glyphicon-plus-sign"></i> New Interview
                     </a>
                     <!-- /ko -->
                 </td>
                 <td>
-                    <a class="btn btn-success" data-bind="attr: { href: $getExportedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                    <a class="btn btn-success margin-top-bottom-3" data-bind="attr: { href: $getExportedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
                         <i class=" glyphicon glyphicon-download">
                         </i> TAB
                     </a>
-                    <a class="btn btn-success" data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                    <a class="btn btn-success margin-top-bottom-3" data-bind="attr: { href: $getExportedApprovedDataUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
                         <i class=" glyphicon glyphicon-download">
                         </i> Approved data
                     </a>
-                    <a class="btn btn-success" data-bind="attr: { href: $getExportedFilesUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                    <a class="btn btn-success margin-top-bottom-3" data-bind="attr: { href: $getExportedFilesUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
                         <i class=" glyphicon glyphicon-download">
                         </i> Binary data
                     </a>
-                    <a class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
+                    <a class="btn btn-danger margin-top-bottom-3" data-bind="click : $parent.deleteQuestionnaire">
                         <i class="glyphicon"></i> Delete
                     </a>
                 </td>
