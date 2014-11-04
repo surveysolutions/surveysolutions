@@ -827,5 +827,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0092_CascadingChildQuesionShouldNotContainValidation", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question with the same variable name already exists..
+        /// </summary>
+        internal static string WB0093_QuestionWithTheSameVariableNameAlreadyExists {
+            get {
+                return ResourceManager.GetString("WB0093_QuestionWithTheSameVariableNameAlreadyExists", resourceCulture);
+            }
+        }
     }
 }
