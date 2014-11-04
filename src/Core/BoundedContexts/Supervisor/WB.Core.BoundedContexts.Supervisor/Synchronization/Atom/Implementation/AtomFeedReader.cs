@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Atom.Implementation
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new ApplicationException(string.Format("Failed to read users feed. response code: {1}, response content: {2}",
+                throw new ApplicationException(string.Format("Failed to read users feed. response code: {0}, response content: {1}",
                     response.StatusCode, response.Content));
             }
 
