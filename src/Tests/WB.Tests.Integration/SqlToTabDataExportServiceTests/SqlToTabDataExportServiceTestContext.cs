@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.SqlToTabDataExportServiceTests
         protected static SqlToTabDataExportService CreateSqlToTabDataExportService(ISqlServiceFactory sqlServiceFactory = null, QuestionnaireExportStructure questionnaireExportStructure = null, ICsvWriterService csvWriterService=null)
         {
             var fileSystemAccessor = new FileSystemIOAccessor();
-            sqlServiceFactory = sqlServiceFactory ?? Create.SqliteServiceFactory("sqllite_export_test", fileSystemAccessor);
+            sqlServiceFactory = sqlServiceFactory ?? Create.SqliteServiceFactoryForTests("sqllite_export_test", fileSystemAccessor);
             var sqlDataAccessor = new SqlDataAccessor(fileSystemAccessor);
             if (questionnaireExportStructure != null)
                 new SqlDataExportWriter(sqlDataAccessor, sqlServiceFactory, fileSystemAccessor).CreateStructure(
@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.SqlToTabDataExportServiceTests
             }
         }
 
-        protected class CsvWriterServiceTest : ICsvWriterService
+        protected class CsvWriterServiceStub : ICsvWriterService
         {
             private readonly List<List<string>> writtenData = new List<List<string>>{new List<string>()};
 

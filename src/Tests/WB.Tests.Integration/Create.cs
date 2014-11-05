@@ -327,7 +327,7 @@ namespace WB.Tests.Integration
         }
 
 
-        public static ISqlServiceFactory SqliteServiceFactory(string dbFileName, IFileSystemAccessor fileSystemAccessor=null)
+        public static ISqlServiceFactory SqliteServiceFactoryForTests(string dbFileName, IFileSystemAccessor fileSystemAccessor=null)
         {
             fileSystemAccessor = fileSystemAccessor ?? new FileSystemIOAccessor();
             if(fileSystemAccessor.IsFileExists(dbFileName))
