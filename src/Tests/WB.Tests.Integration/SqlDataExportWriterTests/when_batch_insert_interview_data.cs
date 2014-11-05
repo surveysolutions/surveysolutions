@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.SqlDataExportWriterTests
     {
         Establish context = () =>
         {
-            sqliteServiceFactory = Create.SqliteServiceFactory("sqllite_batch_upload_test");
+            sqliteServiceFactory = Create.SqliteServiceFactoryForTests("sqllite_batch_upload_test");
             interviewDataExportView = CreateInterviewDataExportView(interviewId: interviewId,
                 levels: CreateInterviewDataExportLevelView(interviewId: interviewId, levelName: rosterLevelTable,
                     levelVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() }),
