@@ -23,7 +23,7 @@ namespace WB.UI.Capi.Syncronization.Push
             var result = this.webExecutor.ExecuteRestRequestAsync<bool>(PostPackagePath, ct, content, login, password, null);
 
             if (!result)
-                throw new RestException("Push failed. Try again later.");
+                throw new RestException(Properties.Resource.PushFailed);
         }
 
         public void PushBinary(string login, string password, byte[] data, string fileName, Guid interviewId, CancellationToken ct)
@@ -40,7 +40,7 @@ namespace WB.UI.Capi.Syncronization.Push
                 new KeyValuePair<string, object>[]{});
 
             if (!result)
-                throw new RestException("Push of binary data failed. Try again later.");
+                throw new RestException(Properties.Resource.PushBinaryDataFailed);
         }
     }
 }

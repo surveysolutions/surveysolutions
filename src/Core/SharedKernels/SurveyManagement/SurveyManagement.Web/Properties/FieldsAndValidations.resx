@@ -156,4 +156,7 @@
   <data name="UserNameFieldName" xml:space="preserve">
     <value>User name</value>
   </data>
+  <data name="InvalidUser" xml:space="preserve">
+    <value>Invalid user</value>
+  </data>
 </root>

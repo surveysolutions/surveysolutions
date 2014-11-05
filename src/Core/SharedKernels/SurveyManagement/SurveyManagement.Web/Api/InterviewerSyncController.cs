@@ -20,6 +20,8 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
+using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 
@@ -82,27 +84,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             UserView user = GetUser(globalInfo.GetCurrentUser().Name);
             if (user == null)
-                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid user");
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, FieldsAndValidations.InvalidUser);
 
             Guid key;
             int? supervisorRevisionNumber = versionProvider.GetApplicationBuildNumber();
 
             if (supervisorRevisionNumber.HasValue && version > supervisorRevisionNumber.Value)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                    "Your application is incompatible with the Supervisor. Please, remove your copy and download the correct version");
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.ClientVersionIsObsolete);
             }
 
             if (supervisorRevisionNumber.HasValue && version < supervisorRevisionNumber.Value)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                    "You must update your CAPI application before synchronizing with the Supervisor");
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.OldVersionOfClient);
             }
 
             if (!Guid.TryParse(clientId, out key))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                    "Client Identifier was not provided");
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.NoClientIdentifier);
             }
 
             var identifier = new ClientIdentifier();
@@ -117,16 +116,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 HandshakePackage package = syncManager.ItitSync(identifier);
                 if (package == null)
                     return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                        "Error occurred during synchronization initialization.");
+                        InterviewerSyncControllerMessages.ServerError);
 
                 return Request.CreateResponse(HttpStatusCode.OK, package);
             }
             catch (Exception exc)
             {
-                logger.Fatal("Sync Handshake Error", exc);
+                logger.Fatal(
+                    string.Format("Sync Handshake Error. ClientId:{0}, AndroidId : {1}, ClientRegistrationId:{2}, version: {3}", clientId, androidId, clientRegistrationId, version), exc);
 
                 return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                    "Error occurred during synchronization initialization.");
+                    InterviewerSyncControllerMessages.ServerError);
             }
         }
 
@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             Guid clientRegistrationKey;
             if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Invalid device identifier");
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.InvalidDeviceIdentifier);
             }
             
             try
@@ -155,7 +155,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 logger.Fatal("Error on sync", ex);
                 logger.Fatal(ex.StackTrace);
 
-                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, "General error occurred. Try later");
+                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, InterviewerSyncControllerMessages.ServerError);
             }
         }
 
@@ -165,12 +165,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             UserView user = GetUser(globalInfo.GetCurrentUser().Name);
             if (user == null)
-                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid user");
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, InterviewerSyncControllerMessages.InvalidUser);
 
             Guid clientRegistrationKey;
             if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey) || clientRegistrationKey == Guid.Empty)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Invalid device identifier");
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.InvalidDeviceIdentifier);
             }
 
             long clientSequence;
@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 if (!long.TryParse(sequence, out clientSequence))
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Invalid sequence identifier");
+                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.InvalidSequenceIdentifier);
                 }
             }
             else
@@ -200,7 +200,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 logger.Fatal(ex.StackTrace);
 
                 return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                    "General error occurred. Try later");
+                    InterviewerSyncControllerMessages.ServerError);
             }
         }
 
@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             if (Request.Content == null || !Request.Content.IsMimeMultipartContent())
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Incorrect media type");
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.IncorrectMediaType);
             }
 
             try
@@ -219,7 +219,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 await Request.Content.ReadAsMultipartAsync(provider);
 
                 if (provider.Contents.Count != 1)
-                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Incorrect files count");
+                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, InterviewerSyncControllerMessages.IncorrectFilesCount);
 
                 HttpContent file = provider.Contents[0];
                 string filename = file.Headers.ContentDisposition.FileName.Trim('\"');
@@ -235,7 +235,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 logger.Fatal("Exception message: " + ex.Message);
                 logger.Fatal("Stack: " + ex.StackTrace);
 
-                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, "General error occurred. Try later");
+                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, InterviewerSyncControllerMessages.ServerError);
             }
         }
 
@@ -254,8 +254,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
                 if (syncItem == null)
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                        "General error occurred. Try later");
+                    return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, InterviewerSyncControllerMessages.ServerError);
                 }
 
                 return Request.CreateResponse(HttpStatusCode.OK, syncManager.SendSyncItem(syncItem));
@@ -266,8 +265,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 logger.Fatal("Exception message: " + ex.Message);
                 logger.Fatal("Stack: " + ex.StackTrace);
 
-                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable,
-                    "General error occurred. Try later");
+                return Request.CreateErrorResponse(HttpStatusCode.ServiceUnavailable, InterviewerSyncControllerMessages.ServerError);
             }
         }
 
@@ -277,7 +275,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             int maxVersion = GetLastVersionNumber();
 
             if (maxVersion <= 0)
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "File was not found");
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, InterviewerSyncControllerMessages.FileWasNotFound);
 
 
             string targetToSearchVersions = HostingEnvironment.MapPath(pathToSearchVersions);
@@ -298,7 +296,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 return response;
             }
             
-            return Request.CreateErrorResponse(HttpStatusCode.NotFound, "File was not found");
+            return Request.CreateErrorResponse(HttpStatusCode.NotFound, InterviewerSyncControllerMessages.FileWasNotFound);
         }
 
         private int GetLastVersionNumber()
