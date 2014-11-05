@@ -78,8 +78,10 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable
             };
         }
-                public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
-            string[] fixedTitles = null, IEnumerable<IComposite> children = null, RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+
+        public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
+            string[] fixedTitles = null, IEnumerable<IComposite> children = null,
+            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
         {
             Group group = Create.Group(
@@ -92,7 +94,7 @@ namespace WB.Tests.Unit
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType;
             if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
-                group.RosterFixedTitles = fixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"};
+                group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
 
