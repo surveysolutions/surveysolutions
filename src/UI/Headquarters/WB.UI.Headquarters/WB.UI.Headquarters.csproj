@@ -449,6 +449,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BatchUpload.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Dashboard.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dashboard.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\MainMenu.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -633,6 +638,12 @@
     <Content Include="App_GlobalResources\BatchUpload.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>BatchUpload.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Dashboard.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Dashboard.Designer.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <PropertyGroup>

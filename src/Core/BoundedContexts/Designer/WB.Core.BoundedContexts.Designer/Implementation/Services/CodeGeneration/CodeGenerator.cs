@@ -51,7 +51,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
 
             var variableNames = allQuestions.ToDictionary(q => q.VariableName, q => q.Id);
-            allRosters.ForEach(r => variableNames.Add(r.VariableName, questionnaire.PublicKey));
+            foreach (var roster in allRosters)
+            {
+                if (!variableNames.ContainsKey(roster.VariableName))
+                {
+                    variableNames.Add(roster.VariableName, questionnaire.PublicKey);
+                }
+            }
 
             var conditionalDependencies = this.BuildConditionalDependencies(questionnaire, variableNames);
 

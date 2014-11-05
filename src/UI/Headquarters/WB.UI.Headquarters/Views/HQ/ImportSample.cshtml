@@ -39,7 +39,7 @@
                 </tbody>
             </table>
         </div>
-        <a href="@Url.Action(Model.MetaData.PreloadedContentType == PreloadedContentType.Sample ? "VerifySample" : "VerifyPanel", new { id = Model.MetaData.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version })" 
+        <a href="@Url.Action(Model.MetaData.PreloadedContentType == PreloadedContentType.Sample ? "VerifySample" : "VerifyPanel", new { id = Model.MetaData.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version })"
            class="btn btn-primary">Verify</a>
     }
 </div>

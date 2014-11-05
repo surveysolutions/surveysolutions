@@ -16,8 +16,8 @@ namespace WB.Tests.Integration.SqlToTabDataExportServiceTests
     {
         Establish context = () =>
         {
-            csvWriterService=new CsvWriterServiceTest();
-            sqlServiceFactory = Create.SqliteServiceFactory("sqllite_export_all_test");
+            csvWriterService=new CsvWriterServiceStub();
+            sqlServiceFactory = Create.SqliteServiceFactoryForTests("sqllite_export_all_test");
 
             questionnaireExportStructure =
                 Create.QuestionnaireExportStructure(Create.HeaderStructureForLevel(rosterLevelTable,
@@ -91,7 +91,7 @@ namespace WB.Tests.Integration.SqlToTabDataExportServiceTests
             });
 
         private static SqlToTabDataExportService sqlToTabDataExportService;
-        private static CsvWriterServiceTest csvWriterService;
+        private static CsvWriterServiceStub csvWriterService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 3;
         private static QuestionnaireExportStructure questionnaireExportStructure;
