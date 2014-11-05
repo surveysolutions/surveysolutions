@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
@@ -32,11 +33,13 @@ namespace WB.Core.GenericSubdomains.Rest.Android
 
             if (response.StatusCode == HttpStatusCode.OK) 
                 return;
-            
-            if (response.StatusCode != HttpStatusCode.Forbidden)
+
+            if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                 throw new AuthenticationException("Not autorized");
 
-            this.logger.Error(string.Format("Sync error. Status: {0}",  response.StatusDescription));
+            this.logger.Error(string.Format("Sync error. Status: {0}, Response Uri: {1}, Url: {2} Method:{3}, Login: {4}, args: {5}",
+                response.StatusDescription, response.ResponseUri, url, method, login, 
+                string.Join(";", additionalParams.Select(x => x.Key + "=" + x.Value.ToString()).ToArray())));
             throw new RestException(string.Format("Target returned unexpected result. Status: {0}", response.StatusDescription));
             
         }
@@ -94,7 +97,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
             if (response.StatusCode == HttpStatusCode.OK) 
                 return;
 
-            if (response.StatusCode != HttpStatusCode.Forbidden)
+            if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                 throw new AuthenticationException("Not autorized");
 
             this.logger.Error(string.Format("Sync error. Response status: {0}. {1}", response.StatusCode, response.StatusDescription));
@@ -155,7 +158,7 @@ namespace WB.Core.GenericSubdomains.Rest.Android
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                if(response.StatusCode == HttpStatusCode.Forbidden)
+                if(response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                     throw new AuthenticationException("Not autorized");
 
                 this.logger.Error(string.Format("Sync error. Status: {0}", response.StatusDescription));
