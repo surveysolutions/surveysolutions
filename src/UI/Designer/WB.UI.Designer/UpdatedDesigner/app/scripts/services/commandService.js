@@ -90,6 +90,7 @@
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
                         command.validationExpression = question.cascadeFromQuestionId ? '' : command.validationExpression;
+                        command.validationMessage = question.cascadeFromQuestionId ? '' : command.validationMessage;
                         if (shouldGetOptionsOnServer) {
                             command.options = null;
                         } else {
