@@ -44,7 +44,7 @@ namespace WB.UI.Capi.Syncronization.Pull
                 );
 
             if (syncItemsMetaContainer.ChunksMeta == null)
-                throw new RestException("Error on item list receiving.");
+                throw new RestException(Properties.Resource.ErrorOnItemListReceiving);
 
             return syncItemsMetaContainer.ChunksMeta.ToDictionary(s => s, s => false);
         }
