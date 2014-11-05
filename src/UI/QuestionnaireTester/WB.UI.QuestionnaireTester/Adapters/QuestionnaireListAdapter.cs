@@ -41,8 +41,9 @@ namespace WB.UI.QuestionnaireTester.Adapters
 
                     unfilteredList = items = questionnaireListPackage.Items;
                 }
-                catch (Exception) //AuthenticationException
+                catch (Exception exc) 
                 {
+                    ShowLongToastInUIThread(exc.Message);
                     activity.RunOnUiThread(() =>
                     {
                         if (items == null)
@@ -131,6 +132,11 @@ namespace WB.UI.QuestionnaireTester.Adapters
         public override QuestionnaireListItem this[int position]
         {
             get { return items[position]; }
+        }
+
+        private void ShowLongToastInUIThread(string message)
+        {
+            this.activity.RunOnUiThread(() => Toast.MakeText(activity, message, ToastLength.Long).Show());
         }
     }
 }

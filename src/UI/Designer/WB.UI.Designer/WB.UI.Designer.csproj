@@ -1401,6 +1401,7 @@
     <Content Include="App_GlobalResources\TesterApiController.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>TesterApiController.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <PropertyGroup>

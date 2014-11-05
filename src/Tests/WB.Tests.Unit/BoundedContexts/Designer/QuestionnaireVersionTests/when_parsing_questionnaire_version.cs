@@ -3,7 +3,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
 {
-    internal class when_trying_to_parse_string_to_questionnaire_version : QuestionnaireVersionTestsContext
+    internal class when_parsing_questionnaire_version : QuestionnaireVersionTestsContext
     {
         Establish context = () =>
         {
@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVersionTests
 
         Because of = () => QuestionnaireVersion.TryParse(versionAsString, out result);
 
-        It should_result_equal_prototype = () =>
+        It should_return_version = () =>
             result.ShouldEqual(version);
 
         private static QuestionnaireVersion version;
