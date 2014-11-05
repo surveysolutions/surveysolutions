@@ -32,7 +32,7 @@ namespace Main.Core.Utility
         public static string ComputeHash(string plainText)
         {
             if (plainText == null)
-                return string.Empty;
+                return null;
 
             // Convert plain text into a byte array.
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
