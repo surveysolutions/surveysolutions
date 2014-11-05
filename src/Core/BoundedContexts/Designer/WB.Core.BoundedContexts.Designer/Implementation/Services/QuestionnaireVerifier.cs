@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         #region Constants
 
         private const int maxExpressionErrorsCount = 10;
+        private const int maxExpressionLength = 10000;
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
         {
@@ -175,6 +176,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(LinkedQuestionIsInterviewersOnly, "WB0090", VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
                     Verifier<SingleQuestion>(CascadingQuestionHasEnablementCondition, "WB0091", VerificationMessages.WB0091_CascadingChildQuestionShouldNotContainCondition),
                     Verifier<SingleQuestion>(CascadingQuestionHasValidationExpresssion, "WB0092", VerificationMessages.WB0092_CascadingChildQuesionShouldNotContainValidation),
+                    Verifier<IComposite>(ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
+                    Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
 
 
                     this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperRosterLevel,
@@ -187,6 +190,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByConditionAndValidationExpressions
                 };
             }
+        }
+
+        private bool hasExceededLimitByValidationExpresssionCharactersLength = false;
+        private bool ValidationExpresssionHasLengthMoreThan10000Characters(IQuestion question)
+        {
+            return !string.IsNullOrEmpty(question.ValidationExpression) &&
+                   (hasExceededLimitByValidationExpresssionCharactersLength =
+                       (question.ValidationExpression.Length > maxExpressionLength));
+        }
+
+        private bool hasExceededLimitByConditionExpresssionCharactersLength = false;
+        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestion)
+        {
+            var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestion);
+
+            return !string.IsNullOrEmpty(customEnablementCondition) &&
+                   (hasExceededLimitByConditionExpresssionCharactersLength =
+                       (customEnablementCondition.Length > maxExpressionLength));
         }
 
         private bool CascadingQuestionHasValidationExpresssion(SingleQuestion question)
@@ -202,6 +223,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
        
         private IEnumerable<QuestionnaireVerificationError> ErrorsByConditionAndValidationExpressions(QuestionnaireDocument questionnaire)
         {
+            if(hasExceededLimitByConditionExpresssionCharactersLength || hasExceededLimitByValidationExpresssionCharactersLength)
+                yield break;
+            
             if (IsQuestionnaireValidByValidationsAndConditions(questionnaire))
                 yield break;
 
