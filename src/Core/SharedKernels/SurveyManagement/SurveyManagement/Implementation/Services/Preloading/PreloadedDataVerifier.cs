@@ -346,7 +346,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                         foreach (var answerIndex in presentQuestion.Value)
                         {
-                            var answer = row[answerIndex];
+                            var answer = (row[answerIndex] ?? "").Trim();
                             if (string.IsNullOrEmpty(answer))
                                 continue;
 
