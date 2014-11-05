@@ -59,7 +59,7 @@ namespace WB.UI.Designer.Api
 
             if (user == null)
             {
-                logger.Error("Unauthorized request to the questionnaire list");
+                logger.Warn("Unauthorized request to the questionnaire list");
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
             }
             
@@ -95,7 +95,7 @@ namespace WB.UI.Designer.Api
         public HttpResponseMessage ValidateCredentials()
         {
             if (this.userHelper.WebUser == null)
-                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
 
             return Request.CreateResponse(HttpStatusCode.OK, !this.userHelper.WebUser.MembershipUser.IsLockedOut);
         }
@@ -106,11 +106,11 @@ namespace WB.UI.Designer.Api
             var user = this.userHelper.WebUser;
             if (user == null)
             {
-                logger.Error("Unauthorized request to the questionnaire " + id);
-                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+                logger.Warn("Unauthorized request to the questionnaire " + id);
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
             }
 
-            return Request.CreateErrorResponse(HttpStatusCode.Gone, TesterApiController.TesterController_GetTemplate_You_have_an_old_version_of_application__Please_update_application_to_continue_);
+            return Request.CreateErrorResponse(HttpStatusCode.Gone, TesterApiController.OldClientPleaseUpdate);
         }
 
         [HttpGet]
@@ -119,20 +119,20 @@ namespace WB.UI.Designer.Api
             var user = this.userHelper.WebUser;
             if (user == null)
             {
-                logger.Error("Unauthorized request to the questionnaire " + id);
-                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
+                logger.Warn("Unauthorized request to the questionnaire " + id);
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, TesterApiController.TesterController_ValidateCredentials_Not_authirized);
             }
 
             QuestionnaireVersion supportedQuestionnaireVersion;
             if (!QuestionnaireVersion.TryParse(maxSupportedVersion, out supportedQuestionnaireVersion))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TesterApiController.TesterController_GetTemplate_Max_supporter_version_of_questionnaire_was_not_correctly_provided_);
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TesterApiController.VersionParameterIsIncorrect);
             }
 
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
             if (questionnaireView == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiController.TesterController_GetTemplate_, id));
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiController.TemplateWasNotFound, id));
             }
 
             if (!ValidateAccessPermissions(questionnaireView, user.UserId))
@@ -144,12 +144,13 @@ namespace WB.UI.Designer.Api
             var templateInfo = this.exportService.GetQuestionnaireTemplateInfo(questionnaireView.Source);
             if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiController.TesterController_GetTemplate_, id));
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(TesterApiController.TemplateWasNotFound, id));
             }
 
             if (templateInfo.Version > supportedQuestionnaireVersion)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TesterApiController.TesterController_GetTemplate_You_have_an_obsolete_version_of_application__Please_update_application_to_continue_);
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                    string.Format(TesterApiController.ClientVersionLessThenDocument, supportedQuestionnaireVersion, templateInfo.Version));
             }
 
             string resultAssembly;
@@ -157,20 +158,20 @@ namespace WB.UI.Designer.Api
             {
                 if (questionnaireVerifier.Verify(questionnaireView.Source).ToArray().Any())
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.Questionnaire_verification_failed);
                 }
 
                 GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireView.Source, out resultAssembly);
 
                 if (!generationResult.Success || String.IsNullOrWhiteSpace(resultAssembly))
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
+                    return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.Questionnaire_verification_failed);
                 }
             }
             catch (Exception exc)
             {
                 logger.Error("Error template verification.", exc);
-                return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.TesterController_GetTemplate_Questionnaire_is_invalid__Please_Verify_it_on_Designer_);
+                return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, TesterApiController.Questionnaire_verification_failed);
             }
             
             var template = PackageHelper.CompressString(templateInfo.Source);
