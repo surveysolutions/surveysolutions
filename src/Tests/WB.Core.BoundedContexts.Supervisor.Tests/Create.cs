@@ -84,7 +84,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests
                 plainQuestionnaireRepository ??
                     Mock.Of<IPlainQuestionnaireRepository>(
                         _ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == new QuestionnaireDocument()),
-                Mock.Of<IHeadquartersQuestionnaireReader>(),
                 headquartersInterviewReader ?? Mock.Of<IHeadquartersInterviewReader>(),
                 HeadquartersPullContext(),
                 headquartersPushContext ?? HeadquartersPushContext(),
