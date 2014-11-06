@@ -4,6 +4,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.UI.Shared.Web.CommandDeserialization
 {

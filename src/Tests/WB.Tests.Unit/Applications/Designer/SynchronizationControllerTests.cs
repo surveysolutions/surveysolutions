@@ -11,6 +11,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Controllers;

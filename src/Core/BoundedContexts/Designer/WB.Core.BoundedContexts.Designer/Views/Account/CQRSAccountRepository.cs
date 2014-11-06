@@ -5,6 +5,7 @@ using Main.Core.View;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account

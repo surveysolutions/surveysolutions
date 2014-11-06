@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ncqrs.Commanding
+namespace WB.Core.Infrastructure.CommandBus
 {
     /// <summary>
     /// A command message. A command should contain all the information and

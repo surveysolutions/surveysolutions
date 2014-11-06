@@ -9,6 +9,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization;
