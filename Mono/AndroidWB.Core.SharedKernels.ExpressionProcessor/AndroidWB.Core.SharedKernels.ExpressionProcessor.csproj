@@ -43,9 +43,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\ExpressionProcessorModule.cs">
       <Link>ExpressionProcessorModule.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\ExtentionFunctions.cs">
-      <Link>ExtentionFunctions.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\KeywordsProvider.cs">
       <Link>Implementation\Services\KeywordsProvider.cs</Link>
     </Compile>
