@@ -134,57 +134,6 @@ namespace WB.Tools.EventsConverter
             CommittedEvent tmpEvent = null;
             foreach (var committedEvent in eventsFromSingleCommit)
             {
-                var answerValid = committedEvent.Payload as AnswerDeclaredValid;
-                if (answerValid != null)
-                {
-                    if (currentFlushGroup != 1)
-                    {
-                        sequence = FlushCompactEvents(eventsFromSingleCommit,tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
-
-                        answersValid = new List<Identity>();
-                        answersInvalid = new List<Identity>();
-                        questionsEnabled = new List<Identity>();
-                        questionsDisabled = new List<Identity>();
-                        groupsEnabled = new List<Identity>();
-                        groupsDisabled = new List<Identity>();
-                        answersRemoved = new List<Identity>();
-                        rostersAdded = new List<AddedRosterInstance>();
-                        rostersRemoved = new List<RosterInstance>();
-                    }
-
-                    currentFlushGroup = 1;
-
-                    AddrIgnore(answersValid, answerValid.QuestionId, answerValid.PropagationVector);
-                    tmpEvent = committedEvent;
-                    continue;
-                }
-
-                var answerInvalid = committedEvent.Payload as AnswerDeclaredInvalid;
-                if (answerInvalid != null)
-                {
-                    if (currentFlushGroup != 2)
-                    {
-                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
-
-                        answersValid = new List<Identity>();
-                        answersInvalid = new List<Identity>();
-                        questionsEnabled = new List<Identity>();
-                        questionsDisabled = new List<Identity>();
-                        groupsEnabled = new List<Identity>();
-                        groupsDisabled = new List<Identity>();
-                        answersRemoved = new List<Identity>();
-                        rostersAdded = new List<AddedRosterInstance>();
-                        rostersRemoved = new List<RosterInstance>();
-                    }
-
-                    currentFlushGroup = 2;
-
-
-                    AddrIgnore(answersInvalid, answerInvalid.QuestionId, answerInvalid.PropagationVector);
-                    tmpEvent = committedEvent;
-                    continue;
-                }
-
                 var questionEnabled = committedEvent.Payload as QuestionEnabled;
                 if (questionEnabled != null)
                 {
@@ -409,16 +358,6 @@ namespace WB.Tools.EventsConverter
             {
                 sequence = AddOrIgnoreAndReturnNewSequence<RosterInstancesRemoved, RosterRowRemoved>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new RosterInstancesRemoved(rostersRemoved.ToArray()), sequence);
-            }
-            if (answersValid.Any())
-            {
-                sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredValid, AnswerDeclaredValid>(streamToSave, eventsFromSingleCommit, tmpEvent,
-                    () => new AnswersDeclaredValid(answersValid.ToArray()), sequence);
-            }
-            if (answersInvalid.Any())
-            {
-                sequence = AddOrIgnoreAndReturnNewSequence<AnswersDeclaredInvalid, AnswerDeclaredInvalid>(streamToSave, eventsFromSingleCommit, tmpEvent,
-                    () => new AnswersDeclaredInvalid(answersInvalid.ToArray()), sequence);
             }
             if (questionsEnabled.Any())
             {

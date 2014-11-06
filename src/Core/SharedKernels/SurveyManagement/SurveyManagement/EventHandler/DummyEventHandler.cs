@@ -9,8 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<AnswerCommented>,
         IEventHandler<FlagRemovedFromAnswer>,
         IEventHandler<FlagSetToAnswer>,
-        IEventHandler<AnswerDeclaredValid>,
-        IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswersDeclaredValid>,
         IEventHandler<AnswersDeclaredInvalid>,
         IEventHandler<GroupPropagated>,
@@ -35,10 +33,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewDeclaredInvalid>,
     IEventHandler
     {
-        public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
-
-        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt) { }
-
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
 
         public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt) { }

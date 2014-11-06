@@ -62,8 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionsDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionsEnabled>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, AnswerDeclaredInvalid>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, AnswerDeclaredValid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersDeclaredInvalid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersDeclaredValid>,
         IUpdateHandler<ViewWithSequence<InterviewData>, FlagRemovedFromAnswer>,
@@ -712,20 +710,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.Payload.Questions.Aggregate(
                     currentState.Document,
                     (document, question) => ChangeQuestionConditionState(document, question.RosterVector, question.Id, true)),
-                evnt.EventSequence);
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerDeclaredInvalid> evnt)
-        {
-            return new ViewWithSequence<InterviewData>(
-                ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false),
-                evnt.EventSequence);
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<AnswerDeclaredValid> evnt)
-        {
-            return new ViewWithSequence<InterviewData>(
-                ChangeQuestionConditionValidity(currentState.Document, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, true),
                 evnt.EventSequence);
         }
 
