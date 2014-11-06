@@ -29,8 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             });
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.IsSyntaxValid(Moq.It.IsAny<string>()) == true
-                    && processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { barcodeQuestionId.ToString() });
+                => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { barcodeQuestionId.ToString() });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
         };

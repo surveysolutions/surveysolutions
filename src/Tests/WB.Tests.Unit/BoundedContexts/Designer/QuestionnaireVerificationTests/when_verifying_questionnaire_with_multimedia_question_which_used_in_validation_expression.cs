@@ -18,9 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         {
             var validationExpression = "[var]==1";
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                =>
-                processor.IsSyntaxValid(validationExpression) == true &&
-                    processor.GetIdentifiersUsedInExpression(validationExpression) == new[] { "var" });
+                => processor.GetIdentifiersUsedInExpression(validationExpression) == new[] { "var" });
 
             questionnaire = CreateQuestionnaireDocument(new MultimediaQuestion()
             {

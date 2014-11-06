@@ -1276,33 +1276,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 entity.PublicKey);
         }
 
-        private bool CustomValidationExpressionHasIncorrectSyntax(IQuestion question)
-        {
-            if (string.IsNullOrWhiteSpace(question.ValidationExpression))
-                return false;
-
-            if (!QuestionTypesValidToHaveValidationExpressions.Contains(question.QuestionType))
-                return false;
-
-            return !this.expressionProcessor.IsSyntaxValid(question.ValidationExpression);
-        }
-
         private bool QuestionHasValidationExpressionWithoutValidationMessage(IQuestion question)
         {
             if (string.IsNullOrWhiteSpace(question.ValidationExpression) || question.QuestionType == QuestionType.QRBarcode)
                 return false;
 
             return string.IsNullOrWhiteSpace(question.ValidationMessage);
-        }
-
-        private bool CustomEnablementConditionHasIncorrectSyntax(IComposite entity)
-        {
-            string customEnablementCondition = GetCustomEnablementCondition(entity);
-
-            if (string.IsNullOrWhiteSpace(customEnablementCondition))
-                return false;
-
-            return !this.expressionProcessor.IsSyntaxValid(customEnablementCondition);
         }
 
         private bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, QuestionnaireDocument questionnaire)

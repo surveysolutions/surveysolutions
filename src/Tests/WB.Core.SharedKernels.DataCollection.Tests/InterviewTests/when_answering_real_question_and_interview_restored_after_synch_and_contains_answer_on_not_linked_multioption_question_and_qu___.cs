@@ -53,9 +53,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
             
-            expressionProcessor
-                .Setup(x => x.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()))
-                .Returns(false);
+//            expressionProcessor
+//                .Setup(x => x.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>()))
+//                .Returns(false);
 
             SetupInstanceToMockedServiceLocator<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(expressionProcessor.Object);
 

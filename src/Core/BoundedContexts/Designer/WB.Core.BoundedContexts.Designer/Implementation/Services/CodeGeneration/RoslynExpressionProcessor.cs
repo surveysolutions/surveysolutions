@@ -12,11 +12,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     internal class RoslynExpressionProcessor : IExpressionProcessor
     {
-        public bool IsSyntaxValid(string expression)
-        {
-            throw new NotImplementedException("Separate engine is now used for syntax validation.");
-        }
-
         public IEnumerable<string> GetIdentifiersUsedInExpression(string expression)
         {
             string code = string.Format("class a {{ bool b() {{ return ({0}); }} }} ", expression);
@@ -31,11 +26,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .Select(token => token.ToString())
                 .Except(string.IsNullOrEmpty)
                 .Distinct();
-        }
-
-        public bool EvaluateBooleanExpression(string expression, Func<string, object> getValueForIdentifier)
-        {
-            throw new NotImplementedException("Separate engine is now used for evaluation.");
         }
 
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)

@@ -46,12 +46,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\ExtentionFunctions.cs">
       <Link>ExtentionFunctions.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\ExpressionProcessor.cs">
-      <Link>Implementation\Services\ExpressionProcessor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\IdentifierCollector.cs">
-      <Link>Implementation\Services\IdentifierCollector.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\ExpressionProcessor\ExpressionProcessor\Implementation\Services\KeywordsProvider.cs">
       <Link>Implementation\Services\KeywordsProvider.cs</Link>
     </Compile>
@@ -70,10 +64,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
-      <Project>{f0476c33-6f4f-4524-9cea-37e87d55e67e}</Project>
-      <Name>AndroidNCalc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
@@ -87,7 +77,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="d55b9582-70fd-4340-a3bc-55a33d49b2e6" />
+      <UserProperties ProjectLinkReference="d55b9582-70fd-4340-a3bc-55a33d49b2e6" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

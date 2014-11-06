@@ -154,8 +154,6 @@
     <Compile Include="Entities\QuestionTest.cs" />
     <Compile Include="Entities\SubEntities\GeoPositionTests\when_parsing_string_i_order_to_create_GeoPosition_object.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
-    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollectorTest.cs" />
-    <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleObjectExtensionsTests.cs" />
     <Compile Include="Utils\RavenMockUtils.cs" />
@@ -182,7 +180,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AbstractFactories\" />
-    <Folder Include="Export\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
