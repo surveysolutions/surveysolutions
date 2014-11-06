@@ -1325,6 +1325,7 @@
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\angular-block-ui.min.js.map" />
     <Content Include="UpdatedDesigner\vendor\angular-block-ui\dist\README.md" />
     <Content Include="Views\ControlPanel\NCalcToCSharp.cshtml" />
+    <Content Include="UpdatedDesigner\package.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
