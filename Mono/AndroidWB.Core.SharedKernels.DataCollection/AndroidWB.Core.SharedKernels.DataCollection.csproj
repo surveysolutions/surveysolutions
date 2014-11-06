@@ -300,12 +300,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\GeoLocationQuestionAnswered.cs">
       <Link>Events\Interview\GeoLocationQuestionAnswered.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\GroupDisabled.cs">
-      <Link>Events\Interview\GroupDisabled.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\GroupEnabled.cs">
-      <Link>Events\Interview\GroupEnabled.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\GroupPropagated.cs">
       <Link>Events\Interview\GroupPropagated.cs</Link>
     </Compile>

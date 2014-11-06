@@ -186,58 +186,6 @@ namespace WB.Tools.EventsConverter
                     continue;
                 }
 
-                var groupEnabled = committedEvent.Payload as GroupEnabled;
-                if (groupEnabled != null)
-                {
-                    if (currentFlushGroup != 5)
-                    {
-                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
-
-                        answersValid = new List<Identity>();
-                        answersInvalid = new List<Identity>();
-                        questionsEnabled = new List<Identity>();
-                        questionsDisabled = new List<Identity>();
-                        groupsEnabled = new List<Identity>();
-                        groupsDisabled = new List<Identity>();
-                        answersRemoved = new List<Identity>();
-                        rostersAdded = new List<AddedRosterInstance>();
-                        rostersRemoved = new List<RosterInstance>();
-                    }
-
-                    currentFlushGroup = 5;
-
-
-                    AddrIgnore(groupsEnabled, groupEnabled.GroupId, groupEnabled.PropagationVector);
-                    tmpEvent = committedEvent;
-                    continue;
-                }
-
-                var groupDisabled = committedEvent.Payload as GroupDisabled;
-                if (groupDisabled != null)
-                {
-                    if (currentFlushGroup != 6)
-                    {
-                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
-
-                        answersValid = new List<Identity>();
-                        answersInvalid = new List<Identity>();
-                        questionsEnabled = new List<Identity>();
-                        questionsDisabled = new List<Identity>();
-                        groupsEnabled = new List<Identity>();
-                        groupsDisabled = new List<Identity>();
-                        answersRemoved = new List<Identity>();
-                        rostersAdded = new List<AddedRosterInstance>();
-                        rostersRemoved = new List<RosterInstance>();
-                    }
-
-                    currentFlushGroup = 6;
-
-
-                    AddrIgnore(groupsDisabled, groupDisabled.GroupId, groupDisabled.PropagationVector);
-                    tmpEvent = committedEvent;
-                    continue;
-                }
-
                 var rosterAdded = committedEvent.Payload as RosterRowAdded;
                 if (rosterAdded != null)
                 {
@@ -342,16 +290,6 @@ namespace WB.Tools.EventsConverter
             {
                 sequence = AddOrIgnoreAndReturnNewSequence<QuestionsDisabled, QuestionDisabled>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new QuestionsDisabled(questionsDisabled.ToArray()), sequence);
-            }
-            if (groupsEnabled.Any())
-            {
-                sequence = AddOrIgnoreAndReturnNewSequence<GroupsEnabled, GroupEnabled>(streamToSave, eventsFromSingleCommit, tmpEvent,
-                    () => new GroupsEnabled(groupsEnabled.ToArray()), sequence);
-            }
-            if (groupsDisabled.Any())
-            {
-                sequence = AddOrIgnoreAndReturnNewSequence<GroupsDisabled, GroupDisabled>(streamToSave, eventsFromSingleCommit, tmpEvent,
-                    () => new GroupsDisabled(groupsDisabled.ToArray()), sequence);
             }
             return sequence;
         }

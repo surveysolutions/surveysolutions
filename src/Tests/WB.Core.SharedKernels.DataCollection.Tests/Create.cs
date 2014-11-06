@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -12,6 +13,18 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
 {
     internal static class Create
     {
+        internal static class Events
+        {
+            public static GroupsDisabled GroupsDisabled(Guid? id = null, decimal[] rosterVector = null)
+            {
+                var identities = new[]
+                {
+                    new DataCollection.Events.Interview.Dtos.Identity(id ?? Guid.NewGuid(), rosterVector ?? rosterVector), 
+                };
+                return new GroupsDisabled(identities);
+            }
+        }
+
         public static Questionnaire Questionnaire(Guid creatorId, QuestionnaireDocument document)
         {
             return new Questionnaire(new Guid(), document, false, string.Empty);

@@ -53,8 +53,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<ViewWithSequence<InterviewData>, QRBarcodeQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, PictureQuestionAnswered>,
         IUpdateHandler<ViewWithSequence<InterviewData>, AnswersRemoved>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, GroupDisabled>,
-        IUpdateHandler<ViewWithSequence<InterviewData>, GroupEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupsDisabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, GroupsEnabled>,
         IUpdateHandler<ViewWithSequence<InterviewData>, QuestionDisabled>,
@@ -608,32 +606,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         updatedQuestion.Answer = null;
                         updatedQuestion.IsAnswered = false;
                     })),
-                evnt.EventSequence);
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupDisabled> evnt)
-        {
-            return new ViewWithSequence<InterviewData>(
-                PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, level =>
-                {
-                    if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
-                    {
-                        level.DisabledGroups.Add(evnt.Payload.GroupId);
-                    }
-                }),
-                evnt.EventSequence);
-        }
-
-        public ViewWithSequence<InterviewData> Update(ViewWithSequence<InterviewData> currentState, IPublishedEvent<GroupEnabled> evnt)
-        {
-            return new ViewWithSequence<InterviewData>(
-                PreformActionOnLevel(currentState.Document, evnt.Payload.PropagationVector, level =>
-                {
-                    if (level.DisabledGroups.Contains(evnt.Payload.GroupId))
-                    {
-                        level.DisabledGroups.Remove(evnt.Payload.GroupId);
-                    }
-                }),
                 evnt.EventSequence);
         }
 
