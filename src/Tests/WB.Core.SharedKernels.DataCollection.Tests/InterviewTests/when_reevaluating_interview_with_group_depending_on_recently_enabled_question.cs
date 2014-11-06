@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            interview.Apply(new GroupDisabled(conditionallyDependentGroupId, new decimal[0]));
+            interview.Apply(Create.Events.GroupsDisabled(conditionallyDependentGroupId));
 
             interview.Apply(new QuestionDisabled(conditionallyRecentlyEnabledQuestionId, new decimal[0]));
             interview.Apply(new NumericIntegerQuestionAnswered(userId, conditionallyRecentlyEnabledQuestionId, new decimal[0],

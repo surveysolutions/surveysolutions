@@ -34,8 +34,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
-        IEventHandler<GroupDisabled>,
-        IEventHandler<GroupEnabled>,
         IEventHandler<GroupsDisabled>,
         IEventHandler<GroupsEnabled>,
         IEventHandler<QuestionDisabled>,
@@ -218,18 +216,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
             {
                 this.RemoveAnswer(evnt.EventSourceId, question.Id, question.RosterVector);
             }
-        }
-
-        public void Handle(IPublishedEvent<GroupDisabled> evnt)
-        {
-            var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.SetScreenStatus(new InterviewItemId(evnt.Payload.GroupId, evnt.Payload.PropagationVector), false);
-        }
-
-        public void Handle(IPublishedEvent<GroupEnabled> evnt)
-        {
-            var doc = this.GetStoredViewModel(evnt.EventSourceId);
-            doc.SetScreenStatus(new InterviewItemId(evnt.Payload.GroupId, evnt.Payload.PropagationVector), true);
         }
 
         public void Handle(IPublishedEvent<GroupsDisabled> evnt)
