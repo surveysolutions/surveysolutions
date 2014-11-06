@@ -181,8 +181,6 @@
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Base\GroupPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionActiveEvent.cs" />
-    <Compile Include="Events\Interview\AnswerDeclaredInvalid.cs" />
-    <Compile Include="Events\Interview\AnswerDeclaredValid.cs" />
     <Compile Include="Events\Interview\Base\InterviewActiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\InterviewPassiveEvent.cs" />

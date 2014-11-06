@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -10,9 +7,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
@@ -30,9 +25,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             conditionallyDisabledGroupId = Guid.Parse("22222222222222222222222222222222");
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
-                                                       /* _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyDisabledGroupId }
-                                                        && */_.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { conditionallyDisabledGroupId }
-                                                        && _.GetAllMandatoryQuestions() == new Guid[] { mandatoryQuestionId });
+                                                        _.GetAllParentGroupsForQuestion(mandatoryQuestionId) == new Guid[] { conditionallyDisabledGroupId } && 
+                                                        _.GetAllMandatoryQuestions() == new Guid[] { mandatoryQuestionId });
 
             var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 
@@ -66,8 +60,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview.ReevaluateSynchronizedInterview();
 
         It should_not_raise_QuestionDisabled_event_with_GroupId_equal_to_conditionallyEnabledQuestionId = () =>
-            eventContext.ShouldNotContainEvent<AnswerDeclaredInvalid>(@event
-             => @event.QuestionId == mandatoryQuestionId);
+            eventContext.ShouldNotContainEvent<AnswersDeclaredInvalid>(@event
+             => @event.Questions.Any(x => x.Id== mandatoryQuestionId));
 
         private static EventContext eventContext;
         private static Guid questionnaireId;

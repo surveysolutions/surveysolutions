@@ -352,26 +352,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVectors);
         }
 
-        private void Apply(AnswerDeclaredValid @event)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            this.interviewState.ValidAnsweredQuestions.Add(questionKey);
-            this.interviewState.InvalidAnsweredQuestions.Remove(questionKey);
-
-            this.ExpressionProcessorStatePrototype.DeclareAnswersValid(new[] { new Identity(@event.QuestionId, @event.PropagationVector) });
-        }
-
-        private void Apply(AnswerDeclaredInvalid @event)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            this.interviewState.ValidAnsweredQuestions.Remove(questionKey);
-            this.interviewState.InvalidAnsweredQuestions.Add(questionKey);
-
-            this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(new[] { new Identity(@event.QuestionId, @event.PropagationVector) });
-        }
-
         internal void Apply(AnswersDeclaredValid @event)
         {
             this.interviewState.DeclareAnswersValid(@event.Questions);
