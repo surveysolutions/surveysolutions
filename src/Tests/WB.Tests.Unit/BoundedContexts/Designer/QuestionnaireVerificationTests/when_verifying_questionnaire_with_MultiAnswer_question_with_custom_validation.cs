@@ -34,9 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 PublicKey = textQuestionId
             });
 
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(x => x.IsSyntaxValid(Moq.It.IsAny<string>())== true);
-
-            verifier = CreateQuestionnaireVerifier(expressionProcessor);
+            verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>

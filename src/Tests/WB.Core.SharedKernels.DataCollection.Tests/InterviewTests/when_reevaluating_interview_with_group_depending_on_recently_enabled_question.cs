@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                     //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(conditionallyRecentlyEnabledQuestionId) == new[] { questionId }
                     && _.GetQuestionVariableName(questionId) == "q2");
 
-            var expressionProcessor = new WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services.ExpressionProcessor();
+//            var expressionProcessor = new WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services.ExpressionProcessor();
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionaire);
 
@@ -48,9 +48,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
-                .Returns(expressionProcessor);
+//            Mock.Get(ServiceLocator.Current)
+//                .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
+//                .Returns(expressionProcessor);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 

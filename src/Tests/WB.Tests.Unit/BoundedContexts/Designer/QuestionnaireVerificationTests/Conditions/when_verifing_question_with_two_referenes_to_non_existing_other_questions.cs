@@ -32,10 +32,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             var expressionProcessor = new Mock<IExpressionProcessor>();
 
             expressionProcessor
-                .Setup(x => x.IsSyntaxValid(Moq.It.IsAny<string>()))
-                .Returns(true);
-
-            expressionProcessor
                 .Setup(x => x.GetIdentifiersUsedInExpression(conditionExpression))
                 .Returns(new[] { "nonExist1", "nonExist2" });
 

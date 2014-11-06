@@ -45,9 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 );
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.IsSyntaxValid(EnablementConditionWithNotExistingQuestion) == true
-                    &&
-                    processor.GetIdentifiersUsedInExpression(EnablementConditionWithNotExistingQuestion) ==
+                => processor.GetIdentifiersUsedInExpression(EnablementConditionWithNotExistingQuestion) ==
                         new[] { "99999999999999999999999999999999" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);

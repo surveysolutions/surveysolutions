@@ -26,10 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     StataExportCaption = "var1"
                 });
 
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.IsSyntaxValid(validationExpression) == true);
-
-            verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
+            verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
