@@ -43,7 +43,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<GeoLocationQuestionAnswered>,
                                       IEventHandler<QRBarcodeQuestionAnswered>,
 
-                                      IEventHandler<AnswerRemoved>,
+                                      IEventHandler<AnswersRemoved>,
 
                                       IEventHandler<InterviewOnClientCreated>,
                                       IEventHandler<InterviewerAssigned>,
@@ -324,11 +324,13 @@ namespace CAPI.Android.Core.Model.EventHandlers
             AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
 
-        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        public void Handle(IPublishedEvent<AnswersRemoved> evnt)
         {
-            AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Empty);
+            foreach (var question in evnt.Payload.Questions)
+            {
+                AnswerQuestion(evnt.EventSourceId, question.Id, string.Empty);
+            }
         }
-
 
         private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode)
         {

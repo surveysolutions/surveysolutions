@@ -151,7 +151,6 @@ namespace WB.UI.QuestionnaireTester
             bus.RegisterHandler(eventHandler, typeof(RosterInstancesRemoved));
             bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof(AnswerRemoved));
             bus.RegisterHandler(eventHandler, typeof(AnswersRemoved));
             bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
@@ -167,7 +166,6 @@ namespace WB.UI.QuestionnaireTester
 
             var answerOptionsForLinkedQuestionsDenormalizer = this.kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
 
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswersRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(TextQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericIntegerQuestionAnswered));

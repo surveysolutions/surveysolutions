@@ -238,32 +238,6 @@ namespace WB.Tools.EventsConverter
                     continue;
                 }
 
-                var answerRemoved = committedEvent.Payload as AnswerRemoved;
-                if (answerRemoved != null)
-                {
-                    if (currentFlushGroup != 7)
-                    {
-                        sequence = FlushCompactEvents(eventsFromSingleCommit, tmpEvent, sequence, rostersAdded, streamToSave, rostersRemoved, answersValid, answersInvalid, questionsEnabled, questionsDisabled, groupsEnabled, groupsDisabled, answersRemoved);
-
-                        answersValid = new List<Identity>();
-                        answersInvalid = new List<Identity>();
-                        questionsEnabled = new List<Identity>();
-                        questionsDisabled = new List<Identity>();
-                        groupsEnabled = new List<Identity>();
-                        groupsDisabled = new List<Identity>();
-                        answersRemoved = new List<Identity>();
-                        rostersAdded = new List<AddedRosterInstance>();
-                        rostersRemoved = new List<RosterInstance>();
-                    }
-
-                    currentFlushGroup = 7;
-
-
-                    AddrIgnore(answersRemoved, answerRemoved.QuestionId, answerRemoved.PropagationVector);
-                    tmpEvent = committedEvent;
-                    continue;
-                }
-
                 var rosterAdded = committedEvent.Payload as RosterRowAdded;
                 if (rosterAdded != null)
                 {
@@ -378,11 +352,6 @@ namespace WB.Tools.EventsConverter
             {
                 sequence = AddOrIgnoreAndReturnNewSequence<GroupsDisabled, GroupDisabled>(streamToSave, eventsFromSingleCommit, tmpEvent,
                     () => new GroupsDisabled(groupsDisabled.ToArray()), sequence);
-            }
-            if (answersRemoved.Any())
-            {
-                sequence = AddOrIgnoreAndReturnNewSequence<AnswersRemoved, AnswerRemoved>(streamToSave, eventsFromSingleCommit, tmpEvent,
-                    () => new AnswersRemoved(answersRemoved.ToArray()), sequence);
             }
             return sequence;
         }

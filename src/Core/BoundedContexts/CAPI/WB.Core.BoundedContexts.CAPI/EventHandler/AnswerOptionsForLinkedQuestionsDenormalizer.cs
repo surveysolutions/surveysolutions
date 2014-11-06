@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 namespace WB.Core.BoundedContexts.Capi.EventHandler
 {
     public class AnswerOptionsForLinkedQuestionsDenormalizer :
-        IEventHandler<AnswerRemoved>,
         IEventHandler<AnswersRemoved>,
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
@@ -25,11 +24,6 @@ namespace WB.Core.BoundedContexts.Capi.EventHandler
         {
             this.interviewStorage = interviewStorage;
             this.logger = logger;
-        }
-
-        public void Handle(IPublishedEvent<AnswerRemoved> @event)
-        {
-            this.RemoveAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> @event)
