@@ -173,6 +173,10 @@
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ncqrs.Spec\Ncqrs.Spec.csproj">
       <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
       <Name>Ncqrs.Spec</Name>

@@ -9,10 +9,10 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
         public PropertyToParameterMappingInfo[] GetMappedProperties(Type target)
         {
             // TODO: At support for both: exclude and include strategy.
-            return target.GetProperties().Where
-                (
-                    p => !p.IsDefined(typeof (ExcludeInMappingAttribute), false)
-                ).Select(FromPropertyInfo).ToArray();
+            return target.GetProperties()
+                .Where(p => !p.IsDefined(typeof (ExcludeInMappingAttribute), false))
+                .Where(p => p.Name != "CommandIdentifier" && p.Name != "KnownVersion")
+                .Select(FromPropertyInfo).ToArray();
         }
 
         private PropertyToParameterMappingInfo FromPropertyInfo(PropertyInfo prop)

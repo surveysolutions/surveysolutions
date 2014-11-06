@@ -167,9 +167,6 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs">
       <Link>Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs</Link>
     </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ICommand.cs">
-      <Link>Commanding\ICommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\IKnownCommandsEnumerator.cs">
       <Link>Commanding\IKnownCommandsEnumerator.cs</Link>
     </Compile>
@@ -178,9 +175,6 @@
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ServiceModel\CommandService.cs">
       <Link>Commanding\ServiceModel\CommandService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ServiceModel\ICommandService.cs">
-      <Link>Commanding\ServiceModel\ICommandService.cs</Link>
     </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\Commanding\ServiceModel\ICommandServiceInterceptor.cs">
       <Link>Commanding\ServiceModel\ICommandServiceInterceptor.cs</Link>
@@ -501,6 +495,10 @@
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -508,7 +506,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" />
+      <UserProperties ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

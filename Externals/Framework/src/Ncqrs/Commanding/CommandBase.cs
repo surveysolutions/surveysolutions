@@ -20,7 +20,6 @@ namespace Ncqrs.Commanding
         /// <summary>
         /// Gets the unique identifier for this command.
         /// </summary>
-        [ExcludeInMapping]
         public Guid CommandIdentifier
         {
             get;
@@ -34,7 +33,6 @@ namespace Ncqrs.Commanding
         /// when the current version of the aggregate root
         /// is the same as the known version.
         /// </summary>
-        [ExcludeInMapping]
         public long? KnownVersion
         { 
             get; 
