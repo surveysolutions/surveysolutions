@@ -35,7 +35,7 @@
     "angular-unsavedChanges": "0.2.3-alpha.1",
     "console-shim": "*",
     "angular-elastic": "~2.3.5",
-    "angular-bootstrap": "~0.11.0",
+    "angular-bootstrap": "~0.11.2",
     "perfect-scrollbar": "~0.4.11",
     "jquery-mousewheel": "~3.1.12",
     "angular-perfect-scrollbar": "~0.1.4",
