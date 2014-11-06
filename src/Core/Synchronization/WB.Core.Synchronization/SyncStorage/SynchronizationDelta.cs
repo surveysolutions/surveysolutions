@@ -1,5 +1,4 @@
 ﻿using System;
-using Main.Core;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Synchronization.SyncStorage
@@ -19,12 +18,12 @@ namespace WB.Core.Synchronization.SyncStorage
         public SynchronizationDelta(Guid publicKey, string content, DateTime timestamp, Guid? userId, bool isCompressed, string itemType, string metaInfo)
         {
             PublicKey = publicKey;
-            Content = isCompressed ? PackageHelper.CompressString(content) : content;
+            Content = content;
             Timestamp = timestamp;
             UserId = userId;
             IsCompressed = isCompressed;
             ItemType = itemType;
-            MetaInfo = (isCompressed && !string.IsNullOrWhiteSpace(metaInfo)) ? PackageHelper.CompressString(metaInfo) : metaInfo; 
+            MetaInfo = metaInfo; 
         }
 
         public Guid PublicKey { get; private set; }
