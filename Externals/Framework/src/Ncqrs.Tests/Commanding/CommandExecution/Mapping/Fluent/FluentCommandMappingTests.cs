@@ -9,6 +9,7 @@ using Ncqrs.Commanding.CommandExecution.Mapping.Fluent;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain;
 using WB.Core.Infrastructure.CommandBus;
+using CommandService = Ncqrs.Commanding.ServiceModel.CommandService;
 
 namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Fluent
 {

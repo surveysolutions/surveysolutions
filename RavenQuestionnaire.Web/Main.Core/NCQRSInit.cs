@@ -13,6 +13,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.CommandBus;
+using CommandService = Ncqrs.Commanding.ServiceModel.CommandService;
 
 namespace Main.Core
 {
