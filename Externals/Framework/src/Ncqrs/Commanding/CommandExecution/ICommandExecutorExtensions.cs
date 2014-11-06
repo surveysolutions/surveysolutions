@@ -1,4 +1,5 @@
 ﻿using Ncqrs.Commanding.ServiceModel;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding.CommandExecution
 {

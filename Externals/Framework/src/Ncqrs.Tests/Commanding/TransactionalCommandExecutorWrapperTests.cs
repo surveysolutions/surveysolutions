@@ -5,6 +5,7 @@ using Ncqrs.Commanding;
 using Rhino.Mocks;
 using Ncqrs.Commanding.CommandExecution;
 using NUnit.Framework;
+using WB.Core.Infrastructure.CommandBus;
 using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Commanding

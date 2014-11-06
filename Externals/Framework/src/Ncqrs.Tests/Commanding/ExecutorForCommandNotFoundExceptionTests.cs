@@ -7,6 +7,7 @@ using Moq;
 using Ncqrs.Commanding.CommandExecution;
 using NUnit.Framework;
 using Ncqrs.Commanding;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Tests.Commanding
 {

@@ -1,5 +1,6 @@
 ﻿using Ncqrs.Commanding;
 using NUnit.Framework;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Spec
 {

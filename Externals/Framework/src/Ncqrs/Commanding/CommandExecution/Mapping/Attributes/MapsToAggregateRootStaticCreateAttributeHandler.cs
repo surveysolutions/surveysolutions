@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Domain;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {

@@ -1,5 +1,6 @@
 using System;
 using Ncqrs.Domain;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding.CommandExecution.Mapping
 {

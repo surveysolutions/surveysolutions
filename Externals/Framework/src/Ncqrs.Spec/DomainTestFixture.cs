@@ -2,6 +2,7 @@
 using Ncqrs.Commanding;
 using Ncqrs.Eventing;
 using Ncqrs.Spec.Fakes;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Spec
 {

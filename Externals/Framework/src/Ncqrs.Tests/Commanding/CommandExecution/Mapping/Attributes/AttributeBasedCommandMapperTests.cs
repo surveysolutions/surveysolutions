@@ -7,6 +7,7 @@ using Ncqrs.Domain;
 using NUnit.Framework;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using Ncqrs.Commanding;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
 {

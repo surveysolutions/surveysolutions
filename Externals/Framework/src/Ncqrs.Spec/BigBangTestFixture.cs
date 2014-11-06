@@ -4,6 +4,7 @@ using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Spec
 {

@@ -3,6 +3,7 @@ using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using Ncqrs.Domain;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
 {

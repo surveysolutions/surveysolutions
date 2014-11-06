@@ -4,6 +4,7 @@ using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Eventing;
 using NUnit.Framework;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Spec
 {

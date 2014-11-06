@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.Serialization;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding
 {

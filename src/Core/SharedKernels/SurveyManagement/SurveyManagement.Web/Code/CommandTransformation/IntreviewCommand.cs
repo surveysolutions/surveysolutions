@@ -1,5 +1,6 @@
 ﻿using System;
 using Ncqrs.Commanding;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
 {

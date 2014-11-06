@@ -2,6 +2,7 @@
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Main.Core.Commands
 {

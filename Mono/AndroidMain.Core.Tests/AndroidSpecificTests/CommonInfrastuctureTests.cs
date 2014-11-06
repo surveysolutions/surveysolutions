@@ -10,6 +10,7 @@
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Commanding;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace AndroidMain.Core.Tests.CommonTests
 {

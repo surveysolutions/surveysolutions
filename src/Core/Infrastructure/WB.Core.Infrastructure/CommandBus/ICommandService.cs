@@ -1,4 +1,4 @@
-﻿namespace Ncqrs.Commanding.ServiceModel
+﻿namespace WB.Core.Infrastructure.CommandBus
 {
     public interface ICommandService
     {

@@ -7,6 +7,7 @@ using Ncqrs.Commanding.ServiceModel;
 using NUnit.Framework;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Commanding;
+using WB.Core.Infrastructure.CommandBus;
 using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Commanding.ServiceModel

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using Ncqrs.Domain;
+using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
 {
