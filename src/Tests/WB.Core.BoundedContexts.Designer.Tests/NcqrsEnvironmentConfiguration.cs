@@ -12,6 +12,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Config;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
+using CommandService = Ncqrs.Commanding.ServiceModel.CommandService;
 
 namespace WB.Core.BoundedContexts.Designer.Tests
 {

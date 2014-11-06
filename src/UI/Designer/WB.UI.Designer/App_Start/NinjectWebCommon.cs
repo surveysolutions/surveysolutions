@@ -27,6 +27,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Shared.Web.Modules;
 using WebActivatorEx;
+using CommandService = WB.Core.Infrastructure.CommandBus.CommandService;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof (NinjectWebCommon), "Stop")]
@@ -97,10 +98,13 @@ namespace WB.UI.Designer.App_Start
 
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
-            NcqrsEnvironment.SetDefault(commandService);
-            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
+            var ncqrsCommandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.SetDefault(ncqrsCommandService);
+            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), ncqrsCommandService);
+
+            var commandService = new CommandService(ncqrsCommandService);
             kernel.Bind<ICommandService>().ToConstant(commandService);
+
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 

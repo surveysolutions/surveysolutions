@@ -40,6 +40,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandBus\CommandService.cs" />
     <Compile Include="CommandBus\ICommand.cs" />
     <Compile Include="CommandBus\ICommandService.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
