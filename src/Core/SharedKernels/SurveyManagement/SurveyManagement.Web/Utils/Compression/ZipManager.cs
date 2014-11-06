@@ -5,22 +5,8 @@ using Ionic.Zip;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression
 {
-    /// <summary>
-    /// The zip manager.
-    /// </summary>
     public static class ZipManager
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The get zip content.
-        /// </summary>
-        /// <param name="inputStream">
-        /// The input stream.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List"/>.
-        /// </returns>
         public static List<string> GetZipContent(Stream inputStream)
         {
             if (!ZipFile.IsZipFile(inputStream, false))
@@ -58,7 +44,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression
                 return null;
             }
         }
-
-        #endregion
     }
 }

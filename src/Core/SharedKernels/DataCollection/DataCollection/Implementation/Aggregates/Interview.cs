@@ -368,24 +368,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.EnableGroups(@event.Groups.ToIdentities());
         }
 
-        internal void Apply(QuestionDisabled @event)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            this.interviewState.DisabledQuestions.Add(questionKey);
-
-            this.ExpressionProcessorStatePrototype.DisableQuestions(new[] { new Identity(@event.QuestionId, @event.PropagationVector) });
-        }
-
-        internal void Apply(QuestionEnabled @event)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            this.interviewState.DisabledQuestions.Remove(questionKey);
-
-            this.ExpressionProcessorStatePrototype.EnableQuestions(new[] { new Identity(@event.QuestionId, @event.PropagationVector) });
-        }
-
         internal void Apply(QuestionsDisabled @event)
         {
             this.interviewState.DisableQuestions(@event.Questions);

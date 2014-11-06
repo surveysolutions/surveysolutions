@@ -384,12 +384,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QRBarcodeQuestionAnswered.cs">
       <Link>Events\Interview\QRBarcodeQuestionAnswered.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QuestionDisabled.cs">
-      <Link>Events\Interview\QuestionDisabled.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QuestionEnabled.cs">
-      <Link>Events\Interview\QuestionEnabled.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\DataCollection\Events\Interview\QuestionsDisabled.cs">
       <Link>Events\Interview\QuestionsDisabled.cs</Link>
     </Compile>

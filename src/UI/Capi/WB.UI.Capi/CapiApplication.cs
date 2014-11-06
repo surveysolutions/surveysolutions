@@ -119,8 +119,6 @@ namespace WB.UI.Capi
             bus.RegisterHandler(eventHandler, typeof (DateTimeQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (GroupsDisabled));
             bus.RegisterHandler(eventHandler, typeof (GroupsEnabled));
-            bus.RegisterHandler(eventHandler, typeof (QuestionDisabled));
-            bus.RegisterHandler(eventHandler, typeof (QuestionEnabled));
             bus.RegisterHandler(eventHandler, typeof (QuestionsDisabled));
             bus.RegisterHandler(eventHandler, typeof (QuestionsEnabled));
             bus.RegisterHandler(eventHandler, typeof (AnswersDeclaredInvalid));

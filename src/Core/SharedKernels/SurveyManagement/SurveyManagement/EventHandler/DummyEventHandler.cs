@@ -12,8 +12,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<AnswersDeclaredValid>,
         IEventHandler<AnswersDeclaredInvalid>,
         IEventHandler<GroupPropagated>,
-        IEventHandler<QuestionEnabled>,
-        IEventHandler<QuestionDisabled>,
         IEventHandler<QuestionsEnabled>,
         IEventHandler<QuestionsDisabled>,
         IEventHandler<GroupsDisabled>,
@@ -36,10 +34,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt) { }
 
         public void Handle(IPublishedEvent<GroupPropagated> evnt) { }
-
-        public void Handle(IPublishedEvent<QuestionEnabled> evnt) {}
-
-        public void Handle(IPublishedEvent<QuestionDisabled> evnt) {}
 
         public void Handle(IPublishedEvent<QuestionsEnabled> evnt) {}
 
