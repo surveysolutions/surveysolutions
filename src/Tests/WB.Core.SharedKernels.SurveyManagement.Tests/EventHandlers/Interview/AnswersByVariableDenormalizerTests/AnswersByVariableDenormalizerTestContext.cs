@@ -4,6 +4,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -19,9 +20,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Tests.EventHandlers.Interview.A
                 && publishedEvent.EventSequence == (eventSequence ?? 1));
         }
 
-        protected static IPublishedEvent<AnswerRemoved> CreateAnswerRemovedEvent(Guid interviewId, Guid? questionId = null, decimal[] propagationVector = null)
+        protected static IPublishedEvent<AnswersRemoved> CreateAnswerRemovedEvent(Guid interviewId, Guid? questionId = null, decimal[] propagationVector = null)
         {
-            return ToPublishedEvent(new AnswerRemoved(questionId ?? Guid.NewGuid(), propagationVector ?? new decimal[0]), 10, interviewId);
+            var answersRemoved = new AnswersRemoved(new[] {
+                new Identity(questionId ?? Guid.NewGuid(), propagationVector ?? new decimal[0])
+            });
+            return ToPublishedEvent(answersRemoved, 10, interviewId);
         }
 
         protected static IPublishedEvent<GeoLocationQuestionAnswered> CreateGeoLocationQuestionAnsweredEvent(Guid interviewId, Guid? userId = null, Guid? questionId = null,

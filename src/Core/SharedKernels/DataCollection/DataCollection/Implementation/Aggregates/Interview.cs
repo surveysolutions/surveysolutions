@@ -546,25 +546,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewDeclaredInvalid @event) { }
 
-        private void Apply(AnswerRemoved @event)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.PropagationVector);
-
-            this.interviewState.AnswersSupportedInExpressions.Remove(questionKey);
-            this.interviewState.LinkedSingleOptionAnswersBuggy.Remove(questionKey);
-            this.interviewState.LinkedMultipleOptionsAnswers.Remove(questionKey);
-            this.interviewState.TextListAnswers.Remove(questionKey);
-            this.interviewState.AnsweredQuestions.Remove(questionKey);
-            this.interviewState.DisabledQuestions.Remove(questionKey);
-            this.interviewState.ValidAnsweredQuestions.Remove(questionKey);
-            this.interviewState.InvalidAnsweredQuestions.Remove(questionKey);
-        }
-
         private void Apply(AnswersRemoved @event)
         {
             this.interviewState.RemoveAnswers(@event.Questions);
         }
-
 
         public InterviewState CreateSnapshot()
         {
