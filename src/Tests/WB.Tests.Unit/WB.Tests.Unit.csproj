@@ -373,8 +373,6 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value_which_is_not_decimal.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_cascading_question_parent_value_for_text_list_question.cs" />
-    <Compile Include="SharedKernels\ExpressionProcessor\ExpressionProcessorTests\ExpressionProcessorTestsContext.cs" />
-    <Compile Include="SharedKernels\ExpressionProcessor\ExpressionProcessorTests\when_getting_identifiers_used_in_expression__a_or_colon_b_and_c_colon__.cs" />
     <Compile Include="SharedKernels\ExpressionProcessor\KeywordsProviderTests\KeywordsProviderTestContext.cs" />
     <Compile Include="SharedKernels\ExpressionProcessor\KeywordsProviderTests\when_getting_all_reserved_keywords.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ChartStatisticsViewFactoryTests\ChartStatisticsViewFactoryTestsContext.cs" />

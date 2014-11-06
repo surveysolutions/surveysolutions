@@ -43,8 +43,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             var expressionProcessor =
                 Mock.Of<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>(
                     x =>
-                        x.EvaluateBooleanExpression(validationExpression, Moq.It.IsAny<Func<string, object>>()) == true &&
-                        x.EvaluateBooleanExpression(enablementCondition, Moq.It.IsAny<Func<string, object>>()) == true &&
+//                        x.EvaluateBooleanExpression(validationExpression, Moq.It.IsAny<Func<string, object>>()) == true &&
+//                        x.EvaluateBooleanExpression(enablementCondition, Moq.It.IsAny<Func<string, object>>()) == true &&
                         x.GetIdentifiersUsedInExpression(validationExpression) == new []{ singleQuestion1Id.ToString()} &&
                         x.GetIdentifiersUsedInExpression(enablementCondition) == new[] { singleQuestion1Id.ToString() });
 

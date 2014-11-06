@@ -21,8 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
 
-            expressionProcessor.Setup(x => x.IsSyntaxValid(Moq.It.IsAny<string>())).Returns(true);
-
             expressionProcessor.Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()))
                 .Returns(new [] { questionIdFromOtherRosterWithSameLevel.ToString() });
 
