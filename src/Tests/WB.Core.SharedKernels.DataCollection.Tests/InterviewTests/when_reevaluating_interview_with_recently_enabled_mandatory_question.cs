@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            interview.Apply(new QuestionDisabled(conditionallyRecentlyEnabledMandatoryQuestionId, new decimal[0]));
+            interview.Apply(Create.Events.QuestionsDisabled(conditionallyRecentlyEnabledMandatoryQuestionId));
             interview.Apply(new NumericIntegerQuestionAnswered(userId, conditionallyRecentlyEnabledMandatoryQuestionId, new decimal[0],
                 DateTime.Now, 2));
             eventContext = new EventContext();

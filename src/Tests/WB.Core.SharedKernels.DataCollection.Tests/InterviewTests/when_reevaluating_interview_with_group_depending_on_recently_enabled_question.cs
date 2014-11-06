@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
@@ -32,15 +26,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
                   _.GetCustomEnablementConditionForGroup(conditionallyDependentGroupId) == string.Format("[q1]==2")
-                    //&& _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyDependentGroupId }
-                    //&&_.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(conditionallyDependentGroupId) == new[] { conditionallyRecentlyEnabledQuestionId }
-                  
                     && _.GetCustomEnablementConditionForQuestion(conditionallyRecentlyEnabledQuestionId) == "2==2"
                     && _.GetQuestionVariableName(conditionallyRecentlyEnabledQuestionId) == "q1"
-                    //&& _.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(conditionallyRecentlyEnabledQuestionId) == new[] { questionId }
                     && _.GetQuestionVariableName(questionId) == "q2");
 
-//            var expressionProcessor = new WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services.ExpressionProcessor();
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionaire);
 
@@ -48,17 +37,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
 
-//            Mock.Get(ServiceLocator.Current)
-//                .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
-//                .Returns(expressionProcessor);
-
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             interview.Apply(Create.Events.GroupsDisabled(conditionallyDependentGroupId));
 
-            interview.Apply(new QuestionDisabled(conditionallyRecentlyEnabledQuestionId, new decimal[0]));
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, conditionallyRecentlyEnabledQuestionId, new decimal[0],
-                DateTime.Now, 2));
+            interview.Apply(Create.Events.QuestionsDisabled(conditionallyRecentlyEnabledQuestionId));
+            interview.Apply(new NumericIntegerQuestionAnswered(userId, conditionallyRecentlyEnabledQuestionId, new decimal[0], DateTime.Now, 2));
             eventContext = new EventContext();
         };
 
